@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>flexi-streams用法简介 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="每过一段时间总会燃起一种用Common Lisp（下文简称CL）来写Web应用的冲动，继而就会开始感慨在CL的生态圈中居然没有一款好用的Web框架。尽管放狗搜索“common lisp web framework”可以找到一些——例如Caveman2，以及在Cliki中记录的一些其它框架。然后使用过其中一部分的人就会知道，大部分用起来的体验都不咋地。 在业界摸爬打滚了一小段时光（从业几年姑且可以这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flexi-streams用法简介">
+<meta property="og:url" content="http://yoursite.com/2018/11/27/flexi-streams用法简介/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="每过一段时间总会燃起一种用Common Lisp（下文简称CL）来写Web应用的冲动，继而就会开始感慨在CL的生态圈中居然没有一款好用的Web框架。尽管放狗搜索“common lisp web framework”可以找到一些——例如Caveman2，以及在Cliki中记录的一些其它框架。然后使用过其中一部分的人就会知道，大部分用起来的体验都不咋地。 在业界摸爬打滚了一小段时光（从业几年姑且可以这">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-27T15:15:04.302Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="flexi-streams用法简介">
+<meta name="twitter:description" content="每过一段时间总会燃起一种用Common Lisp（下文简称CL）来写Web应用的冲动，继而就会开始感慨在CL的生态圈中居然没有一款好用的Web框架。尽管放狗搜索“common lisp web framework”可以找到一些——例如Caveman2，以及在Cliki中记录的一些其它框架。然后使用过其中一部分的人就会知道，大部分用起来的体验都不咋地。 在业界摸爬打滚了一小段时光（从业几年姑且可以这">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-flexi-streams用法简介" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/27/flexi-streams用法简介/" class="article-date">
+  <time datetime="2018-11-27T15:14:50.000Z" itemprop="datePublished">2018-11-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      flexi-streams用法简介
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>每过一段时间总会燃起一种用Common Lisp（下文简称CL）来写Web应用的冲动，继而就会开始感慨在CL的生态圈中居然没有一款好用的Web框架。尽管放狗搜索“common lisp web framework”可以找到一些——例如Caveman2，以及在Cliki中记录的一些其它框架。然后使用过其中一部分的人就会知道，大部分用起来的体验都不咋地。</p>
+<p>在业界摸爬打滚了一小段时光（从业几年姑且可以这么说吧）后，感觉制作一款专门用于编写JSON-in-JSON-out的Web应用的Web框架应该是一个不错的点子——反正大家都是发出application/json的请求期望application/json的响应，于是乎就撸起袖子自己干了。不过完全从零开始编写起是不现实的，于是乎选择了一个“平台”来作为基础。这个平台就是<a href="https://github.com/fukamachi/clack" target="_blank" rel="noopener">Clack</a>啦</p>
+<p>Clack会负责屏蔽下层的Web Server的差异，它只需要我提供一个函数给它作为来访的HTTP请求的“handler”即可，然后在这个handler中我就可以为所欲为啦。Clack在收到HTTP请求后，会把HTTP请求中的一些信息组织为一个列表类型的值传递给这个handler。在这个handler中，我只需要综合运用CAR、CDR之类的奇怪名字的函数就可以拿到自己需要的东西了——当然了，鉴于这个列表是个plist，用CL提供的DESTRUCTURING-BIND就可以很方便地提取啦。</p>
+<p>在这个plist中，就有一个叫做:RAW-BODY的p，它的值是一个“流”——是的，就是那种文件流的流！但它又不是一个路边随处可见的妖艳贱货的流，而是一个来自FLEXI-STREAMS这个包（指CL中的package）的流。<a href="https://edicl.github.io/flexi-streams/" target="_blank" rel="noopener">FLEXI-STREAMS</a>是一个提供流操作的库，鉴于我没有看过<a href="http://www.nhplace.com/kent/CL/Issues/stream-definition-by-user.html" target="_blank" rel="noopener">Gray streams</a>相关的内容，就不在这里瞎逼逼误导读者了。总而言之，我必须找到一个办法可以从一个FLEXI-STREAMS提供的输入流类型的值中读出一些东西来。</p>
+<p>其实这个办法很简单，就是用CL原生提供的读取流的函数即可——比如READ-SEQUENCE这样的函数。不过我得验证一下不是，为此，我需要有办法可以构造出一个FLEXI-STREAMS流类型的值出来。FLEXI-STREAMS提供了一个叫做MAKE-FLEXI-STREAM的函数，显然这个就是我所需要调用的最后一个函数了。从它的描述来看，它需要一个CL中的原生流来作为第一个参数才行。为此，我试了一下下面的代码</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">text</span> <span class="string">"Hello, world!"</span>))</span><br><span class="line">  (<span class="name">with-input-from-string</span> (<span class="name">s</span> text)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">buffer</span> (<span class="name">make-array</span> (<span class="name">length</span> text)))</span><br><span class="line">          (<span class="name">fs</span> (<span class="name">flexi-streams</span><span class="symbol">:make-flexi-stream</span> s)))</span><br><span class="line">      (<span class="name">read-sequence</span> buffer fs))))</span><br></pre></td></tr></table></figure>
+<p>遗憾的是，运行上面的代码会报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">The value</span><br><span class="line">  #\H</span><br><span class="line">is not of type</span><br><span class="line">  (UNSIGNED-BYTE 8)</span><br><span class="line">when setting an element of (ARRAY (UNSIGNED-BYTE 8))</span><br><span class="line">   [Condition of type TYPE-ERROR]</span><br><span class="line"></span><br><span class="line">Restarts:</span><br><span class="line"> 0: [RETRY] Retry SLIME interactive evaluation request.</span><br><span class="line"> 1: [*ABORT] Return to SLIME&apos;s top level.</span><br><span class="line"> 2: [ABORT] abort thread (#&lt;THREAD &quot;worker&quot; RUNNING &#123;1007766D53&#125;&gt;)</span><br><span class="line"></span><br><span class="line">Backtrace:</span><br><span class="line">  0: ((SB-VM::OPTIMIZED-DATA-VECTOR-SET (UNSIGNED-BYTE 8)) #&lt;unavailable argument&gt; #&lt;unavailable argument&gt; #&lt;unavailable argument&gt;)</span><br><span class="line">  1: (SB-IMPL:ANSI-STREAM-READ-SEQUENCE #(0 0 0 0 0 0 ...) #&lt;SB-IMPL::STRING-INPUT-STREAM &#123;1007975973&#125;&gt; 0 13)</span><br><span class="line">  2: (READ-SEQUENCE #(0 0 0 0 0 0 ...) #&lt;SB-IMPL::STRING-INPUT-STREAM &#123;1007975973&#125;&gt; :START 0 :END 13)</span><br><span class="line">  3: ((FLET FLEXI-STREAMS::FILL-BUFFER :IN FLEXI-STREAMS::READ-SEQUENCE*) 13)</span><br><span class="line">  4: ((:METHOD FLEXI-STREAMS::READ-SEQUENCE* (FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT T T T T)) #&lt;FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT (:ISO-8859-1 :EOL-STYLE :LF) &#123;1007975B43&#125;&gt; #&lt;FLEXI-STREAMS:FLEXI-INPUT-STRE..</span><br><span class="line">  5: ((:METHOD STREAM-READ-SEQUENCE (TRIVIAL-GRAY-STREAMS:FUNDAMENTAL-INPUT-STREAM T)) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM &#123;1007975C73&#125;&gt; #(0 0 0 0 0 0 ...) 0 NIL) [fast-method]</span><br><span class="line">  6: (READ-SEQUENCE #(0 0 0 0 0 0 ...) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM &#123;1007975C73&#125;&gt; :START 0 :END NIL)</span><br><span class="line">  7: ((LAMBDA ()))</span><br><span class="line">  8: (SB-INT:SIMPLE-EVAL-IN-LEXENV (LET ((TEXT &quot;Hello, world!&quot;)) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))) #&lt;NULL-LEXENV&gt;)</span><br><span class="line">  9: (EVAL (LET ((TEXT &quot;Hello, world!&quot;)) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))))</span><br><span class="line"> 10: ((LAMBDA NIL :IN SWANK:INTERACTIVE-EVAL))</span><br><span class="line"> --more--</span><br></pre></td></tr></table></figure>
+<p>既然在调用READ-SEQUENCE的时候出状况了，不妨试试下面的代码</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">text</span> <span class="string">"Hello, world!"</span>))</span><br><span class="line">  (<span class="name">with-input-from-string</span> (<span class="name">s</span> text)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">fs</span> (<span class="name">flexi-streams</span><span class="symbol">:make-flexi-stream</span> s)))</span><br><span class="line">      (<span class="name">read-char</span> fs))))</span><br></pre></td></tr></table></figure>
+<p>再次令人遗憾的，它会抛出另一个状况（CL中的condition啦）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#&lt;SB-IMPL::STRING-INPUT-STREAM &#123;10020A7243&#125;&gt; is not a binary input stream.</span><br><span class="line">   [Condition of type SIMPLE-TYPE-ERROR]</span><br><span class="line"></span><br><span class="line">Restarts:</span><br><span class="line"> 0: [RETRY] Retry SLIME interactive evaluation request.</span><br><span class="line"> 1: [*ABORT] Return to SLIME&apos;s top level.</span><br><span class="line"> 2: [ABORT] abort thread (#&lt;THREAD &quot;worker&quot; RUNNING &#123;1001F6E813&#125;&gt;)</span><br><span class="line"></span><br><span class="line">Backtrace:</span><br><span class="line">  0: (SB-KERNEL:ILL-BIN #&lt;SB-IMPL::STRING-INPUT-STREAM &#123;10020A7243&#125;&gt;)</span><br><span class="line">  1: (READ-BYTE #&lt;SB-IMPL::STRING-INPUT-STREAM &#123;10020A7243&#125;&gt; NIL NIL)</span><br><span class="line">  2: ((:METHOD FLEXI-STREAMS::READ-BYTE* (FLEXI-STREAMS:FLEXI-INPUT-STREAM)) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM &#123;10020A74C3&#125;&gt;) [fast-method]</span><br><span class="line">  3: ((:METHOD FLEXI-STREAMS::OCTETS-TO-CHAR-CODE (FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT T)) #&lt;FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT (:ISO-8859-1 :EOL-STYLE :LF) &#123;10020A7393&#125;&gt; #&lt;unavailable argument&gt;) [fast-me..</span><br><span class="line">  4: ((:METHOD STREAM-READ-CHAR (FLEXI-STREAMS:FLEXI-INPUT-STREAM)) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM &#123;10020A74C3&#125;&gt;) [fast-method]</span><br><span class="line">  5: (READ-CHAR #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM &#123;10020A74C3&#125;&gt; T NIL #&lt;unused argument&gt;)</span><br><span class="line">  6: ((LAMBDA ()))</span><br><span class="line">  7: (SB-INT:SIMPLE-EVAL-IN-LEXENV (LET ((TEXT &quot;Hello, world!&quot;)) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))) #&lt;NULL-LEXENV&gt;)</span><br><span class="line">  8: (EVAL (LET ((TEXT &quot;Hello, world!&quot;)) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))))</span><br><span class="line">  9: ((LAMBDA NIL :IN SWANK:INTERACTIVE-EVAL))</span><br><span class="line"> --more--</span><br></pre></td></tr></table></figure>
+<p>看来从一开始提供给MAKE-FLEXI-STREAM函数的参数就应当是一个“二进制”的流才对。为此，我需要借助FLEXI-STREAMS自身的力量——调用它的STRING-TO-OCTETS函数。使用这个函数，可以将一个字符串转换为某种编码下的字节数组，例如下面的代码</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">flexi-streams</span><span class="symbol">:string-to-octets</span> <span class="string">"Hello"</span>) <span class="comment">;#(72 101 108 108 111)</span></span><br></pre></td></tr></table></figure>
+<p>得到一串“octet”后，还需要将其转换为“流”才行。再次借助FLEXI-STREAMS的力量，调用它的MAKE-IN-MEMORY-INPUT-STREAM函数，然后将这个函数调用的返回值作为MAKE-FLEXI-STREAM的第一个参数即可，最终的代码如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">text</span> <span class="string">"Hello, world!"</span>)           <span class="comment">; 原始文本</span></span><br><span class="line">       (<span class="name">octets</span> (<span class="name">flexi-streams</span><span class="symbol">:string-to-octets</span> text)) <span class="comment">; 使用flexi-streams转换为字节数组，因为下一个函数只接受这种类型的参数</span></span><br><span class="line">       (<span class="name">memory-input</span> (<span class="name">flexi-streams</span><span class="symbol">:make-in-memory-input-stream</span> octets)) <span class="comment">; 同样先转换为内存中的流，因为下一个函数只接受这种类型的参数</span></span><br><span class="line">       (<span class="name">flexi-stream</span> (<span class="name">flexi-streams</span><span class="symbol">:make-flexi-stream</span> memory-input)) <span class="comment">; 终于可以得到一个真正的flexi-stream了</span></span><br><span class="line">       (<span class="name">buffer</span> (<span class="name">make-array</span> (<span class="name">flexi-streams</span><span class="symbol">:octet-length</span> text)))) <span class="comment">; 这里其实用字节的长度还是用字符的长度（flexi-streams:char-length）都没差</span></span><br><span class="line">  (<span class="name">read-sequence</span> buffer flexi-stream)   <span class="comment">; 可以像处理CL中的流那样处理flexi-stream</span></span><br><span class="line">  (<span class="name">print</span> (<span class="name">coerce</span> buffer 'string)))      <span class="comment">; 把字节数组拼成字符串再输出比较好看</span></span><br></pre></td></tr></table></figure>
+<p>全文完</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/27/flexi-streams用法简介/" data-id="cjozvuoih0000c030qw1zjjbg" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/11/27/编写嵌套反引号的宏/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">编写嵌套反引号的宏</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/27/flexi-streams用法简介/">flexi-streams用法简介</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/27/编写嵌套反引号的宏/">编写嵌套反引号的宏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/25/重复输入相似的命令的几种方法/">重复输入相似的命令的几种方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
