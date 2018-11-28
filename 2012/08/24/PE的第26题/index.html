@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>PE的第26题 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="今天上百度贴吧的ProjectEuler吧时发现大家在讨论第26题的一个解法的原理［求值］求解释原理，然后话题很快又从对解法的原理的解释转移到了对性能的攀比之中——这也是人之常情啦，哪个做PE题目的人不希望自己的方法是尽量快的呢^_^看了一下吧主的解法的运行时间，发现居然不是毫秒级别的，顿时对自己以前的解法需要运行多久心生好奇，于是在已经打开的SLIME中加载了以前的源文件，一运行，发现相当地快，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PE的第26题">
+<meta property="og:url" content="https://liutos.github.io/2012/08/24/PE的第26题/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="今天上百度贴吧的ProjectEuler吧时发现大家在讨论第26题的一个解法的原理［求值］求解释原理，然后话题很快又从对解法的原理的解释转移到了对性能的攀比之中——这也是人之常情啦，哪个做PE题目的人不希望自己的方法是尽量快的呢^_^看了一下吧主的解法的运行时间，发现居然不是毫秒级别的，顿时对自己以前的解法需要运行多久心生好奇，于是在已经打开的SLIME中加载了以前的源文件，一运行，发现相当地快，">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-28T14:54:29.083Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PE的第26题">
+<meta name="twitter:description" content="今天上百度贴吧的ProjectEuler吧时发现大家在讨论第26题的一个解法的原理［求值］求解释原理，然后话题很快又从对解法的原理的解释转移到了对性能的攀比之中——这也是人之常情啦，哪个做PE题目的人不希望自己的方法是尽量快的呢^_^看了一下吧主的解法的运行时间，发现居然不是毫秒级别的，顿时对自己以前的解法需要运行多久心生好奇，于是在已经打开的SLIME中加载了以前的源文件，一运行，发现相当地快，">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liutos.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-PE的第26题" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2012/08/24/PE的第26题/" class="article-date">
+  <time datetime="2012-08-24T14:53:06.000Z" itemprop="datePublished">2012-08-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PE的第26题
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天上百度贴吧的ProjectEuler吧时发现大家在讨论第26题的一个解法的原理<a href="http://tieba.baidu.com/f?ct=335675392&amp;tn=baiduPostBrowser&amp;sc=23484588064&amp;z=1814139127#23484588064" target="_blank" rel="noopener">［求值］求解释原理</a>，然后话题很快又从对解法的原理的解释转移到了对性能的攀比之中——这也是人之常情啦，哪个做PE题目的人不希望自己的方法是尽量快的呢^_^看了一下吧主的解法的运行时间，发现居然不是毫秒级别的，顿时对自己以前的解法需要运行多久心生好奇，于是在已经打开的SLIME中加载了以前的源文件，一运行，发现相当地快，速度上是吧主给出解法的快一百倍，连我自己都吓了一跳，不过还是掩盖不了自己内心的欢喜。</p>
+<h2 id="我的思路"><a href="#我的思路" class="headerlink" title="我的思路"></a>我的思路</h2><p>我不知道吧主是怎么做的，他在贴吧里面没有给出代码，不过我倒是可以给一下我的解法的链接<a href="https://github.com/Liutos/Project-Euler/blob/master/lisp/pro26.lisp" target="_blank" rel="noopener">第26题</a>。刚翻出来看的时候我自己也看蒙了，完全不知道自己当初究竟是怎样的思路的，也不知道自己当初是在怎样的情况下想出这样的代码的。不过再仔细看了一会儿之后，总算有点明白是什么意思了。这其中的做法，还得从小学的时候学习除法来说起……</p>
+<p>哦，不好意思，说太远了，没必要追溯到小学那里去，不过思路本身可能确实就是小学的除法，只不过是找了一下其中的规律，然后用计算机代替了手动计算而已。考虑一个简单的情况，例如一除以二，要怎么计算呢？嗯，因为1比2要小，所以计算结果应该是个小数，所以商必然有0.（零以及小数点），然后在1后面添一个0，再继续计算。这时候我们知道了2×5=10，所以在商的部分再添上一个5，就得到了余数为0的情况。因为余数为0，所以我们知道2是可以整除1的，所以计算就到此结束了，因此1/2=0.5。</p>
+<p>上面的例子是可以整除的情况，因此在小数点后面并没有循环的部分，所以循环部分的长度理所当然的就是0。那如果是一除以六呢？计算方法是一样的，因为1比6小，所以商添上0.，而给1添上一个0得到10，而10除以6的商为1余数为4。接下来给4添上一个0得到40，再进行40除以6的计算过程。最后得到的结果是一个无限循环小数，按照第26题的写法就是0.1(6)。不过且慢，这里有个地方值得注意，那就是对于得到余数为4的情况，我们为其添上了一个0再继续进行计算，这个步骤和一开始为1添上0再进行计算难道有什么本质的差别吗？</p>
+<p>显然没有啊！而且计算40除以6的结果是6.(6)，如果直接把这个计算1除以6时的第一步得到的商进行拼接，就得到了0.1(6)啊。也就是说，小学的时候学到的手动进行除法计算的方法，实际上可以分解成一个递归的算法。具体如何分解不是这里的讨论重点，这里的重点在于怎样从递归的过程中发现可以得到循环部分的长度的方法。</p>
+<h2 id="余数的奥秘"><a href="#余数的奥秘" class="headerlink" title="余数的奥秘"></a>余数的奥秘</h2><p>如果在手动计算的过程中，遇到了某个曾经在余数的位置上出现过的数，那么还有必要继续计算下去吗？显然没有，40除以6得到的第一个余数是4，而这个余数比6小（事实上我们都知道，所有的余数都比除数要小），就需要先将其乘上10再继续计算下去。结果显而易见，一乘上10，就又得到了一开始的40了，这样的话要是继续计算下去，那么结果一定是在重复前面的那些动作，并且永无休止。结论就是，<em>当你遇到了一个余数是之前出现的数的时候，计算就不需要继续下去了，此时根据历史积累的信息，就可以知道循环部分的长度是多少</em>。这也就是我的代码中第一个函数cycle-length的内部辅助函数rec的作用。</p>
+<p>rec接收三个参数，第一个参数就是被除数，第二个数是除数，第三个数是<em>这一次计算得到的商在原来的小数部分上是位于哪一个位置上的</em>一个整数。对于每一个出现过的被除数，都将它们记录在了一个内部的哈希表中（为了查找速度的尽可能快），如果一个被除数已经被计算过了，那么就直接取出它所对应的商所在的位置，然后用现在的商所在的位置减掉前者，就知道了循环部分的长度了；如果没有出现过，那么就计算出这一次计算的余数，如果余数为0，意味着除数可以整除被除数，所以没有循环部分可言，长度为0；如果不能整除，那么这个余数的10倍就是新的被除数（因为余数必定小于除数，所以要乘以10直到大于除数为止），位置计数器加上1，重新进行递归。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2012/08/24/PE的第26题/" data-id="cjp1az2760001mf30j8i5ul4n" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2012/08/31/连分数与ProjectEuler的第66题/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          连分数与ProjectEuler的第66题
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/27/flexi-streams用法简介/">flexi-streams用法简介</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/27/编写嵌套反引号的宏/">编写嵌套反引号的宏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/25/重复输入相似的命令的几种方法/">重复输入相似的命令的几种方法</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/16/值得使用的软件之Alfred/">值得使用的软件之Alfred</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/30/如何使用CL实现snowflake/">如何使用CL实现snowflake</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Common Lisp的restart特性 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="主流的编程语言中，表示出现错误的手段不外乎两种：  函数调用返回错误码 函数调用抛出异常  C语言就属于前者，它的fopen(3)函数在成功打开文件时返回一个FILE指针，失败时返回NULL，并将错误代码写入全局变量errno；Ruby语言属于后者，它的File.open方法在找不到文件时抛出ENOENT的异常，在File.open之外包裹一层begin…rescue…end即可捕捉其抛出的异常。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Common Lisp的restart特性">
+<meta property="og:url" content="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="主流的编程语言中，表示出现错误的手段不外乎两种：  函数调用返回错误码 函数调用抛出异常  C语言就属于前者，它的fopen(3)函数在成功打开文件时返回一个FILE指针，失败时返回NULL，并将错误代码写入全局变量errno；Ruby语言属于后者，它的File.open方法在找不到文件时抛出ENOENT的异常，在File.open之外包裹一层begin…rescue…end即可捕捉其抛出的异常。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-28T14:52:45.264Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Common Lisp的restart特性">
+<meta name="twitter:description" content="主流的编程语言中，表示出现错误的手段不外乎两种：  函数调用返回错误码 函数调用抛出异常  C语言就属于前者，它的fopen(3)函数在成功打开文件时返回一个FILE指针，失败时返回NULL，并将错误代码写入全局变量errno；Ruby语言属于后者，它的File.open方法在找不到文件时抛出ENOENT的异常，在File.open之外包裹一层begin…rescue…end即可捕捉其抛出的异常。">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liutos.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Common-Lisp的restart特性" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/17/Common-Lisp的restart特性/" class="article-date">
+  <time datetime="2017-01-17T14:51:52.000Z" itemprop="datePublished">2017-01-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Common Lisp的restart特性
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>主流的编程语言中，表示出现错误的手段不外乎两种：</p>
+<ul>
+<li>函数调用返回错误码</li>
+<li>函数调用抛出异常</li>
+</ul>
+<p>C语言就属于前者，它的fopen(3)函数在成功打开文件时返回一个FILE指针，失败时返回NULL，并将错误代码写入全局变量errno；Ruby语言属于后者，它的File.open方法在找不到文件时抛出ENOENT的异常，在File.open之外包裹一层begin…rescue…end即可捕捉其抛出的异常。</p>
+<p>Common Lisp的错误机制叫做状况系统（Condition System），与异常机制相似，可以实现抛出异常（使用函数error）和捕捉异常（使用宏handler-case）。但与其它语言的异常机制不同的地方在于，状况系统有一种名为RESTART的特性，能够由使用者、或者由代码决定是否要、以及如何从错误中恢复过来。听起来很别致也很诡异，不妨继续往下看。</p>
+<p>假设我有一个Web框架，它提供了将日志记录到文件中的功能。这个功能需要先调用名为init-logger的函数进行初始化，该函数实现如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-logger ()</span><br><span class="line">  (<span class="name">with-open-file</span> (<span class="name">s</span> <span class="string">"/tmp/log/web.log"</span></span><br><span class="line">                     <span class="symbol">:direction</span> <span class="symbol">:output</span></span><br><span class="line">                     <span class="symbol">:if-exists</span> <span class="symbol">:supersede</span>)</span><br><span class="line">    (<span class="name">format</span> s <span class="string">"Logger module starting..."</span>)))</span><br></pre></td></tr></table></figure>
+<p>这个函数被框架的初始化代码所调用，如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-framework ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Framework starting...~%"</span>)</span><br><span class="line">  (<span class="name">init-plugin</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> init-plugin ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Plugins starting...~%"</span>)</span><br><span class="line">  (<span class="name">init-logger</span>))</span><br></pre></td></tr></table></figure>
+<p>而框架的初始化代码则由应用的初始化代码所调用，如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-app ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Application starting...~%"</span>)</span><br><span class="line">  (<span class="name">init-framework</span>))</span><br></pre></td></tr></table></figure>
+<p>如果在目录<code>/tmp/log</code>不存在时调用init-app函数，我将会收到一个错误，说明其无法找到<code>/tmp/log/web.log</code>这个文件。为了避免错误打断了应用的正常启动流程，可以让init-app函数负责创建这个用于存放日志文件的目录。将init-app函数改写为如下形式</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-app ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Application starting...~%"</span>)</span><br><span class="line">  (<span class="name">ensure-directories-exist</span> <span class="string">"/tmp/log/"</span>)</span><br><span class="line">  (<span class="name">init-framework</span>))</span><br></pre></td></tr></table></figure>
+<p>尽管这种做法确实可行，但它导致应用层的代码（init-app函数）必须了解位于底层的日志模块的实现细节。直觉告诉我这样子是不对的，框架的事情应该由框架本身提供方案来解决。借助Common Lisp的restart功能，框架确实可以对外提供一种解决方案。</p>
+<p>首先需要主动检测用于存放日志文件的目录是否存在。借助UIOP这个包可以写出如下代码</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-logger ()</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">dir</span> <span class="string">"/tmp/log/"</span>))</span><br><span class="line">    (<span class="name">unless</span> (<span class="name">uiop</span><span class="symbol">:directory-exists-p</span> dir)</span><br><span class="line">      (<span class="name">error</span> 'file-error <span class="symbol">:pathname</span> dir))</span><br><span class="line">    (<span class="name">with-open-file</span> (<span class="name">s</span> (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"~Aweb.log"</span> dir)</span><br><span class="line">                       <span class="symbol">:direction</span> <span class="symbol">:output</span></span><br><span class="line">                       <span class="symbol">:if-exists</span> <span class="symbol">:supersede</span>)</span><br><span class="line">      (<span class="name">format</span> s <span class="string">"Logger module starting..."</span>))))</span><br></pre></td></tr></table></figure>
+<p>接着，init-logger需要主动为调用者提供目录不存在的问题的解决方案，一种办法就是当这个目录不存在时，可以由调用者选择是否创建。使用Common Lisp的<code>restart-case</code>宏，我将init-logger改写为如下形式</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-logger ()</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">dir</span> <span class="string">"/tmp/log/"</span>))</span><br><span class="line">    (<span class="name">restart-case</span></span><br><span class="line">        (<span class="name">unless</span> (<span class="name">uiop</span><span class="symbol">:directory-exists-p</span> dir)</span><br><span class="line">          (<span class="name">error</span> 'file-error <span class="symbol">:pathname</span> dir))</span><br><span class="line">      (<span class="name">create-log-directory</span> ()</span><br><span class="line">        <span class="symbol">:report</span> (<span class="name">lambda</span> (<span class="name">stream</span>)</span><br><span class="line">                  (<span class="name">format</span> stream <span class="string">"Create the directory ~A"</span> dir))</span><br><span class="line">        (<span class="name">ensure-directories-exist</span> dir)))</span><br><span class="line">    (<span class="name">with-open-file</span> (<span class="name">s</span> (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"~Aweb.log"</span> dir)</span><br><span class="line">                       <span class="symbol">:direction</span> <span class="symbol">:output</span></span><br><span class="line">                       <span class="symbol">:if-exists</span> <span class="symbol">:supersede</span>)</span><br><span class="line">      (<span class="name">format</span> s <span class="string">"Logger module starting..."</span>))))</span><br></pre></td></tr></table></figure>
+<p>此时如果调用第一版的init-app函数，那么init-logger仍将抛出异常（类型为file-error与之前一样）并将我带入到SBCL（我用的是SBCL）的调试器中，但看到的内容会稍有不同</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">error on file <span class="string">"/tmp/log"</span></span><br><span class="line">   [Condition of type FILE-ERROR]</span><br><span class="line"></span><br><span class="line">Restarts:</span><br><span class="line"> 0: [CREATE-LOG-DIRECTORY] Create the directory /tmp/log ;; &lt;- 新增了这一行</span><br><span class="line"> 1: [RETRY] Retry SLIME REPL evaluation request.</span><br><span class="line"> 2: [*ABORT] Return to SLIME's top level.</span><br><span class="line"> 3: [ABORT] abort thread (#&lt;THREAD "new-repl-thread" RUNNING &#123;1001F958A3&#125;&gt;)</span><br></pre></td></tr></table></figure>
+<p>在Restarts中新增了名为create-log-directory的一项，这正是在init-logger中通过<code>restart-case</code>定义的新的”恢复措施“。我输入0触发这个restart，Common Lisp会回到它被定义的<code>restart-case</code>宏相应的子句中执行其中的表达式，也就是调用<code>CL:ENSURE-DIRECTORY-EXIST</code>函数创建/tmp/log。</p>
+<p>如果总是希望执行<code>CREATE-LOG-DIRECTORY</code>这个选项来创建存放日志文件的目录，可以直接在代码中指定，只需要配合使用Common Lisp的<code>handler-bind</code>和<code>invoke-restart</code>函数即可，最终init-app函数的实现如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-app ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Application starting...~%"</span>)</span><br><span class="line">  (<span class="name">handler-bind</span></span><br><span class="line">      ((<span class="name">file-error</span> #'(lambda (c)</span><br><span class="line">                       (declare (ignorable c))</span><br><span class="line">                       (invoke-restart 'create-log-directory))))</span><br><span class="line">    (<span class="name">init-framework</span>)))</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/" data-id="cjp1az2720000mf30szf2pa0t" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/23/如何用Common-Lisp实现尾递归优化/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          如何用Common Lisp实现尾递归优化
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/10/手动安装mysql/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">手动安装mysql</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/27/flexi-streams用法简介/">flexi-streams用法简介</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/27/编写嵌套反引号的宏/">编写嵌套反引号的宏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/25/重复输入相似的命令的几种方法/">重复输入相似的命令的几种方法</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/16/值得使用的软件之Alfred/">值得使用的软件之Alfred</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/30/如何使用CL实现snowflake/">如何使用CL实现snowflake</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
