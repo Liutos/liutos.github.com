@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>涂色笔试题的动态规划解法 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="链子涂色问题的动态规划解法话说大四已经开始了一个半月了，自己自从开学以来也一直在找工作，相继投了很多家IT公司。可悲的是，笔试过后就完全没有回音了——参加了多益网络的笔试两天后倒是有回音，只是收到的是拒绝的邮件QAQ。说实话，现在对于自己能不能够顺利地找到工作还是很担忧的，所以最近开始了紧张的复习。不过自己实在是懒，所以也没有像别人考研那么地拼命，只是在刷完微博读完邮件逛完豆瓣后开始看一些讲数据结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="涂色笔试题的动态规划解法">
+<meta property="og:url" content="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="链子涂色问题的动态规划解法话说大四已经开始了一个半月了，自己自从开学以来也一直在找工作，相继投了很多家IT公司。可悲的是，笔试过后就完全没有回音了——参加了多益网络的笔试两天后倒是有回音，只是收到的是拒绝的邮件QAQ。说实话，现在对于自己能不能够顺利地找到工作还是很担忧的，所以最近开始了紧张的复习。不过自己实在是懒，所以也没有像别人考研那么地拼命，只是在刷完微博读完邮件逛完豆瓣后开始看一些讲数据结">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://liutos.github.io/pictures/changeColor.png">
+<meta property="og:image" content="https://liutos.github.io/pictures/fnCall.png">
+<meta property="og:image" content="https://liutos.github.io/pictures/table.png">
+<meta property="og:image" content="https://liutos.github.io/pictures/result.png">
+<meta property="og:updated_time" content="2018-11-29T14:59:11.641Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="涂色笔试题的动态规划解法">
+<meta name="twitter:description" content="链子涂色问题的动态规划解法话说大四已经开始了一个半月了，自己自从开学以来也一直在找工作，相继投了很多家IT公司。可悲的是，笔试过后就完全没有回音了——参加了多益网络的笔试两天后倒是有回音，只是收到的是拒绝的邮件QAQ。说实话，现在对于自己能不能够顺利地找到工作还是很担忧的，所以最近开始了紧张的复习。不过自己实在是懒，所以也没有像别人考研那么地拼命，只是在刷完微博读完邮件逛完豆瓣后开始看一些讲数据结">
+<meta name="twitter:image" content="https://liutos.github.io/pictures/changeColor.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liutos.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-涂色笔试题的动态规划解法" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2012/10/18/涂色笔试题的动态规划解法/" class="article-date">
+  <time datetime="2012-10-18T14:58:23.000Z" itemprop="datePublished">2012-10-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      涂色笔试题的动态规划解法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="链子涂色问题的动态规划解法"><a href="#链子涂色问题的动态规划解法" class="headerlink" title="链子涂色问题的动态规划解法"></a>链子涂色问题的动态规划解法</h1><p>话说大四已经开始了一个半月了，自己自从开学以来也一直在找工作，相继投了很多家IT公司。可悲的是，笔试过后就完全没有回音了——参加了多益网络的笔试两天后倒是有回音，只是收到的是拒绝的邮件QAQ。说实话，现在对于自己能不能够顺利地找到工作还是很担忧的，所以最近开始了紧张的复习。不过自己实在是懒，所以也没有像别人考研那么地拼命，只是在刷完微博读完邮件逛完豆瓣后开始看一些讲数据结构和算法的书罢了。至于是否真的有效，我也不清楚，毕竟笔试题目也不一定就完全考察这些内容的。不过按照目前的几次经验来讲，考察数据结构和算法的擦边球也有不少，可以说也是为了日后的面试准备一下吧，如果有面试的话……QAQ。</p>
+<h2 id="问题来源与描述"><a href="#问题来源与描述" class="headerlink" title="问题来源与描述"></a>问题来源与描述</h2><p>前面跑题还真严重，算是个人风格吧……话说室友去了一家名为CVT的公司参加笔试和面试，尽管最后第二轮被刷了，不过可以说还是挺厉害的。他在参加了笔试之后回来和我说了一道题目，大意是“给一串红绿珠子并存的链子，要求通过涂色把红色的珠子全部放到绿色的珠子的左边去，要求涂色的次数尽可能地少”。刚开始的时候没有认真听，于是就觉得这是编辑距离的变体罢了，那天晚上就把这个思路脱口而出，结果他第二天去面试面试官又拿这道题问他有没有新思路，结果估计被我害得够呛吧，惭愧。</p>
+<p>题目其实有蹊跷，因为编辑距离是有前提的，那就是做变换的过程中要可以使用插入和删除操作，而那道题只允许涂色，那么也就是编辑距离中的替换操作罢了。还有另外一个和编辑距离不同的地方，那就是最终的变换目标不是唯一的，因为完全可以把链子里的珠子全部涂成一个颜色，那样就不会有红色在绿色的右边的情形了。所以，这道题目不是编辑距离的变体。唉，都怪自己太骄傲了，没有读懂题目。</p>
+<h2 id="动态规划的解法"><a href="#动态规划的解法" class="headerlink" title="动态规划的解法"></a>动态规划的解法</h2><p>前天上计算智能的课的时候，因为室友（去笔试的那位）想到了正确的线性时间的解法，所以我也不甘落后，开始在课堂上捣鼓起这道题目来。我的预感是，一般笔试题应该都可以用动态规划来做的，于是就从动态规划的角度来思考，结果也确实想到了一个办法。尽管不知道网上是不是已经有这道题的解法了，不过还是拿出来分享一下吧。</p>
+<p>既然要使用动态规划，那么当然要按部就班地来思考。首先，就是要<em>描述最优解的结构</em>，也就是要找出问题解的最优子结构。为了便于描述，先约定一些记法。对于珠子和链子这种东西，可以把它们适当地抽象为元素和数组，用R代表红色而用G代表绿色，同时用S表示整个数组。数组的长度记为S.len，数组的第n个元素记为S[n]，而把最后一个元素拿掉之后的数组记为S[1..(S.len-1)]（类似于Python中的数组slice的写法）。对具体的数组实施变换，即涂色操作的功能就命名为F，它是一个二元函数，第一个参数是数组，第二个参数是位于数组之后的元素。为什么要这样子定义，而不是定义为一元函数呢？</p>
+<h3 id="不一样的最优子结构"><a href="#不一样的最优子结构" class="headerlink" title="不一样的最优子结构"></a>不一样的最优子结构</h3><p>对于数组的最后一个元素S[S.len]，它只有两种可能：</p>
+<ul>
+<li>S[S.len]为R；</li>
+<li>S[S.len]为G。</li>
+</ul>
+<p>并且如果本来是红色R的，那么可以涂成绿色G的；本来是绿色G的，可以涂成红色R。可是对于一个珠子，是不是真的可以随意地对它涂色的呢？显然不是的。例如，如果已经确定了整个数组S的下一个元素是红色R的，那么S[S.len]就无论如何也不能涂成绿色，因为这样一来就绝对无法得到红色全在绿色右边的链子了。所以，如果操作F是最优的，即F对于一个数组S以及给定的下一个元素a，它的涂色次数最少，那么：</p>
+<ul>
+<li>如果a为R，那么F肯定是把前缀S[1..(S.len-1)]也给全部涂成了红色；</li>
+<li>如果a为G，那么F对于数组S的前缀S[1..(S.len-1)]的涂色次数肯定也是最少的。</li>
+</ul>
+<p>上述的第二条，正是解的最优子结构。</p>
+<h3 id="递归定义最优解的值"><a href="#递归定义最优解的值" class="headerlink" title="递归定义最优解的值"></a>递归定义最优解的值</h3><p>显然，最优解的值也就是最优解的衡量标准，即需要对原来的数组进行的涂色的次数。既然要递归定义，那么就要考虑递归的一般情形（也就是需要递归的情形）以及基准的情形。对于下一个元素a为红色的情况，只能继续选择把目前处理的数组的最后一个元素也涂成红色，因此如果原来的数组最后一个元素S[S.len]不是红色，那么就需要一次涂色操作，如果是那么就不需要；对于下一个元素为绿色的情况，需要分别考虑要不要涂改最后一个元素的问题。如果涂，那么就增加一次操作，不涂就不需要。在a为绿色的两个分支中，涂成（或者保留）红色末尾元素的情形，和a为红色的情况的递归是一样，因此这里确实存在重叠子问题——动态规划的另一个要求。至于基准情况，则是当数组只有两个元素时的情况。此时，只能是GG、GR、RG、GG这四种，除了GR需要进行一次涂色之外，其它的均不需要涂色。</p>
+<p>用数学公式来表示递归的情形可能更清楚：</p>
+<p><img src="/pictures/changeColor.png">其中diff函数判断两个参数是否相等。如果相等，那么就返回0，否则返回1。也就是在从第一个参数变换到第二个参数时所需要的涂色次数。</p>
+<h3 id="按自底向上的方式计算最优解的值"><a href="#按自底向上的方式计算最优解的值" class="headerlink" title="按自底向上的方式计算最优解的值"></a>按自底向上的方式计算最优解的值</h3><p>在思考如何自底向上的时候，我采用的办法是先自顶向下地演示一遍。如下图所示，其中入口功能的名字为G，例子所使用的数组为RGRG：</p>
+<p><img src="/pictures/fnCall.png"></p>
+<p>显然这里需要构造一个表格来对F过程的中间结果进行存储，因为F是一个二元的函数。尽管F的第一个参数是一个数组，可是原来的数组是不会变的，所以只需要记住当前处理的数组是由原来的数组的前多少个元素组成的前缀即可，因此F的第一个参数可以用数字来代替。因此，在处理过程中需要的是这样的一张表：</p>
+<p><img src="/pictures/table.png">（不好意思，图中的空格没有对齐&gt;_&lt;）</p>
+<p>那么如何自底向上呢？首先对于参数为1而下一个元素为R的情况，因为是递归函数的基准情况，所以可以直接得到F(1, R)=F([R], R)为0，于是填入0；同样第二行的第一个空格的值也为0。当需要填写第一行的第二个空格的时候，可以知道因为下一个元素为R，所以此处的值只与之前的末尾元素亦为红色R的情形有关，所以这个值只与第一行的前一个值有关，并且此时的元素S[2]为G与R不同，因此需要变换，故增加一；而第二行的第二个空格的值取决于前一列的两个格子的值。此时即计算G([RGG])的值，所以取F([RG], G)和F([RG], R)+1的较小值，即1。其它空格以此类推，最终结果为：</p>
+<p><img src="/pictures/result.png"></p>
+<h3 id="由计算出的结果构造一个最优解"><a href="#由计算出的结果构造一个最优解" class="headerlink" title="由计算出的结果构造一个最优解"></a>由计算出的结果构造一个最优解</h3><p>显然，最后一列的结果就是所要的值，例如上面的数组[RGRG]的最少涂色次数是1，并且操作是将第二个位置上的G涂成R。这样的操作反映在中间结果中，就是先找出最后一列的元素的值最小的那一行，例如上面就是第二行。然后就是在所有的列中找出所有与下一列的值不一样的列，将其对应的珠子的颜色翻转。例如在上面的表格中，就是将第二列的G涂成R，因为G对应的数字0不同于下一列的数字1。好吧，这一次，我就不给代码了，因为我还没有写出来;)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/" data-id="cjp2q7krl000db030fqe8sx4y" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2012/10/26/递归、闭包、面向对象/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          递归、闭包、面向对象
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2012/09/20/三个角度思考问题的不同结果/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">三个角度思考问题的不同结果</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/27/编写嵌套反引号的宏/">编写嵌套反引号的宏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/25/重复输入相似的命令的几种方法/">重复输入相似的命令的几种方法</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/16/值得使用的软件之Alfred/">值得使用的软件之Alfred</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/18/flexi-streams用法简介/">flexi-streams用法简介</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/30/如何使用CL实现snowflake/">如何使用CL实现snowflake</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

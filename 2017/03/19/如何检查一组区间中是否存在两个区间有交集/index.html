@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>如何检查一组区间中是否存在两个区间有交集 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="假设有N个区间，将它们表达为，其中下标i位于区间中 为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间而言，都有（这里的i小于N-1）。 为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系  这是因为如果，那么所有位于区间中的数都将会小于 b_k，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何检查一组区间中是否存在两个区间有交集">
+<meta property="og:url" content="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="假设有N个区间，将它们表达为，其中下标i位于区间中 为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间而言，都有（这里的i小于N-1）。 为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系  这是因为如果，那么所有位于区间中的数都将会小于 b_k，">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?%5Bb_i,%20e_i%5D">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?b_i%20%3C%20b_%7Bi+1%7D">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?e_j%20%3C%20b_k">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?%5Bb_j,%20e_j%5D">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_k%20%3C%20e_j">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?k%20-%20j%20%3E%201">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_l">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k%20%3E%20b_l">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?%5Bb_l,%20e_j%5D">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?e_l%20%3E%20e_j">
+<meta property="og:updated_time" content="2018-11-29T14:50:34.401Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何检查一组区间中是否存在两个区间有交集">
+<meta name="twitter:description" content="假设有N个区间，将它们表达为，其中下标i位于区间中 为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间而言，都有（这里的i小于N-1）。 为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系  这是因为如果，那么所有位于区间中的数都将会小于 b_k，">
+<meta name="twitter:image" content="http://latex.codecogs.com/gif.latex?%5Bb_i,%20e_i%5D">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liutos.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-如何检查一组区间中是否存在两个区间有交集" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" class="article-date">
+  <time datetime="2017-03-19T14:49:46.000Z" itemprop="datePublished">2017-03-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      如何检查一组区间中是否存在两个区间有交集
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>假设有N个区间，将它们表达为<img src="http://latex.codecogs.com/gif.latex?%5Bb_i,%20e_i%5D" alt="">，其中下标i位于区间<img src="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">中</p>
+<p>为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间<img src="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">而言，都有<img src="http://latex.codecogs.com/gif.latex?b_i%20%3C%20b_%7Bi+1%7D" alt="">（这里的i小于N-1）。</p>
+<p>为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系</p>
+<p><img src="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k" alt=""></p>
+<p>这是因为如果<img src="http://latex.codecogs.com/gif.latex?e_j%20%3C%20b_k" alt="">，那么所有位于区间<img src="http://latex.codecogs.com/gif.latex?%5Bb_j,%20e_j%5D" alt="">中的数都将会小于 b_k，那么第j个区间与第k个区间就不可能有交集了，因此上述不等式一定成立。再加上这一组区间都是按照区间的下界递增排序的，那么必然有</p>
+<p><img src="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_k%20%3C%20e_j" alt=""></p>
+<p>假设<img src="http://latex.codecogs.com/gif.latex?k%20-%20j%20%3E%201" alt="">，由于k和j都是正整数，这意味着在第j和第k个区间之间，必然还存在着一个区间l，那么这个区间的必然满足</p>
+<p><img src="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_l" alt=""></p>
+<p><img src="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k%20%3E%20b_l" alt=""></p>
+<p>这就意味着第j个区间和第l个区间也存在交集，它们的交集是子区间<img src="http://latex.codecogs.com/gif.latex?%5Bb_l,%20e_j%5D" alt="">（这里假设<img src="http://latex.codecogs.com/gif.latex?e_l%20%3E%20e_j" alt="">）。这就说明了，如果可以在一组区间中找到两个不相邻的区间，它们存在重叠的部分，那么一定可以找到第三个区间，使得这个区间与其中的一个区间也存在重叠。</p>
+<p>这表示如果我们要判定一组区间是否存在重叠，那么只需要先将它们基于区间的起点按照递增排序后，比较每一对相邻的两个区间是否存在重叠即可。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" data-id="cjp2q7krb0007b030ebfxchmf" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/30/如何使用CL实现snowflake/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          如何使用CL实现snowflake
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/23/如何用Common-Lisp实现尾递归优化/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">如何用Common Lisp实现尾递归优化</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/27/编写嵌套反引号的宏/">编写嵌套反引号的宏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/25/重复输入相似的命令的几种方法/">重复输入相似的命令的几种方法</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/16/值得使用的软件之Alfred/">值得使用的软件之Alfred</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/18/flexi-streams用法简介/">flexi-streams用法简介</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/30/如何使用CL实现snowflake/">如何使用CL实现snowflake</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
