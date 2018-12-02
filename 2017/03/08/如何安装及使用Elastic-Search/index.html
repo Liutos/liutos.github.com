@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>如何安装及使用Elastic Search | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近产品需要一个搜索商城中的商品的功能，于是接触了一下Elastic Search。虽然久仰它的大名，但一直都没有真正用过。这次稍微摸索了一下，顺便记录下来，说不定哪天就真的需要用上了。 安装首先需要下载Elastic Search，我选择了.zip格式的安装包，下载地址在这里。下载完成后就拿到了一个5.2.2版本的Elastic Search的安装包，只需要解压即可使用。因为我喜欢把软件安装到主">
+<meta name="keywords" content="elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何安装及使用Elastic Search">
+<meta property="og:url" content="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近产品需要一个搜索商城中的商品的功能，于是接触了一下Elastic Search。虽然久仰它的大名，但一直都没有真正用过。这次稍微摸索了一下，顺便记录下来，说不定哪天就真的需要用上了。 安装首先需要下载Elastic Search，我选择了.zip格式的安装包，下载地址在这里。下载完成后就拿到了一个5.2.2版本的Elastic Search的安装包，只需要解压即可使用。因为我喜欢把软件安装到主">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-12-02T13:30:33.865Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何安装及使用Elastic Search">
+<meta name="twitter:description" content="最近产品需要一个搜索商城中的商品的功能，于是接触了一下Elastic Search。虽然久仰它的大名，但一直都没有真正用过。这次稍微摸索了一下，顺便记录下来，说不定哪天就真的需要用上了。 安装首先需要下载Elastic Search，我选择了.zip格式的安装包，下载地址在这里。下载完成后就拿到了一个5.2.2版本的Elastic Search的安装包，只需要解压即可使用。因为我喜欢把软件安装到主">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liutos.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-如何安装及使用Elastic-Search" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/08/如何安装及使用Elastic-Search/" class="article-date">
+  <time datetime="2017-03-08T09:31:32.000Z" itemprop="datePublished">2017-03-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      如何安装及使用Elastic Search
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近产品需要一个搜索商城中的商品的功能，于是接触了一下Elastic Search。虽然久仰它的大名，但一直都没有真正用过。这次稍微摸索了一下，顺便记录下来，说不定哪天就真的需要用上了。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>首先需要下载Elastic Search，我选择了.zip格式的安装包，下载地址在<a href="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.2.zip" target="_blank" rel="noopener">这里</a>。下载完成后就拿到了一个5.2.2版本的Elastic Search的安装包，只需要解压即可使用。因为我喜欢把软件安装到主目录的app目录下，所以我用的命令是</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/liutos/app</span><br><span class="line">unzip ../installer/elasticsearch-5.2.2.zip</span><br></pre></td></tr></table></figure>
+<p>主目录下的installer是我习惯的用来存放软件的安装包的位置。解压后生成了一个名为elasticsearch-5.2.2的新目录。在这个目录下有一个名为bin的子目录，只需要进入该目录运行其中的elasticsearch文件即可，实例命令为</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> elasticsearch-5.2.2/bin</span><br><span class="line">./elasticsearch -d</span><br></pre></td></tr></table></figure>
+<p>为了让Elastic Search可以不占用当前的终端，添加了-d选项，使其以后台进程（daemon）的方式运行。Elastic Search需要JVM才能运行，在执行上面的命令之前请各位自行准备好Java程序的运行环境。成功启动后，Elastic Search默认会监听9200端口，可以通过浏览器访问<a href="http://localhost:9200" target="_blank" rel="noopener">http://localhost:9200</a>来确认Elastic Search是否正常启动了</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h2><p>遵照官方文档中的指导，先创建一个索引以便后续向这个索引中添加文档。假设要创建的索引是为商品准备的，取名为products，可以通过如下的命令创建出来</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X PUT <span class="string">'http://localhost:9200/products'</span></span><br></pre></td></tr></table></figure>
+<p>创建成功后Elastic Search的响应结果为</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">"acknowledged"</span>:<span class="literal">true</span>,<span class="string">"shards_acknowledged"</span>:<span class="literal">true</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>如果希望Elastic Search返回更可读的形式，可以添加<code>?pretty</code>参数到上面的URL的末尾。</p>
+<h2 id="文档的增删查改"><a href="#文档的增删查改" class="headerlink" title="文档的增删查改"></a>文档的增删查改</h2><p>索引已经创建了，就可以创建文档了。Elastic Search的文档是对象形式的，假设现在要创建的对象的类型为product，示例命令如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">'http://localhost:9200/products/product'</span> --data <span class="string">'</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  "id": 1,</span></span><br><span class="line"><span class="string">  "name": "Product 1"</span></span><br><span class="line"><span class="string">&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>在我的机器上，Elastic Search的响应结果为</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">"_index"</span>:<span class="string">"products"</span>,<span class="string">"_type"</span>:<span class="string">"product"</span>,<span class="string">"_id"</span>:<span class="string">"AVqpZHmVckriR6iVcbaW"</span>,<span class="string">"_version"</span>:1,<span class="string">"result"</span>:<span class="string">"created"</span>,<span class="string">"_shards"</span>:&#123;<span class="string">"total"</span>:2,<span class="string">"successful"</span>:1,<span class="string">"failed"</span>:0&#125;,<span class="string">"created"</span>:<span class="literal">true</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>其中名为”_id”的字段的值为Elastic Search自动为这份新写入的文档分配的ID，通过这个ID可以从Elastic Search中取出这份文档，示例命令如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">'http://localhost:9200/products/product/AVqpZHmVckriR6iVcbaW?pretty'</span></span><br></pre></td></tr></table></figure>
+<p>相当的RESTful的接口路径，也许你已经猜到了，删除一个文档的代码就是将请求的GET方法替换为DELETE。是的，示例代码如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X DELETE <span class="string">'http://localhost:9200/products/product/AVqpZHmVckriR6iVcbaW?pretty'</span></span><br></pre></td></tr></table></figure>
+<p>再次查找刚才的ID的文档时，响应结果中的”_found”字段的值就已经变成了false了。关于修改文档的方法，请参考官方手册中的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html" target="_blank" rel="noopener">章节</a>。</p>
+<h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2><h3 id="准备数据"><a href="#准备数据" class="headerlink" title="准备数据"></a>准备数据</h3><p>最简单的搜索接口的使用就是通过浏览器访问<a href="http://localhost:9200/products/_search" target="_blank" rel="noopener">http://localhost:9200/products/_search</a>这个地址了。在我的机器上，看到的页面内容为如下的JSON字符串</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="string">"took"</span>: <span class="number">42</span>,</span><br><span class="line">    <span class="string">"timed_out"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"_shards"</span>: &#123;</span><br><span class="line">        <span class="string">"total"</span>: <span class="number">5</span>,</span><br><span class="line">        <span class="string">"successful"</span>: <span class="number">5</span>,</span><br><span class="line">        <span class="string">"failed"</span>: <span class="number">0</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"hits"</span>: &#123;</span><br><span class="line">        <span class="string">"total"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">"max_score"</span>: <span class="literal">null</span>,</span><br><span class="line">        <span class="string">"hits"</span>: [ ]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了方便接下来的演示，先通过Elastic Search的_bulk接口向其批量创建文档数据，示例代码如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">'http://localhost:9200/_bulk?pretty'</span> --data-binary <span class="string">'@docs'</span></span><br></pre></td></tr></table></figure>
+<p>其中docs文件中的内容为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 1&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;设计模式之禅&quot;&#125;</span><br><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 2&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;失控：全人类的最终命运和结局&quot;&#125;</span><br><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 3&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;构建高性能Web站点&quot;, &quot;price&quot;: 75.00, &quot;author&quot;: &quot;郭欣&quot;&#125;</span><br><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 4&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;大型网站技术架构：核心原理与案例分析&quot;, &quot;price&quot;: 59.00, &quot;author&quot;: &quot;李智慧&quot;, &quot;publisher&quot;: &quot;电子工业出版社&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>尽管这里是一个文本文件，但是根据<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html" target="_blank" rel="noopener">官方文档</a>的说法，此处需要使用curl的二进制模式来发送数据，否则会报错。</p>
+<h3 id="个性化搜索"><a href="#个性化搜索" class="headerlink" title="个性化搜索"></a>个性化搜索</h3><p>如果希望找到《失控》这本书的信息，那么可以根据书名进行查找，示例代码如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">'http://localhost:9200/products/_search?q=name:失控'</span></span><br></pre></td></tr></table></figure>
+<p>Elastic Search提供了许多的搜索选项，如果全部通过URL中的query string来传递将会非常难以构造。为此，可以使用Elastic Search提供的基于HTTP body的参数传递方式，示例代码如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search'</span> --data <span class="string">'&#123;"query": &#123;"match": &#123;"name": "失控"&#125;&#125;&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>Elastic Search支持相当丰富的搜索选项，这里不逐一介绍了，大家可以从官方文档的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html" target="_blank" rel="noopener">这里</a>开始翻看。本来想在Chrome的POSTMAN插件中试验搜索功能的，结果当我选定了GET方法后，就不需要我提交HTTP body了，因此还是用curl进行演示。回到正题，如果我们搜索的是一个“站”字，那么Elastic Search会吐出两个结果，此处可以使用搜索接口的<code>from</code>和<code>size</code>参数，分别控制返回的内容取自搜索结果中的哪一个片段。例如想要取出结果中的第二个，可以使用下列代码</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search?pretty'</span> --data <span class="string">'&#123;"from": 1, "size": 1, "query": &#123;"match": &#123;"name": "站"&#125;&#125;&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>通过结合使用<code>from</code>和<code>size</code>参数，可以实现许多应用中所要求的分页功能。在我厂的业务场景中，商品信息还是很多的，不可能全部放入到Elastic Search中作为文档数据存储，Elastic Search只是负责提供搜索出来的商品ID即可，之后再通过商品ID从原来的商品的数据库中按照顺序取出对应的完整的商品信息。因此，在搜索Elastic Search时实际上只需要商品的ID就足够了，可以通过Elastic Search提供的<code>_source</code>字段控制接口吐出的内容，示例代码如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search?pretty'</span> --data <span class="string">'&#123;"query": &#123;"match_all": &#123;&#125;&#125;, "_source": ["_id"]&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>这样在吐出的内容中<code>_source</code>字段的值就会是一个空对象，应用程序只需要取每一个hits数组中的记录的”_id”字段即可。这样做的目的是减少Elastic Search通过网络传输了一部分毫无必要的数据，略微优化一下网络开销</p>
+<p>全文完</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/" data-id="cjp6xfqwx000cnu309auj19nu" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          如何检查一组区间中是否存在两个区间有交集
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/23/如何用Common-Lisp实现尾递归优化/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">如何用Common Lisp实现尾递归优化</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/alfred/" style="font-size: 10px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 13.33px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/project-euler/" style="font-size: 16.67px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/27/编写嵌套反引号的宏/">编写嵌套反引号的宏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/25/重复输入相似的命令的几种方法/">重复输入相似的命令的几种方法</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/16/值得使用的软件之Alfred/">值得使用的软件之Alfred</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/18/flexi-streams用法简介/">flexi-streams用法简介</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/12/sdedit使用方法介绍（混沌向）/">sdedit使用方法介绍（混沌向）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

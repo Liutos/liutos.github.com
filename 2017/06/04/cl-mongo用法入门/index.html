@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>cl-mongo用法入门 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了cl-mongo这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己">
+<meta name="keywords" content="common lisp,mongo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cl-mongo用法入门">
+<meta property="og:url" content="https://liutos.github.io/2017/06/04/cl-mongo用法入门/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了cl-mongo这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-12-02T13:29:37.905Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cl-mongo用法入门">
+<meta name="twitter:description" content="最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了cl-mongo这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liutos.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-cl-mongo用法入门" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/04/cl-mongo用法入门/" class="article-date">
+  <time datetime="2017-06-04T13:21:20.000Z" itemprop="datePublished">2017-06-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      cl-mongo用法入门
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了<a href="https://github.com/fons/cl-mongo" target="_blank" rel="noopener">cl-mongo</a>这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己查阅，也为了方便有相同需求的人了解如何使用cl-mongo，于是写了这篇文章。</p>
+<p>首先使用<code>CL-MONGO:MONGO</code>函数连接MongoDB的服务器程序（mongod）。因为在我的系统上mongod进程监听的是27017这个端口，并且我希望使用的数据库名为test，因此键入如下代码来连接数据库</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:mongo</span> <span class="symbol">:db</span> <span class="string">"test"</span></span><br><span class="line">                <span class="symbol">:host</span> <span class="string">"127.0.0.1"</span></span><br><span class="line">                <span class="symbol">:port</span> <span class="number">27017</span>)</span><br></pre></td></tr></table></figure>
+<p>连接上了数据库后，首先尝试往其中写入一个文档。假设现在要记录的是发出的HTTP请求的信息，那么一个可以写入的基本信息就是请求的目标地址。假设在命令行的mongo shell中输入的内容如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.insert(&#123;<span class="attr">uri</span>: <span class="string">'http://example.com'</span>&#125;);</span><br></pre></td></tr></table></figure>
+<p>那么使用cl-mongo提供的<code>DB.INSERT</code>函数达到上述效果的代码如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.insert <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></table></figure>
+<p>求值上述代码后返回值为NIL。为了将上述写入的文档重新查询出来，需要使用cl-mongo提供的<code>DB.FIND</code>函数。因为只有一个文档，所以直接查询就可以查看到结果了。在mongo shell中我们可以使用如下代码查询</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.find();</span><br></pre></td></tr></table></figure>
+<p>使用<code>DB.FIND</code>函数的话编写的代码可能会长得像下面这样</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>)</span><br></pre></td></tr></table></figure>
+<p>在我的系统上求值了上述代码后在REPL中输出的内容如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">((<span class="number">86</span> <span class="number">449</span> <span class="number">0</span> <span class="number">1</span> <span class="number">8</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span> <span class="string">"http_request"</span>)</span><br><span class="line"> (<span class="name">&lt;CL-MONGO</span><span class="symbol">:DOCUMENT&gt;</span> : &#123; </span><br><span class="line">   _id : CL-MONGO:<span class="symbol">:BSON-OID</span> [#(<span class="number">89</span> <span class="number">52</span> <span class="number">26</span> <span class="number">160</span> <span class="number">109</span> <span class="number">156</span> <span class="number">254</span> <span class="number">71</span> <span class="number">184</span> <span class="number">115</span> <span class="number">102</span> <span class="number">30</span>)]</span><br><span class="line">   elements : <span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line">))</span><br></pre></td></tr></table></figure>
+<p>值得注意的是，<code>DB.FIND</code>的返回值不完全是文档组成的数组，而是在这个结果集的数组之外又多了一层列表，并且列表的第一个元素还是一个一看之下不知其所以然的子列表。由于cl-mongo的GitHub上没有提及这个玩意儿的来历，我也没有深入去了解<code>DB.FIND</code>函数的实现代码，因此这个元素就先忽略它吧。如果需要使用<code>DB.FIND</code>查询到的结果，那么开发者需要对<code>DB.FIND</code>的返回值应用一下函数<code>SECOND</code>才行，如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))</span><br></pre></td></tr></table></figure>
+<p>返回值的列表中的每一个元素都是<code>CL-MONGO:DOCUMENT</code>这个类的实例对象，如果要直接使用还是稍微有点不方便的，因此我写了一个函数用来将<code>DB.FIND</code>函数查询到的<code>CL-MONGO:DOCUMENT</code>的实例对象都转换为较为熟悉，容易操作的数据类型——association list，函数的定义如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> document-to-alist (<span class="name">doc</span>)</span><br><span class="line">  <span class="string">"Convert a DOC of type CL-MONGO:DOCUMENT to a equivalent, serializable alist."</span></span><br><span class="line">  (<span class="name">check-type</span> doc cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">  (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">doc</span>)</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">typep</span> doc 'cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">                    (<span class="name">let</span> ((<span class="name">keys</span> (<span class="name">cl-mongo</span><span class="symbol">:get-keys</span> doc)))</span><br><span class="line">                      (<span class="name">mapcar</span> #'(lambda (key)</span><br><span class="line">                                  (cons key</span><br><span class="line">                                        (aux (cl-mongo:get-element key doc))))</span><br><span class="line">                              keys)))</span><br><span class="line">                   (<span class="name">t</span> doc))))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">id</span> (<span class="name">cl-mongo</span><span class="symbol">:doc-id</span> doc)))</span><br><span class="line">      (<span class="name">append</span> (<span class="name">aux</span> doc) (<span class="name">list</span> (<span class="name">cons</span> <span class="string">"_id"</span> id))))))</span><br></pre></td></tr></table></figure>
+<p>使用如下代码即可查看方才所写入的文档究竟长什么样子了</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">document-to-alist</span> (<span class="name">first</span> (<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))))</span><br></pre></td></tr></table></figure>
+<p>如果想要修改数据库中的文档，例如增加一个字段，那么可以使用cl-mongo提供的<code>DB.UPDATE</code>函数，用法如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.update <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>)</span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"$set"</span></span><br><span class="line">                                 (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"method"</span> <span class="string">"GET"</span>)))</span><br></pre></td></tr></table></figure>
+<p>最后如果要删除刚才所写入的这个文档，可以使用cl-mongo的<code>DB.DELETE</code>函数（我很好奇这个函数居然不是叫做DB.REMOVE），用法如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.delete <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="cjp6xfqx5000lnu309yjrn3ha" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo/">mongo</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/02/MacBook-Pro使用体验/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          MacBook Pro使用体验
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/18/远程请求Squid/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">远程请求Squid</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/alfred/" style="font-size: 10px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 13.33px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/project-euler/" style="font-size: 16.67px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/27/编写嵌套反引号的宏/">编写嵌套反引号的宏</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/25/重复输入相似的命令的几种方法/">重复输入相似的命令的几种方法</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/16/值得使用的软件之Alfred/">值得使用的软件之Alfred</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/18/flexi-streams用法简介/">flexi-streams用法简介</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/12/sdedit使用方法介绍（混沌向）/">sdedit使用方法介绍（混沌向）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
