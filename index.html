@@ -101,7 +101,7 @@
 <p>整个Workflow的概貌其实很简单</p>
 <p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Alfred%E4%B8%AD%E7%9A%84upload%E7%9A%84%E9%B8%9F%E7%9E%B0%E5%9B%BE.png" alt="upload Workflow的全貌"></p>
 <p>第二个节点所调用的External Script是长这样子的</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"><span class="meta">#</span> 将磁盘文件上传到GitHub</span><br><span class="line"></span><br><span class="line">path=$&#123;1&#125;</span><br><span class="line"></span><br><span class="line">pictures_dir="$&#123;HOME&#125;/Documents/Projects/riverbed/pictures"</span><br><span class="line">cp "$&#123;path&#125;" "$&#123;pictures_dir&#125;"</span><br><span class="line">echo '文件复制完毕'</span><br><span class="line"></span><br><span class="line">file=$(basename "$&#123;path&#125;")</span><br><span class="line">cd "$&#123;pictures_dir&#125;"</span><br><span class="line">git add "$&#123;file&#125;"</span><br><span class="line">git commit -m '上传一张图片'</span><br><span class="line">git push -u origin master</span><br><span class="line">echo '文件已提交到GitHub'</span><br><span class="line"></span><br><span class="line">/usr/local/bin/node -e "console.log(encodeURI('https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/$&#123;file&#125;'));" | tr -d '\n' | pbcopy</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将磁盘文件上传到GitHub</span></span><br><span class="line"></span><br><span class="line">path=$&#123;1&#125;</span><br><span class="line"></span><br><span class="line">pictures_dir="$&#123;HOME&#125;/Documents/Projects/riverbed/pictures"</span><br><span class="line">cp "$&#123;path&#125;" "$&#123;pictures_dir&#125;"</span><br><span class="line">echo '文件复制完毕'</span><br><span class="line"></span><br><span class="line">file=$(basename "$&#123;path&#125;")</span><br><span class="line">cd "$&#123;pictures_dir&#125;"</span><br><span class="line">git add "$&#123;file&#125;"</span><br><span class="line">git commit -m '上传一张图片'</span><br><span class="line">git push -u origin master</span><br><span class="line">echo '文件已提交到GitHub'</span><br><span class="line"></span><br><span class="line">/usr/local/bin/node -e "console.log(encodeURI('https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/$&#123;file&#125;'));" | tr -d '\n' | pbcopy</span><br></pre></td></tr></table></figure>
 <p>获取文件的绝对路径其实很简单，在Finder中选中文件后，按下Command+Option+C即可</p>
 <p>这里使用<code>basename</code>命令获取文件名。并且，为了避免<code>git</code>打开文本编辑器要求输入commit message，向git-commit命令传递了<code>-m</code>选项。</p>
 <p>因为文件名含有非ASCII的字符（毕竟会有中文），需要做一次URL编码，因此用了<code>node</code>来做转换。在Node.js代码中用<code>console.log</code>输出编码后的图片URL，结尾会有一个换行符，所以用<code>tr</code>将其去掉。最后，输出的内容重定向给<code>pbcopy</code>，就将上传后的图片URL复制到剪贴板中了。如果此时正在编辑文章，便可以粘贴这个图片的链接到源码中。</p>
@@ -111,7 +111,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjpdlgi7i000rdz30afphz0lz" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjpgx25d90013rr30f5hpev0t" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li></ul>
@@ -174,7 +174,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjpdlgi82001gdz30loxmhmb6" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjpgx25dk001brr30dywmrqek" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macro/">macro</a></li></ul>
@@ -224,7 +224,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="cjpdlgi85001mdz30ruiky6fb" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="cjpgx25ds001krr30a7twqp4y" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
@@ -277,7 +277,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/" data-id="cjpdlgi7g000mdz302qenxn1s" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/" data-id="cjpgx25cs000zrr30966kw2yl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li></ul>
@@ -332,7 +332,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/09/18/flexi-streams用法简介/" data-id="cjpdlgi76000adz30s86zk5f1" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/09/18/flexi-streams用法简介/" data-id="cjpgx25bd000arr30ti6m79r2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li></ul>
@@ -389,7 +389,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/" data-id="cjpdlgi740008dz3095wtlin4" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/" data-id="cjpgx25ba0007rr30o585g9ip" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li></ul>
@@ -440,7 +440,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/" data-id="cjpdlgi700004dz30qakv5akj" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/" data-id="cjpgx25as0001rr30jd95wwy3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macbook/">macbook</a></li></ul>
@@ -501,7 +501,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="cjpdlgi720007dz30l2tbympl" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="cjpgx25b80005rr30rhg6zypw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo/">mongo</a></li></ul>
@@ -555,7 +555,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/05/18/远程请求Squid/" data-id="cjpdlgi83001jdz30irckarm7" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/05/18/远程请求Squid/" data-id="cjpgx25df0014rr30brba2k3l" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/squid/">squid</a></li></ul>
@@ -604,7 +604,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" data-id="cjpdlgi79000fdz30v9fluio0" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" data-id="cjpgx25bo000hrr30oe5dkh4p" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li></ul>
