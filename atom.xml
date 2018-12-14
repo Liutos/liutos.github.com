@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2018-12-07T05:35:13.960Z</updated>
+  <updated>2018-12-14T15:47:06.001Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,42 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>用过的一些Markdown编辑器</title>
+    <link href="https://liutos.github.io/2018/12/14/%E7%94%A8%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9BMarkdown%E7%BC%96%E8%BE%91%E5%99%A8/"/>
+    <id>https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/</id>
+    <published>2018-12-14T15:43:50.000Z</published>
+    <updated>2018-12-14T15:47:06.001Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+    
+      <category term="笔记类软件" scheme="https://liutos.github.io/tags/%E7%AC%94%E8%AE%B0%E7%B1%BB%E8%BD%AF%E4%BB%B6/"/>
+    
+      <category term="Markdown" scheme="https://liutos.github.io/tags/Markdown/"/>
+    
+      <category term="编辑器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%BE%91%E5%99%A8/"/>
+    
+      <category term="Emacs" scheme="https://liutos.github.io/tags/Emacs/"/>
+    
+      <category term="Boostnote" scheme="https://liutos.github.io/tags/Boostnote/"/>
+    
+      <category term="Yu Writer" scheme="https://liutos.github.io/tags/Yu-Writer/"/>
+    
+      <category term="Typora" scheme="https://liutos.github.io/tags/Typora/"/>
+    
+  </entry>
   
   <entry>
     <title>把GitHub作为图床</title>
@@ -483,28 +519,6 @@
       <category term="algorithm" scheme="https://liutos.github.io/tags/algorithm/"/>
     
       <category term="dynamic programming" scheme="https://liutos.github.io/tags/dynamic-programming/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>三个角度思考问题的不同结果</title>
-    <link href="https://liutos.github.io/2012/09/20/%E4%B8%89%E4%B8%AA%E8%A7%92%E5%BA%A6%E6%80%9D%E8%80%83%E9%97%AE%E9%A2%98%E7%9A%84%E4%B8%8D%E5%90%8C%E7%BB%93%E6%9E%9C/"/>
-    <id>https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/</id>
-    <published>2012-09-20T14:46:46.000Z</published>
-    <updated>2018-11-29T14:48:53.518Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
     
   </entry>
   
