@@ -62,6 +62,55 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-如何随机挑选要做的任务" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/15/如何随机挑选要做的任务/" class="article-date">
+  <time datetime="2018-12-15T14:50:39.000Z" itemprop="datePublished">2018-12-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/15/如何随机挑选要做的任务/">如何随机挑选要做的任务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>由于个人喜好的因素，选择了用Emacs的org-mode来实践GTD，管理自己的任务和安排日程。但也因为个人喜好的因素，导致在安排第二天的计划，从积累的TODO列表中挑选要做的事情时，总会下意识地跳过一些一看就很麻烦的任务。久而久之，在列表的顶部，便堆积着一些好久前就创建的TODO。而因为总是从上往下挑选任务，列表的底部则是堆积着好久没有露脸的TODO。有不见者，三十六年。</p>
+<p>迫切需要一个办法来解决这个难题，但若真的一丝不苟地从上往下处理每一条TODO又觉得没意思，该怎么办？不如从中随机地挑选TODO来安排到第二天的日程中？Sounds good。</p>
+<h2 id="如何实现"><a href="#如何实现" class="headerlink" title="如何实现"></a>如何实现</h2><p>一开始，我是打算找找现成的类似功能的，不过放狗搜了一番后并没有什么收获。之后的某天我忽然意识到，.org文件不过就是普通的文本文件而已，直接用命令行工具处理就好了呀。摸索一番之后才知道并不难，成果就是下面这段简单的shell命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name '*.org' ! -name 'trash.org' ! -name 'work.org' -exec grep -Hn '\*\* TODO' &#123;&#125; \; | sort -R | head -3</span><br></pre></td></tr></table></figure>
+<p>稍微解释一下。首先登场的是<code>find</code>，它用来遍历目录下的所有.org文件——因为我把TODO按照不同的领域放到了不同的.org文件下。传递给<code>find</code>的参数的意思，是“匹配所有文件名以.org结尾、但既不叫trash.org、也不叫work.org的文件”</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-name '*.org' ! -name 'trash.org' ! -name 'work.org'</span><br></pre></td></tr></table></figure>
+<p>trash.org是垃圾箱，work.org存放的是工作相关的任务——我可不喜欢把工作安排到自己的闲暇时光里。</p>
+<p>通过<code>-exec</code>让<code>find</code>调用<code>grep</code>从.org文件中过滤出符合条件的带有TODO关键字的行——在我的.org文件中，有很多行是没有TODO关键字的非任务型的内容，它们可能是一个目标、一个分类，甚至可以是某个TODO条目下的“笔记”。用下面的正则即可筛选出想要的内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">'\*\* TODO'</span><br></pre></td></tr></table></figure>
+<p>总和运用<code>find</code>和<code>grep</code>后，便到了从中挑选的环节了。虽然开始的时候提到的是“随机地挑选”，但可以参考音乐播放器的“随机播放”功能的做法，即先将所有的TODO条目随机排序，然后从头开始按顺序取出前几个。<code>sort</code>命令的<code>-R</code>选项已经实现了随机排序，再用<code>head</code>选取前3个即可。</p>
+<p>全文完</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjppkxi42000wbx30karynzmh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/find/">find</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grep/">grep</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/head/">head</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sort/">sort</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-用过的一些Markdown编辑器" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/12/14/用过的一些Markdown编辑器/" class="article-date">
@@ -128,7 +177,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjpo7hflt0013pa30c2tracdp" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjppkxi450013bx30i04ppoj6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Boostnote/">Boostnote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Emacs/">Emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Markdown/">Markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Typora/">Typora</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Yu-Writer/">Yu Writer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编辑器/">编辑器</a></li></ul>
@@ -189,7 +238,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjpo7hflw0016pa301m78k7lc" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjppkxi440011bx30h598lbin" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li></ul>
@@ -252,7 +301,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjpo7hflz0019pa30d65lw823" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjppkxi470018bx304cqcj510" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macro/">macro</a></li></ul>
@@ -302,7 +351,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="cjpo7hfm8001fpa30no12sc28" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="cjppkxi49001fbx3045posfac" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
@@ -355,7 +404,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/" data-id="cjpo7hflc000npa30pcf1h05z" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/" data-id="cjppkxi3v000kbx30i5anki0v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li></ul>
@@ -410,7 +459,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/09/18/flexi-streams用法简介/" data-id="cjpo7hfl3000hpa30sms5emns" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/09/18/flexi-streams用法简介/" data-id="cjppkxi3n0008bx30bzqvlcy7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li></ul>
@@ -467,7 +516,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/" data-id="cjpo7hfkw000gpa30h72s3zva" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/" data-id="cjppkxi3k0007bx307v2uls2f" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li></ul>
@@ -518,7 +567,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/" data-id="cjpo7hfjp0003pa302cx64fw1" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/" data-id="cjppkxi3d0001bx305nhmugca" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macbook/">macbook</a></li></ul>
@@ -579,64 +628,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="cjpo7hfl9000lpa3063d6x8k5" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="cjppkxi3p000abx30lez2nzh7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo/">mongo</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-远程请求Squid" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/18/远程请求Squid/" class="article-date">
-  <time datetime="2017-05-18T13:18:42.000Z" itemprop="datePublished">2017-05-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/18/远程请求Squid/">远程请求Squid</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>不久前在办公室抓取某网站S被对方发现，导致对方自动屏蔽了来自办公室网络的所有HTTP请求，连正儿八经地用浏览器打开也不行。为了可以摸索出“改头换面”（改HTTP头部）访问的方法，必须先成功访问至少一次，看看发出的HTTP头部是怎样的才行。恰好想起自己有一台腾讯云服务器，登上去用<code>curl</code>访问网站S，发现是成功的（也就是尚未被屏蔽）。既然如此，干脆在服务器上部署一套Squid作为正向代理，帮助办公网络的请求成功抵达网站S并拿到响应页面。</p>
-<p>用<code>apt-get</code>安装了<code>squid</code>软件包后启动并监听端口8321，在办公网络下将公网地址和8321端口作为代理配置传递给<code>curl</code>的<code>-x</code>选项，访问网站S。不料Squid拒绝了我的请求，返回了如下内容（节选自<code>curl -v</code>命令的输出）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt; HTTP/1.1 403 Forbidden</span><br><span class="line">&lt; Server: squid/3.5.12</span><br><span class="line">&lt; Mime-Version: 1.0</span><br><span class="line">&lt; Date: Wed, 17 May 2017 15:18:08 GMT</span><br><span class="line">&lt; Content-Type: text/html;charset=utf-8</span><br><span class="line">&lt; Content-Length: 3531</span><br><span class="line">&lt; X-Squid-Error: ERR_ACCESS_DENIED 0</span><br><span class="line">&lt; Vary: Accept-Language</span><br><span class="line">&lt; Content-Language: en</span><br><span class="line">&lt; X-Cache: MISS from VM-44-136-ubuntu</span><br><span class="line">&lt; X-Cache-Lookup: NONE from VM-44-136-ubuntu:8321</span><br><span class="line">&lt; Via: 1.1 VM-44-136-ubuntu (squid/3.5.12)</span><br><span class="line">&lt; Connection: keep-alive</span><br></pre></td></tr></table></figure>
-<p>经过一番Google，才知道原来是Squid的配置导致的。在Squid配置文件（/etc/squid/squid.conf）中，默认的acl和http_access指令的设置如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">acl SSL_ports port 443</span><br><span class="line">acl Safe_ports port 80          # http</span><br><span class="line">acl Safe_ports port 21          # ftp</span><br><span class="line">acl Safe_ports port 443         # https</span><br><span class="line">acl Safe_ports port 70          # gopher</span><br><span class="line">acl Safe_ports port 210         # wais</span><br><span class="line">acl Safe_ports port 1025-65535  # unregistered ports</span><br><span class="line">acl Safe_ports port 280         # http-mgmt</span><br><span class="line">acl Safe_ports port 488         # gss-http</span><br><span class="line">acl Safe_ports port 591         # filemaker</span><br><span class="line">acl Safe_ports port 777         # multiling http</span><br><span class="line">acl CONNECT method CONNECT</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http_access deny !Safe_ports</span><br><span class="line">http_access deny CONNECT !SSL_ports</span><br><span class="line">http_access allow localhost manager</span><br><span class="line">http_access deny manager</span><br><span class="line">http_access allow localhost</span><br><span class="line">http_access deny all</span><br></pre></td></tr></table></figure>
-<p>由于Squid是按照第一条匹配的http_access指令来决定允许还是拒绝的，因为来自我办公网络的请求实际上命中的是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access deny all</span><br></pre></td></tr></table></figure>
-<p>因此被拒绝是必然的。为了可以接受来自办公网络发起的请求，首先需要新增一行acl指令。通过Squid的日志（/var/log/squid/access.log）可以查看到被拒绝的请求的IP地址是多少，此处假设IP地址为8.7.198.45，那么相应的acl指令如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acl myclients src 8.7.198.45</span><br></pre></td></tr></table></figure>
-<p>此处的myclients为自定义的名称，顾名思义，它表示“我的客户端”；src是一种acl类型，表示客户端的IP地址；8.7.198.45是src类型下的参数，也就是我所使用的客户端发出的请求的来源IP地址。配置了acl后，还需要配置http_access指令。这个就简单多了，只要允许上面创建的这个acl的访问即可，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access allow myclients</span><br></pre></td></tr></table></figure>
-<p>之后再重启Squid服务即可</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service squid restart</span><br></pre></td></tr></table></figure>
-<p>这时候再从办公网络中以腾讯云服务器上的Squid为正向代理发出请求，就不会再被Squid拒绝了。</p>
-<p>全文完</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/05/18/远程请求Squid/" data-id="cjpo7hfm4001dpa308wna4qzr" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/squid/">squid</a></li></ul>
 
     </footer>
   </div>
@@ -663,7 +658,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boostnote/">Boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Emacs/">Emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora/">Typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Yu-Writer/">Yu Writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boostnote/">Boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Emacs/">Emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora/">Typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Yu-Writer/">Yu Writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li></ul>
     </div>
   </div>
 
@@ -673,7 +668,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Boostnote/" style="font-size: 10px;">Boostnote</a> <a href="/tags/Emacs/" style="font-size: 10px;">Emacs</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Typora/" style="font-size: 10px;">Typora</a> <a href="/tags/Yu-Writer/" style="font-size: 10px;">Yu Writer</a> <a href="/tags/alfred/" style="font-size: 13.33px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 13.33px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/project-euler/" style="font-size: 16.67px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a>
+      <a href="/tags/Boostnote/" style="font-size: 10px;">Boostnote</a> <a href="/tags/Emacs/" style="font-size: 10px;">Emacs</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Typora/" style="font-size: 10px;">Typora</a> <a href="/tags/Yu-Writer/" style="font-size: 10px;">Yu Writer</a> <a href="/tags/alfred/" style="font-size: 13.33px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 13.33px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/project-euler/" style="font-size: 16.67px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a>
     </div>
   </div>
 
@@ -695,6 +690,10 @@
       <ul>
         
           <li>
+            <a href="/2018/12/15/如何随机挑选要做的任务/">如何随机挑选要做的任务</a>
+          </li>
+        
+          <li>
             <a href="/2018/12/14/用过的一些Markdown编辑器/">用过的一些Markdown编辑器</a>
           </li>
         
@@ -708,10 +707,6 @@
         
           <li>
             <a href="/2018/11/25/重复输入相似的命令的几种方法/">重复输入相似的命令的几种方法</a>
-          </li>
-        
-          <li>
-            <a href="/2018/11/16/值得使用的软件之Alfred/">值得使用的软件之Alfred</a>
           </li>
         
       </ul>

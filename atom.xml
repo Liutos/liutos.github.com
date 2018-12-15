@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2018-12-14T15:47:06.001Z</updated>
+  <updated>2018-12-15T14:51:18.826Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何随机挑选要做的任务</title>
+    <link href="https://liutos.github.io/2018/12/15/%E5%A6%82%E4%BD%95%E9%9A%8F%E6%9C%BA%E6%8C%91%E9%80%89%E8%A6%81%E5%81%9A%E7%9A%84%E4%BB%BB%E5%8A%A1/"/>
+    <id>https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/</id>
+    <published>2018-12-15T14:50:39.000Z</published>
+    <updated>2018-12-15T14:51:18.826Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+    
+      <category term="find" scheme="https://liutos.github.io/tags/find/"/>
+    
+      <category term="grep" scheme="https://liutos.github.io/tags/grep/"/>
+    
+      <category term="sort" scheme="https://liutos.github.io/tags/sort/"/>
+    
+      <category term="head" scheme="https://liutos.github.io/tags/head/"/>
+    
+  </entry>
   
   <entry>
     <title>用过的一些Markdown编辑器</title>
@@ -493,32 +523,6 @@
       <category term="closure" scheme="https://liutos.github.io/tags/closure/"/>
     
       <category term="oop" scheme="https://liutos.github.io/tags/oop/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>涂色笔试题的动态规划解法</title>
-    <link href="https://liutos.github.io/2012/10/18/%E6%B6%82%E8%89%B2%E7%AC%94%E8%AF%95%E9%A2%98%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E8%A7%A3%E6%B3%95/"/>
-    <id>https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/</id>
-    <published>2012-10-18T14:58:23.000Z</published>
-    <updated>2018-12-02T13:31:47.590Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="algorithm" scheme="https://liutos.github.io/tags/algorithm/"/>
-    
-      <category term="dynamic programming" scheme="https://liutos.github.io/tags/dynamic-programming/"/>
     
   </entry>
   
