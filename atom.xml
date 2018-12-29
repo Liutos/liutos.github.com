@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2018-12-15T14:51:18.826Z</updated>
+  <updated>2018-12-29T05:45:22.525Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2018年度技术总结</title>
+    <link href="https://liutos.github.io/2018/12/29/2018%E5%B9%B4%E5%BA%A6%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/"/>
+    <id>https://liutos.github.io/2018/12/29/2018年度技术总结/</id>
+    <published>2018-12-29T05:44:31.000Z</published>
+    <updated>2018-12-29T05:45:22.525Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+    
+      <category term="2018" scheme="https://liutos.github.io/tags/2018/"/>
+    
+      <category term="总结" scheme="https://liutos.github.io/tags/%E6%80%BB%E7%BB%93/"/>
+    
+  </entry>
   
   <entry>
     <title>如何随机挑选要做的任务</title>
@@ -495,34 +521,6 @@
       <category term="bfs" scheme="https://liutos.github.io/tags/bfs/"/>
     
       <category term="algorithm" scheme="https://liutos.github.io/tags/algorithm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>递归、闭包、面向对象</title>
-    <link href="https://liutos.github.io/2012/10/26/%E9%80%92%E5%BD%92%E3%80%81%E9%97%AD%E5%8C%85%E3%80%81%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"/>
-    <id>https://liutos.github.io/2012/10/26/递归、闭包、面向对象/</id>
-    <published>2012-10-26T04:56:12.000Z</published>
-    <updated>2018-12-02T13:33:38.986Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="recursion" scheme="https://liutos.github.io/tags/recursion/"/>
-    
-      <category term="closure" scheme="https://liutos.github.io/tags/closure/"/>
-    
-      <category term="oop" scheme="https://liutos.github.io/tags/oop/"/>
     
   </entry>
   
