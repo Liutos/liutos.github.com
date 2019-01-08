@@ -84,13 +84,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h2><p><a href="https://orgmode.org/" target="_blank" rel="noopener">org-mode</a>是一个<a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">Emacs</a>内置的major mode，当打开一个后缀为<code>.org</code>的文件时就会被启用。在官网的介绍中提到，它可以用于管理待办事项，而这也正是我目前使用org-mode最多的场合。比如，我用它来记录漫画的阅读进度，每一话或每一章就是一个标记了TODO关键字的条目，读完那一话或那一章后就会将对应的条目标记为DONE。一般我会一周一次地归档自己标记为DONE的条目，但由于一次要处理的条目可能很多，逐一将它们归档比较繁琐，因此，便打算二次开发实现一个自动归档的功能。</p>
+<p>需要事先声明的是，本文不是org-mode的入门教程，也不会讲解如何配置org-mode。对这方面有兴趣的读者，可以自己搜索一番，资料还是相当丰富的。</p>
+<h2 id="菜谱"><a href="#菜谱" class="headerlink" title="菜谱"></a>菜谱</h2><p>对于每一个被完成的单独的阅读任务，我的做法是将其<a href="https://orgmode.org/manual/Internal-archiving.html" target="_blank" rel="noopener">internal archive</a>。等到一整本漫画都读完之后，再将整个以漫画名命名的条目归档到别的文件中去。要实现自动的internal archive，最简单直接的办法是借助于org-mode提供的各种hook。</p>
+<p>org-mode提供了许多的hook，在官方的<a href="https://orgmode.org/worg/doc.html#org-after-demote-entry-hook" target="_blank" rel="noopener">文档</a>中有一一列举 。其中，名为<code>org-after-todo-state-change-hook</code>的便是我所需要的钩子。只需往这个变量所绑定的列表中添加一个函数，那么这个函数便会在条目切换状态时（比如从TODO切换到DONE）被org-mode调用。</p>
+<p>最终的ELisp代码如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> lt-archive-if-manga ()</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">state</span> org-state))</span><br><span class="line">    (<span class="name">when</span> (<span class="name">string=</span> state <span class="string">"DONE"</span>)</span><br><span class="line">      (<span class="name">let</span> ((<span class="name">tags</span> (<span class="name">org-get-tags-at</span>)))</span><br><span class="line">        (<span class="name">when</span> (<span class="name">member</span> <span class="string">"漫画"</span> tags)</span><br><span class="line">          (<span class="name">org-toggle-archive-tag</span>))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">add-to-list</span> 'org-after-todo-state-change-hook 'lt-archive-if-manga <span class="literal">t</span>)</span><br></pre></td></tr></table></figure>
+<p>稍微解释一下。从<code>C-h v org-after-todo-state-change-hook RET</code>的文档可以得知，条目的新状态可以通过变量<code>org-state</code>获取。取得新状态（是个字符串）后，首先检查其是否为<code>&quot;DONE&quot;</code>。如果是，再检查这个条目是否为一个阅读漫画的任务。</p>
+<p>在我的用法中，凡是漫画条目，都打上了名为<code>&quot;漫画&quot;</code>的标签。因此，使用函数<code>org-get-tags-at</code>取得一个条目的所有标签（包括从父级条目继承下来的），再用<code>member</code>函数判断这些标签中是否包含字符串<code>&quot;漫画&quot;</code>。如果有，就调用<code>org-toggle-archive-tag</code>将该条目internal archive。</p>
+<p>传给函数<code>add-to-list</code>的第三个参数<code>t</code>的作用，是让这个新加入钩子的函数最后被调用。</p>
+<p>全文完</p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjqlwr6ji0007or30jvuurnfx" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjqlxr61n00002l30ggc9rg3z" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/org-mode/">org-mode</a></li></ul>
+
     </footer>
   </div>
   
@@ -149,7 +161,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjqlwr6ir0000or30fxqpcipz" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjqlxr61v00042l30hwron9cl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/总结/">总结</a></li></ul>
@@ -198,7 +210,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjqlwr6kw0013or30jtw3j6rj" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjqlxr628000u2l30uo8tw772" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/find/">find</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grep/">grep</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/head/">head</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sort/">sort</a></li></ul>
@@ -276,7 +288,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjqlwr6lo002gor30kz4b12nv" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjqlxr62o002c2l30qqht0hdt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Boostnote/">Boostnote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Emacs/">Emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Markdown/">Markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Typora/">Typora</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Yu-Writer/">Yu Writer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编辑器/">编辑器</a></li></ul>
@@ -337,7 +349,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjqlwr6kz0016or30buob1jy4" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjqlxr62a000y2l302tm6y232" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li></ul>
@@ -400,7 +412,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjqlwr6l2001aor30p0paraub" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjqlxr62m00272l305lk0f6q7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macro/">macro</a></li></ul>
@@ -450,7 +462,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="cjqlwr6l10018or308k7gc6bp" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="cjqlxr62q002g2l309t7xdhom" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
@@ -503,7 +515,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/" data-id="cjqlwr6jq000cor30pn7fq1nb" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/" data-id="cjqlxr626000o2l30aq3dxds2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li></ul>
@@ -558,7 +570,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/09/18/flexi-streams用法简介/" data-id="cjqlwr6k8000lor309byarmt6" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/09/18/flexi-streams用法简介/" data-id="cjqlxr61z000c2l30gslvimjq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li></ul>
@@ -615,7 +627,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/" data-id="cjqlwr6k4000hor30k5k9ej7g" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/" data-id="cjqlxr620000f2l30m7abam1o" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li></ul>
@@ -645,7 +657,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boostnote/">Boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Emacs/">Emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora/">Typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Yu-Writer/">Yu Writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Boostnote/">Boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Emacs/">Emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Typora/">Typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Yu-Writer/">Yu Writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li></ul>
     </div>
   </div>
 
@@ -655,7 +667,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/Boostnote/" style="font-size: 10px;">Boostnote</a> <a href="/tags/Emacs/" style="font-size: 10px;">Emacs</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Typora/" style="font-size: 10px;">Typora</a> <a href="/tags/Yu-Writer/" style="font-size: 10px;">Yu Writer</a> <a href="/tags/alfred/" style="font-size: 13.33px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 13.33px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/project-euler/" style="font-size: 16.67px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/Boostnote/" style="font-size: 10px;">Boostnote</a> <a href="/tags/Emacs/" style="font-size: 10px;">Emacs</a> <a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Typora/" style="font-size: 10px;">Typora</a> <a href="/tags/Yu-Writer/" style="font-size: 10px;">Yu Writer</a> <a href="/tags/alfred/" style="font-size: 13.33px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 13.33px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/emacs/" style="font-size: 10px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 16.67px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a>
     </div>
   </div>
 
