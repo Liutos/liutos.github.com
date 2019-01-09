@@ -73,7 +73,7 @@
     <link href="https://liutos.github.io/2018/12/15/%E5%A6%82%E4%BD%95%E9%9A%8F%E6%9C%BA%E6%8C%91%E9%80%89%E8%A6%81%E5%81%9A%E7%9A%84%E4%BB%BB%E5%8A%A1/"/>
     <id>https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/</id>
     <published>2018-12-15T14:50:39.000Z</published>
-    <updated>2018-12-15T14:51:18.826Z</updated>
+    <updated>2019-01-09T15:20:35.498Z</updated>
     
     <summary type="html">
     
@@ -96,6 +96,8 @@
     
       <category term="head" scheme="https://liutos.github.io/tags/head/"/>
     
+      <category term="gtd" scheme="https://liutos.github.io/tags/gtd/"/>
+    
   </entry>
   
   <entry>
@@ -103,7 +105,7 @@
     <link href="https://liutos.github.io/2018/12/14/%E7%94%A8%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9BMarkdown%E7%BC%96%E8%BE%91%E5%99%A8/"/>
     <id>https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/</id>
     <published>2018-12-14T15:43:50.000Z</published>
-    <updated>2018-12-14T15:47:06.001Z</updated>
+    <updated>2019-01-09T15:20:58.367Z</updated>
     
     <summary type="html">
     
@@ -118,19 +120,23 @@
     </summary>
     
     
+      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
       <category term="笔记类软件" scheme="https://liutos.github.io/tags/%E7%AC%94%E8%AE%B0%E7%B1%BB%E8%BD%AF%E4%BB%B6/"/>
     
-      <category term="Markdown" scheme="https://liutos.github.io/tags/Markdown/"/>
+      <category term="markdown" scheme="https://liutos.github.io/tags/markdown/"/>
     
       <category term="编辑器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%BE%91%E5%99%A8/"/>
     
-      <category term="Emacs" scheme="https://liutos.github.io/tags/Emacs/"/>
+      <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
     
-      <category term="Boostnote" scheme="https://liutos.github.io/tags/Boostnote/"/>
+      <category term="yu writer" scheme="https://liutos.github.io/tags/yu-writer/"/>
     
-      <category term="Yu Writer" scheme="https://liutos.github.io/tags/Yu-Writer/"/>
+      <category term="typora" scheme="https://liutos.github.io/tags/typora/"/>
     
-      <category term="Typora" scheme="https://liutos.github.io/tags/Typora/"/>
+      <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
+    
+      <category term="note taking" scheme="https://liutos.github.io/tags/note-taking/"/>
     
   </entry>
   
@@ -139,7 +145,7 @@
     <link href="https://liutos.github.io/2018/12/07/%E6%8A%8AGitHub%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A/"/>
     <id>https://liutos.github.io/2018/12/07/把GitHub作为图床/</id>
     <published>2018-12-07T05:31:59.000Z</published>
-    <updated>2018-12-07T05:35:13.960Z</updated>
+    <updated>2019-01-09T15:20:35.414Z</updated>
     
     <summary type="html">
     
@@ -156,6 +162,8 @@
     
       <category term="alfred" scheme="https://liutos.github.io/tags/alfred/"/>
     
+      <category term="github" scheme="https://liutos.github.io/tags/github/"/>
+    
   </entry>
   
   <entry>
@@ -163,7 +171,7 @@
     <link href="https://liutos.github.io/2018/11/27/%E7%BC%96%E5%86%99%E5%B5%8C%E5%A5%97%E5%8F%8D%E5%BC%95%E5%8F%B7%E7%9A%84%E5%AE%8F/"/>
     <id>https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/</id>
     <published>2018-11-27T15:11:42.000Z</published>
-    <updated>2018-12-02T13:31:55.610Z</updated>
+    <updated>2019-01-09T15:20:35.271Z</updated>
     
     <summary type="html">
     
@@ -182,6 +190,8 @@
     
       <category term="macro" scheme="https://liutos.github.io/tags/macro/"/>
     
+      <category term="宏" scheme="https://liutos.github.io/tags/%E5%AE%8F/"/>
+    
   </entry>
   
   <entry>
@@ -189,7 +199,7 @@
     <link href="https://liutos.github.io/2018/11/25/%E9%87%8D%E5%A4%8D%E8%BE%93%E5%85%A5%E7%9B%B8%E4%BC%BC%E7%9A%84%E5%91%BD%E4%BB%A4%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/"/>
     <id>https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/</id>
     <published>2018-11-25T14:40:51.000Z</published>
-    <updated>2018-12-02T13:33:47.116Z</updated>
+    <updated>2019-01-09T15:20:35.088Z</updated>
     
     <summary type="html">
     
@@ -203,6 +213,8 @@
     
     </summary>
     
+    
+      <category term="alfred" scheme="https://liutos.github.io/tags/alfred/"/>
     
       <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
     
@@ -335,7 +347,7 @@
     <link href="https://liutos.github.io/2017/05/18/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82Squid/"/>
     <id>https://liutos.github.io/2017/05/18/远程请求Squid/</id>
     <published>2017-05-18T13:18:42.000Z</published>
-    <updated>2018-12-02T13:32:00.316Z</updated>
+    <updated>2019-01-09T15:20:35.215Z</updated>
     
     <summary type="html">
     
@@ -351,6 +363,10 @@
     
     
       <category term="squid" scheme="https://liutos.github.io/tags/squid/"/>
+    
+      <category term="教程" scheme="https://liutos.github.io/tags/%E6%95%99%E7%A8%8B/"/>
+    
+      <category term="tutorial" scheme="https://liutos.github.io/tags/tutorial/"/>
     
   </entry>
   
@@ -383,7 +399,7 @@
     <link href="https://liutos.github.io/2017/03/19/%E5%A6%82%E4%BD%95%E6%A3%80%E6%9F%A5%E4%B8%80%E7%BB%84%E5%8C%BA%E9%97%B4%E4%B8%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E4%B8%A4%E4%B8%AA%E5%8C%BA%E9%97%B4%E6%9C%89%E4%BA%A4%E9%9B%86/"/>
     <id>https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/</id>
     <published>2017-03-19T14:49:46.000Z</published>
-    <updated>2018-11-29T14:50:34.401Z</updated>
+    <updated>2019-01-09T15:20:35.584Z</updated>
     
     <summary type="html">
     
@@ -397,6 +413,8 @@
     
     </summary>
     
+    
+      <category term="数学" scheme="https://liutos.github.io/tags/%E6%95%B0%E5%AD%A6/"/>
     
   </entry>
   
@@ -429,7 +447,7 @@
     <link href="https://liutos.github.io/2017/02/23/%E5%A6%82%E4%BD%95%E7%94%A8Common-Lisp%E5%AE%9E%E7%8E%B0%E5%B0%BE%E9%80%92%E5%BD%92%E4%BC%98%E5%8C%96/"/>
     <id>https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/</id>
     <published>2017-02-23T14:58:07.000Z</published>
-    <updated>2018-12-02T13:31:01.513Z</updated>
+    <updated>2019-01-09T15:20:35.542Z</updated>
     
     <summary type="html">
     
@@ -447,6 +465,8 @@
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
       <category term="tail recursion" scheme="https://liutos.github.io/tags/tail-recursion/"/>
+    
+      <category term="尾递归" scheme="https://liutos.github.io/tags/%E5%B0%BE%E9%80%92%E5%BD%92/"/>
     
   </entry>
   
@@ -505,7 +525,7 @@
     <link href="https://liutos.github.io/2017/01/10/%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85mysql/"/>
     <id>https://liutos.github.io/2017/01/10/手动安装mysql/</id>
     <published>2017-01-10T15:03:31.000Z</published>
-    <updated>2018-12-02T13:31:22.778Z</updated>
+    <updated>2019-01-09T15:20:35.455Z</updated>
     
     <summary type="html">
     
@@ -520,7 +540,15 @@
     </summary>
     
     
+      <category term="教程" scheme="https://liutos.github.io/tags/%E6%95%99%E7%A8%8B/"/>
+    
+      <category term="tutorial" scheme="https://liutos.github.io/tags/tutorial/"/>
+    
       <category term="mysql" scheme="https://liutos.github.io/tags/mysql/"/>
+    
+      <category term="安装" scheme="https://liutos.github.io/tags/%E5%AE%89%E8%A3%85/"/>
+    
+      <category term="install" scheme="https://liutos.github.io/tags/install/"/>
     
   </entry>
   
