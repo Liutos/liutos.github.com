@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2019-01-07T06:18:51.674Z</updated>
+  <updated>2019-01-11T13:38:07.942Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一些在Emacs中搜索文本的方法</title>
+    <link href="https://liutos.github.io/2019/01/11/%E4%B8%80%E4%BA%9B%E5%9C%A8Emacs%E4%B8%AD%E6%90%9C%E7%B4%A2%E6%96%87%E6%9C%AC%E7%9A%84%E6%96%B9%E6%B3%95/"/>
+    <id>https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/</id>
+    <published>2019-01-11T13:37:18.000Z</published>
+    <updated>2019-01-11T13:38:07.942Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+    
+      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
+      <category term="search" scheme="https://liutos.github.io/tags/search/"/>
+    
+      <category term="tool" scheme="https://liutos.github.io/tags/tool/"/>
+    
+      <category term="搜索" scheme="https://liutos.github.io/tags/%E6%90%9C%E7%B4%A2/"/>
+    
+      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
+    
+  </entry>
   
   <entry>
     <title>Emacs的org-mode实现自动的internal archive</title>
@@ -362,11 +394,11 @@
     </summary>
     
     
-      <category term="squid" scheme="https://liutos.github.io/tags/squid/"/>
-    
       <category term="教程" scheme="https://liutos.github.io/tags/%E6%95%99%E7%A8%8B/"/>
     
       <category term="tutorial" scheme="https://liutos.github.io/tags/tutorial/"/>
+    
+      <category term="squid" scheme="https://liutos.github.io/tags/squid/"/>
     
   </entry>
   
@@ -517,38 +549,6 @@
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
       <category term="restart" scheme="https://liutos.github.io/tags/restart/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>手动安装mysql</title>
-    <link href="https://liutos.github.io/2017/01/10/%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85mysql/"/>
-    <id>https://liutos.github.io/2017/01/10/手动安装mysql/</id>
-    <published>2017-01-10T15:03:31.000Z</published>
-    <updated>2019-01-09T15:20:35.455Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="教程" scheme="https://liutos.github.io/tags/%E6%95%99%E7%A8%8B/"/>
-    
-      <category term="tutorial" scheme="https://liutos.github.io/tags/tutorial/"/>
-    
-      <category term="mysql" scheme="https://liutos.github.io/tags/mysql/"/>
-    
-      <category term="安装" scheme="https://liutos.github.io/tags/%E5%AE%89%E8%A3%85/"/>
-    
-      <category term="install" scheme="https://liutos.github.io/tags/install/"/>
     
   </entry>
   
