@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2019-01-11T13:38:07.942Z</updated>
+  <updated>2019-01-28T15:26:03.010Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Project-Euler第69题</title>
+    <link href="https://liutos.github.io/2019/01/28/Project-Euler%E7%AC%AC69%E9%A2%98/"/>
+    <id>https://liutos.github.io/2019/01/28/Project-Euler第69题/</id>
+    <published>2019-01-28T15:21:22.000Z</published>
+    <updated>2019-01-28T15:26:03.010Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+    
+      <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
+    
+      <category term="algorithm" scheme="https://liutos.github.io/tags/algorithm/"/>
+    
+      <category term="project euler" scheme="https://liutos.github.io/tags/project-euler/"/>
+    
+      <category term="算法" scheme="https://liutos.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="数学" scheme="https://liutos.github.io/tags/%E6%95%B0%E5%AD%A6/"/>
+    
+  </entry>
   
   <entry>
     <title>一些在Emacs中搜索文本的方法</title>
@@ -523,32 +555,6 @@
     
     
       <category term="bash" scheme="https://liutos.github.io/tags/bash/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Common Lisp的restart特性</title>
-    <link href="https://liutos.github.io/2017/01/17/Common-Lisp%E7%9A%84restart%E7%89%B9%E6%80%A7/"/>
-    <id>https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/</id>
-    <published>2017-01-17T14:51:52.000Z</published>
-    <updated>2018-12-02T13:28:48.895Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
-    
-      <category term="restart" scheme="https://liutos.github.io/tags/restart/"/>
     
   </entry>
   
