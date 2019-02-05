@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2019-01-28T15:26:03.010Z</updated>
+  <updated>2019-02-05T07:19:57.002Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>拿Emacs对接我的cuckoo</title>
+    <link href="https://liutos.github.io/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/"/>
+    <id>https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/</id>
+    <published>2019-02-05T07:17:08.000Z</published>
+    <updated>2019-02-05T07:19:57.002Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+    
+      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
+      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
+    
+      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
+    
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
+  </entry>
   
   <entry>
     <title>Project-Euler第69题</title>
@@ -38,9 +68,9 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
-      <category term="algorithm" scheme="https://liutos.github.io/tags/algorithm/"/>
-    
       <category term="project euler" scheme="https://liutos.github.io/tags/project-euler/"/>
+    
+      <category term="algorithm" scheme="https://liutos.github.io/tags/algorithm/"/>
     
       <category term="算法" scheme="https://liutos.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
@@ -531,30 +561,6 @@
       <category term="tail recursion" scheme="https://liutos.github.io/tags/tail-recursion/"/>
     
       <category term="尾递归" scheme="https://liutos.github.io/tags/%E5%B0%BE%E9%80%92%E5%BD%92/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>如何自定义命令行补全</title>
-    <link href="https://liutos.github.io/2017/01/20/%E5%A6%82%E4%BD%95%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%A1%A5%E5%85%A8/"/>
-    <id>https://liutos.github.io/2017/01/20/如何自定义命令行补全/</id>
-    <published>2017-01-20T15:07:36.000Z</published>
-    <updated>2018-12-02T13:31:08.356Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="bash" scheme="https://liutos.github.io/tags/bash/"/>
     
   </entry>
   

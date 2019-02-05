@@ -62,6 +62,71 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-拿Emacs对接我的cuckoo" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/05/拿Emacs对接我的cuckoo/" class="article-date">
+  <time datetime="2019-02-05T07:17:08.000Z" itemprop="datePublished">2019-02-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/05/拿Emacs对接我的cuckoo/">拿Emacs对接我的cuckoo</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>cuckoo是一个我自己开发的类似待办事项的工具，运行在我本地的电脑上。它有如下两个接口：</p>
+<ol>
+<li>传入一个UNIX Epoch时间戳创建提醒</li>
+<li>传入一个标题以及提醒的ID来创建任务</li>
+</ol>
+<p>这样一来，便能在设定的时刻调用<a href="https://github.com/vjeantet/alerter" target="_blank" rel="noopener"><code>alerter</code></a>在屏幕右上角弹出提醒。</p>
+<p>我喜欢用<a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">Emacs</a>的<a href="https://orgmode.org/" target="_blank" rel="noopener">org-mode</a>来安排任务，但可惜的是，org-mode没有定点提醒的功能（如果有的话希望来个人打我的脸XD）。开发了cuckoo后，忽然灵机一动——何不给Emacs添砖加瓦，让它可以把org-mode中的条目内容（所谓的heading）当做任务丢给cuckoo，以此来实现定点提醒呢。感觉是个好主意，马上着手写这么些Elisp函数。</p>
+<p>PS：读者朋友们就不用执着于我的cuckoo究竟是怎样的接口定义了。</p>
+<p>为了实现所需要的功能，让我从结果反过来推导一番。首先，需要提炼一个TODO条目的标题和时间戳（用来创建提醒获取ID），才能调用cuckoo的接口。标题就是org-mode中一个TODO条目的heading text，在Emacs中用下面的代码获取</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">nth</span> <span class="number">4</span> (<span class="name">org-heading-components</span>))</span><br></pre></td></tr></table></figure>
+<p><code>org-headline-components</code>在光标位于TODO条目上的时候，会返回许多信息（参见下图）</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/org-heading-components%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.png" alt=""></p>
+<p>其中下标为4的component就是我所需要的内容。</p>
+<p>接着便是要获取一个提醒的ID。ID当然是从cuckoo的接口中返回的，这就需要能够解析JSON格式的文本。在Emacs中解析JSON序列化后的文本可以用<a href="https://github.com/ryancrum/json.el" target="_blank" rel="noopener">json</a>这个库，示例代码如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">s</span> <span class="string">"&#123;\"remind\":&#123;\"create_at\":\"2019-01-11T14:53:59.000Z\",\"duration\":null,\"id\":41,\"restricted_hours\":null,\"timestamp\":1547216100,\"update_at\":\"2019-01-11T14:53:59.000Z\"&#125;&#125;"</span>))</span><br><span class="line">  (<span class="name">cdr</span> (<span class="name">assoc</span> 'id (<span class="name">cdr</span> (<span class="name">car</span> (<span class="name">json-read-from-string</span> s))))))</span><br></pre></td></tr></table></figure>
+<p>既然知道如何解析（同时还知道如何提取解析后的内容），那么接下来便是要能够获取上述示例代码中的<code>s</code>。<code>s</code>来自于HTTP响应的body，为了发出HTTP请求，可以用Emacs的<a href="https://github.com/tkf/emacs-request" target="_blank" rel="noopener">request</a>库，示例代码如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">this-request</span> (<span class="name">request</span></span><br><span class="line">                      <span class="string">"http://localhost:7001/remind"</span></span><br><span class="line">                      <span class="symbol">:data</span> <span class="string">"&#123;\"timestamp\":1547216100&#125;"</span></span><br><span class="line">                      <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">                      <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">                      <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">                      <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">                                (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                                  (<span class="name">message</span> <span class="string">"data: %S"</span> data)))</span><br><span class="line">                      <span class="symbol">:sync</span> <span class="literal">t</span>))</span><br><span class="line">       (<span class="name">data</span> (<span class="name">request-response-data</span> this-request)))</span><br><span class="line">  data)</span><br></pre></td></tr></table></figure>
+<p>此处的<code>:sync</code>参数花了我好长的时间才捣鼓出来——看了一下<code>request</code>函数的docstring后才发现，原来需要传递<code>:sync</code>为<code>t</code>才可以让<code>request</code>函数阻塞地调用，否则一调用<code>request</code>就立马返回了<code>nil</code>。</p>
+<p>现在需要的就是构造<code>:data</code>的值了，其中的关键是生成秒级的UNIX Epoch时间戳，这个时间戳可以通过TODO条目的<code>SCHEDULED</code>属性转换而来。比如，一个条目的<code>SCHEDULED</code>属性的值可能是<code>&lt;2019-01-11 Fri 22:15&gt;</code>，将这个字符串传递给<code>date-to-time</code>函数可以解析成代表着秒数的几个数字</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">date-to-time</span> <span class="string">"&lt;2019-01-11 Fri 22:15&gt;"</span>)</span><br></pre></td></tr></table></figure>
+<p>时间戳字符串要怎么拿到？答案是使用org-mode的<code>org-entry-get</code>函数</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">org-entry-get</span> <span class="literal">nil</span> <span class="string">"SCHEDULED"</span>)</span><br></pre></td></tr></table></figure>
+<p>PS：需要先将光标定位在一个TODO条目上。</p>
+<p>至此，所有的原件都准备齐全了，最终我的Elisp代码如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> scheduled-to-time (<span class="name">scheduled</span>)</span><br><span class="line">  <span class="string">"将TODO条目的SCHEDULED属性转换为UNIX时间戳"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">lst</span> (<span class="name">date-to-time</span> scheduled)))</span><br><span class="line">    (<span class="name">+</span> (<span class="name">*</span> (<span class="name">car</span> lst) (<span class="name">expt</span> <span class="number">2</span> <span class="number">16</span>))</span><br><span class="line">       (<span class="name">cadr</span> lst))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> create-remind-in-cuckoo (<span class="name">timestamp</span>)</span><br><span class="line">  <span class="string">"往cuckoo中创建一个定时提醒并返回这个刚创建的提醒的ID"</span></span><br><span class="line">  (<span class="name">let</span> (<span class="name">remind-id</span>)</span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:7001/remind"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">json-encode-alist</span></span><br><span class="line">            (<span class="name">list</span> (<span class="name">cons</span> <span class="string">"timestamp"</span> timestamp)))</span><br><span class="line">     <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">     <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">     <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">message</span> <span class="string">"返回内容为：%S"</span> data)</span><br><span class="line">                 (<span class="name">let</span> ((<span class="name">remind</span> (<span class="name">json-read-from-string</span> data)))</span><br><span class="line">                   (<span class="name">setq</span> remind-id (<span class="name">cdr</span> (<span class="name">assoc</span> 'id (<span class="name">cdr</span> (<span class="name">car</span> remind))))))))</span><br><span class="line">     <span class="symbol">:sync</span> <span class="literal">t</span>)</span><br><span class="line">    remind-id))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> create-task-in-cuckoo ()</span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">brief</span>)</span><br><span class="line">        (<span class="name">remind-id</span>))</span><br><span class="line"></span><br><span class="line">    (<span class="name">setq</span> brief (<span class="name">nth</span> <span class="number">4</span> (<span class="name">org-heading-components</span>)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">let*</span> ((<span class="name">scheduled</span> (<span class="name">org-entry-get</span> <span class="literal">nil</span> <span class="string">"SCHEDULED"</span>))</span><br><span class="line">           (<span class="name">timestamp</span> (<span class="name">scheduled-to-time</span> scheduled)))</span><br><span class="line">      (<span class="name">setq</span> remind-id (<span class="name">create-remind-in-cuckoo</span> timestamp)))</span><br><span class="line">    </span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:7001/task"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">concat</span> <span class="string">"brief="</span> (<span class="name">url-encode-url</span> brief) <span class="string">"&amp;detail=&amp;remind_id="</span> (<span class="name">format</span> <span class="string">"%S"</span> remind-id))</span><br><span class="line">     <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">message</span> <span class="string">"任务创建完毕"</span>))))))</span><br></pre></td></tr></table></figure>
+<p>在<code>create-task-in-cuckoo</code>中，之所以没有再传递<code>application/json</code>形式的数据给cuckoo，是因为不管我怎么测试，始终无法避免中文字符在传递到接口的时候变成了<code>\u</code>编码的形式，不得已而为之，只好把中文先做一遍url encoding，然后再通过表单的形式（<code>form/x-www-urlencode</code>）发送给接口了。</p>
+<p>全文完。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="cjrrfoe90001ilm303bgenuvf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elisp/">elisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/org-mode/">org-mode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Project-Euler第69题" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/01/28/Project-Euler第69题/" class="article-date">
@@ -105,7 +170,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="cjrghhr6f0005ir30yoeeku7p" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="cjrrfoe8o0012lm30likihl6q" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数学/">数学</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
@@ -161,7 +226,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjrghhr6s000gir30jdu035pb" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjrrfoe8j000zlm30d5semikz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/search/">search</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tool/">tool</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/工具/">工具</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/搜索/">搜索</a></li></ul>
@@ -209,7 +274,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjrghhr690001ir30h9eopwlx" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjrrfoe7k0001lm30kbmkhary" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/org-mode/">org-mode</a></li></ul>
@@ -272,7 +337,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjrghhr650000ir309i9tclwa" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjrrfoe7g0000lm306sp360tu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/总结/">总结</a></li></ul>
@@ -321,7 +386,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjrghhr75000yir30t7xgz6d1" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjrrfoe94001olm30fesdiek2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/find/">find</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grep/">grep</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gtd/">gtd</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/head/">head</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sort/">sort</a></li></ul>
@@ -399,7 +464,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjrghhr780016ir30j6jti42o" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjrrfoe9d0023lm30azi63uv0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/editor/">editor</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/typora/">typora</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编辑器/">编辑器</a></li></ul>
@@ -460,7 +525,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjrghhr760010ir309hkhr037" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjrrfoe96001rlm30mwqf3zbb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/">github</a></li></ul>
@@ -523,7 +588,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjrghhr790018ir30yn0durza" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjrrfoe9a001ylm304nmz0sfv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macro/">macro</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/宏/">宏</a></li></ul>
@@ -573,63 +638,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="cjrghhr7d001dir30ddmitgat" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="cjrrfoe9c0021lm30nivhcr54" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-值得使用的软件之Alfred" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/11/16/值得使用的软件之Alfred/" class="article-date">
-  <time datetime="2018-11-16T15:05:00.000Z" itemprop="datePublished">2018-11-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/16/值得使用的软件之Alfred/">值得使用的软件之Alfred</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>是一款所谓的“生产力工具”，可以理解为就是帮助Mac用户提高日常事务的处理效率的工具，在我还没有入手MBP的时候就已经（在知乎上）听闻了这款软件的大名了。实际使用了之后发现确实可以提升一些事情的处理效率，是一款值得身为程序员的读者朋友使用的应用。接下来我会举一些例子来说明一下，希望可以传达到我的感受。献上我的Alfred使用统计<br><img src="http://wx1.sinaimg.cn/large/791cf7abgy1fx5nx11uumj21kw115n9m.jpg" alt="Alfred的使用统计"></p>
-<h2 id="Alfred的Clipboard"><a href="#Alfred的Clipboard" class="headerlink" title="Alfred的Clipboard"></a>Alfred的Clipboard</h2><p>剪贴板真是一个再常用不过的功能了，我想所有的读者朋友应该都使用过复制&amp;粘贴的功能——不管是在Windows上面的Ctrl-c Ctrl-v也好，还是在Mac上面的Command-c Command-v也罢。Alfred的Clipboard功能可以认为是一个强化版的剪贴板，它可以通过快捷键（在我的系统上设置为了Command-p）快速唤出<br><img src="http://wx1.sinaimg.cn/large/791cf7abgy1fx5o8vf7g9j20vs0ngh1e.jpg" alt="Alfred唤出Clipboard"></p>
-<p>并且支持搜索（虽然很遗憾图片没办法搜索）<br><img src="http://wx1.sinaimg.cn/large/791cf7abgy1fx5oh8pgiyj20vs0ngnh2.jpg" alt="在Clipboard中搜索"></p>
-<p>当需要在两个应用间复制粘贴多段内容的时候，Clipboard就派上用场了。只需要先把需要的每一段内容在一个应用中分别复制一次，打开另一个应用后唤出Clipboard，便可以把刚才复制的内容逐个粘贴进来。每当我在一些地方看到有趣的图片想要分享给微信或者QQ的朋友时，也是打开微信或者QQ后进入Alfred的Clipboard浏览——打开Clipboard后，敲入“Image”，便可以只查看记录在剪贴板中的图片了，并且还可以在发送前预览<br><img src="http://wx4.sinaimg.cn/large/791cf7abgy1fx6clzi5sej20vq0ngqnt.jpg" alt="在Clipboard中搜索图片"></p>
-<h2 id="Alfred的Snippets"><a href="#Alfred的Snippets" class="headerlink" title="Alfred的Snippets"></a>Alfred的Snippets</h2><p>Snippets算是我近期才挖掘到并开始重度使用的功能，用一句话概括，就是“长话短说”。在Snippets中可以新建一个较短的关键字来代替一串较长的输入，例如我就分别用了gcd、gct，以及gmd来代替切换到develop分支、切换到test分支，以及合并develop分支这三条常用的Git操作命令<br><img src="http://wx1.sinaimg.cn/large/791cf7abgy1fx7i4n82ouj21kw1144kh.jpg" alt="在Snippets中定义短语"></p>
-<p>之后既可以通过快捷键唤出Snippets面板的方式来输入短语，也可以直接在短语定义时勾选【Auto expandsion allowed】来做到输入短语后自动展开为完整的内容。下图演示的是输入gcd后自动展开为完整的命令<br><img src="http://wx1.sinaimg.cn/large/791cf7abgy1fx95zf440lg20dc06n42u.gif" alt="自动展开Snippets中的短语"></p>
-<p>我现在已经积累了很多的短语了，不仅提高了输入的速度，也降低了重复输入这些内容的出错率，实在是居家旅行coding必备。</p>
-<h2 id="Alfred的Workflow"><a href="#Alfred的Workflow" class="headerlink" title="Alfred的Workflow"></a>Alfred的Workflow</h2><p>购买Alfred的Powerpack后就可以开启<a href="https://www.alfredapp.com/workflows/" target="_blank" rel="noopener">Workflow</a>的功能了，实际上，在我真正开始用Alfred之前（还在用着Windows的时候），对Alfred的了解基本上局限于“它拥有一个很强大的叫做Workflow的功能”这样，可以说，让Alfred如此闻名遐迩的就是它的Workflow特性吧——不过后来我才知道原来Mac自带一个叫做Automator的类似的功能。</p>
-<p>刚开始接触Workflow的时候，我也沉迷于在网上搜罗别人写好的来用，慢慢地才发现这些其他人经常（在知乎的答案里）列举到的Workflow，其实并不适合我。有一两个觉得眼前一亮的，在使用了一两次之后也就不怎么用了。现在，我自己写了一些Workflow，倒是显著地提升了我的开发过程。</p>
-<p>比较合适作为例子的是我写的三个用于处理时间的Workflow。一个是用于将日期时间字符串转换为UNIX时间戳（毫秒单位）的Workflow，名为gt——取的是get time之意。使用起来的效果大致如下<br><img src="http://wx1.sinaimg.cn/large/791cf7abgy1fx95y9x87ng20dc0c81en.gif" alt="gt的使用效果"></p>
-<p>这个Workflow最终会把结果复制到剪贴板中，便于在其它应用中使用。由于工作内容的缘故，我常常会需要获取某一个时候的UNIX时间戳（毫秒单位）。在有这个Workflow之前，我都是打开iTerm运行node，然后敲入<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(<span class="string">'2018-11-15 00:00:00'</span>).getTime();</span><br></pre></td></tr></table></figure></p>
-<p>这般的代码来得到结果的，不仅要在不同的应用间切换来切换去的，而且还需要重复地敲入new、Date，以及getTime等字眼，实在是一件很低效的事情。使用了gt之后，感觉幸福感也提高了很多。</p>
-<p>另一个Workflow名为wt——取的是what time之意，它的作用跟gt相反，是将毫秒数转换为可读的日期时间字符串，效果如下<br><img src="http://wx2.sinaimg.cn/large/791cf7abgy1fx960hx1heg20dc0c849f.gif" alt="wt的使用效果"></p>
-<p>最后一个Workflow名为int——即I need time，它可以提供特定的一些时刻的时间戳，例如【今天零点】这样的特定的时刻。这三个Workflow的入口节点都是一个<a href="https://www.alfredapp.com/help/workflows/inputs/script-filter/" target="_blank" rel="noopener">Script Filter</a>，int的使用效果如下<br><img src="http://wx3.sinaimg.cn/large/791cf7abgy1fx9um0vongg20dc0c8k95.gif" alt="int的使用效果"></p>
-<p>Alfred的Workflow还可以做很多的事情。它是一个入口，很适合用于不需要肉眼查看含有大段文字的结果的交互场景，例如对字符串做编码转换、计算字符串的摘要、通过AppleScript调起微信联系人，以及控制音量等等，只要好好利用，就可以提升平时的使用效率。程序员朋友们，不妨一起来发挥自己的创造力吧。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/" data-id="cjrghhr6x000oir305uvwbene" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li></ul>
 
     </footer>
   </div>
@@ -642,7 +654,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -656,7 +668,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/install/">install</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安装/">安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/宏/">宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/尾递归/">尾递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面向对象/">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elisp/">elisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/install/">install</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安装/">安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/宏/">宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/尾递归/">尾递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面向对象/">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
     </div>
   </div>
 
@@ -666,7 +678,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 15px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 15px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 10px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 10px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 10px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 10px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 17.5px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12.5px;">tutorial</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/yu-writer/" style="font-size: 10px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 10px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12.5px;">教程</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12.5px;">算法</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 15px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 15px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 10px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 10px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 17.5px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 10px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12.5px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 17.5px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12.5px;">tutorial</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/yu-writer/" style="font-size: 10px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 10px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12.5px;">教程</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12.5px;">算法</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -675,7 +687,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
     </div>
   </div>
 
@@ -686,6 +698,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/02/05/拿Emacs对接我的cuckoo/">拿Emacs对接我的cuckoo</a>
+          </li>
         
           <li>
             <a href="/2019/01/28/Project-Euler第69题/">Project-Euler第69题</a>
@@ -701,10 +717,6 @@
         
           <li>
             <a href="/2018/12/29/2018年度技术总结/">2018年度技术总结</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/15/如何随机挑选要做的任务/">如何随机挑选要做的任务</a>
           </li>
         
       </ul>
