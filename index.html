@@ -62,6 +62,65 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-不同工具查看代码分支diff的差异" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/28/不同工具查看代码分支diff的差异/" class="article-date">
+  <time datetime="2019-02-28T14:53:46.000Z" itemprop="datePublished">2019-02-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/28/不同工具查看代码分支diff的差异/">不同工具查看代码分支diff的差异</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文只是简单地讲述我自己在使用<a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">GNU Emacs</a>、<a href="https://git-fork.com/" target="_blank" rel="noopener">Fork</a>，以及<a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a>查看Git仓库的不同分支的diff上的经历。</p>
+<h2 id="Emacs"><a href="#Emacs" class="headerlink" title="Emacs"></a>Emacs</h2><p>当使用Emacs时，我更喜欢用<code>M-x package-install</code>安装的<a href="https://github.com/magit/magit" target="_blank" rel="noopener"><code>magit</code></a>提供的功能——<code>magit-diff</code>，而不是它自带的<code>vc-dir</code>。按下<code>M-x</code>，输入<code>magit-diff</code>并敲下回车后，Emacs会在minibuffer中等待用户输入要比较的分支。就像在shell中使用<code>git-diff</code>一样，只需要输入两个以<code>..</code>连接的分支名并敲下回车，就可以列出它们间的差异。如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E5%B7%AE%E5%BC%82.png" alt=""></p>
+<p>上图是master与re两个分支间的差异。<code>magit-diff</code>会列出两个分支间不一致的文件，与直接使用<code>git-diff</code>命令没有不同。往下滚动跨过文件清单后，还可以查看单个文件的差异。如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E6%97%B6%E7%9A%84%E5%85%B7%E4%BD%93%E6%96%87%E4%BB%B6%E5%B7%AE%E5%BC%82.png" alt=""></p>
+<h2 id="Fork"><a href="#Fork" class="headerlink" title="Fork"></a>Fork</h2><p>第一次知道Fork是在知乎闲逛的时候，好像是在浏览“Mac下有什么值得推荐的软件”这类问题时看到的。某一次，为了能直观地查看两个commit间的差异，便试用了一番，效果确实不错。Fork的界面如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E7%9A%84%E7%95%8C%E9%9D%A2%E6%A6%82%E8%A7%88.png" alt=""></p>
+<p>还记得，当时为了能够比较两个commit间的差异，我还在Fork的菜单栏中翻了很久——虽然是毫无收获。结果发现，原来只需要选中两个commit就可以了。如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E4%B8%AD%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AAcommit%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82.png" alt=""></p>
+<p>图片两行蓝色的就是我选中的两个commit——先用鼠标点击其一，按住<code>control</code>键后再选中另一个即可。图片下方的部分与<code>magit-diff</code>差不多，应该也算是一目了然了。</p>
+<h2 id="Visual-Studio-Code"><a href="#Visual-Studio-Code" class="headerlink" title="Visual Studio Code"></a>Visual Studio Code</h2><p>原本我觉得Fork已经足够好了，某一天在用VSCode时才忽然发现，在Fork中显示的代码差异，是没有语法高亮的。通常来说，即使没有语法高亮，查看短小的diff也不成问题。但如果差异的内容很多，或是diff位于一个很长的函数内部，这时光靠diff来做代码审查已经不太够了——因为不好确定在这片diff中出现的变量和函数，到底是不是正确地定义了的。</p>
+<p>后来我发现，VSCode自带的“源代码管理”，即便是在查看diff时也是有语法高亮的——不仅有语法高亮，对于Node.js代码而言，还有ESLint的提示和“跳转到定义”的功能，awesome！不愧是全宇宙最好用的编辑器（笑</p>
+<p>为了可以用VSCode来查看两个分支间的差异，放狗搜了一下，找到了神器<a href="https://github.com/eamodio/vscode-gitlens" target="_blank" rel="noopener">GitLens</a>。</p>
+<p>安装GitLens后，VSCode的最左侧会多出一个菜单项，在其中可以方便地选择两个分支来进行比较。首先，找到一个要比较的分支，选择“Select for Compare”。如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png" alt=""></p>
+<p>再选中另一个要比较的分支，右键单击选择“Compare with Selected”，然后便可以在下方看到VSCode罗列出不一致的文件清单了。如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png" alt=""></p>
+<p>VSCode是最吼的！</p>
+<p>全文完。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/" data-id="cjsor43gr000kv630p4qtfa9f" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/visual-studio-code/">visual studio code</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-拿Emacs对接我的cuckoo" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/02/05/拿Emacs对接我的cuckoo/" class="article-date">
@@ -115,7 +174,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="cjs9voc410019c030llg2dlov" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="cjsor43h4001av630a85jec7c" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -172,7 +231,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="cjs9voc3p000fc030k756ze15" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="cjsor43gl000av6304vujelyi" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/28/Project-Euler第69题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -230,7 +289,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjs9voc3t000nc0301cfswibi" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjsor43gt000mv630ddxkkyv3" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -280,7 +339,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjs9voc3h0003c030ob671t17" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjsor43gf0003v630ceusbs1i" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -345,7 +404,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjs9voc3i0004c03042gooauq" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjsor43gg0004v6302bp2il2k" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/29/2018年度技术总结/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -396,7 +455,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjs9voc3y0011c030brdv3323" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjsor43h10014v630ygheg3ou" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -476,7 +535,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjs9voc46001kc0303hppik4g" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjsor43ha001lv630t8z0hlfl" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -539,7 +598,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjs9voc3z0013c0304o7j52ex" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjsor43h20016v6308718c72w" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/07/把GitHub作为图床/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -604,64 +663,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjs9voc400016c0306i2besz8" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjsor43hb001nv630pznxghs3" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macro/">macro</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/宏/">宏</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-重复输入相似的命令的几种方法" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/11/25/重复输入相似的命令的几种方法/" class="article-date">
-  <time datetime="2018-11-25T14:40:51.000Z" itemprop="datePublished">2018-11-25</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/25/重复输入相似的命令的几种方法/">重复输入相似的命令的几种方法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在命令行经常需要重复输入一些shell代码，例如用cd切换到某个目录、运行npm run local，或者git commit等。每次都完整地一个个字符地敲入这些命令还是很麻烦的，这种时候就要寻找可以解决重复输入，提高效率的办法了。</p>
-<p>最原始的，当然是找一个文本文件，把平时经常敲入的命令存放在其中，每当需要运行这些命令的时候就打开文件选中内容复制一下，再到终端粘贴并运行，但这未免过于原始了。</p>
-<h2 id="使用ctrl-r翻出历史命令"><a href="#使用ctrl-r翻出历史命令" class="headerlink" title="使用ctrl-r翻出历史命令"></a>使用ctrl-r翻出历史命令</h2><p>使用ctrl-r是一种不那么原始的方法。在终端中按下ctrl-r后，shell会等待进一步地输入，并根据输入从以前输入过的命令中找出匹配的一条。找到了自己所需要的命令行，直接敲击回车即可，效果如下<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/ctrl_r%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="ctrl-r的效果"><br>PS：上面是使用了<a href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">fzf</a>之后的效果，所以在敲入回车后并不会立即执行所选中的命令。原生的ctrl-r命令不支持在不同的位置上匹配输入字符，所以还是推荐一试fzf的。</p>
-<h2 id="使用alias"><a href="#使用alias" class="headerlink" title="使用alias"></a>使用alias</h2><p>alias相比于ctrl-r而言进化了一点，因为它毕竟不再需要往命令行中塞入那么多字符了——它让终端用户可以用较短的内容来代替较长的内容。例如，我就给登录我本地的MySQL的命令写了一个alias<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> myroot=<span class="string">'mysql -u root -p*******'</span></span><br></pre></td></tr></table></figure></p>
-<p>而且alias更像是宏展开，所以可以在后面添加其它内容，如下图<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/alias%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="alias的效果"><br>在myroot之后输入的test和user_info都跟着myroot展开后的结果一起喂给了shell去执行。使用alias之后，每次只需要输入较短的myroot即可。</p>
-<h2 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h2><p>如果说alias是C语言里面的宏的话，那么shell所支持的函数就是C语言里面的函数了（这不是废话么）。alias始终不太适合所要输入的内容比较多的场景——定义也特别难写，并且alias没有输入参数可言，也不适合处理需要有为妙差异的重复内容的情况。shell函数很适合这种情况，例如，我在本地编辑完一个.sd文件后需要用<a href="http://sdedit.sourceforge.net/index.html" target="_blank" rel="noopener">sdedit</a>将其转换为.png文件，方能上传到Confluence上贴到设计文档里，我希望.png文件跟.sd文件有相同的basename，那么用下面这个shell函数可以减轻一些重复输入的劳动力<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 根据.sd文件生成同名的.png文件</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">sdpng</span></span>() &#123;</span><br><span class="line">    basename=<span class="variable">$&#123;1&#125;</span></span><br><span class="line">    /usr/<span class="built_in">local</span>/bin/sdedit -t png -o <span class="variable">$&#123;basename&#125;</span>.png <span class="variable">$&#123;basename&#125;</span>.sd</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>只需要我输入一次文件名即可，效果如下<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/shell%E5%87%BD%E6%95%B0%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="shell函数的效果"></p>
-<h2 id="使用Alfred的Snippets功能"><a href="#使用Alfred的Snippets功能" class="headerlink" title="使用Alfred的Snippets功能"></a>使用Alfred的Snippets功能</h2><p><a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>带有一个叫做Snippets的特性<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Alfred%E7%9A%84Snippets%E7%89%B9%E6%80%A7.png" alt="Alfred的Snippets特性"><br>它跟上面所说的alias很相似，但它不是由shell自己处理悄悄展开的，它是显式地输入一长串的字符。比如说我定义了三个短语：gpd、gct，以及gpt，它们分别会展开为<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin develop</span><br><span class="line">git checkout <span class="built_in">test</span></span><br><span class="line">git push -u origin <span class="built_in">test</span></span><br></pre></td></tr></table></figure></p>
-<p>效果如下<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Alfred%E8%87%AA%E5%8A%A8%E5%B1%95%E5%BC%80%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="Alfred的Snippets自动展开的效果"><br>Alfred的Snippets也跟alias一样是不能接受参数的，不过支持一些占位符，可以展开为一些特定模式的动态内容。一个比较有用的是{cursor}这个占位符，可以让光标定位至此。例如我可以定义这样的一串展开结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM `user_info` WHERE `userId` = &#123;cursor&#125;\G</span><br></pre></td></tr></table></figure></p>
-<p>这样我敲入对应的短语后就可以正确定位到WHERE语句，然后直接输入要查询的参数即可，效果如下<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/cursor%E5%8D%A0%E4%BD%8D%E7%AC%A6%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="cursor占位符的效果"></p>
-<p>除了Alfred之外，还有其它的通过snippet提高输入效率的软件，比如<a href="http://www.trankynam.com/atext/" target="_blank" rel="noopener">aText</a>，<a href="https://kapeli.com/dash" target="_blank" rel="noopener">Dash</a>，不过我没有实际地用过，就不多说了。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>没有代码才是最快地输入代码的方式</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="cjs9voc42001cc030v8bbrtfp" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
 
     </footer>
   </div>
@@ -688,7 +695,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elisp/">elisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/install/">install</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安装/">安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/宏/">宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/尾递归/">尾递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面向对象/">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elisp/">elisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/install/">install</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visual-studio-code/">visual studio code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安装/">安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/宏/">宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/尾递归/">尾递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面向对象/">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
     </div>
   </div>
 
@@ -698,7 +705,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 15px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 15px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 10px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 10px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 17.5px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 10px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12.5px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 17.5px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12.5px;">tutorial</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/yu-writer/" style="font-size: 10px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 10px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12.5px;">教程</a> <a href="/tags/数学/" style="font-size: 15px;">数学</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12.5px;">算法</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 14px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 14px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 10px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 10px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 10px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 16px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12px;">tutorial</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/yu-writer/" style="font-size: 10px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 10px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12px;">教程</a> <a href="/tags/数学/" style="font-size: 14px;">数学</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -720,6 +727,10 @@
       <ul>
         
           <li>
+            <a href="/2019/02/28/不同工具查看代码分支diff的差异/">不同工具查看代码分支diff的差异</a>
+          </li>
+        
+          <li>
             <a href="/2019/02/05/拿Emacs对接我的cuckoo/">拿Emacs对接我的cuckoo</a>
           </li>
         
@@ -733,10 +744,6 @@
         
           <li>
             <a href="/2019/01/07/Emacs的org-mode实现自动的internal-archive/">Emacs的org-mode实现自动的internal archive</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/29/2018年度技术总结/">2018年度技术总结</a>
           </li>
         
       </ul>
