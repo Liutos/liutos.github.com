@@ -62,6 +62,85 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-CommonLisp函数调用的CPS变换" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2012/09/08/CommonLisp函数调用的CPS变换/" class="article-date">
+  <time datetime="2012-09-08T05:44:38.000Z" itemprop="datePublished">2012-09-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2012/09/08/CommonLisp函数调用的CPS变换/">CommonLisp函数调用的CPS变换</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之前在新浪博客上已经发表了一篇同样主题的文章了，不过心血来潮想重写一份发到这边的博客上来，顺便看看自己能不能够在自己重写这篇的东西的过程中再发掘出一些有价值的东西，充实一下内容。</p>
+<h2 id="什么是CPS"><a href="#什么是CPS" class="headerlink" title="什么是CPS"></a>什么是CPS</h2><p>首先双手奉上来自<a href="http://en.wikipedia.org/wiki/Continuation-passing_style" target="_blank" rel="noopener">维基百科的Continuation-passing-style条目</a>。CPS一般译作<em>续延传递风格</em>，这里最不好理解的词语莫过于<em>续延</em>了。维基百科上关于<a href="http://en.wikipedia.org/wiki/Continuation" target="_blank" rel="noopener">续延</a>也有详细的介绍，不过我也可以简单地介绍一下。<em>续延</em>是一种表示接下来所要进行的计算的对象，也就是你在计算了这一步之后需要继续做的事情的一个描述。举个例子，对于Common Lisp代码(+ (+ 1 2) 3)而言，最左边的参数首先会被计算，也就是Lisp实现先计算的是<em>(+ 1 2)</em>这个表达式，于是可以得到返回值为3。那么计算完了最左边的参数之后，Lisp实现接下来要做什么呢？显然，接下来会计算作为直接值的3得到3本身，然后再将第一次计算得到的3和第二次求值得到的3进行相加。而上面的这两个步骤，其实可以用Lisp中的对象进行描述，只需要用一个匿名函数就可以了，写成</p>
+<pre><code>(lambda (v) (+ v 3))。
+</code></pre><p>那么我们就可以思考，在这一个匿名函数被计算之后，再一次的<em>接下来的计算</em>又是什么呢？对于在REPL中输入的代码而言，Lisp实现会把表达式最终计算得到的返回值打印在终端上，所以我们可以认为上面的匿名函数，也就是一个计算过程，所对应的续延是</p>
+<pre><code>(lambda (u) (print u))。
+</code></pre><p>那么原来的表达式<em>(+ (+ 1 2) 3)</em>就可以写成下面这样的风格的代码：</p>
+<pre><code>(+&amp; 1 2 (lambda (v)
+          (+&amp; v 3 (lambda (u)
+                    (print u)))))
+</code></pre><p>你或许会感到奇怪：这里的<em>+&amp;</em>是个什么东西啊？+&amp;是一个和加法类似的函数，只是它除了会把前两个参数相加之外，还会将这个参数传递给作为第三个参数传入的匿名函数，并进行函数调用。按照维基百科上的说明，CPS代码有两个规范：</p>
+<ol>
+<li>每一个函数都要接受一个续延作为额外的参数；</li>
+<li>每一个函数调用中的参数都只能是一个变量或者λ表达式。</li>
+</ol>
+<p>可以说，+&amp;这样的函数是为了将代码变换成CPS才创造出来的。当然了，除了+函数需要进行变换之外，其它的普通函数（regular function）也是需要进行变换的。例如对代码<em>(\</em> (+ 1 2) 3)<em>进行变换的话，就需要为\</em>函数提供相应的变体，结果应该是：</p>
+<pre><code>(+&amp; 1 2 (lambda (v)
+          (*&amp; v 3 (lambda (u)
+                    (print u)))))。
+</code></pre><p>上面的代码中有个可以稍微琢磨的地方：为什么在两个不同的匿名函数的参数列表中偏偏要使用不同的参数名呢？事实上，在上面的两个变换出来的结果中，完全可以统一使用v或者u来作为参数名，那是因为参数v不需要在第二层嵌套的匿名函数中被使用。可是有时候一开始就进行求值的表达式不一定是马上就被使用的，例如代码<em>(- (+ 1 2) (\</em> 3 4))*的变换结果就是</p>
+<pre><code>(+&amp; 1 2 (lambda (v)
+          (*&amp; 3 4 (lambda (u)
+                    (-&amp; v u)))))。
+</code></pre><p>可以说，当参数列表表达式中不止一个<em>复杂</em>表达式时，就需要至少两个不重名的参数了。讲了这么多手动变换的事情，现在可以讨论最重要的问题了：</p>
+<h2 id="如何对Lisp代码进行CPS变换"><a href="#如何对Lisp代码进行CPS变换" class="headerlink" title="如何对Lisp代码进行CPS变换"></a>如何对Lisp代码进行CPS变换</h2><p>如果我们可以对一类简单的代码进行CPS变换了，那么如何在这个基础上对复杂的代码进行CPS变换呢？例如我们有一段简单的代码<em>(op3 (op2 (op1 a b) c) d)</em>，并且我们已经有了一个通用的功能F可以对其中的嵌套的表达式<em>(op2 (op1 a b) c)</em>进行变换，那么要如何将其和外层的对op3函数的调用结合在一起呢？显然，我们可以先把<em>(op2 (op1 a b) c)</em>换掉，换成一个普通的符号v，以表示一个变量。那么接下来我们的处理对象就是一个稍微简单的表达式<em>(op3 v c)</em>了，对于这种参数列表均由变量所构成的表达式，要将其变换成CPS代码只需要修改其函数为<em>加&amp;的形式</em>，并且添上一个额外的参数——续延就可以了。至于这个续延应该是由调用者提供，而又可以使用默认的<em>(lambda (XXX) (print XXX))</em>的。所以，上面的代码最终会变成</p>
+<pre><code>(经过F处理的代码 (lambda (v)
+                (op3&amp; v c (lambda (XXX)
+                            (print XXX)))))。
+</code></pre><p>对内层的表达式应用F处理完之后还要再计算外层表达式的续延，而计算续延正是函数F所做的事情，所以实际上对一个复杂的表达式做CPS变换，是一个递归的过程。用两段代码进行变换可以有更直观的体验：假设我们有一个正确实现的变换函数F，它接受一个代码和一个续延，并产生出对代码进行CPS变换所得到的结果。那么如果应用在代码<em>(+ (+ 1 1) 3)</em>上，就是</p>
+<pre><code>(F (+ (+ 1 1) 3) (lambda (v) (print v)))。
+</code></pre><p>显然，这段代码应该和下面的这段代码是等价的：</p>
+<pre><code>(F (+ 1 1) (lambda (u)
+             (+&amp; u 3 (lambda (v)
+                       (print v)))))。
+</code></pre><p>并且上面这段代码的续延参数部分，和下面的这段代码是等价的：</p>
+<pre><code>(F (+ u 3) (lambda (v) (print v)))。
+</code></pre><p>是不是就是说，对于一个复杂的表达式expr0，如果想要在提供一个额外续延cont0的情况下，将其正确变换成CPS形式，那么可以先提取出它的第一个被求值的子表达式expr1，将原来子表达式出现的地方替换为一个变量，那么原本的表达式就变成了expr1对应的续延cont1。此时先将cont1和cont0传入函数F进行CPS变换，得到的结果cont将会成为和expr1一起传入函数F进行变换，并最终得到对expr0和cont0进行变换的正确结果呢？显然这是对的，因为cont0紧随expr0求值，而expr0可以拆分为两部分：expr1以及紧随其求值的cont1。那么显然cont0紧随cont1求值，所以cont0是cont1的续延，同样需要进行CPS变换，然后得到新的代码作为expr1的续延继续进行变换，那么最终就会得到代码，它反映的求值顺序正是expr1 -&gt; cont1 -&gt; expr0。</p>
+<p>那么重点就在于怎么把原本的expr0给拆分成expr1和cont1，以及具体结合代码和续延的技术细节了。假设实现拆分功能的函数叫做split-funcall，那么它需要在什么情况下做什么事情呢？一般而言，split-funcall处理的是有复杂的子表达式的代码，那么它需要能够在整个表达式expr0中找出尽量左的一个复杂子表达式，也就是expr1。如果找到这样的expr1了，那么就需要同时找出对应的续延cont1并将两者都返回；如果没有这样的expr1，那么直接返回逻辑假和整个expr0就可以了。说到需要返回多个值的情况，正是Common Lisp的values函数派上大用场的时候了。</p>
+<p>对于含有复杂子表达式的情况，split-funcall函数会返回提取到的子表达式和对应的续延，那么这里的续延应该用什么样的形式来表示呢？为了方便使用从split-funcall内部所gensym出来的符号，所以直接返回一个经过构造的lambda表达式就可以了，但是在递归调用函数F时，不能直接对其进行变换处理，因为lambda表达式不是一个会对参数求值的操作符，所以真正需要变换的是lambda表达式的函数体。因此必须先拆开lambda表达式，对其函数体进行变换并再次构造成lambda表达式，以传递给函数F使用。</p>
+<p>最后，贴一下自己放在Gist上的代码:<script src="https://gist.github.com/3148312.js"> </script></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/" data-id="cjt7c599j00035c30wbgmvyp8" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cps/">cps</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-连分数与ProjectEuler的第66题" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2012/08/31/连分数与ProjectEuler的第66题/" class="article-date">
@@ -108,7 +187,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/" data-id="cjsor43ha001kv630ixsd37n0" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/" data-id="cjt7c59ad001m5c30u1b4gsz6" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -155,7 +234,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/08/24/PE的第26题/" data-id="cjsor43gj0007v630j1kqi2nr" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/08/24/PE的第26题/" data-id="cjt7c599l00075c30tlol2xup" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/08/24/PE的第26题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -197,7 +276,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 14px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 14px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 10px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 10px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 10px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 16px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12px;">tutorial</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/yu-writer/" style="font-size: 10px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 10px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12px;">教程</a> <a href="/tags/数学/" style="font-size: 14px;">数学</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 14px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 14px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 10px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 10px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/lisp/" style="font-size: 12px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 12px;">macro</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 10px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 16px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12px;">tutorial</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/yu-writer/" style="font-size: 10px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 12px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12px;">教程</a> <a href="/tags/数学/" style="font-size: 14px;">数学</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -206,7 +285,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
     </div>
   </div>
 
@@ -217,6 +296,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/03/13/更过程式的let——vertical-let/">更过程式的let——vertical-let</a>
+          </li>
         
           <li>
             <a href="/2019/02/28/不同工具查看代码分支diff的差异/">不同工具查看代码分支diff的差异</a>
@@ -232,10 +315,6 @@
         
           <li>
             <a href="/2019/01/11/一些在Emacs中搜索文本的方法/">一些在Emacs中搜索文本的方法</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/07/Emacs的org-mode实现自动的internal-archive/">Emacs的org-mode实现自动的internal archive</a>
           </li>
         
       </ul>

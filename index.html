@@ -62,6 +62,74 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-更过程式的let——vertical-let" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/13/更过程式的let——vertical-let/" class="article-date">
+  <time datetime="2019-03-13T15:02:59.000Z" itemprop="datePublished">2019-03-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/13/更过程式的let——vertical-let/">更过程式的let——vertical-let</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>作为一名自诩的non-trivial的Common Lisp程序员，在编码的时候经常会遇到令人不愉快的地方，其中一个便是<a href="http://www.lispworks.com/documentation/HyperSpec/Body/s_let_l.htm#let" target="_blank" rel="noopener">LET</a>。</p>
+<p>一段典型的<code>LET</code>的示例代码如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> <span class="number">1</span>))</span><br><span class="line">   a)</span><br></pre></td></tr></table></figure>
+<p>大多数时候，<code>LET</code>不会只有一个绑定。并且，也不会只是绑定一个常量这么简单，而应当是下面这样的</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">      (<span class="name">b</span> (<span class="name">bar</span> z)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></table></figure>
+<p>有时候我会想看看某一个绑定的值——最好是在它计算完毕后立即查看。如果要查看<code>foo</code>函数的返回值，可以这样写</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">      (<span class="name">b</span> (<span class="name">bar</span> z)))</span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></table></figure>
+<p>如果调用<code>foo</code>和<code>bar</code>都顺利的话上面的代码也就够了。比较棘手的情况是，如果<code>a</code>的值不符合预期，会导致<code>b</code>的计算过程出状况（尽管在上面的代码中看似不会）。这种情况多出现在<code>LET*</code>的使用中，如下面所示</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">       (<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></table></figure>
+<p>如果错误的<code>a</code>会导致<code>bar</code>的调用出错，那么在调用<code>function1</code>之前才调用<code>print</code>打印<code>a</code>已经为时过晚了——毕竟调用<code>bar</code>的时候就抛出<code>condition</code>往调用链的上游走了。一种方法是写成下面这样子</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">let</span> ((<span class="name">tmp</span> (<span class="name">foo</span> x y)))</span><br><span class="line">            (<span class="name">print</span> tmp)</span><br><span class="line">            tmp))</span><br><span class="line">       (<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></table></figure>
+<p>这也太丑了！要不然写成下面这样子？</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y)))</span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">    (<span class="name">function1</span> a b)</span><br><span class="line">    (<span class="name">function2</span> a b)))</span><br></pre></td></tr></table></figure>
+<p>本来一个<code>LET</code>就可以做到的事情，这下子用了两个，还导致缩进更深了一级。如果有十个变量需要打印，就会增加十个<code>LET</code>和十层缩进。如果心血来潮想查看一个变量的值，还要大幅调整代码。</p>
+<p>问题大概就出在<code>LET</code>和<code>LET*</code>的语法上。以<code>LET</code>为例，它由截然分开的<code>bindings</code>和<code>forms</code>组成，两者不能互相穿插。因此，如果想在<code>bindings</code>中求值一段表达式，只能将<code>bindings</code>切开，写成两个<code>LET</code>的形式。好像写一个新的宏可以解决这个问题？是的，<code>vertical-let</code>就是。</p>
+<p><code>vertical-let</code>是一个我自己写的宏，源代码<a href="https://github.com/Liutos/clitool/blob/master/cl/sak.lisp#L9" target="_blank" rel="noopener">在此</a>。其用法如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line">  <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line">  a)</span><br></pre></td></tr></table></figure>
+<p>它借鉴了<code>LOOP</code>中绑定变量的方式（即<code>:with</code>和<code>=</code>），绑定变量和用于求值的代码还可以交织在一起，如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line">  <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line">  (<span class="name">+</span> a b))</span><br></pre></td></tr></table></figure>
+<p><code>vertical-let</code>最终会展开为<code>LET</code>，比如上面的代码，会展开为如下的代码</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">LET</span> ((<span class="name">A</span> <span class="number">1</span>))</span><br><span class="line">  (<span class="name">PRINT</span> A)</span><br><span class="line">  (<span class="name">LET</span> ((<span class="name">B</span> <span class="number">2</span>))</span><br><span class="line">    (<span class="name">+</span> A B)))</span><br></pre></td></tr></table></figure>
+<p><code>vertical-let</code>的算法很简单。它遍历表达式列表，当遇到<code>:with</code>时就把接下来的三个元素分别视为变量名、等号，以及待求值的表达式，将三者打包进一个列表中，再压栈；当遇到其它值时，就视为待求值的表达式（将会组成<code>LET</code>的<code>forms</code>部分），也放进列表中再压栈（具体方法参见源代码）。</p>
+<p>将所有值都遍历并压栈后，接下来要遍历这个栈中的元素。先准备两个空的栈——一个存放<code>bindings</code>，一个存放<code>forms</code>。接着，对于每一个从栈中弹出的元素，分为如下两种情况：</p>
+<ol>
+<li>如果表示<code>binding</code>，则直接压入存放<code>bindings</code>的栈，否则；</li>
+<li>如果是待求值的表达式，并且上一个出栈的元素是<code>binding</code>，则说明已经有一段完整的<code>LET</code>的内容被集齐。因此，将目前在两个栈中的内容全部弹出，组合为一个<code>LET</code>表达式再压入存放<code>forms</code>的栈中。然后将方才弹出的表达式也压入<code>forms</code>。重复上述过程直至所有元素都被处理，最后将还在两个栈中的内容也组合为一个<code>LET</code>表达式便结束了。</li>
+</ol>
+<p>全文完</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/" data-id="cjt7c59ab001i5c30w4spjdf2" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macro/">macro</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/宏/">宏</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-不同工具查看代码分支diff的差异" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/02/28/不同工具查看代码分支diff的差异/" class="article-date">
@@ -107,7 +175,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/" data-id="cjsor43gr000kv630p4qtfa9f" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/" data-id="cjt7c599w000p5c30il0f8s2n" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -174,7 +242,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="cjsor43h4001av630a85jec7c" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="cjt7c59a300135c30646ba81l" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -231,7 +299,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="cjsor43gl000av6304vujelyi" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="cjt7c599m00085c30tmari88v" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/28/Project-Euler第69题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -289,7 +357,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjsor43gt000mv630ddxkkyv3" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjt7c599s000j5c30n59qjwxs" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -339,7 +407,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjsor43gf0003v630ceusbs1i" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjt7c599k00055c30xg2vlw0z" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -404,7 +472,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjsor43gg0004v6302bp2il2k" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjt7c599g00015c30z413996y" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/29/2018年度技术总结/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -455,7 +523,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjsor43h10014v630ygheg3ou" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjt7c59a200105c30z275klm7" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -535,7 +603,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjsor43ha001lv630t8z0hlfl" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjt7c59a9001f5c30tt33qqzd" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -598,77 +666,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjsor43h20016v6308718c72w" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjt7c59a400155c30a1pwhx6y" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/07/把GitHub作为图床/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/">github</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-编写嵌套反引号的宏" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/11/27/编写嵌套反引号的宏/" class="article-date">
-  <time datetime="2018-11-27T15:11:42.000Z" itemprop="datePublished">2018-11-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/27/编写嵌套反引号的宏/">编写嵌套反引号的宏</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一个没事找事的例子"><a href="#一个没事找事的例子" class="headerlink" title="一个没事找事的例子"></a>一个没事找事的例子</h2><p>当在Common Lisp中定义宏的时候，常常会使用到反引号（`）。比方说，我有这么一个函数<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
-<p>它被调用后会返回最后一个表达式的结果——13。如果我希望在第二个表达式计算后就把结果返回给外部的调用者的话，可以用<code>return-from</code><br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">return-from</span> foobar (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
-<p>当然了，这属于没事找事，因为完全可以把最后两个表达式放到一个<code>prog1</code>（这也是没事找事），或者直接点，把最后一个表达式删掉来做到同样的效果——但如果是这样的话这篇东西就写不下去了，所以我偏要用<code>return-from</code>。</p>
-<p>还有一个更加没事找事的办法，就是用<code>macrolet</code>定义一个局部的宏来代替<code>return-from</code>——我很想把这个新的宏叫做<code>return</code>，但这样<a href="http://www.sbcl.org/" target="_blank" rel="noopener">SBCL</a>会揍我一顿，所以我只好把这个宏叫做<code>bye</code>（叫做<code>exit</code>也会被揍）<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">macrolet</span> ((<span class="name">bye</span> (<span class="name">&amp;optional</span> value)</span><br><span class="line">               `(return-from foobar ,value)))</span><br><span class="line">    (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">    (<span class="name">bye</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">    (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>)))</span><br></pre></td></tr></table></figure></p>
-<p>如果我有另一个叫做<code>foobaz</code>的函数<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">6</span>))</span><br></pre></td></tr></table></figure></p>
-<p>也想要拥有<code>bye</code>这种想来就来想走就走的能力的话，可以依葫芦画瓢地包含一个<code>macrolet</code><br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz ()</span><br><span class="line">  (<span class="name">macrolet</span> ((<span class="name">bye</span> (<span class="name">&amp;optional</span> value)</span><br><span class="line">               `(return-from foobaz ,value)))</span><br><span class="line">    (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br><span class="line">    (<span class="name">bye</span> (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>))</span><br><span class="line">    (<span class="name">+</span> <span class="number">5</span> <span class="number">6</span>)))</span><br></pre></td></tr></table></figure></p>
-<p>好了，现在我觉得每次都需要在函数体内粘贴一份<code>bye</code>的实现代码太麻烦了，想要减少这种重复劳作。于是乎，我打算写一个宏来帮我复制粘贴代码。既然要定义宏，那么首先应当定义这个宏的名字以及用法，姑且是这么用的吧<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">with-bye</span> foobar</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">bye</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
-<p><code>with-bye</code>这个宏需要能够展开成上面的手动编写的<code>foobar</code>中的函数体的代码形式，那么<code>with-bye</code>的定义中，就一定会含有<code>macrolet</code>的代码，同时也就含有了反引号——好了，现在要来处理嵌套的反引号了。</p>
-<p><a href="https://blog.csdn.net/xiaojianpitt/article/details/7747230" target="_blank" rel="noopener">这篇文章</a>有个不错的讲解，各位不妨先看看。现在，让我来机械化地操作一遍，给出<code>with-bye</code>的定义。首先，要确定生成的目标代码中，那一些部分是可变的。对于<code>with-bye</code>而言，<code>return-from</code>的第一个参数已经<code>macrolet</code>的函数体是可变的，那么不妨把这两部分先抽象为参数<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
-<p>但这样是不够的，因为<code>name</code>是一个在最外层绑定的，但它被放在了两层的反引号当中，如果它只有一个前缀的逗号，那么它就无法在外层的反引号求值的时候被替换为目标的<code>FOOBAR</code>符号。因此，需要在<code>,name</code>之前再添加一个反引号<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,,name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
-<p>如果你在Emacs中对上述的表达式进行求值，那么它吐出来的结果实际上是<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">MACROLET</span> ((<span class="name">BYE</span> (<span class="name">&amp;OPTIONAL</span> VALUE)</span><br><span class="line">             `(RETURN-FROM ,FOOBAR ,VALUE)))</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">BYE</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
-<p>显然，这还是不对。如果生成了上面这样的代码，那么对于<code>bye</code>而言<code>FOOBAR</code>就是一个未绑定的符号了。之所以会这样，是因为</p>
-<ol>
-<li><code>name</code>在绑定的时候输入的是一个符号，并且</li>
-<li><code>name</code>被用在了嵌套的反引号内，它会被求值两次——第一次求值得到符号<code>foobar</code>，第二次则是<code>foobar</code>会被求值</li>
-</ol>
-<p>因此，为了对抗第二次的求值，需要给<code>,name</code>加上一个前缀的引号（‘），最终效果如下<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,',name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
-<p>所以<code>with-bye</code>的定义是这样的<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> with-bye (<span class="name">name</span> <span class="symbol">&amp;body</span> body)</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,',name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
-<h2 id="机械化的操作方法"><a href="#机械化的操作方法" class="headerlink" title="机械化的操作方法"></a>机械化的操作方法</h2><p>我大言不惭地总结一下，刚才的操作步骤是这样的。首先，找出一段有规律的、需要被用宏来实现的目标代码；然后，识别其中的可变的代码，给这些可变的代码的位置起一个名字（例如上文中的<code>name</code>和<code>body</code>），将它们作为<code>let</code>表达式的绑定，把目标代码装进同一个<code>let</code>表达式中。此时，目标代码被加上了一层反引号，而根据每个名字出现的位置的不同，为它们适当地补充一个前缀的逗号；最后，如果在嵌套的反引号中出现的名字无法被求值多次——比如符号或者列表，那么还需要给它们在第一个逗号后面插入一个引号，避免被求值两次招致未绑定的错误。</p>
-<h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2><p>就用上面所引用的文章里的例子好了。有一天我觉得Common Lisp中一些常用的宏的名字实在是太长了想要精简一下——毕竟敲键盘也是会累的——假装没有自动补全的功能。我可能会定义下面这两个宏<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> d-bind (<span class="name">&amp;body</span> body)</span><br><span class="line">  `(destructuring-bind ,@body))</span><br><span class="line">(<span class="name">defmacro</span> mv-bind (<span class="name">&amp;body</span> body)</span><br><span class="line">  `(multiple-value-bind ,@body))</span><br></pre></td></tr></table></figure></p>
-<p>显然，这里的代码的写法出现了重复模式，不妨试用按照机械化的操作手法来提炼出一个宏。第一步，先识别出其中可变的内容。对于上面这个例子而言，变化的地方其实只有两个名字——新宏的名字（<code>d-bind</code>和<code>mv-bind</code>），以及旧宏的名字（<code>destructuring-bind</code>和<code>multiple-value-bind</code>）。第二步，给它们命名并剥离成<code>let</code>表达式的绑定，得到如下的代码<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">new-name</span> 'd-bind)</span><br><span class="line">      (<span class="name">old-name</span> 'destructuring-bind))</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,old-name ,@body)))</span><br></pre></td></tr></table></figure></p>
-<p>因为<code>old-name</code>处于嵌套的反引号中，但是它是由最外层的<code>let</code>定义的，所以应当添上一个前缀的逗号，得到<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">new-name</span> 'd-bind)</span><br><span class="line">      (<span class="name">old-name</span> 'destructuring-bind))</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,,old-name ,@body)))</span><br></pre></td></tr></table></figure></p>
-<p>最后，因为<code>old-name</code>绑定的是一个符号，不能被两次求值（第二次是在<code>defmacro</code>定义的新宏中展开，此时<code>old-name</code>已经被替换为了<code>destructuring-bind</code>，而它对于新宏而言是一个自由变量，并没有被绑定），所以需要有一个单引号来阻止第二次的求值——因为需要的就是符号<code>destructuring-bind</code>本身。所以，最终的代码为<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> define-abbreviation (<span class="name">new-name</span> old-name)</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,',old-name ,@body)))</span><br></pre></td></tr></table></figure></p>
-<p>试一下就可以确认这个<code>define-abbreviation</code>是能用的（笑</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>能够指导编写宏的、万能的、机械化的操作方法，我想应该是不存在的</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjsor43hb001nv630pznxghs3" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macro/">macro</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/宏/">宏</a></li></ul>
 
     </footer>
   </div>
@@ -705,7 +708,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 14px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 14px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 10px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 10px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/lisp/" style="font-size: 10px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 10px;">macro</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 10px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 16px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12px;">tutorial</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/yu-writer/" style="font-size: 10px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 10px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12px;">教程</a> <a href="/tags/数学/" style="font-size: 14px;">数学</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 14px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 14px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 10px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 10px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/lisp/" style="font-size: 12px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 12px;">macro</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 10px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 16px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12px;">tutorial</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/yu-writer/" style="font-size: 10px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 12px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12px;">教程</a> <a href="/tags/数学/" style="font-size: 14px;">数学</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -714,7 +717,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
     </div>
   </div>
 
@@ -725,6 +728,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/03/13/更过程式的let——vertical-let/">更过程式的let——vertical-let</a>
+          </li>
         
           <li>
             <a href="/2019/02/28/不同工具查看代码分支diff的差异/">不同工具查看代码分支diff的差异</a>
@@ -740,10 +747,6 @@
         
           <li>
             <a href="/2019/01/11/一些在Emacs中搜索文本的方法/">一些在Emacs中搜索文本的方法</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/07/Emacs的org-mode实现自动的internal-archive/">Emacs的org-mode实现自动的internal archive</a>
           </li>
         
       </ul>
