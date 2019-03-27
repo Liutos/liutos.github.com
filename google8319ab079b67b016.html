@@ -5,24 +5,19 @@
   
 
   
-  <title>一些在Emacs中搜索文本的方法 | Hexo</title>
+  <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在Emacs中写代码的时候，常常需要查找一个函数、方法，或者变量的定义。如果是正在写Common Lisp，那么SLIME已经配置好了相应的快捷键M-.，只需要将光标移动到要查看的函数、方法，或者变量的名字上，按下M-.便可以跳转过去——再按一下M-,还能回到原来的位置。 如果是写其它语言的代码，很多时候都没办法方便地跳转过去，这时候就需要依赖于文本搜索了，这也是本篇所要讲述的主题。 通常情况下，">
-<meta name="keywords" content="emacs,search,tool,搜索,工具">
-<meta property="og:type" content="article">
-<meta property="og:title" content="一些在Emacs中搜索文本的方法">
-<meta property="og:url" content="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/index.html">
+  <meta name="description" content="google-site-verification: google8319ab079b67b016.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://liutos.github.io/google8319ab079b67b016.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="在Emacs中写代码的时候，常常需要查找一个函数、方法，或者变量的定义。如果是正在写Common Lisp，那么SLIME已经配置好了相应的快捷键M-.，只需要将光标移动到要查看的函数、方法，或者变量的名字上，按下M-.便可以跳转过去——再按一下M-,还能回到原来的位置。 如果是写其它语言的代码，很多时候都没办法方便地跳转过去，这时候就需要依赖于文本搜索了，这也是本篇所要讲述的主题。 通常情况下，">
+<meta property="og:description" content="google-site-verification: google8319ab079b67b016.html">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/swiper%E6%97%B6%E7%9A%84minibuffer.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/find-grep%E7%9A%84%E7%AD%89%E5%80%99.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/git-grep%E7%9A%84man%E6%96%87%E6%A1%A3.png">
-<meta property="og:updated_time" content="2019-01-11T13:38:07.942Z">
+<meta property="og:updated_time" content="2019-03-27T14:44:45.535Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一些在Emacs中搜索文本的方法">
-<meta name="twitter:description" content="在Emacs中写代码的时候，常常需要查找一个函数、方法，或者变量的定义。如果是正在写Common Lisp，那么SLIME已经配置好了相应的快捷键M-.，只需要将光标移动到要查看的函数、方法，或者变量的名字上，按下M-.便可以跳转过去——再按一下M-,还能回到原来的位置。 如果是写其它语言的代码，很多时候都没办法方便地跳转过去，这时候就需要依赖于文本搜索了，这也是本篇所要讲述的主题。 通常情况下，">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/swiper%E6%97%B6%E7%9A%84minibuffer.png">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="google-site-verification: google8319ab079b67b016.html">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -69,80 +64,31 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-一些在Emacs中搜索文本的方法" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/01/11/一些在Emacs中搜索文本的方法/" class="article-date">
-  <time datetime="2019-01-11T13:37:18.000Z" itemprop="datePublished">2019-01-11</time>
+    <a href="/google8319ab079b67b016.html" class="article-date">
+  <time datetime="2019-03-27T14:44:45.585Z" itemprop="datePublished">2019-03-27</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      一些在Emacs中搜索文本的方法
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在Emacs中写代码的时候，常常需要查找一个函数、方法，或者变量的定义。如果是正在写Common Lisp，那么<a href="https://common-lisp.net/project/slime/" target="_blank" rel="noopener">SLIME</a>已经配置好了相应的快捷键<code>M-.</code>，只需要将光标移动到要查看的函数、方法，或者变量的名字上，按下<code>M-.</code>便可以跳转过去——再按一下<code>M-,</code>还能回到原来的位置。</p>
-<p>如果是写其它语言的代码，很多时候都没办法方便地跳转过去，这时候就需要依赖于文本搜索了，这也是本篇所要讲述的主题。</p>
-<p>通常情况下，用<code>C-s</code>和<code>C-r</code>就足够了——一个负责“往下”搜索一个负责“往上”搜索。尤其在安装了Emacs的插件<a href="https://github.com/abo-abo/swiper" target="_blank" rel="noopener">swiper</a>之后，只需使用<code>C-s</code>便可以同时查看到上下两个方向的匹配文本。</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/swiper%E6%97%B6%E7%9A%84minibuffer.png" alt=""></p>
-<p>但<code>C-s</code>也有其局限性。例如，它不能跨文件搜索，如果要查看的函数、方法，或者变量的定义不在当前buffer中，就不得不手动在多个buffer间切换并频繁按下<code>C-s</code>了。</p>
-<p>有多种办法可以解决上面这种问题。例如，可以用Emacs的<code>projectile-ag</code>。通常，如果代码散布在多个源文件中，那么它们多半是放在一个项目中——比如一个Git仓库。打开位于项目中的文件时，Emacs的<code>projectile-mode</code>就会启动。此时，按下<code>C-c C-p s s</code>这套组合键，会调用<code>projectile-ag</code>函数。<code>projectile-ag</code>会在minibuffer中等候输入要搜索的内容，按下回车后，Emacs会调用命令行工具<a href="https://github.com/ggreer/the_silver_searcher" target="_blank" rel="noopener">ag</a>来搜索这个项目下的所有文件，找出匹配关键字的行并显示。</p>
-<p><code>projectile-ag</code>函数会打开另一个buffer来展示搜索结果，一个示例如下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ag --literal --group --line-number --column --color --color-match 30\;43 --color-path 1\;32 --smart-case --stats -- emacs .</span><br><span class="line">0 matches</span><br><span class="line">0 files contained matches</span><br><span class="line">36 files searched</span><br><span class="line">111365 bytes searched</span><br><span class="line">0.007795 seconds</span><br></pre></td></tr></table></figure>
-<p>使用<code>projectile-ag</code>的前提是要搜索的文件都在同一个一个项目中，但并非所有时候都满足这个要求。这时，可以用Emacs的<code>find-grep</code>函数。</p>
-<p><code>find-grep</code>函数调起后同样要求使用者在minibuffer输入内容，但它更原始一点</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/find-grep%E7%9A%84%E7%AD%89%E5%80%99.png" alt=""></p>
-<p>光标会定位在<code>-e</code>选项之后，需要填补交给<code>grep</code>的正则表达式。由于minibuffer中给出的是完整的、将会被运行的命令，因此可以也给<code>find</code>命令添加一些选项和参数，来改变搜索行为。</p>
-<p>如果是在一个Node.js项目中搜索，一般还要让<code>find</code>忽略一些文件，如node_modules目录下的大量依赖，或者构建产生出来的.css和.js文件。这些文件中的行不仅很可能会命中输入的正则表达式，还极可能成片地出现，占据搜索结果中的半壁江山。</p>
-<p>除了<code>grep</code>之外，还有许多命令行的文本搜索工具，例如<a href="https://github.com/samaaron/ack" target="_blank" rel="noopener"><code>ack</code></a>和<a href="https://github.com/BurntSushi/ripgrep" target="_blank" rel="noopener"><code>rg</code></a>，并且它们都称自己更快。要在Emacs中使用它们也很简单，尤其是后者还有相应的插件<a href="https://github.com/dajva/rg.el" target="_blank" rel="noopener"><code>rg.el</code></a>可以方便调起。</p>
-<p>如果经常要控制<code>find</code>来忽略node_modules，可以考虑用<code>git-grep</code>。<code>man git-grep</code>中说到，它只会搜索tracked的文件</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/git-grep%E7%9A%84man%E6%96%87%E6%A1%A3.png" alt="git-grep的man文档"></p>
-<p>node_modules一般都不会被git跟踪，自然也就不会被搜索。</p>
-<p>全文完</p>
-
+        google-site-verification: google8319ab079b67b016.html
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjtrbgsne000nhe30f8nilr41" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/google8319ab079b67b016.html" data-id="cjtrblxk20000n030cl094h7m" class="article-share-link">Share</a>
       
-        <a href="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://liutos.github.io/google8319ab079b67b016.html#disqus_thread" class="article-comment-link">Comments</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/search/">search</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tool/">tool</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/工具/">工具</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/搜索/">搜索</a></li></ul>
-
     </footer>
   </div>
   
     
-<nav id="article-nav">
-  
-    <a href="/2019/01/28/Project-Euler第69题/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Project-Euler第69题
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2019/01/07/Emacs的org-mode实现自动的internal-archive/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Emacs的org-mode实现自动的internal archive</div>
-    </a>
-  
-</nav>
-
   
 </article>
 
@@ -243,7 +189,7 @@
 <script>
   var disqus_shortname = 'Liutos';
   
-  var disqus_url = 'https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/';
+  var disqus_url = 'https://liutos.github.io/google8319ab079b67b016.html';
   
   (function(){
     var dsq = document.createElement('script');
