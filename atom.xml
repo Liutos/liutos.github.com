@@ -102,9 +102,9 @@
     
       <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
     
-      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
-    
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
+      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
     
   </entry>
   
@@ -130,9 +130,9 @@
     </summary>
     
     
-      <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
-    
       <category term="project euler" scheme="https://liutos.github.io/tags/project-euler/"/>
+    
+      <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
       <category term="algorithm" scheme="https://liutos.github.io/tags/algorithm/"/>
     
