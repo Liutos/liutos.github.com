@@ -34,7 +34,7 @@ ga('send', 'pageview');
     <link rel="icon" href="/favicon.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+    <link href="//fonts.useso.com/css?family=Lato:400,400italic" rel="stylesheet" type="text/css">
   
   <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -74,6 +74,106 @@ ga('send', 'pageview');
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Boostnote及对记笔记的思考" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/07/Boostnote及对记笔记的思考/" class="article-date">
+  <time datetime="2019-05-07T15:06:43.000Z" itemprop="datePublished">2019-05-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/07/Boostnote及对记笔记的思考/">Boostnote及对记笔记的思考</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇文章就是在<a href="https://boostnote.io/" target="_blank" rel="noopener">Boostnote</a> 中写成的XD</p>
+<h2 id="来龙去脉"><a href="#来龙去脉" class="headerlink" title="来龙去脉"></a>来龙去脉</h2><p>有一阵子，我沉迷于“笔记软件狩猎”中——就是不停寻找各种各样的笔记软件，再一个个试用，企图从中选出一个最强大的。回想起来，我尝试过有道云笔记、印象笔记、Quiver、Boostnote、OneNote、Yu Writer、Leanote（在本地搭建），等等。大部分都是浅尝辄止，例如OneNote，当我发现它不支持代码块语法高亮时，就放弃了它。目前仍然在使用的是Boostnote，并且也是最令我满意的。</p>
+<h2 id="走马观花"><a href="#走马观花" class="headerlink" title="走马观花"></a>走马观花</h2><p>Boostnote自诩为“for developer”的笔记软件，除了书写Markdown以及实时预览之外，还支持绘图（UML、流程图、时序图）、制表，甚至可以添加LaTeX公式。</p>
+<p>GitHub上可以找到官方对Boostnote绘图能力的简单<a href="https://github.com/BoostIO/Boostnote/wiki/Diagram-support" target="_blank" rel="noopener">示例</a>，但我用得极少。不管是画UML、流程图，还是时序图，方法都是“写代码”。画UML用的是PlantUML的语法（你甚至可以在首选项中找到PlantUML服务器的地址），画流程图用的是<a href="http://flowchart.js.org/" target="_blank" rel="noopener">flowchart.js</a>的语法。我自己很喜欢这类语绘的方式，只需要熟悉一下语法，画起来图来比鼠标拖拖拉拉不知道要高到哪里去了。说到时序图，我更喜欢用<a href="http://sdedit.sourceforge.net/example/index.html" target="_blank" rel="noopener">sdedit</a>。</p>
+<p>制表只需要敲入竖线和横线即可。例如，下面的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">|这|是|一|</span><br><span class="line">|-|-|-|</span><br><span class="line">|个|表|格|</span><br></pre></td></tr></table></figure>
+<p>在Boostnote中预览时的效果是如下这样的</p>
+<table>
+<thead>
+<tr>
+<th>这</th>
+<th>是</th>
+<th>一</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>个</td>
+<td>表</td>
+<td>格</td>
+</tr>
+</tbody>
+</table>
+<p>制表在Emacs的<a href="https://orgmode.org/manual/Built_002din-table-editor.html#Built_002din-table-editor" target="_blank" rel="noopener">org-mode</a>中有更风骚的表现。比如，按下tab键可以让光标跳至下一个单元格，同时会自动调整每一列的宽度；甚至，还可以在单元格中使用公式。</p>
+<p>既然可以嵌入LaTeX，那么下列的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$ \LaTeX $$</span><br></pre></td></tr></table></figure>
+<p>就能够用来绘制酷炫版的LaTeX logo了，如下所示</p>
+<p>$$ \LaTeX $$</p>
+<p>只可惜这玩意儿不是inline的。</p>
+<p>Markdown这门标记语言原本也支持代码块，但稍微现代的编辑器都应当至少支持语法高亮才行。在Boostnote中即便不进行预览，代码块中的代码也是彩色的。</p>
+<p>Boostnote自动保存笔记内容，这点上每个人的口味可能还是不太一样的。</p>
+<h2 id="槽点"><a href="#槽点" class="headerlink" title="槽点"></a>槽点</h2><p>尽管可以将剪贴板中的图片粘贴到Boostnote的笔记中，却不能将图片复制到剪贴板中。唯一的办法，就是在粘贴了图片后，按照笔记中的文件路径，在Finder中找到这个文件，然后再复制。</p>
+<p>不像Yu Writer和Typora，Boostnote既不支持目录也不支持大纲模式。如果用来写篇幅很长的文章，并且需要频繁在相距比较远的章节之间切换的话，会写得比较辛苦。但也可以认为，Markdown，或者说Boostnote这样的笔记软件，本来也不适合写作大型文档。遇到这种事情，还是应当出动字处理软件（比如Word）或者TeX。</p>
+<p>Boostnote没有将笔记的内容以朴素的Markdown形式保存为一个.md文件，而是存储成后缀名为.cson的文件格式。这意味着，即便哪一天有一款完美的Markdown编辑器出现了，也无法在其中查看和编辑这些Boostnote生成的文档。</p>
+<h2 id="一些胡言乱语"><a href="#一些胡言乱语" class="headerlink" title="一些胡言乱语"></a>一些胡言乱语</h2><ul>
+<li>记笔记的目的是什么？</li>
+<li>我对笔记软件的要求是什么？</li>
+<li>Boostnote是最合适的吗？它又适合做什么呢？</li>
+</ul>
+<p>我不是从入手了Mac之后才开始记笔记的，在此之前，我用Emacs的org-mode来记笔记，但也许称其为FAQ更恰当。使用org-mode，写作方式、浏览方式，以及载体都是一致的——用org-mode的语法来写作，同时写下的也就是所看到的（org-mode没有预览一说），最后，存储的也是纯粹的、敲入的文本。但用org-mode来记笔记也有自己的缺陷：</p>
+<ul>
+<li>在Emacs中浏览的体验不是非常好</li>
+<li>不方便使用行内的代码块</li>
+<li>其它编辑器对.org格式的支持不好</li>
+<li>不方便粘贴图片</li>
+</ul>
+<p>因此，才打算构筑新的笔记系统。但新的笔记系统应当不仅仅可以解决org-mode遇到的问题，而是应该贴合我的核心需求才行。我自己曾经总结过，笔记软件应该满足如下的要求：</p>
+<ul>
+<li>支持Markdown，它是一门我所熟悉的、轻量级的标记语言，也被众多的软件支持</li>
+<li>支持编程语言的语法高亮，毕竟是软件开发方面的笔记，总会涉及到代码的</li>
+<li>以.md文件的形式存储。这个一会儿再聊聊</li>
+<li>支持树形的文件层级结构，因为我可能会给笔记划分比较多的层级，但这个也值得一会儿聊聊</li>
+<li>支持Emacs的keymap，这是我所熟悉的操作方式，减少手离开键盘的次数</li>
+</ul>
+<p>看下来更像是在物色一款好用的Markdown文件编辑器。但一款优秀的Markdown文件编辑器就会是一款优秀的笔记软件吗？我看未必。</p>
+<p>实际上，对代码的语法高亮的要求，暴露了一个关键因素，就是：即便我写入的是Markdown代码，也希望能够以渲染后的效果展示出来。所以，为什么不直接使用富文本来书写笔记内容。如果是富文本的编辑器，那么一般便不会是以朴素的.md文件的格式来存储的了，但这并没有什么太值得在意的，毕竟谁也不会闲着没事就将笔记内容在各个软件间迁移着玩。</p>
+<p>如果是一些可以公开的笔记，那么直接记录到博客中也不失为一个好办法——博客可以被搜索引擎索引，之后如果想要查找记录过的内容的话，也可以借助于搜索引擎强大的搜索能力来实现。不过，现阶段，我更喜欢这些笔记是私密的。</p>
+<p>我的笔记也几乎不会与他人分享，因此不管是书写格式还是存储格式，都只需要我自己用着开心就足够了。大多数情况下，笔记的用途其实是代码片段，在需要的时候能够复制出来略作修改，用到其它地方——例如粘贴到shell中运行，解决一些临时的问题。如果不是因为我喜欢记下最终结果的来龙去脉的话，Boostnote的代码片段功能也许才是最适合我的选择。另外，由于大部分的代码都非常地短，即便没有语法高亮浏览器来也不是大问题，所以语法高亮的需要也就不那么迫切了。</p>
+<p>现在看来，Boostnote并不是最合适的（打脸了）。Evernote和Leanote是我用过的笔记软件中比较强有力的两个竞争者。由于Leanote比Evernote支持更多的目录层级，并且还可以选择创建Markdown笔记（而不仅仅是富文本笔记），所以我大概会选择用Leanote来作为接下来的笔记软件的主力吧。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>用Typora来写，用ElasticSearch来索引笔记，好像也不错？！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/" data-id="cjvdxinph00015730ztwdj9q5" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/editor/">editor</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/typora/">typora</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编辑器/">编辑器</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-更过程式的let——vertical-let" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
@@ -129,7 +229,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/" data-id="cjtzatp0g0019s130tdjnfujz" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/" data-id="cjvdxinqc00135730rnpzoljb" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -188,7 +288,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/" data-id="cjtzatp07000rs1300kdjg7xo" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/" data-id="cjvdxinq2000l57302825rfph" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -255,7 +355,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="cjtzatp0i001bs1306teo3kjt" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="cjvdxinqb001157302vn6fjj0" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -312,7 +412,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="cjtzatozz000ds130i070gbvo" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="cjvdxinpu000b5730f5i2s3z5" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/28/Project-Euler第69题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -370,7 +470,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjtzatp02000hs1305ivc3q3u" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjvdxinq0000i5730o4krqoe3" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -420,7 +520,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjtzatozl0001s130y5p0n4fr" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjvdxinpl00025730xdjbxz83" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -485,7 +585,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjtzatozp0002s130td0phlxt" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjvdxinpr00065730we9rdxfh" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/29/2018年度技术总结/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -536,7 +636,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjtzatp0b0011s13047zbi4b7" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjvdxinq8000w57308yufqaak" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -616,75 +716,12 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjtzatp0m001ls130nsj5e54l" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjvdxinqg00165730ajxgqn1u" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/editor/">editor</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/typora/">typora</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编辑器/">编辑器</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-把GitHub作为图床" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/07/把GitHub作为图床/" class="article-date">
-  <time datetime="2018-12-07T05:31:59.000Z" itemprop="datePublished">2018-12-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/07/把GitHub作为图床/">把GitHub作为图床</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近又迷恋上了写博客，尤其是前一段时间很想要写点东西分享一些软件的使用感想。但当写完文章想要发表时就会碰到一个问题：由于我是现在本机的编辑器中用Markdown写好了全文的内容，再发表到各个平台（曾经是GitHub Pages搭建的博客，后来又多了简书，现在再加上SegmentFault）上的，因此文章里的图片都是引用在本地磁盘上的文件路径的。这么一来，如果直接将文章源码粘贴到博客平台上——比如粘贴到SegmentFault中，那么这些本地的图片链接就无法在发布后的文章中正常显示了。</p>
-<p>如果一开始就在SegmentFault中写作也会遇到问题。SegmentFault上的文章插入图片后，并不是像普通的Markdown源码那般插入一条<code>![]()</code>形式的标记的，而是像下图这样</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8SegmentFault%E7%BC%96%E8%BE%91%E5%99%A8%E4%B8%AD%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E5%90%8E%E7%9A%84%E6%95%88%E6%9E%9C.png" alt="在SegmentFault中插入图片后的效果"></p>
-<p>显然，这样的文章源码复制到其它平台（GitHub Pages、简书）去发布的话，必然是需要针对其中的图片标记修改一番的——比刚开始的方法或许要更麻烦。</p>
-<p>看来要解决这个图片链接在不同平台间共用的问题，必须有一处纯粹的用于存放图片文件的地方——也就是大家常说的图床了。刚开始我也放狗搜了一下，看看别人的推荐，印象中得到的答复不外乎是又○云、七○云、新○微博，以及<a href="https://sm.ms/" target="_blank" rel="noopener">sm.ms</a>等。但它们要么需要注册并且实名认证，要么不纯粹，要么让人觉得随时会丢失。</p>
-<p>某个晚上忽然想到，GitHub不就是一个很好的图床么？！在GitHub上建一个仓库专门存放博客中的图片，不仅免费、完全受自己管理，而且自带CDN加速，并且我的读者群（如果真的有这么一个群体的话）也应当可以畅通地访问GitHub。</p>
-<p>放图片的仓库虽然有了，但用起来还不是很便利——因为作为写作素材的图片在我的电脑上是存放在一个单独的、非GitHub仓库的目录下的，所以如果要丢到图床上，就需要先将文件复制过去，然后执行git的add、commit、push三部曲，最后还要到GitHub上复制这张新图片的“raw”地址。</p>
-<p>这个过程很机械化，完全可以用一个<a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>的<a href="https://www.alfredapp.com/workflows/" target="_blank" rel="noopener">Workflow</a>来代劳。</p>
-<h2 id="编写Workflow"><a href="#编写Workflow" class="headerlink" title="编写Workflow"></a>编写Workflow</h2><p>编写Workflow就像编写Common Lisp中的宏一样，总是从它们的用法入手的。在我的设想中，这个Workflow的使用方式应当是：</p>
-<ol>
-<li>首先，按下快捷键调出Alfred的输入框，输入关键字（在我这里就叫做upload）来唤起这个Workflow；</li>
-<li>然后，输入要上传的图片文件的绝对路径并按下回车，开始在后台处理</li>
-<li>最后，上传完毕后，弹出通知来告诉我</li>
-</ol>
-<p>整个Workflow的概貌其实很简单</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Alfred%E4%B8%AD%E7%9A%84upload%E7%9A%84%E9%B8%9F%E7%9E%B0%E5%9B%BE.png" alt="upload Workflow的全貌"></p>
-<p>第二个节点所调用的External Script是长这样子的</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 将磁盘文件上传到GitHub</span></span><br><span class="line"></span><br><span class="line">path=$&#123;1&#125;</span><br><span class="line"></span><br><span class="line">pictures_dir="$&#123;HOME&#125;/Documents/Projects/riverbed/pictures"</span><br><span class="line">cp "$&#123;path&#125;" "$&#123;pictures_dir&#125;"</span><br><span class="line">echo '文件复制完毕'</span><br><span class="line"></span><br><span class="line">file=$(basename "$&#123;path&#125;")</span><br><span class="line">cd "$&#123;pictures_dir&#125;"</span><br><span class="line">git add "$&#123;file&#125;"</span><br><span class="line">git commit -m '上传一张图片'</span><br><span class="line">git push -u origin master</span><br><span class="line">echo '文件已提交到GitHub'</span><br><span class="line"></span><br><span class="line">/usr/local/bin/node -e "console.log(encodeURI('https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/$&#123;file&#125;'));" | tr -d '\n' | pbcopy</span><br></pre></td></tr></table></figure>
-<p>获取文件的绝对路径其实很简单，在Finder中选中文件后，按下Command+Option+C即可</p>
-<p>这里使用<code>basename</code>命令获取文件名。并且，为了避免<code>git</code>打开文本编辑器要求输入commit message，向git-commit命令传递了<code>-m</code>选项。</p>
-<p>因为文件名含有非ASCII的字符（毕竟会有中文），需要做一次URL编码，因此用了<code>node</code>来做转换。在Node.js代码中用<code>console.log</code>输出编码后的图片URL，结尾会有一个换行符，所以用<code>tr</code>将其去掉。最后，输出的内容重定向给<code>pbcopy</code>，就将上传后的图片URL复制到剪贴板中了。如果此时正在编辑文章，便可以粘贴这个图片的链接到源码中。</p>
-<p>Alfred也提供<code>Copy to Clipboard</code>，用于将Workflow中上一个节点的输出复制到剪贴板中。之所以不使用，其实是因为刚开始的时候就是用的Alfred的<code>Copy to Clipboard</code>，结果发现<code>git</code>运行过程中的输出也被Alfred接收了，跟图片URL一起混进了剪贴板中。所以最后改为直接调用<code>pbcopy</code>。</p>
-<p>全文完。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjtzatp0e0015s130dgs45hea" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2018/12/07/把GitHub作为图床/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alfred/">alfred</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/">github</a></li></ul>
 
     </footer>
   </div>
@@ -721,7 +758,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 14px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 14px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 10px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 10px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/lisp/" style="font-size: 12px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 12px;">macro</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 10px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 16px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 10px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12px;">tutorial</a> <a href="/tags/typora/" style="font-size: 10px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/yu-writer/" style="font-size: 10px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 12px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12px;">教程</a> <a href="/tags/数学/" style="font-size: 14px;">数学</a> <a href="/tags/笔记类软件/" style="font-size: 10px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a> <a href="/tags/编辑器/" style="font-size: 10px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 14px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 14px;">algorithm</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 12px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 12px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/lisp/" style="font-size: 12px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 12px;">macro</a> <a href="/tags/markdown/" style="font-size: 12px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 14px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 16px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 12px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12px;">tutorial</a> <a href="/tags/typora/" style="font-size: 12px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/yu-writer/" style="font-size: 12px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 12px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12px;">教程</a> <a href="/tags/数学/" style="font-size: 14px;">数学</a> <a href="/tags/笔记类软件/" style="font-size: 12px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a> <a href="/tags/编辑器/" style="font-size: 12px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -730,7 +767,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
     </div>
   </div>
 
@@ -741,6 +778,10 @@ ga('send', 'pageview');
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/05/07/Boostnote及对记笔记的思考/">Boostnote及对记笔记的思考</a>
+          </li>
         
           <li>
             <a href="/2019/03/13/更过程式的let——vertical-let/">更过程式的let——vertical-let</a>
@@ -756,10 +797,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/01/28/Project-Euler第69题/">Project-Euler第69题</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/11/一些在Emacs中搜索文本的方法/">一些在Emacs中搜索文本的方法</a>
           </li>
         
       </ul>
@@ -801,7 +838,12 @@ ga('send', 'pageview');
 </script>
 
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+if (typeof jQuery == 'undefined') {
+  document.write(unescape("%3Cscript src='/js/jquery-2.0.3.min.js' type='text/javascript'%3E%3C/script%3E"));
+}
+</script>
 
 
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
