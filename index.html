@@ -100,26 +100,15 @@ ga('send', 'pageview');
         <p>本文很水。</p>
 <p>有一天，我心血来潮想要写一个将Common Lisp编译成汇编（x64那种）的编译器。我喜欢Common Lisp这门语言，它非常好玩，有许多有趣的特性（宏、condition system等），并且它的生态很贫瘠，有很多造轮子的机会。因为我懂的还不够多，所以没法从源代码一步到位生成可执行文件，只好先输出汇编代码，再利用现成的汇编器（比如as、nasm）从这些输出内容生成可执行文件。至于这东西是不是真的算是编译器，我也不是很在意。</p>
 <p>好了，我要开始表演了。</p>
-<p>你可能看过<a href="https://book.douban.com/subject/3296317/" target="_blank" rel="noopener">龙书</a>，或者其它比较经典的编译原理和实践方面的书。那你应该会知道，编译器还蛮复杂的。但我水平有限，把持不住工业级的产品那么精妙的结构和代码，所以我的编译器很简陋——简陋到起码这个版本一眼就看到尽头了。</p>
-<p>尽管简陋，但身为一名业余爱好者，尝试开发这么一个玩具还是很excited的。由于编译器本身也是用Common Lisp写的，所以就偷个懒不写front end的部分了，聚焦于从CL代码到汇编代码的实现。</p>
-<p>先从最简单的一种情况——二元整数的加法入手，比如下面这段代码</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-<p>对于加法，可以输出<code>ADDL</code>指令，两个参数则随便找两个寄存器放进去就好了。一段简单得不能再简单的代码一下子就写出来了</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (addl %eax %ebx)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> stringify (<span class="name">asm</span>)</span><br><span class="line">  <span class="string">"根据jjcc2产生的S表达式生成汇编代码字符串"</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .section __TEXT,__text,regular,pure_instructions~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .globl _main~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"_main:~%"</span>)</span><br><span class="line">  (<span class="name">dolist</span> (<span class="name">ins</span> asm)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A, ~A~%"</span></span><br><span class="line">            (<span class="name">first</span> ins)</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">second</span> ins))</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">third</span> ins))))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl %ebx, %edi~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl $0x2000001, %eax~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        syscall~%"</span>))</span><br></pre></td></tr></table></figure>
-<p>在 REPL 中像下面这样运行</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">stringify</span> (<span class="name">jjcc2</span> '(+ <span class="number">1</span> <span class="number">2</span>)))</span><br></pre></td></tr></table></figure>
-<p>它会输出这些内容</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EAX</span><br><span class="line">        MOVL $2, %EBX</span><br><span class="line">        ADDL %EAX, %EBX</span><br><span class="line">        movl %ebx, %edi</span><br><span class="line">        movl $0x2000001, %eax</span><br><span class="line">        syscall</span><br></pre></td></tr></table></figure>
-<p>把上面这段汇编代码保存到名为 jjcc.s 的文件，再运行下列的命令，就可以得到一个能跑的 a.out 文件了</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">as -o jjcc.o jjcc.s</span><br><span class="line">gcc jjcc.o</span><br></pre></td></tr></table></figure>
-<p>运行之后，再输出上一个命令的退出码，就可以看到结果3了。</p>
-<p><code>.section</code>那一行太长，其实可以用<code>.text</code>来代替；指令和寄存器的名字大小写混用；<code>stringify</code>函数中对第二第三个操作数的处理代码很冗余，等等，都是可以吐槽的问题XD</p>
-<p>全文完。</p>
-
+        
+          <p class="article-more-link">
+            <a href="/2019/05/17/一个简陋的四则运算编译器实现/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/" data-id="cjvs5h9mh000k0830c3l34921" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/" data-id="cjvs5kp7t000g8n30evi0w2kk" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -165,7 +154,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/" data-id="cjvs5h9m400020830n3u28200" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/" data-id="cjvs5kp7d00028n30ek7vf0c7" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -233,7 +222,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/" data-id="cjvs5h9no003u0830kyuvn1xj" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/" data-id="cjvs5kp8d00168n303ikpf5ji" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -292,7 +281,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/" data-id="cjvs5h9mi000n0830h07jqil0" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/" data-id="cjvs5kp82000r8n30yosz0p6i" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -359,7 +348,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="cjvs5h9nk003o0830va6gjppd" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="cjvs5kp8h001b8n30y27mgkpm" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -416,7 +405,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="cjvs5h9md000d08301sd5jccj" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="cjvs5kp7w000j8n30a5e374s2" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/28/Project-Euler第69题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -474,7 +463,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjvs5h9mi000l0830yavql7q7" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjvs5kp7z000n8n305nv8yily" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -524,7 +513,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjvs5h9m900060830rb8ivtlp" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjvs5kp7i00048n30xpw0ok3k" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -589,7 +578,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjvs5h9m100010830s71wmbbi" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/29/2018年度技术总结/" data-id="cjvs5kp7a00018n308bj01bc1" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/29/2018年度技术总结/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -640,7 +629,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjvs5h9nf003j08301u1j7lwy" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/" data-id="cjvs5kp87000y8n30eripvxaz" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/#disqus_thread" class="article-comment-link">Comments</a>
       

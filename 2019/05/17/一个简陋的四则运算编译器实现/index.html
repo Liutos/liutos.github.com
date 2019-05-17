@@ -28,7 +28,7 @@ ga('send', 'pageview');
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="本文很水。 有一天，我心血来潮想要写一个将Common Lisp编译成汇编（x64那种）的编译器。我喜欢Common Lisp这门语言，它非常好玩，有许多有趣的特性（宏、condition system等），并且它的生态很贫瘠，有很多造轮子的机会。因为我懂的还不够多，所以没法从源代码一步到位生成可执行文件，只好先输出汇编代码，再利用现成的汇编器（比如as、nasm）从这些输出内容生成可执行文件。至">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-17T14:01:29.498Z">
+<meta property="og:updated_time" content="2019-05-17T14:03:01.321Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个简陋的四则运算编译器实现">
 <meta name="twitter:description" content="本文很水。 有一天，我心血来潮想要写一个将Common Lisp编译成汇编（x64那种）的编译器。我喜欢Common Lisp这门语言，它非常好玩，有许多有趣的特性（宏、condition system等），并且它的生态很贫瘠，有很多造轮子的机会。因为我懂的还不够多，所以没法从源代码一步到位生成可执行文件，只好先输出汇编代码，再利用现成的汇编器（比如as、nasm）从这些输出内容生成可执行文件。至">
@@ -103,6 +103,7 @@ ga('send', 'pageview');
         <p>本文很水。</p>
 <p>有一天，我心血来潮想要写一个将Common Lisp编译成汇编（x64那种）的编译器。我喜欢Common Lisp这门语言，它非常好玩，有许多有趣的特性（宏、condition system等），并且它的生态很贫瘠，有很多造轮子的机会。因为我懂的还不够多，所以没法从源代码一步到位生成可执行文件，只好先输出汇编代码，再利用现成的汇编器（比如as、nasm）从这些输出内容生成可执行文件。至于这东西是不是真的算是编译器，我也不是很在意。</p>
 <p>好了，我要开始表演了。</p>
+<a id="more"></a>
 <p>你可能看过<a href="https://book.douban.com/subject/3296317/" target="_blank" rel="noopener">龙书</a>，或者其它比较经典的编译原理和实践方面的书。那你应该会知道，编译器还蛮复杂的。但我水平有限，把持不住工业级的产品那么精妙的结构和代码，所以我的编译器很简陋——简陋到起码这个版本一眼就看到尽头了。</p>
 <p>尽管简陋，但身为一名业余爱好者，尝试开发这么一个玩具还是很excited的。由于编译器本身也是用Common Lisp写的，所以就偷个懒不写front end的部分了，聚焦于从CL代码到汇编代码的实现。</p>
 <p>先从最简单的一种情况——二元整数的加法入手，比如下面这段代码</p>
@@ -122,7 +123,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/" data-id="cjvs5h9mh000k0830c3l34921" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/" data-id="cjvs5kp7t000g8n30evi0w2kk" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/#disqus_thread" class="article-comment-link">Comments</a>
       
