@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2019-05-14T14:57:51.860Z</updated>
+  <updated>2019-05-17T14:01:29.498Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,44 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一个简陋的四则运算编译器实现</title>
+    <link href="https://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/"/>
+    <id>https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/</id>
+    <published>2019-05-17T13:57:50.000Z</published>
+    <updated>2019-05-17T14:01:29.498Z</updated>
+    
+    <content type="html"><![CDATA[<p>本文很水。</p><p>有一天，我心血来潮想要写一个将Common Lisp编译成汇编（x64那种）的编译器。我喜欢Common Lisp这门语言，它非常好玩，有许多有趣的特性（宏、condition system等），并且它的生态很贫瘠，有很多造轮子的机会。因为我懂的还不够多，所以没法从源代码一步到位生成可执行文件，只好先输出汇编代码，再利用现成的汇编器（比如as、nasm）从这些输出内容生成可执行文件。至于这东西是不是真的算是编译器，我也不是很在意。</p><p>好了，我要开始表演了。</p><p>你可能看过<a href="https://book.douban.com/subject/3296317/" target="_blank" rel="noopener">龙书</a>，或者其它比较经典的编译原理和实践方面的书。那你应该会知道，编译器还蛮复杂的。但我水平有限，把持不住工业级的产品那么精妙的结构和代码，所以我的编译器很简陋——简陋到起码这个版本一眼就看到尽头了。</p><p>尽管简陋，但身为一名业余爱好者，尝试开发这么一个玩具还是很excited的。由于编译器本身也是用Common Lisp写的，所以就偷个懒不写front end的部分了，聚焦于从CL代码到汇编代码的实现。</p><p>先从最简单的一种情况——二元整数的加法入手，比如下面这段代码</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br></pre></td></tr></table></figure><p>对于加法，可以输出<code>ADDL</code>指令，两个参数则随便找两个寄存器放进去就好了。一段简单得不能再简单的代码一下子就写出来了</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (addl %eax %ebx)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> stringify (<span class="name">asm</span>)</span><br><span class="line">  <span class="string">"根据jjcc2产生的S表达式生成汇编代码字符串"</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .section __TEXT,__text,regular,pure_instructions~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .globl _main~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"_main:~%"</span>)</span><br><span class="line">  (<span class="name">dolist</span> (<span class="name">ins</span> asm)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A, ~A~%"</span></span><br><span class="line">            (<span class="name">first</span> ins)</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">second</span> ins))</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">third</span> ins))))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl %ebx, %edi~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl $0x2000001, %eax~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        syscall~%"</span>))</span><br></pre></td></tr></table></figure><p>在 REPL 中像下面这样运行</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">stringify</span> (<span class="name">jjcc2</span> '(+ <span class="number">1</span> <span class="number">2</span>)))</span><br></pre></td></tr></table></figure><p>它会输出这些内容</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EAX</span><br><span class="line">        MOVL $2, %EBX</span><br><span class="line">        ADDL %EAX, %EBX</span><br><span class="line">        movl %ebx, %edi</span><br><span class="line">        movl $0x2000001, %eax</span><br><span class="line">        syscall</span><br></pre></td></tr></table></figure><p>把上面这段汇编代码保存到名为 jjcc.s 的文件，再运行下列的命令，就可以得到一个能跑的 a.out 文件了</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">as -o jjcc.o jjcc.s</span><br><span class="line">gcc jjcc.o</span><br></pre></td></tr></table></figure><p>运行之后，再输出上一个命令的退出码，就可以看到结果3了。</p><p><code>.section</code>那一行太长，其实可以用<code>.text</code>来代替；指令和寄存器的名字大小写混用；<code>stringify</code>函数中对第二第三个操作数的处理代码很冗余，等等，都是可以吐槽的问题XD</p><p>全文完。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+    
+      <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
+    
+      <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
+    
+      <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
+    
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
+      <category term="x64" scheme="https://liutos.github.io/tags/x64/"/>
+    
+      <category term="汇编" scheme="https://liutos.github.io/tags/%E6%B1%87%E7%BC%96/"/>
+    
+      <category term="编译器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>Boostnote及对记笔记的思考</title>
@@ -592,32 +630,6 @@
       <category term="tutorial" scheme="https://liutos.github.io/tags/tutorial/"/>
     
       <category term="squid" scheme="https://liutos.github.io/tags/squid/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>如何使用CL实现snowflake</title>
-    <link href="https://liutos.github.io/2017/04/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/"/>
-    <id>https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/</id>
-    <published>2017-04-30T14:59:30.000Z</published>
-    <updated>2018-12-02T13:30:33.886Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR;"></a>TL;DR;</h2><p>这是一篇为了完成写作KPI而写的博客，总结起来就是提供了一种用Common Lisp实现来自于Twitter的雪花算法的实现方案。成品在<a href="https://github.com/Liutos/clitool/blob/master/cl/misc/snowflake.lisp" target="_blank" rel="noopener">这里</a>，本文只是简单地描述一下生成雪花ID的大致思路，详细内容请各位移步代码仓库查看。</p><p>上述代码仓库中的snowflake算法——如果我的实现确实可以称作snowflake算法的话——的思路来自于下列两个地方：</p><ol><li><a href="http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/" target="_blank" rel="noopener">http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/</a></li><li><a href="https://github.com/sony/sonyflake" target="_blank" rel="noopener">https://github.com/sony/sonyflake</a></li></ol><h2 id="如何获取时间戳"><a href="#如何获取时间戳" class="headerlink" title="如何获取时间戳"></a>如何获取时间戳</h2><p>Common Lisp本身提供了一个获取时间戳的函数，也就是<code>get-universal-time</code>，可惜的是，这个函数所返回的并不是通常意义上的<a href="https://en.wikipedia.org/wiki/Unix_time" target="_blank" rel="noopener">Epoch时间戳</a>，而是自己的一套计算时间的方式中的表示时间的整数。为了获得UNIX时间戳，需要借助于第三方库<a href="https://common-lisp.net/project/local-time/manual.html" target="_blank" rel="noopener"><code>local-time</code></a>。为了可以获取到毫秒精度的时间戳，一个可运行的函数如下</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> now ()</span><br><span class="line">  <span class="string">"Returns the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC."</span></span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">now</span> (<span class="name">local-time</span><span class="symbol">:now</span>))</span><br><span class="line">         (<span class="name">seconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-to-unix</span> now))</span><br><span class="line">         (<span class="name">milliseconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-millisecond</span> now)))</span><br><span class="line">    (<span class="name">+</span> (<span class="name">*</span> <span class="number">1000</span> seconds) milliseconds)))</span><br></pre></td></tr></table></figure><h2 id="如何获取机器ID"><a href="#如何获取机器ID" class="headerlink" title="如何获取机器ID"></a>如何获取机器ID</h2><p>这里参考了Sony的雪花ID算法中的思路，基于机器的内网IP地址来生成机器ID。当然了，Common Lisp标准中是没有提供获取机器的内网IP地址的方法的，这一点也可以借助于第三方库实现，选用的是<a href="https://common-lisp.net/project/ip-interfaces/" target="_blank" rel="noopener"><code>ip-interfaces</code></a>。通过这个库提供的<code>get-ip-interfaces</code>函数可以获取到机器的所有“接口”，遍历这个接口的列表后即可找出其中的内网IP。一台机器可能会有多个内网IP，我的方法是选用了第一个找到的内网IP地址。当然了，还需要一个将向量转化为数值的函数，并取出转化为数值后的IP地址的低10位，作为机器ID。</p><h2 id="序号"><a href="#序号" class="headerlink" title="序号"></a>序号</h2><p>如果希望生成的ID是保持递增的，那么就需要维护一个可以原子递增的数值计数器。在真实的使用中可以通过Redis的INCR指令来生成这一个ID，但是因为这里的雪花ID算法是作为一个独立的库实现的，不需要依赖于数据库等外部组建，因此这里就直接使用了Common Lisp自带的<code>random</code>函数来生成这个序号了。</p><p>全文完</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
   </entry>
   
