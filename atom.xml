@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2019-05-17T14:03:01.321Z</updated>
+  <updated>2019-05-21T14:40:13.579Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Evernote与Leanote</title>
+    <link href="https://liutos.github.io/2019/05/21/Evernote%E4%B8%8ELeanote/"/>
+    <id>https://liutos.github.io/2019/05/21/Evernote与Leanote/</id>
+    <published>2019-05-21T14:38:19.000Z</published>
+    <updated>2019-05-21T14:40:13.579Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近开始重新用起了Evernote，当然还有Leanote，不过不算是“重新“而已。这两者各有各的优缺点，下面分别列举一下</p><h2 id="Evernote的优缺点以及和Leanote的对比"><a href="#Evernote的优缺点以及和Leanote的对比" class="headerlink" title="Evernote的优缺点以及和Leanote的对比"></a>Evernote的优缺点以及和Leanote的对比</h2><p>Evernote可以比较灵活地调整文字的字号，如下图所示</p><p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Evernote%E4%B8%AD%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png" alt="image-20190515124117460"></p><a id="more"></a><p>在Leanote中只能选择固定的几种字号，如下图所示</p><p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Leanote%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png" alt="Leanote的字号选择"></p><p>Evernote的方式灵活性更高，但从我自身的写作习惯看来，其实不会用到那么多层级的字号。而且，由于Evernote的字号是随意调整的，不像Leanote那般具备语义，所以也不利于生成目录。在Leanote中设置了标题后，便可以在浏览模式下看到导航栏了，如下所示</p><p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%AF%BC%E8%88%AA%E6%9D%A1.png" alt="导航条"></p><p>Evernote的搜索功能比Leanote强大很多。我在Leanote写了这么一个笔记</p><p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/git%E7%9A%84%E7%AC%94%E8%AE%B0%E6%88%AA%E5%9B%BE.png" alt="git的笔记截图"></p><p>然后我在Leanote的搜索框中输入“git 中文”，是搜不到任何东西的。但如果是同样的内容放到Evernote中，再进行搜索，就可以得到自己想要的结果</p><p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD.png" alt="搜索功能"></p><p>而且配合Evernote的浏览器插件，还可以做到在搜索引擎中搜索的同时，将笔记中匹配的内容也展示出来，如下图所示</p><p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%9A%84%E5%90%8C%E6%97%B6%E6%90%9C%E7%B4%A2%E7%AC%94%E8%AE%B0.jpeg" alt="使用搜索引擎的同时搜索笔记"></p><p>在Evernote中使用Emacs的键绑定更方便。在Leanote中其实也可以，无非就是按下ctrl+f前进，按下ctrl+b后退，按下ctrl+n下一行，按下ctrl+p上一行。但是有一个我个人比较习惯的快捷键，就是按下ctrl+e去到行尾，但这个与Leanote的默认快捷键冲突了，所以没法用。</p><p>Evernote中的表格编辑功能更友好更方便，将鼠标放到表格上时，就可以看到直截了当的新增一行的功能，如下图所示</p><p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E8%A1%A8%E6%A0%BC%E6%96%B0%E5%A2%9E%E4%B8%80%E8%A1%8C.png" alt="表格新增一行"></p><p>相比之下，Leanote中如果要给表格新增一行，需要点击右上角，然后再深入两级菜单后才能找到一个Insert row after的功能</p><p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E8%A1%A8%E6%A0%BC%E6%93%8D%E4%BD%9C.jpeg" alt="表格操作"></p><p>而且如果你不仅仅是要新增一行，那就必须不填地点出这个菜单来操作，可麻烦了。</p><p>Evernote只支持两层的笔记组织形式，也就是一个笔记本，然后笔记本之下就是各自独立的笔记内容了。而Leanote则支持更深的层级，比如下图就是三个目录</p><p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%9B%AE%E5%BD%95%E5%B1%82%E7%BA%A7.png" alt="目录层级"></p><p>当我Leanote中粘贴图片的时候，总是会一次贴入两张，这个问题倒是挺烦人的。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近开始重新用起了Evernote，当然还有Leanote，不过不算是“重新“而已。这两者各有各的优缺点，下面分别列举一下&lt;/p&gt;
+&lt;h2 id=&quot;Evernote的优缺点以及和Leanote的对比&quot;&gt;&lt;a href=&quot;#Evernote的优缺点以及和Leanote的对比&quot; class=&quot;headerlink&quot; title=&quot;Evernote的优缺点以及和Leanote的对比&quot;&gt;&lt;/a&gt;Evernote的优缺点以及和Leanote的对比&lt;/h2&gt;&lt;p&gt;Evernote可以比较灵活地调整文字的字号，如下图所示&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Evernote%E4%B8%AD%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png&quot; alt=&quot;image-20190515124117460&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="evernote" scheme="https://liutos.github.io/tags/evernote/"/>
+    
+      <category term="leanote" scheme="https://liutos.github.io/tags/leanote/"/>
+    
+      <category term="markdown" scheme="https://liutos.github.io/tags/markdown/"/>
+    
+      <category term="note taking" scheme="https://liutos.github.io/tags/note-taking/"/>
+    
+  </entry>
   
   <entry>
     <title>一个简陋的四则运算编译器实现</title>
@@ -67,15 +95,15 @@
     </summary>
     
     
-      <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
-    
-      <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
+      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
     
       <category term="markdown" scheme="https://liutos.github.io/tags/markdown/"/>
     
       <category term="note taking" scheme="https://liutos.github.io/tags/note-taking/"/>
     
-      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
+      <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
+    
+      <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
     
       <category term="sequence diagram" scheme="https://liutos.github.io/tags/sequence-diagram/"/>
     
@@ -171,9 +199,9 @@
     </summary>
     
     
-      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
-    
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
+      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
     
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
@@ -271,9 +299,9 @@
     </summary>
     
     
-      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
-    
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
+      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
     
   </entry>
   
@@ -361,13 +389,15 @@
     </summary>
     
     
-      <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
-    
-      <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
+      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
       <category term="markdown" scheme="https://liutos.github.io/tags/markdown/"/>
     
       <category term="note taking" scheme="https://liutos.github.io/tags/note-taking/"/>
+    
+      <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
+    
+      <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
     
       <category term="typora" scheme="https://liutos.github.io/tags/typora/"/>
     
@@ -376,8 +406,6 @@
       <category term="笔记类软件" scheme="https://liutos.github.io/tags/%E7%AC%94%E8%AE%B0%E7%B1%BB%E8%BD%AF%E4%BB%B6/"/>
     
       <category term="编辑器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%BE%91%E5%99%A8/"/>
-    
-      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
   </entry>
   
@@ -596,36 +624,6 @@
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
       <category term="mongo" scheme="https://liutos.github.io/tags/mongo/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>远程请求Squid</title>
-    <link href="https://liutos.github.io/2017/05/18/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82Squid/"/>
-    <id>https://liutos.github.io/2017/05/18/远程请求Squid/</id>
-    <published>2017-05-18T13:18:42.000Z</published>
-    <updated>2019-01-09T15:20:35.215Z</updated>
-    
-    <content type="html"><![CDATA[<p>不久前在办公室抓取某网站S被对方发现，导致对方自动屏蔽了来自办公室网络的所有HTTP请求，连正儿八经地用浏览器打开也不行。为了可以摸索出“改头换面”（改HTTP头部）访问的方法，必须先成功访问至少一次，看看发出的HTTP头部是怎样的才行。恰好想起自己有一台腾讯云服务器，登上去用<code>curl</code>访问网站S，发现是成功的（也就是尚未被屏蔽）。既然如此，干脆在服务器上部署一套Squid作为正向代理，帮助办公网络的请求成功抵达网站S并拿到响应页面。</p><p>用<code>apt-get</code>安装了<code>squid</code>软件包后启动并监听端口8321，在办公网络下将公网地址和8321端口作为代理配置传递给<code>curl</code>的<code>-x</code>选项，访问网站S。不料Squid拒绝了我的请求，返回了如下内容（节选自<code>curl -v</code>命令的输出）</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt; HTTP/1.1 403 Forbidden</span><br><span class="line">&lt; Server: squid/3.5.12</span><br><span class="line">&lt; Mime-Version: 1.0</span><br><span class="line">&lt; Date: Wed, 17 May 2017 15:18:08 GMT</span><br><span class="line">&lt; Content-Type: text/html;charset=utf-8</span><br><span class="line">&lt; Content-Length: 3531</span><br><span class="line">&lt; X-Squid-Error: ERR_ACCESS_DENIED 0</span><br><span class="line">&lt; Vary: Accept-Language</span><br><span class="line">&lt; Content-Language: en</span><br><span class="line">&lt; X-Cache: MISS from VM-44-136-ubuntu</span><br><span class="line">&lt; X-Cache-Lookup: NONE from VM-44-136-ubuntu:8321</span><br><span class="line">&lt; Via: 1.1 VM-44-136-ubuntu (squid/3.5.12)</span><br><span class="line">&lt; Connection: keep-alive</span><br></pre></td></tr></table></figure><p>经过一番Google，才知道原来是Squid的配置导致的。在Squid配置文件（/etc/squid/squid.conf）中，默认的acl和http_access指令的设置如下</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">acl SSL_ports port 443</span><br><span class="line">acl Safe_ports port 80          # http</span><br><span class="line">acl Safe_ports port 21          # ftp</span><br><span class="line">acl Safe_ports port 443         # https</span><br><span class="line">acl Safe_ports port 70          # gopher</span><br><span class="line">acl Safe_ports port 210         # wais</span><br><span class="line">acl Safe_ports port 1025-65535  # unregistered ports</span><br><span class="line">acl Safe_ports port 280         # http-mgmt</span><br><span class="line">acl Safe_ports port 488         # gss-http</span><br><span class="line">acl Safe_ports port 591         # filemaker</span><br><span class="line">acl Safe_ports port 777         # multiling http</span><br><span class="line">acl CONNECT method CONNECT</span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http_access deny !Safe_ports</span><br><span class="line">http_access deny CONNECT !SSL_ports</span><br><span class="line">http_access allow localhost manager</span><br><span class="line">http_access deny manager</span><br><span class="line">http_access allow localhost</span><br><span class="line">http_access deny all</span><br></pre></td></tr></table></figure><p>由于Squid是按照第一条匹配的http_access指令来决定允许还是拒绝的，因为来自我办公网络的请求实际上命中的是</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access deny all</span><br></pre></td></tr></table></figure><p>因此被拒绝是必然的。为了可以接受来自办公网络发起的请求，首先需要新增一行acl指令。通过Squid的日志（/var/log/squid/access.log）可以查看到被拒绝的请求的IP地址是多少，此处假设IP地址为8.7.198.45，那么相应的acl指令如下</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acl myclients src 8.7.198.45</span><br></pre></td></tr></table></figure><p>此处的myclients为自定义的名称，顾名思义，它表示“我的客户端”；src是一种acl类型，表示客户端的IP地址；8.7.198.45是src类型下的参数，也就是我所使用的客户端发出的请求的来源IP地址。配置了acl后，还需要配置http_access指令。这个就简单多了，只要允许上面创建的这个acl的访问即可，内容如下</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access allow myclients</span><br></pre></td></tr></table></figure><p>之后再重启Squid服务即可</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service squid restart</span><br></pre></td></tr></table></figure><p>这时候再从办公网络中以腾讯云服务器上的Squid为正向代理发出请求，就不会再被Squid拒绝了。</p><p>全文完</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="教程" scheme="https://liutos.github.io/tags/%E6%95%99%E7%A8%8B/"/>
-    
-      <category term="tutorial" scheme="https://liutos.github.io/tags/tutorial/"/>
-    
-      <category term="squid" scheme="https://liutos.github.io/tags/squid/"/>
     
   </entry>
   

@@ -75,6 +75,72 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-涂色笔试题的动态规划解法" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2012/10/18/涂色笔试题的动态规划解法/" class="article-date">
+  <time datetime="2012-10-18T14:58:23.000Z" itemprop="datePublished">2012-10-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2012/10/18/涂色笔试题的动态规划解法/">涂色笔试题的动态规划解法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="链子涂色问题的动态规划解法"><a href="#链子涂色问题的动态规划解法" class="headerlink" title="链子涂色问题的动态规划解法"></a>链子涂色问题的动态规划解法</h1><p>话说大四已经开始了一个半月了，自己自从开学以来也一直在找工作，相继投了很多家IT公司。可悲的是，笔试过后就完全没有回音了——参加了多益网络的笔试两天后倒是有回音，只是收到的是拒绝的邮件QAQ。说实话，现在对于自己能不能够顺利地找到工作还是很担忧的，所以最近开始了紧张的复习。不过自己实在是懒，所以也没有像别人考研那么地拼命，只是在刷完微博读完邮件逛完豆瓣后开始看一些讲数据结构和算法的书罢了。至于是否真的有效，我也不清楚，毕竟笔试题目也不一定就完全考察这些内容的。不过按照目前的几次经验来讲，考察数据结构和算法的擦边球也有不少，可以说也是为了日后的面试准备一下吧，如果有面试的话……QAQ。</p>
+<h2 id="问题来源与描述"><a href="#问题来源与描述" class="headerlink" title="问题来源与描述"></a>问题来源与描述</h2><p>前面跑题还真严重，算是个人风格吧……话说室友去了一家名为CVT的公司参加笔试和面试，尽管最后第二轮被刷了，不过可以说还是挺厉害的。他在参加了笔试之后回来和我说了一道题目，大意是“给一串红绿珠子并存的链子，要求通过涂色把红色的珠子全部放到绿色的珠子的左边去，要求涂色的次数尽可能地少”。刚开始的时候没有认真听，于是就觉得这是编辑距离的变体罢了，那天晚上就把这个思路脱口而出，结果他第二天去面试面试官又拿这道题问他有没有新思路，结果估计被我害得够呛吧，惭愧。</p>
+<p>题目其实有蹊跷，因为编辑距离是有前提的，那就是做变换的过程中要可以使用插入和删除操作，而那道题只允许涂色，那么也就是编辑距离中的替换操作罢了。还有另外一个和编辑距离不同的地方，那就是最终的变换目标不是唯一的，因为完全可以把链子里的珠子全部涂成一个颜色，那样就不会有红色在绿色的右边的情形了。所以，这道题目不是编辑距离的变体。唉，都怪自己太骄傲了，没有读懂题目。</p>
+<h2 id="动态规划的解法"><a href="#动态规划的解法" class="headerlink" title="动态规划的解法"></a>动态规划的解法</h2><p>前天上计算智能的课的时候，因为室友（去笔试的那位）想到了正确的线性时间的解法，所以我也不甘落后，开始在课堂上捣鼓起这道题目来。我的预感是，一般笔试题应该都可以用动态规划来做的，于是就从动态规划的角度来思考，结果也确实想到了一个办法。尽管不知道网上是不是已经有这道题的解法了，不过还是拿出来分享一下吧。</p>
+<p>既然要使用动态规划，那么当然要按部就班地来思考。首先，就是要<em>描述最优解的结构</em>，也就是要找出问题解的最优子结构。为了便于描述，先约定一些记法。对于珠子和链子这种东西，可以把它们适当地抽象为元素和数组，用R代表红色而用G代表绿色，同时用S表示整个数组。数组的长度记为S.len，数组的第n个元素记为S[n]，而把最后一个元素拿掉之后的数组记为S[1..(S.len-1)]（类似于Python中的数组slice的写法）。对具体的数组实施变换，即涂色操作的功能就命名为F，它是一个二元函数，第一个参数是数组，第二个参数是位于数组之后的元素。为什么要这样子定义，而不是定义为一元函数呢？</p>
+<h3 id="不一样的最优子结构"><a href="#不一样的最优子结构" class="headerlink" title="不一样的最优子结构"></a>不一样的最优子结构</h3><p>对于数组的最后一个元素S[S.len]，它只有两种可能：</p>
+<ul>
+<li>S[S.len]为R；</li>
+<li>S[S.len]为G。</li>
+</ul>
+<p>并且如果本来是红色R的，那么可以涂成绿色G的；本来是绿色G的，可以涂成红色R。可是对于一个珠子，是不是真的可以随意地对它涂色的呢？显然不是的。例如，如果已经确定了整个数组S的下一个元素是红色R的，那么S[S.len]就无论如何也不能涂成绿色，因为这样一来就绝对无法得到红色全在绿色右边的链子了。所以，如果操作F是最优的，即F对于一个数组S以及给定的下一个元素a，它的涂色次数最少，那么：</p>
+<ul>
+<li>如果a为R，那么F肯定是把前缀S[1..(S.len-1)]也给全部涂成了红色；</li>
+<li>如果a为G，那么F对于数组S的前缀S[1..(S.len-1)]的涂色次数肯定也是最少的。</li>
+</ul>
+<p>上述的第二条，正是解的最优子结构。</p>
+<h3 id="递归定义最优解的值"><a href="#递归定义最优解的值" class="headerlink" title="递归定义最优解的值"></a>递归定义最优解的值</h3><p>显然，最优解的值也就是最优解的衡量标准，即需要对原来的数组进行的涂色的次数。既然要递归定义，那么就要考虑递归的一般情形（也就是需要递归的情形）以及基准的情形。对于下一个元素a为红色的情况，只能继续选择把目前处理的数组的最后一个元素也涂成红色，因此如果原来的数组最后一个元素S[S.len]不是红色，那么就需要一次涂色操作，如果是那么就不需要；对于下一个元素为绿色的情况，需要分别考虑要不要涂改最后一个元素的问题。如果涂，那么就增加一次操作，不涂就不需要。在a为绿色的两个分支中，涂成（或者保留）红色末尾元素的情形，和a为红色的情况的递归是一样，因此这里确实存在重叠子问题——动态规划的另一个要求。至于基准情况，则是当数组只有两个元素时的情况。此时，只能是GG、GR、RG、GG这四种，除了GR需要进行一次涂色之外，其它的均不需要涂色。</p>
+<p>用数学公式来表示递归的情形可能更清楚：</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/changeColor.png">其中diff函数判断两个参数是否相等。如果相等，那么就返回0，否则返回1。也就是在从第一个参数变换到第二个参数时所需要的涂色次数。</p>
+<h3 id="按自底向上的方式计算最优解的值"><a href="#按自底向上的方式计算最优解的值" class="headerlink" title="按自底向上的方式计算最优解的值"></a>按自底向上的方式计算最优解的值</h3><p>在思考如何自底向上的时候，我采用的办法是先自顶向下地演示一遍。如下图所示，其中入口功能的名字为G，例子所使用的数组为RGRG：</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/fnCall.png"></p>
+<p>显然这里需要构造一个表格来对F过程的中间结果进行存储，因为F是一个二元的函数。尽管F的第一个参数是一个数组，可是原来的数组是不会变的，所以只需要记住当前处理的数组是由原来的数组的前多少个元素组成的前缀即可，因此F的第一个参数可以用数字来代替。因此，在处理过程中需要的是这样的一张表：</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/table.png">（不好意思，图中的空格没有对齐&gt;_&lt;）</p>
+<p>那么如何自底向上呢？首先对于参数为1而下一个元素为R的情况，因为是递归函数的基准情况，所以可以直接得到F(1, R)=F([R], R)为0，于是填入0；同样第二行的第一个空格的值也为0。当需要填写第一行的第二个空格的时候，可以知道因为下一个元素为R，所以此处的值只与之前的末尾元素亦为红色R的情形有关，所以这个值只与第一行的前一个值有关，并且此时的元素S[2]为G与R不同，因此需要变换，故增加一；而第二行的第二个空格的值取决于前一列的两个格子的值。此时即计算G([RGG])的值，所以取F([RG], G)和F([RG], R)+1的较小值，即1。其它空格以此类推，最终结果为：</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/result.png"></p>
+<h3 id="由计算出的结果构造一个最优解"><a href="#由计算出的结果构造一个最优解" class="headerlink" title="由计算出的结果构造一个最优解"></a>由计算出的结果构造一个最优解</h3><p>显然，最后一列的结果就是所要的值，例如上面的数组[RGRG]的最少涂色次数是1，并且操作是将第二个位置上的G涂成R。这样的操作反映在中间结果中，就是先找出最后一列的元素的值最小的那一行，例如上面就是第二行。然后就是在所有的列中找出所有与下一列的值不一样的列，将其对应的珠子的颜色翻转。例如在上面的表格中，就是将第二列的G涂成R，因为G对应的数字0不同于下一列的数字1。好吧，这一次，我就不给代码了，因为我还没有写出来;)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/" data-id="cjvxwn6ad001h4p30prjmc9py" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-三个角度思考问题的不同结果" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2012/09/20/三个角度思考问题的不同结果/" class="article-date">
@@ -113,7 +179,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/" data-id="cjvs5kp7y000l8n30z1hgl8ln" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/" data-id="cjvxwn6a0000s4p30rdw8ea63" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -165,7 +231,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/16/ProjectEuler第18题/" data-id="cjvs5kp7n00098n30b98f2ul5" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/09/16/ProjectEuler第18题/" data-id="cjvxwn69v000h4p30iv2qrtrw" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/09/16/ProjectEuler第18题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -244,7 +310,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/" data-id="cjvs5kp7l00068n30qof1qub4" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/" data-id="cjvxwn69p00084p30g0wqgo9t" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -304,7 +370,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/" data-id="cjvs5kp8i001d8n306dqbslaz" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/" data-id="cjvxwn6aj001q4p306or8eykt" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -351,7 +417,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/08/24/PE的第26题/" data-id="cjvs5kp7m00088n30cskcdb6s" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/08/24/PE的第26题/" data-id="cjvxwn69q00094p30hexy82w3" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/08/24/PE的第26题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -383,7 +449,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elisp/">elisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/install/">install</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visual-studio-code/">visual studio code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x64/">x64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安装/">安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/宏/">宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/尾递归/">尾递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/汇编/">汇编</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编译器/">编译器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面向对象/">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elisp/">elisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/evernote/">evernote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/install/">install</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leanote/">leanote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visual-studio-code/">visual studio code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x64/">x64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安装/">安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/宏/">宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/尾递归/">尾递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/汇编/">汇编</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编译器/">编译器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面向对象/">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
     </div>
   </div>
 
@@ -393,7 +459,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 14px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 14px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 10px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 12px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 10px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 12px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/lisp/" style="font-size: 14px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 12px;">macro</a> <a href="/tags/markdown/" style="font-size: 12px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 14px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 16px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 12px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12px;">tutorial</a> <a href="/tags/typora/" style="font-size: 12px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 10px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 12px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 12px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12px;">教程</a> <a href="/tags/数学/" style="font-size: 14px;">数学</a> <a href="/tags/汇编/" style="font-size: 10px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 12px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a> <a href="/tags/编译器/" style="font-size: 10px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 12px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 14px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 14px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 10px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 12px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 10px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 12px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 14px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 12px;">macro</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 14px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 14px;">org-mode</a> <a href="/tags/project-euler/" style="font-size: 16px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 12px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12px;">tutorial</a> <a href="/tags/typora/" style="font-size: 12px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 10px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 12px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 12px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12px;">教程</a> <a href="/tags/数学/" style="font-size: 14px;">数学</a> <a href="/tags/汇编/" style="font-size: 10px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 12px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a> <a href="/tags/编译器/" style="font-size: 10px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 12px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -415,6 +481,10 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <a href="/2019/05/21/Evernote与Leanote/">Evernote与Leanote</a>
+          </li>
+        
+          <li>
             <a href="/2019/05/17/一个简陋的四则运算编译器实现/">一个简陋的四则运算编译器实现</a>
           </li>
         
@@ -428,10 +498,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/02/28/不同工具查看代码分支diff的差异/">不同工具查看代码分支diff的差异</a>
-          </li>
-        
-          <li>
-            <a href="/2019/02/05/拿Emacs对接我的cuckoo/">拿Emacs对接我的cuckoo</a>
           </li>
         
       </ul>
