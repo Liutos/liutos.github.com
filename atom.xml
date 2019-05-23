@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2019-05-21T14:40:13.579Z</updated>
+  <updated>2019-05-23T13:56:18.661Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,41 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>支持减、乘，以及除</title>
+    <link href="https://liutos.github.io/2019/05/23/%E6%94%AF%E6%8C%81%E5%87%8F%E3%80%81%E4%B9%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%99%A4/"/>
+    <id>https://liutos.github.io/2019/05/23/支持减、乘，以及除/</id>
+    <published>2019-05-23T13:50:19.000Z</published>
+    <updated>2019-05-23T13:56:18.661Z</updated>
+    
+    <content type="html"><![CDATA[<p>在<a href="http://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/">上一篇文章</a>中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。</p><p>我自己模仿着x64的调用约定，规定四则运算的结果始终放在<code>EAX</code>这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到<code>EAX</code>寄存器中，再从<code>EAX</code>中减去或者除掉右操作数。</p><p>在摸索除法的汇编代码怎么生成时，遇到了个费解的问题，最后才知道，原来需要把<code>EAX</code>寄存器的符号扩展到高位的<code>EDX</code>寄存器中去。对于<code>as</code>这个汇编器来说，需要用到<a href="https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-49/index.html" target="_blank" rel="noopener"><code>CLTD</code></a>指令。</p><p>最后，<code>jjcc2</code>和<code>stringify</code>两个函数被修改为如下的样子</p><a id="more"></a><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (addl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '-)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (subl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '*)</span><br><span class="line">         <span class="comment">;; 将两个数字相乘的结果放到第二个操作数所在的寄存器中</span></span><br><span class="line">         <span class="comment">;; 因为约定了用EAX寄存器作为存放最终结果给continuation用的寄存器，所以第二个操作数应当为EAX</span></span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (imull %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '/)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (cltd)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (idivl %ebx)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> stringify (<span class="name">asm</span>)</span><br><span class="line">  <span class="string">"根据jjcc2产生的S表达式生成汇编代码字符串"</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .section __TEXT,__text,regular,pure_instructions~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .globl _main~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"_main:~%"</span>)</span><br><span class="line">  (<span class="name">dolist</span> (<span class="name">ins</span> asm)</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">=</span> (<span class="name">length</span> ins) <span class="number">3</span>)</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A, ~A~%"</span></span><br><span class="line">                   (<span class="name">first</span> ins)</span><br><span class="line">                   (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">second</span> ins))</span><br><span class="line">                   (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">third</span> ins))</span><br><span class="line">                       (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">third</span> ins))</span><br><span class="line">                       (<span class="name">third</span> ins))))</span><br><span class="line">          ((<span class="name">=</span> (<span class="name">length</span> ins) <span class="number">2</span>)</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A~%"</span></span><br><span class="line">                   (<span class="name">first</span> ins)</span><br><span class="line">                   (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">second</span> ins))))</span><br><span class="line">          ((<span class="name">=</span> (<span class="name">length</span> ins) <span class="number">1</span>)</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A~%"</span> (<span class="name">first</span> ins)))))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl %eax, %edi~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl $0x2000001, %eax~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        syscall~%"</span>))</span><br></pre></td></tr></table></figure><p>全文完。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在&lt;a href=&quot;http://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/&quot;&gt;上一篇文章&lt;/a&gt;中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。&lt;/p&gt;
+&lt;p&gt;我自己模仿着x64的调用约定，规定四则运算的结果始终放在&lt;code&gt;EAX&lt;/code&gt;这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到&lt;code&gt;EAX&lt;/code&gt;寄存器中，再从&lt;code&gt;EAX&lt;/code&gt;中减去或者除掉右操作数。&lt;/p&gt;
+&lt;p&gt;在摸索除法的汇编代码怎么生成时，遇到了个费解的问题，最后才知道，原来需要把&lt;code&gt;EAX&lt;/code&gt;寄存器的符号扩展到高位的&lt;code&gt;EDX&lt;/code&gt;寄存器中去。对于&lt;code&gt;as&lt;/code&gt;这个汇编器来说，需要用到&lt;a href=&quot;https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-49/index.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;&lt;code&gt;CLTD&lt;/code&gt;&lt;/a&gt;指令。&lt;/p&gt;
+&lt;p&gt;最后，&lt;code&gt;jjcc2&lt;/code&gt;和&lt;code&gt;stringify&lt;/code&gt;两个函数被修改为如下的样子&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
+    
+      <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
+    
+      <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
+    
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
+      <category term="x64" scheme="https://liutos.github.io/tags/x64/"/>
+    
+      <category term="汇编" scheme="https://liutos.github.io/tags/%E6%B1%87%E7%BC%96/"/>
+    
+      <category term="编译器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>Evernote与Leanote</title>
@@ -34,13 +69,13 @@
     </summary>
     
     
-      <category term="evernote" scheme="https://liutos.github.io/tags/evernote/"/>
-    
-      <category term="leanote" scheme="https://liutos.github.io/tags/leanote/"/>
-    
       <category term="markdown" scheme="https://liutos.github.io/tags/markdown/"/>
     
       <category term="note taking" scheme="https://liutos.github.io/tags/note-taking/"/>
+    
+      <category term="evernote" scheme="https://liutos.github.io/tags/evernote/"/>
+    
+      <category term="leanote" scheme="https://liutos.github.io/tags/leanote/"/>
     
   </entry>
   
@@ -95,15 +130,15 @@
     </summary>
     
     
-      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
+      <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
+    
+      <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
     
       <category term="markdown" scheme="https://liutos.github.io/tags/markdown/"/>
     
       <category term="note taking" scheme="https://liutos.github.io/tags/note-taking/"/>
     
-      <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
-    
-      <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
+      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
     
       <category term="sequence diagram" scheme="https://liutos.github.io/tags/sequence-diagram/"/>
     
@@ -199,9 +234,9 @@
     </summary>
     
     
-      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
-    
       <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
+    
+      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
@@ -299,9 +334,9 @@
     </summary>
     
     
-      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
-    
       <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
+    
+      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
   </entry>
   
@@ -389,15 +424,13 @@
     </summary>
     
     
-      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+      <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
+    
+      <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
     
       <category term="markdown" scheme="https://liutos.github.io/tags/markdown/"/>
     
       <category term="note taking" scheme="https://liutos.github.io/tags/note-taking/"/>
-    
-      <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
-    
-      <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
     
       <category term="typora" scheme="https://liutos.github.io/tags/typora/"/>
     
@@ -406,6 +439,8 @@
       <category term="笔记类软件" scheme="https://liutos.github.io/tags/%E7%AC%94%E8%AE%B0%E7%B1%BB%E8%BD%AF%E4%BB%B6/"/>
     
       <category term="编辑器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%BE%91%E5%99%A8/"/>
+    
+      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
   </entry>
   
@@ -596,34 +631,6 @@
     
     
       <category term="macbook" scheme="https://liutos.github.io/tags/macbook/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>cl-mongo用法入门</title>
-    <link href="https://liutos.github.io/2017/06/04/cl-mongo%E7%94%A8%E6%B3%95%E5%85%A5%E9%97%A8/"/>
-    <id>https://liutos.github.io/2017/06/04/cl-mongo用法入门/</id>
-    <published>2017-06-04T13:21:20.000Z</published>
-    <updated>2018-12-02T13:29:37.905Z</updated>
-    
-    <content type="html"><![CDATA[<p>最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了<a href="https://github.com/fons/cl-mongo" target="_blank" rel="noopener">cl-mongo</a>这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己查阅，也为了方便有相同需求的人了解如何使用cl-mongo，于是写了这篇文章。</p><p>首先使用<code>CL-MONGO:MONGO</code>函数连接MongoDB的服务器程序（mongod）。因为在我的系统上mongod进程监听的是27017这个端口，并且我希望使用的数据库名为test，因此键入如下代码来连接数据库</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:mongo</span> <span class="symbol">:db</span> <span class="string">"test"</span></span><br><span class="line">                <span class="symbol">:host</span> <span class="string">"127.0.0.1"</span></span><br><span class="line">                <span class="symbol">:port</span> <span class="number">27017</span>)</span><br></pre></td></tr></table></figure><p>连接上了数据库后，首先尝试往其中写入一个文档。假设现在要记录的是发出的HTTP请求的信息，那么一个可以写入的基本信息就是请求的目标地址。假设在命令行的mongo shell中输入的内容如下</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.insert(&#123;<span class="attr">uri</span>: <span class="string">'http://example.com'</span>&#125;);</span><br></pre></td></tr></table></figure><p>那么使用cl-mongo提供的<code>DB.INSERT</code>函数达到上述效果的代码如下</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.insert <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></table></figure><p>求值上述代码后返回值为NIL。为了将上述写入的文档重新查询出来，需要使用cl-mongo提供的<code>DB.FIND</code>函数。因为只有一个文档，所以直接查询就可以查看到结果了。在mongo shell中我们可以使用如下代码查询</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.find();</span><br></pre></td></tr></table></figure><p>使用<code>DB.FIND</code>函数的话编写的代码可能会长得像下面这样</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>)</span><br></pre></td></tr></table></figure><p>在我的系统上求值了上述代码后在REPL中输出的内容如下</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">((<span class="number">86</span> <span class="number">449</span> <span class="number">0</span> <span class="number">1</span> <span class="number">8</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span> <span class="string">"http_request"</span>)</span><br><span class="line"> (<span class="name">&lt;CL-MONGO</span><span class="symbol">:DOCUMENT&gt;</span> : &#123; </span><br><span class="line">   _id : CL-MONGO:<span class="symbol">:BSON-OID</span> [#(<span class="number">89</span> <span class="number">52</span> <span class="number">26</span> <span class="number">160</span> <span class="number">109</span> <span class="number">156</span> <span class="number">254</span> <span class="number">71</span> <span class="number">184</span> <span class="number">115</span> <span class="number">102</span> <span class="number">30</span>)]</span><br><span class="line">   elements : <span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line">))</span><br></pre></td></tr></table></figure><p>值得注意的是，<code>DB.FIND</code>的返回值不完全是文档组成的数组，而是在这个结果集的数组之外又多了一层列表，并且列表的第一个元素还是一个一看之下不知其所以然的子列表。由于cl-mongo的GitHub上没有提及这个玩意儿的来历，我也没有深入去了解<code>DB.FIND</code>函数的实现代码，因此这个元素就先忽略它吧。如果需要使用<code>DB.FIND</code>查询到的结果，那么开发者需要对<code>DB.FIND</code>的返回值应用一下函数<code>SECOND</code>才行，如下</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))</span><br></pre></td></tr></table></figure><p>返回值的列表中的每一个元素都是<code>CL-MONGO:DOCUMENT</code>这个类的实例对象，如果要直接使用还是稍微有点不方便的，因此我写了一个函数用来将<code>DB.FIND</code>函数查询到的<code>CL-MONGO:DOCUMENT</code>的实例对象都转换为较为熟悉，容易操作的数据类型——association list，函数的定义如下</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> document-to-alist (<span class="name">doc</span>)</span><br><span class="line">  <span class="string">"Convert a DOC of type CL-MONGO:DOCUMENT to a equivalent, serializable alist."</span></span><br><span class="line">  (<span class="name">check-type</span> doc cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">  (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">doc</span>)</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">typep</span> doc 'cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">                    (<span class="name">let</span> ((<span class="name">keys</span> (<span class="name">cl-mongo</span><span class="symbol">:get-keys</span> doc)))</span><br><span class="line">                      (<span class="name">mapcar</span> #'(lambda (key)</span><br><span class="line">                                  (cons key</span><br><span class="line">                                        (aux (cl-mongo:get-element key doc))))</span><br><span class="line">                              keys)))</span><br><span class="line">                   (<span class="name">t</span> doc))))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">id</span> (<span class="name">cl-mongo</span><span class="symbol">:doc-id</span> doc)))</span><br><span class="line">      (<span class="name">append</span> (<span class="name">aux</span> doc) (<span class="name">list</span> (<span class="name">cons</span> <span class="string">"_id"</span> id))))))</span><br></pre></td></tr></table></figure><p>使用如下代码即可查看方才所写入的文档究竟长什么样子了</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">document-to-alist</span> (<span class="name">first</span> (<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))))</span><br></pre></td></tr></table></figure><p>如果想要修改数据库中的文档，例如增加一个字段，那么可以使用cl-mongo提供的<code>DB.UPDATE</code>函数，用法如下</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.update <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>)</span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"$set"</span></span><br><span class="line">                                 (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"method"</span> <span class="string">"GET"</span>)))</span><br></pre></td></tr></table></figure><p>最后如果要删除刚才所写入的这个文档，可以使用cl-mongo的<code>DB.DELETE</code>函数（我很好奇这个函数居然不是叫做DB.REMOVE），用法如下</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.delete <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
-    
-      <category term="mongo" scheme="https://liutos.github.io/tags/mongo/"/>
     
   </entry>
   

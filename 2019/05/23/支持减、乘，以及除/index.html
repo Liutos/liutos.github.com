@@ -18,30 +18,20 @@ ga('send', 'pageview');
 
 
   
-  <title>Evernote与Leanote | Hexo</title>
+  <title>支持减、乘，以及除 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近开始重新用起了Evernote，当然还有Leanote，不过不算是“重新“而已。这两者各有各的优缺点，下面分别列举一下 Evernote的优缺点以及和Leanote的对比Evernote可以比较灵活地调整文字的字号，如下图所示">
-<meta name="keywords" content="markdown,note taking,evernote,leanote">
+  <meta name="description" content="在上一篇文章中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。 我自己模仿着x64的调用约定，规定四则运算的结果始终放在EAX这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到EAX寄存器中，再从EAX中减去或者">
+<meta name="keywords" content="common lisp,assembly,compiler,lisp,x64,汇编,编译器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Evernote与Leanote">
-<meta property="og:url" content="https://liutos.github.io/2019/05/21/Evernote与Leanote/index.html">
+<meta property="og:title" content="支持减、乘，以及除">
+<meta property="og:url" content="https://liutos.github.io/2019/05/23/支持减、乘，以及除/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="最近开始重新用起了Evernote，当然还有Leanote，不过不算是“重新“而已。这两者各有各的优缺点，下面分别列举一下 Evernote的优缺点以及和Leanote的对比Evernote可以比较灵活地调整文字的字号，如下图所示">
+<meta property="og:description" content="在上一篇文章中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。 我自己模仿着x64的调用约定，规定四则运算的结果始终放在EAX这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到EAX寄存器中，再从EAX中减去或者">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Evernote%E4%B8%AD%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Leanote%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%AF%BC%E8%88%AA%E6%9D%A1.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/git%E7%9A%84%E7%AC%94%E8%AE%B0%E6%88%AA%E5%9B%BE.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%9A%84%E5%90%8C%E6%97%B6%E6%90%9C%E7%B4%A2%E7%AC%94%E8%AE%B0.jpeg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E8%A1%A8%E6%A0%BC%E6%96%B0%E5%A2%9E%E4%B8%80%E8%A1%8C.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E8%A1%A8%E6%A0%BC%E6%93%8D%E4%BD%9C.jpeg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%9B%AE%E5%BD%95%E5%B1%82%E7%BA%A7.png">
-<meta property="og:updated_time" content="2019-05-21T14:40:13.579Z">
+<meta property="og:updated_time" content="2019-05-23T13:56:18.661Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Evernote与Leanote">
-<meta name="twitter:description" content="最近开始重新用起了Evernote，当然还有Leanote，不过不算是“重新“而已。这两者各有各的优缺点，下面分别列举一下 Evernote的优缺点以及和Leanote的对比Evernote可以比较灵活地调整文字的字号，如下图所示">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Evernote%E4%B8%AD%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png">
+<meta name="twitter:title" content="支持减、乘，以及除">
+<meta name="twitter:description" content="在上一篇文章中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。 我自己模仿着x64的调用约定，规定四则运算的结果始终放在EAX这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到EAX寄存器中，再从EAX中减去或者">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -88,10 +78,10 @@ ga('send', 'pageview');
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-Evernote与Leanote" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main"><article id="post-支持减、乘，以及除" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/05/21/Evernote与Leanote/" class="article-date">
-  <time datetime="2019-05-21T14:38:19.000Z" itemprop="datePublished">2019-05-21</time>
+    <a href="/2019/05/23/支持减、乘，以及除/" class="article-date">
+  <time datetime="2019-05-23T13:50:19.000Z" itemprop="datePublished">2019-05-23</time>
 </a>
     
   </div>
@@ -102,7 +92,7 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      Evernote与Leanote
+      支持减、乘，以及除
     </h1>
   
 
@@ -110,39 +100,23 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近开始重新用起了Evernote，当然还有Leanote，不过不算是“重新“而已。这两者各有各的优缺点，下面分别列举一下</p>
-<h2 id="Evernote的优缺点以及和Leanote的对比"><a href="#Evernote的优缺点以及和Leanote的对比" class="headerlink" title="Evernote的优缺点以及和Leanote的对比"></a>Evernote的优缺点以及和Leanote的对比</h2><p>Evernote可以比较灵活地调整文字的字号，如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Evernote%E4%B8%AD%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png" alt="image-20190515124117460"></p>
+        <p>在<a href="http://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/">上一篇文章</a>中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。</p>
+<p>我自己模仿着x64的调用约定，规定四则运算的结果始终放在<code>EAX</code>这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到<code>EAX</code>寄存器中，再从<code>EAX</code>中减去或者除掉右操作数。</p>
+<p>在摸索除法的汇编代码怎么生成时，遇到了个费解的问题，最后才知道，原来需要把<code>EAX</code>寄存器的符号扩展到高位的<code>EDX</code>寄存器中去。对于<code>as</code>这个汇编器来说，需要用到<a href="https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-49/index.html" target="_blank" rel="noopener"><code>CLTD</code></a>指令。</p>
+<p>最后，<code>jjcc2</code>和<code>stringify</code>两个函数被修改为如下的样子</p>
 <a id="more"></a>
-<p>在Leanote中只能选择固定的几种字号，如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Leanote%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png" alt="Leanote的字号选择"></p>
-<p>Evernote的方式灵活性更高，但从我自身的写作习惯看来，其实不会用到那么多层级的字号。而且，由于Evernote的字号是随意调整的，不像Leanote那般具备语义，所以也不利于生成目录。在Leanote中设置了标题后，便可以在浏览模式下看到导航栏了，如下所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%AF%BC%E8%88%AA%E6%9D%A1.png" alt="导航条"></p>
-<p>Evernote的搜索功能比Leanote强大很多。我在Leanote写了这么一个笔记</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/git%E7%9A%84%E7%AC%94%E8%AE%B0%E6%88%AA%E5%9B%BE.png" alt="git的笔记截图"></p>
-<p>然后我在Leanote的搜索框中输入“git 中文”，是搜不到任何东西的。但如果是同样的内容放到Evernote中，再进行搜索，就可以得到自己想要的结果</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD.png" alt="搜索功能"></p>
-<p>而且配合Evernote的浏览器插件，还可以做到在搜索引擎中搜索的同时，将笔记中匹配的内容也展示出来，如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%9A%84%E5%90%8C%E6%97%B6%E6%90%9C%E7%B4%A2%E7%AC%94%E8%AE%B0.jpeg" alt="使用搜索引擎的同时搜索笔记"></p>
-<p>在Evernote中使用Emacs的键绑定更方便。在Leanote中其实也可以，无非就是按下ctrl+f前进，按下ctrl+b后退，按下ctrl+n下一行，按下ctrl+p上一行。但是有一个我个人比较习惯的快捷键，就是按下ctrl+e去到行尾，但这个与Leanote的默认快捷键冲突了，所以没法用。</p>
-<p>Evernote中的表格编辑功能更友好更方便，将鼠标放到表格上时，就可以看到直截了当的新增一行的功能，如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E8%A1%A8%E6%A0%BC%E6%96%B0%E5%A2%9E%E4%B8%80%E8%A1%8C.png" alt="表格新增一行"></p>
-<p>相比之下，Leanote中如果要给表格新增一行，需要点击右上角，然后再深入两级菜单后才能找到一个Insert row after的功能</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E8%A1%A8%E6%A0%BC%E6%93%8D%E4%BD%9C.jpeg" alt="表格操作"></p>
-<p>而且如果你不仅仅是要新增一行，那就必须不填地点出这个菜单来操作，可麻烦了。</p>
-<p>Evernote只支持两层的笔记组织形式，也就是一个笔记本，然后笔记本之下就是各自独立的笔记内容了。而Leanote则支持更深的层级，比如下图就是三个目录</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%9B%AE%E5%BD%95%E5%B1%82%E7%BA%A7.png" alt="目录层级"></p>
-<p>当我Leanote中粘贴图片的时候，总是会一次贴入两张，这个问题倒是挺烦人的。</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (addl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '-)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (subl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '*)</span><br><span class="line">         <span class="comment">;; 将两个数字相乘的结果放到第二个操作数所在的寄存器中</span></span><br><span class="line">         <span class="comment">;; 因为约定了用EAX寄存器作为存放最终结果给continuation用的寄存器，所以第二个操作数应当为EAX</span></span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (imull %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '/)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (cltd)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (idivl %ebx)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> stringify (<span class="name">asm</span>)</span><br><span class="line">  <span class="string">"根据jjcc2产生的S表达式生成汇编代码字符串"</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .section __TEXT,__text,regular,pure_instructions~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .globl _main~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"_main:~%"</span>)</span><br><span class="line">  (<span class="name">dolist</span> (<span class="name">ins</span> asm)</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">=</span> (<span class="name">length</span> ins) <span class="number">3</span>)</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A, ~A~%"</span></span><br><span class="line">                   (<span class="name">first</span> ins)</span><br><span class="line">                   (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">second</span> ins))</span><br><span class="line">                   (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">third</span> ins))</span><br><span class="line">                       (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">third</span> ins))</span><br><span class="line">                       (<span class="name">third</span> ins))))</span><br><span class="line">          ((<span class="name">=</span> (<span class="name">length</span> ins) <span class="number">2</span>)</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A~%"</span></span><br><span class="line">                   (<span class="name">first</span> ins)</span><br><span class="line">                   (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">second</span> ins))))</span><br><span class="line">          ((<span class="name">=</span> (<span class="name">length</span> ins) <span class="number">1</span>)</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A~%"</span> (<span class="name">first</span> ins)))))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl %eax, %edi~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl $0x2000001, %eax~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        syscall~%"</span>))</span><br></pre></td></tr></table></figure>
+<p>全文完。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/21/Evernote与Leanote/" data-id="cjw0ptn0x0008uk303ic8w9xx" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="cjw0ptn1k0013uk30kr9v1k1s" class="article-share-link">Share</a>
       
-        <a href="https://liutos.github.io/2019/05/21/Evernote与Leanote/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://liutos.github.io/2019/05/23/支持减、乘，以及除/#disqus_thread" class="article-comment-link">Comments</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/evernote/">evernote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leanote/">leanote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note-taking/">note taking</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
 
     </footer>
   </div>
@@ -150,19 +124,10 @@ ga('send', 'pageview');
     
 <nav id="article-nav">
   
-    <a href="/2019/05/23/支持减、乘，以及除/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          支持减、乘，以及除
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/05/17/一个简陋的四则运算编译器实现/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/05/21/Evernote与Leanote/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">一个简陋的四则运算编译器实现</div>
+      <div class="article-nav-title">Evernote与Leanote</div>
     </a>
   
 </nav>
@@ -267,7 +232,7 @@ ga('send', 'pageview');
 <script>
   var disqus_shortname = 'Liutos';
   
-  var disqus_url = 'https://liutos.github.io/2019/05/21/Evernote与Leanote/';
+  var disqus_url = 'https://liutos.github.io/2019/05/23/支持减、乘，以及除/';
   
   (function(){
     var dsq = document.createElement('script');
