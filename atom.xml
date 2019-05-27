@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2019-05-23T13:56:18.661Z</updated>
+  <updated>2019-05-27T14:41:00.202Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,48 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>如何编译progn</title>
+    <link href="https://liutos.github.io/2019/05/27/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91progn/"/>
+    <id>https://liutos.github.io/2019/05/27/如何编译progn/</id>
+    <published>2019-05-27T14:38:22.000Z</published>
+    <updated>2019-05-27T14:41:00.202Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="progn是什么玩意"><a href="#progn是什么玩意" class="headerlink" title="progn是什么玩意"></a>progn是什么玩意</h2><p><code>progn</code>是Common Lisp里面的一个special operator，见这份文档的说明：<a href="http://clhs.lisp.se/Body/s_progn.htm" target="_blank" rel="noopener">http://clhs.lisp.se/Body/s_progn.htm</a></p><h2 id="为嘛要编译这东西"><a href="#为嘛要编译这东西" class="headerlink" title="为嘛要编译这东西"></a>为嘛要编译这东西</h2><p>现在已经支持了二元四则运算了，但现在这里有一个大问题，就是这四个运算没办法嵌套着组合使用。比如，遇到下面这样的代码，<code>jjcc2</code>函数就懵逼了</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> <span class="number">1</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br></pre></td></tr></table></figure><p>那要编译这种代码的话怎么办呢？一个比较直观的做法，是引入临时变量，来保存嵌套在其中的表达式的求值结果，然后再用变量来代替原本嵌套的表达式。修改后的代码可能长这个样子</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> a (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">(<span class="name">+</span> <span class="number">1</span> a)</span><br></pre></td></tr></table></figure><p>显然，这是有先后的时间依赖关系的两条语句，因此应当使用<code>progn</code>将它们包裹起来，结果如下</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">setq</span> a (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> a))</span><br></pre></td></tr></table></figure><p>这样整个表达式的求值结果，或者说它被编译之后的运行结果，应当就是在寄存器<code>EAX</code>中放入整数6了。所以，本篇将来解决对<code>progn</code>的编译问题。</p><h2 id="如何编译progn"><a href="#如何编译progn" class="headerlink" title="如何编译progn"></a>如何编译progn</h2><a id="more"></a><p>其实很简单，<code>progn</code>可能有不定数量的form在其中，那么只需要按照顺序对它们一个个进行编译，输出汇编代码就可以了，因此最终<code>jjcc2</code>被修改为如下的样子</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (addl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '-)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (subl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '*)</span><br><span class="line">         <span class="comment">;; 将两个数字相乘的结果放到第二个操作数所在的寄存器中</span></span><br><span class="line">         <span class="comment">;; 因为约定了用EAX寄存器作为存放最终结果给continuation用的寄存器，所以第二个操作数应当为EAX</span></span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (imull %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '/)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (cltd)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (idivl %ebx)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'progn)</span><br><span class="line">         (<span class="name">let</span> ((<span class="name">result</span> '()))</span><br><span class="line">           (<span class="name">dolist</span> (<span class="name">expr</span> (<span class="name">rest</span> expr))</span><br><span class="line">             (<span class="name">setf</span> result (<span class="name">append</span> result (<span class="name">jjcc2</span> expr))))</span><br><span class="line">           result))))</span><br></pre></td></tr></table></figure><p>就酱就足够了。下一篇，是时候讲一下如何编译<code>setq</code>了。</p><p>全文完。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;progn是什么玩意&quot;&gt;&lt;a href=&quot;#progn是什么玩意&quot; class=&quot;headerlink&quot; title=&quot;progn是什么玩意&quot;&gt;&lt;/a&gt;progn是什么玩意&lt;/h2&gt;&lt;p&gt;&lt;code&gt;progn&lt;/code&gt;是Common Lisp里面的一个special operator，见这份文档的说明：&lt;a href=&quot;http://clhs.lisp.se/Body/s_progn.htm&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://clhs.lisp.se/Body/s_progn.htm&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;为嘛要编译这东西&quot;&gt;&lt;a href=&quot;#为嘛要编译这东西&quot; class=&quot;headerlink&quot; title=&quot;为嘛要编译这东西&quot;&gt;&lt;/a&gt;为嘛要编译这东西&lt;/h2&gt;&lt;p&gt;现在已经支持了二元四则运算了，但现在这里有一个大问题，就是这四个运算没办法嵌套着组合使用。比如，遇到下面这样的代码，&lt;code&gt;jjcc2&lt;/code&gt;函数就懵逼了&lt;/p&gt;
+&lt;figure class=&quot;highlight lisp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;(&lt;span class=&quot;name&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt; (&lt;span class=&quot;name&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;))&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;那要编译这种代码的话怎么办呢？一个比较直观的做法，是引入临时变量，来保存嵌套在其中的表达式的求值结果，然后再用变量来代替原本嵌套的表达式。修改后的代码可能长这个样子&lt;/p&gt;
+&lt;figure class=&quot;highlight lisp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;(&lt;span class=&quot;name&quot;&gt;setq&lt;/span&gt; a (&lt;span class=&quot;name&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;(&lt;span class=&quot;name&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt; a)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;显然，这是有先后的时间依赖关系的两条语句，因此应当使用&lt;code&gt;progn&lt;/code&gt;将它们包裹起来，结果如下&lt;/p&gt;
+&lt;figure class=&quot;highlight lisp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;(&lt;span class=&quot;name&quot;&gt;progn&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  (&lt;span class=&quot;name&quot;&gt;setq&lt;/span&gt; a (&lt;span class=&quot;name&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;3&lt;/span&gt;))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  (&lt;span class=&quot;name&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt; a))&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;这样整个表达式的求值结果，或者说它被编译之后的运行结果，应当就是在寄存器&lt;code&gt;EAX&lt;/code&gt;中放入整数6了。所以，本篇将来解决对&lt;code&gt;progn&lt;/code&gt;的编译问题。&lt;/p&gt;
+&lt;h2 id=&quot;如何编译progn&quot;&gt;&lt;a href=&quot;#如何编译progn&quot; class=&quot;headerlink&quot; title=&quot;如何编译progn&quot;&gt;&lt;/a&gt;如何编译progn&lt;/h2&gt;
+    
+    </summary>
+    
+    
+      <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
+    
+      <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
+    
+      <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
+    
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
+      <category term="x64" scheme="https://liutos.github.io/tags/x64/"/>
+    
+      <category term="汇编" scheme="https://liutos.github.io/tags/%E6%B1%87%E7%BC%96/"/>
+    
+      <category term="编译器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
+    
+      <category term="progn" scheme="https://liutos.github.io/tags/progn/"/>
+    
+  </entry>
   
   <entry>
     <title>支持减、乘，以及除</title>
@@ -605,32 +647,6 @@
     
     
       <category term="sequence diagram" scheme="https://liutos.github.io/tags/sequence-diagram/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MacBook Pro使用体验</title>
-    <link href="https://liutos.github.io/2018/08/02/MacBook-Pro%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/"/>
-    <id>https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/</id>
-    <published>2018-08-02T15:33:58.000Z</published>
-    <updated>2018-12-02T13:29:15.019Z</updated>
-    
-    <content type="html"><![CDATA[<p>生平第一次有一台自己的MacBook，使用了一段时间之后也有了自己的一番感想，特此写下来留个纪念。感想主要分为硬件以及软件两个方面，本文不会有太多的条理性</p><h1 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h1><p>上周四晚上第一次从收件的超市老板手里接过MacBook Pro的时候，第一感觉是意想不到的沉重。回到家拆开包装，拿起机体和电源适配器的时候，也是觉得非常的重。虽然经过几天的使用后发现并没有当初那般沉重的感觉了，但总体还是超过了我的预期。</p><p>接着是发现这台电脑居然没有开机键。老实说，其实这个是我在昨天才意识到的；同时，这台电脑只有四个Type-C的接口，不得不下单买了个外接的适配器。</p><p>触控板的面积很大，但正如传闻中所说的，触控板非常地好用，不像我之前用的电脑触控板是塑料材质的，当手出汗的时候非常地难用。</p><p>比较可惜的是，control键只在键盘的左侧有，对于使用Emacs来编码的人（指我自己）来说，是比较不方便的。虽然现在已经分别将左右的option设置成了（Windows上的）control，以及将command设置成了（Windows上的）Alt，但无名指在按键的时候还是难免误触。同时，没有独立的home/end/up/down，刚开始还真有点不习惯</p><p>touchbar毕竟是一块没有力反馈的触摸屏，所以每当需要按ESC的时候都忍不住要肉眼确认一下或者按两下。但用touchbar来控制音量则非常方便</p><p>散热有点糟糕。第一天晚上折腾的时候，安装完Visual Studio Code然后VSC自己卡死了，随后机器开始发热，尤其是touchbar上方靠近屏幕铰链的位置很烫——可千万不要轻易烧坏了呀</p><p>电池很给力，不需要每天下班都带着重重的电源适配器回家</p><h1 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h1><p>开机后的第一感觉就是界面新颖，虽然并不是第一次亲眼看见macOS了，但作为自己的机器来使用，认真一看确实觉得比Windows要美观，比起之前在虚拟机中使用的Mint也要更优雅统一。触控板非常地好用，尤其是三指上划用于在窗口间切换的功能非常地棒，两指点击表示右键单击的效果也非常地好，既轻盈又方便。字体很好看，就连在Emacs中展示的中文也变得可爱起来</p><p>摆脱了虚拟机，也就不用再把内存用在一起重复的功能上了（比如把内存分给虚拟机的操作系统），搭配上SSD现在开启软件都非常地快。不过大概是因为虚拟机用惯了，有时候总忍不住切换到调度中心，然后找一个看起来比较像虚拟机的应用来点一下，2333</p><p>以前在Mint里面用的搜狗输入法总觉得有什么欠缺，现在可以用上全功能的版本了感觉很爽快，连在Emacs中输入中文也变得畅快起来。更令人惊喜的是，不知道如何折腾，现在我居然可以在多个软件里用上Emacs的键绑定了，目前发现的包括但不限于Firefox的输入框、微信、QQ，以及有道云笔记。</p><p>Mac上的一些软件很有趣，比如Alfred、Timing等等，同时也是我第一次使用zsh+oh-my-zsh，的确是很强大的工具。这两天我也开始编写自己的Workflow了，打算接着学习一下Apple Script更好地帮助自己使用这个系统。</p><p>好了，就酱</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="macbook" scheme="https://liutos.github.io/tags/macbook/"/>
     
   </entry>
   
