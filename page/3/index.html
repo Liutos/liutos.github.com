@@ -75,6 +75,65 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-sdedit使用方法介绍（混沌向）" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/12/sdedit使用方法介绍（混沌向）/" class="article-date">
+  <time datetime="2018-08-12T00:52:54.000Z" itemprop="datePublished">2018-08-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/12/sdedit使用方法介绍（混沌向）/">sdedit使用方法介绍（混沌向）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在寻找绘制时序图的过程中遇到了sdedit，感觉非常适合自己使用，故写这么篇文章向自己也向有同样需求的其它开发人员介绍一些这款软件</p>
+<p>sdedit在macOS上安装还是非常容易的，只需要使用homebrew就可以轻松安装，命令如下</p>
+<pre><code>brew install sdedit
+</code></pre><p>之后sdedit就会被安装到/usr/local/bin 这个目录下，在命令中输入sdedit就可以启动了。</p>
+<p>输入sdedit后会启动一个Java Swing写的GUI程序，具体的外观和布局就不介绍了，这里主要讲解一下sdedit所支持的语法</p>
+<h1 id="sdedit中绘图的常用语法"><a href="#sdedit中绘图的常用语法" class="headerlink" title="sdedit中绘图的常用语法"></a>sdedit中绘图的常用语法</h1><p>PS：我对UML中的一些术语并不了解，下面的介绍是可能有错误的，具体请以sdedit的官方文档（<a href="http://sdedit.sourceforge.net/enter_text/" target="_blank" rel="noopener">http://sdedit.sourceforge.net/enter_text/</a>）为准。同时，既然有官方文档了，我就不在此翻译一遍了，只记录一些常用的用法</p>
+<p>如果需要输入整个时序图的标题（姑且叫做标题），那么可以使用下面的语法</p>
+<pre><code>#![一键获取手机号并登录的交互流程]
+</code></pre><p>即以UNIX中的shebang开头，后面通过一对方括号包住标题内容即可</p>
+<p>如果需要绘制一个参与时序图的节点，那么使用下面的语法（摘抄自官方文档）</p>
+<pre><code>&lt;name&gt;:&lt;Type&gt;[&lt;flags&gt;] &quot;&lt;label&gt;&quot;
+</code></pre><p>其中，<name>就是节点的唯一名字，之后当描述节点间的交互时需要这个字段，请给每一个节点都取一个独一无二的名字（就像取变量名那样）；<type>部分顾名思义就是类型，虽然我在使用的时候这个字段的值也是随心所欲地写的，但这个字段对sdedit而言似乎有特殊含义——例如，如果这个字段填入的是Actor，那么绘制出来的就会是一个人形的节点，在用来表示用户的时候特别有用；（flags我还没有用过就不介绍了）；label可以理解为节点的文案，如果不填<label>，那么节点在最终绘制的图中展示的时候用的就是<name>作为名字</name></label></type></name></p>
+<p>定义好节点之后，就需要把各个节点在不同的时间用不同的消息联系起来了。描述节点间联系用的语法是（摘自官网）</p>
+<pre><code>&lt;caller&gt;[&lt;s&gt;]:&lt;answer&gt;=&lt;callee&gt;[m].&lt;message&gt;
+</code></pre><p>其中的caller和callee都是写的节点的<name>（所以name需要时独一无二的），这样就会绘制出两条线——一条实线从caller指向callee，以及一条虚线从callee指向caller，以及在callee的生命周期下绘制出一个纵向的矩形，表示callee的处理过程；<message>是从caller发往callee的消息，例如参数的描述；如果需要同时描述从callee返回的结果，那么就需要填写在上述语法的的<answer>的位置——个人觉得这个语法是有点奇怪的</answer></message></name></p>
+<h2 id="生成图片"><a href="#生成图片" class="headerlink" title="生成图片"></a>生成图片</h2><p>上面的这些文本描述都需要输入到sdedit的文本框中（唯一UI上的右下角），之后点击保存就可以得到一个XXX.sdx的文件了。由于在我的电脑上，sdedit的GUI上的导出功能用起来非常有问题，所以我摸索出来的是在命令行导出图片文件的做法（并且可以导出的格式似乎更丰富）。总体的用法是</p>
+<pre><code>sdedit -t &lt;类型&gt; -o &lt;输出文件名&gt; &lt;原始的.sdx文件&gt;
+</code></pre><p>输出文件名随性地取即可，其中类型对常用的都有支持（svg、png、jpg，和bmp），我一般常用的是png，然后就可以得到一张PNG图片了（便可以美美地用到设计文档里了）</p>
+<p>配图什么的等我哪天特别闲了再补充上来吧</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/" data-id="cjwdngtto000kip30v3cirun0" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-MacBook-Pro使用体验" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/08/02/MacBook-Pro使用体验/" class="article-date">
@@ -114,7 +173,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/" data-id="cjw6ha2up00066r30bmp7iult" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/" data-id="cjwdngtte0008ip30dijafskc" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -177,7 +236,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="cjw6ha2uu000g6r30xi2ozo16" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="cjwdngttl000hip30r9pgw1hi" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/06/04/cl-mongo用法入门/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -233,7 +292,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/05/18/远程请求Squid/" data-id="cjw6ha2vl001m6r30xkqki97s" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/05/18/远程请求Squid/" data-id="cjwdngtue001nip30lzdrea5r" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/05/18/远程请求Squid/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -284,7 +343,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" data-id="cjw6ha2v3000w6r30x28zpt05" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" data-id="cjwdngttu000tip30mn1k78j1" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -335,7 +394,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" data-id="cjw6ha2v400106r30k5g3osz3" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" data-id="cjwdngttv000uip30c9tsdygf" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -412,7 +471,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/" data-id="cjw6ha2v500116r30t7oo0kjr" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/" data-id="cjwdngttw000xip30sf4hp386" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -486,7 +545,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/" data-id="cjw6ha2v600126r30a5a1r4lr" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/" data-id="cjwdngttx000yip303lc7afo1" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -540,7 +599,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/20/如何自定义命令行补全/" data-id="cjw6ha2v800156r30gbmjsisx" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/01/20/如何自定义命令行补全/" data-id="cjwdngtty0010ip30c6qqqk0z" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/01/20/如何自定义命令行补全/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -605,79 +664,12 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/" data-id="cjw6ha2uk00026r306o8spmn1" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/" data-id="cjwdngttb0004ip304tr3d6uq" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/restart/">restart</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-手动安装mysql" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/10/手动安装mysql/" class="article-date">
-  <time datetime="2017-01-10T15:03:31.000Z" itemprop="datePublished">2017-01-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/10/手动安装mysql/">手动安装mysql</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在战舰少女贴吧里，偶尔能看到的一个说法叫做“这活动我用脚打都能过”，意思是活动关卡很容易（实际上有时候并非真的那么简单，仅仅是调侃）。在安装mysql这件事情上，也有用脚安装和用手安装两种。</p>
-<p>典型的用脚安装就是使用系统的包管理器。例如在我的LinuxMint系统中，在shell中键入下列命令就可以装上mysql</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install mysql-server</span><br></pre></td></tr></table></figure>
-<p>遗憾的是，包管理器并不是任何时候都可用的。举个例子：以前在UC，研发团队是可以申请到一些机器用于分配给开发人员使用的，但如果要在上面使用数据库，那么多半需要开发人员自己动手部署。此外，只要掌握了手动部署单个mysql实例的方法，就可以轻松地在一台机器上部署多个mysql实例了，而这正是我最近需要完成的一个任务。为了方便自己很久之后查阅，也为了帮到其他有此类需求的程序员，我写了这篇手动安装的指南。</p>
-<h2 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h2><p>安装mysql的第一步，是创建数据库运行所需要的一系列文件。在5.7.6版本之前的mysql中，这个过程是由mysql_install_db这个脚本完成的。在5.7.6的发行版中，这个功能被集成到了mysqld中，下面的操作也是基于mysqld实现的。mysqld提供了执行用于初始化的命令行选项：</p>
-<ul>
-<li>–initialize</li>
-<li>–initialize-insecure</li>
-</ul>
-<p>–initialize-insecure会为数据库的root账户设置空的密码，方便稍后登录，因此将选用这一个初始化的方法。</p>
-<p>为了初始化数据库，还需要指定mysql的安装目录和存放数据文件的目录。安装目录即mysql的二进制安装包解压缩后生成的目录，而存放数据文件的目录则可以自由选择。这两个路径分别传递给mysqld的–basedir和–datadir参数。为了方便起见，也为了避免mysqld启动后读取了已存在的mysql配置文件造成干扰，我将这两个参数写到了配置文件中。在我的机器上配置文件路径是~/local/mysql/my.cnf，内容如下</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">basedir</span> = /home/liutos/local/mysql</span><br><span class="line"><span class="attr">datadir</span> = /home/liutos/data/mysql/data</span><br></pre></td></tr></table></figure>
-<p>需要注意的是，根据<a href="http://dev.mysql.com/doc/refman/5.7/en/data-directory-initialization-mysqld.html" target="_blank" rel="noopener">官方文档</a>的说明，datadir所设置的目录，必须为一个尚不存在的目录或者是一个空目录。在我的系统中，/home/liutos/data/mysql/data是一个尚未创建的目录。</p>
-<p>现在可以进行初始化了。因为在我的系统上解压缩后的目录为~/local/mysql，因此在shell中执行的命令为</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/<span class="built_in">local</span>/mysql/</span><br><span class="line">./bin/mysqld --defaults-file=/home/liutos/<span class="built_in">local</span>/mysql/my.cnf --initialize-insecure --user=`whoami`</span><br></pre></td></tr></table></figure>
-<h2 id="启动数据库服务"><a href="#启动数据库服务" class="headerlink" title="启动数据库服务"></a>启动数据库服务</h2><p>完成初始化后就可以启动mysqld了。启动的命令为</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/mysqld_safe --defaults-file=/home/liutos/<span class="built_in">local</span>/mysql/my.cnf --user=`whoami` &gt; /dev/null 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
-<p>由于在我的系统中，已经使用包管理器安装了mysql服务并且正在监听着3306端口，为此必须修改即将启动的mysqld进程所监听的端口。监听的端口号可以通过配置文件来指定，修改后的配置文件如下</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">basedir</span> = /home/liutos/local/mysql</span><br><span class="line"><span class="attr">datadir</span> = /home/liutos/data/mysql/data</span><br><span class="line"><span class="attr">port</span> = <span class="number">3307</span> # 新增该行</span><br></pre></td></tr></table></figure>
-<p>现在可以执行刚才的启动命令了。成功启动后，使用<code>netstat -apn | grep &#39;3307&#39;</code>应当可以看到类似下文的输出</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcp6       0      0 :::3307                 :::*                    LISTEN      30898/mysqld</span><br></pre></td></tr></table></figure>
-<h2 id="登录数据库"><a href="#登录数据库" class="headerlink" title="登录数据库"></a>登录数据库</h2><p>一番波折，终于可以登录了。因为当初是使用–initialize-insecure执行初始化的，root账户没有登录密码，因此在shell中键入下列命令登录</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u root --skip-password -h 127.0.0.1 -P 3307</span><br></pre></td></tr></table></figure>
-<p>登录后建议为root账户设置登录密码。例如，我要给root账户设置密码为1234567，就执行下列SQL语句</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">USER</span> <span class="string">'root'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'1234567'</span>;</span><br></pre></td></tr></table></figure>
-<h2 id="UNIX-socket配置"><a href="#UNIX-socket配置" class="headerlink" title="UNIX socket配置"></a>UNIX socket配置</h2><p>按照上述步骤启动后，mysqld会在系统的/tmp目录下创建一个mysql.sock文件。此时如果再按照上述步骤是无法启动另一个mysql实例的，因此每一个mysqld必须使用单独的.sock文件。这可以通过配置文件来实现，在我的系统上的配置如下</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">basedir</span> = /home/liutos/local/mysql</span><br><span class="line"><span class="attr">datadir</span> = /home/liutos/data/mysql/data</span><br><span class="line"><span class="attr">port</span> = <span class="number">3307</span></span><br><span class="line"><span class="attr">socket</span> = /home/liutos/local/mysql/mysql.sock # 新增该行</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/10/手动安装mysql/" data-id="cjw6ha2v900176r30gja21hyd" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2017/01/10/手动安装mysql/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/install/">install</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/安装/">安装</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/教程/">教程</a></li></ul>
 
     </footer>
   </div>
@@ -704,7 +696,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elisp/">elisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/evernote/">evernote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/install/">install</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leanote/">leanote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/progn/">progn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visual-studio-code/">visual studio code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x64/">x64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安装/">安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/宏/">宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/尾递归/">尾递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/汇编/">汇编</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编译器/">编译器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面向对象/">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elisp/">elisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/evernote/">evernote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/install/">install</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leanote/">leanote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/progn/">progn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/setq/">setq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visual-studio-code/">visual studio code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x64/">x64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安装/">安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/宏/">宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/尾递归/">尾递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/汇编/">汇编</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编译器/">编译器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面向对象/">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
     </div>
   </div>
 
@@ -714,7 +706,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 14px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 14px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 14px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 12px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 14px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 12px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 18px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 12px;">macro</a> <a href="/tags/markdown/" style="font-size: 14px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 14px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 14px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 16px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 12px;">sequence diagram</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 12px;">tutorial</a> <a href="/tags/typora/" style="font-size: 12px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 14px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 12px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 12px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 12px;">教程</a> <a href="/tags/数学/" style="font-size: 14px;">数学</a> <a href="/tags/汇编/" style="font-size: 14px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 12px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 12px;">算法</a> <a href="/tags/编译器/" style="font-size: 14px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 12px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 13.33px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 13.33px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 15px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 11.67px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 15px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.67px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 16.67px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.33px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.67px;">macro</a> <a href="/tags/markdown/" style="font-size: 13.33px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 13.33px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 13.33px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 15px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.67px;">sequence diagram</a> <a href="/tags/setq/" style="font-size: 10px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.67px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.67px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 15px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.67px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.67px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.67px;">教程</a> <a href="/tags/数学/" style="font-size: 13.33px;">数学</a> <a href="/tags/汇编/" style="font-size: 15px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 11.67px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.67px;">算法</a> <a href="/tags/编译器/" style="font-size: 15px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.67px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -723,7 +715,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
     </div>
   </div>
 
@@ -734,6 +726,10 @@ ga('send', 'pageview');
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/06/01/如何编译setq？/">如何编译setq？</a>
+          </li>
         
           <li>
             <a href="/2019/05/27/如何编译progn/">如何编译progn</a>
@@ -749,10 +745,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/05/17/一个简陋的四则运算编译器实现/">一个简陋的四则运算编译器实现</a>
-          </li>
-        
-          <li>
-            <a href="/2019/05/07/Boostnote及对记笔记的思考/">Boostnote及对记笔记的思考</a>
           </li>
         
       </ul>
