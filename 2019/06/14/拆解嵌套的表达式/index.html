@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-94082039-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <title>拆解嵌套的表达式 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在上一篇文章中，jjcc2函数已经可以处理加减乘除运算表达式中的变量了。也就是说，现在它可以处理如下的代码了 123(progn  (setq a (+ 1 2))  (+ a a)) 在我的电脑上，在SLIME中依次运行下面的代码 12(defvar *globals* (make-hash-table))(stringify (jjcc2 &apos;(progn (setq a (+ 1 2)) (+">
+<meta name="keywords" content="common lisp,assembly,compiler,lisp,x64,汇编,编译器,setq">
+<meta property="og:type" content="article">
+<meta property="og:title" content="拆解嵌套的表达式">
+<meta property="og:url" content="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在上一篇文章中，jjcc2函数已经可以处理加减乘除运算表达式中的变量了。也就是说，现在它可以处理如下的代码了 123(progn  (setq a (+ 1 2))  (+ a a)) 在我的电脑上，在SLIME中依次运行下面的代码 12(defvar *globals* (make-hash-table))(stringify (jjcc2 &apos;(progn (setq a (+ 1 2)) (+">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-06-14T13:48:35.140Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="拆解嵌套的表达式">
+<meta name="twitter:description" content="在上一篇文章中，jjcc2函数已经可以处理加减乘除运算表达式中的变量了。也就是说，现在它可以处理如下的代码了 123(progn  (setq a (+ 1 2))  (+ a a)) 在我的电脑上，在SLIME中依次运行下面的代码 12(defvar *globals* (make-hash-table))(stringify (jjcc2 &apos;(progn (setq a (+ 1 2)) (+">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.useso.com/css?family=Lato:400,400italic" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liutos.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-拆解嵌套的表达式" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/14/拆解嵌套的表达式/" class="article-date">
+  <time datetime="2019-06-14T13:43:23.000Z" itemprop="datePublished">2019-06-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      拆解嵌套的表达式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在<a href="http://liutos.github.io/2019/06/11/%E6%94%AF%E6%8C%81%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F/">上一篇文章</a>中，<code>jjcc2</code>函数已经可以处理加减乘除运算表达式中的变量了。也就是说，现在它可以处理如下的代码了</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">setq</span> a (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line">  (<span class="name">+</span> a a))</span><br></pre></td></tr></table></figure>
+<p>在我的电脑上，在SLIME中依次运行下面的代码</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defvar</span> *globals* (<span class="name">make-hash-table</span>))</span><br><span class="line">(<span class="name">stringify</span> (<span class="name">jjcc2</span> '(progn (setq a (+ <span class="number">1</span> <span class="number">2</span>)) (+ a a)) *globals*) *globals*)</span><br></pre></td></tr></table></figure>
+<p>会得到下列的汇编代码</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">        .data</span><br><span class="line">A: .long 0</span><br><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EAX</span><br><span class="line">        MOVL $2, %EBX</span><br><span class="line">        ADDL %EBX, %EAX</span><br><span class="line">        MOVL %EAX, A(%RIP)</span><br><span class="line">        MOVL A(%RIP), %EAX</span><br><span class="line">        MOVL A(%RIP), %EBX</span><br><span class="line">        ADDL %EBX, %EAX</span><br><span class="line">        movl %eax, %edi</span><br><span class="line">        movl $0x2000001, %eax</span><br><span class="line">        syscall</span><br></pre></td></tr></table></figure>
+<p>现在所需要的，就是要实现一个功能（一般是一个函数），可以将</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>) (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<p>自动转换为上面所给出的<code>progn</code>的形式了。我这里给的例子不好，上面这段代码就算能够自动转换，也不会是最上面那段<code>progn</code>的形式的，起码会有两个变量哈哈。好了，那么怎么把上面的含有嵌套表达式的代码给转换成<code>progn</code>的形式呢？</p>
+<p>跑个题，可以做个CPS变换呀。比如，你可以先把<code>(+ (+ 1 2) (+ 1 2))</code>写成这种形式</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+&amp;</span> <span class="number">1</span> <span class="number">2</span> (<span class="name">lambda</span> (<span class="name">a</span>)</span><br><span class="line">          (<span class="name">+&amp;</span> <span class="number">1</span> <span class="number">2</span> (<span class="name">lambda</span> (<span class="name">b</span>)</span><br><span class="line">                    (<span class="name">+</span> a b)))))</span><br></pre></td></tr></table></figure>
+<p>上面的<code>+&amp;</code>表示它是一个带<code>continuation</code>版本的加法运算，它会把两个操作相加之后调用它的continuation。这个写法如果没有记错的话，我是从PG的《On Lisp》里面学来的（逃</p>
+<p>你看，这多简单呀。做完CPS变换之后，只要把每一个有continuation的函数调用都重写成<code>setq</code>，符号就用回调里的参数名，值就是带回调的表达式本身；没有回调的就继续没有。最后把这些<code>setq</code>放到一个<code>progn</code>里去就可以了</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">setq</span> a (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line">  (<span class="name">setq</span> b (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line">  (<span class="name">+</span> a b))</span><br></pre></td></tr></table></figure>
+<p>很久以前还真的写过一个对表达式做CPS变换的玩意，有兴趣的请移步<a href="http://liutos.github.io/2012/09/08/CommonLisp%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84CPS%E5%8F%98%E6%8D%A2/">这篇文章</a>。</p>
+<p>言归正传。因为<code>jjcc2</code>只需要处理两个参数的加减乘除运算，所以不需要做通用的CPS变换那么复杂。我是这么想的：既然只有两个参数，那么我就真的在代码里先处理第一个再处理第二个。对两个参数，我都把它们放到一个<code>setq</code>的求值部分，然后把原来的表达式中的对应位置用一个新的变量名来代替即可，新变量名也好办，只要用<code>gensym</code>来生成就可以了。</p>
+<p>其实这样是不够的，因为作为加减乘除运算的操作数的表达式本身，也可能还有嵌套的子表达式。这里必然有一个递归的过程。新的办法是，我用一个栈来存放所有不再需要被拆解的<code>setq</code>表达式，然后把这个栈在每次递归调用的时候传进去。这样一来，当所有的递归都结束的时候，就得到了一个充满了<code>setq</code>表达式的栈，以及一个所有的嵌套表达式都被替换为变量名的“顶层”表达式。</p>
+<p>好了，说完了思路，上代码吧</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> inside-out/aux (<span class="name">expr</span> result)</span><br><span class="line">  <span class="string">"将嵌套的表达式EXPR由内而外地翻出来"</span></span><br><span class="line">  (<span class="name">check-type</span> expr list)</span><br><span class="line">  <span class="comment">;; 出于简单起见，暂时只处理加法运算</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         (<span class="name">when</span> (<span class="name">listp</span> (<span class="name">second</span> expr))</span><br><span class="line">           <span class="comment">;; 第一个操作数也是需要翻出来的</span></span><br><span class="line">           <span class="comment">;; 翻出来后，result中的第一个元素就是一个没有嵌套表达式的叶子表达式了，可以作为setq的第二个操作数</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">var</span> (<span class="name">gensym</span>)))</span><br><span class="line">             (<span class="name">setf</span> result (<span class="name">inside-out/aux</span> (<span class="name">second</span> expr) result))</span><br><span class="line">             (<span class="name">let</span> ((<span class="name">val</span> (<span class="name">pop</span> result)))</span><br><span class="line">               (<span class="name">push</span> `(setq ,var ,val) result)</span><br><span class="line">               (<span class="name">setf</span> (<span class="name">second</span> expr) var))))</span><br><span class="line">         (<span class="name">when</span> (<span class="name">listp</span> (<span class="name">third</span> expr))</span><br><span class="line">           (<span class="name">let</span> ((<span class="name">var</span> (<span class="name">gensym</span>)))</span><br><span class="line">             (<span class="name">setf</span> result (<span class="name">inside-out/aux</span> (<span class="name">third</span> expr) result))</span><br><span class="line">             (<span class="name">let</span> ((<span class="name">val</span> (<span class="name">pop</span> result)))</span><br><span class="line">               (<span class="name">push</span> `(setq ,var ,val) result)</span><br><span class="line">               (<span class="name">setf</span> (<span class="name">third</span> expr) var))))</span><br><span class="line">         (<span class="name">push</span> expr result)</span><br><span class="line">         result)</span><br><span class="line">        (<span class="name">t</span></span><br><span class="line">         (<span class="name">push</span> expr result)</span><br><span class="line">         result)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> inside-out (<span class="name">expr</span>)</span><br><span class="line">  (<span class="name">cons</span> 'progn (<span class="name">nreverse</span> (<span class="name">inside-out/aux</span> expr '()))))</span><br></pre></td></tr></table></figure>
+<p>因为用的是栈（其实就是个list），所以最后需要用<code>nreverse</code>反转一下，才能拼上<code>progn</code>。现在，如果喂给<code>inside-out</code>一个嵌套的表达式</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">inside-out</span> '(+ (+ <span class="number">1</span> <span class="number">2</span>) (+ <span class="number">3</span> <span class="number">4</span>)))</span><br></pre></td></tr></table></figure>
+<p>就会得到一个由内而外地翻出来的版本</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">PROGN</span></span><br><span class="line"> (<span class="name">SETQ</span> #<span class="symbol">:G688</span> (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line"> (<span class="name">SETQ</span> #<span class="symbol">:G689</span> (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>))</span><br><span class="line"> (<span class="name">+</span> #<span class="symbol">:G688</span> #<span class="symbol">:G689</span>))</span><br></pre></td></tr></table></figure>
+<p>锵锵锵，Common Lisp中的unintern symbol再次登场。好了，现在即便是嵌套的加减乘除运算的表达式，只要先经过<code>inside-out</code>处理一下，再喂给<code>jjcc2</code>，也可以编译出结果来了，可喜可贺。</p>
+<p>全文完。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="cjww58kuz00181z30xfkn4gth" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/06/11/支持四则运算中的变量/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">支持四则运算中的变量</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elisp/">elisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/evernote/">evernote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/install/">install</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leanote/">leanote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/progn/">progn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/setq/">setq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visual-studio-code/">visual studio code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x64/">x64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安装/">安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/宏/">宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/尾递归/">尾递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/汇编/">汇编</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编译器/">编译器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面向对象/">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 12.86px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 12.86px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 17.14px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 11.43px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 17.14px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.43px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 15.71px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.57px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.43px;">macro</a> <a href="/tags/markdown/" style="font-size: 12.86px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12.86px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12.86px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 14.29px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.43px;">sequence diagram</a> <a href="/tags/setq/" style="font-size: 12.86px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.43px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.43px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 17.14px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.43px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.43px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.43px;">教程</a> <a href="/tags/数学/" style="font-size: 12.86px;">数学</a> <a href="/tags/汇编/" style="font-size: 17.14px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 11.43px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.43px;">算法</a> <a href="/tags/编译器/" style="font-size: 17.14px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.43px;">编辑器</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/06/14/拆解嵌套的表达式/">拆解嵌套的表达式</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/11/支持四则运算中的变量/">支持四则运算中的变量</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/01/如何编译setq？/">如何编译setq？</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/27/如何编译progn/">如何编译progn</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/23/支持减、乘，以及除/">支持减、乘，以及除</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'Liutos';
+  
+  var disqus_url = 'https://liutos.github.io/2019/06/14/拆解嵌套的表达式/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+if (typeof jQuery == 'undefined') {
+  document.write(unescape("%3Cscript src='/js/jquery-2.0.3.min.js' type='text/javascript'%3E%3C/script%3E"));
+}
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
