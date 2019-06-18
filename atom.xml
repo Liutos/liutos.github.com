@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2019-06-14T13:48:35.140Z</updated>
+  <updated>2019-06-18T14:02:40.926Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>时序图绘制工具走马观花</title>
+    <link href="https://liutos.github.io/2019/06/18/%E6%97%B6%E5%BA%8F%E5%9B%BE%E7%BB%98%E5%88%B6%E5%B7%A5%E5%85%B7%E8%B5%B0%E9%A9%AC%E8%A7%82%E8%8A%B1/"/>
+    <id>https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/</id>
+    <published>2019-06-18T14:01:00.000Z</published>
+    <updated>2019-06-18T14:02:40.926Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="为什么我会需要绘制时序图"><a href="#为什么我会需要绘制时序图" class="headerlink" title="为什么我会需要绘制时序图"></a>为什么我会需要绘制时序图</h2><p>我司在做一些咋看之下比较复杂的需求的时候，都需要先写设计文档，不过我猜想这种规矩应该在很多公司都有才对，我并没有其它公司没有这种规矩的言外之意。然后呢，我个人比较习惯按照“从外到内”的方式来写设计文档，因此，在文档的开篇我总是会描述一下一个需求的全局视图，一般来说，就是用绘图的方式。对于一些复杂的活动需求里的流程，咋一看觉得会涉及到多个系统间的调用的时候，我就会选择画一幅时序图了。</p><p>需要事先说明的是，我没有正儿八经地系统学习过UML方面的内容，所以我画出来的图都只是一些不算很规范的野鸡时序图，当然了，我也不知道这世界上到底有没有规范的时序图画法。</p><p>为了画时序图，用过几款工具。它们的共同点，就是都是“语绘”的，也就是通过写代码的方式来描述所想要的图，然后让这些工具帮你把这张图给“画出来”。我个人更喜欢这种方式，而不是拖拖拉拉，不过这纯粹是个人喜好的问题而已。</p><h2 id="走马观花"><a href="#走马观花" class="headerlink" title="走马观花"></a>走马观花</h2><a id="more"></a><p><a href="http://www.websequencediagrams.com是我接触到的第一个“语绘”时序图的工具。打开它之后，就会看到它的实例代码和效果图了，截图如下" target="_blank" rel="noopener">www.websequencediagrams.com是我接触到的第一个“语绘”时序图的工具。打开它之后，就会看到它的实例代码和效果图了，截图如下</a></p><p><img src="/Users/liutos/Pictures/写作素材/软件测评/websequencediagrams首页.png" alt=""></p><p>用这个网站的工具画出来的时序图会有一种【手绘】的感觉</p><p><a href="http://sdedit.sourceforge.net/index.html" target="_blank" rel="noopener"><code>sdedit</code></a>是我第二款使用的绘图工具，是一款用Java开发的本地工具，只需要编写好一个<code>.sd</code>文件，然后用下列的命令处理即可</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sdedit -t png -o a.png a.sd</span><br></pre></td></tr></table></figure><p><code>sdedit</code>绘制时序图的代码的语法跟WebSequenceDiagrams不同，在Emacs中似乎也没有找到别人写好的适合编辑<code>.sd</code>文件的主模式，后来我自己定义了一个简陋的主模式来用，如下</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> sdedit-highlights</span><br><span class="line">      '((<span class="string">"Actor\\|Node"</span> . font-lock-function-name-face)))</span><br><span class="line"></span><br><span class="line">(<span class="name">define-derived-mode</span> sdedit-mode fundamental-mode <span class="string">"sdedit"</span></span><br><span class="line">  <span class="string">"编辑.sd文件的主模式"</span></span><br><span class="line">  (<span class="name">setq</span> font-lock-defaults '(sdedit-highlights)))</span><br><span class="line"></span><br><span class="line"><span class="comment">;;; 代码是从下面这个网页给的例子改动来的</span></span><br><span class="line"><span class="comment">;;; https://www.emacswiki.org/emacs/CompileCommand</span></span><br><span class="line">(<span class="name">add-hook</span> 'sdedit-mode-hook</span><br><span class="line">          (<span class="name">lambda</span> ()</span><br><span class="line">            (<span class="name">unless</span> (<span class="name">file-exists-p</span> <span class="string">"Makefile"</span>)</span><br><span class="line">              (<span class="name">set</span> (<span class="name">make-local-variable</span> 'compile-command)</span><br><span class="line">                   (<span class="name">let*</span> ((<span class="name">buffer-name</span> (<span class="name">buffer-name</span>))</span><br><span class="line">                          (<span class="name">base-name</span> (<span class="name">car</span> (<span class="name">split-string</span> buffer-name <span class="string">"\\."</span>))))</span><br><span class="line">                     (<span class="name">format</span> <span class="string">"/usr/local/bin/sdedit -t png -o %s.png %s.sd"</span> base-name base-name))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">add-to-list</span> 'auto-mode-alist</span><br><span class="line">             '(<span class="string">"\\.sd$"</span> . sdedit-mode))</span><br></pre></td></tr></table></figure><p>勉勉强强可以接受</p><p>sequencediagram.org则是最近刚发掘到的一个不错的绘制时序图的在线工具。它的绘制语法跟WebSequenceDiagrams是一样的，并且它还有一个不错的教程。打开它的网站后，点击左侧的这个图标</p><p><img src="/Users/liutos/Pictures/写作素材/软件测评/sequencediagram.org的教程入口.png" alt=""></p><p>便可以看到详尽的语法教程。</p><p>sequencediagram.org绘制出来的时序图是这三个工具中最符合我的审美的，今后应当会成为我绘制时序图的主力工具。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;为什么我会需要绘制时序图&quot;&gt;&lt;a href=&quot;#为什么我会需要绘制时序图&quot; class=&quot;headerlink&quot; title=&quot;为什么我会需要绘制时序图&quot;&gt;&lt;/a&gt;为什么我会需要绘制时序图&lt;/h2&gt;&lt;p&gt;我司在做一些咋看之下比较复杂的需求的时候，都需要先写设计文档，不过我猜想这种规矩应该在很多公司都有才对，我并没有其它公司没有这种规矩的言外之意。然后呢，我个人比较习惯按照“从外到内”的方式来写设计文档，因此，在文档的开篇我总是会描述一下一个需求的全局视图，一般来说，就是用绘图的方式。对于一些复杂的活动需求里的流程，咋一看觉得会涉及到多个系统间的调用的时候，我就会选择画一幅时序图了。&lt;/p&gt;
+&lt;p&gt;需要事先说明的是，我没有正儿八经地系统学习过UML方面的内容，所以我画出来的图都只是一些不算很规范的野鸡时序图，当然了，我也不知道这世界上到底有没有规范的时序图画法。&lt;/p&gt;
+&lt;p&gt;为了画时序图，用过几款工具。它们的共同点，就是都是“语绘”的，也就是通过写代码的方式来描述所想要的图，然后让这些工具帮你把这张图给“画出来”。我个人更喜欢这种方式，而不是拖拖拉拉，不过这纯粹是个人喜好的问题而已。&lt;/p&gt;
+&lt;h2 id=&quot;走马观花&quot;&gt;&lt;a href=&quot;#走马观花&quot; class=&quot;headerlink&quot; title=&quot;走马观花&quot;&gt;&lt;/a&gt;走马观花&lt;/h2&gt;
+    
+    </summary>
+    
+    
+      <category term="sequencediagram" scheme="https://liutos.github.io/tags/sequencediagram/"/>
+    
+      <category term="时序图" scheme="https://liutos.github.io/tags/%E6%97%B6%E5%BA%8F%E5%9B%BE/"/>
+    
+      <category term="语绘" scheme="https://liutos.github.io/tags/%E8%AF%AD%E7%BB%98/"/>
+    
+  </entry>
   
   <entry>
     <title>拆解嵌套的表达式</title>
@@ -652,34 +679,6 @@
       <category term="macro" scheme="https://liutos.github.io/tags/macro/"/>
     
       <category term="宏" scheme="https://liutos.github.io/tags/%E5%AE%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>重复输入相似的命令的几种方法</title>
-    <link href="https://liutos.github.io/2018/11/25/%E9%87%8D%E5%A4%8D%E8%BE%93%E5%85%A5%E7%9B%B8%E4%BC%BC%E7%9A%84%E5%91%BD%E4%BB%A4%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/"/>
-    <id>https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/</id>
-    <published>2018-11-25T14:40:51.000Z</published>
-    <updated>2019-01-09T15:20:35.088Z</updated>
-    
-    <content type="html"><![CDATA[<p>在命令行经常需要重复输入一些shell代码，例如用cd切换到某个目录、运行npm run local，或者git commit等。每次都完整地一个个字符地敲入这些命令还是很麻烦的，这种时候就要寻找可以解决重复输入，提高效率的办法了。</p><p>最原始的，当然是找一个文本文件，把平时经常敲入的命令存放在其中，每当需要运行这些命令的时候就打开文件选中内容复制一下，再到终端粘贴并运行，但这未免过于原始了。</p><h2 id="使用ctrl-r翻出历史命令"><a href="#使用ctrl-r翻出历史命令" class="headerlink" title="使用ctrl-r翻出历史命令"></a>使用ctrl-r翻出历史命令</h2><p>使用ctrl-r是一种不那么原始的方法。在终端中按下ctrl-r后，shell会等待进一步地输入，并根据输入从以前输入过的命令中找出匹配的一条。找到了自己所需要的命令行，直接敲击回车即可，效果如下<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/ctrl_r%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="ctrl-r的效果"><br>PS：上面是使用了<a href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">fzf</a>之后的效果，所以在敲入回车后并不会立即执行所选中的命令。原生的ctrl-r命令不支持在不同的位置上匹配输入字符，所以还是推荐一试fzf的。</p><h2 id="使用alias"><a href="#使用alias" class="headerlink" title="使用alias"></a>使用alias</h2><p>alias相比于ctrl-r而言进化了一点，因为它毕竟不再需要往命令行中塞入那么多字符了——它让终端用户可以用较短的内容来代替较长的内容。例如，我就给登录我本地的MySQL的命令写了一个alias<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> myroot=<span class="string">'mysql -u root -p*******'</span></span><br></pre></td></tr></table></figure></p><p>而且alias更像是宏展开，所以可以在后面添加其它内容，如下图<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/alias%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="alias的效果"><br>在myroot之后输入的test和user_info都跟着myroot展开后的结果一起喂给了shell去执行。使用alias之后，每次只需要输入较短的myroot即可。</p><h2 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h2><p>如果说alias是C语言里面的宏的话，那么shell所支持的函数就是C语言里面的函数了（这不是废话么）。alias始终不太适合所要输入的内容比较多的场景——定义也特别难写，并且alias没有输入参数可言，也不适合处理需要有为妙差异的重复内容的情况。shell函数很适合这种情况，例如，我在本地编辑完一个.sd文件后需要用<a href="http://sdedit.sourceforge.net/index.html" target="_blank" rel="noopener">sdedit</a>将其转换为.png文件，方能上传到Confluence上贴到设计文档里，我希望.png文件跟.sd文件有相同的basename，那么用下面这个shell函数可以减轻一些重复输入的劳动力<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 根据.sd文件生成同名的.png文件</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">sdpng</span></span>() &#123;</span><br><span class="line">    basename=<span class="variable">$&#123;1&#125;</span></span><br><span class="line">    /usr/<span class="built_in">local</span>/bin/sdedit -t png -o <span class="variable">$&#123;basename&#125;</span>.png <span class="variable">$&#123;basename&#125;</span>.sd</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>只需要我输入一次文件名即可，效果如下<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/shell%E5%87%BD%E6%95%B0%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="shell函数的效果"></p><h2 id="使用Alfred的Snippets功能"><a href="#使用Alfred的Snippets功能" class="headerlink" title="使用Alfred的Snippets功能"></a>使用Alfred的Snippets功能</h2><p><a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>带有一个叫做Snippets的特性<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Alfred%E7%9A%84Snippets%E7%89%B9%E6%80%A7.png" alt="Alfred的Snippets特性"><br>它跟上面所说的alias很相似，但它不是由shell自己处理悄悄展开的，它是显式地输入一长串的字符。比如说我定义了三个短语：gpd、gct，以及gpt，它们分别会展开为<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin develop</span><br><span class="line">git checkout <span class="built_in">test</span></span><br><span class="line">git push -u origin <span class="built_in">test</span></span><br></pre></td></tr></table></figure></p><p>效果如下<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Alfred%E8%87%AA%E5%8A%A8%E5%B1%95%E5%BC%80%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="Alfred的Snippets自动展开的效果"><br>Alfred的Snippets也跟alias一样是不能接受参数的，不过支持一些占位符，可以展开为一些特定模式的动态内容。一个比较有用的是{cursor}这个占位符，可以让光标定位至此。例如我可以定义这样的一串展开结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM `user_info` WHERE `userId` = &#123;cursor&#125;\G</span><br></pre></td></tr></table></figure></p><p>这样我敲入对应的短语后就可以正确定位到WHERE语句，然后直接输入要查询的参数即可，效果如下<br><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/cursor%E5%8D%A0%E4%BD%8D%E7%AC%A6%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="cursor占位符的效果"></p><p>除了Alfred之外，还有其它的通过snippet提高输入效率的软件，比如<a href="http://www.trankynam.com/atext/" target="_blank" rel="noopener">aText</a>，<a href="https://kapeli.com/dash" target="_blank" rel="noopener">Dash</a>，不过我没有实际地用过，就不多说了。</p><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>没有代码才是最快地输入代码的方式</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="alfred" scheme="https://liutos.github.io/tags/alfred/"/>
-    
-      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
     
   </entry>
   
