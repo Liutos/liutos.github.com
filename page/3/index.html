@@ -75,6 +75,86 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-用过的一些Markdown编辑器" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/14/用过的一些Markdown编辑器/" class="article-date">
+  <time datetime="2018-12-14T15:43:50.000Z" itemprop="datePublished">2018-12-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/14/用过的一些Markdown编辑器/">用过的一些Markdown编辑器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h2><p>买了MacBook Pro之后的一段时间里，为了打造适合自己的知识管理体系，折腾起了笔记类软件（题外话，我还挺喜欢尝试新软件的，尤其在接触macOS后发现许多软件都长得很漂亮）。其实在入手Mac之前，我已经试用过不少笔记类软件和服务了，包括Evernote（还有印象笔记）、有道云笔记、为知笔记，等等。再后来，改用Emacs的<a href="https://orgmode.org/" target="_blank" rel="noopener">org-mode</a>来写笔记——主要是将一些常常搜索的内容或经验记录在了多个.org文件中，算是一份自己的FAQ。后来想看看在macOS的世界中有没有更好的工具，同时渐渐觉得Markdown是一个更好的笔记内容载体，便尝试了一些知名的笔记类软件暨Markdown编辑器。</p>
+<p>大致上尝试了下列这些：</p>
+<ul>
+<li>Emacs</li>
+<li>Boostnote</li>
+<li>Quiver</li>
+<li>Typora</li>
+<li>Visual Studio Code</li>
+<li>Yu Writer</li>
+</ul>
+<p>本文并不是一篇完整的、专业的软件评测报告，只是我兴趣使然的对各个软件的吐槽和赞美，各位权当打发时间吧。下面我按顺序说一下上面提及的各款软件。</p>
+<h2 id="Emacs"><a href="#Emacs" class="headerlink" title="Emacs"></a>Emacs</h2><p><a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">Emacs</a>并不仅仅是一款Markdown编辑器，我用得最多的是用它来做计划（之前还用来写Node.js代码，不过现在交给VSCode了）。用Emacs来写Markdown，坏处是没有live preview的功能。在Emacs中打开了一个.md文件，只会原原本本地显示着井号、星号，三个反引号等Markdown语法的关键字——并且还是白底黑字的模样，而不带有丝毫不同的样式。为了让它们好看点，你还需要安装一个叫做<code>markdown-mode</code>的Emacs扩展。但几遍安装了<code>markdown-mode</code>，也无法实时预览。<code>markdown-mode</code>的菜单栏中有一个叫做“Preview”的功能，它依赖一个名为<code>markdown</code>的命令行工具（用<code>brew install markdown</code>可以安装）。当一切安装完毕点击“Preview”菜单项时，才发现是在网页浏览器中查看的方式——虽然有preview了，但并不live。</p>
+<p>Emacs在写Markdown方面也并非一无是处。对程序员而言，在一篇Markdown写就的文章中插入代码是再正常不过的事情了。在Emacs中将光标定位到Markdown语法的代码块内，按下<code>control</code>和<code>c</code>的组合键，再敲一下单引号键，Emacs便会另起一个相应模式的buffer，并将代码块中的内容复制到新buffer中供继续编辑。如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs_%E7%BC%96%E8%BE%91Markdown%E4%BB%A3%E7%A0%81%E5%9D%97.gif" alt="Emacs_编辑Markdown代码块.gif"></p>
+<p>在上面的GIF中，代码块以GitHub Flavored Markdown的语法在开头的三个反引号后附上了模式的名字，即lisp，Emacs便会打开<code>lisp-mode</code>的buffer。在这个buffer中可以继续使用Emacs的完整功能编辑对代码，包括语法高亮、自动补全，等等——如果启动了<a href="https://common-lisp.net/project/slime/" target="_blank" rel="noopener">SLIME</a>，甚至可以运行里面的Common Lisp代码。</p>
+<p>Emacs和VSCode用于在编写代码的同时写写项目的README.md文件应当是绰绰有余的了。</p>
+<h2 id="Boostnote"><a href="#Boostnote" class="headerlink" title="Boostnote"></a>Boostnote</h2><p><a href="https://boostnote.io/" target="_blank" rel="noopener">Boostnote</a>自诩为“程序员的笔记本”，它并不是我在Emacs之外寻找的第一款笔记软件，在它之前，我还尝试了<a href="https://www.notion.so/" target="_blank" rel="noopener">Notion</a>、<a href="http://happenapps.com/" target="_blank" rel="noopener">Quiver</a>来着。上手后发现，Boostnote简直就是Quiver的开源免费版本，相当的喜爱。</p>
+<p>Boostnote当然让我格外喜欢的有几点：首先，Boostnote可以实时预览键入的Markdown源文档。会有一列跟编辑区域差不多宽的区域被用来展示Markdown渲染后的效果。（刚刚发现，原来这个区域的宽度是可以拖动调节的）</p>
+<p>其次，它不仅支持Markdown、带语法高亮的代码块，甚至还支持表格和流程图的绘制！当然我以为，用竖线和连字符绘制表格的功能仅在Emacs的org-mode中存在（孤陋寡闻了汗颜），刚开始用Boostnote制作表格的时候可是相当兴奋。而text-based的绘制流程图的方式也是让我大开眼界（后来才知道原来有<a href="http://flowchart.js.org/" target="_blank" rel="noopener">flowchart.js</a>这样的工具）——尽管后来我渐渐发现，绘制流程图其实挺少用。</p>
+<p>然后Boostnote具备在多份笔记中搜索的功能，这对于一款笔记软件而言倒是真的非常重要，因为有时候只能想到一些只言片语，而并不能确定所要查阅的内容究竟在哪一份笔记中。</p>
+<p>但Boostnote也有一些缺点。首先，Boostnote是用自有的文件格式（而不是纯文本的.md文件）来存储输入的内容的——打开<code>~/Boostnote/notes/</code>可以看到这些后缀为<code>.cson</code>的文件。这样一来，假设我日后发现了一款更优秀的Markdown编辑器，那就不能无痛迁移了，还得先从Boostnote中将这些笔记逐一导出成.md文件才行。</p>
+<p>其次，Boostnote只支持三层的组织结构——最外层是storage，然后是folder，最后就是笔记本身。当初有道云笔记特别让我喜欢的，就是它支持非常多层级的目录结构。尽管目录不是越多越好，但有这种灵活性总是更好的。否则，笔记的使用者就只能在命名和标签上下功夫了</p>
+<p>最后一点，就是Boostnote在我的系统上非常容易崩溃。有时候一翻起盖子，看到的就是Boostnote崩溃的提示。</p>
+<p>不过Boostnote支持往其中粘贴图片，当我需要快速记录一些图文内容时，我还是很喜欢用它的。</p>
+<h2 id="Yu-Writer"><a href="#Yu-Writer" class="headerlink" title="Yu Writer"></a>Yu Writer</h2><p>某一天偶然遇到了<a href="https://ivarptr.github.io/yu-writer.site/" target="_blank" rel="noopener">Yu Writer</a>，它官网上的截图看着很吸引人，于是我便试用了一下。第一印象是，Yu Writer is awesome！首先它很人性化。它的预览区域是一个minimap——就是Sublime Text最右侧的那一列。在做到实时预览的时候，也不会占用太多的横向空间。其次，它支持大纲视图</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Yu%20Writer%E7%9A%84%E5%A4%A7%E7%BA%B2%E8%A7%86%E5%9B%BE.png" alt="Yu Writer的大纲视图"></p>
+<p>即上图左侧的目录。恰逢当时我在用Boostnote写一篇比较长的设计文档，深刻地体验到了一个大纲视图的重要意义——对在长文档内的多个标题间跳转非常有帮助。再次，Yu Writer还准备了工具栏，方便不懂得Markdown语法的用户；支持标签页，便于在多个文档间切换；甚至可以把一个Markdown文档作为幻灯片来播放。</p>
+<p>但Yu Writer也有它自己的劣势。第一，在Yu Writer内，原本在macOS系统中全局可用的Emacs风格快捷键——即<code>control+b</code>往左移动光标、<code>control+f</code>往右移动光标——居然不生效！这些快捷键对我个人还是非常重要的。</p>
+<p>第二，在Yu Writer中，不能直接插入磁盘上的图片文件的绝对地址，既没有在预览区域显示出来，也没有在文档列表显示成功。</p>
+<p>据说Yu Writer的作者的主业是厨师，感觉好强</p>
+<h2 id="Typora"><a href="#Typora" class="headerlink" title="Typora"></a>Typora</h2><p><a href="https://typora.io/" target="_blank" rel="noopener">Typora</a> is best。不同于前面提到的几款Markdown编辑器，Typora是“所见即所得”的编辑器。你敲入两个井号，加一个空格，再敲入你的标题内容，最后回车，那么标题内容就会被渲染为二级标题的形式，如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora_%E8%BE%93%E5%85%A5%E4%BA%8C%E7%BA%A7%E6%A0%87%E9%A2%98.gif" alt="Typora_输入二级标题"></p>
+<p>这么一来，屏幕上的空间基本都可以被用来写作，不需要担心被预览用的列给占据了。</p>
+<p>然后，Typora没有自定义它的存储结构，它直接打开磁盘上的.md文件进行编辑，这些Markdown源文件可以随心所欲地放在任何喜欢的目录下，只要能打开就行。再加上它文件树视图，就实现了不受限制的笔记组织方式了，如下图</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora_%E6%96%87%E4%BB%B6%E6%A0%91%E8%A7%86%E5%9B%BE.png" alt="Typora_文件树视图"></p>
+<p>不过一个可以想到的缺点，就是Typora不支持在所有的Markdown文件上搜索关键字——毕竟它也不知道要去哪个目录下寻找这些待搜索的源文件。</p>
+<p>尽管Typora外观很简洁，但Boostnote有的功能它一个也没有落下，就像它的官网所说的那样</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora%E7%9A%84%E5%AE%98%E7%BD%91%E5%AE%A3%E4%BC%A0.png" alt="Typora的官网宣传"></p>
+<p>现在我的博客的文章基本都是用Typora来写的，冥冥中感受到了一股乐趣。但Typora毕竟没有搜索功能，所以我又开始摸索额外的搜索笔记的方式了（比如把记录在.org文件中的FAQ导入到ElasticSearch中再借助全文搜索的力量来找到自己要的内容）。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>没有最好的，只有最适合的，祝各位都能找到最适合自己的Markdown编辑器。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" data-id="cjxx6yg1c00461u30hgc1ukjx" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/editor/">editor</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/typora/">typora</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编辑器/">编辑器</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-把GitHub作为图床" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/12/07/把GitHub作为图床/" class="article-date">
@@ -124,7 +204,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjxnc67uo0019s2304k1ykhb6" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/12/07/把GitHub作为图床/" data-id="cjxx6yg0y003n1u307jmyr5bj" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/12/07/把GitHub作为图床/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -189,7 +269,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjxnc67uw001us230gkqaeaiy" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="cjxx6yg1f004b1u30sxpz3cao" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -241,7 +321,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="cjxnc67v30029s230hprlgjvn" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="cjxx6yg1m004n1u30dm3r5gt3" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -296,7 +376,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/" data-id="cjxnc67ug000ss230fhmgh7zo" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/" data-id="cjxx6yg0j00351u309mwvtm13" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -353,7 +433,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/09/18/flexi-streams用法简介/" data-id="cjxnc67u9000gs230j7qfrop5" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/09/18/flexi-streams用法简介/" data-id="cjxx6yfzl000l1u30o4dvh1ol" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/09/18/flexi-streams用法简介/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -412,7 +492,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/" data-id="cjxnc67ud000ms230ebus9rls" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/" data-id="cjxx6yfzm000n1u30e634uq5n" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -465,7 +545,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/" data-id="cjxnc67u40006s230mricq005" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/" data-id="cjxx6yfzf000b1u30mz5141pk" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -528,7 +608,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="cjxnc67ub000ks230xwhkg43f" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="cjxx6yfzj000h1u30rsfrxfq8" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/06/04/cl-mongo用法入门/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -584,63 +664,12 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/05/18/远程请求Squid/" data-id="cjxnc67uz0021s230i3zh6cfv" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/05/18/远程请求Squid/" data-id="cjxx6yg1h004e1u30gfrumswg" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/05/18/远程请求Squid/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/squid/">squid</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/教程/">教程</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-如何使用CL实现snowflake" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/04/30/如何使用CL实现snowflake/" class="article-date">
-  <time datetime="2017-04-30T14:59:30.000Z" itemprop="datePublished">2017-04-30</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/30/如何使用CL实现snowflake/">如何使用CL实现snowflake</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR;"></a>TL;DR;</h2><p>这是一篇为了完成写作KPI而写的博客，总结起来就是提供了一种用Common Lisp实现来自于Twitter的雪花算法的实现方案。成品在<a href="https://github.com/Liutos/clitool/blob/master/cl/misc/snowflake.lisp" target="_blank" rel="noopener">这里</a>，本文只是简单地描述一下生成雪花ID的大致思路，详细内容请各位移步代码仓库查看。</p>
-<p>上述代码仓库中的snowflake算法——如果我的实现确实可以称作snowflake算法的话——的思路来自于下列两个地方：</p>
-<ol>
-<li><a href="http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/" target="_blank" rel="noopener">http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/</a></li>
-<li><a href="https://github.com/sony/sonyflake" target="_blank" rel="noopener">https://github.com/sony/sonyflake</a></li>
-</ol>
-<h2 id="如何获取时间戳"><a href="#如何获取时间戳" class="headerlink" title="如何获取时间戳"></a>如何获取时间戳</h2><p>Common Lisp本身提供了一个获取时间戳的函数，也就是<code>get-universal-time</code>，可惜的是，这个函数所返回的并不是通常意义上的<a href="https://en.wikipedia.org/wiki/Unix_time" target="_blank" rel="noopener">Epoch时间戳</a>，而是自己的一套计算时间的方式中的表示时间的整数。为了获得UNIX时间戳，需要借助于第三方库<a href="https://common-lisp.net/project/local-time/manual.html" target="_blank" rel="noopener"><code>local-time</code></a>。为了可以获取到毫秒精度的时间戳，一个可运行的函数如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> now ()</span><br><span class="line">  <span class="string">"Returns the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC."</span></span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">now</span> (<span class="name">local-time</span><span class="symbol">:now</span>))</span><br><span class="line">         (<span class="name">seconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-to-unix</span> now))</span><br><span class="line">         (<span class="name">milliseconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-millisecond</span> now)))</span><br><span class="line">    (<span class="name">+</span> (<span class="name">*</span> <span class="number">1000</span> seconds) milliseconds)))</span><br></pre></td></tr></table></figure>
-<h2 id="如何获取机器ID"><a href="#如何获取机器ID" class="headerlink" title="如何获取机器ID"></a>如何获取机器ID</h2><p>这里参考了Sony的雪花ID算法中的思路，基于机器的内网IP地址来生成机器ID。当然了，Common Lisp标准中是没有提供获取机器的内网IP地址的方法的，这一点也可以借助于第三方库实现，选用的是<a href="https://common-lisp.net/project/ip-interfaces/" target="_blank" rel="noopener"><code>ip-interfaces</code></a>。通过这个库提供的<code>get-ip-interfaces</code>函数可以获取到机器的所有“接口”，遍历这个接口的列表后即可找出其中的内网IP。一台机器可能会有多个内网IP，我的方法是选用了第一个找到的内网IP地址。当然了，还需要一个将向量转化为数值的函数，并取出转化为数值后的IP地址的低10位，作为机器ID。</p>
-<h2 id="序号"><a href="#序号" class="headerlink" title="序号"></a>序号</h2><p>如果希望生成的ID是保持递增的，那么就需要维护一个可以原子递增的数值计数器。在真实的使用中可以通过Redis的INCR指令来生成这一个ID，但是因为这里的雪花ID算法是作为一个独立的库实现的，不需要依赖于数据库等外部组建，因此这里就直接使用了Common Lisp自带的<code>random</code>函数来生成这个序号了。</p>
-<p>全文完</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" data-id="cjxnc67ug000us2306e6sjfvr" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li></ul>
 
     </footer>
   </div>
@@ -677,7 +706,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 12.86px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 12.86px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 17.14px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 11.43px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 17.14px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.43px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 15.71px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.57px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.43px;">macro</a> <a href="/tags/markdown/" style="font-size: 12.86px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12.86px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12.86px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 14.29px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.43px;">sequence diagram</a> <a href="/tags/sequencediagram/" style="font-size: 10px;">sequencediagram</a> <a href="/tags/setq/" style="font-size: 12.86px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.43px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.43px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 17.14px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.43px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.43px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.43px;">教程</a> <a href="/tags/数学/" style="font-size: 12.86px;">数学</a> <a href="/tags/时序图/" style="font-size: 10px;">时序图</a> <a href="/tags/汇编/" style="font-size: 17.14px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 11.43px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.43px;">算法</a> <a href="/tags/编译器/" style="font-size: 17.14px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.43px;">编辑器</a> <a href="/tags/语绘/" style="font-size: 10px;">语绘</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 12.5px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 12.5px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 17.5px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 11.25px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 17.5px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.25px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.75px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.25px;">macro</a> <a href="/tags/markdown/" style="font-size: 12.5px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12.5px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12.5px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 13.75px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.25px;">sequence diagram</a> <a href="/tags/sequencediagram/" style="font-size: 10px;">sequencediagram</a> <a href="/tags/setq/" style="font-size: 16.25px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.25px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.25px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 17.5px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.25px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.25px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.25px;">教程</a> <a href="/tags/数学/" style="font-size: 12.5px;">数学</a> <a href="/tags/时序图/" style="font-size: 10px;">时序图</a> <a href="/tags/汇编/" style="font-size: 17.5px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 11.25px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.25px;">算法</a> <a href="/tags/编译器/" style="font-size: 17.5px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.25px;">编辑器</a> <a href="/tags/语绘/" style="font-size: 10px;">语绘</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -699,11 +728,15 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <a href="/2019/07/10/调用C标准库的exit函数/">调用C标准库的exit函数</a>
+          </li>
+        
+          <li>
             <a href="/2019/07/03/编译大于运算符/">编译大于运算符</a>
           </li>
         
           <li>
-            <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/">inside-out:aux如何支持对_exit的调用</a>
+            <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/">inside-out/aux如何支持对_exit的调用</a>
           </li>
         
           <li>
@@ -712,10 +745,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/06/14/拆解嵌套的表达式/">拆解嵌套的表达式</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/11/支持四则运算中的变量/">支持四则运算中的变量</a>
           </li>
         
       </ul>

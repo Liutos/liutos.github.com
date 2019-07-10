@@ -75,6 +75,52 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-调用C标准库的exit函数" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/07/10/调用C标准库的exit函数/" class="article-date">
+  <time datetime="2019-07-10T11:58:06.000Z" itemprop="datePublished">2019-07-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/07/10/调用C标准库的exit函数/">调用C标准库的exit函数</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在<a href="http://liutos.github.io/2019/07/03/%E7%BC%96%E8%AF%91%E5%A4%A7%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6/">上一篇文章</a>中，实现了对大于号（<code>&gt;</code>）的处理，那么对<code>if</code>表达式的编译也就是信手拈来的事了，不解释太多。在本篇中，将会讲述一下如何产生可以调用来自于C语言标准库的<code>exit(3)</code>函数的汇编代码。</p>
+<p>在Common Lisp中并没有一个叫做<code>EXIT</code>的内置函数，所以如同之前实现的<code>_exit</code>一样，我会新增一种需要识别的<code>(first expr)</code>，即符号<code>exit</code>。为了可以调用C语言标准库中的<code>exit</code>函数，需要遵循调用约定。对于<code>exit</code>这种只有一个参数的函数而言，情形比较简单，只需要跟对<code>_exit</code>一样处理即可。刚开始，我写下的代码是这样的</p>
+        
+          <p class="article-more-link">
+            <a href="/2019/07/10/调用C标准库的exit函数/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="cjxx6yg1i004g1u30dzphi8f5" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-编译大于运算符" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/03/编译大于运算符/" class="article-date">
@@ -98,7 +144,7 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="articleBody">
       
         <p>原定的计划中这一篇应当是要讲如何编译<a href="http://clhs.lisp.se/Body/s_if.htm" target="_blank" rel="noopener">if</a>表达式的，但是我发现没什么东西可以作为if的test-form的部分的表达式，所以觉得，要不还是先实现一下比较两个数字这样子的功能吧。说干就干，我决定用大于运算符来作为例子——大于运算符就是指<a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_eq_sle.htm#GT" target="_blank" rel="noopener"><code>&gt;</code></a>啦。所以，我的目标是要编译下面这样的代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(&gt; 1 2)</span><br></pre></td></tr></table></figure>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">&gt;</span> <span class="number">1</span> <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
         
           <p class="article-more-link">
             <a href="/2019/07/03/编译大于运算符/#more">Read More</a>
@@ -107,11 +153,13 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/03/编译大于运算符/" data-id="cjxnc67ux001xs230dfkktky9" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/07/03/编译大于运算符/" data-id="cjxx6yg1j004j1u30cliaqt9h" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/07/03/编译大于运算符/#disqus_thread" class="article-comment-link">Comments</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
+
     </footer>
   </div>
   
@@ -133,7 +181,7 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/26/inside-out-aux如何支持对-exit的调用/">inside-out:aux如何支持对_exit的调用</a>
+      <a class="article-title" href="/2019/06/26/inside-out-aux如何支持对-exit的调用/">inside-out/aux如何支持对_exit的调用</a>
     </h1>
   
 
@@ -153,11 +201,13 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/" data-id="cjxnc67ue000os230qtfcztym" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/" data-id="cjxx6yfzh000d1u30yba9eoud" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/#disqus_thread" class="article-comment-link">Comments</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
+
     </footer>
   </div>
   
@@ -206,7 +256,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="cjxnc67uu001ns230la3ze12f" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="cjxx6yg17003z1u30s73ztk15" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -255,7 +305,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="cjxnc67uq001ds230sjybcwpc" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="cjxx6yg10003p1u301r10amsb" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -302,7 +352,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="cjxnc67uu001ps230wugzzr4j" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="cjxx6yg13003u1u30bfv1ltj7" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/11/支持四则运算中的变量/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -350,7 +400,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="cjxnc67un0018s230id7gmm3w" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="cjxx6yg0s003g1u30bpjq18j0" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/01/如何编译setq？/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -403,7 +453,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/27/如何编译progn/" data-id="cjxnc67uj0010s230xoy4j8u6" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/27/如何编译progn/" data-id="cjxx6yg0p003c1u304turrfag" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/27/如何编译progn/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -451,7 +501,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="cjxnc67up001bs230hk5io1kp" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="cjxx6yg15003x1u30nr2p0863" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/23/支持减、乘，以及除/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -498,59 +548,12 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/21/Evernote与Leanote/" data-id="cjxnc67u50008s230cjf9sbfx" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/21/Evernote与Leanote/" data-id="cjxx6yfze00081u309fici3e3" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/21/Evernote与Leanote/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/evernote/">evernote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leanote/">leanote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note-taking/">note taking</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-一个简陋的四则运算编译器实现" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/05/17/一个简陋的四则运算编译器实现/" class="article-date">
-  <time datetime="2019-05-17T13:57:50.000Z" itemprop="datePublished">2019-05-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/17/一个简陋的四则运算编译器实现/">一个简陋的四则运算编译器实现</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文很水。</p>
-<p>有一天，我心血来潮想要写一个将Common Lisp编译成汇编（x64那种）的编译器。我喜欢Common Lisp这门语言，它非常好玩，有许多有趣的特性（宏、condition system等），并且它的生态很贫瘠，有很多造轮子的机会。因为我懂的还不够多，所以没法从源代码一步到位生成可执行文件，只好先输出汇编代码，再利用现成的汇编器（比如as、nasm）从这些输出内容生成可执行文件。至于这东西是不是真的算是编译器，我也不是很在意。</p>
-<p>好了，我要开始表演了。</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/05/17/一个简陋的四则运算编译器实现/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/" data-id="cjxnc67uc000ls230w70kvb7k" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
 
     </footer>
   </div>
@@ -587,7 +590,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 12.86px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 12.86px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 17.14px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 11.43px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 17.14px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.43px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 15.71px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.57px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.43px;">macro</a> <a href="/tags/markdown/" style="font-size: 12.86px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12.86px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12.86px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 14.29px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.43px;">sequence diagram</a> <a href="/tags/sequencediagram/" style="font-size: 10px;">sequencediagram</a> <a href="/tags/setq/" style="font-size: 12.86px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.43px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.43px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 17.14px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.43px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.43px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.43px;">教程</a> <a href="/tags/数学/" style="font-size: 12.86px;">数学</a> <a href="/tags/时序图/" style="font-size: 10px;">时序图</a> <a href="/tags/汇编/" style="font-size: 17.14px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 11.43px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.43px;">算法</a> <a href="/tags/编译器/" style="font-size: 17.14px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.43px;">编辑器</a> <a href="/tags/语绘/" style="font-size: 10px;">语绘</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 12.5px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 12.5px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 17.5px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 11.25px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 17.5px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.25px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.75px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.25px;">macro</a> <a href="/tags/markdown/" style="font-size: 12.5px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12.5px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12.5px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 13.75px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.25px;">sequence diagram</a> <a href="/tags/sequencediagram/" style="font-size: 10px;">sequencediagram</a> <a href="/tags/setq/" style="font-size: 16.25px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.25px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.25px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 17.5px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.25px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.25px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.25px;">教程</a> <a href="/tags/数学/" style="font-size: 12.5px;">数学</a> <a href="/tags/时序图/" style="font-size: 10px;">时序图</a> <a href="/tags/汇编/" style="font-size: 17.5px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 11.25px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.25px;">算法</a> <a href="/tags/编译器/" style="font-size: 17.5px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.25px;">编辑器</a> <a href="/tags/语绘/" style="font-size: 10px;">语绘</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -609,11 +612,15 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <a href="/2019/07/10/调用C标准库的exit函数/">调用C标准库的exit函数</a>
+          </li>
+        
+          <li>
             <a href="/2019/07/03/编译大于运算符/">编译大于运算符</a>
           </li>
         
           <li>
-            <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/">inside-out:aux如何支持对_exit的调用</a>
+            <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/">inside-out/aux如何支持对_exit的调用</a>
           </li>
         
           <li>
@@ -622,10 +629,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/06/14/拆解嵌套的表达式/">拆解嵌套的表达式</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/11/支持四则运算中的变量/">支持四则运算中的变量</a>
           </li>
         
       </ul>
