@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2019-07-10T13:40:54.544Z</updated>
+  <updated>2019-08-11T14:38:59.036Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一个有用的org-agenda-custom-commands的例子</title>
+    <link href="https://liutos.github.io/2019/08/11/%E4%B8%80%E4%B8%AA%E6%9C%89%E7%94%A8%E7%9A%84org-agenda-custom-commands%E7%9A%84%E4%BE%8B%E5%AD%90/"/>
+    <id>https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/</id>
+    <published>2019-08-11T14:37:28.000Z</published>
+    <updated>2019-08-11T14:38:59.036Z</updated>
+    
+    <content type="html"><![CDATA[<p>好久没有写了，文章的开头，照例还是要吹吹水的。</p><p>自从更新了基于org-mode的待办事项的管理模式后，感觉整个人都日益神清气爽起来。究其原因，大概是因为现在处理inbox.org和安排第二天的行程的时候，有一个相对可行的操作方法可以参考了，所以每次处理这两件事情的时候，也就没有那么纠结了。同时，还因为采取了一种尽量goal-oriented的TODO管理方法，最大程度上杜绝了一些不必要的TODO被收集起来，从而也减轻了内心的焦虑感。</p><p>言归正传，这篇文章是要讲一个我自定义的org-mode的Agenda视图的command的。这条命令是下面这样子的</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> org-agenda-custom-commands</span><br><span class="line">      '((<span class="string">"f"</span> <span class="string">"查看TODO条目（按创建时间排序）"</span> todo <span class="string">"TODO"</span></span><br><span class="line">         ((org-agenda-sorting-strategy '(priority-down time-up))))))</span><br></pre></td></tr></table></figure><p>俗话说的好，要检验自己是不是懂得某个东西，只要看看自己能不能把这个东西给别人讲清楚就可以了。如果讲清楚了，没有哪里需要emmmm的地方，那么就可以认为这个东西基本上自己是真的懂得了。</p><p>那么<code>org-agenda-custom-commands</code>是干嘛用的呢。官方文档的链接在这里：<a href="https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html" target="_blank" rel="noopener">https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html</a> ——哎哟喂，其实如果你们身处在Emacs之中来看这篇文章的话，只要按下<code>C-h v</code>，然后在minibuffer中输入<code>org-agenda-custom-commands</code>的话，也就可以看到关于这个变量的说明了啦。不过上面这个文档的好处是它有附赠一些例子。</p><p>总而言之，<code>org-agenda-custom-commands</code>是一个变量，通过给这个变量赋值，可以在<code>org-mode</code>的Agenda视图中，添加一些自定义的功能及对应的快捷键。例如，如果在Emacs中求值我上面所给的Elisp代码，然后按下<code>C-c a</code>，便会看到类似于下面这样的提示</p><p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84Agenda%E8%A7%86%E5%9B%BE%E6%8F%90%E9%86%92%E4%BF%A1%E6%81%AF.png" alt=""></p><p>这时候，如果按下<code>f</code>键，Emacs就会按照上面代码中描述的那样找出所有关键字为<code>TODO</code>的条目，然后按照【先优先级降序，然后时间戳升序】的方式来排列它们。在我的电脑上的效果如下图所示</p><p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E7%9A%84%E6%95%88%E6%9E%9C.png" alt=""></p><p>可以看到，首先出现的条目是标注为最高的A优先级的两条，然后是在heading内容的开头含有时间戳的条目。</p><p>对我来说，这样的一个好处是可以将未处理过的TODO按照时间顺序列出来，从而避免了所有的TODO条目先是按照文件的名称集中起来，然后又按照它们在文件中的顺序从上往下地排列起来。毕竟文件内的TODO都是聚合在各自不同的更高级的heading之下的，它们之间的上下关系体现不出什么东西。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+    
+      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
+    
+      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
+      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
+    
+      <category term="gtd" scheme="https://liutos.github.io/tags/gtd/"/>
+    
+  </entry>
   
   <entry>
     <title>调用C标准库的exit函数</title>
@@ -41,13 +73,13 @@
     
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
+      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
+    
       <category term="x64" scheme="https://liutos.github.io/tags/x64/"/>
     
       <category term="汇编" scheme="https://liutos.github.io/tags/%E6%B1%87%E7%BC%96/"/>
     
       <category term="编译器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
-    
-      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
   </entry>
   
@@ -76,13 +108,13 @@
     
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
+      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
+    
       <category term="x64" scheme="https://liutos.github.io/tags/x64/"/>
     
       <category term="汇编" scheme="https://liutos.github.io/tags/%E6%B1%87%E7%BC%96/"/>
     
       <category term="编译器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
-    
-      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
   </entry>
   
@@ -113,13 +145,13 @@
     
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
+      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
+    
       <category term="x64" scheme="https://liutos.github.io/tags/x64/"/>
     
       <category term="汇编" scheme="https://liutos.github.io/tags/%E6%B1%87%E7%BC%96/"/>
     
       <category term="编译器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
-    
-      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
   </entry>
   
@@ -181,13 +213,13 @@
     
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
+      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
+    
       <category term="x64" scheme="https://liutos.github.io/tags/x64/"/>
     
       <category term="汇编" scheme="https://liutos.github.io/tags/%E6%B1%87%E7%BC%96/"/>
     
       <category term="编译器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
-    
-      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
   </entry>
   
@@ -217,13 +249,13 @@
     
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
+      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
+    
       <category term="x64" scheme="https://liutos.github.io/tags/x64/"/>
     
       <category term="汇编" scheme="https://liutos.github.io/tags/%E6%B1%87%E7%BC%96/"/>
     
       <category term="编译器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
-    
-      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
   </entry>
   
@@ -254,13 +286,13 @@
     
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
+      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
+    
       <category term="x64" scheme="https://liutos.github.io/tags/x64/"/>
     
       <category term="汇编" scheme="https://liutos.github.io/tags/%E6%B1%87%E7%BC%96/"/>
     
       <category term="编译器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
-    
-      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
   </entry>
   
@@ -420,8 +452,6 @@
     </summary>
     
     
-      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
-    
       <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
     
       <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
@@ -429,6 +459,8 @@
       <category term="markdown" scheme="https://liutos.github.io/tags/markdown/"/>
     
       <category term="note taking" scheme="https://liutos.github.io/tags/note-taking/"/>
+    
+      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
     
       <category term="sequence diagram" scheme="https://liutos.github.io/tags/sequence-diagram/"/>
     
@@ -524,9 +556,9 @@
     </summary>
     
     
-      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
-    
       <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
+    
+      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
@@ -624,9 +656,9 @@
     </summary>
     
     
-      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
-    
       <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
+    
+      <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
   </entry>
   
@@ -655,40 +687,6 @@
       <category term="2018" scheme="https://liutos.github.io/tags/2018/"/>
     
       <category term="总结" scheme="https://liutos.github.io/tags/%E6%80%BB%E7%BB%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>如何随机挑选要做的任务</title>
-    <link href="https://liutos.github.io/2018/12/15/%E5%A6%82%E4%BD%95%E9%9A%8F%E6%9C%BA%E6%8C%91%E9%80%89%E8%A6%81%E5%81%9A%E7%9A%84%E4%BB%BB%E5%8A%A1/"/>
-    <id>https://liutos.github.io/2018/12/15/如何随机挑选要做的任务/</id>
-    <published>2018-12-15T14:50:39.000Z</published>
-    <updated>2019-01-09T15:20:35.498Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>由于个人喜好的因素，选择了用Emacs的org-mode来实践GTD，管理自己的任务和安排日程。但也因为个人喜好的因素，导致在安排第二天的计划，从积累的TODO列表中挑选要做的事情时，总会下意识地跳过一些一看就很麻烦的任务。久而久之，在列表的顶部，便堆积着一些好久前就创建的TODO。而因为总是从上往下挑选任务，列表的底部则是堆积着好久没有露脸的TODO。有不见者，三十六年。</p><p>迫切需要一个办法来解决这个难题，但若真的一丝不苟地从上往下处理每一条TODO又觉得没意思，该怎么办？不如从中随机地挑选TODO来安排到第二天的日程中？Sounds good。</p><h2 id="如何实现"><a href="#如何实现" class="headerlink" title="如何实现"></a>如何实现</h2><p>一开始，我是打算找找现成的类似功能的，不过放狗搜了一番后并没有什么收获。之后的某天我忽然意识到，.org文件不过就是普通的文本文件而已，直接用命令行工具处理就好了呀。摸索一番之后才知道并不难，成果就是下面这段简单的shell命令</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -name '*.org' ! -name 'trash.org' ! -name 'work.org' -exec grep -Hn '\*\* TODO' &#123;&#125; \; | sort -R | head -3</span><br></pre></td></tr></table></figure><p>稍微解释一下。首先登场的是<code>find</code>，它用来遍历目录下的所有.org文件——因为我把TODO按照不同的领域放到了不同的.org文件下。传递给<code>find</code>的参数的意思，是“匹配所有文件名以.org结尾、但既不叫trash.org、也不叫work.org的文件”</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-name '*.org' ! -name 'trash.org' ! -name 'work.org'</span><br></pre></td></tr></table></figure><p>trash.org是垃圾箱，work.org存放的是工作相关的任务——我可不喜欢把工作安排到自己的闲暇时光里。</p><p>通过<code>-exec</code>让<code>find</code>调用<code>grep</code>从.org文件中过滤出符合条件的带有TODO关键字的行——在我的.org文件中，有很多行是没有TODO关键字的非任务型的内容，它们可能是一个目标、一个分类，甚至可以是某个TODO条目下的“笔记”。用下面的正则即可筛选出想要的内容</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">'\*\* TODO'</span><br></pre></td></tr></table></figure><p>总和运用<code>find</code>和<code>grep</code>后，便到了从中挑选的环节了。虽然开始的时候提到的是“随机地挑选”，但可以参考音乐播放器的“随机播放”功能的做法，即先将所有的TODO条目随机排序，然后从头开始按顺序取出前几个。<code>sort</code>命令的<code>-R</code>选项已经实现了随机排序，再用<code>head</code>选取前3个即可。</p><p>全文完</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="find" scheme="https://liutos.github.io/tags/find/"/>
-    
-      <category term="grep" scheme="https://liutos.github.io/tags/grep/"/>
-    
-      <category term="sort" scheme="https://liutos.github.io/tags/sort/"/>
-    
-      <category term="head" scheme="https://liutos.github.io/tags/head/"/>
-    
-      <category term="gtd" scheme="https://liutos.github.io/tags/gtd/"/>
     
   </entry>
   

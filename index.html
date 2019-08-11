@@ -75,6 +75,58 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-一个有用的org-agenda-custom-commands的例子" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/" class="article-date">
+  <time datetime="2019-08-11T14:37:28.000Z" itemprop="datePublished">2019-08-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/">一个有用的org-agenda-custom-commands的例子</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>好久没有写了，文章的开头，照例还是要吹吹水的。</p>
+<p>自从更新了基于org-mode的待办事项的管理模式后，感觉整个人都日益神清气爽起来。究其原因，大概是因为现在处理inbox.org和安排第二天的行程的时候，有一个相对可行的操作方法可以参考了，所以每次处理这两件事情的时候，也就没有那么纠结了。同时，还因为采取了一种尽量goal-oriented的TODO管理方法，最大程度上杜绝了一些不必要的TODO被收集起来，从而也减轻了内心的焦虑感。</p>
+<p>言归正传，这篇文章是要讲一个我自定义的org-mode的Agenda视图的command的。这条命令是下面这样子的</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> org-agenda-custom-commands</span><br><span class="line">      '((<span class="string">"f"</span> <span class="string">"查看TODO条目（按创建时间排序）"</span> todo <span class="string">"TODO"</span></span><br><span class="line">         ((org-agenda-sorting-strategy '(priority-down time-up))))))</span><br></pre></td></tr></table></figure>
+<p>俗话说的好，要检验自己是不是懂得某个东西，只要看看自己能不能把这个东西给别人讲清楚就可以了。如果讲清楚了，没有哪里需要emmmm的地方，那么就可以认为这个东西基本上自己是真的懂得了。</p>
+<p>那么<code>org-agenda-custom-commands</code>是干嘛用的呢。官方文档的链接在这里：<a href="https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html" target="_blank" rel="noopener">https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html</a> ——哎哟喂，其实如果你们身处在Emacs之中来看这篇文章的话，只要按下<code>C-h v</code>，然后在minibuffer中输入<code>org-agenda-custom-commands</code>的话，也就可以看到关于这个变量的说明了啦。不过上面这个文档的好处是它有附赠一些例子。</p>
+<p>总而言之，<code>org-agenda-custom-commands</code>是一个变量，通过给这个变量赋值，可以在<code>org-mode</code>的Agenda视图中，添加一些自定义的功能及对应的快捷键。例如，如果在Emacs中求值我上面所给的Elisp代码，然后按下<code>C-c a</code>，便会看到类似于下面这样的提示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84Agenda%E8%A7%86%E5%9B%BE%E6%8F%90%E9%86%92%E4%BF%A1%E6%81%AF.png" alt=""></p>
+<p>这时候，如果按下<code>f</code>键，Emacs就会按照上面代码中描述的那样找出所有关键字为<code>TODO</code>的条目，然后按照【先优先级降序，然后时间戳升序】的方式来排列它们。在我的电脑上的效果如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E7%9A%84%E6%95%88%E6%9E%9C.png" alt=""></p>
+<p>可以看到，首先出现的条目是标注为最高的A优先级的两条，然后是在heading内容的开头含有时间戳的条目。</p>
+<p>对我来说，这样的一个好处是可以将未处理过的TODO按照时间顺序列出来，从而避免了所有的TODO条目先是按照文件的名称集中起来，然后又按照它们在文件中的顺序从上往下地排列起来。毕竟文件内的TODO都是聚合在各自不同的更高级的heading之下的，它们之间的上下关系体现不出什么东西。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/" data-id="cjz72q7z4000rci307kv29c3e" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elisp/">elisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gtd/">gtd</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/org-mode/">org-mode</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-调用C标准库的exit函数" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/10/调用C标准库的exit函数/" class="article-date">
@@ -107,7 +159,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="cjxx6yg1i004g1u30dzphi8f5" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="cjz72q7zq0026ci306wq45abj" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -153,7 +205,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/03/编译大于运算符/" data-id="cjxx6yg1j004j1u30cliaqt9h" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/07/03/编译大于运算符/" data-id="cjz72q7zn001zci30rw4kf1kp" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/07/03/编译大于运算符/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -201,7 +253,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/" data-id="cjxx6yfzh000d1u30yba9eoud" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/" data-id="cjz72q7z2000mci30oc8i7ktm" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -256,7 +308,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="cjxx6yg17003z1u30s73ztk15" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="cjz72q7zl001uci30jux1i51q" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -305,7 +357,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="cjxx6yg10003p1u301r10amsb" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="cjz72q7zf001gci30rt2hsqhz" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -352,7 +404,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="cjxx6yg13003u1u30bfv1ltj7" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="cjz72q7zi001nci30zs1pwr7h" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/11/支持四则运算中的变量/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -400,7 +452,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="cjxx6yg0s003g1u30bpjq18j0" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="cjz72q7zb0016ci3013ppnfni" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/01/如何编译setq？/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -453,7 +505,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/27/如何编译progn/" data-id="cjxx6yg0p003c1u304turrfag" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/27/如何编译progn/" data-id="cjz72q7z80011ci30colv0wvu" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/27/如何编译progn/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -501,59 +553,12 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="cjxx6yg15003x1u30nr2p0863" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="cjz72q7zg001ici30c7qjx5j7" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/23/支持减、乘，以及除/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Evernote与Leanote" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/05/21/Evernote与Leanote/" class="article-date">
-  <time datetime="2019-05-21T14:38:19.000Z" itemprop="datePublished">2019-05-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/21/Evernote与Leanote/">Evernote与Leanote</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近开始重新用起了Evernote，当然还有Leanote，不过不算是“重新“而已。这两者各有各的优缺点，下面分别列举一下</p>
-<h2 id="Evernote的优缺点以及和Leanote的对比"><a href="#Evernote的优缺点以及和Leanote的对比" class="headerlink" title="Evernote的优缺点以及和Leanote的对比"></a>Evernote的优缺点以及和Leanote的对比</h2><p>Evernote可以比较灵活地调整文字的字号，如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Evernote%E4%B8%AD%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png" alt="image-20190515124117460"></p>
-        
-          <p class="article-more-link">
-            <a href="/2019/05/21/Evernote与Leanote/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/21/Evernote与Leanote/" data-id="cjxx6yfze00081u309fici3e3" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2019/05/21/Evernote与Leanote/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/evernote/">evernote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/leanote/">leanote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note-taking/">note taking</a></li></ul>
 
     </footer>
   </div>
@@ -590,7 +595,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 12.5px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 12.5px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 17.5px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 11.25px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 17.5px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.25px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 10px;">elisp</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 10px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.75px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.25px;">macro</a> <a href="/tags/markdown/" style="font-size: 12.5px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12.5px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 12.5px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 13.75px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.25px;">sequence diagram</a> <a href="/tags/sequencediagram/" style="font-size: 10px;">sequencediagram</a> <a href="/tags/setq/" style="font-size: 16.25px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.25px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.25px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 17.5px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.25px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.25px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.25px;">教程</a> <a href="/tags/数学/" style="font-size: 12.5px;">数学</a> <a href="/tags/时序图/" style="font-size: 10px;">时序图</a> <a href="/tags/汇编/" style="font-size: 17.5px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 11.25px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.25px;">算法</a> <a href="/tags/编译器/" style="font-size: 17.5px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.25px;">编辑器</a> <a href="/tags/语绘/" style="font-size: 10px;">语绘</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 12.86px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 12.86px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 17.14px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 11.43px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 17.14px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.43px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 11.43px;">elisp</a> <a href="/tags/emacs/" style="font-size: 15.71px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 11.43px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.57px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.43px;">macro</a> <a href="/tags/markdown/" style="font-size: 12.86px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12.86px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 14.29px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 14.29px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.43px;">sequence diagram</a> <a href="/tags/sequencediagram/" style="font-size: 10px;">sequencediagram</a> <a href="/tags/setq/" style="font-size: 15.71px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.43px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.43px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 17.14px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.43px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.43px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.43px;">教程</a> <a href="/tags/数学/" style="font-size: 12.86px;">数学</a> <a href="/tags/时序图/" style="font-size: 10px;">时序图</a> <a href="/tags/汇编/" style="font-size: 17.14px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 11.43px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.43px;">算法</a> <a href="/tags/编译器/" style="font-size: 17.14px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.43px;">编辑器</a> <a href="/tags/语绘/" style="font-size: 10px;">语绘</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -599,7 +604,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
     </div>
   </div>
 
@@ -610,6 +615,10 @@ ga('send', 'pageview');
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/">一个有用的org-agenda-custom-commands的例子</a>
+          </li>
         
           <li>
             <a href="/2019/07/10/调用C标准库的exit函数/">调用C标准库的exit函数</a>
@@ -625,10 +634,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/06/18/时序图绘制工具走马观花/">时序图绘制工具走马观花</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/14/拆解嵌套的表达式/">拆解嵌套的表达式</a>
           </li>
         
       </ul>

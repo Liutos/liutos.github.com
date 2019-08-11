@@ -18,20 +18,23 @@ ga('send', 'pageview');
 
 
   
-  <title>支持四则运算中的变量 | Hexo</title>
+  <title>一个有用的org-agenda-custom-commands的例子 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在上一篇文章中，jjcc2函数实现了对setq这个语句的编译。这么一来，便可以将加减乘除运算中的嵌套表达式都替换为变量了。比如，将 1(+ (+ 1 2) 3) 中的嵌套的表达式(+ 1 2)用一个变量G564代替，变成">
-<meta name="keywords" content="common lisp,assembly,compiler,lisp,setq,x64,汇编,编译器">
+  <meta name="description" content="好久没有写了，文章的开头，照例还是要吹吹水的。 自从更新了基于org-mode的待办事项的管理模式后，感觉整个人都日益神清气爽起来。究其原因，大概是因为现在处理inbox.org和安排第二天的行程的时候，有一个相对可行的操作方法可以参考了，所以每次处理这两件事情的时候，也就没有那么纠结了。同时，还因为采取了一种尽量goal-oriented的TODO管理方法，最大程度上杜绝了一些不必要的TODO被">
+<meta name="keywords" content="org-mode,emacs,elisp,gtd">
 <meta property="og:type" content="article">
-<meta property="og:title" content="支持四则运算中的变量">
-<meta property="og:url" content="https://liutos.github.io/2019/06/11/支持四则运算中的变量/index.html">
+<meta property="og:title" content="一个有用的org-agenda-custom-commands的例子">
+<meta property="og:url" content="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="在上一篇文章中，jjcc2函数实现了对setq这个语句的编译。这么一来，便可以将加减乘除运算中的嵌套表达式都替换为变量了。比如，将 1(+ (+ 1 2) 3) 中的嵌套的表达式(+ 1 2)用一个变量G564代替，变成">
+<meta property="og:description" content="好久没有写了，文章的开头，照例还是要吹吹水的。 自从更新了基于org-mode的待办事项的管理模式后，感觉整个人都日益神清气爽起来。究其原因，大概是因为现在处理inbox.org和安排第二天的行程的时候，有一个相对可行的操作方法可以参考了，所以每次处理这两件事情的时候，也就没有那么纠结了。同时，还因为采取了一种尽量goal-oriented的TODO管理方法，最大程度上杜绝了一些不必要的TODO被">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-06-11T13:37:53.919Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84Agenda%E8%A7%86%E5%9B%BE%E6%8F%90%E9%86%92%E4%BF%A1%E6%81%AF.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E7%9A%84%E6%95%88%E6%9E%9C.png">
+<meta property="og:updated_time" content="2019-08-11T14:38:59.036Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="支持四则运算中的变量">
-<meta name="twitter:description" content="在上一篇文章中，jjcc2函数实现了对setq这个语句的编译。这么一来，便可以将加减乘除运算中的嵌套表达式都替换为变量了。比如，将 1(+ (+ 1 2) 3) 中的嵌套的表达式(+ 1 2)用一个变量G564代替，变成">
+<meta name="twitter:title" content="一个有用的org-agenda-custom-commands的例子">
+<meta name="twitter:description" content="好久没有写了，文章的开头，照例还是要吹吹水的。 自从更新了基于org-mode的待办事项的管理模式后，感觉整个人都日益神清气爽起来。究其原因，大概是因为现在处理inbox.org和安排第二天的行程的时候，有一个相对可行的操作方法可以参考了，所以每次处理这两件事情的时候，也就没有那么纠结了。同时，还因为采取了一种尽量goal-oriented的TODO管理方法，最大程度上杜绝了一些不必要的TODO被">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84Agenda%E8%A7%86%E5%9B%BE%E6%8F%90%E9%86%92%E4%BF%A1%E6%81%AF.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -78,10 +81,10 @@ ga('send', 'pageview');
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-支持四则运算中的变量" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main"><article id="post-一个有用的org-agenda-custom-commands的例子" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/06/11/支持四则运算中的变量/" class="article-date">
-  <time datetime="2019-06-11T13:30:41.000Z" itemprop="datePublished">2019-06-11</time>
+    <a href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/" class="article-date">
+  <time datetime="2019-08-11T14:37:28.000Z" itemprop="datePublished">2019-08-11</time>
 </a>
     
   </div>
@@ -92,7 +95,7 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      支持四则运算中的变量
+      一个有用的org-agenda-custom-commands的例子
     </h1>
   
 
@@ -100,35 +103,28 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在<a href="http://liutos.github.io/2019/06/01/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91setq%EF%BC%9F/">上一篇文章</a>中，<code>jjcc2</code>函数实现了对<code>setq</code>这个语句的编译。这么一来，便可以将加减乘除运算中的嵌套表达式都替换为变量了。比如，将</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>) <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-<p>中的嵌套的表达式<code>(+ 1 2)</code>用一个变量<code>G564</code>代替，变成</p>
-<a id="more"></a>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">PROGN</span></span><br><span class="line">  (<span class="name">SETQ</span> #<span class="symbol">:G564</span> (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line">  (<span class="name">+</span> #<span class="symbol">:G564</span> <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
-<p>PS：上面的结果中的<code>#:G564</code>只是打印出来的时候长这个样子而已，实际地输入这段代码的话，两个<code>#:G564</code>其实是不同的符号，会导致未绑定的变量的错误的。</p>
-<p>言归正传。既然如此，现在就要来支持编译<code>(+ #:G564 3)</code>这样的表达式了。其实这个真的是太简单了，只需要将这个符号塞入到<code>jjcc2</code>的第二个参数的<code>globals</code>中，然后在生成的“汇编指令”的S表达式中，嵌入这个符号即可。</p>
-<p>我刚开始的时候也是这么想的，后来发现这样出来的代码编译不过，哭</p>
-<p>折腾了一小段时间后，才知道原来有一种叫做“RIP-relative”的东西——好吧，我的X64的汇编语言知识也是赶鸭子上架的，遇到什么问题就放狗搜，所以完全不成体系——总之，我找到了解决办法，就是将原本放入一个符号的操作数，替换为类似于下面这样的内容</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">G564(%RIP)</span><br></pre></td></tr></table></figure>
-<p>所以对于操作数，实际上还需要先判断一下其类型。如果是整数，就按照原来的方式原样输出；如果是符号，就生成像上面这样的RIP-relative的结构。这部分太经常出现了，于是提炼出了一个专门处理四则运算的操作数的辅助函数<code>get-operand</code></p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> get-operand (<span class="name">expr</span> n)</span><br><span class="line">  <span class="string">"从EXPR中提取出第N个操作数，操作数的下标从0开始计算"</span></span><br><span class="line">  (<span class="name">check-type</span> expr list)</span><br><span class="line">  (<span class="name">check-type</span> n integer)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">e</span> (<span class="name">nth</span> (<span class="number">1</span>+ n) expr)))</span><br><span class="line">    (<span class="name">etypecase</span> e</span><br><span class="line">      (<span class="name">integer</span> e)</span><br><span class="line">      (<span class="name">symbol</span> (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"~A(%RIP)"</span> e)))))</span><br></pre></td></tr></table></figure>
-<p>借助它重写<code>jjcc2</code>，结果如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span> globals)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">check-type</span> globals hash-table)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (addl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '-)</span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (subl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '*)</span><br><span class="line">         <span class="comment">;; 将两个数字相乘的结果放到第二个操作数所在的寄存器中</span></span><br><span class="line">         <span class="comment">;; 因为约定了用EAX寄存器作为存放最终结果给continuation用的寄存器，所以第二个操作数应当为EAX</span></span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (imull %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '/)</span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (cltd)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (idivl %ebx)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'progn)</span><br><span class="line">         (<span class="name">let</span> ((<span class="name">result</span> '()))</span><br><span class="line">           (<span class="name">dolist</span> (<span class="name">expr</span> (<span class="name">rest</span> expr))</span><br><span class="line">             (<span class="name">setf</span> result (<span class="name">append</span> result (<span class="name">jjcc2</span> expr globals))))</span><br><span class="line">           result))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'setq)</span><br><span class="line">         <span class="comment">;; 编译赋值语句的方式比较简单，就是将被赋值的符号视为一个全局变量，然后将eax寄存器中的内容移动到这里面去</span></span><br><span class="line">         <span class="comment">;; <span class="doctag">TODO:</span> 这里expr的second的结果必须是一个符号才行</span></span><br><span class="line">         <span class="comment">;; <span class="doctag">FIXME:</span> 不知道应该赋值什么比较好，先随便写个0吧</span></span><br><span class="line">         (<span class="name">setf</span> (<span class="name">gethash</span> (<span class="name">second</span> expr) globals) <span class="number">0</span>)</span><br><span class="line">         (<span class="name">values</span> (<span class="name">append</span> (<span class="name">jjcc2</span> (<span class="name">third</span> expr) globals)</span><br><span class="line">                         <span class="comment">;; 为了方便stringify函数的实现，这里直接构造出RIP-relative形式的字符串</span></span><br><span class="line">                         `((movl %eax ,(get-operand expr <span class="number">0</span>))))</span><br><span class="line">                 globals))))</span><br></pre></td></tr></table></figure>
-<p>现在，如果运行下面的这个<code>example1</code>函数</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> example1 ()</span><br><span class="line">  <span class="string">"验证jjcc2确实可以处理含有变量的加减乘除运算"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">ht</span> (<span class="name">make-hash-table</span>)))</span><br><span class="line">    (<span class="name">setf</span> (<span class="name">gethash</span> 'a ht) <span class="number">1</span>)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">asm</span> (<span class="name">jjcc2</span> '(+ a a) ht)))</span><br><span class="line">      (<span class="name">stringify</span> asm ht))))</span><br></pre></td></tr></table></figure>
-<p>便可以得到下面这段汇编代码了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">        .data</span><br><span class="line">A: .long 1</span><br><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL A(%RIP), %EAX</span><br><span class="line">        MOVL A(%RIP), %EBX</span><br><span class="line">        ADDL %EBX, %EAX</span><br><span class="line">        movl %eax, %edi</span><br><span class="line">        movl $0x2000001, %eax</span><br><span class="line">        syscall</span><br></pre></td></tr></table></figure>
-<p>全文完。</p>
+        <p>好久没有写了，文章的开头，照例还是要吹吹水的。</p>
+<p>自从更新了基于org-mode的待办事项的管理模式后，感觉整个人都日益神清气爽起来。究其原因，大概是因为现在处理inbox.org和安排第二天的行程的时候，有一个相对可行的操作方法可以参考了，所以每次处理这两件事情的时候，也就没有那么纠结了。同时，还因为采取了一种尽量goal-oriented的TODO管理方法，最大程度上杜绝了一些不必要的TODO被收集起来，从而也减轻了内心的焦虑感。</p>
+<p>言归正传，这篇文章是要讲一个我自定义的org-mode的Agenda视图的command的。这条命令是下面这样子的</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> org-agenda-custom-commands</span><br><span class="line">      '((<span class="string">"f"</span> <span class="string">"查看TODO条目（按创建时间排序）"</span> todo <span class="string">"TODO"</span></span><br><span class="line">         ((org-agenda-sorting-strategy '(priority-down time-up))))))</span><br></pre></td></tr></table></figure>
+<p>俗话说的好，要检验自己是不是懂得某个东西，只要看看自己能不能把这个东西给别人讲清楚就可以了。如果讲清楚了，没有哪里需要emmmm的地方，那么就可以认为这个东西基本上自己是真的懂得了。</p>
+<p>那么<code>org-agenda-custom-commands</code>是干嘛用的呢。官方文档的链接在这里：<a href="https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html" target="_blank" rel="noopener">https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html</a> ——哎哟喂，其实如果你们身处在Emacs之中来看这篇文章的话，只要按下<code>C-h v</code>，然后在minibuffer中输入<code>org-agenda-custom-commands</code>的话，也就可以看到关于这个变量的说明了啦。不过上面这个文档的好处是它有附赠一些例子。</p>
+<p>总而言之，<code>org-agenda-custom-commands</code>是一个变量，通过给这个变量赋值，可以在<code>org-mode</code>的Agenda视图中，添加一些自定义的功能及对应的快捷键。例如，如果在Emacs中求值我上面所给的Elisp代码，然后按下<code>C-c a</code>，便会看到类似于下面这样的提示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84Agenda%E8%A7%86%E5%9B%BE%E6%8F%90%E9%86%92%E4%BF%A1%E6%81%AF.png" alt=""></p>
+<p>这时候，如果按下<code>f</code>键，Emacs就会按照上面代码中描述的那样找出所有关键字为<code>TODO</code>的条目，然后按照【先优先级降序，然后时间戳升序】的方式来排列它们。在我的电脑上的效果如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E7%9A%84%E6%95%88%E6%9E%9C.png" alt=""></p>
+<p>可以看到，首先出现的条目是标注为最高的A优先级的两条，然后是在heading内容的开头含有时间戳的条目。</p>
+<p>对我来说，这样的一个好处是可以将未处理过的TODO按照时间顺序列出来，从而避免了所有的TODO条目先是按照文件的名称集中起来，然后又按照它们在文件中的顺序从上往下地排列起来。毕竟文件内的TODO都是聚合在各自不同的更高级的heading之下的，它们之间的上下关系体现不出什么东西。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="cjz72q7zi001nci30zs1pwr7h" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/" data-id="cjz72q7z4000rci307kv29c3e" class="article-share-link">Share</a>
       
-        <a href="https://liutos.github.io/2019/06/11/支持四则运算中的变量/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/#disqus_thread" class="article-comment-link">Comments</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elisp/">elisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gtd/">gtd</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/org-mode/">org-mode</a></li></ul>
 
     </footer>
   </div>
@@ -136,19 +132,10 @@ ga('send', 'pageview');
     
 <nav id="article-nav">
   
-    <a href="/2019/06/14/拆解嵌套的表达式/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          拆解嵌套的表达式
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/06/01/如何编译setq？/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/07/10/调用C标准库的exit函数/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">如何编译setq？</div>
+      <div class="article-nav-title">调用C标准库的exit函数</div>
     </a>
   
 </nav>
@@ -253,7 +240,7 @@ ga('send', 'pageview');
 <script>
   var disqus_shortname = 'Liutos';
   
-  var disqus_url = 'https://liutos.github.io/2019/06/11/支持四则运算中的变量/';
+  var disqus_url = 'https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/';
   
   (function(){
     var dsq = document.createElement('script');
