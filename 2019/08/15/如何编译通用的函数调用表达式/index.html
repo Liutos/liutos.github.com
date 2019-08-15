@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-94082039-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <title>如何编译通用的函数调用表达式 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="这篇的东西比较多。 首先要处理一下inside-out/aux和inside-out这两个函数。之前的inside-out/aux其实一直不支持对progn的处理，需要先补充；而inside-out则可以优化一下，避免在只有一个表达式的情况下，也用progn将其包裹起来。修改后的inside-out/aux和inside-out分别如下">
+<meta name="keywords" content="common lisp,assembly,compiler,lisp,setq,x64,汇编,编译器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何编译通用的函数调用表达式">
+<meta property="og:url" content="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="这篇的东西比较多。 首先要处理一下inside-out/aux和inside-out这两个函数。之前的inside-out/aux其实一直不支持对progn的处理，需要先补充；而inside-out则可以优化一下，避免在只有一个表达式的情况下，也用progn将其包裹起来。修改后的inside-out/aux和inside-out分别如下">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-15T14:18:00.405Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何编译通用的函数调用表达式">
+<meta name="twitter:description" content="这篇的东西比较多。 首先要处理一下inside-out/aux和inside-out这两个函数。之前的inside-out/aux其实一直不支持对progn的处理，需要先补充；而inside-out则可以优化一下，避免在只有一个表达式的情况下，也用progn将其包裹起来。修改后的inside-out/aux和inside-out分别如下">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.useso.com/css?family=Lato:400,400italic" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liutos.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-如何编译通用的函数调用表达式" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/15/如何编译通用的函数调用表达式/" class="article-date">
+  <time datetime="2019-08-15T14:15:57.000Z" itemprop="datePublished">2019-08-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      如何编译通用的函数调用表达式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇的东西比较多。</p>
+<p>首先要处理一下<code>inside-out/aux</code>和<code>inside-out</code>这两个函数。之前的<code>inside-out/aux</code>其实一直不支持对<code>progn</code>的处理，需要先补充；而<code>inside-out</code>则可以优化一下，避免在只有一个表达式的情况下，也用<code>progn</code>将其包裹起来。修改后的<code>inside-out/aux</code>和<code>inside-out</code>分别如下</p>
+<a id="more"></a>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> inside-out/aux (<span class="name">expr</span> result)</span><br><span class="line">  <span class="string">"将嵌套的表达式EXPR由内而外地翻出来"</span></span><br><span class="line">  (<span class="name">check-type</span> expr list)</span><br><span class="line">  <span class="comment">;; 出于简单起见，暂时只处理加法运算</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">member</span> (<span class="name">first</span> expr) '(+ - * / _exit &gt; exit))</span><br><span class="line">         (let ((operands '()))</span><br><span class="line">           ;; 对参数列表中的所有表达式都递归地进行【外翻】处理</span><br><span class="line">           (dolist (arg (rest expr))</span><br><span class="line">             (if (listp arg)</span><br><span class="line">                 (let ((var (gensym)))</span><br><span class="line">                   (setf result (inside-out/aux arg result))</span><br><span class="line">                   (let ((val (pop result)))</span><br><span class="line">                     (push `(setq ,var ,val) result)</span><br><span class="line">                     (push var operands)))</span><br><span class="line">                 (push arg operands)))</span><br><span class="line">           (push (cons (first expr) (nreverse operands)) result)</span><br><span class="line">           result))</span><br><span class="line">        ((eq (first expr) 'if)</span><br><span class="line">         (push `(if ,(inside-out (second expr))</span><br><span class="line">                    ,(inside-out (third expr))</span><br><span class="line">                    ,(inside-out (fourth expr)))</span><br><span class="line">               result)</span><br><span class="line">         result)</span><br><span class="line">        ((eq (first expr) 'progn)</span><br><span class="line">         (dolist (e (rest expr))</span><br><span class="line">           (push (inside-out e) result))</span><br><span class="line">         result)</span><br><span class="line">        (t</span><br><span class="line">         (push expr result)</span><br><span class="line">         result)))</span><br><span class="line"></span><br><span class="line">(defun inside-out (expr)</span><br><span class="line">  (let ((forms (nreverse (inside-out/aux expr '()))))</span><br><span class="line">    (if (&gt; (length forms) 1)</span><br><span class="line">        (cons 'progn forms)</span><br><span class="line">        (car forms))))</span><br></pre></td></tr></table></figure>
+<p>实际上可以更进一步：<code>inside-out/aux</code>和<code>inside-out</code>大可以合并到一起，结果如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> inside-out (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"将嵌套的表达式EXPR由内而外地翻出来"</span></span><br><span class="line">  (<span class="name">check-type</span> expr list)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) 'if)</span><br><span class="line">         `(if ,(inside-out (second expr))</span><br><span class="line">              ,(inside-out (third expr))</span><br><span class="line">              ,(inside-out (fourth expr))))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'progn)</span><br><span class="line">         (<span class="name">cons</span> 'progn</span><br><span class="line">               (<span class="name">mapcar</span> #'inside-out (<span class="name">rest</span> expr))))</span><br><span class="line">        (<span class="name">t</span></span><br><span class="line">         (<span class="name">let</span> ((<span class="name">assignments</span> '())</span><br><span class="line">               (<span class="name">operands</span> '()))</span><br><span class="line">           <span class="comment">;; 对参数列表中的所有表达式都递归地进行【外翻】处理</span></span><br><span class="line">           (<span class="name">dolist</span> (<span class="name">arg</span> (<span class="name">rest</span> expr))</span><br><span class="line">             (<span class="name">if</span> (<span class="name">listp</span> arg)</span><br><span class="line">                 (<span class="name">let</span> ((<span class="name">val</span> (<span class="name">inside-out</span> arg))</span><br><span class="line">                       (<span class="name">var</span> (<span class="name">gensym</span>)))</span><br><span class="line">                   (<span class="name">push</span> `(setq ,var ,val) assignments)</span><br><span class="line">                   (<span class="name">push</span> var operands))</span><br><span class="line">                 (<span class="name">push</span> arg operands)))</span><br><span class="line">           (<span class="name">if</span> (<span class="name">null</span> assignments)</span><br><span class="line">               expr</span><br><span class="line">               `(progn</span><br><span class="line">                  ,@(nreverse assignments)</span><br><span class="line">                  (,(first expr) ,@(nreverse operands))))))))</span><br></pre></td></tr></table></figure>
+<p>好了，接下来才是本文的重点：如何编译所有的函数调用表达式。</p>
+<p>尽管我在上面夸下海口，说要编译“所有”的函数调用表达式，但事实上，现在我还做不到——我只能把所有的函数调用表达式，都映射到对C标准库中的函数的调用。因此，如果想要调用C标准库中的<code>putchar</code>函数，那么必须写下如下的代码</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">|_putchar|</span> #.(<span class="name">char-code</span> #\A))</span><br></pre></td></tr></table></figure>
+<p>这里用了双竖线的语法来确保这个符号的<code>symbol-name</code>是全小写的<code>putchar</code>，开始的下划线是因为在macOS中，调用C函数的时候必须要加上这个前缀的下划线。<code>#.</code>是个Common Lisp中的<code>reader macro</code>，可以让后面的表达式在读取期被求值，这样我就不需要手写字母A的code-point啦——好吧，是在炫技。</p>
+<p>要编译这种函数调用表达式，只需要模仿一下此前对<code>_exit</code>的处理就可以啦。首先，是求值函数调用表达式中的各个参数，然后将它们放入恰当的位置中——有的要放入寄存器中，有的要压栈。作为一个野路子的编译器爱好者，我当然是没有正儿八经地看过牙膏厂或者按摩店出品的ABI手册的，我看的是这一份资料：<a href="https://www3.nd.edu/~dthain/courses/cse40243/fall2015/intel-intro.html" target="_blank" rel="noopener">https://www3.nd.edu/~dthain/courses/cse40243/fall2015/intel-intro.html</a></p>
+<p>所以我了解到的是：</p>
+<ul>
+<li>前六个参数，分别要从左到右地依次放入<code>RDI</code>、<code>RSI</code>、<code>RDX</code>、<code>RCX</code>、<code>R8</code>，以及<code>R9</code>这些寄存器中的；</li>
+<li>剩下的参数，通通压栈</li>
+</ul>
+<p>然后由于macOS的任性要求，在调用前还需要将<code>RSP</code>寄存器对齐到16字节的内存地址。我在这里折腾了很久，最后才发现，原来我要在函数调用结束之后，把修改过的<code>RSP</code>寄存器恢复原状才行_(:з」∠)_</p>
+<p>所以，这一部分的代码是这样子的（精简了一下）</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span> globals)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">check-type</span> globals hash-table)</span><br><span class="line">  (<span class="name">cond</span> (<span class="name">t</span> <span class="comment">;; 这里省却了很多其它情况下的代码，欢迎读者自行脑补</span></span><br><span class="line">         <span class="comment">;; 按照这里（https://www3.nd.edu/~dthain/courses/cse40243/fall2015/intel-intro.html）所给的函数调用约定来传递参数</span></span><br><span class="line">         (<span class="name">let</span> ((<span class="name">instructions</span> '())</span><br><span class="line">               (<span class="name">registers</span> '(%rdi %rsi %rdx %rcx %r8 %r9)))</span><br><span class="line">           (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">length</span> (<span class="name">rest</span> expr)))</span><br><span class="line">             (<span class="name">if</span> (<span class="name">nth</span> i registers)</span><br><span class="line">                 (<span class="name">push</span> `(movq ,(get-operand expr i) ,(nth i registers)) instructions)</span><br><span class="line">                 (<span class="name">push</span> `(pushq ,(get-operand expr i)) instructions)))</span><br><span class="line">           <span class="comment">;; 经过一番尝试后，我发现必须在完成函数调用后恢复RSP寄存器才不会导致段错误</span></span><br><span class="line">           `(,@(nreverse instructions)</span><br><span class="line">             (pushq %rsp)</span><br><span class="line">             (and ,(format <span class="literal">nil</span> <span class="string">"$0x~X"</span> <span class="number">#XFFFFFFFFFFFFFFF0</span>) %rsp)</span><br><span class="line">             (call ,(first expr))</span><br><span class="line">             (popq %rsp))))))</span><br></pre></td></tr></table></figure>
+<p>先用<code>pushq</code>把<code>RSP</code>保存起来，待<code>call</code>指令结束返回之后，再<code>popq</code>出来恢复它XD</p>
+<p>到这里为止，就可以来写经典的Hello World了，代码如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">fb</span> `(progn ,@(mapcar #'(lambda (c) `(|_putchar| ,(char-code c))) (coerce <span class="string">"Hello, world!"</span> 'list)) (_exit <span class="number">0</span>)))</span><br></pre></td></tr></table></figure>
+<p>生成的汇编代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">        .data</span><br><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVQ $72, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $101, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $108, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $108, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $111, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $44, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $32, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $119, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $111, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $114, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $108, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $100, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVQ $33, %RDI</span><br><span class="line">        PUSHQ %RSP</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _putchar</span><br><span class="line">        POPQ %RSP</span><br><span class="line">        MOVL $0, %EDI</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _exit</span><br></pre></td></tr></table></figure>
+<p>使用GAS编译上述代码，并借助gcc链接后，运行它就可以看到<code>Hello, world!</code>了</p>
+<p>全文完</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/" data-id="cjzcrqm1x0014x730vup2i4bo" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">一个有用的org-agenda-custom-commands的例子</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elisp/">elisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/evernote/">evernote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/install/">install</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leanote/">leanote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/progn/">progn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequencediagram/">sequencediagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/setq/">setq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visual-studio-code/">visual studio code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x64/">x64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安装/">安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/宏/">宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/尾递归/">尾递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时序图/">时序图</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/汇编/">汇编</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编译器/">编译器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语绘/">语绘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面向对象/">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 12.5px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 12.5px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 17.5px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 11.25px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 17.5px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.25px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 11.25px;">elisp</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 11.25px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.75px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.25px;">macro</a> <a href="/tags/markdown/" style="font-size: 12.5px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12.5px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 13.75px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 13.75px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.25px;">sequence diagram</a> <a href="/tags/sequencediagram/" style="font-size: 10px;">sequencediagram</a> <a href="/tags/setq/" style="font-size: 16.25px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.25px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.25px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 17.5px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.25px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.25px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.25px;">教程</a> <a href="/tags/数学/" style="font-size: 12.5px;">数学</a> <a href="/tags/时序图/" style="font-size: 10px;">时序图</a> <a href="/tags/汇编/" style="font-size: 17.5px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 11.25px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.25px;">算法</a> <a href="/tags/编译器/" style="font-size: 17.5px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.25px;">编辑器</a> <a href="/tags/语绘/" style="font-size: 10px;">语绘</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/08/15/如何编译通用的函数调用表达式/">如何编译通用的函数调用表达式</a>
+          </li>
+        
+          <li>
+            <a href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/">一个有用的org-agenda-custom-commands的例子</a>
+          </li>
+        
+          <li>
+            <a href="/2019/07/10/调用C标准库的exit函数/">调用C标准库的exit函数</a>
+          </li>
+        
+          <li>
+            <a href="/2019/07/03/编译大于运算符/">编译大于运算符</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/">inside-out/aux如何支持对_exit的调用</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'Liutos';
+  
+  var disqus_url = 'https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+if (typeof jQuery == 'undefined') {
+  document.write(unescape("%3Cscript src='/js/jquery-2.0.3.min.js' type='text/javascript'%3E%3C/script%3E"));
+}
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

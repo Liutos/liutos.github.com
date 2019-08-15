@@ -75,6 +75,73 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-递归、闭包、面向对象" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2012/10/26/递归、闭包、面向对象/" class="article-date">
+  <time datetime="2012-10-26T04:56:12.000Z" itemprop="datePublished">2012-10-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2012/10/26/递归、闭包、面向对象/">递归、闭包、面向对象</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="话题由来"><a href="#话题由来" class="headerlink" title="话题由来"></a>话题由来</h2><p>参加了不少IT公司的笔试，有些题目遇到的次数还是比较多的，例如给一系列字符和一个空栈，询问你选项中的哪一个是不可能出现的出栈顺序这样的问题。另外一道题目，就是我这里要拿来讲的，不过我讲的和题目本身不直接相关，只是恰好和题目所要完成的任务有重合罢了。这道题目就是“给出一颗二叉树的先序遍历和中序遍历的输出结果，请给出这个二叉树的后序遍历的输出结果”。</p>
+<p>这道题目其实非常简单，尽管我一开始遇到的时候仍然是手足无措的（谁没有年少无知过呢对不），不过一两次之后就轻车熟路了，知道了这样的题目的行之有效的解法。举个例子，先序的序列和中序的序列分别是”abfce”和”bface”，那么这棵二叉树就是这样子的<br><img src="/pictures/postree.png"></p>
+<p>可以知道，后序遍历的输出结果为”fbeca”。怎么得到这棵二叉树呢？其实很简单，首先根据先序遍历的定义，所以在先序遍历结果中的第一个元素一定是整棵二叉树的根结点，也就是a，那么根据中序遍历的定义，在a左边出现的序列就是左子树的中序遍历结果，在a的右边的就是右子树的中序遍历结果，它们分别是”bf”和”ce”。并且可以知道，在先序遍历中与它们对应的片段应该也是”bf”和”ce”。在对”bf”做同样的处理，就可以知道b是根结点，而左子树为空且右子树为单节点f，另一棵子树的根结点为c且左子树为空，右子树为单节点e。</p>
+<p>那么，怎么用程序来自动化呢？</p>
+<h2 id="C语言的递归版本"><a href="#C语言的递归版本" class="headerlink" title="C语言的递归版本"></a>C语言的递归版本</h2><p>以文字来描述根据先序和中序来构造二叉树的算法还是很好理解的。为了描述方便，取几个名字。把先序遍历的结果叫做preseq，中序遍历的输出结果叫做inseq，并且把它们当作C语言中的数组那样来取出元素（例如preseq[0]表示第一个元素），再给它们一个方便取出片段的语法糖，例如preseq[0..2]表示取出下标从0到2的三个元素组成一个新的输出序列。</p>
+<p>首先，取出preseq的第一个元素preseq[0]，可以知道它肯定是目前正在处理的整棵二叉树的根结点，接着在inseq中寻找这个根结点，于是就可以把inseq分成三段，第一段是左子树的中序输出结果inseq1，第二段是根结点本身inseq2，第三段则是右子树的中序输出结果inseq3。同样的，preseq也可以分成三部分：第一个元素就是根结点，记为preseq1，然后是和inseq1等长的一个子串，也就是左子树的先序遍历的输出结果，剩下的，就是和inseq3等长的子串，即右子树的先序遍历输出结果了。既然有得到了先序和中序遍历的输出结果各一对，那么接下来只要对对应的一对输出结果递归调用原来的功能就可以了。递归的base case，就是输出结果只有一个元素的情况。这时候只需要生成一个没有左右子树的节点即可。</p>
+<p>我写了两个版本，第一个是很简单很直接的实现，就是完全按照上面所说的思路来做的，因此其中充满了字符串的复制操作，详见代码（其中的make_tree_by_prein函数就是实现了上面的算法的代码）</p>
+<script src="https://gist.github.com/3951810.js"> </script>
+
+<p>第二个版本避免了字符串的复制操作，不过没有第一个版本的make_tree_by_prein函数那么好理解了。这里只有修改后的make_tree_by_prein函数的代码</p>
+<script src="https://gist.github.com/3952212.js?file=make\_tree\_by\_prein.c"></script>
+
+<h2 id="CommonLisp和Java的版本"><a href="#CommonLisp和Java的版本" class="headerlink" title="CommonLisp和Java的版本"></a>CommonLisp和Java的版本</h2><p>C语言中的第二个版本在CommonLisp和Java里面可以改得更好一点，这多亏了CommonLisp的闭包特性和Java的OO方式。在C实现的第二个版本中，make_tree_by_prein函数有两个参数，而辅助函数make_tree_aux则需要两个参数。其中参数preseq和inseq是两个在传递过程中完成不会被修改的参数，它们之所以被作为参数，仅仅是因为C语言中只有两种方式在函数间共享一些信息：</p>
+<ul>
+<li>函数参数</li>
+<li>全局变量</li>
+</ul>
+<p>因为不想使用全局变量，所以只好在参数列表中动手脚了，不过在CommonLisp和Java的实现，就有办法可以在函数之间以受控的方式共享信息。例如下面用CommonLisp实现的make-tree-by-prein函数</p>
+<script src="https://gist.github.com/3952212.js?file=make-tree-by-prein.lisp"></script>
+
+<p>函数make-tree-by-prein利用labels在函数体内部定义了一个闭包aux，preseq和inseq则是在词法范围内可见的变量，因为在aux内部依然可以访问到它们，这样就不需要将它们作为aux的两个参数来进行传递了。而Java的实现也是类似的，在Java中方法从属于类，并且它们可以共享同一个类的实例中的所有变量，因此直接使用这些变量即可，代码如下（因为Java同样没有办法定义内部函数的关系，所以只好定义一个用private修饰的方法makeTreeAux了。）</p>
+<script src="https://gist.github.com/3952212.js?file=TreePost.java"></script>
+
+<p>不是有人说吗？OO是穷人的闭包；闭包是穷人的OO;-)</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>总算把讲思路贴代码的东西弄完了，可以好好扯淡一番了=。=话说上课的时候有个考研的同学找我讲话（班里的一名胖子，在算法方面有很厉害的嗅觉），就是问我对于用算法来实现“根据先序和中序输出结果如何构造二叉树”有没有思路。递归的方法其实很容易就可以想出来了，加之我之前已经想过这类题目要怎么系统地解决，所以很快就说出来了。然后我就觉得用C语言可以像上面那样写出一个高效（即没什么字符串复制操作）的版本，接着又想到这个可以用Lisp（或者其它带闭包的语言）来实现得更好，又想到了用Java也可以实现闭包的那类效果，再接着又觉得可以发篇文章来讨论讨论，于是就有这样的一篇东西了。</p>
+<p>对于具体实现某个功能的技术，我貌似没有特别地挑剔，甚至可以说，对于加入到编程语言中的任何特性，我都没有太挑剔的，只要好用，那么我就很可能会接纳——当然了，我也无法保证自己在找到一个反例之后不会把这句话给改掉当作自己没有这么说过，不过暂时没有想到这种情况，所以就先当作我是这样的人吧。举个例子，对于Haskell我很喜欢，也很喜欢纯函数语言的说法，即“纯函数是非常有利于程序编写的”。不过对于副作用我也没有持完全拒绝的态度，即使我在编程的过程中也会尽量遵循函数式编程的规矩（尽量避免副作用）。可是副作用实际上避无可避，倒不如拥抱它们。或许正是因为这个原因，我才会喜欢OCaml更甚于Haskell吧——至少目前是这样的。</p>
+<p>我也喜欢惰性计算，尤其是其带来的效果——无限长的列表推到看起来实在是帅得不行，并且还可以使得编写的程序拥有了函数式的外观和命令式的效率（例如《SICP》中举的例子，用惰性计算结合map、filter和reduce）。拥有惰性计算有利无害，何乐而不为呢～或许也正是因为自己对特性的需求是多多益善，所以才喜欢Common Lisp吧。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/" data-id="cjzcrqm2e0026x730zbji3mqh" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/closure/">closure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/recursion/">recursion</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/递归/">递归</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/闭包/">闭包</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面向对象/">面向对象</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-涂色笔试题的动态规划解法" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2012/10/18/涂色笔试题的动态规划解法/" class="article-date">
@@ -127,7 +194,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/" data-id="cjz72q7zm001xci30y8e78ybd" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/" data-id="cjzcrqm28001ux730kp64v7p0" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -179,7 +246,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/" data-id="cjz72q7z4000sci30albpig7r" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/" data-id="cjzcrqm1p000rx730sjga3u3m" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -231,7 +298,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/16/ProjectEuler第18题/" data-id="cjz72q7yy000dci30aduynnot" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/09/16/ProjectEuler第18题/" data-id="cjzcrqm1i000bx730dyqxz4ey" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/09/16/ProjectEuler第18题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -310,7 +377,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/" data-id="cjz72q7ys0004ci303dfsxn02" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/" data-id="cjzcrqm1d0005x7300yyu3l7u" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -370,7 +437,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/" data-id="cjz72q81k00abci302hhsllu8" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/" data-id="cjzcrqm2g002dx730e1ardayy" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -417,7 +484,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/08/24/PE的第26题/" data-id="cjz72q7yu0006ci30bu4742og" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/08/24/PE的第26题/" data-id="cjzcrqm1h0009x730dr9ibcfs" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/08/24/PE的第26题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -459,7 +526,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 12.86px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 12.86px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 17.14px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 11.43px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 17.14px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.43px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 11.43px;">elisp</a> <a href="/tags/emacs/" style="font-size: 15.71px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 11.43px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.57px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.43px;">macro</a> <a href="/tags/markdown/" style="font-size: 12.86px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12.86px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 14.29px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 14.29px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.43px;">sequence diagram</a> <a href="/tags/sequencediagram/" style="font-size: 10px;">sequencediagram</a> <a href="/tags/setq/" style="font-size: 15.71px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.43px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.43px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 17.14px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.43px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.43px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.43px;">教程</a> <a href="/tags/数学/" style="font-size: 12.86px;">数学</a> <a href="/tags/时序图/" style="font-size: 10px;">时序图</a> <a href="/tags/汇编/" style="font-size: 17.14px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 11.43px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.43px;">算法</a> <a href="/tags/编译器/" style="font-size: 17.14px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.43px;">编辑器</a> <a href="/tags/语绘/" style="font-size: 10px;">语绘</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 12.5px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 12.5px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 17.5px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/boostnote/" style="font-size: 11.25px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/compiler/" style="font-size: 17.5px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.25px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 11.25px;">elisp</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 11.25px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.75px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.25px;">macro</a> <a href="/tags/markdown/" style="font-size: 12.5px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/note-taking/" style="font-size: 12.5px;">note taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 13.75px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 13.75px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.25px;">sequence diagram</a> <a href="/tags/sequencediagram/" style="font-size: 10px;">sequencediagram</a> <a href="/tags/setq/" style="font-size: 16.25px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.25px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.25px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/x64/" style="font-size: 17.5px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.25px;">yu writer</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.25px;">宏</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.25px;">教程</a> <a href="/tags/数学/" style="font-size: 12.5px;">数学</a> <a href="/tags/时序图/" style="font-size: 10px;">时序图</a> <a href="/tags/汇编/" style="font-size: 17.5px;">汇编</a> <a href="/tags/笔记类软件/" style="font-size: 11.25px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.25px;">算法</a> <a href="/tags/编译器/" style="font-size: 17.5px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.25px;">编辑器</a> <a href="/tags/语绘/" style="font-size: 10px;">语绘</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -481,6 +548,10 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <a href="/2019/08/15/如何编译通用的函数调用表达式/">如何编译通用的函数调用表达式</a>
+          </li>
+        
+          <li>
             <a href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/">一个有用的org-agenda-custom-commands的例子</a>
           </li>
         
@@ -494,10 +565,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/">inside-out/aux如何支持对_exit的调用</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/18/时序图绘制工具走马观花/">时序图绘制工具走马观花</a>
           </li>
         
       </ul>
