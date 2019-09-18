@@ -75,6 +75,72 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-报告层数的广度有限搜索" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/02/18/报告层数的广度有限搜索/" class="article-date">
+  <time datetime="2013-02-18T14:59:40.000Z" itemprop="datePublished">2013-02-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/02/18/报告层数的广度有限搜索/">报告层数的广度有限搜索</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h2><p>大一的时候为了装13就自己去图书馆借了很多讲解和CS有关却又还没有教或者不会教的内容的书来看，其中就有数据结构那一类的。不过我已经忘记了当时去图书馆借到的是什么样子的书了，只知道书的封面是蓝色的（要是有空的话去图书馆找找就可以知道了=。=）。不过说到数据结构方面的书，在国内大部分和计算机或者信息技术沾边的专业的学生中，比较广为人知的应该既不是《算法导论》，也不是《算法概论》，而是编者为严蔚敏的那本《数据结构C语言描述》吧。我也有幸看过，并且印象中那时候觉得那本教材还是不错的。只不过现在<strong>道行</strong>稍微有点高了，就开始有点鄙视当初习得技能的恩师了——哦，有种过河拆桥的感觉。</p>
+<h2 id="百度面试题"><a href="#百度面试题" class="headerlink" title="百度面试题"></a>百度面试题</h2><p>第一次去百度面试时，面试官看起来和蔼可亲，同样给出的问题也很和蔼可亲。当时的问题有三道，第一道是让我随意写一个二叉树的遍历的代码，我挑了个深度优先搜索来写，因为我觉得这货算得上是最容易写的代码之一了。然后面试官就让我用广度优先搜索再写一遍，我就再写了一次。说真的，队列那一部分的处理还真是让人头大，尤其是我居然稀里糊涂地把队列的处理和栈的处理混淆在一起了，结果代码看起来也是稀里糊涂的。要不是面试官大慈大悲耐心地和我商量着来修改，我可能就没有遇到第三题的机会了。不过终究第二题还是安全过关了，之后就是第三题了：给广度优先搜索增加一个返回所找到的关键字在二叉树的哪一层的功能。</p>
+<p>老实说，听到题目的当即我就想到了一种最最最简单的办法，就是修改二叉树的定义，给它增加一个数据字段来存储每一个节点究竟位于第几层就可以了嘛，唉真是简单得无趣啊=。=不过面试官说不允许这样做，那好，我再换一种办法，就是增加一个新的队列来存储每一个进入队列的节点究竟是位于哪一层的。因为一开始肯定是从第一层开始的，所以只要中间的每一个节点都不要漏掉，那么根据父节点的层数就可以推知直接的子节点的层数，那么在将每一个节点入队列的时候都有办法知道它们是在哪一层的。嗯，这个办法也很好，不过面试官也不允许增加新的队列，呃。。你这不是存心刁难我么！还好，把队列的版本稍微修改一下就可以去掉队列了，不过要增加广度优先搜索的实现函数的参数。</p>
+<h2 id="第三个版本"><a href="#第三个版本" class="headerlink" title="第三个版本"></a>第三个版本</h2><p>首先要明确这个函数的参数与返回值究竟是怎样的。因为当时这个功能是用C语言来实现的，所以只允许函数调用有一个返回值。在一开始写的两个版本中函数的返回值是所找到的二叉树中的节点，所以在第三个版本中也依然返回所查找到的节点或者是在找不到的时候返回C语言中的空——NULL。那么这样一来节点所对应的深度的信息只能通过下面的两种方法来返回了：</p>
+<ul>
+<li>全局变量</li>
+<li>传出参数</li>
+</ul>
+<p>我选择了第二种，因此查找功能需要增加一个传出参数depth，它的类型声明是int *。因此查找功能的入口函数的整体类型声明为：</p>
+<pre><code>TreeNode dfs_search_tree(Tree tree, char target, int *depth)
+</code></pre><p>（我觉得标识符取得还不错，不用解释了吧→_→）那么dfs_search_tree这个函数要如何实现具体的功能呢？现在我们是为了要在队列的版本上进行修改来实现查找功能的，那么原本需要使用队列来存储的深度信息现在应该交给函数的参数来存储，但是这个参数不能添加到入口函数中，因此我们需要一个辅助函数，就叫做dfs_search_tree_aux函数好了，它至少需要上面的函数所拥有的三个参数，并且还需要一个用来传递而不是用来返回的<em>深度</em>的信息，不妨声明为int *nd。</p>
+<p>试想一下，如果我们在处理第i层的一个节点，那么显然可以知道它的左右子树的根结点如果存在，必定会位于第i+1层，因此在广度优先搜索的函数递归调用的时候，nd参数的传递是以加一的形式进行的，即遍历子树的时候nd必定要比测试当前节点的时候加一。不过实际上这样子是不可行的，因为我们不是在测试了父节点之后就立即递归调用函数来测试两个子节点，在测试父节点的时候，只是把两个子节点给放进了队列罢了，因此没有办法通过简单地直接加一的方法来传递深度参数。我们需要的信息是，现在这个节点和上一个节点到底是不是在同一层。</p>
+<p>确定是否在同一层的一个办法，是知道每一层的节点的数目。例如第一层显然只能有一个节点，因此当测试了第一个节点后就可以知道第一层已经测试完了，那么接下来的函数调用的nd参数的值就至少应该增加一，并且应该把表示一层的节点个数的参数设置为第二层的对应值。第二层的节点个数可以利用遍历第一层的时候来得到。例如对于第i层的节点，如果每一个节点都有两个子节点，那么第i+1层的节点数目就是第i层的两倍，对于其它情况也可以很简单地推算出来。因此，我们需要额外的两个参数current_count和next_count，来分别存储当前层剩下的节点数目以及下一层目前所探测到的节点数目。现在，我们可以写出辅助函数的原型了：</p>
+<pre><code>TreeNode dfs_search_tree_aux(char target, int depth, int *nd, Queue queue, int current_count, int next_count)
+</code></pre><p>其中没有和dfs_search_tree一样的tree参数，因为在广度优先搜索中，树的节点是存储在队列queue中的。dfs_search_tree_aux这个函数的逻辑是这样子的：</p>
+<ol>
+<li>先看看队列是否为空。如果是就说明节点都已经测试完了，仍然没有找到目标节点，所以返回NULL；</li>
+<li>从队列中取出最早进入的节点。</li>
+<li>既然已经开始测试新的节点，那么当前层的剩余节点数就少了一个，因此current_count要自减一；</li>
+<li>测试节点的关键字。如果是一致的就先设置传出参数nd为depth，然后返回对应节点的指针；</li>
+<li>如果测试失败，那么就说明函数需要继续递归调用下去了。这时候需要先决定current_count和next_count的值。</li>
+<li>如果current_count为0，也就是说这一层没有节点剩下了，那么就让depth加一，把当前的节点数目（current_count）设置为下一层的节点数目（next_count），然后下一层的节点数目重新归零。</li>
+<li>接下来，测试左子树是否为空。如果非空，就把当前节点的左子树根结点入队，并给next_count加一。同样的，右子树也是类似的处理办法。</li>
+<li>最后，递归调用辅助函数本身。</li>
+</ol>
+<p>最后给出代码链接好了：<a href="https://github.com/Liutos/CLab/blob/master/binary_tree/prototype.c" target="_blank" rel="noopener">https://github.com/Liutos/CLab/blob/master/binary_tree/prototype.c</a>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/" data-id="ck0pc5vaf001gi130guenb8jh" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bfs/">bfs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-递归、闭包、面向对象" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2012/10/26/递归、闭包、面向对象/" class="article-date">
@@ -128,7 +194,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/" data-id="cjzcrxp3l00292k3092upqg97" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/" data-id="ck0pc5vat002ci130fbrg8u27" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -194,7 +260,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/" data-id="cjzcrxp3i001z2k30lbr3uz16" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/" data-id="ck0pc5vaq0025i130s7xb7lsl" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -246,7 +312,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/" data-id="cjzcrxp2y000p2k30nxgsi4b4" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/" data-id="ck0pc5va4000ri130ujflz32p" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -298,7 +364,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/16/ProjectEuler第18题/" data-id="cjzcrxp2s000d2k304wtiyhpv" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/09/16/ProjectEuler第18题/" data-id="ck0pc5v9y000gi130zbvotbuq" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/09/16/ProjectEuler第18题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -377,7 +443,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/" data-id="cjzcrxp2n00042k307i86fiux" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/" data-id="ck0pc5v9r0004i130zhnld4b9" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -437,7 +503,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/" data-id="cjzcrxp3o002d2k30cav4cel7" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/" data-id="ck0pc5vau002hi1302xrnm98x" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -484,7 +550,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/08/24/PE的第26题/" data-id="cjzcrxp2q00092k30h29fkibc" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/08/24/PE的第26题/" data-id="ck0pc5v9v0009i130i3nw5e5g" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/08/24/PE的第26题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -535,7 +601,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
     </div>
   </div>
 
@@ -546,6 +612,10 @@ ga('send', 'pageview');
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/09/18/编译return语句/">编译return语句</a>
+          </li>
         
           <li>
             <a href="/2019/08/15/如何编译通用的函数调用表达式/">输出HELLO WORLD——如何编译通用的函数调用表达式</a>
@@ -561,10 +631,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/07/03/编译大于运算符/">编译大于运算符</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/">inside-out/aux如何支持对_exit的调用</a>
           </li>
         
       </ul>

@@ -75,6 +75,59 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-如何编译progn" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/27/如何编译progn/" class="article-date">
+  <time datetime="2019-05-27T14:38:22.000Z" itemprop="datePublished">2019-05-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/27/如何编译progn/">如何编译progn</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="progn是什么玩意"><a href="#progn是什么玩意" class="headerlink" title="progn是什么玩意"></a>progn是什么玩意</h2><p><code>progn</code>是Common Lisp里面的一个special operator，见这份文档的说明：<a href="http://clhs.lisp.se/Body/s_progn.htm" target="_blank" rel="noopener">http://clhs.lisp.se/Body/s_progn.htm</a></p>
+<h2 id="为嘛要编译这东西"><a href="#为嘛要编译这东西" class="headerlink" title="为嘛要编译这东西"></a>为嘛要编译这东西</h2><p>现在已经支持了二元四则运算了，但现在这里有一个大问题，就是这四个运算没办法嵌套着组合使用。比如，遇到下面这样的代码，<code>jjcc2</code>函数就懵逼了</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> <span class="number">1</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+<p>那要编译这种代码的话怎么办呢？一个比较直观的做法，是引入临时变量，来保存嵌套在其中的表达式的求值结果，然后再用变量来代替原本嵌套的表达式。修改后的代码可能长这个样子</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> a (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">(<span class="name">+</span> <span class="number">1</span> a)</span><br></pre></td></tr></table></figure>
+<p>显然，这是有先后的时间依赖关系的两条语句，因此应当使用<code>progn</code>将它们包裹起来，结果如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">setq</span> a (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> a))</span><br></pre></td></tr></table></figure>
+<p>这样整个表达式的求值结果，或者说它被编译之后的运行结果，应当就是在寄存器<code>EAX</code>中放入整数6了。所以，本篇将来解决对<code>progn</code>的编译问题。</p>
+<h2 id="如何编译progn"><a href="#如何编译progn" class="headerlink" title="如何编译progn"></a>如何编译progn</h2>
+        
+          <p class="article-more-link">
+            <a href="/2019/05/27/如何编译progn/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/05/27/如何编译progn/" data-id="ck0pc5va90011i130xw5riukw" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/05/27/如何编译progn/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/progn/">progn</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-支持减、乘，以及除" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/05/23/支持减、乘，以及除/" class="article-date">
@@ -109,7 +162,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="cjzcrxp3d001k2k30s1rwr4gr" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="ck0pc5vai001li1306l5swh2g" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/23/支持减、乘，以及除/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -156,7 +209,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/21/Evernote与Leanote/" data-id="cjzcrxp2p00062k305yfti6m5" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/21/Evernote与Leanote/" data-id="ck0pc5v9w000bi130yml93pa8" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/21/Evernote与Leanote/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -203,7 +256,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/" data-id="cjzcrxp2z000s2k309isnlz38" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/" data-id="ck0pc5va2000oi130wa22i5ft" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -249,7 +302,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/" data-id="cjzcrxp2l00022k30a84qhxuy" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/" data-id="ck0pc5v9p0002i130jzd3lgyg" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -317,7 +370,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/" data-id="cjzcrxp3g001s2k30733mxbna" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/" data-id="ck0pc5vak001qi130w8dop4i5" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -376,7 +429,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/" data-id="cjzcrxp2z000r2k30ddjshdxj" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/" data-id="ck0pc5va5000ti130bz7w9pee" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -443,7 +496,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="cjzcrxp3c001g2k3062r1ayqv" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="ck0pc5vae001di130ixiuibyt" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -500,7 +553,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="cjzcrxp2u000h2k30xeu1ed6w" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/28/Project-Euler第69题/" data-id="ck0pc5v9x000di130cltfsmxw" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/28/Project-Euler第69题/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -558,62 +611,12 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="cjzcrxp3800182k305xhlk4a6" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/" data-id="ck0pc5va3000qi130kb71ulm6" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/search/">search</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tool/">tool</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/工具/">工具</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/搜索/">搜索</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Emacs的org-mode实现自动的internal-archive" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/01/07/Emacs的org-mode实现自动的internal-archive/" class="article-date">
-  <time datetime="2019-01-07T05:50:53.000Z" itemprop="datePublished">2019-01-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/07/Emacs的org-mode实现自动的internal-archive/">Emacs的org-mode实现自动的internal archive</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h2><p><a href="https://orgmode.org/" target="_blank" rel="noopener">org-mode</a>是一个<a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">Emacs</a>内置的major mode，当打开一个后缀为<code>.org</code>的文件时就会被启用。在官网的介绍中提到，它可以用于管理待办事项，而这也正是我目前使用org-mode最多的场合。比如，我用它来记录漫画的阅读进度，每一话或每一章就是一个标记了TODO关键字的条目，读完那一话或那一章后就会将对应的条目标记为DONE。一般我会一周一次地归档自己标记为DONE的条目，但由于一次要处理的条目可能很多，逐一将它们归档比较繁琐，因此，便打算二次开发实现一个自动归档的功能。</p>
-<p>需要事先声明的是，本文不是org-mode的入门教程，也不会讲解如何配置org-mode。对这方面有兴趣的读者，可以自己搜索一番，资料还是相当丰富的。</p>
-<h2 id="菜谱"><a href="#菜谱" class="headerlink" title="菜谱"></a>菜谱</h2><p>对于每一个被完成的单独的阅读任务，我的做法是将其<a href="https://orgmode.org/manual/Internal-archiving.html" target="_blank" rel="noopener">internal archive</a>。等到一整本漫画都读完之后，再将整个以漫画名命名的条目归档到别的文件中去。要实现自动的internal archive，最简单直接的办法是借助于org-mode提供的各种hook。</p>
-<p>org-mode提供了许多的hook，在官方的<a href="https://orgmode.org/worg/doc.html#org-after-demote-entry-hook" target="_blank" rel="noopener">文档</a>中有一一列举 。其中，名为<code>org-after-todo-state-change-hook</code>的便是我所需要的钩子。只需往这个变量所绑定的列表中添加一个函数，那么这个函数便会在条目切换状态时（比如从TODO切换到DONE）被org-mode调用。</p>
-<p>最终的ELisp代码如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> lt-archive-if-manga ()</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">state</span> org-state))</span><br><span class="line">    (<span class="name">when</span> (<span class="name">string=</span> state <span class="string">"DONE"</span>)</span><br><span class="line">      (<span class="name">let</span> ((<span class="name">tags</span> (<span class="name">org-get-tags-at</span>)))</span><br><span class="line">        (<span class="name">when</span> (<span class="name">member</span> <span class="string">"漫画"</span> tags)</span><br><span class="line">          (<span class="name">org-toggle-archive-tag</span>))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">add-to-list</span> 'org-after-todo-state-change-hook 'lt-archive-if-manga <span class="literal">t</span>)</span><br></pre></td></tr></table></figure>
-<p>稍微解释一下。从<code>C-h v org-after-todo-state-change-hook RET</code>的文档可以得知，条目的新状态可以通过变量<code>org-state</code>获取。取得新状态（是个字符串）后，首先检查其是否为<code>&quot;DONE&quot;</code>。如果是，再检查这个条目是否为一个阅读漫画的任务。</p>
-<p>在我的用法中，凡是漫画条目，都打上了名为<code>&quot;漫画&quot;</code>的标签。因此，使用函数<code>org-get-tags-at</code>取得一个条目的所有标签（包括从父级条目继承下来的），再用<code>member</code>函数判断这些标签中是否包含字符串<code>&quot;漫画&quot;</code>。如果有，就调用<code>org-toggle-archive-tag</code>将该条目internal archive。</p>
-<p>传给函数<code>add-to-list</code>的第三个参数<code>t</code>的作用，是让这个新加入钩子的函数最后被调用。</p>
-<p>全文完</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="cjzcrxp2p00082k301rnd1ur8" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/org-mode/">org-mode</a></li></ul>
 
     </footer>
   </div>
@@ -659,7 +662,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
     </div>
   </div>
 
@@ -670,6 +673,10 @@ ga('send', 'pageview');
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/09/18/编译return语句/">编译return语句</a>
+          </li>
         
           <li>
             <a href="/2019/08/15/如何编译通用的函数调用表达式/">输出HELLO WORLD——如何编译通用的函数调用表达式</a>
@@ -685,10 +692,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/07/03/编译大于运算符/">编译大于运算符</a>
-          </li>
-        
-          <li>
-            <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/">inside-out/aux如何支持对_exit的调用</a>
           </li>
         
       </ul>
