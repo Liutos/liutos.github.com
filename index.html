@@ -75,6 +75,53 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-如何编译defun" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/11/如何编译defun/" class="article-date">
+  <time datetime="2019-10-11T14:32:54.000Z" itemprop="datePublished">2019-10-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/11/如何编译defun/">如何编译defun</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文讲解如何编译<code>defun</code>。在Common Lisp中，<code>defun</code>用于定义函数。例如，下列的代码定义了函数<code>foo</code></p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foo (<span class="name">a</span>)</span><br><span class="line">  <span class="string">"一个名为FOO的函数"</span></span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> a))</span><br><span class="line">  (<span class="number">1</span>+ <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p>在<code>defun</code>的<a href="http://clhs.lisp.se/Body/m_defun.htm" target="_blank" rel="noopener">语法</a>中，第一行的字符串是这个函数的文档，可以用<code>documentation</code>函数获取；第二行是declaration。（不管是documentation还是declaration，也许要等到自举的那一天才能够支持了）目前只打算支持如下这般朴素的<code>defun</code>用法：</p>
+        
+          <p class="article-more-link">
+            <a href="/2019/10/11/如何编译defun/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/10/11/如何编译defun/" data-id="ck1m8f0e700199y30th5mmxgv" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/10/11/如何编译defun/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-编译return语句" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/09/18/编译return语句/" class="article-date">
@@ -108,7 +155,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/09/18/编译return语句/" data-id="ck0pc5vam001vi1303ilccfa1" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/09/18/编译return语句/" data-id="ck1m8f0el00229y30afzaj95l" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/09/18/编译return语句/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -154,7 +201,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/" data-id="ck0pc5va90013i130sa5a0zrr" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/" data-id="ck1m8f0e8001c9y300aldharp" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -206,7 +253,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/" data-id="ck0pc5va1000li130msa1snz6" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/" data-id="ck1m8f0dz000q9y30wnbnhrsc" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -252,7 +299,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="ck0pc5var0027i130jpvlsz8z" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="ck1m8f0em00249y30no210056" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -298,7 +345,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/03/编译大于运算符/" data-id="ck0pc5vap0022i130pa4us3zf" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/07/03/编译大于运算符/" data-id="ck1m8f0en00269y30wim8k7x1" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/07/03/编译大于运算符/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -346,7 +393,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/" data-id="ck0pc5va2000ni1302adbnv0h" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/" data-id="ck1m8f0dx000l9y30edr7bsi6" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -401,7 +448,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="ck0pc5vaj001ni130s7v1gc0b" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="ck1m8f0ef001p9y301d4o77py" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -450,7 +497,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="ck0pc5vag001ii1300fxd1pvf" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="ck1m8f0ed001k9y30s0l4a0ty" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -497,57 +544,9 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="ck0pc5van0020i1304wteigjt" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="ck1m8f0ee001n9y302xgh15kh" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/11/支持四则运算中的变量/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-如何编译setq？" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/06/01/如何编译setq？/" class="article-date">
-  <time datetime="2019-06-01T15:06:03.000Z" itemprop="datePublished">2019-06-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/01/如何编译setq？/">如何编译setq？</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Common Lisp中的<code>setq</code>类似于其它语言中的赋值语句，它可以给一个符号对象设定一个值，类似于将一个值赋值给一个变量一样。简单起见，在<code>jjcc2</code>中，我会将所有的符号都作为全局的一个label来实现。也就是说，如果代码中出现了</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> a <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<p>这样的代码，那么在最后生成的代码中，就会相应的在<code>.data</code>段中有一个同名的label，其中存放着数值1。</p>
-<p>既然都是全局变量，那么只需要准备一个容器来盛这些变量名即可。现阶段，暂时认为所有的变量都是数值类型即可。简单起见，这个容器直接用Common Lisp内置的<code>HASH-TABLE</code>来表示。</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/06/01/如何编译setq？/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="ck0pc5vab0014i130czpb7aqi" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2019/06/01/如何编译setq？/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
@@ -596,7 +595,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
     </div>
   </div>
 
@@ -607,6 +606,10 @@ ga('send', 'pageview');
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/10/11/如何编译defun/">如何编译defun</a>
+          </li>
         
           <li>
             <a href="/2019/09/18/编译return语句/">编译return语句</a>
@@ -622,10 +625,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/07/10/调用C标准库的exit函数/">调用C标准库的exit函数</a>
-          </li>
-        
-          <li>
-            <a href="/2019/07/03/编译大于运算符/">编译大于运算符</a>
           </li>
         
       </ul>
