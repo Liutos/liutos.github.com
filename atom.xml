@@ -498,13 +498,13 @@
     </summary>
     
     
-      <category term="markdown" scheme="https://liutos.github.io/tags/markdown/"/>
-    
-      <category term="note taking" scheme="https://liutos.github.io/tags/note-taking/"/>
-    
       <category term="evernote" scheme="https://liutos.github.io/tags/evernote/"/>
     
       <category term="leanote" scheme="https://liutos.github.io/tags/leanote/"/>
+    
+      <category term="markdown" scheme="https://liutos.github.io/tags/markdown/"/>
+    
+      <category term="note taking" scheme="https://liutos.github.io/tags/note-taking/"/>
     
   </entry>
   
@@ -559,13 +559,13 @@
     </summary>
     
     
-      <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
-    
-      <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
-    
       <category term="markdown" scheme="https://liutos.github.io/tags/markdown/"/>
     
       <category term="note taking" scheme="https://liutos.github.io/tags/note-taking/"/>
+    
+      <category term="boostnote" scheme="https://liutos.github.io/tags/boostnote/"/>
+    
+      <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
     
       <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
     
