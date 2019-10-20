@@ -18,34 +18,24 @@ ga('send', 'pageview');
 
 
   
-  <title>如何检查一组区间中是否存在两个区间有交集 | Hexo</title>
+  <title>在Emacs中搭建笔记查阅系统的尝试 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="假设有N个区间，将它们表达为，其中下标i位于区间中 为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间而言，都有（这里的i小于N-1）。 为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系  这是因为如果，那么所有位于区间中的数都将会小于 b_k，">
-<meta name="keywords" content="数学">
+  <meta name="description" content="给Emacs写插件有种痛并快乐着的感觉。虽然这个发挥创意的过程很有趣，但是Elisp写起来总有种别扭的感觉。一方面，我把它当成是Common Lisp，写的时候没有觉得“这个用法可能会有问题”；另一方面，它又不是普通的写lisp代码，还要一边写一边摸索Emacs中的一些概念。不过总体而言，还是挺好玩的，除了没有一个像模像样的REPL之外。 来龙去脉我用Emacs记录了不少的“笔记”。虽说我自己将其">
+<meta name="keywords" content="emacs,elisp,elasticsearch,note-taking,笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何检查一组区间中是否存在两个区间有交集">
-<meta property="og:url" content="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/index.html">
+<meta property="og:title" content="在Emacs中搭建笔记查阅系统的尝试">
+<meta property="og:url" content="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="假设有N个区间，将它们表达为，其中下标i位于区间中 为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间而言，都有（这里的i小于N-1）。 为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系  这是因为如果，那么所有位于区间中的数都将会小于 b_k，">
+<meta property="og:description" content="给Emacs写插件有种痛并快乐着的感觉。虽然这个发挥创意的过程很有趣，但是Elisp写起来总有种别扭的感觉。一方面，我把它当成是Common Lisp，写的时候没有觉得“这个用法可能会有问题”；另一方面，它又不是普通的写lisp代码，还要一边写一边摸索Emacs中的一些概念。不过总体而言，还是挺好玩的，除了没有一个像模像样的REPL之外。 来龙去脉我用Emacs记录了不少的“笔记”。虽说我自己将其">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?%5Bb_i,%20e_i%5D">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?b_i%20%3C%20b_%7Bi+1%7D">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?e_j%20%3C%20b_k">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?%5Bb_j,%20e_j%5D">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_k%20%3C%20e_j">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?k%20-%20j%20%3E%201">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_l">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k%20%3E%20b_l">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?%5Bb_l,%20e_j%5D">
-<meta property="og:image" content="http://latex.codecogs.com/gif.latex?e_l%20%3E%20e_j">
-<meta property="og:updated_time" content="2019-01-09T15:20:35.584Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%94%A8org-mode%E8%AE%B0%E7%9A%84%E7%AC%94%E8%AE%B0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%9F%A5%E7%9C%8BElasticSearch%E4%B8%AD%E7%9A%84%E7%AC%94%E8%AE%B0.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/lt-ask%E7%9A%84%E5%80%99%E9%80%89%E5%88%97%E8%A1%A8.png">
+<meta property="og:updated_time" content="2019-10-20T06:48:42.127Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何检查一组区间中是否存在两个区间有交集">
-<meta name="twitter:description" content="假设有N个区间，将它们表达为，其中下标i位于区间中 为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间而言，都有（这里的i小于N-1）。 为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系  这是因为如果，那么所有位于区间中的数都将会小于 b_k，">
-<meta name="twitter:image" content="http://latex.codecogs.com/gif.latex?%5Bb_i,%20e_i%5D">
+<meta name="twitter:title" content="在Emacs中搭建笔记查阅系统的尝试">
+<meta name="twitter:description" content="给Emacs写插件有种痛并快乐着的感觉。虽然这个发挥创意的过程很有趣，但是Elisp写起来总有种别扭的感觉。一方面，我把它当成是Common Lisp，写的时候没有觉得“这个用法可能会有问题”；另一方面，它又不是普通的写lisp代码，还要一边写一边摸索Emacs中的一些概念。不过总体而言，还是挺好玩的，除了没有一个像模像样的REPL之外。 来龙去脉我用Emacs记录了不少的“笔记”。虽说我自己将其">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%94%A8org-mode%E8%AE%B0%E7%9A%84%E7%AC%94%E8%AE%B0.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -92,10 +82,10 @@ ga('send', 'pageview');
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-如何检查一组区间中是否存在两个区间有交集" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main"><article id="post-在Emacs中搭建笔记查阅系统的尝试" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" class="article-date">
-  <time datetime="2017-03-19T14:49:46.000Z" itemprop="datePublished">2017-03-19</time>
+    <a href="/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" class="article-date">
+  <time datetime="2019-10-20T06:42:33.000Z" itemprop="datePublished">2019-10-20</time>
 </a>
     
   </div>
@@ -106,7 +96,7 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      如何检查一组区间中是否存在两个区间有交集
+      在Emacs中搭建笔记查阅系统的尝试
     </h1>
   
 
@@ -114,27 +104,31 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>假设有N个区间，将它们表达为<img src="http://latex.codecogs.com/gif.latex?%5Bb_i,%20e_i%5D" alt="">，其中下标i位于区间<img src="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">中</p>
-<p>为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间<img src="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">而言，都有<img src="http://latex.codecogs.com/gif.latex?b_i%20%3C%20b_%7Bi+1%7D" alt="">（这里的i小于N-1）。</p>
-<p>为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系</p>
-<p><img src="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k" alt=""></p>
-<p>这是因为如果<img src="http://latex.codecogs.com/gif.latex?e_j%20%3C%20b_k" alt="">，那么所有位于区间<img src="http://latex.codecogs.com/gif.latex?%5Bb_j,%20e_j%5D" alt="">中的数都将会小于 b_k，那么第j个区间与第k个区间就不可能有交集了，因此上述不等式一定成立。再加上这一组区间都是按照区间的下界递增排序的，那么必然有</p>
-<p><img src="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_k%20%3C%20e_j" alt=""></p>
-<p>假设<img src="http://latex.codecogs.com/gif.latex?k%20-%20j%20%3E%201" alt="">，由于k和j都是正整数，这意味着在第j和第k个区间之间，必然还存在着一个区间l，那么这个区间的必然满足</p>
-<p><img src="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_l" alt=""></p>
-<p><img src="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k%20%3E%20b_l" alt=""></p>
-<p>这就意味着第j个区间和第l个区间也存在交集，它们的交集是子区间<img src="http://latex.codecogs.com/gif.latex?%5Bb_l,%20e_j%5D" alt="">（这里假设<img src="http://latex.codecogs.com/gif.latex?e_l%20%3E%20e_j" alt="">）。这就说明了，如果可以在一组区间中找到两个不相邻的区间，它们存在重叠的部分，那么一定可以找到第三个区间，使得这个区间与其中的一个区间也存在重叠。</p>
-<p>这表示如果我们要判定一组区间是否存在重叠，那么只需要先将它们基于区间的起点按照递增排序后，比较每一对相邻的两个区间是否存在重叠即可。</p>
+        <p>给Emacs写插件有种痛并快乐着的感觉。虽然这个发挥创意的过程很有趣，但是Elisp写起来总有种别扭的感觉。一方面，我把它当成是Common Lisp，写的时候没有觉得“这个用法可能会有问题”；另一方面，它又不是普通的写lisp代码，还要一边写一边摸索Emacs中的一些概念。不过总体而言，还是挺好玩的，除了没有一个像模像样的REPL之外。</p>
+<h2 id="来龙去脉"><a href="#来龙去脉" class="headerlink" title="来龙去脉"></a>来龙去脉</h2><p>我用Emacs记录了不少的“笔记”。虽说我自己将其称为笔记，但是它们更像是我把遇到的一些问题和解决方法给记录下来，而没有太多自己的感悟。它们的外观倒是高度的一致，见下图</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%94%A8org-mode%E8%AE%B0%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
+<p>（第一次尝试给自己的图片打水印，有点好玩）每一个一级条目都是一个问题，并且这个文件中只有一级条目。而条目下的内容则是对标题的问题的回答。其中还有代码块——也就是写着BEGIN_SRC和END_SRC的那部分。用org-mode来记录笔记有几个好处，其中一个便是可以在笔记中插入任何Emacs支持的编程语言代码片段并具备语法高亮。当然了，还有一个巨大的优势，便是org-mode尽管看似花里胡哨，骨子里却是正统的纯文本文件，它可以很方便地在其它工具中处理。</p>
+<p>而我用来处理的其中一个工具便是ElasticSearch。比如说，上图的第一条笔记，在ElasticSearch中存成了下面这样的结构</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%9F%A5%E7%9C%8BElasticSearch%E4%B8%AD%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
+<p>本来我是写了一个Alfred的Workflow来查询ElasticSearch的，但是奈何Workflow那种一行行的方式展示org-mode格式的笔记不太友好，因此便打算直接在Emacs中查询并查看笔记内容。</p>
+<h2 id="牛刀小试"><a href="#牛刀小试" class="headerlink" title="牛刀小试"></a>牛刀小试</h2><p>为了可以在Emacs中查看笔记内容，我打算借助于Helm的力量。<a href="https://emacs-helm.github.io/helm/" target="_blank" rel="noopener">Helm</a>是Emacs的一个补全的框架，可以用来呈现一系列的候选项，然后选中后触发一些什么动作。我期望的形式，是在Emacs中按下某种快捷键或者输入某个命令行，可以在minibuffer中输入自己要查询的内容，然后Emacs查询ElasticSearch并最终通过Helm来呈现这些查询内容匹配的笔记条目。目前的成果是下面这样子的</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/lt-ask%E7%9A%84%E5%80%99%E9%80%89%E5%88%97%E8%A1%A8.png" alt=""></p>
+<p>具体的做法其实也很简单。首先，要知道Helm是如何被使用的。通过这篇<a href="https://wikemacs.org/wiki/How_to_write_helm_extensions" target="_blank" rel="noopener">文档</a>，初步了解到只需要定一个变量，并通过<code>:sources</code>关键字参数传递给<code>helm</code>这个函数即可。我所定义的传递给<code>helm</code>函数的“source”如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br></pre></td></tr></table></figure>
+<p>其中<code>faq-candidates</code>的作用便是根据minibuffer中的关键字查询ElasticSearch并组织好一个结构返回给<code>helm</code>。需要注意的是，<code>faq-candidates</code>必须是一个无参的函数才行，但输入的数据又偏偏需要从minibuffer中获取。因此，我的做法是约定一个变量<code>faq-query</code>，在调用<code>helm</code>之前首先调用<code>read-from-minibuffer</code>函数读取输入，然后将输入的字符串赋值给<code>faq-query</code>，之后当<code>helm</code>开始使用这个source的时候，<code>faq-candidates</code>函数便不需要参数，而可以直接从<code>faq-query</code>中拿到自己需要的搜索内容向ElasticSearch请求了。当然了，如果有像Common Lisp动态作用域的话，也就不需要定义这么一个全局变量了，对Emacs全局的侵入会更少一点。</p>
+<p>目前能够做到的也仅仅是查询ElasticSearch，并在选中某个条目并按下回车的时候打开浏览器来查看而已，之后应该会继续完善。目前的完整代码如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; 调用ElasticSearch查询笔记</span></span><br><span class="line">(<span class="name">require</span> 'request)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq (<span class="name">query</span>)</span><br><span class="line">  <span class="string">"向ElasticSearch查询QUERY匹配的笔记"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">response</span>))</span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:9200/faq/_search"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">encode-coding-string</span></span><br><span class="line">            (<span class="name">json-encode</span></span><br><span class="line">             (<span class="name">list</span></span><br><span class="line">              (<span class="name">cons</span> <span class="string">"query"</span> (<span class="name">list</span></span><br><span class="line">                             (<span class="name">cons</span> <span class="string">"multi_match"</span> (<span class="name">list</span></span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"fields"</span> (<span class="name">list</span> <span class="string">"answer"</span> <span class="string">"question"</span>))</span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"query"</span> query)))))))</span><br><span class="line">            'utf-8)</span><br><span class="line">     <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">     <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">setq</span> data (<span class="name">decode-coding-string</span> data 'utf-8))</span><br><span class="line">                 (<span class="name">setq</span> response (<span class="name">json-read-from-string</span> data))))</span><br><span class="line">     <span class="symbol">:sync</span> <span class="literal">t</span>)</span><br><span class="line">    response))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> make-faq-candidates (<span class="name">response</span>)</span><br><span class="line">  <span class="string">"将查询ElasticSearch的结果构造为helm可以识别的candidates格式"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">hits</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits response))))))</span><br><span class="line">    (<span class="name">mapcar</span> (<span class="name">lambda</span> (<span class="name">doc</span>)</span><br><span class="line">              (<span class="name">let</span> ((<span class="name">_source</span> (<span class="name">cdr</span> (<span class="name">assoc</span> '_source doc))))</span><br><span class="line">                (<span class="name">cons</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'question _source))</span><br><span class="line">                      (<span class="name">cdr</span> (<span class="name">assoc</span> '_id doc)))))</span><br><span class="line">            hits)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defvar</span> faq-query <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq-candidates ()</span><br><span class="line">  (<span class="name">make-faq-candidates</span> (<span class="name">faq</span> faq-query)))</span><br><span class="line"></span><br><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> lt-ask ()</span><br><span class="line">  <span class="string">"交互式地从minibuffer中读取笔记的关键词并展示选项"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">content</span> (<span class="name">read-from-minibuffer</span> <span class="string">"笔记关键词："</span>)))</span><br><span class="line">    (<span class="name">setq</span> faq-query content)</span><br><span class="line">    (<span class="name">helm</span> <span class="symbol">:sources</span> '(faq-helm-sources))))</span><br></pre></td></tr></table></figure>
+<p>有不少值得吐槽的地方，不过都先按下不表吧，各位读者有兴趣的话可以留言交流一下XD</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" data-id="ck1ymr4o100117v30f5jbtva0" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" data-id="ck1ymr4nz000w7v30alebz0ip" class="article-share-link">Share</a>
       
-        <a href="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/#disqus_thread" class="article-comment-link">Comments</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数学/">数学</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elisp/">elisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note-taking/">note-taking</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
 
     </footer>
   </div>
@@ -142,19 +136,10 @@ ga('send', 'pageview');
     
 <nav id="article-nav">
   
-    <a href="/2017/04/30/如何使用CL实现snowflake/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          如何使用CL实现snowflake
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/03/08/如何安装及使用Elastic-Search/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/10/11/如何编译defun/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">如何安装及使用Elastic Search</div>
+      <div class="article-nav-title">如何编译defun</div>
     </a>
   
 </nav>
@@ -266,7 +251,7 @@ ga('send', 'pageview');
 <script>
   var disqus_shortname = 'Liutos';
   
-  var disqus_url = 'https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/';
+  var disqus_url = 'https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/';
   
   (function(){
     var dsq = document.createElement('script');
