@@ -22,7 +22,7 @@ ga('send', 'pageview');
   <title>调用C标准库的exit函数 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="在上一篇文章中，实现了对大于号（&amp;gt;）的处理，那么对if表达式的编译也就是信手拈来的事了，不解释太多。在本篇中，将会讲述一下如何产生可以调用来自于C语言标准库的exit(3)函数的汇编代码。 在Common Lisp中并没有一个叫做EXIT的内置函数，所以如同之前实现的_exit一样，我会新增一种需要识别的(first expr)，即符号exit。为了可以调用C语言标准库中的exit函数，需要">
-<meta name="keywords" content="common lisp,assembly,compiler,lisp,x64,汇编,编译器,setq">
+<meta name="keywords" content="common lisp,assembly,compiler,lisp,setq,x64,汇编,编译器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="调用C标准库的exit函数">
 <meta property="og:url" content="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/index.html">
@@ -120,7 +120,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="ck2bzbghs002aou30apyo370o" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="ck2bzvzjt002bfj305ewxohqx" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -162,6 +162,19 @@ ga('send', 'pageview');
 </section>
         
           <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title">广告</h3>
+  <div class="widget">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- sidebar广告 -->
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4199841931601311" data-ad-slot="8452413315" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+
   
     
 

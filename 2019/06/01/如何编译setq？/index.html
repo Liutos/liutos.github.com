@@ -22,7 +22,7 @@ ga('send', 'pageview');
   <title>如何编译setq？ | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Common Lisp中的setq类似于其它语言中的赋值语句，它可以给一个符号对象设定一个值，类似于将一个值赋值给一个变量一样。简单起见，在jjcc2中，我会将所有的符号都作为全局的一个label来实现。也就是说，如果代码中出现了 1(setq a 1) 这样的代码，那么在最后生成的代码中，就会相应的在.data段中有一个同名的label，其中存放着数值1。 既然都是全局变量，那么只需要准备一个容">
-<meta name="keywords" content="common lisp,assembly,compiler,lisp,x64,汇编,编译器,setq">
+<meta name="keywords" content="common lisp,assembly,compiler,lisp,setq,x64,汇编,编译器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何编译setq？">
 <meta property="og:url" content="https://liutos.github.io/2019/06/01/如何编译setq？/index.html">
@@ -123,7 +123,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="ck2bzbghd001bou301saro0wq" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="ck2bzvzjd0016fj3056cl5479" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/01/如何编译setq？/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -165,6 +165,19 @@ ga('send', 'pageview');
 </section>
         
           <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title">广告</h3>
+  <div class="widget">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- sidebar广告 -->
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4199841931601311" data-ad-slot="8452413315" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+</div>
+
   
     
 
