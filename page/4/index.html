@@ -76,6 +76,71 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-编写嵌套反引号的宏" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/27/编写嵌套反引号的宏/" class="article-date">
+  <time datetime="2018-11-27T15:11:42.000Z" itemprop="datePublished">2018-11-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/27/编写嵌套反引号的宏/">编写嵌套反引号的宏</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一个没事找事的例子"><a href="#一个没事找事的例子" class="headerlink" title="一个没事找事的例子"></a>一个没事找事的例子</h2><p>当在Common Lisp中定义宏的时候，常常会使用到反引号（`）。比方说，我有这么一个函数<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
+<p>它被调用后会返回最后一个表达式的结果——13。如果我希望在第二个表达式计算后就把结果返回给外部的调用者的话，可以用<code>return-from</code><br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">return-from</span> foobar (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
+<p>当然了，这属于没事找事，因为完全可以把最后两个表达式放到一个<code>prog1</code>（这也是没事找事），或者直接点，把最后一个表达式删掉来做到同样的效果——但如果是这样的话这篇东西就写不下去了，所以我偏要用<code>return-from</code>。</p>
+<p>还有一个更加没事找事的办法，就是用<code>macrolet</code>定义一个局部的宏来代替<code>return-from</code>——我很想把这个新的宏叫做<code>return</code>，但这样<a href="http://www.sbcl.org/" target="_blank" rel="noopener">SBCL</a>会揍我一顿，所以我只好把这个宏叫做<code>bye</code>（叫做<code>exit</code>也会被揍）<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">macrolet</span> ((<span class="name">bye</span> (<span class="name">&amp;optional</span> value)</span><br><span class="line">               `(return-from foobar ,value)))</span><br><span class="line">    (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">    (<span class="name">bye</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">    (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>)))</span><br></pre></td></tr></table></figure></p>
+<p>如果我有另一个叫做<code>foobaz</code>的函数<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">6</span>))</span><br></pre></td></tr></table></figure></p>
+<p>也想要拥有<code>bye</code>这种想来就来想走就走的能力的话，可以依葫芦画瓢地包含一个<code>macrolet</code><br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz ()</span><br><span class="line">  (<span class="name">macrolet</span> ((<span class="name">bye</span> (<span class="name">&amp;optional</span> value)</span><br><span class="line">               `(return-from foobaz ,value)))</span><br><span class="line">    (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br><span class="line">    (<span class="name">bye</span> (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>))</span><br><span class="line">    (<span class="name">+</span> <span class="number">5</span> <span class="number">6</span>)))</span><br></pre></td></tr></table></figure></p>
+<p>好了，现在我觉得每次都需要在函数体内粘贴一份<code>bye</code>的实现代码太麻烦了，想要减少这种重复劳作。于是乎，我打算写一个宏来帮我复制粘贴代码。既然要定义宏，那么首先应当定义这个宏的名字以及用法，姑且是这么用的吧<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">with-bye</span> foobar</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">bye</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
+<p><code>with-bye</code>这个宏需要能够展开成上面的手动编写的<code>foobar</code>中的函数体的代码形式，那么<code>with-bye</code>的定义中，就一定会含有<code>macrolet</code>的代码，同时也就含有了反引号——好了，现在要来处理嵌套的反引号了。</p>
+<p><a href="https://blog.csdn.net/xiaojianpitt/article/details/7747230" target="_blank" rel="noopener">这篇文章</a>有个不错的讲解，各位不妨先看看。现在，让我来机械化地操作一遍，给出<code>with-bye</code>的定义。首先，要确定生成的目标代码中，那一些部分是可变的。对于<code>with-bye</code>而言，<code>return-from</code>的第一个参数已经<code>macrolet</code>的函数体是可变的，那么不妨把这两部分先抽象为参数<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
+<p>但这样是不够的，因为<code>name</code>是一个在最外层绑定的，但它被放在了两层的反引号当中，如果它只有一个前缀的逗号，那么它就无法在外层的反引号求值的时候被替换为目标的<code>FOOBAR</code>符号。因此，需要在<code>,name</code>之前再添加一个反引号<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,,name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
+<p>如果你在Emacs中对上述的表达式进行求值，那么它吐出来的结果实际上是<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">MACROLET</span> ((<span class="name">BYE</span> (<span class="name">&amp;OPTIONAL</span> VALUE)</span><br><span class="line">             `(RETURN-FROM ,FOOBAR ,VALUE)))</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">BYE</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
+<p>显然，这还是不对。如果生成了上面这样的代码，那么对于<code>bye</code>而言<code>FOOBAR</code>就是一个未绑定的符号了。之所以会这样，是因为</p>
+<ol>
+<li><code>name</code>在绑定的时候输入的是一个符号，并且</li>
+<li><code>name</code>被用在了嵌套的反引号内，它会被求值两次——第一次求值得到符号<code>foobar</code>，第二次则是<code>foobar</code>会被求值</li>
+</ol>
+<p>因此，为了对抗第二次的求值，需要给<code>,name</code>加上一个前缀的引号（‘），最终效果如下<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,',name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
+<p>所以<code>with-bye</code>的定义是这样的<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> with-bye (<span class="name">name</span> <span class="symbol">&amp;body</span> body)</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,',name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
+<h2 id="机械化的操作方法"><a href="#机械化的操作方法" class="headerlink" title="机械化的操作方法"></a>机械化的操作方法</h2><p>我大言不惭地总结一下，刚才的操作步骤是这样的。首先，找出一段有规律的、需要被用宏来实现的目标代码；然后，识别其中的可变的代码，给这些可变的代码的位置起一个名字（例如上文中的<code>name</code>和<code>body</code>），将它们作为<code>let</code>表达式的绑定，把目标代码装进同一个<code>let</code>表达式中。此时，目标代码被加上了一层反引号，而根据每个名字出现的位置的不同，为它们适当地补充一个前缀的逗号；最后，如果在嵌套的反引号中出现的名字无法被求值多次——比如符号或者列表，那么还需要给它们在第一个逗号后面插入一个引号，避免被求值两次招致未绑定的错误。</p>
+<h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2><p>就用上面所引用的文章里的例子好了。有一天我觉得Common Lisp中一些常用的宏的名字实在是太长了想要精简一下——毕竟敲键盘也是会累的——假装没有自动补全的功能。我可能会定义下面这两个宏<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> d-bind (<span class="name">&amp;body</span> body)</span><br><span class="line">  `(destructuring-bind ,@body))</span><br><span class="line">(<span class="name">defmacro</span> mv-bind (<span class="name">&amp;body</span> body)</span><br><span class="line">  `(multiple-value-bind ,@body))</span><br></pre></td></tr></table></figure></p>
+<p>显然，这里的代码的写法出现了重复模式，不妨试用按照机械化的操作手法来提炼出一个宏。第一步，先识别出其中可变的内容。对于上面这个例子而言，变化的地方其实只有两个名字——新宏的名字（<code>d-bind</code>和<code>mv-bind</code>），以及旧宏的名字（<code>destructuring-bind</code>和<code>multiple-value-bind</code>）。第二步，给它们命名并剥离成<code>let</code>表达式的绑定，得到如下的代码<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">new-name</span> 'd-bind)</span><br><span class="line">      (<span class="name">old-name</span> 'destructuring-bind))</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,old-name ,@body)))</span><br></pre></td></tr></table></figure></p>
+<p>因为<code>old-name</code>处于嵌套的反引号中，但是它是由最外层的<code>let</code>定义的，所以应当添上一个前缀的逗号，得到<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">new-name</span> 'd-bind)</span><br><span class="line">      (<span class="name">old-name</span> 'destructuring-bind))</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,,old-name ,@body)))</span><br></pre></td></tr></table></figure></p>
+<p>最后，因为<code>old-name</code>绑定的是一个符号，不能被两次求值（第二次是在<code>defmacro</code>定义的新宏中展开，此时<code>old-name</code>已经被替换为了<code>destructuring-bind</code>，而它对于新宏而言是一个自由变量，并没有被绑定），所以需要有一个单引号来阻止第二次的求值——因为需要的就是符号<code>destructuring-bind</code>本身。所以，最终的代码为<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> define-abbreviation (<span class="name">new-name</span> old-name)</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,',old-name ,@body)))</span><br></pre></td></tr></table></figure></p>
+<p>试一下就可以确认这个<code>define-abbreviation</code>是能用的（笑</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>能够指导编写宏的、万能的、机械化的操作方法，我想应该是不存在的</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/" data-id="ck3lk3zvy002bn030i9l13c8q" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macro/">macro</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/宏/">宏</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-重复输入相似的命令的几种方法" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/11/25/重复输入相似的命令的几种方法/" class="article-date">
@@ -114,7 +179,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="ck3ljpwek002hy130b4o1tezu" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/" data-id="ck3lk3zw5002sn030fpyp5qkr" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -169,7 +234,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/" data-id="ck3ljpwds000zy130b79wzldh" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/" data-id="ck3lk3zve000wn030i7zc4c96" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -226,7 +291,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/09/18/flexi-streams用法简介/" data-id="ck3ljpwdm000ly130edqauk4i" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/09/18/flexi-streams用法简介/" data-id="ck3lk3zv7000in030fuaocxaw" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/09/18/flexi-streams用法简介/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -285,7 +350,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/" data-id="ck3ljpwdl000jy1306vasg6nx" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/" data-id="ck3lk3zv8000ln030hkdm50lq" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -338,7 +403,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/" data-id="ck3ljpwdh000by130yiqqiweo" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/" data-id="ck3lk3zv3000bn030dv21mz3g" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -401,7 +466,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="ck3ljpwdk000hy130ml3lv6rm" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="ck3lk3zv6000fn030pw2vrcn2" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/06/04/cl-mongo用法入门/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -457,7 +522,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/05/18/远程请求Squid/" data-id="ck3ljpweh002ay13007nxwwa6" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/05/18/远程请求Squid/" data-id="ck3lk3zw2002ln0301spl4y85" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/05/18/远程请求Squid/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -508,7 +573,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" data-id="ck3ljpwdx001ay130ox0qpo07" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" data-id="ck3lk3zvf000zn0304jtmg63x" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -559,89 +624,12 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" data-id="ck3ljpwdu0016y130jepl9rdr" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" data-id="ck3lk3zvh0012n030qu5a0cpp" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数学/">数学</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-如何安装及使用Elastic-Search" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/08/如何安装及使用Elastic-Search/" class="article-date">
-  <time datetime="2017-03-08T09:31:32.000Z" itemprop="datePublished">2017-03-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/08/如何安装及使用Elastic-Search/">如何安装及使用Elastic Search</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近产品需要一个搜索商城中的商品的功能，于是接触了一下Elastic Search。虽然久仰它的大名，但一直都没有真正用过。这次稍微摸索了一下，顺便记录下来，说不定哪天就真的需要用上了。</p>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>首先需要下载Elastic Search，我选择了.zip格式的安装包，下载地址在<a href="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.2.zip" target="_blank" rel="noopener">这里</a>。下载完成后就拿到了一个5.2.2版本的Elastic Search的安装包，只需要解压即可使用。因为我喜欢把软件安装到主目录的app目录下，所以我用的命令是</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/liutos/app</span><br><span class="line">unzip ../installer/elasticsearch-5.2.2.zip</span><br></pre></td></tr></table></figure>
-<p>主目录下的installer是我习惯的用来存放软件的安装包的位置。解压后生成了一个名为elasticsearch-5.2.2的新目录。在这个目录下有一个名为bin的子目录，只需要进入该目录运行其中的elasticsearch文件即可，实例命令为</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> elasticsearch-5.2.2/bin</span><br><span class="line">./elasticsearch -d</span><br></pre></td></tr></table></figure>
-<p>为了让Elastic Search可以不占用当前的终端，添加了-d选项，使其以后台进程（daemon）的方式运行。Elastic Search需要JVM才能运行，在执行上面的命令之前请各位自行准备好Java程序的运行环境。成功启动后，Elastic Search默认会监听9200端口，可以通过浏览器访问<a href="http://localhost:9200" target="_blank" rel="noopener">http://localhost:9200</a>来确认Elastic Search是否正常启动了</p>
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h2><p>遵照官方文档中的指导，先创建一个索引以便后续向这个索引中添加文档。假设要创建的索引是为商品准备的，取名为products，可以通过如下的命令创建出来</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X PUT <span class="string">'http://localhost:9200/products'</span></span><br></pre></td></tr></table></figure>
-<p>创建成功后Elastic Search的响应结果为</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">"acknowledged"</span>:<span class="literal">true</span>,<span class="string">"shards_acknowledged"</span>:<span class="literal">true</span>&#125;</span><br></pre></td></tr></table></figure>
-<p>如果希望Elastic Search返回更可读的形式，可以添加<code>?pretty</code>参数到上面的URL的末尾。</p>
-<h2 id="文档的增删查改"><a href="#文档的增删查改" class="headerlink" title="文档的增删查改"></a>文档的增删查改</h2><p>索引已经创建了，就可以创建文档了。Elastic Search的文档是对象形式的，假设现在要创建的对象的类型为product，示例命令如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">'http://localhost:9200/products/product'</span> --data <span class="string">'</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  "id": 1,</span></span><br><span class="line"><span class="string">  "name": "Product 1"</span></span><br><span class="line"><span class="string">&#125;'</span></span><br></pre></td></tr></table></figure>
-<p>在我的机器上，Elastic Search的响应结果为</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">"_index"</span>:<span class="string">"products"</span>,<span class="string">"_type"</span>:<span class="string">"product"</span>,<span class="string">"_id"</span>:<span class="string">"AVqpZHmVckriR6iVcbaW"</span>,<span class="string">"_version"</span>:1,<span class="string">"result"</span>:<span class="string">"created"</span>,<span class="string">"_shards"</span>:&#123;<span class="string">"total"</span>:2,<span class="string">"successful"</span>:1,<span class="string">"failed"</span>:0&#125;,<span class="string">"created"</span>:<span class="literal">true</span>&#125;</span><br></pre></td></tr></table></figure>
-<p>其中名为”_id”的字段的值为Elastic Search自动为这份新写入的文档分配的ID，通过这个ID可以从Elastic Search中取出这份文档，示例命令如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">'http://localhost:9200/products/product/AVqpZHmVckriR6iVcbaW?pretty'</span></span><br></pre></td></tr></table></figure>
-<p>相当的RESTful的接口路径，也许你已经猜到了，删除一个文档的代码就是将请求的GET方法替换为DELETE。是的，示例代码如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X DELETE <span class="string">'http://localhost:9200/products/product/AVqpZHmVckriR6iVcbaW?pretty'</span></span><br></pre></td></tr></table></figure>
-<p>再次查找刚才的ID的文档时，响应结果中的”_found”字段的值就已经变成了false了。关于修改文档的方法，请参考官方手册中的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html" target="_blank" rel="noopener">章节</a>。</p>
-<h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2><h3 id="准备数据"><a href="#准备数据" class="headerlink" title="准备数据"></a>准备数据</h3><p>最简单的搜索接口的使用就是通过浏览器访问<a href="http://localhost:9200/products/_search" target="_blank" rel="noopener">http://localhost:9200/products/_search</a>这个地址了。在我的机器上，看到的页面内容为如下的JSON字符串</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="string">"took"</span>: <span class="number">42</span>,</span><br><span class="line">    <span class="string">"timed_out"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"_shards"</span>: &#123;</span><br><span class="line">        <span class="string">"total"</span>: <span class="number">5</span>,</span><br><span class="line">        <span class="string">"successful"</span>: <span class="number">5</span>,</span><br><span class="line">        <span class="string">"failed"</span>: <span class="number">0</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"hits"</span>: &#123;</span><br><span class="line">        <span class="string">"total"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">"max_score"</span>: <span class="literal">null</span>,</span><br><span class="line">        <span class="string">"hits"</span>: [ ]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>为了方便接下来的演示，先通过Elastic Search的_bulk接口向其批量创建文档数据，示例代码如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">'http://localhost:9200/_bulk?pretty'</span> --data-binary <span class="string">'@docs'</span></span><br></pre></td></tr></table></figure>
-<p>其中docs文件中的内容为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 1&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;设计模式之禅&quot;&#125;</span><br><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 2&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;失控：全人类的最终命运和结局&quot;&#125;</span><br><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 3&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;构建高性能Web站点&quot;, &quot;price&quot;: 75.00, &quot;author&quot;: &quot;郭欣&quot;&#125;</span><br><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 4&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;大型网站技术架构：核心原理与案例分析&quot;, &quot;price&quot;: 59.00, &quot;author&quot;: &quot;李智慧&quot;, &quot;publisher&quot;: &quot;电子工业出版社&quot;&#125;</span><br></pre></td></tr></table></figure>
-<p>尽管这里是一个文本文件，但是根据<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html" target="_blank" rel="noopener">官方文档</a>的说法，此处需要使用curl的二进制模式来发送数据，否则会报错。</p>
-<h3 id="个性化搜索"><a href="#个性化搜索" class="headerlink" title="个性化搜索"></a>个性化搜索</h3><p>如果希望找到《失控》这本书的信息，那么可以根据书名进行查找，示例代码如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">'http://localhost:9200/products/_search?q=name:失控'</span></span><br></pre></td></tr></table></figure>
-<p>Elastic Search提供了许多的搜索选项，如果全部通过URL中的query string来传递将会非常难以构造。为此，可以使用Elastic Search提供的基于HTTP body的参数传递方式，示例代码如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search'</span> --data <span class="string">'&#123;"query": &#123;"match": &#123;"name": "失控"&#125;&#125;&#125;'</span></span><br></pre></td></tr></table></figure>
-<p>Elastic Search支持相当丰富的搜索选项，这里不逐一介绍了，大家可以从官方文档的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html" target="_blank" rel="noopener">这里</a>开始翻看。本来想在Chrome的POSTMAN插件中试验搜索功能的，结果当我选定了GET方法后，就不需要我提交HTTP body了，因此还是用curl进行演示。回到正题，如果我们搜索的是一个“站”字，那么Elastic Search会吐出两个结果，此处可以使用搜索接口的<code>from</code>和<code>size</code>参数，分别控制返回的内容取自搜索结果中的哪一个片段。例如想要取出结果中的第二个，可以使用下列代码</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search?pretty'</span> --data <span class="string">'&#123;"from": 1, "size": 1, "query": &#123;"match": &#123;"name": "站"&#125;&#125;&#125;'</span></span><br></pre></td></tr></table></figure>
-<p>通过结合使用<code>from</code>和<code>size</code>参数，可以实现许多应用中所要求的分页功能。在我厂的业务场景中，商品信息还是很多的，不可能全部放入到Elastic Search中作为文档数据存储，Elastic Search只是负责提供搜索出来的商品ID即可，之后再通过商品ID从原来的商品的数据库中按照顺序取出对应的完整的商品信息。因此，在搜索Elastic Search时实际上只需要商品的ID就足够了，可以通过Elastic Search提供的<code>_source</code>字段控制接口吐出的内容，示例代码如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search?pretty'</span> --data <span class="string">'&#123;"query": &#123;"match_all": &#123;&#125;&#125;, "_source": ["_id"]&#125;'</span></span><br></pre></td></tr></table></figure>
-<p>这样在吐出的内容中<code>_source</code>字段的值就会是一个空对象，应用程序只需要取每一个hits数组中的记录的”_id”字段即可。这样做的目的是减少Elastic Search通过网络传输了一部分毫无必要的数据，略微优化一下网络开销</p>
-<p>全文完</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/" data-id="ck3ljpwdz001ey130rpfjt91y" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li></ul>
 
     </footer>
   </div>
@@ -668,23 +656,16 @@ ga('send', 'pageview');
   <h3 class="widget-title">链接</h3>
   <div class="widget">
     <li><a href="http://reverland.org" title="reverland的知行阁">reverland的知行阁</a></li>
-    <li><a href="http://maplebeats.com" title="maplebeats's blog">maplebeats's blog</a></li>
     <li><a href="http://www.gndrive.org/" title="高达数字实验室">高达数字实验室</a></li>
     <li><a href="http://www.hsyyf.me/" title="月下叹逍遥/寒山烟雨">月下叹逍遥/寒山烟雨</a></li>
     <li><a href="http://www.lainme.com/doku.php" title="Lainme's Blog">Lainme's Blog</a></li>
-    <li><a href="http://maskray.tk/" title="MaskRay">MaskRay</a></li>
     <li><a href="http://lengxx.com/" title="冷轩信">冷轩信</a></li>
     <li><a href="http://forum.ubuntu.org.cn/" title="Ubuntu中文论坛">Ubuntu中文论坛</a></li>
     <li><a href="http://tombu.info/" title="Tom Bu's Blog">Tom Bu's Blog</a></li>
-    <li><a href="http://blog.aeropig.me/" title="叶孤城">叶孤城</a></li>
-    <li><a href="http://xwyam.github.com/" title="xw_y_am的博客">xw_y_am的博客</a></li>
-    <li><a href="http://9.douban.com/subject/9548542/" title="krfantasy的博客">krfantasy的博客</a></li>
     <li><a href="http://y-window.github.com/" title="Window的空间">Window的空间</a></li>
     <li><a href="http://www.thev.net/PaulLiu/" title="九瓜老师的博客">九瓜老师的博客</a></li>
-    <li><a href="http://www.huangjs.net/blog/" title="涧石兄的博客">涧石兄的博客</a></li>
     <li><a href="http://weibo.com/liutos" title="博主的微博">博主的微博</a></li>
     <li><a href="http://github.com/Liutos" title="博主的GitHub页面">博主的GitHub页面</a></li>
-    <li><a href="http://blog.sina.com.cn/u/2031941547" title="博主的新浪博客">博主的新浪博客</a></li>
   </div>
 </div>
   
@@ -724,6 +705,10 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <a href="/2019/11/30/一些自我感觉良好的命名约定/">一些自我感觉良好的命名约定</a>
+          </li>
+        
+          <li>
             <a href="/2019/11/21/Emacs走马观花/">带你见识一下传说中的Emacs</a>
           </li>
         
@@ -737,10 +722,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/10/11/如何编译defun/">如何编译defun</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/18/编译return语句/">编译return语句</a>
           </li>
         
       </ul>

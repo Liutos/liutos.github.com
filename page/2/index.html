@@ -76,6 +76,54 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-inside-out-aux如何支持对-exit的调用" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/" class="article-date">
+  <time datetime="2019-06-26T13:44:25.000Z" itemprop="datePublished">2019-06-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/26/inside-out-aux如何支持对-exit的调用/">inside-out/aux如何支持对_exit的调用</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在<a href="http://liutos.github.io/2019/06/14/%E6%8B%86%E8%A7%A3%E5%B5%8C%E5%A5%97%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F/">上一篇文章</a>中，新增了两个函数：<code>inside-out</code>以及<code>inside-out/aux</code>——曾经想过将<code>inside-out/aux</code>放到前者的函数中用<code>labels</code>来定义，但担心不好调试，所以剥离了出来成为一个独立的函数——<code>inside-out</code>基本上只是驱动了后者，真正地将嵌套表达式拆解开来的还是<code>inside-out/aux</code>。因此，为了让让这个编译器最终可以处理如下形式的代码</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">_exit</span> (<span class="name">+</span> (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>) <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+<p>就需要先对<code>inside-out/aux</code>进行一番改造，使其可以处理上述代码。</p>
+<p>在此之前，先处理一下<code>inside-out/aux</code>目前的一些问题。在之前的实现中，由于使用了<code>setf</code>对输入参数<code>expr</code>进行了修改，因此在<code>example3</code>中的列表实际上在第二次运行的时候已经不是代码中看到的那样子了。所以，先将<code>inside-out/aux</code>改写为更pure的形式</p>
+        
+          <p class="article-more-link">
+            <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/" data-id="ck3lk3zv8000jn0309ro7id96" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-时序图绘制工具走马观花" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/06/18/时序图绘制工具走马观花/" class="article-date">
@@ -117,7 +165,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="ck3ljpweb001zy130kapzi6pw" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="ck3lk3zvu0023n030sjvuh41b" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -166,7 +214,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="ck3ljpwe8001vy130qritmot4" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="ck3lk3zvq001vn030hmmbdglk" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -213,7 +261,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="ck3ljpwe9001wy13010aehkz1" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="ck3lk3zvt0021n0308htde4av" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/11/支持四则运算中的变量/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -261,7 +309,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="ck3ljpwe2001jy1306o2etx54" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="ck3lk3zvj001cn0301pq972s8" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/01/如何编译setq？/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -314,7 +362,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/27/如何编译progn/" data-id="ck3ljpwdw0018y130ri2jebqv" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/27/如何编译progn/" data-id="ck3lk3zvj0019n0306lobg41g" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/27/如何编译progn/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -362,7 +410,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="ck3ljpweh002by130lfpcrgqn" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="ck3lk3zvs0020n030ycqosnhb" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/23/支持减、乘，以及除/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -409,7 +457,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/21/Evernote与Leanote/" data-id="ck3ljpwdf0006y1308ur4gkmf" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/21/Evernote与Leanote/" data-id="ck3lk3zv10008n030rcya1hjt" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/21/Evernote与Leanote/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -456,7 +504,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/" data-id="ck3ljpwdq000uy130hi7amucj" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/" data-id="ck3lk3zv9000mn03098ntomcm" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -502,80 +550,12 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/" data-id="ck3ljpwdg0008y130y4smillz" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/" data-id="ck3lk3zuu0001n030kiue099v" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/editor/">editor</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/typora/">typora</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编辑器/">编辑器</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-更过程式的let——vertical-let" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/13/更过程式的let——vertical-let/" class="article-date">
-  <time datetime="2019-03-13T15:02:59.000Z" itemprop="datePublished">2019-03-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/13/更过程式的let——vertical-let/">更过程式的let——vertical-let</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>作为一名自诩的non-trivial的Common Lisp程序员，在编码的时候经常会遇到令人不愉快的地方，其中一个便是<a href="http://www.lispworks.com/documentation/HyperSpec/Body/s_let_l.htm#let" target="_blank" rel="noopener">LET</a>。</p>
-<p>一段典型的<code>LET</code>的示例代码如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> <span class="number">1</span>))</span><br><span class="line">   a)</span><br></pre></td></tr></table></figure>
-<p>大多数时候，<code>LET</code>不会只有一个绑定。并且，也不会只是绑定一个常量这么简单，而应当是下面这样的</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">      (<span class="name">b</span> (<span class="name">bar</span> z)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></table></figure>
-<p>有时候我会想看看某一个绑定的值——最好是在它计算完毕后立即查看。如果要查看<code>foo</code>函数的返回值，可以这样写</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">      (<span class="name">b</span> (<span class="name">bar</span> z)))</span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></table></figure>
-<p>如果调用<code>foo</code>和<code>bar</code>都顺利的话上面的代码也就够了。比较棘手的情况是，如果<code>a</code>的值不符合预期，会导致<code>b</code>的计算过程出状况（尽管在上面的代码中看似不会）。这种情况多出现在<code>LET*</code>的使用中，如下面所示</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">       (<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></table></figure>
-<p>如果错误的<code>a</code>会导致<code>bar</code>的调用出错，那么在调用<code>function1</code>之前才调用<code>print</code>打印<code>a</code>已经为时过晚了——毕竟调用<code>bar</code>的时候就抛出<code>condition</code>往调用链的上游走了。一种方法是写成下面这样子</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">let</span> ((<span class="name">tmp</span> (<span class="name">foo</span> x y)))</span><br><span class="line">            (<span class="name">print</span> tmp)</span><br><span class="line">            tmp))</span><br><span class="line">       (<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></table></figure>
-<p>这也太丑了！要不然写成下面这样子？</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y)))</span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">    (<span class="name">function1</span> a b)</span><br><span class="line">    (<span class="name">function2</span> a b)))</span><br></pre></td></tr></table></figure>
-<p>本来一个<code>LET</code>就可以做到的事情，这下子用了两个，还导致缩进更深了一级。如果有十个变量需要打印，就会增加十个<code>LET</code>和十层缩进。如果心血来潮想查看一个变量的值，还要大幅调整代码。</p>
-<p>问题大概就出在<code>LET</code>和<code>LET*</code>的语法上。以<code>LET</code>为例，它由截然分开的<code>bindings</code>和<code>forms</code>组成，两者不能互相穿插。因此，如果想在<code>bindings</code>中求值一段表达式，只能将<code>bindings</code>切开，写成两个<code>LET</code>的形式。好像写一个新的宏可以解决这个问题？是的，<code>vertical-let</code>就是。</p>
-<p><code>vertical-let</code>是一个我自己写的宏，源代码<a href="https://github.com/Liutos/clitool/blob/master/cl/sak.lisp#L9" target="_blank" rel="noopener">在此</a>。其用法如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line">  <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line">  a)</span><br></pre></td></tr></table></figure>
-<p>它借鉴了<code>LOOP</code>中绑定变量的方式（即<code>:with</code>和<code>=</code>），绑定变量和用于求值的代码还可以交织在一起，如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line">  <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line">  (<span class="name">+</span> a b))</span><br></pre></td></tr></table></figure>
-<p><code>vertical-let</code>最终会展开为<code>LET</code>，比如上面的代码，会展开为如下的代码</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">LET</span> ((<span class="name">A</span> <span class="number">1</span>))</span><br><span class="line">  (<span class="name">PRINT</span> A)</span><br><span class="line">  (<span class="name">LET</span> ((<span class="name">B</span> <span class="number">2</span>))</span><br><span class="line">    (<span class="name">+</span> A B)))</span><br></pre></td></tr></table></figure>
-<p><code>vertical-let</code>的算法很简单。它遍历表达式列表，当遇到<code>:with</code>时就把接下来的三个元素分别视为变量名、等号，以及待求值的表达式，将三者打包进一个列表中，再压栈；当遇到其它值时，就视为待求值的表达式（将会组成<code>LET</code>的<code>forms</code>部分），也放进列表中再压栈（具体方法参见源代码）。</p>
-<p>将所有值都遍历并压栈后，接下来要遍历这个栈中的元素。先准备两个空的栈——一个存放<code>bindings</code>，一个存放<code>forms</code>。接着，对于每一个从栈中弹出的元素，分为如下两种情况：</p>
-<ol>
-<li>如果表示<code>binding</code>，则直接压入存放<code>bindings</code>的栈，否则；</li>
-<li>如果是待求值的表达式，并且上一个出栈的元素是<code>binding</code>，则说明已经有一段完整的<code>LET</code>的内容被集齐。因此，将目前在两个栈中的内容全部弹出，组合为一个<code>LET</code>表达式再压入存放<code>forms</code>的栈中。然后将方才弹出的表达式也压入<code>forms</code>。重复上述过程直至所有元素都被处理，最后将还在两个栈中的内容也组合为一个<code>LET</code>表达式便结束了。</li>
-</ol>
-<p>全文完</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/" data-id="ck3ljpweb0021y130lz799l53" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/macro/">macro</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/宏/">宏</a></li></ul>
 
     </footer>
   </div>
@@ -602,23 +582,16 @@ ga('send', 'pageview');
   <h3 class="widget-title">链接</h3>
   <div class="widget">
     <li><a href="http://reverland.org" title="reverland的知行阁">reverland的知行阁</a></li>
-    <li><a href="http://maplebeats.com" title="maplebeats's blog">maplebeats's blog</a></li>
     <li><a href="http://www.gndrive.org/" title="高达数字实验室">高达数字实验室</a></li>
     <li><a href="http://www.hsyyf.me/" title="月下叹逍遥/寒山烟雨">月下叹逍遥/寒山烟雨</a></li>
     <li><a href="http://www.lainme.com/doku.php" title="Lainme's Blog">Lainme's Blog</a></li>
-    <li><a href="http://maskray.tk/" title="MaskRay">MaskRay</a></li>
     <li><a href="http://lengxx.com/" title="冷轩信">冷轩信</a></li>
     <li><a href="http://forum.ubuntu.org.cn/" title="Ubuntu中文论坛">Ubuntu中文论坛</a></li>
     <li><a href="http://tombu.info/" title="Tom Bu's Blog">Tom Bu's Blog</a></li>
-    <li><a href="http://blog.aeropig.me/" title="叶孤城">叶孤城</a></li>
-    <li><a href="http://xwyam.github.com/" title="xw_y_am的博客">xw_y_am的博客</a></li>
-    <li><a href="http://9.douban.com/subject/9548542/" title="krfantasy的博客">krfantasy的博客</a></li>
     <li><a href="http://y-window.github.com/" title="Window的空间">Window的空间</a></li>
     <li><a href="http://www.thev.net/PaulLiu/" title="九瓜老师的博客">九瓜老师的博客</a></li>
-    <li><a href="http://www.huangjs.net/blog/" title="涧石兄的博客">涧石兄的博客</a></li>
     <li><a href="http://weibo.com/liutos" title="博主的微博">博主的微博</a></li>
     <li><a href="http://github.com/Liutos" title="博主的GitHub页面">博主的GitHub页面</a></li>
-    <li><a href="http://blog.sina.com.cn/u/2031941547" title="博主的新浪博客">博主的新浪博客</a></li>
   </div>
 </div>
   
@@ -658,6 +631,10 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <a href="/2019/11/30/一些自我感觉良好的命名约定/">一些自我感觉良好的命名约定</a>
+          </li>
+        
+          <li>
             <a href="/2019/11/21/Emacs走马观花/">带你见识一下传说中的Emacs</a>
           </li>
         
@@ -671,10 +648,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/10/11/如何编译defun/">如何编译defun</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/18/编译return语句/">编译return语句</a>
           </li>
         
       </ul>

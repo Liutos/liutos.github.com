@@ -76,6 +76,83 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-如何安装及使用Elastic-Search" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/08/如何安装及使用Elastic-Search/" class="article-date">
+  <time datetime="2017-03-08T09:31:32.000Z" itemprop="datePublished">2017-03-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/08/如何安装及使用Elastic-Search/">如何安装及使用Elastic Search</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近产品需要一个搜索商城中的商品的功能，于是接触了一下Elastic Search。虽然久仰它的大名，但一直都没有真正用过。这次稍微摸索了一下，顺便记录下来，说不定哪天就真的需要用上了。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>首先需要下载Elastic Search，我选择了.zip格式的安装包，下载地址在<a href="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.2.zip" target="_blank" rel="noopener">这里</a>。下载完成后就拿到了一个5.2.2版本的Elastic Search的安装包，只需要解压即可使用。因为我喜欢把软件安装到主目录的app目录下，所以我用的命令是</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/liutos/app</span><br><span class="line">unzip ../installer/elasticsearch-5.2.2.zip</span><br></pre></td></tr></table></figure>
+<p>主目录下的installer是我习惯的用来存放软件的安装包的位置。解压后生成了一个名为elasticsearch-5.2.2的新目录。在这个目录下有一个名为bin的子目录，只需要进入该目录运行其中的elasticsearch文件即可，实例命令为</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> elasticsearch-5.2.2/bin</span><br><span class="line">./elasticsearch -d</span><br></pre></td></tr></table></figure>
+<p>为了让Elastic Search可以不占用当前的终端，添加了-d选项，使其以后台进程（daemon）的方式运行。Elastic Search需要JVM才能运行，在执行上面的命令之前请各位自行准备好Java程序的运行环境。成功启动后，Elastic Search默认会监听9200端口，可以通过浏览器访问<a href="http://localhost:9200" target="_blank" rel="noopener">http://localhost:9200</a>来确认Elastic Search是否正常启动了</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h2><p>遵照官方文档中的指导，先创建一个索引以便后续向这个索引中添加文档。假设要创建的索引是为商品准备的，取名为products，可以通过如下的命令创建出来</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X PUT <span class="string">'http://localhost:9200/products'</span></span><br></pre></td></tr></table></figure>
+<p>创建成功后Elastic Search的响应结果为</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">"acknowledged"</span>:<span class="literal">true</span>,<span class="string">"shards_acknowledged"</span>:<span class="literal">true</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>如果希望Elastic Search返回更可读的形式，可以添加<code>?pretty</code>参数到上面的URL的末尾。</p>
+<h2 id="文档的增删查改"><a href="#文档的增删查改" class="headerlink" title="文档的增删查改"></a>文档的增删查改</h2><p>索引已经创建了，就可以创建文档了。Elastic Search的文档是对象形式的，假设现在要创建的对象的类型为product，示例命令如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">'http://localhost:9200/products/product'</span> --data <span class="string">'</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">  "id": 1,</span></span><br><span class="line"><span class="string">  "name": "Product 1"</span></span><br><span class="line"><span class="string">&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>在我的机器上，Elastic Search的响应结果为</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">"_index"</span>:<span class="string">"products"</span>,<span class="string">"_type"</span>:<span class="string">"product"</span>,<span class="string">"_id"</span>:<span class="string">"AVqpZHmVckriR6iVcbaW"</span>,<span class="string">"_version"</span>:1,<span class="string">"result"</span>:<span class="string">"created"</span>,<span class="string">"_shards"</span>:&#123;<span class="string">"total"</span>:2,<span class="string">"successful"</span>:1,<span class="string">"failed"</span>:0&#125;,<span class="string">"created"</span>:<span class="literal">true</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>其中名为”_id”的字段的值为Elastic Search自动为这份新写入的文档分配的ID，通过这个ID可以从Elastic Search中取出这份文档，示例命令如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">'http://localhost:9200/products/product/AVqpZHmVckriR6iVcbaW?pretty'</span></span><br></pre></td></tr></table></figure>
+<p>相当的RESTful的接口路径，也许你已经猜到了，删除一个文档的代码就是将请求的GET方法替换为DELETE。是的，示例代码如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X DELETE <span class="string">'http://localhost:9200/products/product/AVqpZHmVckriR6iVcbaW?pretty'</span></span><br></pre></td></tr></table></figure>
+<p>再次查找刚才的ID的文档时，响应结果中的”_found”字段的值就已经变成了false了。关于修改文档的方法，请参考官方手册中的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html" target="_blank" rel="noopener">章节</a>。</p>
+<h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2><h3 id="准备数据"><a href="#准备数据" class="headerlink" title="准备数据"></a>准备数据</h3><p>最简单的搜索接口的使用就是通过浏览器访问<a href="http://localhost:9200/products/_search" target="_blank" rel="noopener">http://localhost:9200/products/_search</a>这个地址了。在我的机器上，看到的页面内容为如下的JSON字符串</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="string">"took"</span>: <span class="number">42</span>,</span><br><span class="line">    <span class="string">"timed_out"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"_shards"</span>: &#123;</span><br><span class="line">        <span class="string">"total"</span>: <span class="number">5</span>,</span><br><span class="line">        <span class="string">"successful"</span>: <span class="number">5</span>,</span><br><span class="line">        <span class="string">"failed"</span>: <span class="number">0</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"hits"</span>: &#123;</span><br><span class="line">        <span class="string">"total"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">"max_score"</span>: <span class="literal">null</span>,</span><br><span class="line">        <span class="string">"hits"</span>: [ ]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了方便接下来的演示，先通过Elastic Search的_bulk接口向其批量创建文档数据，示例代码如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">'http://localhost:9200/_bulk?pretty'</span> --data-binary <span class="string">'@docs'</span></span><br></pre></td></tr></table></figure>
+<p>其中docs文件中的内容为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 1&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;设计模式之禅&quot;&#125;</span><br><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 2&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;失控：全人类的最终命运和结局&quot;&#125;</span><br><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 3&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;构建高性能Web站点&quot;, &quot;price&quot;: 75.00, &quot;author&quot;: &quot;郭欣&quot;&#125;</span><br><span class="line">&#123;&quot;create&quot;: &#123;&quot;_index&quot;: &quot;products&quot;, &quot;_type&quot;: &quot;product&quot;, &quot;_id&quot;: 4&#125;&#125;</span><br><span class="line">&#123;&quot;name&quot;: &quot;大型网站技术架构：核心原理与案例分析&quot;, &quot;price&quot;: 59.00, &quot;author&quot;: &quot;李智慧&quot;, &quot;publisher&quot;: &quot;电子工业出版社&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>尽管这里是一个文本文件，但是根据<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html" target="_blank" rel="noopener">官方文档</a>的说法，此处需要使用curl的二进制模式来发送数据，否则会报错。</p>
+<h3 id="个性化搜索"><a href="#个性化搜索" class="headerlink" title="个性化搜索"></a>个性化搜索</h3><p>如果希望找到《失控》这本书的信息，那么可以根据书名进行查找，示例代码如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">'http://localhost:9200/products/_search?q=name:失控'</span></span><br></pre></td></tr></table></figure>
+<p>Elastic Search提供了许多的搜索选项，如果全部通过URL中的query string来传递将会非常难以构造。为此，可以使用Elastic Search提供的基于HTTP body的参数传递方式，示例代码如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search'</span> --data <span class="string">'&#123;"query": &#123;"match": &#123;"name": "失控"&#125;&#125;&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>Elastic Search支持相当丰富的搜索选项，这里不逐一介绍了，大家可以从官方文档的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html" target="_blank" rel="noopener">这里</a>开始翻看。本来想在Chrome的POSTMAN插件中试验搜索功能的，结果当我选定了GET方法后，就不需要我提交HTTP body了，因此还是用curl进行演示。回到正题，如果我们搜索的是一个“站”字，那么Elastic Search会吐出两个结果，此处可以使用搜索接口的<code>from</code>和<code>size</code>参数，分别控制返回的内容取自搜索结果中的哪一个片段。例如想要取出结果中的第二个，可以使用下列代码</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search?pretty'</span> --data <span class="string">'&#123;"from": 1, "size": 1, "query": &#123;"match": &#123;"name": "站"&#125;&#125;&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>通过结合使用<code>from</code>和<code>size</code>参数，可以实现许多应用中所要求的分页功能。在我厂的业务场景中，商品信息还是很多的，不可能全部放入到Elastic Search中作为文档数据存储，Elastic Search只是负责提供搜索出来的商品ID即可，之后再通过商品ID从原来的商品的数据库中按照顺序取出对应的完整的商品信息。因此，在搜索Elastic Search时实际上只需要商品的ID就足够了，可以通过Elastic Search提供的<code>_source</code>字段控制接口吐出的内容，示例代码如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search?pretty'</span> --data <span class="string">'&#123;"query": &#123;"match_all": &#123;&#125;&#125;, "_source": ["_id"]&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>这样在吐出的内容中<code>_source</code>字段的值就会是一个空对象，应用程序只需要取每一个hits数组中的记录的”_id”字段即可。这样做的目的是减少Elastic Search通过网络传输了一部分毫无必要的数据，略微优化一下网络开销</p>
+<p>全文完</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/" data-id="ck3lk3zvg0010n030enowp1zg" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-如何用Common-Lisp实现尾递归优化" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/02/23/如何用Common-Lisp实现尾递归优化/" class="article-date">
@@ -136,7 +213,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/" data-id="ck3ljpwdv0017y130hahb1lrm" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/" data-id="ck3lk3zvi0017n0307up0v97o" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -190,7 +267,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/20/如何自定义命令行补全/" data-id="ck3ljpwdz001fy130hmw4w24q" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/01/20/如何自定义命令行补全/" data-id="ck3lk3zvl001gn030zshwygj1" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/01/20/如何自定义命令行补全/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -255,7 +332,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/" data-id="ck3ljpwdd0004y1301ges9rby" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/" data-id="ck3lk3zuz0004n0301jux9k3y" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -322,7 +399,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/10/手动安装mysql/" data-id="ck3ljpwe3001my130c10tukpo" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/01/10/手动安装mysql/" data-id="ck3lk3zvo001on030pvvdpi2g" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/01/10/手动安装mysql/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -388,7 +465,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/" data-id="ck3ljpwe7001ty130cc6p6bad" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/" data-id="ck3lk3zvq001tn030t17ufenf" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -455,7 +532,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/" data-id="ck3ljpwej002ey1302x1rap07" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/" data-id="ck3lk3zw3002pn030hfvy6kil" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -521,7 +598,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/" data-id="ck3ljpwea001yy130kee178t1" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/" data-id="ck3lk3zvx0028n0303ku6df2n" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -573,7 +650,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/" data-id="ck3ljpwdr000yy130fxrlp8ll" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/" data-id="ck3lk3zvc000sn0309gifuqcu" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -625,91 +702,12 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/16/ProjectEuler第18题/" data-id="ck3ljpwdj000gy1306pvk7fzs" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/09/16/ProjectEuler第18题/" data-id="ck3lk3zv6000hn03019fjn21a" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/09/16/ProjectEuler第18题/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/project-euler/">project euler</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-CommonLisp函数调用的CPS变换" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2012/09/08/CommonLisp函数调用的CPS变换/" class="article-date">
-  <time datetime="2012-09-08T05:44:38.000Z" itemprop="datePublished">2012-09-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2012/09/08/CommonLisp函数调用的CPS变换/">CommonLisp函数调用的CPS变换</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>之前在新浪博客上已经发表了一篇同样主题的文章了，不过心血来潮想重写一份发到这边的博客上来，顺便看看自己能不能够在自己重写这篇的东西的过程中再发掘出一些有价值的东西，充实一下内容。</p>
-<h2 id="什么是CPS"><a href="#什么是CPS" class="headerlink" title="什么是CPS"></a>什么是CPS</h2><p>首先双手奉上来自<a href="http://en.wikipedia.org/wiki/Continuation-passing_style" target="_blank" rel="noopener">维基百科的Continuation-passing-style条目</a>。CPS一般译作<em>续延传递风格</em>，这里最不好理解的词语莫过于<em>续延</em>了。维基百科上关于<a href="http://en.wikipedia.org/wiki/Continuation" target="_blank" rel="noopener">续延</a>也有详细的介绍，不过我也可以简单地介绍一下。<em>续延</em>是一种表示接下来所要进行的计算的对象，也就是你在计算了这一步之后需要继续做的事情的一个描述。举个例子，对于Common Lisp代码(+ (+ 1 2) 3)而言，最左边的参数首先会被计算，也就是Lisp实现先计算的是<em>(+ 1 2)</em>这个表达式，于是可以得到返回值为3。那么计算完了最左边的参数之后，Lisp实现接下来要做什么呢？显然，接下来会计算作为直接值的3得到3本身，然后再将第一次计算得到的3和第二次求值得到的3进行相加。而上面的这两个步骤，其实可以用Lisp中的对象进行描述，只需要用一个匿名函数就可以了，写成</p>
-<pre><code>(lambda (v) (+ v 3))。
-</code></pre><p>那么我们就可以思考，在这一个匿名函数被计算之后，再一次的<em>接下来的计算</em>又是什么呢？对于在REPL中输入的代码而言，Lisp实现会把表达式最终计算得到的返回值打印在终端上，所以我们可以认为上面的匿名函数，也就是一个计算过程，所对应的续延是</p>
-<pre><code>(lambda (u) (print u))。
-</code></pre><p>那么原来的表达式<em>(+ (+ 1 2) 3)</em>就可以写成下面这样的风格的代码：</p>
-<pre><code>(+&amp; 1 2 (lambda (v)
-          (+&amp; v 3 (lambda (u)
-                    (print u)))))
-</code></pre><p>你或许会感到奇怪：这里的<em>+&amp;</em>是个什么东西啊？+&amp;是一个和加法类似的函数，只是它除了会把前两个参数相加之外，还会将这个参数传递给作为第三个参数传入的匿名函数，并进行函数调用。按照维基百科上的说明，CPS代码有两个规范：</p>
-<ol>
-<li>每一个函数都要接受一个续延作为额外的参数；</li>
-<li>每一个函数调用中的参数都只能是一个变量或者λ表达式。</li>
-</ol>
-<p>可以说，+&amp;这样的函数是为了将代码变换成CPS才创造出来的。当然了，除了+函数需要进行变换之外，其它的普通函数（regular function）也是需要进行变换的。例如对代码<em>(\</em> (+ 1 2) 3)<em>进行变换的话，就需要为\</em>函数提供相应的变体，结果应该是：</p>
-<pre><code>(+&amp; 1 2 (lambda (v)
-          (*&amp; v 3 (lambda (u)
-                    (print u)))))。
-</code></pre><p>上面的代码中有个可以稍微琢磨的地方：为什么在两个不同的匿名函数的参数列表中偏偏要使用不同的参数名呢？事实上，在上面的两个变换出来的结果中，完全可以统一使用v或者u来作为参数名，那是因为参数v不需要在第二层嵌套的匿名函数中被使用。可是有时候一开始就进行求值的表达式不一定是马上就被使用的，例如代码<em>(- (+ 1 2) (\</em> 3 4))*的变换结果就是</p>
-<pre><code>(+&amp; 1 2 (lambda (v)
-          (*&amp; 3 4 (lambda (u)
-                    (-&amp; v u)))))。
-</code></pre><p>可以说，当参数列表表达式中不止一个<em>复杂</em>表达式时，就需要至少两个不重名的参数了。讲了这么多手动变换的事情，现在可以讨论最重要的问题了：</p>
-<h2 id="如何对Lisp代码进行CPS变换"><a href="#如何对Lisp代码进行CPS变换" class="headerlink" title="如何对Lisp代码进行CPS变换"></a>如何对Lisp代码进行CPS变换</h2><p>如果我们可以对一类简单的代码进行CPS变换了，那么如何在这个基础上对复杂的代码进行CPS变换呢？例如我们有一段简单的代码<em>(op3 (op2 (op1 a b) c) d)</em>，并且我们已经有了一个通用的功能F可以对其中的嵌套的表达式<em>(op2 (op1 a b) c)</em>进行变换，那么要如何将其和外层的对op3函数的调用结合在一起呢？显然，我们可以先把<em>(op2 (op1 a b) c)</em>换掉，换成一个普通的符号v，以表示一个变量。那么接下来我们的处理对象就是一个稍微简单的表达式<em>(op3 v c)</em>了，对于这种参数列表均由变量所构成的表达式，要将其变换成CPS代码只需要修改其函数为<em>加&amp;的形式</em>，并且添上一个额外的参数——续延就可以了。至于这个续延应该是由调用者提供，而又可以使用默认的<em>(lambda (XXX) (print XXX))</em>的。所以，上面的代码最终会变成</p>
-<pre><code>(经过F处理的代码 (lambda (v)
-                (op3&amp; v c (lambda (XXX)
-                            (print XXX)))))。
-</code></pre><p>对内层的表达式应用F处理完之后还要再计算外层表达式的续延，而计算续延正是函数F所做的事情，所以实际上对一个复杂的表达式做CPS变换，是一个递归的过程。用两段代码进行变换可以有更直观的体验：假设我们有一个正确实现的变换函数F，它接受一个代码和一个续延，并产生出对代码进行CPS变换所得到的结果。那么如果应用在代码<em>(+ (+ 1 1) 3)</em>上，就是</p>
-<pre><code>(F (+ (+ 1 1) 3) (lambda (v) (print v)))。
-</code></pre><p>显然，这段代码应该和下面的这段代码是等价的：</p>
-<pre><code>(F (+ 1 1) (lambda (u)
-             (+&amp; u 3 (lambda (v)
-                       (print v)))))。
-</code></pre><p>并且上面这段代码的续延参数部分，和下面的这段代码是等价的：</p>
-<pre><code>(F (+ u 3) (lambda (v) (print v)))。
-</code></pre><p>是不是就是说，对于一个复杂的表达式expr0，如果想要在提供一个额外续延cont0的情况下，将其正确变换成CPS形式，那么可以先提取出它的第一个被求值的子表达式expr1，将原来子表达式出现的地方替换为一个变量，那么原本的表达式就变成了expr1对应的续延cont1。此时先将cont1和cont0传入函数F进行CPS变换，得到的结果cont将会成为和expr1一起传入函数F进行变换，并最终得到对expr0和cont0进行变换的正确结果呢？显然这是对的，因为cont0紧随expr0求值，而expr0可以拆分为两部分：expr1以及紧随其求值的cont1。那么显然cont0紧随cont1求值，所以cont0是cont1的续延，同样需要进行CPS变换，然后得到新的代码作为expr1的续延继续进行变换，那么最终就会得到代码，它反映的求值顺序正是expr1 -&gt; cont1 -&gt; expr0。</p>
-<p>那么重点就在于怎么把原本的expr0给拆分成expr1和cont1，以及具体结合代码和续延的技术细节了。假设实现拆分功能的函数叫做split-funcall，那么它需要在什么情况下做什么事情呢？一般而言，split-funcall处理的是有复杂的子表达式的代码，那么它需要能够在整个表达式expr0中找出尽量左的一个复杂子表达式，也就是expr1。如果找到这样的expr1了，那么就需要同时找出对应的续延cont1并将两者都返回；如果没有这样的expr1，那么直接返回逻辑假和整个expr0就可以了。说到需要返回多个值的情况，正是Common Lisp的values函数派上大用场的时候了。</p>
-<p>对于含有复杂子表达式的情况，split-funcall函数会返回提取到的子表达式和对应的续延，那么这里的续延应该用什么样的形式来表示呢？为了方便使用从split-funcall内部所gensym出来的符号，所以直接返回一个经过构造的lambda表达式就可以了，但是在递归调用函数F时，不能直接对其进行变换处理，因为lambda表达式不是一个会对参数求值的操作符，所以真正需要变换的是lambda表达式的函数体。因此必须先拆开lambda表达式，对其函数体进行变换并再次构造成lambda表达式，以传递给函数F使用。</p>
-<p>最后，贴一下自己放在Gist上的代码:<script src="https://gist.github.com/3148312.js"> </script></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/" data-id="ck3ljpwdb0002y1307ronp4t5" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cps/">cps</a></li></ul>
 
     </footer>
   </div>
@@ -736,23 +734,16 @@ ga('send', 'pageview');
   <h3 class="widget-title">链接</h3>
   <div class="widget">
     <li><a href="http://reverland.org" title="reverland的知行阁">reverland的知行阁</a></li>
-    <li><a href="http://maplebeats.com" title="maplebeats's blog">maplebeats's blog</a></li>
     <li><a href="http://www.gndrive.org/" title="高达数字实验室">高达数字实验室</a></li>
     <li><a href="http://www.hsyyf.me/" title="月下叹逍遥/寒山烟雨">月下叹逍遥/寒山烟雨</a></li>
     <li><a href="http://www.lainme.com/doku.php" title="Lainme's Blog">Lainme's Blog</a></li>
-    <li><a href="http://maskray.tk/" title="MaskRay">MaskRay</a></li>
     <li><a href="http://lengxx.com/" title="冷轩信">冷轩信</a></li>
     <li><a href="http://forum.ubuntu.org.cn/" title="Ubuntu中文论坛">Ubuntu中文论坛</a></li>
     <li><a href="http://tombu.info/" title="Tom Bu's Blog">Tom Bu's Blog</a></li>
-    <li><a href="http://blog.aeropig.me/" title="叶孤城">叶孤城</a></li>
-    <li><a href="http://xwyam.github.com/" title="xw_y_am的博客">xw_y_am的博客</a></li>
-    <li><a href="http://9.douban.com/subject/9548542/" title="krfantasy的博客">krfantasy的博客</a></li>
     <li><a href="http://y-window.github.com/" title="Window的空间">Window的空间</a></li>
     <li><a href="http://www.thev.net/PaulLiu/" title="九瓜老师的博客">九瓜老师的博客</a></li>
-    <li><a href="http://www.huangjs.net/blog/" title="涧石兄的博客">涧石兄的博客</a></li>
     <li><a href="http://weibo.com/liutos" title="博主的微博">博主的微博</a></li>
     <li><a href="http://github.com/Liutos" title="博主的GitHub页面">博主的GitHub页面</a></li>
-    <li><a href="http://blog.sina.com.cn/u/2031941547" title="博主的新浪博客">博主的新浪博客</a></li>
   </div>
 </div>
   
@@ -792,6 +783,10 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <a href="/2019/11/30/一些自我感觉良好的命名约定/">一些自我感觉良好的命名约定</a>
+          </li>
+        
+          <li>
             <a href="/2019/11/21/Emacs走马观花/">带你见识一下传说中的Emacs</a>
           </li>
         
@@ -805,10 +800,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/10/11/如何编译defun/">如何编译defun</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/18/编译return语句/">编译return语句</a>
           </li>
         
       </ul>
