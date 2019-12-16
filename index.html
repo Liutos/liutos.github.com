@@ -76,6 +76,81 @@ ga('send', 'pageview');
       <div class="outer">
         <section id="main">
   
+    <article id="post-让斗图赢在起跑线上" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/16/让斗图赢在起跑线上/" class="article-date">
+  <time datetime="2019-12-16T14:16:53.000Z" itemprop="datePublished">2019-12-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/12/16/让斗图赢在起跑线上/">让斗图赢在起跑线上</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>以前用Windows的时候，我在QQ中添加了很多自定义表情，其中有很多我还为它们设置了短语，以便可以便捷地发出去。后来微信用得多了，也在微信中收集了很多的表情。很多时候，表情包真的是一图胜千言，而且比起直白地说出同样的话，发图片显得更有意思。比如说，某一天你的同事在谈论他朋友的一些事情时，你可以发一张</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/你说的这个朋友到底是不是你自己.jpeg" alt=""></p>
+<p>当然了，很多时候可能手头没有这张图片，或者一时找不到，也可以来一句“你说的这个朋友到底是不是你自己.jpg”，异曲同工。每每遇到这些有趣的图片的时候，我便会将它们保存下来以备不时之需。不过收集得多了之后，在想要用的时候便发现找表情也不是一件特别容易的事情。比如说，我的表情包目录中已经有92张图片了，即便我明确地知道我要找的就是上面这张图，文件名也没记错，但要在九十多张图片中一眼看到它，还是颇具难度的。</p>
+<p>好在，咱是程序员，在很多事情上可以动动手指写写代码来予以辅助——找表情图片这件事情，恰好是其中之一。</p>
+<h1 id="准备素材"><a href="#准备素材" class="headerlink" title="准备素材"></a>准备素材</h1><p>首先，我要祭出神器<a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>。我会编写一个Alfred的Workflow，它起码要能够方便我按名字找到图片，并且能够复制到粘贴板中。这么一来，我就可以直接在IM软件的聊天窗口中发出选好的表情图。</p>
+<p>其次，正所谓巧妇难为无米之炊，如果没有表情图片的储备，那制作这么个工具也就毫无意义了。因此，我还得准备一个目录，用来存放所有将来可能会用上的图片文件，这个目录便是<code>~/OneDrive/图片/表情包</code>。OneDrive上1TB的存储空间，放点图片也是绰绰有余了——当然了，也不是非要把图片目录放到一个同步网盘里。</p>
+<p>最后，这些搜集回来的图片还不能就这么晾着，必须给它们取一些容易记忆的名字，毕竟之后就靠名字来找它们了。给表情图片文件命名很简单，因为许多图片中含有一两句关键的话。比如说，下面这张图</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/6点后Java程序员继续上班.jpeg" alt=""></p>
+<p>直接用图中的文字来命名即可。</p>
+<h1 id="编写Workflow"><a href="#编写Workflow" class="headerlink" title="编写Workflow"></a>编写Workflow</h1><p>现在可以开始编写Workflow了。它的最终形态是下图这样的</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包工作流的结构.png" alt=""></p>
+<p>作为Workflow入口的是一个keyword为<code>bqb</code>的<a href="https://www.alfredapp.com/help/workflows/inputs/file-filter/" target="_blank" rel="noopener">File Filter</a>。<code>File Filter</code>是一个挺强大的工具，它本身就可以完成我所需要的功能，见如下演示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/FileFilter的效果.gif" alt=""></p>
+<p>可见，<code>File Filter</code>本身便足矣完成搜索图片并复制到粘贴板的需求，本篇文章也就到此为止了——才怪，光有<code>File Filter</code>还不够，因为收集回来的表情图片的尺寸并不统一，直接在IM工具中发送的效果并不好，可能有霸屏之嫌。比如文章开头的图片，用来自<code>ImageMagick</code>套件的<code>identify</code>程序可以看到这张图片足足有527像素宽405像素高，一下子占据了半个聊天窗口——群聊的时候，还是应当照顾一下群里其他人的感受的。</p>
+<p>因此，Workflow中的第二个对象，便负责将图片缩放为合适的尺寸。第二个对象是一个<a href="https://www.alfredapp.com/help/workflows/actions/run-script/" target="_blank" rel="noopener"><code>Run Script Action</code></a>，Alfred在运行后第一个<code>File Filter</code>后便会接着调用这个对象中所指定的外部脚本。这个对象的配置如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的RunScriptAction.png" alt=""></p>
+<p>其中的脚本内容如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 将图片等比缩放为300像素的宽度</span></span><br><span class="line"></span><br><span class="line">filename=$(basename <span class="string">"<span class="variable">$&#123;1&#125;</span>"</span>)</span><br><span class="line">suffix=<span class="string">"<span class="variable">$&#123;filename##*.&#125;</span>"</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$&#123;suffix&#125;</span>"</span> = <span class="string">'gif'</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> -n <span class="string">"<span class="variable">$&#123;1&#125;</span>"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    sips --resampleWidth 300 <span class="string">"<span class="variable">$&#123;1&#125;</span>"</span> --out /tmp &gt; /dev/null 2&gt;&amp;1</span><br><span class="line">    <span class="built_in">echo</span> -n <span class="string">"/tmp/<span class="variable">$&#123;filename&#125;</span>"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<p>运行这个脚本后，便可以在<code>/tmp</code>目录下得到与原始图片同名的、宽度缩放为300像素的新图片。刚开始我也打算处理<code>.gif</code>文件，但试验后发现<code>sips</code>把GIF缩放成了一张静态图，于是便不处理GIF文件了。</p>
+<p>第三个对象很简单，是一个<a href="https://www.alfredapp.com/help/workflows/utilities/argument/" target="_blank" rel="noopener"><code>Argument and Variables Utility</code></a>，配置很简单，直接上图比较直观</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的Argument工具.png" alt=""></p>
+<p>第四个对象又是一个<code>Run Script Action</code>，用于将缩放后的图片复制到粘贴板中——没错，这本来是<code>File Filter</code>完成的工作。这个对象同样会调用一个<code>External Script</code>，内容如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">cd</span> /Users/liutos/SourceCode/applescript/</span><br><span class="line">osascript copy_file_to_clipboard.scpt <span class="variable">$&#123;1&#125;</span></span><br></pre></td></tr></table></figure>
+<p>咦，复制文件到粘贴板的逻辑呢？别着急，在<code>/Users/liutos/SourceCode/applescript/copy_file_to_clipboard.scpt</code>这个文件中，内容如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/osascript</span><br><span class="line"># 方法来自这里：https://superuser.com/questions/1132777/copy-an-image-to-clipboard-from-the-mac-terminal</span><br><span class="line">on run args</span><br><span class="line">	set the clipboard to POSIX file (first item of args)</span><br><span class="line">end run</span><br></pre></td></tr></table></figure>
+<p>它借助<code>AppleScrippt</code>来实现复制文件的功能。</p>
+<p>最后一个对象是Alfred内置的<a href="https://www.alfredapp.com/help/workflows/outputs/post-notification/" target="_blank" rel="noopener"><code>Post Notification</code></a>，用于在一切就绪后在右上角弹出提醒，反馈给Workflow的使用者，它的配置如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的弹出提醒.png" alt=""></p>
+<p>至此，这个集查找、缩放，以及复制图片于一身的Workflow，便大功告成了。怎样？是不是已经跃跃欲试了？</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>等跃跃欲试的感觉褪去后便会发现，这个Workflow还相当地不成熟：</p>
+<ol>
+<li>使用<code>AppleScript</code>复制文件后，只要在IM软件中一粘贴便会立即发送出去，让人有点猝不及防。我希望的效果，是类似于在浏览器中右键复制一张图片那般的；</li>
+<li>它基于Alfred的<code>File Filter</code>来查找目录下的文件，但<code>File Filter</code>的搜索能力并非很强。虽然从上面的动图看来，它支持以拼音来搜索，但很多时候稍微多打几个字母，便什么结果也没有了。如果可以支持模糊查找，甚至全文搜索乃是极好的；</li>
+<li>表情图片的文件名需要自己维护，每次收集到新的表情时都需要自己手打显诚意。若是有一个配套的工具可以从图片中提取出文字来自动命名便更好了——OCR了解一下？；</li>
+<li>最后，当收集的表情图片多起来后，许多图片便不好找了，毕竟谁也无法很容易地记忆九十多张图片的名字。渐渐地，很多图片的使用率也会下降，变成了鸡肋。而当它们真的派上用场的时候，早已忘记了它们正静静地躺在目录下等待召唤。或许，我需要一个可以自动阅读我的聊天内容并向我推荐表情图的AI助理？</li>
+</ol>
+<p>等哪天有空了，说不定我会按上面的思路稍微改进一下吧，哈哈。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/12/16/让斗图赢在起跑线上/" data-id="ck48j4kaw002c8g309io5e0f5" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/12/16/让斗图赢在起跑线上/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-一些自我感觉良好的命名约定" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/11/30/一些自我感觉良好的命名约定/" class="article-date">
@@ -164,7 +239,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/11/30/一些自我感觉良好的命名约定/" data-id="ck45q4uif001j3v30p5mvysq7" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/11/30/一些自我感觉良好的命名约定/" data-id="ck48j4ka6000w8g3002fdy188" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/11/30/一些自我感觉良好的命名约定/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -319,7 +394,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/11/21/Emacs走马观花/" data-id="ck45q4ui900163v30sczie2pr" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/11/21/Emacs走马观花/" data-id="ck48j4k9z000h8g30zwbwfd8p" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/11/21/Emacs走马观花/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -405,7 +480,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/10/29/将二叉树写到磁盘上/" data-id="ck45q4uj0002m3v3063fo6o9y" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/10/29/将二叉树写到磁盘上/" data-id="ck48j4kah001i8g309d4lc19o" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/10/29/将二叉树写到磁盘上/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -460,7 +535,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" data-id="ck45q4ui6000z3v30n0d2j9rs" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" data-id="ck48j4ka7000y8g306wlxjlm7" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -507,7 +582,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/10/11/如何编译defun/" data-id="ck45q4uib001a3v303ayz41mr" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/10/11/如何编译defun/" data-id="ck48j4kab00168g30lao4b3ru" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/10/11/如何编译defun/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -554,7 +629,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/09/18/编译return语句/" data-id="ck45q4uiu00263v30biv5tqu7" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/09/18/编译return语句/" data-id="ck48j4kay002h8g30gkit7nxj" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/09/18/编译return语句/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -600,7 +675,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/" data-id="ck45q4uig001k3v302lpjmvwe" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/" data-id="ck48j4kad001b8g30ao0vcv40" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -652,7 +727,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/" data-id="ck45q4ui3000r3v30i51k1wbp" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/" data-id="ck48j4ka2000n8g301zvwkwt8" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -698,55 +773,9 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="ck45q4uiu00273v30ylijedsh" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="ck48j4kb1002o8g30ae790nhg" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-编译大于运算符" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/03/编译大于运算符/" class="article-date">
-  <time datetime="2019-07-03T14:27:24.000Z" itemprop="datePublished">2019-07-03</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/03/编译大于运算符/">编译大于运算符</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>原定的计划中这一篇应当是要讲如何编译<a href="http://clhs.lisp.se/Body/s_if.htm" target="_blank" rel="noopener">if</a>表达式的，但是我发现没什么东西可以作为if的test-form的部分的表达式，所以觉得，要不还是先实现一下比较两个数字这样子的功能吧。说干就干，我决定用大于运算符来作为例子——大于运算符就是指<a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_eq_sle.htm#GT" target="_blank" rel="noopener"><code>&gt;</code></a>啦。所以，我的目标是要编译下面这样的代码</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">&gt;</span> <span class="number">1</span> <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2019/07/03/编译大于运算符/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/03/编译大于运算符/" data-id="ck45q4uiv002a3v30jyct50a8" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2019/07/03/编译大于运算符/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
@@ -779,6 +808,10 @@ ga('send', 'pageview');
       <ul>
         
           <li>
+            <a href="/2019/12/16/让斗图赢在起跑线上/">让斗图赢在起跑线上</a>
+          </li>
+        
+          <li>
             <a href="/2019/11/30/一些自我感觉良好的命名约定/">一些适用于Node.js的命名约定</a>
           </li>
         
@@ -792,10 +825,6 @@ ga('send', 'pageview');
         
           <li>
             <a href="/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/">在Emacs中搭建笔记查阅系统的尝试</a>
-          </li>
-        
-          <li>
-            <a href="/2019/10/11/如何编译defun/">如何编译defun</a>
           </li>
         
       </ul>
@@ -826,7 +855,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
     </div>
   </div>
 
