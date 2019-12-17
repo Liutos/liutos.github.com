@@ -30,12 +30,12 @@ ga('send', 'pageview');
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/你说的这个朋友到底是不是你自己.jpeg">
 <meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/6点后Java程序员继续上班.jpeg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包工作流的结构.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包工作流的结构.jpeg">
 <meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/FileFilter的效果.gif">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的RunScriptAction.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的Argument工具.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的弹出提醒.png">
-<meta property="og:updated_time" content="2019-12-16T15:01:45.538Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的RunScriptAction.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的Argument工具.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的弹出提醒.jpeg">
+<meta property="og:updated_time" content="2019-12-16T15:03:26.520Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="让斗图赢在起跑线上">
 <meta name="twitter:description" content="序言以前用Windows的时候，我在QQ中添加了很多自定义表情，其中有很多我还为它们设置了短语，以便可以便捷地发出去。后来微信用得多了，也在微信中收集了很多的表情。很多时候，表情包真的是一图胜千言，而且比起直白地说出同样的话，发图片显得更有意思。比如说，某一天你的同事在谈论他朋友的一些事情时，你可以发一张  当然了，很多时候可能手头没有这张图片，或者一时找不到，也可以来一句“你说的这个朋友到底是不">
@@ -118,24 +118,24 @@ ga('send', 'pageview');
 <p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/6点后Java程序员继续上班.jpeg" alt=""></p>
 <p>直接用图中的文字来命名即可。</p>
 <h1 id="编写Workflow"><a href="#编写Workflow" class="headerlink" title="编写Workflow"></a>编写Workflow</h1><p>现在可以开始编写Workflow了。它的最终形态是下图这样的</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包工作流的结构.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包工作流的结构.jpeg" alt=""></p>
 <p>作为Workflow入口的是一个keyword为<code>bqb</code>的<a href="https://www.alfredapp.com/help/workflows/inputs/file-filter/" target="_blank" rel="noopener">File Filter</a>。<code>File Filter</code>是一个挺强大的工具，它本身就可以完成我所需要的功能，见如下演示</p>
 <p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/FileFilter的效果.gif" alt=""></p>
 <p>可见，<code>File Filter</code>本身便足矣完成搜索图片并复制到粘贴板的需求，本篇文章也就到此为止了——才怪，光有<code>File Filter</code>还不够，因为收集回来的表情图片的尺寸并不统一，直接在IM工具中发送的效果并不好，可能有霸屏之嫌。比如文章开头的图片，用来自<code>ImageMagick</code>套件的<code>identify</code>程序可以看到这张图片足足有527像素宽405像素高，一下子占据了半个聊天窗口——群聊的时候，还是应当照顾一下群里其他人的感受的。</p>
 <p>因此，Workflow中的第二个对象，便负责将图片缩放为合适的尺寸。第二个对象是一个<a href="https://www.alfredapp.com/help/workflows/actions/run-script/" target="_blank" rel="noopener"><code>Run Script Action</code></a>，Alfred在运行后第一个<code>File Filter</code>后便会接着调用这个对象中所指定的外部脚本。这个对象的配置如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的RunScriptAction.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的RunScriptAction.jpeg" alt=""></p>
 <p>其中的脚本内容如下</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 将图片等比缩放为300像素的宽度</span></span><br><span class="line"></span><br><span class="line">filename=$(basename <span class="string">"<span class="variable">$&#123;1&#125;</span>"</span>)</span><br><span class="line">suffix=<span class="string">"<span class="variable">$&#123;filename##*.&#125;</span>"</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$&#123;suffix&#125;</span>"</span> = <span class="string">'gif'</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> -n <span class="string">"<span class="variable">$&#123;1&#125;</span>"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    sips --resampleWidth 300 <span class="string">"<span class="variable">$&#123;1&#125;</span>"</span> --out /tmp &gt; /dev/null 2&gt;&amp;1</span><br><span class="line">    <span class="built_in">echo</span> -n <span class="string">"/tmp/<span class="variable">$&#123;filename&#125;</span>"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
 <p>运行这个脚本后，便可以在<code>/tmp</code>目录下得到与原始图片同名的、宽度缩放为300像素的新图片。刚开始我也打算处理<code>.gif</code>文件，但试验后发现<code>sips</code>把GIF缩放成了一张静态图，于是便不处理GIF文件了。</p>
 <p>第三个对象很简单，是一个<a href="https://www.alfredapp.com/help/workflows/utilities/argument/" target="_blank" rel="noopener"><code>Argument and Variables Utility</code></a>，配置很简单，直接上图比较直观</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的Argument工具.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的Argument工具.jpeg" alt=""></p>
 <p>第四个对象又是一个<code>Run Script Action</code>，用于将缩放后的图片复制到粘贴板中——没错，这本来是<code>File Filter</code>完成的工作。这个对象同样会调用一个<code>External Script</code>，内容如下</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">cd</span> /Users/liutos/SourceCode/applescript/</span><br><span class="line">osascript copy_file_to_clipboard.scpt <span class="variable">$&#123;1&#125;</span></span><br></pre></td></tr></table></figure>
 <p>咦，复制文件到粘贴板的逻辑呢？别着急，在<code>/Users/liutos/SourceCode/applescript/copy_file_to_clipboard.scpt</code>这个文件中，内容如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/osascript</span><br><span class="line"># 方法来自这里：https://superuser.com/questions/1132777/copy-an-image-to-clipboard-from-the-mac-terminal</span><br><span class="line">on run args</span><br><span class="line">	set the clipboard to POSIX file (first item of args)</span><br><span class="line">end run</span><br></pre></td></tr></table></figure>
 <p>它借助<code>AppleScrippt</code>来实现复制文件的功能。</p>
 <p>最后一个对象是Alfred内置的<a href="https://www.alfredapp.com/help/workflows/outputs/post-notification/" target="_blank" rel="noopener"><code>Post Notification</code></a>，用于在一切就绪后在右上角弹出提醒，反馈给Workflow的使用者，它的配置如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的弹出提醒.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的弹出提醒.jpeg" alt=""></p>
 <p>至此，这个集查找、缩放，以及复制图片于一身的Workflow，便大功告成了。怎样？是不是已经跃跃欲试了？</p>
 <h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>等跃跃欲试的感觉褪去后便会发现，这个Workflow还相当地不成熟：</p>
 <ol>
@@ -149,7 +149,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/12/16/让斗图赢在起跑线上/" data-id="ck48j4kaw002c8g309io5e0f5" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/12/16/让斗图赢在起跑线上/" data-id="ck49xrrv2002vor30d03fy384" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/12/16/让斗图赢在起跑线上/#disqus_thread" class="article-comment-link">Comments</a>
       
