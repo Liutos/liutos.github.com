@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <script data-ad-client="ca-pub-4199841931601311" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-94082039-2', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+  
+  <title>当我们git merge的时候到底在merge什么 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="序言我在上大学的时候并没有接触过VCS（版本控制系统）。虽然曾经在Google Code发布过去项目，但是以压缩包的形式发布的；与室友合作开发计算机网络这门课的课程设计时，也没有用上。直到入职第一家公司后才真正开始使用，当时用的是Git，此后也始终没用过其它的VCS——SVN仅仅耳闻未曾使用——转眼间已经用了六年多的Git了。 尽管日常使用问题不大，但对于Git的内部运行原理我仍然是一知半解——也">
+<meta name="keywords" content="git,internal,原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="当我们git merge的时候到底在merge什么">
+<meta property="og:url" content="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="序言我在上大学的时候并没有接触过VCS（版本控制系统）。虽然曾经在Google Code发布过去项目，但是以压缩包的形式发布的；与室友合作开发计算机网络这门课的课程设计时，也没有用上。直到入职第一家公司后才真正开始使用，当时用的是Git，此后也始终没用过其它的VCS——SVN仅仅耳闻未曾使用——转眼间已经用了六年多的Git了。 尽管日常使用问题不大，但对于Git的内部运行原理我仍然是一知半解——也">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/commit_tree_blob.jpeg">
+<meta property="og:updated_time" content="2019-12-21T07:29:23.001Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="当我们git merge的时候到底在merge什么">
+<meta name="twitter:description" content="序言我在上大学的时候并没有接触过VCS（版本控制系统）。虽然曾经在Google Code发布过去项目，但是以压缩包的形式发布的；与室友合作开发计算机网络这门课的课程设计时，也没有用上。直到入职第一家公司后才真正开始使用，当时用的是Git，此后也始终没用过其它的VCS——SVN仅仅耳闻未曾使用——转眼间已经用了六年多的Git了。 尽管日常使用问题不大，但对于Git的内部运行原理我仍然是一知半解——也">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/commit_tree_blob.jpeg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.useso.com/css?family=Lato:400,400italic" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://liutos.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-当我们git-merge的时候到底在merge什么" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/21/当我们git-merge的时候到底在merge什么/" class="article-date">
+  <time datetime="2019-12-21T07:26:36.000Z" itemprop="datePublished">2019-12-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      当我们git merge的时候到底在merge什么
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>我在上大学的时候并没有接触过VCS（版本控制系统）。虽然曾经在Google Code发布过去项目，但是以压缩包的形式发布的；与室友合作开发计算机网络这门课的课程设计时，也没有用上。直到入职第一家公司后才真正开始使用，当时用的是Git，此后也始终没用过其它的VCS——SVN仅仅耳闻未曾使用——转眼间已经用了六年多的Git了。</p>
+<p>尽管日常使用问题不大，但对于Git的内部运行原理我仍然是一知半解——也不是我谦虚，基本就是不懂吧。例如，使用<code>git add</code>、<code>git commit</code>、<code>git branch</code>等命令的时候，Git在背后究竟做了什么，我是答不上来的。好在互联网上有许多这方面的资料可供学习，我硬着头皮看了不少文档和博客后，总算是习得了一些皮毛。</p>
+<p>现在，我试着循序渐进地讲解一遍吧。</p>
+<h1 id="git-add的时候发生了什么？"><a href="#git-add的时候发生了什么？" class="headerlink" title="git add的时候发生了什么？"></a>git add的时候发生了什么？</h1><p>首先创建出一个仓库并向其中添加一个文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir git-test</span><br><span class="line">cd git-test</span><br><span class="line">git init</span><br><span class="line">echo 'hello' &gt; a</span><br><span class="line">git add .</span><br></pre></td></tr></table></figure>
+<p>到此为止，暂时不要提交改动。现在，我来看看Git到底在背后做了些什么。Git的秘密都藏在叫做<code>.git</code>的目录中，尤其是其中的<code>objects</code>目录。用<code>tree</code>命令查看这个目录的结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.git/objects</span><br><span class="line">├── ce</span><br><span class="line">│   └── 013625030ba8dba906f756967f9e9ca394464a</span><br><span class="line">├── info</span><br><span class="line">└── pack</span><br></pre></td></tr></table></figure>
+<p>与运行<code>git add</code>前相比，多出了一个叫<code>ce</code>的目录，以及位于其中的叫<code>013625030ba8dba906f756967f9e9ca394464a</code>的文件。这个文件其实就是<code>a</code>的一个“副本”，其中存储着文件<code>a</code>的内容。但是不能用<code>cat</code>直接查看，因为Git对这个文件做了压缩。可以用<code>pigz</code>来得到压缩前的原文，示例代码如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pigz -d &lt; .git/objects/ce/013625030ba8dba906f756967f9e9ca394464a</span><br></pre></td></tr></table></figure>
+<p>结果为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">blob 6hello</span><br></pre></td></tr></table></figure>
+<p>Git生成这个文件的规则其实不复杂。首先Git会计算原文件的长度，即6（之所以是6，是因为用<code>echo</code>和重定向写入文件<code>a</code>时，添加了一个换行符）。然后，Git将一个固定的前缀<code>blob</code>（此处有一个空格）、文件长度、一个空字符（ASCII码为0的字符），以及文件内容这四者连接成一个字符串，并计算这个字符串的SHA1摘要。具体到文件<code>a</code>，可以用下面的命令试着计算</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">printf "blob 6\0hello\n" | shasum</span><br></pre></td></tr></table></figure>
+<p>或者用Git内置的<code>hash-object</code>子命令会更简单</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git hash-object a</span><br></pre></td></tr></table></figure>
+<p>不管是哪一个命令，算出来的摘要都是<code>ce013625030ba8dba906f756967f9e9ca394464a</code>。然后Git会取前两个字符（<code>ce</code>）作为目录名，在<code>.git/objects</code>下创建新的目录。以从第三个字符开始的剩余内容（<code>013625030ba8dba906f756967f9e9ca394464a</code>）为文件名，将方才拼接好的内容压缩后写如文件。这种文件用Git的术语来讲叫做<code>blob</code>对象，稍后还会遇到<code>tree</code>类型和<code>commit</code>类型的对象。</p>
+<h1 id="git-commit的时候发生了什么？"><a href="#git-commit的时候发生了什么？" class="headerlink" title="git commit的时候发生了什么？"></a>git commit的时候发生了什么？</h1><p>接下来提交改动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config user.email &apos;foobar&apos;</span><br><span class="line">git config user.name &apos;foobar&apos;</span><br><span class="line">git commit -m &apos;test&apos;</span><br></pre></td></tr></table></figure>
+<p>此时会发现<code>.git/objects</code>下新增了两个文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.git/objects</span><br><span class="line">├── 09</span><br><span class="line">│   └── 76950c1fdbcb52435a433913017bf044b3a58f # 新的</span><br><span class="line">├── 14</span><br><span class="line">│   └── c77e71bd06df41e1509280cfba045e1db2aa5f # 新的</span><br><span class="line">├── ce</span><br><span class="line">│   └── 013625030ba8dba906f756967f9e9ca394464a</span><br><span class="line">├── info</span><br><span class="line">└── pack</span><br></pre></td></tr></table></figure>
+<p>用<code>git cat-file -t</code>可以查看这两个新文件的类型</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git cat-file -t 14c77e71bd06df41e1509280cfba045e1db2aa5f # 输出commit</span><br><span class="line">git cat-file -t 0976950c1fdbcb52435a433913017bf044b3a58f # 输出tree</span><br></pre></td></tr></table></figure>
+<p>也可以用<code>git cat-file -p</code>以可读的方式输出新文件的内容。例如用<code>git cat-file -p 0976950c1fdbcb52435a433913017bf044b3a58f</code>输出<code>tree</code>类型的对象的内容，结果为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">100644 blob ce013625030ba8dba906f756967f9e9ca394464a	a</span><br></pre></td></tr></table></figure>
+<p><code>tree</code>类型的对象中记录着Git所追踪的文件的元信息，包括文件的权限、在Git中的对象类型、对象摘要，以及文件名。另一个<code>commit</code>类型的对象中存储着本次提交的信息，用<code>git cat-file -p</code>查看的结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tree 0976950c1fdbcb52435a433913017bf044b3a58f</span><br><span class="line">author foobar &lt;foobar&gt; 1576676836 +0800</span><br><span class="line">committer foobar &lt;foobar&gt; 1576676836 +0800</span><br><span class="line"></span><br><span class="line">test</span><br></pre></td></tr></table></figure>
+<p>第一行表示这个<code>commit</code>对象指向的是哪一个<code>tree</code>对象，从这个<code>tree</code>对象出发，可以遍历仓库中直到本次提交为止、所有被Git追踪的文件。<code>commit</code>指向<code>tree</code>，<code>tree</code>可以指向<code>blob</code>也可以指向其它的<code>tree</code>，<code>blob</code>就像是树中的叶子节点，不再指向其它的对象，它们之间的关系如下图所示</p>
+<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/commit_tree_blob.jpeg" alt=""></p>
+<h1 id="git-branch的时候发生了什么？"><a href="#git-branch的时候发生了什么？" class="headerlink" title="git branch的时候发生了什么？"></a>git branch的时候发生了什么？</h1><p>Git的<code>branch</code>子命令用于创建新分支——虽然我平时更多地使用<code>git checkout -b</code>。既然<code>add</code>和<code>commit</code>的时候，Git会创建出<code>blob</code>、<code>tree</code>，以及<code>commit</code>类型的对象，那么创建新分支的时候，Git是不是也会创建名为<code>branch</code>的对象呢？答案是否定的。</p>
+<p>Git的分支非常简单——它仅仅是指向某个<code>commit</code>对象的引用，就像是<code>*nix</code>系统中的符号链接一样。所有分支都存储在<code>.git/refs/heads</code>之下。例如文件<code>.git/refs/heads/master</code>中便存储着<code>master</code>分支上的最新提交的摘要</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat .git/refs/heads/master # 输出14c77e71bd06df41e1509280cfba045e1db2aa5f</span><br></pre></td></tr></table></figure>
+<p>这就是在Git中创建新分支的成本很低的原因——不过是复制一下当前分支在<code>.git/refs/heads</code>下的同名文件而已。我创建一个新分支<code>develop</code>并提交一个新文件<code>b</code>，<code>.git/objects</code>下会多出三个文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b develop</span><br><span class="line">echo 'good' &gt; b</span><br><span class="line">git add b</span><br><span class="line">git commit -m 'new branch'</span><br></pre></td></tr></table></figure>
+<p>三个新文件分别存储着文件<code>b</code>的内容（一个<code>blob</code>对象）、文件<code>b</code>的元信息（一个<code>tree</code>对象），以及本次提交（一个<code>commit</code>对象）。这些文件中没有任何关于<code>develop</code>分支的信息，<code>develop</code>分支仅仅是一个存在于<code>.git/refs/heads/</code>目录下的同名文件。</p>
+<h1 id="git-merge一个子代时发生了什么？"><a href="#git-merge一个子代时发生了什么？" class="headerlink" title="git merge一个子代时发生了什么？"></a>git merge一个子代时发生了什么？</h1><p><code>develop</code>分支是从<code>master</code>分叉出来，将<code>develop</code>合并回<code>master</code>时，Git会进行一次<code>fast-forward</code>的合并。虽然名字很唬人但其实Git做的事情非常简单，只需要将<code>.git/refs/heads/master</code>文件的内容修改为与<code>develop</code>相同的摘要即可。</p>
+<p>也可以要求Git不使用<code>fast-forward</code>。先用<code>git reset --hard HEAD^1</code>将<code>master</code>分支回退到第一次提交的状态，然后使用下列的命令再次将<code>develop</code>合并进来</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge --no-ff develop</span><br></pre></td></tr></table></figure>
+<p>这一次，Git不再简单地修改<code>.git/refs/heads/master</code>文件了事，而是会创建一个新的<code>commit</code>对象。在我的电脑上，这个新的<code>commit</code>对象的摘要为<code>d1403bb629c7a636c724069b22875ed882b54bcc</code>，使用<code>git cat-file -p</code>看看它的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tree e960ed43b8e6b5fe9b4e57b806f70796da820056</span><br><span class="line">parent 14c77e71bd06df41e1509280cfba045e1db2aa5f</span><br><span class="line">parent db891542d3e44448433ba86c7cd636d8aec3da54</span><br><span class="line">author foobar &lt;foobar&gt; 1576679608 +0800</span><br><span class="line">committer foobar &lt;foobar&gt; 1576679608 +0800</span><br><span class="line"></span><br><span class="line">Merge branch &apos;develop&apos;</span><br></pre></td></tr></table></figure>
+<p>有趣的是，这个<code>commit</code>对象有两个“父级”的<code>commit</code>，而不像平常所认识的树形数据结构那般只有一个“父节点”。显然，这两个父节点分别是合并前的<code>master</code>分支的最新一次提交，以及<code>develop</code>的最新提交。</p>
+<p>虽然创建了一个新的<code>commit</code>对象，但其实<code>develop</code>分支的最新提交持有的便是整个仓库的最新版本，所以不需要创建新的<code>tree</code>，合并所产生的<code>commit</code>直接与<code>develop</code>分支的最新提交共用同一个<code>tree</code>对象便足够了——在上面输出内容的第一行的摘要，就是<code>develop</code>分支的最新<code>commit</code>所指向的<code>tree</code>对象的摘要。</p>
+<p>至此，终于解决了我一直以来的一个困惑。我曾天真地以为，Git在合并两个分支的时候，会将待合进来的分支中的所有多出来的改动，复制到要合进去的分支中去。这都是因为我没有理解分支的本质，Git的分支并不是一根水管，没有哪一个提交是只能装在一个特定的分支中的。Git合并的时候，就像是在一个immutable的树上做修改，只需要创建不多的新<code>commit</code>和<code>tree</code>对象，再引用已经存在的旧<code>commit</code>和<code>tree</code>对象即可。否则，哪能快速地完成两个分支的合并呢。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>没想到还写了蛮多内容的，经过这么几次试验，我对Git的核心原理也算略知一二了，暂时不打算继续深入。各位读者如果有兴趣，可以试着制造一次有冲突的合并，然后看看冲突解决的前后，<code>.git/objects</code>目录下会有什么变化。</p>
+<p>最后，在摸索Git原理的过程中，我找到了不少优质的参考资料，这里一并奉上：</p>
+<ol>
+<li><a href="https://nfarina.com/post/9868516270/git-is-simpler" target="_blank" rel="noopener">https://nfarina.com/post/9868516270/git-is-simpler</a></li>
+<li><a href="https://maryrosecook.com/blog/post/git-from-the-inside-out" target="_blank" rel="noopener">https://maryrosecook.com/blog/post/git-from-the-inside-out</a></li>
+<li><a href="http://www-cs-students.stanford.edu/~blynn/gitmagic/ch08.html" target="_blank" rel="noopener">http://www-cs-students.stanford.edu/~blynn/gitmagic/ch08.html</a></li>
+<li><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank" rel="noopener">https://git-scm.com/book/en/v2/Git-Internals-Git-Objects</a></li>
+</ol>
+
+      
+      
+        <! -- 添加捐赠图标 -->
+<div class="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           ↑<br>
+           欣赏此文？求鼓励，求支持！
+        </span>
+        <br>
+      </div>  
+      <div id="donate_guide" class="donate_bar center hidden">
+          <!-- 方式一： 
+               ![](/img/Alipay.jpg)
+               ![](/img/WeChatpay.jpg)
+          -->
+          <!-- 方式二；
+               step1：在_config.yml中添加配置
+               Alipay: /img/Alipay.jpg
+               WeChatpay: /img/WeChatpay.jpg
+               step2：此处两张图片的路径分别设置为如下
+               <img src=""
+               <img src=""
+          -->
+          <div style="display: flex; justify-content: space-around">
+              <!-- 支付宝打赏图案 -->
+              <div>
+                  <img src="/images/Alipay.jpg" alt="支付宝打赏">
+              </div>
+              <!-- 微信打赏图案 -->
+              <div>
+                  <img src="/images/WeChatpay.jpg" alt="微信打赏">
+              </div>
+          </div>
+    </div>
+    <script type="text/javascript">
+        document.getElementById('btn_donate').onclick = function(){
+            $('#donate_board').addClass('hidden');
+            $('#donate_guide').removeClass('hidden');
+        }
+    </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/" data-id="ck4f9hat6001li130yk90qwiy" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/internal/">internal</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原理/">原理</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/12/16/让斗图赢在起跑线上/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">让斗图赢在起跑线上</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/21/当我们git-merge的时候到底在merge什么/">当我们git merge的时候到底在merge什么</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/16/让斗图赢在起跑线上/">让斗图赢在起跑线上</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/30/一些自我感觉良好的命名约定/">一些适用于Node.js的命名约定</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/21/Emacs走马观花/">带你见识一下传说中的Emacs</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/29/将二叉树写到磁盘上/">将二叉树写到磁盘上</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/2018/" style="font-size: 10px;">2018</a> <a href="/tags/alfred/" style="font-size: 12.5px;">alfred</a> <a href="/tags/algorithm/" style="font-size: 12.5px;">algorithm</a> <a href="/tags/assembly/" style="font-size: 17.5px;">assembly</a> <a href="/tags/bash/" style="font-size: 10px;">bash</a> <a href="/tags/bfs/" style="font-size: 10px;">bfs</a> <a href="/tags/binarysearchtree/" style="font-size: 10px;">binarysearchtree</a> <a href="/tags/binarytree/" style="font-size: 10px;">binarytree</a> <a href="/tags/boostnote/" style="font-size: 11.25px;">boostnote</a> <a href="/tags/closure/" style="font-size: 10px;">closure</a> <a href="/tags/common-lisp/" style="font-size: 20px;">common lisp</a> <a href="/tags/commonlisp/" style="font-size: 10px;">commonlisp</a> <a href="/tags/compiler/" style="font-size: 17.5px;">compiler</a> <a href="/tags/cps/" style="font-size: 10px;">cps</a> <a href="/tags/dynamic-programming/" style="font-size: 10px;">dynamic programming</a> <a href="/tags/editor/" style="font-size: 11.25px;">editor</a> <a href="/tags/elasticsearch/" style="font-size: 11.25px;">elasticsearch</a> <a href="/tags/elisp/" style="font-size: 12.5px;">elisp</a> <a href="/tags/emacs/" style="font-size: 15px;">emacs</a> <a href="/tags/evernote/" style="font-size: 10px;">evernote</a> <a href="/tags/find/" style="font-size: 10px;">find</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/grep/" style="font-size: 10px;">grep</a> <a href="/tags/gtd/" style="font-size: 11.25px;">gtd</a> <a href="/tags/head/" style="font-size: 10px;">head</a> <a href="/tags/install/" style="font-size: 10px;">install</a> <a href="/tags/internal/" style="font-size: 10px;">internal</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/leanote/" style="font-size: 10px;">leanote</a> <a href="/tags/lisp/" style="font-size: 18.75px;">lisp</a> <a href="/tags/macbook/" style="font-size: 10px;">macbook</a> <a href="/tags/macro/" style="font-size: 11.25px;">macro</a> <a href="/tags/markdown/" style="font-size: 12.5px;">markdown</a> <a href="/tags/mongo/" style="font-size: 10px;">mongo</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/naming-convention/" style="font-size: 10px;">naming convention</a> <a href="/tags/note-taking/" style="font-size: 12.5px;">note taking</a> <a href="/tags/note-taking/" style="font-size: 10px;">note-taking</a> <a href="/tags/oop/" style="font-size: 10px;">oop</a> <a href="/tags/org-mode/" style="font-size: 13.75px;">org-mode</a> <a href="/tags/progn/" style="font-size: 10px;">progn</a> <a href="/tags/project-euler/" style="font-size: 13.75px;">project euler</a> <a href="/tags/recursion/" style="font-size: 10px;">recursion</a> <a href="/tags/restart/" style="font-size: 10px;">restart</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sequence-diagram/" style="font-size: 11.25px;">sequence diagram</a> <a href="/tags/sequencediagram/" style="font-size: 10px;">sequencediagram</a> <a href="/tags/setq/" style="font-size: 16.25px;">setq</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/sort/" style="font-size: 10px;">sort</a> <a href="/tags/squid/" style="font-size: 10px;">squid</a> <a href="/tags/tail-recursion/" style="font-size: 10px;">tail recursion</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/tutorial/" style="font-size: 11.25px;">tutorial</a> <a href="/tags/typora/" style="font-size: 11.25px;">typora</a> <a href="/tags/visual-studio-code/" style="font-size: 10px;">visual studio code</a> <a href="/tags/vscode/" style="font-size: 10px;">vscode</a> <a href="/tags/x64/" style="font-size: 17.5px;">x64</a> <a href="/tags/yu-writer/" style="font-size: 11.25px;">yu writer</a> <a href="/tags/二叉搜索树/" style="font-size: 10px;">二叉搜索树</a> <a href="/tags/二叉树/" style="font-size: 10px;">二叉树</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/原理/" style="font-size: 10px;">原理</a> <a href="/tags/命名约定/" style="font-size: 10px;">命名约定</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/宏/" style="font-size: 11.25px;">宏</a> <a href="/tags/对比/" style="font-size: 10px;">对比</a> <a href="/tags/尾递归/" style="font-size: 10px;">尾递归</a> <a href="/tags/工具/" style="font-size: 11.25px;">工具</a> <a href="/tags/序列化/" style="font-size: 10px;">序列化</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/搜索/" style="font-size: 10px;">搜索</a> <a href="/tags/教程/" style="font-size: 11.25px;">教程</a> <a href="/tags/数学/" style="font-size: 12.5px;">数学</a> <a href="/tags/时序图/" style="font-size: 10px;">时序图</a> <a href="/tags/汇编/" style="font-size: 17.5px;">汇编</a> <a href="/tags/笔记/" style="font-size: 10px;">笔记</a> <a href="/tags/笔记类软件/" style="font-size: 11.25px;">笔记类软件</a> <a href="/tags/算法/" style="font-size: 11.25px;">算法</a> <a href="/tags/编译器/" style="font-size: 17.5px;">编译器</a> <a href="/tags/编辑器/" style="font-size: 11.25px;">编辑器</a> <a href="/tags/语绘/" style="font-size: 10px;">语绘</a> <a href="/tags/递归/" style="font-size: 10px;">递归</a> <a href="/tags/闭包/" style="font-size: 10px;">闭包</a> <a href="/tags/面向对象/" style="font-size: 10px;">面向对象</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alfred/">alfred</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/assembly/">assembly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bash/">bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bfs/">bfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binarysearchtree/">binarysearchtree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/binarytree/">binarytree</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/boostnote/">boostnote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/closure/">closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commonlisp/">commonlisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cps/">cps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dynamic-programming/">dynamic programming</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/editor/">editor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elisp/">elisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/evernote/">evernote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/find/">find</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gtd/">gtd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/head/">head</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/install/">install</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/internal/">internal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/leanote/">leanote</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lisp/">lisp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macbook/">macbook</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/macro/">macro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/naming-convention/">naming convention</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note-taking/">note-taking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oop/">oop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/org-mode/">org-mode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/progn/">progn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project-euler/">project euler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/recursion/">recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/restart/">restart</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequence-diagram/">sequence diagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequencediagram/">sequencediagram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/setq/">setq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sort/">sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/squid/">squid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tail-recursion/">tail recursion</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutorial/">tutorial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typora/">typora</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visual-studio-code/">visual studio code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vscode/">vscode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/x64/">x64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yu-writer/">yu writer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/二叉搜索树/">二叉搜索树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/二叉树/">二叉树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原理/">原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/命名约定/">命名约定</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安装/">安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/宏/">宏</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/对比/">对比</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/尾递归/">尾递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/序列化/">序列化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/搜索/">搜索</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/教程/">教程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数学/">数学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时序图/">时序图</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/汇编/">汇编</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记类软件/">笔记类软件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编译器/">编译器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器/">编辑器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/语绘/">语绘</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/递归/">递归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/闭包/">闭包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面向对象/">面向对象</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/02/">February 2013</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/10/">October 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/09/">September 2012</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/08/">August 2012</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title">链接</h3>
+  <div class="widget">
+    <li><a href="http://reverland.org" title="reverland的知行阁">reverland的知行阁</a></li>
+    <li><a href="http://www.gndrive.org/" title="高达数字实验室">高达数字实验室</a></li>
+    <li><a href="http://www.hsyyf.me/" title="月下叹逍遥/寒山烟雨">月下叹逍遥/寒山烟雨</a></li>
+    <li><a href="http://www.lainme.com/doku.php" title="Lainme's Blog">Lainme's Blog</a></li>
+    <li><a href="http://lengxx.com/" title="冷轩信">冷轩信</a></li>
+    <li><a href="http://forum.ubuntu.org.cn/" title="Ubuntu中文论坛">Ubuntu中文论坛</a></li>
+    <li><a href="http://tombu.info/" title="Tom Bu's Blog">Tom Bu's Blog</a></li>
+    <li><a href="http://y-window.github.com/" title="Window的空间">Window的空间</a></li>
+    <li><a href="http://www.thev.net/PaulLiu/" title="九瓜老师的博客">九瓜老师的博客</a></li>
+    <li><a href="http://weibo.com/liutos" title="博主的微博">博主的微博</a></li>
+    <li><a href="http://github.com/Liutos" title="博主的GitHub页面">博主的GitHub页面</a></li>
+  </div>
+</div>
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'Liutos';
+  
+  var disqus_url = 'https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript">
+if (typeof jQuery == 'undefined') {
+  document.write(unescape("%3Cscript src='/js/jquery-2.0.3.min.js' type='text/javascript'%3E%3C/script%3E"));
+}
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
