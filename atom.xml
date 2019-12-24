@@ -331,9 +331,9 @@
     </summary>
     
     
-      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
-    
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
+      <category term="org-mode" scheme="https://liutos.github.io/tags/org-mode/"/>
     
       <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
     
