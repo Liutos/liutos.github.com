@@ -29,12 +29,12 @@ ga('send', 'pageview');
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="序言我在上大学的时候并没有接触过VCS（版本控制系统）。虽然曾经在Google Code发布过去项目，但是以压缩包的形式发布的；与室友合作开发计算机网络这门课的课程设计时，也没有用上。直到入职第一家公司后才真正开始使用，当时用的是Git，此后也始终没用过其它的VCS——SVN仅仅耳闻未曾使用——转眼间已经用了六年多的Git了。 尽管日常使用问题不大，但对于Git的内部运行原理我仍然是一知半解——也">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/commit_tree_blob.jpeg">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
 <meta property="og:updated_time" content="2019-12-21T07:29:23.001Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="当我们git merge的时候到底在merge什么">
 <meta name="twitter:description" content="序言我在上大学的时候并没有接触过VCS（版本控制系统）。虽然曾经在Google Code发布过去项目，但是以压缩包的形式发布的；与室友合作开发计算机网络这门课的课程设计时，也没有用上。直到入职第一家公司后才真正开始使用，当时用的是Git，此后也始终没用过其它的VCS——SVN仅仅耳闻未曾使用——转眼间已经用了六年多的Git了。 尽管日常使用问题不大，但对于Git的内部运行原理我仍然是一知半解——也">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/commit_tree_blob.jpeg">
+<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -130,7 +130,7 @@ ga('send', 'pageview');
 <p><code>tree</code>类型的对象中记录着Git所追踪的文件的元信息，包括文件的权限、在Git中的对象类型、对象摘要，以及文件名。另一个<code>commit</code>类型的对象中存储着本次提交的信息，用<code>git cat-file -p</code>查看的结果如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tree 0976950c1fdbcb52435a433913017bf044b3a58f</span><br><span class="line">author foobar &lt;foobar&gt; 1576676836 +0800</span><br><span class="line">committer foobar &lt;foobar&gt; 1576676836 +0800</span><br><span class="line"></span><br><span class="line">test</span><br></pre></td></tr></table></figure>
 <p>第一行表示这个<code>commit</code>对象指向的是哪一个<code>tree</code>对象，从这个<code>tree</code>对象出发，可以遍历仓库中直到本次提交为止、所有被Git追踪的文件。<code>commit</code>指向<code>tree</code>，<code>tree</code>可以指向<code>blob</code>也可以指向其它的<code>tree</code>，<code>blob</code>就像是树中的叶子节点，不再指向其它的对象，它们之间的关系如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/commit_tree_blob.jpeg" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/commit_tree_blob.jpeg" alt=""></p>
 <h1 id="git-branch的时候发生了什么？"><a href="#git-branch的时候发生了什么？" class="headerlink" title="git branch的时候发生了什么？"></a>git branch的时候发生了什么？</h1><p>Git的<code>branch</code>子命令用于创建新分支——虽然我平时更多地使用<code>git checkout -b</code>。既然<code>add</code>和<code>commit</code>的时候，Git会创建出<code>blob</code>、<code>tree</code>，以及<code>commit</code>类型的对象，那么创建新分支的时候，Git是不是也会创建名为<code>branch</code>的对象呢？答案是否定的。</p>
 <p>Git的分支非常简单——它仅仅是指向某个<code>commit</code>对象的引用，就像是<code>*nix</code>系统中的符号链接一样。所有分支都存储在<code>.git/refs/heads</code>之下。例如文件<code>.git/refs/heads/master</code>中便存储着<code>master</code>分支上的最新提交的摘要</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat .git/refs/heads/master # 输出14c77e71bd06df41e1509280cfba045e1db2aa5f</span><br></pre></td></tr></table></figure>
@@ -182,11 +182,11 @@ ga('send', 'pageview');
           <div style="display: flex; justify-content: space-around">
               <!-- 支付宝打赏图案 -->
               <div>
-                  <img src="/images/Alipay.jpg" alt="支付宝打赏">
+                  <img src="/images/loading.png" data-original="/images/Alipay.jpg" alt="支付宝打赏">
               </div>
               <!-- 微信打赏图案 -->
               <div>
-                  <img src="/images/WeChatpay.png" alt="微信打赏">
+                  <img src="/images/loading.png" data-original="/images/WeChatpay.png" alt="微信打赏">
               </div>
           </div>
     </div>
@@ -202,7 +202,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/" data-id="ck4jzx582001st630vfvck3a9" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/" data-id="ck4v0gyrn001wnp30rpn6xkj8" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -323,7 +323,7 @@ ga('send', 'pageview');
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2020 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -369,5 +369,5 @@ if (typeof jQuery == 'undefined') {
 
 
   </div>
-</body>
+<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
 </html>

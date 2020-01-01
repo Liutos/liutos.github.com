@@ -114,7 +114,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" data-id="ck4jzx57r0017t630zznpnh1v" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" data-id="ck4v0gyr10010np30d2f9fl5b" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -150,23 +150,23 @@ ga('send', 'pageview');
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>假设有N个区间，将它们表达为<img src="http://latex.codecogs.com/gif.latex?%5Bb_i,%20e_i%5D" alt="">，其中下标i位于区间<img src="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">中</p>
-<p>为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间<img src="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">而言，都有<img src="http://latex.codecogs.com/gif.latex?b_i%20%3C%20b_%7Bi+1%7D" alt="">（这里的i小于N-1）。</p>
+        <p>假设有N个区间，将它们表达为<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_i,%20e_i%5D" alt="">，其中下标i位于区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">中</p>
+<p>为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">而言，都有<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_i%20%3C%20b_%7Bi+1%7D" alt="">（这里的i小于N-1）。</p>
 <p>为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系</p>
-<p><img src="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k" alt=""></p>
-<p>这是因为如果<img src="http://latex.codecogs.com/gif.latex?e_j%20%3C%20b_k" alt="">，那么所有位于区间<img src="http://latex.codecogs.com/gif.latex?%5Bb_j,%20e_j%5D" alt="">中的数都将会小于 b_k，那么第j个区间与第k个区间就不可能有交集了，因此上述不等式一定成立。再加上这一组区间都是按照区间的下界递增排序的，那么必然有</p>
-<p><img src="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_k%20%3C%20e_j" alt=""></p>
-<p>假设<img src="http://latex.codecogs.com/gif.latex?k%20-%20j%20%3E%201" alt="">，由于k和j都是正整数，这意味着在第j和第k个区间之间，必然还存在着一个区间l，那么这个区间的必然满足</p>
-<p><img src="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_l" alt=""></p>
-<p><img src="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k%20%3E%20b_l" alt=""></p>
-<p>这就意味着第j个区间和第l个区间也存在交集，它们的交集是子区间<img src="http://latex.codecogs.com/gif.latex?%5Bb_l,%20e_j%5D" alt="">（这里假设<img src="http://latex.codecogs.com/gif.latex?e_l%20%3E%20e_j" alt="">）。这就说明了，如果可以在一组区间中找到两个不相邻的区间，它们存在重叠的部分，那么一定可以找到第三个区间，使得这个区间与其中的一个区间也存在重叠。</p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k" alt=""></p>
+<p>这是因为如果<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3C%20b_k" alt="">，那么所有位于区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_j,%20e_j%5D" alt="">中的数都将会小于 b_k，那么第j个区间与第k个区间就不可能有交集了，因此上述不等式一定成立。再加上这一组区间都是按照区间的下界递增排序的，那么必然有</p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_k%20%3C%20e_j" alt=""></p>
+<p>假设<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?k%20-%20j%20%3E%201" alt="">，由于k和j都是正整数，这意味着在第j和第k个区间之间，必然还存在着一个区间l，那么这个区间的必然满足</p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_l" alt=""></p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k%20%3E%20b_l" alt=""></p>
+<p>这就意味着第j个区间和第l个区间也存在交集，它们的交集是子区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_l,%20e_j%5D" alt="">（这里假设<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_l%20%3E%20e_j" alt="">）。这就说明了，如果可以在一组区间中找到两个不相邻的区间，它们存在重叠的部分，那么一定可以找到第三个区间，使得这个区间与其中的一个区间也存在重叠。</p>
 <p>这表示如果我们要判定一组区间是否存在重叠，那么只需要先将它们基于区间的起点按照递增排序后，比较每一对相邻的两个区间是否存在重叠即可。</p>
 
       
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" data-id="ck4jzx57t001bt630cz8ztsv0" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" data-id="ck4v0gyr40015np306r1k60wp" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -244,7 +244,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/" data-id="ck4jzx57s0018t6304zmjql37" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/" data-id="ck4v0gyr20011np3099poljwu" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -319,7 +319,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/" data-id="ck4jzx57u001et630ows3ktw9" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/" data-id="ck4v0gyr30014np30abluhomk" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -374,7 +374,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/20/如何自定义命令行补全/" data-id="ck4jzx57w001it630857zaeei" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/01/20/如何自定义命令行补全/" data-id="ck4v0gyr7001anp30p6hug65f" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/01/20/如何自定义命令行补全/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -440,7 +440,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/" data-id="ck4jzx5770002t630bhgjz451" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/" data-id="ck4v0gyq90001np30l6l9bhk7" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -508,7 +508,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/10/手动安装mysql/" data-id="ck4jzx57z001nt630p662epb1" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/01/10/手动安装mysql/" data-id="ck4v0gyre001hnp30cduc3ifc" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/01/10/手动安装mysql/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -575,7 +575,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/" data-id="ck4jzx583001ut6300rbokg5d" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/" data-id="ck4v0gyrj001pnp30cl6hpscy" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -612,7 +612,7 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="话题由来"><a href="#话题由来" class="headerlink" title="话题由来"></a>话题由来</h2><p>参加了不少IT公司的笔试，有些题目遇到的次数还是比较多的，例如给一系列字符和一个空栈，询问你选项中的哪一个是不可能出现的出栈顺序这样的问题。另外一道题目，就是我这里要拿来讲的，不过我讲的和题目本身不直接相关，只是恰好和题目所要完成的任务有重合罢了。这道题目就是“给出一颗二叉树的先序遍历和中序遍历的输出结果，请给出这个二叉树的后序遍历的输出结果”。</p>
-<p>这道题目其实非常简单，尽管我一开始遇到的时候仍然是手足无措的（谁没有年少无知过呢对不），不过一两次之后就轻车熟路了，知道了这样的题目的行之有效的解法。举个例子，先序的序列和中序的序列分别是”abfce”和”bface”，那么这棵二叉树就是这样子的<br><img src="/pictures/postree.png"></p>
+<p>这道题目其实非常简单，尽管我一开始遇到的时候仍然是手足无措的（谁没有年少无知过呢对不），不过一两次之后就轻车熟路了，知道了这样的题目的行之有效的解法。举个例子，先序的序列和中序的序列分别是”abfce”和”bface”，那么这棵二叉树就是这样子的<br><img src="/images/loading.png" data-original="/pictures/postree.png"></p>
 <p>可以知道，后序遍历的输出结果为”fbeca”。怎么得到这棵二叉树呢？其实很简单，首先根据先序遍历的定义，所以在先序遍历结果中的第一个元素一定是整棵二叉树的根结点，也就是a，那么根据中序遍历的定义，在a左边出现的序列就是左子树的中序遍历结果，在a的右边的就是右子树的中序遍历结果，它们分别是”bf”和”ce”。并且可以知道，在先序遍历中与它们对应的片段应该也是”bf”和”ce”。在对”bf”做同样的处理，就可以知道b是根结点，而左子树为空且右子树为单节点f，另一棵子树的根结点为c且左子树为空，右子树为单节点e。</p>
 <p>那么，怎么用程序来自动化呢？</p>
 <h2 id="C语言的递归版本"><a href="#C语言的递归版本" class="headerlink" title="C语言的递归版本"></a>C语言的递归版本</h2><p>以文字来描述根据先序和中序来构造二叉树的算法还是很好理解的。为了描述方便，取几个名字。把先序遍历的结果叫做preseq，中序遍历的输出结果叫做inseq，并且把它们当作C语言中的数组那样来取出元素（例如preseq[0]表示第一个元素），再给它们一个方便取出片段的语法糖，例如preseq[0..2]表示取出下标从0到2的三个元素组成一个新的输出序列。</p>
@@ -643,7 +643,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/" data-id="ck4jzx58f002ot630hqqb8b6u" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/" data-id="ck4v0gys2002snp30a84tet6a" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -697,20 +697,20 @@ ga('send', 'pageview');
 <p>上述的第二条，正是解的最优子结构。</p>
 <h3 id="递归定义最优解的值"><a href="#递归定义最优解的值" class="headerlink" title="递归定义最优解的值"></a>递归定义最优解的值</h3><p>显然，最优解的值也就是最优解的衡量标准，即需要对原来的数组进行的涂色的次数。既然要递归定义，那么就要考虑递归的一般情形（也就是需要递归的情形）以及基准的情形。对于下一个元素a为红色的情况，只能继续选择把目前处理的数组的最后一个元素也涂成红色，因此如果原来的数组最后一个元素S[S.len]不是红色，那么就需要一次涂色操作，如果是那么就不需要；对于下一个元素为绿色的情况，需要分别考虑要不要涂改最后一个元素的问题。如果涂，那么就增加一次操作，不涂就不需要。在a为绿色的两个分支中，涂成（或者保留）红色末尾元素的情形，和a为红色的情况的递归是一样，因此这里确实存在重叠子问题——动态规划的另一个要求。至于基准情况，则是当数组只有两个元素时的情况。此时，只能是GG、GR、RG、GG这四种，除了GR需要进行一次涂色之外，其它的均不需要涂色。</p>
 <p>用数学公式来表示递归的情形可能更清楚：</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/changeColor.png">其中diff函数判断两个参数是否相等。如果相等，那么就返回0，否则返回1。也就是在从第一个参数变换到第二个参数时所需要的涂色次数。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/changeColor.png">其中diff函数判断两个参数是否相等。如果相等，那么就返回0，否则返回1。也就是在从第一个参数变换到第二个参数时所需要的涂色次数。</p>
 <h3 id="按自底向上的方式计算最优解的值"><a href="#按自底向上的方式计算最优解的值" class="headerlink" title="按自底向上的方式计算最优解的值"></a>按自底向上的方式计算最优解的值</h3><p>在思考如何自底向上的时候，我采用的办法是先自顶向下地演示一遍。如下图所示，其中入口功能的名字为G，例子所使用的数组为RGRG：</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/fnCall.png"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/fnCall.png"></p>
 <p>显然这里需要构造一个表格来对F过程的中间结果进行存储，因为F是一个二元的函数。尽管F的第一个参数是一个数组，可是原来的数组是不会变的，所以只需要记住当前处理的数组是由原来的数组的前多少个元素组成的前缀即可，因此F的第一个参数可以用数字来代替。因此，在处理过程中需要的是这样的一张表：</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/table.png">（不好意思，图中的空格没有对齐&gt;_&lt;）</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/table.png">（不好意思，图中的空格没有对齐&gt;_&lt;）</p>
 <p>那么如何自底向上呢？首先对于参数为1而下一个元素为R的情况，因为是递归函数的基准情况，所以可以直接得到F(1, R)=F([R], R)为0，于是填入0；同样第二行的第一个空格的值也为0。当需要填写第一行的第二个空格的时候，可以知道因为下一个元素为R，所以此处的值只与之前的末尾元素亦为红色R的情形有关，所以这个值只与第一行的前一个值有关，并且此时的元素S[2]为G与R不同，因此需要变换，故增加一；而第二行的第二个空格的值取决于前一列的两个格子的值。此时即计算G([RGG])的值，所以取F([RG], G)和F([RG], R)+1的较小值，即1。其它空格以此类推，最终结果为：</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/result.png"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/result.png"></p>
 <h3 id="由计算出的结果构造一个最优解"><a href="#由计算出的结果构造一个最优解" class="headerlink" title="由计算出的结果构造一个最优解"></a>由计算出的结果构造一个最优解</h3><p>显然，最后一列的结果就是所要的值，例如上面的数组[RGRG]的最少涂色次数是1，并且操作是将第二个位置上的G涂成R。这样的操作反映在中间结果中，就是先找出最后一列的元素的值最小的那一行，例如上面就是第二行。然后就是在所有的列中找出所有与下一列的值不一样的列，将其对应的珠子的颜色翻转。例如在上面的表格中，就是将第二列的G涂成R，因为G对应的数字0不同于下一列的数字1。好吧，这一次，我就不给代码了，因为我还没有写出来;)</p>
 
       
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/" data-id="ck4jzx5880027t630ks9n2fdh" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/" data-id="ck4v0gyrt0028np30rcgw8aw0" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -822,7 +822,7 @@ ga('send', 'pageview');
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2020 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -866,5 +866,5 @@ if (typeof jQuery == 'undefined') {
 
 
   </div>
-</body>
+<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
 </html>

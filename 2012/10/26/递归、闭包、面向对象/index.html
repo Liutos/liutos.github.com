@@ -29,12 +29,12 @@ ga('send', 'pageview');
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="话题由来参加了不少IT公司的笔试，有些题目遇到的次数还是比较多的，例如给一系列字符和一个空栈，询问你选项中的哪一个是不可能出现的出栈顺序这样的问题。另外一道题目，就是我这里要拿来讲的，不过我讲的和题目本身不直接相关，只是恰好和题目所要完成的任务有重合罢了。这道题目就是“给出一颗二叉树的先序遍历和中序遍历的输出结果，请给出这个二叉树的后序遍历的输出结果”。 这道题目其实非常简单，尽管我一开始遇到的时">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://liutos.github.io/pictures/postree.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
 <meta property="og:updated_time" content="2019-01-09T15:20:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="递归、闭包、面向对象">
 <meta name="twitter:description" content="话题由来参加了不少IT公司的笔试，有些题目遇到的次数还是比较多的，例如给一系列字符和一个空栈，询问你选项中的哪一个是不可能出现的出栈顺序这样的问题。另外一道题目，就是我这里要拿来讲的，不过我讲的和题目本身不直接相关，只是恰好和题目所要完成的任务有重合罢了。这道题目就是“给出一颗二叉树的先序遍历和中序遍历的输出结果，请给出这个二叉树的后序遍历的输出结果”。 这道题目其实非常简单，尽管我一开始遇到的时">
-<meta name="twitter:image" content="https://liutos.github.io/pictures/postree.png">
+<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -104,7 +104,7 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="话题由来"><a href="#话题由来" class="headerlink" title="话题由来"></a>话题由来</h2><p>参加了不少IT公司的笔试，有些题目遇到的次数还是比较多的，例如给一系列字符和一个空栈，询问你选项中的哪一个是不可能出现的出栈顺序这样的问题。另外一道题目，就是我这里要拿来讲的，不过我讲的和题目本身不直接相关，只是恰好和题目所要完成的任务有重合罢了。这道题目就是“给出一颗二叉树的先序遍历和中序遍历的输出结果，请给出这个二叉树的后序遍历的输出结果”。</p>
-<p>这道题目其实非常简单，尽管我一开始遇到的时候仍然是手足无措的（谁没有年少无知过呢对不），不过一两次之后就轻车熟路了，知道了这样的题目的行之有效的解法。举个例子，先序的序列和中序的序列分别是”abfce”和”bface”，那么这棵二叉树就是这样子的<br><img src="/pictures/postree.png"></p>
+<p>这道题目其实非常简单，尽管我一开始遇到的时候仍然是手足无措的（谁没有年少无知过呢对不），不过一两次之后就轻车熟路了，知道了这样的题目的行之有效的解法。举个例子，先序的序列和中序的序列分别是”abfce”和”bface”，那么这棵二叉树就是这样子的<br><img src="/images/loading.png" data-original="/pictures/postree.png"></p>
 <p>可以知道，后序遍历的输出结果为”fbeca”。怎么得到这棵二叉树呢？其实很简单，首先根据先序遍历的定义，所以在先序遍历结果中的第一个元素一定是整棵二叉树的根结点，也就是a，那么根据中序遍历的定义，在a左边出现的序列就是左子树的中序遍历结果，在a的右边的就是右子树的中序遍历结果，它们分别是”bf”和”ce”。并且可以知道，在先序遍历中与它们对应的片段应该也是”bf”和”ce”。在对”bf”做同样的处理，就可以知道b是根结点，而左子树为空且右子树为单节点f，另一棵子树的根结点为c且左子树为空，右子树为单节点e。</p>
 <p>那么，怎么用程序来自动化呢？</p>
 <h2 id="C语言的递归版本"><a href="#C语言的递归版本" class="headerlink" title="C语言的递归版本"></a>C语言的递归版本</h2><p>以文字来描述根据先序和中序来构造二叉树的算法还是很好理解的。为了描述方便，取几个名字。把先序遍历的结果叫做preseq，中序遍历的输出结果叫做inseq，并且把它们当作C语言中的数组那样来取出元素（例如preseq[0]表示第一个元素），再给它们一个方便取出片段的语法糖，例如preseq[0..2]表示取出下标从0到2的三个元素组成一个新的输出序列。</p>
@@ -159,11 +159,11 @@ ga('send', 'pageview');
           <div style="display: flex; justify-content: space-around">
               <!-- 支付宝打赏图案 -->
               <div>
-                  <img src="/images/Alipay.jpg" alt="支付宝打赏">
+                  <img src="/images/loading.png" data-original="/images/Alipay.jpg" alt="支付宝打赏">
               </div>
               <!-- 微信打赏图案 -->
               <div>
-                  <img src="/images/WeChatpay.png" alt="微信打赏">
+                  <img src="/images/loading.png" data-original="/images/WeChatpay.png" alt="微信打赏">
               </div>
           </div>
     </div>
@@ -179,7 +179,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/" data-id="ck4jzx58f002ot630hqqb8b6u" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/" data-id="ck4v0gys2002snp30a84tet6a" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -309,7 +309,7 @@ ga('send', 'pageview');
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2020 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -355,5 +355,5 @@ if (typeof jQuery == 'undefined') {
 
 
   </div>
-</body>
+<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
 </html>

@@ -29,17 +29,17 @@ ga('send', 'pageview');
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="本文只是简单地讲述我自己在使用GNU Emacs、Fork，以及Visual Studio Code查看Git仓库的不同分支的diff上的经历。 Emacs当使用Emacs时，我更喜欢用M-x package-install安装的magit提供的功能——magit-diff，而不是它自带的vc-dir。按下M-x，输入magit-diff并敲下回车后，Emacs会在minibuffer中等待用户输">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E5%B7%AE%E5%BC%82.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E6%97%B6%E7%9A%84%E5%85%B7%E4%BD%93%E6%96%87%E4%BB%B6%E5%B7%AE%E5%BC%82.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E7%9A%84%E7%95%8C%E9%9D%A2%E6%A6%82%E8%A7%88.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E4%B8%AD%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AAcommit%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
 <meta property="og:updated_time" content="2019-02-28T14:55:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="不同工具查看代码分支diff的差异">
 <meta name="twitter:description" content="本文只是简单地讲述我自己在使用GNU Emacs、Fork，以及Visual Studio Code查看Git仓库的不同分支的diff上的经历。 Emacs当使用Emacs时，我更喜欢用M-x package-install安装的magit提供的功能——magit-diff，而不是它自带的vc-dir。按下M-x，输入magit-diff并敲下回车后，Emacs会在minibuffer中等待用户输">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E5%B7%AE%E5%BC%82.png">
+<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -110,21 +110,21 @@ ga('send', 'pageview');
       
         <p>本文只是简单地讲述我自己在使用<a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">GNU Emacs</a>、<a href="https://git-fork.com/" target="_blank" rel="noopener">Fork</a>，以及<a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a>查看Git仓库的不同分支的diff上的经历。</p>
 <h2 id="Emacs"><a href="#Emacs" class="headerlink" title="Emacs"></a>Emacs</h2><p>当使用Emacs时，我更喜欢用<code>M-x package-install</code>安装的<a href="https://github.com/magit/magit" target="_blank" rel="noopener"><code>magit</code></a>提供的功能——<code>magit-diff</code>，而不是它自带的<code>vc-dir</code>。按下<code>M-x</code>，输入<code>magit-diff</code>并敲下回车后，Emacs会在minibuffer中等待用户输入要比较的分支。就像在shell中使用<code>git-diff</code>一样，只需要输入两个以<code>..</code>连接的分支名并敲下回车，就可以列出它们间的差异。如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E5%B7%AE%E5%BC%82.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E5%B7%AE%E5%BC%82.png" alt=""></p>
 <p>上图是master与re两个分支间的差异。<code>magit-diff</code>会列出两个分支间不一致的文件，与直接使用<code>git-diff</code>命令没有不同。往下滚动跨过文件清单后，还可以查看单个文件的差异。如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E6%97%B6%E7%9A%84%E5%85%B7%E4%BD%93%E6%96%87%E4%BB%B6%E5%B7%AE%E5%BC%82.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E6%97%B6%E7%9A%84%E5%85%B7%E4%BD%93%E6%96%87%E4%BB%B6%E5%B7%AE%E5%BC%82.png" alt=""></p>
 <h2 id="Fork"><a href="#Fork" class="headerlink" title="Fork"></a>Fork</h2><p>第一次知道Fork是在知乎闲逛的时候，好像是在浏览“Mac下有什么值得推荐的软件”这类问题时看到的。某一次，为了能直观地查看两个commit间的差异，便试用了一番，效果确实不错。Fork的界面如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E7%9A%84%E7%95%8C%E9%9D%A2%E6%A6%82%E8%A7%88.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E7%9A%84%E7%95%8C%E9%9D%A2%E6%A6%82%E8%A7%88.png" alt=""></p>
 <p>还记得，当时为了能够比较两个commit间的差异，我还在Fork的菜单栏中翻了很久——虽然是毫无收获。结果发现，原来只需要选中两个commit就可以了。如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E4%B8%AD%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AAcommit%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E4%B8%AD%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AAcommit%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82.png" alt=""></p>
 <p>图片两行蓝色的就是我选中的两个commit——先用鼠标点击其一，按住<code>control</code>键后再选中另一个即可。图片下方的部分与<code>magit-diff</code>差不多，应该也算是一目了然了。</p>
 <h2 id="Visual-Studio-Code"><a href="#Visual-Studio-Code" class="headerlink" title="Visual Studio Code"></a>Visual Studio Code</h2><p>原本我觉得Fork已经足够好了，某一天在用VSCode时才忽然发现，在Fork中显示的代码差异，是没有语法高亮的。通常来说，即使没有语法高亮，查看短小的diff也不成问题。但如果差异的内容很多，或是diff位于一个很长的函数内部，这时光靠diff来做代码审查已经不太够了——因为不好确定在这片diff中出现的变量和函数，到底是不是正确地定义了的。</p>
 <p>后来我发现，VSCode自带的“源代码管理”，即便是在查看diff时也是有语法高亮的——不仅有语法高亮，对于Node.js代码而言，还有ESLint的提示和“跳转到定义”的功能，awesome！不愧是全宇宙最好用的编辑器（笑</p>
 <p>为了可以用VSCode来查看两个分支间的差异，放狗搜了一下，找到了神器<a href="https://github.com/eamodio/vscode-gitlens" target="_blank" rel="noopener">GitLens</a>。</p>
 <p>安装GitLens后，VSCode的最左侧会多出一个菜单项，在其中可以方便地选择两个分支来进行比较。首先，找到一个要比较的分支，选择“Select for Compare”。如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png" alt=""></p>
 <p>再选中另一个要比较的分支，右键单击选择“Compare with Selected”，然后便可以在下方看到VSCode罗列出不一致的文件清单了。如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png" alt=""></p>
 <p>VSCode是最吼的！</p>
 <p>全文完。</p>
 
@@ -156,11 +156,11 @@ ga('send', 'pageview');
           <div style="display: flex; justify-content: space-around">
               <!-- 支付宝打赏图案 -->
               <div>
-                  <img src="/images/Alipay.jpg" alt="支付宝打赏">
+                  <img src="/images/loading.png" data-original="/images/Alipay.jpg" alt="支付宝打赏">
               </div>
               <!-- 微信打赏图案 -->
               <div>
-                  <img src="/images/WeChatpay.png" alt="微信打赏">
+                  <img src="/images/loading.png" data-original="/images/WeChatpay.png" alt="微信打赏">
               </div>
           </div>
     </div>
@@ -176,7 +176,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/" data-id="ck4jzx57p0011t630k7wvhoz0" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/" data-id="ck4v0gyqx000unp30m7gjfyh8" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -306,7 +306,7 @@ ga('send', 'pageview');
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2020 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -352,5 +352,5 @@ if (typeof jQuery == 'undefined') {
 
 
   </div>
-</body>
+<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
 </html>

@@ -109,7 +109,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="ck4jzx58c002ht630u0l7gexe" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="ck4v0gys3002unp30cjoy1d30" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -156,7 +156,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/03/编译大于运算符/" data-id="ck4jzx58b002et630l2fm7rnu" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/07/03/编译大于运算符/" data-id="ck4v0gyru002dnp30kp8z5yu7" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/07/03/编译大于运算符/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -205,7 +205,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/" data-id="ck4jzx57k000pt630ggzu53vy" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/" data-id="ck4v0gyqq000jnp306al8prym" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -245,7 +245,7 @@ ga('send', 'pageview');
 <p>需要事先说明的是，我没有正儿八经地系统学习过UML方面的内容，所以我画出来的图都只是一些不算很规范的野鸡时序图，当然了，我也不知道这世界上到底有没有规范的时序图画法。</p>
 <p>为了画时序图，用过几款工具。它们的共同点，就是都是“语绘”的，也就是通过写代码的方式来描述所想要的图，然后让这些工具帮你把这张图给“画出来”。我个人更喜欢这种方式，而不是拖拖拉拉，不过这纯粹是个人喜好的问题而已。</p>
 <h2 id="走马观花"><a href="#走马观花" class="headerlink" title="走马观花"></a>走马观花</h2><p><a href="http://www.websequencediagrams.com是我接触到的第一个“语绘”时序图的工具。打开它之后，就会看到它的实例代码和效果图了，截图如下" target="_blank" rel="noopener">www.websequencediagrams.com是我接触到的第一个“语绘”时序图的工具。打开它之后，就会看到它的实例代码和效果图了，截图如下</a></p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/websequencediagrams%E9%A6%96%E9%A1%B5.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/websequencediagrams%E9%A6%96%E9%A1%B5.png" alt=""></p>
 <p>用这个网站的工具画出来的时序图会有一种【手绘】的感觉</p>
 <p><a href="http://sdedit.sourceforge.net/index.html" target="_blank" rel="noopener"><code>sdedit</code></a>是我第二款使用的绘图工具，是一款用Java开发的本地工具，只需要编写好一个<code>.sd</code>文件，然后用下列的命令处理即可</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sdedit -t png -o a.png a.sd</span><br></pre></td></tr></table></figure>
@@ -253,7 +253,7 @@ ga('send', 'pageview');
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> sdedit-highlights</span><br><span class="line">      '((<span class="string">"Actor\\|Node"</span> . font-lock-function-name-face)))</span><br><span class="line"></span><br><span class="line">(<span class="name">define-derived-mode</span> sdedit-mode fundamental-mode <span class="string">"sdedit"</span></span><br><span class="line">  <span class="string">"编辑.sd文件的主模式"</span></span><br><span class="line">  (<span class="name">setq</span> font-lock-defaults '(sdedit-highlights)))</span><br><span class="line"></span><br><span class="line"><span class="comment">;;; 代码是从下面这个网页给的例子改动来的</span></span><br><span class="line"><span class="comment">;;; https://www.emacswiki.org/emacs/CompileCommand</span></span><br><span class="line">(<span class="name">add-hook</span> 'sdedit-mode-hook</span><br><span class="line">          (<span class="name">lambda</span> ()</span><br><span class="line">            (<span class="name">unless</span> (<span class="name">file-exists-p</span> <span class="string">"Makefile"</span>)</span><br><span class="line">              (<span class="name">set</span> (<span class="name">make-local-variable</span> 'compile-command)</span><br><span class="line">                   (<span class="name">let*</span> ((<span class="name">buffer-name</span> (<span class="name">buffer-name</span>))</span><br><span class="line">                          (<span class="name">base-name</span> (<span class="name">car</span> (<span class="name">split-string</span> buffer-name <span class="string">"\\."</span>))))</span><br><span class="line">                     (<span class="name">format</span> <span class="string">"/usr/local/bin/sdedit -t png -o %s.png %s.sd"</span> base-name base-name))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">add-to-list</span> 'auto-mode-alist</span><br><span class="line">             '(<span class="string">"\\.sd$"</span> . sdedit-mode))</span><br></pre></td></tr></table></figure>
 <p>勉勉强强可以接受</p>
 <p>sequencediagram.org则是最近刚发掘到的一个不错的绘制时序图的在线工具。它的绘制语法跟WebSequenceDiagrams是一样的，并且它还有一个不错的教程。打开它的网站后，点击左侧的这个图标</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/sequencediagram.org%E7%9A%84%E6%95%99%E7%A8%8B%E5%85%A5%E5%8F%A3.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/sequencediagram.org%E7%9A%84%E6%95%99%E7%A8%8B%E5%85%A5%E5%8F%A3.png" alt=""></p>
 <p>便可以看到详尽的语法教程。</p>
 <p>sequencediagram.org绘制出来的时序图是这三个工具中最符合我的审美的，今后应当会成为我绘制时序图的主力工具。</p>
 
@@ -261,7 +261,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="ck4jzx5870022t6306sadfpwi" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="ck4v0gyrr0023np3044qq6f3m" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -311,7 +311,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="ck4jzx581001pt63097wgpj67" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="ck4v0gyrk001rnp30mj1fixbv" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -359,7 +359,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="ck4jzx584001xt630n2cyhobu" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="ck4v0gyrp001znp30p7k4m2wt" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/11/支持四则运算中的变量/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -408,7 +408,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="ck4jzx57w001ht630fpjtxc4j" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="ck4v0gyr60018np3033am6ahl" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/01/如何编译setq？/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -462,7 +462,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/27/如何编译progn/" data-id="ck4jzx57v001ft63081s5ps70" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/27/如何编译progn/" data-id="ck4v0gyr8001bnp300vuz06kp" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/27/如何编译progn/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -511,7 +511,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="ck4jzx585001yt630j8l1ebe6" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="ck4v0gyrl001unp30dfjluwnm" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/23/支持减、乘，以及除/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -549,7 +549,7 @@ ga('send', 'pageview');
       
         <p>最近开始重新用起了Evernote，当然还有Leanote，不过不算是“重新“而已。这两者各有各的优缺点，下面分别列举一下</p>
 <h2 id="Evernote的优缺点以及和Leanote的对比"><a href="#Evernote的优缺点以及和Leanote的对比" class="headerlink" title="Evernote的优缺点以及和Leanote的对比"></a>Evernote的优缺点以及和Leanote的对比</h2><p>Evernote可以比较灵活地调整文字的字号，如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Evernote%E4%B8%AD%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png" alt="image-20190515124117460"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Evernote%E4%B8%AD%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png" alt="image-20190515124117460"></p>
         
           <p class="article-more-link">
             <a href="/2019/05/21/Evernote与Leanote/#more">Read More</a>
@@ -559,7 +559,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/21/Evernote与Leanote/" data-id="ck4jzx57c0008t630fej2r6uq" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/21/Evernote与Leanote/" data-id="ck4v0gyqs000nnp30s06ljypo" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/21/Evernote与Leanote/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -671,7 +671,7 @@ ga('send', 'pageview');
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2020 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -715,5 +715,5 @@ if (typeof jQuery == 'undefined') {
 
 
   </div>
-</body>
+<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
 </html>

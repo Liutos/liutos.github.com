@@ -125,7 +125,7 @@ ga('send', 'pageview');
 <p><code>tree</code>类型的对象中记录着Git所追踪的文件的元信息，包括文件的权限、在Git中的对象类型、对象摘要，以及文件名。另一个<code>commit</code>类型的对象中存储着本次提交的信息，用<code>git cat-file -p</code>查看的结果如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tree 0976950c1fdbcb52435a433913017bf044b3a58f</span><br><span class="line">author foobar &lt;foobar&gt; 1576676836 +0800</span><br><span class="line">committer foobar &lt;foobar&gt; 1576676836 +0800</span><br><span class="line"></span><br><span class="line">test</span><br></pre></td></tr></table></figure>
 <p>第一行表示这个<code>commit</code>对象指向的是哪一个<code>tree</code>对象，从这个<code>tree</code>对象出发，可以遍历仓库中直到本次提交为止、所有被Git追踪的文件。<code>commit</code>指向<code>tree</code>，<code>tree</code>可以指向<code>blob</code>也可以指向其它的<code>tree</code>，<code>blob</code>就像是树中的叶子节点，不再指向其它的对象，它们之间的关系如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/commit_tree_blob.jpeg" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/commit_tree_blob.jpeg" alt=""></p>
 <h1 id="git-branch的时候发生了什么？"><a href="#git-branch的时候发生了什么？" class="headerlink" title="git branch的时候发生了什么？"></a>git branch的时候发生了什么？</h1><p>Git的<code>branch</code>子命令用于创建新分支——虽然我平时更多地使用<code>git checkout -b</code>。既然<code>add</code>和<code>commit</code>的时候，Git会创建出<code>blob</code>、<code>tree</code>，以及<code>commit</code>类型的对象，那么创建新分支的时候，Git是不是也会创建名为<code>branch</code>的对象呢？答案是否定的。</p>
 <p>Git的分支非常简单——它仅仅是指向某个<code>commit</code>对象的引用，就像是<code>*nix</code>系统中的符号链接一样。所有分支都存储在<code>.git/refs/heads</code>之下。例如文件<code>.git/refs/heads/master</code>中便存储着<code>master</code>分支上的最新提交的摘要</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat .git/refs/heads/master # 输出14c77e71bd06df41e1509280cfba045e1db2aa5f</span><br></pre></td></tr></table></figure>
@@ -153,7 +153,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/" data-id="ck4jzx582001st630vfvck3a9" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/" data-id="ck4v0gyrn001wnp30rpn6xkj8" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -190,33 +190,33 @@ ga('send', 'pageview');
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>以前用Windows的时候，我在QQ中添加了很多自定义表情，其中有很多我还为它们设置了短语，以便可以便捷地发出去。后来微信用得多了，也在微信中收集了很多的表情。很多时候，表情包真的是一图胜千言，而且比起直白地说出同样的话，发图片显得更有意思。比如说，某一天你的同事在谈论他朋友的一些事情时，你可以发一张</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/你说的这个朋友到底是不是你自己.jpeg" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/你说的这个朋友到底是不是你自己.jpeg" alt=""></p>
 <p>当然了，很多时候可能手头没有这张图片，或者一时找不到，也可以来一句“你说的这个朋友到底是不是你自己.jpg”，异曲同工。每每遇到这些有趣的图片的时候，我便会将它们保存下来以备不时之需。不过收集得多了之后，在想要用的时候便发现找表情也不是一件特别容易的事情。比如说，我的表情包目录中已经有92张图片了，即便我明确地知道我要找的就是上面这张图，文件名也没记错，但要在九十多张图片中一眼看到它，还是颇具难度的。</p>
 <p>好在，咱是程序员，在很多事情上可以动动手指写写代码来予以辅助——找表情图片这件事情，恰好是其中之一。</p>
 <h1 id="准备素材"><a href="#准备素材" class="headerlink" title="准备素材"></a>准备素材</h1><p>首先，我要祭出神器<a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>。我会编写一个Alfred的Workflow，它起码要能够方便我按名字找到图片，并且能够复制到粘贴板中。这么一来，我就可以直接在IM软件的聊天窗口中发出选好的表情图。</p>
 <p>其次，正所谓巧妇难为无米之炊，如果没有表情图片的储备，那制作这么个工具也就毫无意义了。因此，我还得准备一个目录，用来存放所有将来可能会用上的图片文件，这个目录便是<code>~/OneDrive/图片/表情包</code>。OneDrive上1TB的存储空间，放点图片也是绰绰有余了——当然了，也不是非要把图片目录放到一个同步网盘里。</p>
 <p>最后，这些搜集回来的图片还不能就这么晾着，必须给它们取一些容易记忆的名字，毕竟之后就靠名字来找它们了。给表情图片文件命名很简单，因为许多图片中含有一两句关键的话。比如说，下面这张图</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/6点后Java程序员继续上班.jpeg" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/6点后Java程序员继续上班.jpeg" alt=""></p>
 <p>直接用图中的文字来命名即可。</p>
 <h1 id="编写Workflow"><a href="#编写Workflow" class="headerlink" title="编写Workflow"></a>编写Workflow</h1><p>现在可以开始编写Workflow了。它的最终形态是下图这样的</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包工作流的结构.jpeg" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包工作流的结构.jpeg" alt=""></p>
 <p>作为Workflow入口的是一个keyword为<code>bqb</code>的<a href="https://www.alfredapp.com/help/workflows/inputs/file-filter/" target="_blank" rel="noopener">File Filter</a>。<code>File Filter</code>是一个挺强大的工具，它本身就可以完成我所需要的功能，见如下演示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/FileFilter的效果.gif" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/FileFilter的效果.gif" alt=""></p>
 <p>可见，<code>File Filter</code>本身便足矣完成搜索图片并复制到粘贴板的需求，本篇文章也就到此为止了——才怪，光有<code>File Filter</code>还不够，因为收集回来的表情图片的尺寸并不统一，直接在IM工具中发送的效果并不好，可能有霸屏之嫌。比如文章开头的图片，用来自<code>ImageMagick</code>套件的<code>identify</code>程序可以看到这张图片足足有527像素宽405像素高，一下子占据了半个聊天窗口——群聊的时候，还是应当照顾一下群里其他人的感受的。</p>
 <p>因此，Workflow中的第二个对象，便负责将图片缩放为合适的尺寸。第二个对象是一个<a href="https://www.alfredapp.com/help/workflows/actions/run-script/" target="_blank" rel="noopener"><code>Run Script Action</code></a>，Alfred在运行后第一个<code>File Filter</code>后便会接着调用这个对象中所指定的外部脚本。这个对象的配置如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的RunScriptAction.jpeg" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的RunScriptAction.jpeg" alt=""></p>
 <p>其中的脚本内容如下</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 将图片等比缩放为300像素的宽度</span></span><br><span class="line"></span><br><span class="line">filename=$(basename <span class="string">"<span class="variable">$&#123;1&#125;</span>"</span>)</span><br><span class="line">suffix=<span class="string">"<span class="variable">$&#123;filename##*.&#125;</span>"</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$&#123;suffix&#125;</span>"</span> = <span class="string">'gif'</span> ]</span><br><span class="line"><span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> -n <span class="string">"<span class="variable">$&#123;1&#125;</span>"</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    sips --resampleWidth 300 <span class="string">"<span class="variable">$&#123;1&#125;</span>"</span> --out /tmp &gt; /dev/null 2&gt;&amp;1</span><br><span class="line">    <span class="built_in">echo</span> -n <span class="string">"/tmp/<span class="variable">$&#123;filename&#125;</span>"</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
 <p>运行这个脚本后，便可以在<code>/tmp</code>目录下得到与原始图片同名的、宽度缩放为300像素的新图片。刚开始我也打算处理<code>.gif</code>文件，但试验后发现<code>sips</code>把GIF缩放成了一张静态图，于是便不处理GIF文件了。</p>
 <p>第三个对象很简单，是一个<a href="https://www.alfredapp.com/help/workflows/utilities/argument/" target="_blank" rel="noopener"><code>Argument and Variables Utility</code></a>，配置很简单，直接上图比较直观</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的Argument工具.jpeg" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的Argument工具.jpeg" alt=""></p>
 <p>第四个对象又是一个<code>Run Script Action</code>，用于将缩放后的图片复制到粘贴板中——没错，这本来是<code>File Filter</code>完成的工作。这个对象同样会调用一个<code>External Script</code>，内容如下</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">cd</span> /Users/liutos/SourceCode/applescript/</span><br><span class="line">osascript copy_file_to_clipboard.scpt <span class="variable">$&#123;1&#125;</span></span><br></pre></td></tr></table></figure>
 <p>咦，复制文件到粘贴板的逻辑呢？别着急，在<code>/Users/liutos/SourceCode/applescript/copy_file_to_clipboard.scpt</code>这个文件中，内容如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/osascript</span><br><span class="line"># 方法来自这里：https://superuser.com/questions/1132777/copy-an-image-to-clipboard-from-the-mac-terminal</span><br><span class="line">on run args</span><br><span class="line">	set the clipboard to POSIX file (first item of args)</span><br><span class="line">end run</span><br></pre></td></tr></table></figure>
 <p>它借助<code>AppleScrippt</code>来实现复制文件的功能。</p>
 <p>最后一个对象是Alfred内置的<a href="https://www.alfredapp.com/help/workflows/outputs/post-notification/" target="_blank" rel="noopener"><code>Post Notification</code></a>，用于在一切就绪后在右上角弹出提醒，反馈给Workflow的使用者，它的配置如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的弹出提醒.jpeg" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/表情包的弹出提醒.jpeg" alt=""></p>
 <p>至此，这个集查找、缩放，以及复制图片于一身的Workflow，便大功告成了。怎样？是不是已经跃跃欲试了？</p>
 <h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>等跃跃欲试的感觉褪去后便会发现，这个Workflow还相当地不成熟：</p>
 <ol>
@@ -231,7 +231,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/12/16/让斗图赢在起跑线上/" data-id="ck4jzx58h002tt6301c6n19q3" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/12/16/让斗图赢在起跑线上/" data-id="ck4v0gys4002xnp30kqfck8e3" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/12/16/让斗图赢在起跑线上/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -332,7 +332,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/11/30/一些自我感觉良好的命名约定/" data-id="ck4jzx57p000zt630trgya5cz" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/11/30/一些自我感觉良好的命名约定/" data-id="ck4v0gyr50017np30x1ln73ef" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/11/30/一些自我感觉良好的命名约定/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -377,9 +377,9 @@ ga('send', 'pageview');
 </ul>
 <h1 id="与VSCode对比"><a href="#与VSCode对比" class="headerlink" title="与VSCode对比"></a>与VSCode对比</h1><p>接下来通过与VSCode作对比，来直观地感受一下Emacs的基本功能。</p>
 <h2 id="外观"><a href="#外观" class="headerlink" title="外观"></a>外观</h2><p>Emacs的官网上有一张应用截图</p>
-<p><img src="https://www.gnu.org/software/emacs/images/teaser.png" alt="Emacs的官网截图"></p>
+<p><img src="/images/loading.png" data-original="https://www.gnu.org/software/emacs/images/teaser.png" alt="Emacs的官网截图"></p>
 <p>第一眼看起来和VSCode还是非常不一样的</p>
-<p><img src="https://code.visualstudio.com/assets/home/home-screenshot-mac.png" alt="VSCode的官网截图"></p>
+<p><img src="/images/loading.png" data-original="https://code.visualstudio.com/assets/home/home-screenshot-mac.png" alt="VSCode的官网截图"></p>
 <p>默认的Emacs界面上也会有菜单栏、工具栏，以及底下的状态栏（在Emacs中其实这一行叫做mode line），这些元素在VSCode上也可以找到。VSCode一般给人的印象还有侧边栏、资源管理器视图，以及minimap视图。Emacs的默认底色是白色，而VSCode则是黑色。</p>
 <h2 id="键盘操作"><a href="#键盘操作" class="headerlink" title="键盘操作"></a>键盘操作</h2><p>Emacs有着丰富的快捷键（在Emacs中称之为key binding），但一些常见的功能的快捷键与VSCode等其它软件并不相同，如下表所示</p>
 <table>
@@ -439,47 +439,47 @@ ga('send', 'pageview');
 </tbody>
 </table>
 <p>在上表中，<code>C-x</code>表示先按住<code>control</code>键再按<code>x</code>键，<code>M-w</code>表示先按住<code>alt</code>键再按<code>w</code>键；<code>⌘</code>表示Mac上的<code>command</code>键、<code>⇧</code>表示<code>shift</code>键。此外，在Emacs中还可以使用<code>C-p</code>、<code>C-nn</code>、<code>C-b</code>，以及<code>C-f</code>键来往上、下、左、右四个方向移动光标，不需要移动手臂便可以在编辑的文件中到处移动，提高效率。VSCode也可以使用Emacs风格的快捷键，如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/VSCode%E8%AE%BE%E7%BD%AE%E9%94%AE%E7%9B%98%E6%98%A0%E5%B0%84.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/VSCode%E8%AE%BE%E7%BD%AE%E9%94%AE%E7%9B%98%E6%98%A0%E5%B0%84.png" alt=""></p>
 <h2 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a>文件管理</h2><p>VSCode自带美观大方的标签页功能，此外还可以将编辑器横向及纵向拆分，如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/VSCode%E7%9A%84%E6%A0%87%E7%AD%BE%E9%A1%B5.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/VSCode%E7%9A%84%E6%A0%87%E7%AD%BE%E9%A1%B5.png" alt=""></p>
 <p>Emacs默认是没有标签页的功能的，但也支持切割编辑器，比如在下图中，就将编辑器分为左右两部分，并且左侧还被分为了上下两部分，这三个区域可以展示相同或不同的三个文件。</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%88%87%E5%89%B2%E7%BC%96%E8%BE%91%E5%99%A8.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%88%87%E5%89%B2%E7%BC%96%E8%BE%91%E5%99%A8.png" alt=""></p>
 <h2 id="默认的编程语言支持"><a href="#默认的编程语言支持" class="headerlink" title="默认的编程语言支持"></a>默认的编程语言支持</h2><p>VSCode支持非常多的编程语言，点击窗口右下角的语言模式便可以看到这份清单</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%BC%8F%E5%88%97%E8%A1%A8.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%BC%8F%E5%88%97%E8%A1%A8.png" alt=""></p>
 <p>Emacs虽然没有这么一份清单，但支持的语言的数量也是不遑多让的。不过仅仅是默认的Emacs的话，对编程语言的支持没有VSCode那么开箱即用。例如，比起Emacs，VSCode默认对JavaScript的支持就很好，不仅仅有语法高亮、自动补全，并且还有基于变量类型、函数定义，以及导入的模块等信息实现的智能补全，而Emacs只有平凡的基于文本的语法高亮和自动补全罢了。</p>
 <h2 id="搜索功能"><a href="#搜索功能" class="headerlink" title="搜索功能"></a>搜索功能</h2><p>除了按下<code>⌘f</code>在文件内搜索之外，VSCode左侧工具栏中有一个名为搜索的入口，可以实现在打开的项目的所有文件中搜索特定内容的功能，并且还能用于替换。Emacs尽管没有这么一个GUI入口，但提供了<code>grep</code>命令来做到同样的事情。</p>
 <p>在Emacs中按下<code>M-x</code>后输入<code>grep</code>并按回车，便会在minibuffer中等待使用者的进一步输入</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/grep%E5%91%BD%E4%BB%A4.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/grep%E5%91%BD%E4%BB%A4.png" alt=""></p>
 <p>显然，这是直接调用了同名的命令行程序<code>grep</code>来实现搜索的，控制选项比VSCode的搜索功能要丰富许多。</p>
 <h2 id="集成git"><a href="#集成git" class="headerlink" title="集成git"></a>集成git</h2><p>git可以说已经成为了日常开发中不可或缺的一个工具，如果能够在编辑器内方便地调用git的话会大大提高效率。VSCode通过左侧工具栏的源代码管理入口提供了这个功能，在Emacs中则是通过一个叫做<code>VC dir</code>的主模式提供这个功能。</p>
 <p>在Emacs中按下快捷键<code>C-x v d</code>，然后输入使用git管理的项目的目录地址，便会打开一个新的编辑区域</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/VCdir%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/VCdir%E6%A8%A1%E5%BC%8F.png" alt=""></p>
 <p>当处于这个模式下时，会有一些新的快捷键可以用，比如将光标移动到显示<code>edited</code>的行上按下等号键，可以打开另一个编辑区域查看该文件的修改内容；按下<code>m</code>键可以选中光标所在行的文件，然后按<code>v</code>键打开一个新的编辑区域来填写commit message，写完之后按下<code>C-c C-c</code>提交（即调用<code>git commit</code>命令）；最后按下<code>q</code>键可以退出<code>VC dir</code>模式的编辑区域。</p>
 <h2 id="集成终端"><a href="#集成终端" class="headerlink" title="集成终端"></a>集成终端</h2><p>在VSCode中通过选中顶部菜单的“查看”，再点击“集成终端”，便可以打开命令行，然后像平时在其它的终端模拟器中那样使用命令。Emacs中也可以打开终端，方法是按下快捷键<code>M-x</code>然后输入<code>eshell</code>并回车，然后Emacs便会在当前窗口中打开一个名为<code>*eshell*</code>的编辑区域，显示命令行提示符和闪烁的光标，并等待使用者的进一步交互。</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/eshell%E7%AA%97%E5%8F%A3.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/eshell%E7%AA%97%E5%8F%A3.png" alt=""></p>
 <p>有意思的是，这不是一个真正的命令行程序。比如在<code>*eshell*</code>中输入<code>which pwd</code>，输出结果是<code>eshell/pwd is a compiled Lisp function in ‘em-dirs.el’.</code>。也就是说，<code>eshell</code>中的某一些命令是Emacs重新实现的；此外，在<code>*eshell*</code>中可以运行Emacs的扩展语言——ELisp。比如输入<code>(+ 1 1)</code>并按下回车，会输出2。</p>
 <h2 id="扩展能力"><a href="#扩展能力" class="headerlink" title="扩展能力"></a>扩展能力</h2><p>VSCode有一个<a href="https://marketplace.visualstudio.com/" target="_blank" rel="noopener">插件市场</a></p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%8F%92%E4%BB%B6%E5%B8%82%E5%9C%BA.jpg" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%8F%92%E4%BB%B6%E5%B8%82%E5%9C%BA.jpg" alt=""></p>
 <p>Emacs也有<a href="https://melpa.org/#/?q=yy" target="_blank" rel="noopener">一个</a>，不过得承认这个网页确实没有VSCode阵营的吸引人</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/melpa%E9%A6%96%E9%A1%B5.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/melpa%E9%A6%96%E9%A1%B5.png" alt=""></p>
 <p>在Emacs中按下<code>M-x</code>后输入<code>package-install</code>回车，Emacs会等待用户输入要安装的插件的名字——可以按下<code>⇥</code>键（Mac上的tab键）让Emacs尝试自动补全。确认名字无误后再按回车便可以安装使用了——但一般还需要做一些微调。</p>
 <h1 id="炫酷的特性和插件"><a href="#炫酷的特性和插件" class="headerlink" title="炫酷的特性和插件"></a>炫酷的特性和插件</h1><p>除了上面与VSCode对比的一些基本操作以外，Emacs还有自身的一些特色功能，更有世上的众多优秀程序员为Emacs贡献了不胜枚举的优秀插件，它们极大地扩展了Emacs的能力，提升了文字编辑这项活动的效率，甚至超越了文字编辑。</p>
 <h2 id="内置的功能"><a href="#内置的功能" class="headerlink" title="内置的功能"></a>内置的功能</h2><h3 id="颜色主题"><a href="#颜色主题" class="headerlink" title="颜色主题"></a>颜色主题</h3><p>Emacs也可以安装颜色主题来改变外观。我比较喜欢的一款主题是<code>gruvbox-light-soft</code>，只需要在Emacs的配置文件中写上<code>(load-theme &#39;gruvbox-light-soft t)</code>即可启用。在这个主题的<a href="https://github.com/greduan/emacs-theme-gruvbox" target="_blank" rel="noopener">仓库主页</a>可以看到一些效果图。</p>
 <h3 id="将当前行居中或置顶"><a href="#将当前行居中或置顶" class="headerlink" title="将当前行居中或置顶"></a>将当前行居中或置顶</h3><p>Emacs可以用纯键盘的操作，将光标当前所在的行移到窗口的中间来显示。我特别喜欢这个功能，之前用VSCode时候一直想找这个功能的等价物，可惜没找着。在Emacs中，按下一次<code>control+l</code>，光标所在的行就会移动到窗口的中间；按下第二次，则移动到窗口的顶部展示；再按一次，会去到窗口的底部。如果再按一次，那么就跟第一次一样回到窗口的中间。每当Emacs正在编辑的内容已经去到屏幕上较低的位置时，我便会用这个功能校正一下。</p>
 <p>比起用鼠标拖动滚动条或者用滚轮来滚动，我更喜欢这种表意更清晰的方式。</p>
 <h3 id="纯键盘选中一片区域"><a href="#纯键盘选中一片区域" class="headerlink" title="纯键盘选中一片区域"></a>纯键盘选中一片区域</h3><p>在Emacs中可以用单击鼠标右键的方式来选中一片区域。当按下鼠标右键的时候，从光标所在的位置开始，到鼠标点击的位置结束的内容便会被选中。但我个人更喜欢纯键盘的操作，首先是在要选中的内容的起点按下快捷键<code>C-@</code>，这时候Emacs会在minibuffer中打印一条<code>Mark set</code>的消息。然后移动光标——用方向键还是用一系列的快捷键，甚至直接跳转到某一行也可以——到待选中的内容的终点。这时候加在起点和终点间的内容便会被选中，它们会有特殊的背景色，如下动图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%BA%AF%E9%94%AE%E7%9B%98%E9%80%89%E4%B8%AD%E4%B8%80%E7%89%87%E5%8C%BA%E5%9F%9F.gif" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%BA%AF%E9%94%AE%E7%9B%98%E9%80%89%E4%B8%AD%E4%B8%80%E7%89%87%E5%8C%BA%E5%9F%9F.gif" alt=""></p>
 <p>因为按<code>C-@</code>实在是太别扭了，所以我将这个快捷键修改为了<code>M-SPC</code>（先按住<code>alt</code>键再按下空格键）。如果更喜欢鼠标操作的话，也可以像在VSCode中那样，在终点按住<code>shift</code>键再单击鼠标左键。</p>
 <h3 id="矩形编辑"><a href="#矩形编辑" class="headerlink" title="矩形编辑"></a>矩形编辑</h3><p>在VSCode中按住<code>shift</code>和<code>option</code>键，再单击鼠标右键并拖动就可以选中一片矩形的区域，在Emacs中也支持这样的矩形编辑的功能。像下图这样，先定位到要选中为矩形区域的左上角按下<code>C-@</code>，再移动光标到目标矩形区域的右下角，最后按下快捷键<code>C-x r k</code>即可。</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%9F%A9%E5%BD%A2%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA.gif" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%9F%A9%E5%BD%A2%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA.gif" alt=""></p>
 <h2 id="惊艳的插件"><a href="#惊艳的插件" class="headerlink" title="惊艳的插件"></a>惊艳的插件</h2><h3 id="快速跳转"><a href="#快速跳转" class="headerlink" title="快速跳转"></a>快速跳转</h3><p>Emacs本身支持跳转到指定的某一行，只需要按下快捷键<code>M-g M-g</code>然后输入行号并回车即可。但我一般是不显示行号的，所以这个功能其实比较少用。我使用一个名为<a href="https://github.com/abo-abo/avy" target="_blank" rel="noopener">avy</a>的插件来增强跳转功能，主要用的是它提供的<code>avy-goto-line</code>函数。依照这个插件的<a href="https://github.com/abo-abo/avy#avy-goto-line" target="_blank" rel="noopener">文档</a>，我为这个函数配置了快捷键<code>M-g f</code>，因此当我想要快速地跳转到屏幕上可见的区域中、离光标所在位置稍微有点远的行时，我便按下这个快捷键，然后按照提示按下相应的英文字母键既可，具体效果参见下面的演示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8avy%E5%9C%A8%E8%A1%8C%E9%97%B4%E8%B7%B3%E8%BD%AC.gif" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8avy%E5%9C%A8%E8%A1%8C%E9%97%B4%E8%B7%B3%E8%BD%AC.gif" alt=""></p>
 <h3 id="发出HTTP请求"><a href="#发出HTTP请求" class="headerlink" title="发出HTTP请求"></a>发出HTTP请求</h3><p>VSCode中有一个叫做<a href="https://marketplace.visualstudio.com/items?itemName=humao.rest-client" target="_blank" rel="noopener">REST Client</a>的插件，Emacs中则是有一个叫做<a href="https://github.com/pashky/restclient.el" target="_blank" rel="noopener">restclient.el</a>的主模式。借助于<code>restclient.el</code>便可以直接在一个文本文件中写好自己要发出的HTTP请求的内容，然后一键触发。之前我是用<a href="https://insomnia.rest/" target="_blank" rel="noopener">Insomnia</a>这个工具的，尽管它很强大，但很多时候我不需要那么强大的功能，而且Insomnia消耗内存比较多，于是我便回到<code>restclient.el</code>上了。<code>restclient.el</code>的效果大致如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8restclient.el%E5%8F%91%E5%87%BA%E8%AF%B7%E6%B1%82.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8restclient.el%E5%8F%91%E5%87%BA%E8%AF%B7%E6%B1%82.png" alt=""></p>
 <h3 id="增强的git集成功能"><a href="#增强的git集成功能" class="headerlink" title="增强的git集成功能"></a>增强的git集成功能</h3><p>尽管Emacs自带了<code>VC dir</code>这个主模式，但我更喜欢用<a href="https://github.com/magit/magit" target="_blank" rel="noopener">magit</a>这个插件，尤其是它的<code>magit-discard</code>功能，可以在查看代码的差异的过程中方便地舍弃一些不必要的修改（例如添加一行<code>console.log</code>的调用）。例如下图，通过按下<code>n</code>将光标移动到某一片修改上再按下<code>k</code>键，Emacs便会询问使用者是否要“丢弃”这一块改动。如果按下<code>y</code>，那么这一块被选中的区域的内容便会恢复到git当中未修改的状态。</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/magit-discard.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/magit-discard.png" alt=""></p>
 <h3 id="增强的文件内搜索功能"><a href="#增强的文件内搜索功能" class="headerlink" title="增强的文件内搜索功能"></a>增强的文件内搜索功能</h3><p>Emacs默认的搜索使用的是<code>search-forward</code>函数，插件<a href="https://github.com/abo-abo/swiper#swiper" target="_blank" rel="noopener">swiper</a>提供的功能更强大——不仅可以是字符串的完全匹配，也可以基于正则表达式来搜索，并且展示效果更直观，如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/swiper%E7%9A%84%E9%AB%98%E4%BA%AE%E5%92%8C%E9%A2%84%E8%A7%88.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/swiper%E7%9A%84%E9%AB%98%E4%BA%AE%E5%92%8C%E9%A2%84%E8%A7%88.png" alt=""></p>
 <h3 id="代码片段工具"><a href="#代码片段工具" class="headerlink" title="代码片段工具"></a>代码片段工具</h3><p>VSCode自带了一个“用户代码片段”的功能（通过顶部菜单“Code”，再选中“首选项”可以看到），可以用来定义一些短语，这些短语会在被选中的时候展开为完整的内容。Emacs有一个名为<a href="https://github.com/joaotavora/yasnippet" target="_blank" rel="noopener">yasnippet</a>的插件也提供了类似的功能，但定义代码片段的语法不同。并且，<code>yasnippet</code>支持在短语的定义中嵌入ELisp代码，扩展性远远高于只能使用字符串及占位符的VSCode的等价功能。</p>
 <h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>Emacs还有许多有意思的插件，比如<a href="https://github.com/gonewest818/dimmer.el" target="_blank" rel="noopener">dimmer.el</a>，可以让当前没有获得焦点的窗口显示得黯淡一点；<a href="https://github.com/ledger/ledger-mode" target="_blank" rel="noopener">ledger-mode</a>，可以用Emacs来记账。这里就不一一列举了，各位有兴趣的话可以自己摸索Emacs，相信会遇到自己喜欢的插件的。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>比起家大业大的VSCode，Emacs算不上是开箱即用。它没有VSCode那么友好的界面和平易近人的操作方式，人气也没有VSCode那么旺，当遇到问题的时候可能没那么好求助到人，并且学习曲线（小众的预设快捷键、冷门的扩展语言）也比较高。但Emacs的扩展能力很强，现有的插件已经很丰富了，可以满足大部分的需求，遇到问题也可以到有模有样的<a href="https://emacs-china.org/" target="_blank" rel="noopener">论坛</a>求助。如果喜欢折腾的话，Emacs会是一个不错的选择，至少我自己用得很开心。</p>
@@ -488,7 +488,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/11/21/Emacs走马观花/" data-id="ck4jzx57m000rt630ovsstrna" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/11/21/Emacs走马观花/" data-id="ck4v0gyqr000lnp30plxiu5qz" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/11/21/Emacs走马观花/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -546,7 +546,7 @@ ga('send', 'pageview');
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">|-1</span><br><span class="line">  |-^</span><br><span class="line">  `-^</span><br><span class="line">`-3</span><br><span class="line">  |-^</span><br><span class="line">  `-^</span><br></pre></td></tr></table></figure>
 <h2 id="接下来终于要写盘了"><a href="#接下来终于要写盘了" class="headerlink" title="接下来终于要写盘了"></a>接下来终于要写盘了</h2><p>总算要开始实现将二叉树写入磁盘文件的功能了。将内存中的二叉树写入到文件中，相当于将树形的数据结构转换为线性的存储结构——毕竟磁盘上的文件可以认为就是线性的字节流。在这块字节流中，除了要保存每一个节点的数据之外，同样重要的还有节点间的父子关系。</p>
 <p>有很多种写盘的方法。比如说，可以模仿<a href="https://www.jianshu.com/p/934d95a80e6d" target="_blank" rel="noopener">树的顺序存储结构</a>将二叉树序列化到磁盘上。以上面的二叉树<code>*bst*</code>为例，它是一棵满二叉树，如果采用顺序存储，那么首先分配一个长度为3的数组，在下标为0的位置存储根节点的数字2，在下标为1的位置存储左孩子的数字1，在下标为2的位置存储右孩子的数字3，如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/bst.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/bst.png" alt=""></p>
 <p>推广到高度为<code>h</code>的二叉树，则需要长度为$2^h-1$的数组来存储所有节点的数据。假设每一个节点的数据都是32位整数类型，那么一棵高度为<code>h</code>的二叉树在磁盘上便需要占据$4·(2^h-1)$个字节。这个做法虽然可行，但比较浪费存储空间。它将节点间的父子关系用隐式的下标关系来代替，节省了存储左右子树的“指针”所需的空间，比较适合存储满二叉树或接近满的二叉树。</p>
 <p>对于稀疏的二叉树，如果在序列化后的字节流中显式地记录节点间的父子关系，便可以节省很多不存在的节点所占据的存储空间。比如说，对于每一个节点，都序列化为磁盘上的12个字节：</p>
 <ol>
@@ -555,7 +555,7 @@ ga('send', 'pageview');
 <li>下标为8到11的4个字节，存储的是节点的右子树在文件中的偏移</li>
 </ol>
 <p>如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/bst2.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/bst2.png" alt=""></p>
 <p>上面的数组表示磁盘上的一个文件，每一个方格为一个字节，每个方格在文件内的偏移从左往右依次增大。由于采用后序遍历的方式依次序列化二叉树中的节点数据和指针，因此左孩子首先被写入文件，然后是右孩子，最后才是根节点。推广到所有的二叉树，便是先将左右子树追加写入磁盘文件，再将根节点的数据、左子树根节点在文件内的偏移，以及右子树根节点在文件内的偏移追加到文件末尾；如果左右子树是空的，那么以偏移0表示。</p>
 <p>这是一个递归的过程，而每一次递归调用应当返回两个值：</p>
 <ol>
@@ -567,7 +567,7 @@ ga('send', 'pageview');
 <p>现在可以将<code>*bst*</code>写入文件了</p>
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">write-bst-to-file</span> *bst* <span class="string">"/tmp/bst.dat"</span>)</span><br></pre></td></tr></table></figure>
 <p>使用<code>hexdump</code>验证写入的效果</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%BB%93%E6%9E%84.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%BB%93%E6%9E%84.png" alt=""></p>
 <p>文件最开始的五个字节依次存储着字符串<code>&quot;mybst&quot;</code>的ASCII码，为的就是让最早被写入文件中的根节点——也就是二叉树最左下角的节点——的偏移不为0，以免在后续反序列化的时候，从该节点的父节点中读到左子树的偏移为0——这样会被误认为是一棵空树的。</p>
 <p>有哪里写得不好的还请各位读者不吝赐教。</p>
 
@@ -575,7 +575,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/10/29/将二叉树写到磁盘上/" data-id="ck4jzx581001rt630mwt1d6fi" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/10/29/将二叉树写到磁盘上/" data-id="ck4v0gyri001mnp30snmcz82e" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/10/29/将二叉树写到磁盘上/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -613,13 +613,13 @@ ga('send', 'pageview');
       
         <p>给Emacs写插件有种痛并快乐着的感觉。虽然这个发挥创意的过程很有趣，但是Elisp写起来总有种别扭的感觉。一方面，我把它当成是Common Lisp，写的时候没有觉得“这个用法可能会有问题”；另一方面，它又不是普通的写lisp代码，还要一边写一边摸索Emacs中的一些概念。不过总体而言，还是挺好玩的，除了没有一个像模像样的REPL之外。</p>
 <h2 id="来龙去脉"><a href="#来龙去脉" class="headerlink" title="来龙去脉"></a>来龙去脉</h2><p>我用Emacs记录了不少的“笔记”。虽说我自己将其称为笔记，但是它们更像是我把遇到的一些问题和解决方法给记录下来，而没有太多自己的感悟。它们的外观倒是高度的一致，见下图</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%94%A8org-mode%E8%AE%B0%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%94%A8org-mode%E8%AE%B0%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
 <p>（第一次尝试给自己的图片打水印，有点好玩）每一个一级条目都是一个问题，并且这个文件中只有一级条目。而条目下的内容则是对标题的问题的回答。其中还有代码块——也就是写着BEGIN_SRC和END_SRC的那部分。用org-mode来记录笔记有几个好处，其中一个便是可以在笔记中插入任何Emacs支持的编程语言代码片段并具备语法高亮。当然了，还有一个巨大的优势，便是org-mode尽管看似花里胡哨，骨子里却是正统的纯文本文件，它可以很方便地在其它工具中处理。</p>
 <p>而我用来处理的其中一个工具便是ElasticSearch。比如说，上图的第一条笔记，在ElasticSearch中存成了下面这样的结构</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%9F%A5%E7%9C%8BElasticSearch%E4%B8%AD%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%9F%A5%E7%9C%8BElasticSearch%E4%B8%AD%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
 <p>本来我是写了一个Alfred的Workflow来查询ElasticSearch的，但是奈何Workflow那种一行行的方式展示org-mode格式的笔记不太友好，因此便打算直接在Emacs中查询并查看笔记内容。</p>
 <h2 id="牛刀小试"><a href="#牛刀小试" class="headerlink" title="牛刀小试"></a>牛刀小试</h2><p>为了可以在Emacs中查看笔记内容，我打算借助于Helm的力量。<a href="https://emacs-helm.github.io/helm/" target="_blank" rel="noopener">Helm</a>是Emacs的一个补全的框架，可以用来呈现一系列的候选项，然后选中后触发一些什么动作。我期望的形式，是在Emacs中按下某种快捷键或者输入某个命令行，可以在minibuffer中输入自己要查询的内容，然后Emacs查询ElasticSearch并最终通过Helm来呈现这些查询内容匹配的笔记条目。目前的成果是下面这样子的</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/lt-ask%E7%9A%84%E5%80%99%E9%80%89%E5%88%97%E8%A1%A8.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/lt-ask%E7%9A%84%E5%80%99%E9%80%89%E5%88%97%E8%A1%A8.png" alt=""></p>
 <p>具体的做法其实也很简单。首先，要知道Helm是如何被使用的。通过这篇<a href="https://wikemacs.org/wiki/How_to_write_helm_extensions" target="_blank" rel="noopener">文档</a>，初步了解到只需要定一个变量，并通过<code>:sources</code>关键字参数传递给<code>helm</code>这个函数即可。我所定义的传递给<code>helm</code>函数的“source”如下</p>
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br></pre></td></tr></table></figure>
 <p>其中<code>faq-candidates</code>的作用便是根据minibuffer中的关键字查询ElasticSearch并组织好一个结构返回给<code>helm</code>。需要注意的是，<code>faq-candidates</code>必须是一个无参的函数才行，但输入的数据又偏偏需要从minibuffer中获取。因此，我的做法是约定一个变量<code>faq-query</code>，在调用<code>helm</code>之前首先调用<code>read-from-minibuffer</code>函数读取输入，然后将输入的字符串赋值给<code>faq-query</code>，之后当<code>helm</code>开始使用这个source的时候，<code>faq-candidates</code>函数便不需要参数，而可以直接从<code>faq-query</code>中拿到自己需要的搜索内容向ElasticSearch请求了。当然了，如果有像Common Lisp动态作用域的话，也就不需要定义这么一个全局变量了，对Emacs全局的侵入会更少一点。</p>
@@ -631,7 +631,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" data-id="ck4jzx57r0016t630tqs1e5se" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" data-id="ck4v0gyqy000wnp30svxdzhx5" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -679,7 +679,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/10/11/如何编译defun/" data-id="ck4jzx57t001ct6302y66hkww" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/10/11/如何编译defun/" data-id="ck4v0gyrh001knp30te6bdgo4" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/10/11/如何编译defun/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -727,7 +727,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/09/18/编译return语句/" data-id="ck4jzx58a002ct630m0is89ky" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/09/18/编译return语句/" data-id="ck4v0gyrx002inp30gqgc1ahc" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/09/18/编译return语句/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -774,7 +774,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/" data-id="ck4jzx57x001kt6306xkakc3q" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/" data-id="ck4v0gyrb001fnp30ddcpp65a" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -817,9 +817,9 @@ ga('send', 'pageview');
 <p>俗话说的好，要检验自己是不是懂得某个东西，只要看看自己能不能把这个东西给别人讲清楚就可以了。如果讲清楚了，没有哪里需要emmmm的地方，那么就可以认为这个东西基本上自己是真的懂得了。</p>
 <p>那么<code>org-agenda-custom-commands</code>是干嘛用的呢。官方文档的链接在这里：<a href="https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html" target="_blank" rel="noopener">https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html</a> ——哎哟喂，其实如果你们身处在Emacs之中来看这篇文章的话，只要按下<code>C-h v</code>，然后在minibuffer中输入<code>org-agenda-custom-commands</code>的话，也就可以看到关于这个变量的说明了啦。不过上面这个文档的好处是它有附赠一些例子。</p>
 <p>总而言之，<code>org-agenda-custom-commands</code>是一个变量，通过给这个变量赋值，可以在<code>org-mode</code>的Agenda视图中，添加一些自定义的功能及对应的快捷键。例如，如果在Emacs中求值我上面所给的Elisp代码，然后按下<code>C-c a</code>，便会看到类似于下面这样的提示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84Agenda%E8%A7%86%E5%9B%BE%E6%8F%90%E9%86%92%E4%BF%A1%E6%81%AF.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84Agenda%E8%A7%86%E5%9B%BE%E6%8F%90%E9%86%92%E4%BF%A1%E6%81%AF.png" alt=""></p>
 <p>这时候，如果按下<code>f</code>键，Emacs就会按照上面代码中描述的那样找出所有关键字为<code>TODO</code>的条目，然后按照【先优先级降序，然后时间戳升序】的方式来排列它们。在我的电脑上的效果如下图所示</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E7%9A%84%E6%95%88%E6%9E%9C.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E7%9A%84%E6%95%88%E6%9E%9C.png" alt=""></p>
 <p>可以看到，首先出现的条目是标注为最高的A优先级的两条，然后是在heading内容的开头含有时间戳的条目。</p>
 <p>对我来说，这样的一个好处是可以将未处理过的TODO按照时间顺序列出来，从而避免了所有的TODO条目先是按照文件的名称集中起来，然后又按照它们在文件中的顺序从上往下地排列起来。毕竟文件内的TODO都是聚合在各自不同的更高级的heading之下的，它们之间的上下关系体现不出什么东西。</p>
 
@@ -827,7 +827,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/" data-id="ck4jzx57l000qt6301pjwnzfs" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/" data-id="ck4v0gyqv000tnp30jla95ats" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -939,7 +939,7 @@ ga('send', 'pageview');
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2020 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -983,5 +983,5 @@ if (typeof jQuery == 'undefined') {
 
 
   </div>
-</body>
+<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
 </html>

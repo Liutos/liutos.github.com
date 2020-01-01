@@ -22,7 +22,7 @@ ga('send', 'pageview');
   <title>Emacs的org-mode实现自动的internal archive | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="缘由org-mode是一个Emacs内置的major mode，当打开一个后缀为.org的文件时就会被启用。在官网的介绍中提到，它可以用于管理待办事项，而这也正是我目前使用org-mode最多的场合。比如，我用它来记录漫画的阅读进度，每一话或每一章就是一个标记了TODO关键字的条目，读完那一话或那一章后就会将对应的条目标记为DONE。一般我会一周一次地归档自己标记为DONE的条目，但由于一次要处理">
-<meta name="keywords" content="emacs,org-mode">
+<meta name="keywords" content="org-mode,emacs">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Emacs的org-mode实现自动的internal archive">
 <meta property="og:url" content="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/index.html">
@@ -140,11 +140,11 @@ ga('send', 'pageview');
           <div style="display: flex; justify-content: space-around">
               <!-- 支付宝打赏图案 -->
               <div>
-                  <img src="/images/Alipay.jpg" alt="支付宝打赏">
+                  <img src="/images/loading.png" data-original="/images/Alipay.jpg" alt="支付宝打赏">
               </div>
               <!-- 微信打赏图案 -->
               <div>
-                  <img src="/images/WeChatpay.png" alt="微信打赏">
+                  <img src="/images/loading.png" data-original="/images/WeChatpay.png" alt="微信打赏">
               </div>
           </div>
     </div>
@@ -160,7 +160,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="ck4jzx57a0005t630a0196dof" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/" data-id="ck4v0gyqi0006np30u72f5vzw" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -290,7 +290,7 @@ ga('send', 'pageview');
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2020 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -336,5 +336,5 @@ if (typeof jQuery == 'undefined') {
 
 
   </div>
-</body>
+<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
 </html>

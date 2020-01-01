@@ -22,19 +22,19 @@ ga('send', 'pageview');
   <title>拿Emacs对接我的cuckoo | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="cuckoo是一个我自己开发的类似待办事项的工具，运行在我本地的电脑上。它有如下两个接口：  传入一个UNIX Epoch时间戳创建提醒 传入一个标题以及提醒的ID来创建任务  这样一来，便能在设定的时刻调用alerter在屏幕右上角弹出提醒。 我喜欢用Emacs的org-mode来安排任务，但可惜的是，org-mode没有定点提醒的功能（如果有的话希望来个人打我的脸XD）。开发了cuckoo后，">
-<meta name="keywords" content="emacs,org-mode,lisp,elisp">
+<meta name="keywords" content="org-mode,emacs,lisp,elisp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="拿Emacs对接我的cuckoo">
 <meta property="og:url" content="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="cuckoo是一个我自己开发的类似待办事项的工具，运行在我本地的电脑上。它有如下两个接口：  传入一个UNIX Epoch时间戳创建提醒 传入一个标题以及提醒的ID来创建任务  这样一来，便能在设定的时刻调用alerter在屏幕右上角弹出提醒。 我喜欢用Emacs的org-mode来安排任务，但可惜的是，org-mode没有定点提醒的功能（如果有的话希望来个人打我的脸XD）。开发了cuckoo后，">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/org-heading-components%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
 <meta property="og:updated_time" content="2019-02-05T07:19:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="拿Emacs对接我的cuckoo">
 <meta name="twitter:description" content="cuckoo是一个我自己开发的类似待办事项的工具，运行在我本地的电脑上。它有如下两个接口：  传入一个UNIX Epoch时间戳创建提醒 传入一个标题以及提醒的ID来创建任务  这样一来，便能在设定的时刻调用alerter在屏幕右上角弹出提醒。 我喜欢用Emacs的org-mode来安排任务，但可惜的是，org-mode没有定点提醒的功能（如果有的话希望来个人打我的脸XD）。开发了cuckoo后，">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/org-heading-components%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.png">
+<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -114,7 +114,7 @@ ga('send', 'pageview');
 <p>为了实现所需要的功能，让我从结果反过来推导一番。首先，需要提炼一个TODO条目的标题和时间戳（用来创建提醒获取ID），才能调用cuckoo的接口。标题就是org-mode中一个TODO条目的heading text，在Emacs中用下面的代码获取</p>
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">nth</span> <span class="number">4</span> (<span class="name">org-heading-components</span>))</span><br></pre></td></tr></table></figure>
 <p><code>org-headline-components</code>在光标位于TODO条目上的时候，会返回许多信息（参见下图）</p>
-<p><img src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/org-heading-components%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/org-heading-components%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.png" alt=""></p>
 <p>其中下标为4的component就是我所需要的内容。</p>
 <p>接着便是要获取一个提醒的ID。ID当然是从cuckoo的接口中返回的，这就需要能够解析JSON格式的文本。在Emacs中解析JSON序列化后的文本可以用<a href="https://github.com/ryancrum/json.el" target="_blank" rel="noopener">json</a>这个库，示例代码如下</p>
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">s</span> <span class="string">"&#123;\"remind\":&#123;\"create_at\":\"2019-01-11T14:53:59.000Z\",\"duration\":null,\"id\":41,\"restricted_hours\":null,\"timestamp\":1547216100,\"update_at\":\"2019-01-11T14:53:59.000Z\"&#125;&#125;"</span>))</span><br><span class="line">  (<span class="name">cdr</span> (<span class="name">assoc</span> 'id (<span class="name">cdr</span> (<span class="name">car</span> (<span class="name">json-read-from-string</span> s))))))</span><br></pre></td></tr></table></figure>
@@ -159,11 +159,11 @@ ga('send', 'pageview');
           <div style="display: flex; justify-content: space-around">
               <!-- 支付宝打赏图案 -->
               <div>
-                  <img src="/images/Alipay.jpg" alt="支付宝打赏">
+                  <img src="/images/loading.png" data-original="/images/Alipay.jpg" alt="支付宝打赏">
               </div>
               <!-- 微信打赏图案 -->
               <div>
-                  <img src="/images/WeChatpay.png" alt="微信打赏">
+                  <img src="/images/loading.png" data-original="/images/WeChatpay.png" alt="微信打赏">
               </div>
           </div>
     </div>
@@ -179,7 +179,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="ck4jzx583001vt630skqcr1yt" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/" data-id="ck4v0gyrq0021np30cwtecdp6" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -309,7 +309,7 @@ ga('send', 'pageview');
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2020 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -355,5 +355,5 @@ if (typeof jQuery == 'undefined') {
 
 
   </div>
-</body>
+<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
 </html>
