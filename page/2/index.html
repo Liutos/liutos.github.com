@@ -60,6 +60,53 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-如何编译通用的函数调用表达式" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/08/15/如何编译通用的函数调用表达式/" class="article-date">
+  <time datetime="2019-08-15T14:15:57.000Z" itemprop="datePublished">2019-08-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/08/15/如何编译通用的函数调用表达式/">输出HELLO WORLD——如何编译通用的函数调用表达式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇的东西比较多。</p>
+<p>首先要处理一下<code>inside-out/aux</code>和<code>inside-out</code>这两个函数。之前的<code>inside-out/aux</code>其实一直不支持对<code>progn</code>的处理，需要先补充；而<code>inside-out</code>则可以优化一下，避免在只有一个表达式的情况下，也用<code>progn</code>将其包裹起来。修改后的<code>inside-out/aux</code>和<code>inside-out</code>分别如下</p>
+        
+          <p class="article-more-link">
+            <a href="/2019/08/15/如何编译通用的函数调用表达式/#more">Read More</a>
+          </p>
+        
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/" data-id="ck56qj6t4004ir130jrf126gi" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/setq/">setq</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-一个有用的org-agenda-custom-commands的例子" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/" class="article-date">
@@ -99,7 +146,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/" data-id="ck52kj4ds000udu30tivix8dp" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/" data-id="ck56qj6sn003lr130lt1uj932" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -146,7 +193,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="ck52kj4eq002udu3032q0insy" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/" data-id="ck56qj6tr005qr130ivvifmx8" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -193,7 +240,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/07/03/编译大于运算符/" data-id="ck52kj4ej002ddu30qcgxdwul" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/07/03/编译大于运算符/" data-id="ck56qj6to005jr130jchtgkvt" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/07/03/编译大于运算符/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -242,7 +289,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/" data-id="ck52kj4dp000ndu305ygz3yzu" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/" data-id="ck56qj6rq000lr130m8ej1ocn" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -298,7 +345,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="ck52kj4ec001rdu3016dh3c4p" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" data-id="ck56qj6tg0057r130dr8ieotc" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -348,7 +395,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="ck52kj4e9001mdu30ygs3x2ag" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/" data-id="ck56qj6t9004vr130hai6wwwp" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -396,7 +443,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="ck52kj4eb001pdu30z09pdhen" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/11/支持四则运算中的变量/" data-id="ck56qj6te0052r130mscbvadf" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/11/支持四则运算中的变量/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -445,7 +492,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="ck52kj4e3001edu30ms5ysjzu" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/06/01/如何编译setq？/" data-id="ck56qj6sx0041r130z7rn7x16" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/06/01/如何编译setq？/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -499,61 +546,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/27/如何编译progn/" data-id="ck52kj4e10019du30npn0x9zc" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2019/05/27/如何编译progn/" data-id="ck56qj6t6004lr130wpel9ygc" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2019/05/27/如何编译progn/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/progn/">progn</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-支持减、乘，以及除" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/05/23/支持减、乘，以及除/" class="article-date">
-  <time datetime="2019-05-23T13:50:19.000Z" itemprop="datePublished">2019-05-23</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/23/支持减、乘，以及除/">支持减、乘，以及除</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在<a href="http://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/">上一篇文章</a>中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。</p>
-<p>我自己模仿着x64的调用约定，规定四则运算的结果始终放在<code>EAX</code>这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到<code>EAX</code>寄存器中，再从<code>EAX</code>中减去或者除掉右操作数。</p>
-<p>在摸索除法的汇编代码怎么生成时，遇到了个费解的问题，最后才知道，原来需要把<code>EAX</code>寄存器的符号扩展到高位的<code>EDX</code>寄存器中去。对于<code>as</code>这个汇编器来说，需要用到<a href="https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-49/index.html" target="_blank" rel="noopener"><code>CLTD</code></a>指令。</p>
-<p>最后，<code>jjcc2</code>和<code>stringify</code>两个函数被修改为如下的样子</p>
-        
-          <p class="article-more-link">
-            <a href="/2019/05/23/支持减、乘，以及除/#more">Read More</a>
-          </p>
-        
-      
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2019/05/23/支持减、乘，以及除/" data-id="ck52kj4eh0026du300kipw6tc" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2019/05/23/支持减、乘，以及除/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/assembly/">assembly</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lisp/">lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/x64/">x64</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/汇编/">汇编</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编译器/">编译器</a></li></ul>
 
     </footer>
   </div>
@@ -583,6 +581,10 @@
       <ul>
         
           <li>
+            <a href="/2020/01/09/快速设置任务的开始时间（上）/">快速设置任务的开始时间（上）</a>
+          </li>
+        
+          <li>
             <a href="/2020/01/02/2019年总结/">2019年总结</a>
           </li>
         
@@ -596,10 +598,6 @@
         
           <li>
             <a href="/2019/11/30/一些自我感觉良好的命名约定/">一些适用于Node.js的命名约定</a>
-          </li>
-        
-          <li>
-            <a href="/2019/11/21/Emacs走马观花/">带你见识一下传说中的Emacs</a>
           </li>
         
       </ul>

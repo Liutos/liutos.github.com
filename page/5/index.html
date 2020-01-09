@@ -60,6 +60,70 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-cl-mongo用法入门" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/04/cl-mongo用法入门/" class="article-date">
+  <time datetime="2017-06-04T13:21:20.000Z" itemprop="datePublished">2017-06-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/04/cl-mongo用法入门/">cl-mongo用法入门</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了<a href="https://github.com/fons/cl-mongo" target="_blank" rel="noopener">cl-mongo</a>这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己查阅，也为了方便有相同需求的人了解如何使用cl-mongo，于是写了这篇文章。</p>
+<p>首先使用<code>CL-MONGO:MONGO</code>函数连接MongoDB的服务器程序（mongod）。因为在我的系统上mongod进程监听的是27017这个端口，并且我希望使用的数据库名为test，因此键入如下代码来连接数据库</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:mongo</span> <span class="symbol">:db</span> <span class="string">"test"</span></span><br><span class="line">                <span class="symbol">:host</span> <span class="string">"127.0.0.1"</span></span><br><span class="line">                <span class="symbol">:port</span> <span class="number">27017</span>)</span><br></pre></td></tr></table></figure>
+<p>连接上了数据库后，首先尝试往其中写入一个文档。假设现在要记录的是发出的HTTP请求的信息，那么一个可以写入的基本信息就是请求的目标地址。假设在命令行的mongo shell中输入的内容如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.insert(&#123;<span class="attr">uri</span>: <span class="string">'http://example.com'</span>&#125;);</span><br></pre></td></tr></table></figure>
+<p>那么使用cl-mongo提供的<code>DB.INSERT</code>函数达到上述效果的代码如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.insert <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></table></figure>
+<p>求值上述代码后返回值为NIL。为了将上述写入的文档重新查询出来，需要使用cl-mongo提供的<code>DB.FIND</code>函数。因为只有一个文档，所以直接查询就可以查看到结果了。在mongo shell中我们可以使用如下代码查询</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.find();</span><br></pre></td></tr></table></figure>
+<p>使用<code>DB.FIND</code>函数的话编写的代码可能会长得像下面这样</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>)</span><br></pre></td></tr></table></figure>
+<p>在我的系统上求值了上述代码后在REPL中输出的内容如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">((<span class="number">86</span> <span class="number">449</span> <span class="number">0</span> <span class="number">1</span> <span class="number">8</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span> <span class="string">"http_request"</span>)</span><br><span class="line"> (<span class="name">&lt;CL-MONGO</span><span class="symbol">:DOCUMENT&gt;</span> : &#123; </span><br><span class="line">   _id : CL-MONGO:<span class="symbol">:BSON-OID</span> [#(<span class="number">89</span> <span class="number">52</span> <span class="number">26</span> <span class="number">160</span> <span class="number">109</span> <span class="number">156</span> <span class="number">254</span> <span class="number">71</span> <span class="number">184</span> <span class="number">115</span> <span class="number">102</span> <span class="number">30</span>)]</span><br><span class="line">   elements : <span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line">))</span><br></pre></td></tr></table></figure>
+<p>值得注意的是，<code>DB.FIND</code>的返回值不完全是文档组成的数组，而是在这个结果集的数组之外又多了一层列表，并且列表的第一个元素还是一个一看之下不知其所以然的子列表。由于cl-mongo的GitHub上没有提及这个玩意儿的来历，我也没有深入去了解<code>DB.FIND</code>函数的实现代码，因此这个元素就先忽略它吧。如果需要使用<code>DB.FIND</code>查询到的结果，那么开发者需要对<code>DB.FIND</code>的返回值应用一下函数<code>SECOND</code>才行，如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))</span><br></pre></td></tr></table></figure>
+<p>返回值的列表中的每一个元素都是<code>CL-MONGO:DOCUMENT</code>这个类的实例对象，如果要直接使用还是稍微有点不方便的，因此我写了一个函数用来将<code>DB.FIND</code>函数查询到的<code>CL-MONGO:DOCUMENT</code>的实例对象都转换为较为熟悉，容易操作的数据类型——association list，函数的定义如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> document-to-alist (<span class="name">doc</span>)</span><br><span class="line">  <span class="string">"Convert a DOC of type CL-MONGO:DOCUMENT to a equivalent, serializable alist."</span></span><br><span class="line">  (<span class="name">check-type</span> doc cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">  (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">doc</span>)</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">typep</span> doc 'cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">                    (<span class="name">let</span> ((<span class="name">keys</span> (<span class="name">cl-mongo</span><span class="symbol">:get-keys</span> doc)))</span><br><span class="line">                      (<span class="name">mapcar</span> #'(lambda (key)</span><br><span class="line">                                  (cons key</span><br><span class="line">                                        (aux (cl-mongo:get-element key doc))))</span><br><span class="line">                              keys)))</span><br><span class="line">                   (<span class="name">t</span> doc))))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">id</span> (<span class="name">cl-mongo</span><span class="symbol">:doc-id</span> doc)))</span><br><span class="line">      (<span class="name">append</span> (<span class="name">aux</span> doc) (<span class="name">list</span> (<span class="name">cons</span> <span class="string">"_id"</span> id))))))</span><br></pre></td></tr></table></figure>
+<p>使用如下代码即可查看方才所写入的文档究竟长什么样子了</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">document-to-alist</span> (<span class="name">first</span> (<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))))</span><br></pre></td></tr></table></figure>
+<p>如果想要修改数据库中的文档，例如增加一个字段，那么可以使用cl-mongo提供的<code>DB.UPDATE</code>函数，用法如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.update <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>)</span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"$set"</span></span><br><span class="line">                                 (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"method"</span> <span class="string">"GET"</span>)))</span><br></pre></td></tr></table></figure>
+<p>最后如果要删除刚才所写入的这个文档，可以使用cl-mongo的<code>DB.DELETE</code>函数（我很好奇这个函数居然不是叫做DB.REMOVE），用法如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.delete <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></table></figure>
+
+      
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" data-id="ck56qj6rp000jr130mnlov4vz" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2017/06/04/cl-mongo用法入门/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/common-lisp/">common lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mongo/">mongo</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-远程请求Squid" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/05/18/远程请求Squid/" class="article-date">
@@ -103,7 +167,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/05/18/远程请求Squid/" data-id="ck52kj4em002kdu300bre4lnx" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/05/18/远程请求Squid/" data-id="ck56qj6tq005or130hghilqw0" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/05/18/远程请求Squid/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -155,7 +219,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" data-id="ck52kj4dz0017du30a3rvpham" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" data-id="ck56qj6ss003rr130txzbhhpk" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -207,7 +271,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" data-id="ck52kj4dx0013du30cgutw2mu" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" data-id="ck56qj6su003vr130yvyphis8" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -285,7 +349,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/" data-id="ck52kj4dy0014du30mb2217vq" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/" data-id="ck56qj6st003sr130n7p8r2mj" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/03/08/如何安装及使用Elastic-Search/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -360,7 +424,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/" data-id="ck52kj4dz0016du304rk2j7wt" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/" data-id="ck56qj6sv003wr130y0csmjp8" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -415,7 +479,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/20/如何自定义命令行补全/" data-id="ck52kj4e1001bdu30zw5i4nrw" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/01/20/如何自定义命令行补全/" data-id="ck56qj6t00046r130r3tdcz9u" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/01/20/如何自定义命令行补全/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -481,7 +545,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/" data-id="ck52kj4dk000bdu30vt8u4549" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/" data-id="ck56qj6re0004r130rh7dueqx" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -549,7 +613,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2017/01/10/手动安装mysql/" data-id="ck52kj4e4001fdu30thn9hrbu" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2017/01/10/手动安装mysql/" data-id="ck56qj6t1004br130a8cjgn63" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2017/01/10/手动安装mysql/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -616,80 +680,12 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/" data-id="ck52kj4ef0021du30lao90ebo" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/" data-id="ck56qj6tf0054r130yahzth0j" class="article-share-link">Share</a>
       
         <a href="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bfs/">bfs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-递归、闭包、面向对象" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2012/10/26/递归、闭包、面向对象/" class="article-date">
-  <time datetime="2012-10-26T04:56:12.000Z" itemprop="datePublished">2012-10-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2012/10/26/递归、闭包、面向对象/">递归、闭包、面向对象</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="话题由来"><a href="#话题由来" class="headerlink" title="话题由来"></a>话题由来</h2><p>参加了不少IT公司的笔试，有些题目遇到的次数还是比较多的，例如给一系列字符和一个空栈，询问你选项中的哪一个是不可能出现的出栈顺序这样的问题。另外一道题目，就是我这里要拿来讲的，不过我讲的和题目本身不直接相关，只是恰好和题目所要完成的任务有重合罢了。这道题目就是“给出一颗二叉树的先序遍历和中序遍历的输出结果，请给出这个二叉树的后序遍历的输出结果”。</p>
-<p>这道题目其实非常简单，尽管我一开始遇到的时候仍然是手足无措的（谁没有年少无知过呢对不），不过一两次之后就轻车熟路了，知道了这样的题目的行之有效的解法。举个例子，先序的序列和中序的序列分别是”abfce”和”bface”，那么这棵二叉树就是这样子的<br><img src="/images/loading.png" data-original="/pictures/postree.png"></p>
-<p>可以知道，后序遍历的输出结果为”fbeca”。怎么得到这棵二叉树呢？其实很简单，首先根据先序遍历的定义，所以在先序遍历结果中的第一个元素一定是整棵二叉树的根结点，也就是a，那么根据中序遍历的定义，在a左边出现的序列就是左子树的中序遍历结果，在a的右边的就是右子树的中序遍历结果，它们分别是”bf”和”ce”。并且可以知道，在先序遍历中与它们对应的片段应该也是”bf”和”ce”。在对”bf”做同样的处理，就可以知道b是根结点，而左子树为空且右子树为单节点f，另一棵子树的根结点为c且左子树为空，右子树为单节点e。</p>
-<p>那么，怎么用程序来自动化呢？</p>
-<h2 id="C语言的递归版本"><a href="#C语言的递归版本" class="headerlink" title="C语言的递归版本"></a>C语言的递归版本</h2><p>以文字来描述根据先序和中序来构造二叉树的算法还是很好理解的。为了描述方便，取几个名字。把先序遍历的结果叫做preseq，中序遍历的输出结果叫做inseq，并且把它们当作C语言中的数组那样来取出元素（例如preseq[0]表示第一个元素），再给它们一个方便取出片段的语法糖，例如preseq[0..2]表示取出下标从0到2的三个元素组成一个新的输出序列。</p>
-<p>首先，取出preseq的第一个元素preseq[0]，可以知道它肯定是目前正在处理的整棵二叉树的根结点，接着在inseq中寻找这个根结点，于是就可以把inseq分成三段，第一段是左子树的中序输出结果inseq1，第二段是根结点本身inseq2，第三段则是右子树的中序输出结果inseq3。同样的，preseq也可以分成三部分：第一个元素就是根结点，记为preseq1，然后是和inseq1等长的一个子串，也就是左子树的先序遍历的输出结果，剩下的，就是和inseq3等长的子串，即右子树的先序遍历输出结果了。既然有得到了先序和中序遍历的输出结果各一对，那么接下来只要对对应的一对输出结果递归调用原来的功能就可以了。递归的base case，就是输出结果只有一个元素的情况。这时候只需要生成一个没有左右子树的节点即可。</p>
-<p>我写了两个版本，第一个是很简单很直接的实现，就是完全按照上面所说的思路来做的，因此其中充满了字符串的复制操作，详见代码（其中的make_tree_by_prein函数就是实现了上面的算法的代码）</p>
-<script src="https://gist.github.com/3951810.js"> </script>
-
-<p>第二个版本避免了字符串的复制操作，不过没有第一个版本的make_tree_by_prein函数那么好理解了。这里只有修改后的make_tree_by_prein函数的代码</p>
-<script src="https://gist.github.com/3952212.js?file=make\_tree\_by\_prein.c"></script>
-
-<h2 id="CommonLisp和Java的版本"><a href="#CommonLisp和Java的版本" class="headerlink" title="CommonLisp和Java的版本"></a>CommonLisp和Java的版本</h2><p>C语言中的第二个版本在CommonLisp和Java里面可以改得更好一点，这多亏了CommonLisp的闭包特性和Java的OO方式。在C实现的第二个版本中，make_tree_by_prein函数有两个参数，而辅助函数make_tree_aux则需要两个参数。其中参数preseq和inseq是两个在传递过程中完成不会被修改的参数，它们之所以被作为参数，仅仅是因为C语言中只有两种方式在函数间共享一些信息：</p>
-<ul>
-<li>函数参数</li>
-<li>全局变量</li>
-</ul>
-<p>因为不想使用全局变量，所以只好在参数列表中动手脚了，不过在CommonLisp和Java的实现，就有办法可以在函数之间以受控的方式共享信息。例如下面用CommonLisp实现的make-tree-by-prein函数</p>
-<script src="https://gist.github.com/3952212.js?file=make-tree-by-prein.lisp"></script>
-
-<p>函数make-tree-by-prein利用labels在函数体内部定义了一个闭包aux，preseq和inseq则是在词法范围内可见的变量，因为在aux内部依然可以访问到它们，这样就不需要将它们作为aux的两个参数来进行传递了。而Java的实现也是类似的，在Java中方法从属于类，并且它们可以共享同一个类的实例中的所有变量，因此直接使用这些变量即可，代码如下（因为Java同样没有办法定义内部函数的关系，所以只好定义一个用private修饰的方法makeTreeAux了。）</p>
-<script src="https://gist.github.com/3952212.js?file=TreePost.java"></script>
-
-<p>不是有人说吗？OO是穷人的闭包；闭包是穷人的OO;-)</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>总算把讲思路贴代码的东西弄完了，可以好好扯淡一番了=。=话说上课的时候有个考研的同学找我讲话（班里的一名胖子，在算法方面有很厉害的嗅觉），就是问我对于用算法来实现“根据先序和中序输出结果如何构造二叉树”有没有思路。递归的方法其实很容易就可以想出来了，加之我之前已经想过这类题目要怎么系统地解决，所以很快就说出来了。然后我就觉得用C语言可以像上面那样写出一个高效（即没什么字符串复制操作）的版本，接着又想到这个可以用Lisp（或者其它带闭包的语言）来实现得更好，又想到了用Java也可以实现闭包的那类效果，再接着又觉得可以发篇文章来讨论讨论，于是就有这样的一篇东西了。</p>
-<p>对于具体实现某个功能的技术，我貌似没有特别地挑剔，甚至可以说，对于加入到编程语言中的任何特性，我都没有太挑剔的，只要好用，那么我就很可能会接纳——当然了，我也无法保证自己在找到一个反例之后不会把这句话给改掉当作自己没有这么说过，不过暂时没有想到这种情况，所以就先当作我是这样的人吧。举个例子，对于Haskell我很喜欢，也很喜欢纯函数语言的说法，即“纯函数是非常有利于程序编写的”。不过对于副作用我也没有持完全拒绝的态度，即使我在编程的过程中也会尽量遵循函数式编程的规矩（尽量避免副作用）。可是副作用实际上避无可避，倒不如拥抱它们。或许正是因为这个原因，我才会喜欢OCaml更甚于Haskell吧——至少目前是这样的。</p>
-<p>我也喜欢惰性计算，尤其是其带来的效果——无限长的列表推到看起来实在是帅得不行，并且还可以使得编写的程序拥有了函数式的外观和命令式的效率（例如《SICP》中举的例子，用惰性计算结合map、filter和reduce）。拥有惰性计算有利无害，何乐而不为呢～或许也正是因为自己对特性的需求是多多益善，所以才喜欢Common Lisp吧。</p>
-
-      
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/" data-id="ck52kj4ep002rdu30tfn14xue" class="article-share-link">Share</a>
-      
-        <a href="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/#disqus_thread" class="article-comment-link">Comments</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/closure/">closure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/oop/">oop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/recursion/">recursion</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/递归/">递归</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/闭包/">闭包</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面向对象/">面向对象</a></li></ul>
 
     </footer>
   </div>
@@ -719,6 +715,10 @@
       <ul>
         
           <li>
+            <a href="/2020/01/09/快速设置任务的开始时间（上）/">快速设置任务的开始时间（上）</a>
+          </li>
+        
+          <li>
             <a href="/2020/01/02/2019年总结/">2019年总结</a>
           </li>
         
@@ -732,10 +732,6 @@
         
           <li>
             <a href="/2019/11/30/一些自我感觉良好的命名约定/">一些适用于Node.js的命名约定</a>
-          </li>
-        
-          <li>
-            <a href="/2019/11/21/Emacs走马观花/">带你见识一下传说中的Emacs</a>
           </li>
         
       </ul>

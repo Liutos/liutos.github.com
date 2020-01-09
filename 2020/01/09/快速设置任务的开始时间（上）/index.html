@@ -3,15 +3,21 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>Tag: 命名约定 | Hexo</title>
+  <title>快速设置任务的开始时间（上） | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="https://liutos.github.io/tags/命名约定/index.html">
+  <meta name="description" content="本文是“实战Elisp”系列的第一篇。本系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。 序言用Emacs的org-mode安排业余时间颇有些时日，渐渐地开始编写一些Elisp函数来改善自己的使用体验。 日程管理中一个常见的需求，便是给任务设定一个开始时间。在org-mode中，这可以调用函数org-sched">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速设置任务的开始时间（上）">
+<meta property="og:url" content="https://liutos.github.io/2020/01/09/快速设置任务的开始时间（上）/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本文是“实战Elisp”系列的第一篇。本系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。 序言用Emacs的org-mode安排业余时间颇有些时日，渐渐地开始编写一些Elisp函数来改善自己的使用体验。 日程管理中一个常见的需求，便是给任务设定一个开始时间。在org-mode中，这可以调用函数org-sched">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:updated_time" content="2020-01-09T13:11:34.405Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="快速设置任务的开始时间（上）">
+<meta name="twitter:description" content="本文是“实战Elisp”系列的第一篇。本系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。 序言用Emacs的org-mode安排业余时间颇有些时日，渐渐地开始编写一些Elisp函数来改善自己的使用体验。 日程管理中一个常见的需求，便是给任务设定一个开始时间。在org-mode中，这可以调用函数org-sched">
+<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -58,41 +64,128 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/11/30/一些自我感觉良好的命名约定/" class="archive-article-date">
-  <time datetime="2019-11-30T12:32:33.000Z" itemprop="datePublished">Nov 30</time>
+        <section id="main"><article id="post-快速设置任务的开始时间（上）" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/01/09/快速设置任务的开始时间（上）/" class="article-date">
+  <time datetime="2020-01-09T12:53:16.000Z" itemprop="datePublished">2020-01-09</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/30/一些自我感觉良好的命名约定/">一些适用于Node.js的命名约定</a>
+    <h1 class="article-title" itemprop="name">
+      快速设置任务的开始时间（上）
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文是“实战Elisp”系列的第一篇。本系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。</p>
+<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>用Emacs的org-mode安排业余时间颇有些时日，渐渐地开始编写一些Elisp函数来改善自己的使用体验。</p>
+<p>日程管理中一个常见的需求，便是给任务设定一个开始时间。在org-mode中，这可以调用函数org-schedule实现：将光标移动到一个任务上，再按下C-c C-s，会出现一个日历界面，帮助选择日期和时间来作为日程的开始时间。具体效果如下图所示</p>
+<a id="more"></a>
+<video controls><br>  <source src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200109/org-mode设定任务开始时间.mp4" type="video/mp4"><br></video>
+
+<p>久而久之发现，设置的开始时间不外乎是中午12点、下午1点、晚上10点等。这是因为业余时间是相对固定的，比如午饭、午休，以及晚上在家洗完澡等。有规律便有优化的空间。既然每次输入的内容都一样，干脆预设几个开始时间，直接选择即可。</p>
+<h1 id="平凡的实现"><a href="#平凡的实现" class="headerlink" title="平凡的实现"></a>平凡的实现</h1><p>一个朴素的想法，是为这些固定的时间点各自编写一个Elisp函数，并绑定到不同的快捷键上，每次设置开始时间时就按下对应的快捷键。循着这个思路，我定义了如下的Elisp函数：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> lt-lunch-todo ()</span><br><span class="line">  <span class="string">"将开始时间设置为中午12点"</span></span><br><span class="line">  (<span class="name">lt-next-todo</span> <span class="number">12</span> <span class="number">0</span>))</span><br><span class="line">(<span class="name">defun</span> lt-rest-todo ()</span><br><span class="line">  <span class="string">"将开始时间设置为下午1点"</span></span><br><span class="line">  (<span class="name">lt-next-todo</span> <span class="number">13</span> <span class="number">0</span>))</span><br><span class="line">(<span class="name">defun</span> lt-supper-todo ()</span><br><span class="line">  <span class="string">"将开始时间设置为傍晚6点35分"</span></span><br><span class="line">  (<span class="name">lt-next-todo</span> <span class="number">18</span> <span class="number">40</span>))</span><br><span class="line">(<span class="name">defun</span> lt-night-todo ()</span><br><span class="line">  <span class="string">"将开始时间设置为晚上10点"</span></span><br><span class="line">  (<span class="name">lt-next-todo</span> <span class="number">21</span> <span class="number">30</span>))</span><br></pre></td></tr></table></figure>
+<p>lt-next-todo的定义如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> lt-next-todo (<span class="name">hour</span> minute)</span><br><span class="line">  <span class="string">"设置光标所在行为一个TODO条目，并设置其SCHEDULED为HOUR:MINUTE。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">如果当前的时间已经晚于HOUR:MINUTE，那么将会设定为明天的目标小时。"</span></span><br><span class="line">  (<span class="name">cl-assert</span> (<span class="name">integerp</span> hour))</span><br><span class="line">  (<span class="name">cl-assert</span> (<span class="name">integerp</span> minute))</span><br><span class="line">  (<span class="name">org-todo</span> <span class="string">"TODO"</span>)</span><br><span class="line">  (<span class="name">org-set-tags</span> <span class="literal">nil</span> <span class="literal">t</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">current-hour</span> (<span class="name">string-to-number</span> (<span class="name">format-time-string</span> <span class="string">"%H"</span>)))</span><br><span class="line">        scheduled)</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">&gt;</span> current-hour hour)</span><br><span class="line">           (<span class="name">setf</span> scheduled (<span class="name">format</span> <span class="string">"+1d %02d:%02d"</span> hour minute)))</span><br><span class="line">          (<span class="name">t</span> (<span class="name">setf</span> scheduled (<span class="name">format</span> <span class="string">"%02d:%02d"</span> hour minute))))</span><br><span class="line">    (<span class="name">message</span> <span class="string">"scheduled: %s"</span> scheduled)</span><br><span class="line">    (<span class="name">org-schedule</span> <span class="literal">nil</span> scheduled)))</span><br></pre></td></tr></table></figure>
+<p>除了绑定不同快捷键，也可以直接调用：将光标移动到任务标题上，按下M-:，输入lt-lunch-todo，最后按下回车。鉴于每次都按这么多键实在是太麻烦，我又编写了四个AppleScript脚本代劳键盘操作，再用BetterTouchTools定制了四个Touchbar按钮，以便一键调用这四个AppleScript脚本。举个例子，负责调用lt-lunch-todo的AppleScript脚本的内容为</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">tell</span> <span class="built_in">application</span> <span class="string">"Emacs"</span></span><br><span class="line">	<span class="built_in">activate</span></span><br><span class="line"><span class="keyword">end</span> <span class="keyword">tell</span></span><br><span class="line"><span class="keyword">tell</span> <span class="built_in">application</span> <span class="string">"System Events"</span></span><br><span class="line">	keystroke <span class="string">":"</span> using &#123;option down&#125;</span><br><span class="line">	keystroke <span class="string">"(lt-lunch-todo)"</span></span><br><span class="line">	keystroke <span class="literal">return</span></span><br><span class="line"><span class="keyword">end</span> <span class="keyword">tell</span></span><br></pre></td></tr></table></figure>
+<p>BetterTouchTools中的按钮的设置如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200109/BTT的四个快捷按钮.jpeg" alt=""></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>这套方法用久后发现缺陷蛮多：</p>
+<ol>
+<li>要定义很多高度雷同的Elisp函数；</li>
+<li>要编写很多高度雷同的AppleScript脚本；</li>
+<li>要定制很多高度雷同的BetterTouchTools按钮；</li>
+</ol>
+<p>高度雷同、高度雷同、高度雷同，重要的事情说三遍。有规律便有优化的空间，于是我换了一种更好的方式，实现了可扩展的、优雅的快速设置任务开始时间的办法。</p>
+<p>欲知后事如何，且听下回分解。</p>
+
+      
+      
+        <! -- 添加捐赠图标 -->
+<div class="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           ↑<br>
+           欣赏此文？求鼓励，求支持！
+        </span>
+        <br>
+      </div>  
+      <div id="donate_guide" class="donate_bar center hidden">
+          <!-- 方式一： 
+               ![](/img/Alipay.jpg)
+               ![](/img/WeChatpay.jpg)
+          -->
+          <!-- 方式二；
+               step1：在_config.yml中添加配置
+               Alipay: /img/Alipay.jpg
+               WeChatpay: /img/WeChatpay.jpg
+               step2：此处两张图片的路径分别设置为如下
+               <img src=""
+               <img src=""
+          -->
+          <div style="display: flex; justify-content: space-around">
+              <!-- 支付宝打赏图案 -->
+              <div>
+                  <img src="/images/loading.png" data-original="/images/Alipay.jpg" alt="支付宝打赏">
+              </div>
+              <!-- 微信打赏图案 -->
+              <div>
+                  <img src="/images/loading.png" data-original="/images/WeChatpay.png" alt="微信打赏">
+              </div>
+          </div>
+    </div>
+    <script type="text/javascript">
+        document.getElementById('btn_donate').onclick = function(){
+            $('#donate_board').addClass('hidden');
+            $('#donate_guide').removeClass('hidden');
+        }
+    </script>
+</div>
+<! -- 添加捐赠图标 -->
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://liutos.github.io/2020/01/09/快速设置任务的开始时间（上）/" data-id="ck56qj6t2004dr1306zun8s03" class="article-share-link">Share</a>
+      
+        <a href="https://liutos.github.io/2020/01/09/快速设置任务的开始时间（上）/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/01/02/2019年总结/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">2019年总结</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
 </section>
         
           <aside id="sidebar">
@@ -218,11 +311,13 @@ ga('send', 'pageview');
 <script>
   var disqus_shortname = 'Liutos';
   
+  var disqus_url = 'https://liutos.github.io/2020/01/09/快速设置任务的开始时间（上）/';
+  
   (function(){
     var dsq = document.createElement('script');
     dsq.type = 'text/javascript';
     dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
   })();
 </script>
