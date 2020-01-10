@@ -3,19 +3,20 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>Hexo</title>
+  <title>快速设置任务的开始时间（下） | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="google-site-verification: google8319ab079b67b016.html">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="https://liutos.github.io/google8319ab079b67b016.html">
+  <meta name="description" content="“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。  序言在上一篇文章的末尾，我说有一个更优雅的办法实现快速设置任务的开始时间，本文便来揭秘这个办法。">
+<meta name="keywords" content="emacs,elisp,实战Elisp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速设置任务的开始时间（下）">
+<meta property="og:url" content="https://liutos.github.io/2020/01/10/快速设置任务的开始时间（下）/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="google-site-verification: google8319ab079b67b016.html">
+<meta property="og:description" content="“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。  序言在上一篇文章的末尾，我说有一个更优雅的办法实现快速设置任务的开始时间，本文便来揭秘这个办法。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-27T14:44:45.000Z">
+<meta property="og:updated_time" content="2020-01-10T15:27:15.855Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="google-site-verification: google8319ab079b67b016.html">
+<meta name="twitter:title" content="快速设置任务的开始时间（下）">
+<meta name="twitter:description" content="“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。  序言在上一篇文章的末尾，我说有一个更优雅的办法实现快速设置任务的开始时间，本文便来揭秘这个办法。">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -62,19 +63,58 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="page-" class="article article-type-page" itemscope="" itemprop="blogPost">
+        <section id="main"><article id="post-快速设置任务的开始时间（下）" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/google8319ab079b67b016.html" class="article-date">
-  <time datetime="2019-12-29T07:14:50.572Z" itemprop="datePublished">2019-12-29</time>
+    <a href="/2020/01/10/快速设置任务的开始时间（下）/" class="article-date">
+  <time datetime="2020-01-10T15:12:41.000Z" itemprop="datePublished">2020-01-10</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      快速设置任务的开始时间（下）
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        google-site-verification: google8319ab079b67b016.html
+        <blockquote>
+<p>“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。</p>
+</blockquote>
+<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>在<a href="https://liutos.github.io/2020/01/09/%E5%BF%AB%E9%80%9F%E8%AE%BE%E7%BD%AE%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%BC%80%E5%A7%8B%E6%97%B6%E9%97%B4%EF%BC%88%E4%B8%8A%EF%BC%89/">上一篇文章</a>的末尾，我说有一个更优雅的办法实现快速设置任务的开始时间，本文便来揭秘这个办法。</p>
+<a id="more"></a>
+<h1 id="Helm"><a href="#Helm" class="headerlink" title="Helm"></a>Helm</h1><blockquote>
+<p>如果说我看得比别人更远些，那是因为我站在巨人的肩膀上。<br>——牛顿</p>
+</blockquote>
+<p>既要支持预设选项，又要能够方便选择，一个显而易见的办法就是使用下拉列表。要在Emacs中弹出下拉列表，不需要从零开始造轮子，只要基于<a href="https://github.com/emacs-helm/helm" target="_blank" rel="noopener">Helm</a>即可轻松做到。Helm是一个增量补全及选择的框架，利用它的API，可以轻松实现带补全功能的下拉列表，并在选中某一项后执行特定的代码。</p>
+<p>这份<a href="https://wikemacs.org/wiki/How_to_write_helm_extensions" target="_blank" rel="noopener">文档</a>清晰地说明了如何使用Helm的API。在展示具体代码前，先看看成品的效果是怎样的</p>
+<video controls><br>  <source src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200110/基于Helm快速选择开始时间.mp4" type="video/mp4"><br></video>
+
+<h1 id="show-the-code"><a href="#show-the-code" class="headerlink" title="show the code"></a>show the code</h1><p>Helm的用法朴实无华，只要调用名为<code>helm</code>的函数即可。<code>helm</code>有一个叫<code>sources</code>的重要参数，它接收一个<a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-List-Type.html" target="_blank" rel="noopener">association list</a>，并要求其中有以如下三个符号为<code>car</code>的<code>cons</code>：</p>
+<ol>
+<li><code>name</code>。对应的<code>cdr</code>部分是下拉列表的名字；</li>
+<li><code>candidates</code>。对应的<code>cdr</code>部分是下拉列表的所有候选项；</li>
+<li><code>action</code>。对应的<code>cdr</code>部分是一个函数，代表选中某一项后的处理逻辑。</li>
+</ol>
+<p><code>candidates</code>可以是一个association list（这也是前述的文档以及我接下来的用法），其中每个<code>cons</code>的<code>car</code>部分将作为候选项被展示，<code>cdr</code>部分则是一个“真实值”（就像是HTML的option标签的文本与它的<code>value</code>属性间的关系）。Helm贴心地提供了名为<code>helm-marked-candidates</code>的函数，帮助在这种情况下，获取被选中的候选项对应的<code>cdr</code>部分的内容。为了利用这个便捷的特性，我将候选项定义为：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> *schedule-shortcuts*</span><br><span class="line">      '((<span class="string">"午餐"</span> . (<span class="number">12</span> <span class="number">0</span>))</span><br><span class="line">        (<span class="string">"午休"</span> . (<span class="number">13</span> <span class="number">0</span>))</span><br><span class="line">        (<span class="string">"晚餐"</span> . (<span class="number">18</span> <span class="number">35</span>))</span><br><span class="line">        (<span class="string">"晚上在家"</span> . (<span class="number">22</span> <span class="number">5</span>))))</span><br></pre></td></tr></table></figure>
+<p>要传给<code>helm</code>函数的<code>sources</code>参数的值为：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defvar</span> *helm-quick-schedule-source*</span><br><span class="line">  `((name . <span class="string">"设置TODO的SCHEDULED属性"</span>)</span><br><span class="line">    (candidates . *schedule-shortcuts*)</span><br><span class="line">    (action . (lambda (candidate)</span><br><span class="line">                (helm-marked-candidates)))))</span><br></pre></td></tr></table></figure>
+<p>有了<code>*helm-quick-schedule-source*</code>，便可以一窥Helm的风采。按下<code>M-:</code>并输入<code>(helm :sources *helm-quick-schedule-source*)↵</code>，会打开一个新的buffer，其中纵向列出了“午餐”、“午休”、“晚餐”，以及“晚上在家”四个选项。可以上下移动，也可以输入目标选项的部分内容，Helm会根据输入过滤候选项。按下回车后，<code>helm</code>函数返回一个列表，装载着所选中的项对应的<code>cdr</code>部分——这是因为在<code>*helm-quick-schedule-source*</code>中<code>action</code>的部分就是直接返回这个<code>cdr</code>。</p>
+<p>最后，只需将<code>helm</code>与上一篇文章中定义的<code>lt-next-todo</code>结合起来即可：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> helm-quick-schedule ()</span><br><span class="line">  <span class="string">"从下拉列表选择完后SCHEDULED模式后修改当前TODO条目的SCHEDULED属性。"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">spec</span> (<span class="name">car</span> (<span class="name">helm</span> <span class="symbol">:sources</span> '(*helm-quick-schedule-source*)))))</span><br><span class="line">    (<span class="name">when</span> spec</span><br><span class="line">      (<span class="name">apply</span> 'lt-next-todo spec))))</span><br></pre></td></tr></table></figure>
+<p>把它绑定到<code>C-c l s</code>上</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define-key</span> org-mode-map <span class="string">"\C-cls"</span> 'helm-quick-schedule)</span><br></pre></td></tr></table></figure>
+<p>现在，当处于<code>org-mode</code>模式下的buffer时，只需要按下<code>C-c l s</code>，便可以轻松选择一个开始时间并在眨眼间设置为光标所在任务的SCHEDULED属性。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>Emacs的Helm插件本身已经提供了非常丰富的功能，例如<code>helm-bufferss-list</code>。我还利用Helm实现查询笔记的入口，待时机成熟了，一定将这方面的心得分享出来。</p>
+
       
       
         <! -- 添加捐赠图标 -->
@@ -123,15 +163,27 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://liutos.github.io/google8319ab079b67b016.html" data-id="ck58b26vt00009k307080wuz1" class="article-share-link">Share</a>
+      <a data-url="https://liutos.github.io/2020/01/10/快速设置任务的开始时间（下）/" data-id="ck58b26xh001o9k309109gs7d" class="article-share-link">Share</a>
       
-        <a href="https://liutos.github.io/google8319ab079b67b016.html#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://liutos.github.io/2020/01/10/快速设置任务的开始时间（下）/#disqus_thread" class="article-comment-link">Comments</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elisp/">elisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/emacs/">emacs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/实战Elisp/">实战Elisp</a></li></ul>
+
     </footer>
   </div>
   
     
+<nav id="article-nav">
+  
+  
+    <a href="/2020/01/09/快速设置任务的开始时间（上）/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">快速设置任务的开始时间（上）</div>
+    </a>
+  
+</nav>
+
   
 </article>
 
@@ -266,7 +318,7 @@ ga('send', 'pageview');
 <script>
   var disqus_shortname = 'Liutos';
   
-  var disqus_url = 'https://liutos.github.io/google8319ab079b67b016.html';
+  var disqus_url = 'https://liutos.github.io/2020/01/10/快速设置任务的开始时间（下）/';
   
   (function(){
     var dsq = document.createElement('script');
