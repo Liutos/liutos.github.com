@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
+  <title>小打小闹写点bug</title>
   
-  
+  <subtitle>Liutos的绝对领域</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
@@ -10,7 +10,7 @@
   <id>https://liutos.github.io/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>Liutos</name>
     
   </author>
   
