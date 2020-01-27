@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2020-01-25T12:40:47.362Z</updated>
+  <updated>2020-01-27T08:31:27.713Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://liutos.github.io/2020/01/25/all-first-registers-to-strings/"/>
     <id>https://liutos.github.io/2020/01/25/all-first-registers-to-strings/</id>
     <published>2020-01-25T12:38:09.000Z</published>
-    <updated>2020-01-25T12:40:47.362Z</updated>
+    <updated>2020-01-27T08:31:27.713Z</updated>
     
     <content type="html"><![CDATA[<blockquote><p>本文是《实战Common Lisp》系列的第一篇文章。本系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。</p></blockquote><h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p><del>众所周知，</del>Common Lisp没有内置多少处理字符串的函数，下面的代码便能看到所有以STRING开头的函数名：</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">do-external-symbols</span> (<span class="name">s</span> <span class="symbol">:cl</span>)</span><br><span class="line">  (<span class="name">when</span> (<span class="name">and</span> (<span class="name">fboundp</span> s)</span><br><span class="line">             (<span class="name">equal</span> (<span class="name">search</span> <span class="string">"STRING"</span> (<span class="name">symbol-name</span> s)) <span class="number">0</span>))</span><br><span class="line">    (<span class="name">print</span> s)))</span><br></pre></td></tr></table></figure><p>屈指可数，而且大部分是比较两个字符串的！很多其它语言中的“标配”是不存在的，比如想要将多个字符串连接起来这么简单的功能都没有！要么自己实现，要么依赖第三方库，比如<a href="https://github.com/vindarel/cl-str" target="_blank" rel="noopener"><code>cl-str</code></a>提供的<code>join</code>函数。</p><p>标准库也没有内置正则表达式，好在有一个优秀的第三方库可以用：<a href="http://edicl.github.io/cl-ppcre/" target="_blank" rel="noopener"><code>cl-ppcre</code></a>。一种使用正则的常见需求是提取符合某种模式的内容，比如提取一篇Markdown文章中所有的图片链接。图片链接可以由下列正则括号的部分匹配：</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"!\\[.*\\]\\((.*)\\)"</span></span><br></pre></td></tr></table></figure><p>在cl-ppcre中这个括号匹配的部分叫做第一个register。我想要写一个能够提取出字符串中所有符合这段正则的第一个register，分两步走：</p><ol><li>先实现一个<code>all-first-registers-to-strings</code>函数，实现通用的、提取一个字符串中所有符合某段正则的子串的第一个register的内容；</li><li>基于<code>all-first-registers-to-strings</code>实现一个<code>extract-image-paths</code>。</li></ol><a id="more"></a><h1 id="all-first-registers-to-strings"><a href="#all-first-registers-to-strings" class="headerlink" title="all-first-registers-to-strings"></a><code>all-first-registers-to-strings</code></h1><p>要实现这个函数，需要借助cl-ppcre的<code>scan</code>函数。根据<a href="http://edicl.github.io/cl-ppcre/#scan" target="_blank" rel="noopener">scan函数的文档</a>，当正则匹配成功时，它的第三、第四个返回值表示正则中register的起点和终点在字符串中的偏移——它们是两个数组，起点和终点一一对应。有了起点和终点的偏移，再使用<code>CL:SUBSEQ</code>便能提取出register对应的子串。如果要把字符串中所有匹配register的内容都拿出来，就反复调用scan函数，直到再也没有匹配成功为止。</p><p><code>all-first-registers-to-strings</code>的定义如下：</p><p><script src="https://gist.github.com/Liutos/045aa43b5b3698d7e7c460d3f0c90858.js"></script></p><ul><li>为了不停地在<code>target-string</code>中前进，用变量<code>pos</code>存储<code>scan</code>函数的第二个返回值，并作为下一次调用<code>scan</code>时的<code>start</code>参数——显然，<code>pos</code>的初始值为0；</li><li>为了跳出<code>loop</code>，使用了<code>return-from</code>直接从函数返回；</li><li>用<code>push</code>收集最终结果，再用<code>nreverse</code>处理成最终的返回值——印象中《On Lisp》也说过这是一种比较常见的手法。</li></ul><h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>有了<code>all-first-registers-to-strings</code>，就可以轻松实现<code>extract-image-paths</code>了：</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> extract-image-paths (<span class="name">content</span>)</span><br><span class="line">  <span class="string">"从博文内容CONTENT中提取出图片的绝对路径。"</span></span><br><span class="line">  (<span class="name">all-first-registers-to-strings</span> <span class="string">"!\\[.*\\]\\((.*)\\)"</span> content))</span><br></pre></td></tr></table></figure><p>显然，这个<code>all-first-registers-to-strings</code>函数实现得很糟糕，尤其是<code>loop</code>的用法实在是太不Lispy了。Common Lisp的<code>loop</code>的用法纷繁复杂如天上的星星，多半可以用更优雅的方法来重写一遍，这个就留给各位读者作为私下的乐趣吧。</p>]]></content>
     
@@ -43,6 +43,12 @@
     
     </summary>
     
+      <category term="实战CommonLisp" scheme="https://liutos.github.io/categories/%E5%AE%9E%E6%88%98CommonLisp/"/>
+    
+    
+      <category term="commonlisp" scheme="https://liutos.github.io/tags/commonlisp/"/>
+    
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
   </entry>
   
@@ -121,9 +127,9 @@
     </summary>
     
     
-      <category term="2019" scheme="https://liutos.github.io/tags/2019/"/>
-    
       <category term="总结" scheme="https://liutos.github.io/tags/%E6%80%BB%E7%BB%93/"/>
+    
+      <category term="2019" scheme="https://liutos.github.io/tags/2019/"/>
     
   </entry>
   
@@ -265,11 +271,11 @@
     </summary>
     
     
+      <category term="commonlisp" scheme="https://liutos.github.io/tags/commonlisp/"/>
+    
       <category term="binarysearchtree" scheme="https://liutos.github.io/tags/binarysearchtree/"/>
     
       <category term="binarytree" scheme="https://liutos.github.io/tags/binarytree/"/>
-    
-      <category term="commonlisp" scheme="https://liutos.github.io/tags/commonlisp/"/>
     
       <category term="二叉搜索树" scheme="https://liutos.github.io/tags/%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/"/>
     
@@ -333,11 +339,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -369,11 +375,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -404,11 +410,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -471,11 +477,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -506,11 +512,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -543,11 +549,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -611,11 +617,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -647,11 +653,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
