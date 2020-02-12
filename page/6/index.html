@@ -202,6 +202,98 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/01/20/如何自定义命令行补全/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/01/20/如何自定义命令行补全/" class="post-title-link" itemprop="url">如何自定义命令行补全</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-01-20 23:07:36" itemprop="dateCreated datePublished" datetime="2017-01-20T23:07:36+08:00">2017-01-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-12-02 21:31:08" itemprop="dateModified" datetime="2018-12-02T21:31:08+08:00">2018-12-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2017/01/20/如何自定义命令行补全/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/01/20/如何自定义命令行补全/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在UC就职时养成了一个习惯，就是将自己所参与的项目的源代码都存放在一个名为uc的目录下。换了工作之后这个习惯仍然保留下来了，只不过原本名为uc的目录现在改名了（假设这个目录叫做work）。在新公司参与的项目比较多，因此在这个work目录下有许多的子目录，大致上的结构如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">work/</span><br><span class="line">|-- A/</span><br><span class="line">|-- B/</span><br></pre></td></tr></table></figure>
+<p>其中A和B分别表示一个项目的源代码目录。在work目录下存放的直接是A和B两个项目的目录。work目录本身是放置在<code>~/src/</code>这个目录下的，因此项目A和B的完整根目录路径是<code>~/src/work/A/</code>和<code>~/src/work/B/</code>。由于参与的项目比较多，经常需要在几个项目间交替着编码，因此经常会在终端键入下面的指令</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/src/work/A/ <span class="comment"># 或者</span></span><br><span class="line"><span class="built_in">cd</span> ~/src/work/B/</span><br></pre></td></tr></table></figure>
+<p>不得不说这样确实是非常的麻烦，因此我很快就定义了一个shell函数来简化这串命令，这个shell函数的定义如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">she</span></span>() &#123;</span><br><span class="line">    dir=<span class="variable">$&#123;1&#125;</span></span><br><span class="line">    target=<span class="string">"/home/liutos/src/work/<span class="variable">$&#123;dir&#125;</span>"</span></span><br><span class="line">    <span class="keyword">if</span> [ -d <span class="string">"<span class="variable">$&#123;target&#125;</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">cd</span> <span class="string">"<span class="variable">$&#123;target&#125;</span>"</span></span><br><span class="line">        <span class="built_in">return</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了这个辅助工具后，要切换到项目A和B中就简单多了，只需要输入</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">she A <span class="comment"># 或者</span></span><br><span class="line">she B</span><br></pre></td></tr></table></figure>
+<p>即可。但一使用起来就会发现，原本直接使用cd命令时所能享用的目录名补全功能没有了！绝大多数情况下补全功能是非常有用的，为此打算动手为she函数配备一个目录名的补全功能。显然自定义命令行补全的想法已经有前人实践过了，略加搜索就可以找到这么一篇<a href="http://www.shareditor.com/blogshow/?blogId=22" target="_blank" rel="noopener">指南</a>。模仿文章中的方法，我先是写了下面的代码骨架</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">&#125;</span><br><span class="line">complete -F _she she</span><br></pre></td></tr></table></figure>
+<p>我的想法是只要当前的输入能够作为work下的一个目录名字的前缀，那么就认为这个子目录是本次补全的目标。为此，我需要先获取到work目录下的所有子目录的名称。利用ls命令可以做到这一点，同时为了便于处理，在这里将ls返回的文件名列表作为数组保存起来。修改后的_she函数的代码如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(ls ~/src/work/))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在，只要遍历<code>${dirs}</code>并找出第一个以用户输入的<code>${cur}</code>为名字前缀的目录即可。最终_she函数的定义如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(ls ~/src/work/))</span><br><span class="line">    <span class="keyword">for</span> dir <span class="keyword">in</span> <span class="variable">$&#123;dirs[@]&#125;</span></span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">case</span> <span class="variable">$&#123;dir&#125;</span> <span class="keyword">in</span></span><br><span class="line">            <span class="variable">$&#123;cur&#125;</span>*)</span><br><span class="line">                COMPREPLY=<span class="string">"<span class="variable">$&#123;dir&#125;</span>"</span></span><br><span class="line">                <span class="built_in">return</span> 0</span><br><span class="line">                ;;</span><br><span class="line">        <span class="keyword">esac</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1116,96 +1208,11 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/08/24/PE的第26题/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2012/08/24/PE的第26题/" class="post-title-link" itemprop="url">PE的第26题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2012-08-24 22:53:06" itemprop="dateCreated datePublished" datetime="2012-08-24T22:53:06+08:00">2012-08-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-12-02 21:29:22" itemprop="dateModified" datetime="2018-12-02T21:29:22+08:00">2018-12-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2012/08/24/PE的第26题/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2012/08/24/PE的第26题/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>今天上百度贴吧的ProjectEuler吧时发现大家在讨论第26题的一个解法的原理<a href="http://tieba.baidu.com/f?ct=335675392&amp;tn=baiduPostBrowser&amp;sc=23484588064&amp;z=1814139127#23484588064" target="_blank" rel="noopener">［求值］求解释原理</a>，然后话题很快又从对解法的原理的解释转移到了对性能的攀比之中——这也是人之常情啦，哪个做PE题目的人不希望自己的方法是尽量快的呢^_^看了一下吧主的解法的运行时间，发现居然不是毫秒级别的，顿时对自己以前的解法需要运行多久心生好奇，于是在已经打开的SLIME中加载了以前的源文件，一运行，发现相当地快，速度上是吧主给出解法的快一百倍，连我自己都吓了一跳，不过还是掩盖不了自己内心的欢喜。</p>
-<h2 id="我的思路"><a href="#我的思路" class="headerlink" title="我的思路"></a>我的思路</h2><p>我不知道吧主是怎么做的，他在贴吧里面没有给出代码，不过我倒是可以给一下我的解法的链接<a href="https://github.com/Liutos/Project-Euler/blob/master/lisp/pro26.lisp" target="_blank" rel="noopener">第26题</a>。刚翻出来看的时候我自己也看蒙了，完全不知道自己当初究竟是怎样的思路的，也不知道自己当初是在怎样的情况下想出这样的代码的。不过再仔细看了一会儿之后，总算有点明白是什么意思了。这其中的做法，还得从小学的时候学习除法来说起……</p>
-<p>哦，不好意思，说太远了，没必要追溯到小学那里去，不过思路本身可能确实就是小学的除法，只不过是找了一下其中的规律，然后用计算机代替了手动计算而已。考虑一个简单的情况，例如一除以二，要怎么计算呢？嗯，因为1比2要小，所以计算结果应该是个小数，所以商必然有0.（零以及小数点），然后在1后面添一个0，再继续计算。这时候我们知道了2×5=10，所以在商的部分再添上一个5，就得到了余数为0的情况。因为余数为0，所以我们知道2是可以整除1的，所以计算就到此结束了，因此1/2=0.5。</p>
-<p>上面的例子是可以整除的情况，因此在小数点后面并没有循环的部分，所以循环部分的长度理所当然的就是0。那如果是一除以六呢？计算方法是一样的，因为1比6小，所以商添上0.，而给1添上一个0得到10，而10除以6的商为1余数为4。接下来给4添上一个0得到40，再进行40除以6的计算过程。最后得到的结果是一个无限循环小数，按照第26题的写法就是0.1(6)。不过且慢，这里有个地方值得注意，那就是对于得到余数为4的情况，我们为其添上了一个0再继续进行计算，这个步骤和一开始为1添上0再进行计算难道有什么本质的差别吗？</p>
-<p>显然没有啊！而且计算40除以6的结果是6.(6)，如果直接把这个计算1除以6时的第一步得到的商进行拼接，就得到了0.1(6)啊。也就是说，小学的时候学到的手动进行除法计算的方法，实际上可以分解成一个递归的算法。具体如何分解不是这里的讨论重点，这里的重点在于怎样从递归的过程中发现可以得到循环部分的长度的方法。</p>
-<h2 id="余数的奥秘"><a href="#余数的奥秘" class="headerlink" title="余数的奥秘"></a>余数的奥秘</h2><p>如果在手动计算的过程中，遇到了某个曾经在余数的位置上出现过的数，那么还有必要继续计算下去吗？显然没有，40除以6得到的第一个余数是4，而这个余数比6小（事实上我们都知道，所有的余数都比除数要小），就需要先将其乘上10再继续计算下去。结果显而易见，一乘上10，就又得到了一开始的40了，这样的话要是继续计算下去，那么结果一定是在重复前面的那些动作，并且永无休止。结论就是，<em>当你遇到了一个余数是之前出现的数的时候，计算就不需要继续下去了，此时根据历史积累的信息，就可以知道循环部分的长度是多少</em>。这也就是我的代码中第一个函数cycle-length的内部辅助函数rec的作用。</p>
-<p>rec接收三个参数，第一个参数就是被除数，第二个数是除数，第三个数是<em>这一次计算得到的商在原来的小数部分上是位于哪一个位置上的</em>一个整数。对于每一个出现过的被除数，都将它们记录在了一个内部的哈希表中（为了查找速度的尽可能快），如果一个被除数已经被计算过了，那么就直接取出它所对应的商所在的位置，然后用现在的商所在的位置减掉前者，就知道了循环部分的长度了；如果没有出现过，那么就计算出这一次计算的余数，如果余数为0，意味着除数可以整除被除数，所以没有循环部分可言，长度为0；如果不能整除，那么这个余数的10倍就是新的被除数（因为余数必定小于除数，所以要乘以10直到大于除数为止），位置计数器加上1，重新进行递归。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1271,7 +1278,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-count">61</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

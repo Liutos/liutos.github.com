@@ -48,7 +48,7 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="在上一篇文章中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。 我自己模仿着x64的调用约定，规定四则运算的结果始终放在EAX这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到EAX寄存器中，再从EAX中减去或者">
-<meta name="keywords" content="common lisp,assembly,compiler,lisp,x64,汇编,编译器">
+<meta name="keywords" content="common lisp,lisp,assembly,compiler,x64,汇编,编译器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="支持减、乘，以及除">
 <meta property="og:url" content="https://liutos.github.io/2019/05/23/支持减、乘，以及除/index.html">
@@ -313,9 +313,9 @@
           
           <div class="post-tags">
               <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
               <a href="/tags/assembly/" rel="tag"><i class="fa fa-tag"></i> assembly</a>
               <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
-              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
               <a href="/tags/x64/" rel="tag"><i class="fa fa-tag"></i> x64</a>
               <a href="/tags/汇编/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
               <a href="/tags/编译器/" rel="tag"><i class="fa fa-tag"></i> 编译器</a>
@@ -413,7 +413,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-count">61</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

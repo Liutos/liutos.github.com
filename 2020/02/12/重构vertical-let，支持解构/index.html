@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.8.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://liutos.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+<script data-ad-client="ca-pub-4199841931601311" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <meta name="description" content="《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。  序言因为觉得Common Lisp原生的let操作符在许多时候不够好用，我编写了vertical-let。（详情可以参见这篇文章）比起原生的let，vertical-let的优势在于：  有">
+<meta name="keywords" content="commonlisp,lisp,macro,宏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重构vertical-let，支持解构">
+<meta property="og:url" content="https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/index.html">
+<meta property="og:site_name" content="小打小闹写点bug">
+<meta property="og:description" content="《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。  序言因为觉得Common Lisp原生的let操作符在许多时候不够好用，我编写了vertical-let。（详情可以参见这篇文章）比起原生的let，vertical-let的优势在于：  有">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-02-12T07:41:42.481Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重构vertical-let，支持解构">
+<meta name="twitter:description" content="《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。  序言因为觉得Common Lisp原生的let操作符在许多时候不够好用，我编写了vertical-let。（详情可以参见这篇文章）比起原生的let，vertical-let的优势在于：  有">
+
+<link rel="canonical" href="https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>重构vertical-let，支持解构 | 小打小闹写点bug</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-94082039-2');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小打小闹写点bug</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">乍听之下，不无道理；仔细揣摩，胡说八道</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          重构vertical-let，支持解构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-02-12 15:36:46 / 修改时间：15:41:42" itemprop="dateCreated datePublished" datetime="2020-02-12T15:36:46+08:00">2020-02-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/实战CommonLisp/" itemprop="url" rel="index">
+                    <span itemprop="name">实战CommonLisp</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/02/12/重构vertical-let，支持解构/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/02/12/重构vertical-let，支持解构/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。</p>
+</blockquote>
+<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>因为觉得Common Lisp原生的<code>let</code>操作符在许多时候不够好用，我编写了<code>vertical-let</code>。（详情可以参见这篇<a href="https://liutos.github.io/2019/03/13/%E6%9B%B4%E8%BF%87%E7%A8%8B%E5%BC%8F%E7%9A%84let%E2%80%94%E2%80%94vertical-let/">文章</a>）比起原生的<code>let</code>，<code>vertical-let</code>的优势在于：</p>
+<ol>
+<li>有效减少代码的缩进——尤其是嵌套使用<code>let</code>的时候；</li>
+<li>方便增减binding，对其余代码的布局没有影响。</li>
+</ol>
+<p>除了<code>let</code>，<code>destructuring-bind</code>也是一个常用的声明binding的语法。但如果用在<code>vertical-let</code>中的话，会打乱原有的代码布局。比如原本的代码为</p>
+<a id="more"></a>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line"> <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line"> <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line"> (<span class="name">+</span> a b))</span><br></pre></td></tr></table></figure>
+<p>如果加入<code>destructuring-bind</code>，就会导致从它之后的代码都增加了一级缩进</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line"> <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line"> <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line"> (<span class="name">destructuring-bind</span> (<span class="name">c</span>) '(<span class="number">3</span>)</span><br><span class="line">   (<span class="name">+</span> a b c))) <span class="comment">; &lt;- 这一行开始多了一级缩进，之后的代码全都受到影响</span></span><br></pre></td></tr></table></figure>
+<p>我更希望能写成下面这样</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line"> <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line"> <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line"> <span class="symbol">:with</span> (<span class="name">c</span>) = '(<span class="number">3</span>)</span><br><span class="line"> (<span class="name">+</span> a b c))</span><br></pre></td></tr></table></figure>
+<p>然而<code>vertical-let</code>目前的实现方式很难支持这种新语法。</p>
+<p>在<code>vertical-let</code>内部，将参数分成了“binding”和“form”两种类型，压入到同一个栈中，再逐一弹出处理。如果要支持展开成<code>destructuring-bind</code>，那么：</p>
+<ol>
+<li>如果弹出的是“binding”，就需要决定是将其与旧的合并（都是<code>let</code>的binding的情况），还是先处理已有的变量<code>bindings</code>和<code>forms</code>中的内容（这里又涉及到是组成<code>let</code>还是组成<code>destructuring-bind</code>）；</li>
+<li>如果弹出的是“form”，也要考虑与上述场景类似的情况。</li>
+</ol>
+<p>可想而知，这会让<code>vertical-let</code>的代码膨胀得厉害，并且显得很混乱。因此，必须先优化一番<code>vertical-let</code>。</p>
+<h1 id="重构vertical-let"><a href="#重构vertical-let" class="headerlink" title="重构vertical-let"></a>重构vertical-let</h1><p>新的思路是：</p>
+<ol>
+<li>从尾部开始遍历<code>vertical-let</code>的参数列表；</li>
+<li>如果遍历到的元素不是符号<code>:with</code>，就认为是一个可以求值的表达式，将其压栈。显然，这个栈的元素的顺序，与<code>vertical-let</code>的参数列表的顺序是一致的，可以直接用于合成<code>let</code>表达式；</li>
+<li>如果遍历到的元素是符号<code>:with</code>，就从栈中弹出三个元素（它们依次是变量名、等号、待求值的表达式）；</li>
+<li>将变量名、待求值的表达式，以及栈内所有元素组成只有一个binding的的<code>let</code>表达式，重新压栈。</li>
+</ol>
+<p>当参数列表遍历完后，再看看这个栈：</p>
+<ol>
+<li>如果只有一个元素，就是<code>vertical-let</code>的展开结果；</li>
+<li>否则，将它们作为<code>progn</code>的参数，返回一个<code>progn</code>表达式。</li>
+</ol>
+<h1 id="支持destructuring-bind"><a href="#支持destructuring-bind" class="headerlink" title="支持destructuring-bind"></a>支持destructuring-bind</h1><p>在上面的算法中，遇到符号<code>:with</code>后只需要构造出<code>let</code>表达式即可。为了支持展开成<code>destructuring-bind</code>，需要根据栈顶元素类型来做不同处理：</p>
+<ol>
+<li>如果是<code>cons</code>，就展开为<code>destructuring-bind</code>——毕竟<code>destructuring-bind</code>是无法嵌套的；</li>
+<li>如果是<code>symbol</code>，就展开为<code>let</code>（如果栈只有一个元素并且是<code>let</code>表达式，那么可以将新的binding合并进去，减少展开后代码的缩进）。</li>
+</ol>
+<p>现在，可以完整地实现<code>vertical-let</code>了</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> vertical-let/aux (<span class="name">forms</span>)</span><br><span class="line">  <span class="string">"将FORMS转换为基于DESTRUCTURING-BIND和LET*实现的形式。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">将:WITH VAR = VAL . FORMS形式的代码转换为(LET* ((VAR VAL)) . FORMS)；</span></span><br><span class="line"><span class="string">将:WITH (VAR1 VAR2) = VAL . FORMS形式的代码转换为(DESTRUCTURING-BIND (VAR1 VAR2) VAL . FORMS)。"</span></span><br><span class="line">  (<span class="name">check-type</span> forms list)</span><br><span class="line">  (<span class="name">setf</span> forms (<span class="name">reverse</span> forms))</span><br><span class="line">  (<span class="name">let</span> (<span class="name">form</span></span><br><span class="line">        (<span class="name">stack</span> '()))</span><br><span class="line">    (<span class="name">block</span> <span class="literal">nil</span></span><br><span class="line">      (<span class="name">loop</span></span><br><span class="line">         (<span class="name">when</span> (<span class="name">null</span> forms)</span><br><span class="line">           (<span class="name">return-from</span> <span class="literal">nil</span>))</span><br><span class="line"></span><br><span class="line">         (<span class="name">setf</span> form (<span class="name">pop</span> forms))</span><br><span class="line">         (<span class="name">cond</span> ((<span class="name">eq</span> form <span class="symbol">:with</span>)</span><br><span class="line">                (<span class="name">let</span> ((<span class="name">place</span> (<span class="name">pop</span> stack)))</span><br><span class="line">                  <span class="comment">;; 下一个元素必须是一个名称为等号的符号</span></span><br><span class="line">                  (<span class="name">let</span> ((<span class="name">e</span> (<span class="name">pop</span> stack)))</span><br><span class="line">                    (<span class="name">assert</span> (<span class="name">symbolp</span> e))</span><br><span class="line">                    (<span class="name">assert</span> (<span class="name">string=</span> (<span class="name">symbol-name</span> e) <span class="string">"="</span>)))</span><br><span class="line">                  (<span class="name">let</span> ((<span class="name">val</span> (<span class="name">pop</span> stack)))</span><br><span class="line">                    (<span class="name">etypecase</span> place</span><br><span class="line">                      (<span class="name">cons</span></span><br><span class="line">                       <span class="comment">;; 展开为DESTRUCTURING-BIND</span></span><br><span class="line">                       (<span class="name">setf</span> stack `((destructuring-bind ,place ,val ,@stack))))</span><br><span class="line">                      (<span class="name">symbol</span></span><br><span class="line">                       <span class="comment">;; 如果STAKC中仅有一个LET*表达式就将新的绑定合并进去，否则创建新的LET*表达式</span></span><br><span class="line">                       (<span class="name">cond</span> ((<span class="name">and</span> (<span class="name">=</span> (<span class="name">length</span> stack) <span class="number">1</span>)</span><br><span class="line">                                   (<span class="name">consp</span> (<span class="name">car</span> stack))</span><br><span class="line">                                   (<span class="name">eq</span> (<span class="name">caar</span> stack) 'let*))</span><br><span class="line">                              (<span class="name">let*</span> ((<span class="name">form</span> (<span class="name">pop</span> stack))</span><br><span class="line">                                     (<span class="name">bindings</span> (<span class="name">second</span> form)))</span><br><span class="line">                                (<span class="name">setf</span> (<span class="name">second</span> form)</span><br><span class="line">                                      `((,place ,val) ,@bindings))</span><br><span class="line">                                (<span class="name">push</span> form stack)))</span><br><span class="line">                             (<span class="name">t</span></span><br><span class="line">                              (<span class="name">setf</span> stack `((let* ((,place ,val)) ,@stack))))))))</span><br><span class="line">                  ))</span><br><span class="line">               (<span class="name">t</span></span><br><span class="line">                (<span class="name">push</span> form stack)))))</span><br><span class="line">    </span><br><span class="line">    (<span class="name">if</span> (<span class="name">=</span> (<span class="name">length</span> stack) <span class="number">1</span>)</span><br><span class="line">        (<span class="name">car</span> stack)</span><br><span class="line">        `(progn ,@stack))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmacro</span> vertical-let* (<span class="name">&amp;body</span> body)</span><br><span class="line">  <span class="string">"不需要不停缩进的LET*"</span></span><br><span class="line">  (<span class="name">vertical-let/aux</span> body))</span><br></pre></td></tr></table></figure>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>除了<code>let</code>和<code>destructuring-bind</code>，Common Lisp还提供了名为<code>multiple-value-bind</code>的宏，用于捕捉从一个函数返回的多个值。如果又要修改<code>vertical-let</code>的话，多半就是为了支持它了吧。</p>
+
+    </div>
+
+    
+    
+    <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/loading.png" data-original="/uploads/WechatIMG2934.jpeg" alt="Liutos wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+        <div class="reward-container">
+  <div>你的一点心意，我的十分动力。</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/loading.png" data-original="/images/WeChatpay.png" alt="Liutos 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/loading.png" data-original="/images/Alipay.jpg" alt="Liutos 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Liutos
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/" title="重构vertical-let，支持解构">https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/commonlisp/" rel="tag"><i class="fa fa-tag"></i> commonlisp</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+              <a href="/tags/macro/" rel="tag"><i class="fa fa-tag"></i> macro</a>
+              <a href="/tags/宏/" rel="tag"><i class="fa fa-tag"></i> 宏</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/11/提升条目为第一个孩子节点/" rel="prev" title="提升条目为第一个孩子节点">
+      <i class="fa fa-chevron-left"></i> 提升条目为第一个孩子节点
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重构vertical-let"><span class="nav-number">2.</span> <span class="nav-text">重构vertical-let</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#支持destructuring-bind"><span class="nav-number">3.</span> <span class="nav-text">支持destructuring-bind</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Liutos</p>
+  <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">89</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Liutos" title="GitHub → https://github.com/Liutos" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://segmentfault.com/u/liutos" title="SegmentFault → https://segmentfault.com/u/liutos" rel="noopener" target="_blank"><i class="fa fa-fw fa-stack-overflow"></i>SegmentFault</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.hsyyf.me/" title="http://www.hsyyf.me/" rel="noopener" target="_blank">月下叹逍遥/寒山烟雨</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.lainme.com/doku.php" title="http://www.lainme.com/doku.php" rel="noopener" target="_blank">Lainme's Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://lengxx.com/" title="http://lengxx.com/" rel="noopener" target="_blank">冷轩信</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://forum.ubuntu.org.cn/" title="http://forum.ubuntu.org.cn/" rel="noopener" target="_blank">Ubuntu中文论坛</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y-window.github.com/" title="http://y-window.github.com/" rel="noopener" target="_blank">Window的空间</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.thev.net/PaulLiu/" title="http://www.thev.net/PaulLiu/" rel="noopener" target="_blank">九瓜老师的博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://weibo.com/liutos" title="http://weibo.com/liutos" rel="noopener" target="_blank">博主的微博</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://github.com/Liutos" title="http://github.com/Liutos" rel="noopener" target="_blank">博主的GitHub页面</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liutos</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Liutos.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/",
+            identifier: "2020/02/12/重构vertical-let，支持解构/",
+            title: "重构vertical-let，支持解构"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Liutos.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
+</html>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2020-02-11T08:10:40.883Z</updated>
+  <updated>2020-02-12T07:41:42.481Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,42 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>重构vertical-let，支持解构</title>
+    <link href="https://liutos.github.io/2020/02/12/%E9%87%8D%E6%9E%84vertical-let%EF%BC%8C%E6%94%AF%E6%8C%81%E8%A7%A3%E6%9E%84/"/>
+    <id>https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/</id>
+    <published>2020-02-12T07:36:46.000Z</published>
+    <updated>2020-02-12T07:41:42.481Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。</p></blockquote><h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>因为觉得Common Lisp原生的<code>let</code>操作符在许多时候不够好用，我编写了<code>vertical-let</code>。（详情可以参见这篇<a href="https://liutos.github.io/2019/03/13/%E6%9B%B4%E8%BF%87%E7%A8%8B%E5%BC%8F%E7%9A%84let%E2%80%94%E2%80%94vertical-let/">文章</a>）比起原生的<code>let</code>，<code>vertical-let</code>的优势在于：</p><ol><li>有效减少代码的缩进——尤其是嵌套使用<code>let</code>的时候；</li><li>方便增减binding，对其余代码的布局没有影响。</li></ol><p>除了<code>let</code>，<code>destructuring-bind</code>也是一个常用的声明binding的语法。但如果用在<code>vertical-let</code>中的话，会打乱原有的代码布局。比如原本的代码为</p><a id="more"></a><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line"> <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line"> <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line"> (<span class="name">+</span> a b))</span><br></pre></td></tr></table></figure><p>如果加入<code>destructuring-bind</code>，就会导致从它之后的代码都增加了一级缩进</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line"> <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line"> <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line"> (<span class="name">destructuring-bind</span> (<span class="name">c</span>) '(<span class="number">3</span>)</span><br><span class="line">   (<span class="name">+</span> a b c))) <span class="comment">; &lt;- 这一行开始多了一级缩进，之后的代码全都受到影响</span></span><br></pre></td></tr></table></figure><p>我更希望能写成下面这样</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line"> <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line"> <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line"> <span class="symbol">:with</span> (<span class="name">c</span>) = '(<span class="number">3</span>)</span><br><span class="line"> (<span class="name">+</span> a b c))</span><br></pre></td></tr></table></figure><p>然而<code>vertical-let</code>目前的实现方式很难支持这种新语法。</p><p>在<code>vertical-let</code>内部，将参数分成了“binding”和“form”两种类型，压入到同一个栈中，再逐一弹出处理。如果要支持展开成<code>destructuring-bind</code>，那么：</p><ol><li>如果弹出的是“binding”，就需要决定是将其与旧的合并（都是<code>let</code>的binding的情况），还是先处理已有的变量<code>bindings</code>和<code>forms</code>中的内容（这里又涉及到是组成<code>let</code>还是组成<code>destructuring-bind</code>）；</li><li>如果弹出的是“form”，也要考虑与上述场景类似的情况。</li></ol><p>可想而知，这会让<code>vertical-let</code>的代码膨胀得厉害，并且显得很混乱。因此，必须先优化一番<code>vertical-let</code>。</p><h1 id="重构vertical-let"><a href="#重构vertical-let" class="headerlink" title="重构vertical-let"></a>重构vertical-let</h1><p>新的思路是：</p><ol><li>从尾部开始遍历<code>vertical-let</code>的参数列表；</li><li>如果遍历到的元素不是符号<code>:with</code>，就认为是一个可以求值的表达式，将其压栈。显然，这个栈的元素的顺序，与<code>vertical-let</code>的参数列表的顺序是一致的，可以直接用于合成<code>let</code>表达式；</li><li>如果遍历到的元素是符号<code>:with</code>，就从栈中弹出三个元素（它们依次是变量名、等号、待求值的表达式）；</li><li>将变量名、待求值的表达式，以及栈内所有元素组成只有一个binding的的<code>let</code>表达式，重新压栈。</li></ol><p>当参数列表遍历完后，再看看这个栈：</p><ol><li>如果只有一个元素，就是<code>vertical-let</code>的展开结果；</li><li>否则，将它们作为<code>progn</code>的参数，返回一个<code>progn</code>表达式。</li></ol><h1 id="支持destructuring-bind"><a href="#支持destructuring-bind" class="headerlink" title="支持destructuring-bind"></a>支持destructuring-bind</h1><p>在上面的算法中，遇到符号<code>:with</code>后只需要构造出<code>let</code>表达式即可。为了支持展开成<code>destructuring-bind</code>，需要根据栈顶元素类型来做不同处理：</p><ol><li>如果是<code>cons</code>，就展开为<code>destructuring-bind</code>——毕竟<code>destructuring-bind</code>是无法嵌套的；</li><li>如果是<code>symbol</code>，就展开为<code>let</code>（如果栈只有一个元素并且是<code>let</code>表达式，那么可以将新的binding合并进去，减少展开后代码的缩进）。</li></ol><p>现在，可以完整地实现<code>vertical-let</code>了</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> vertical-let/aux (<span class="name">forms</span>)</span><br><span class="line">  <span class="string">"将FORMS转换为基于DESTRUCTURING-BIND和LET*实现的形式。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">将:WITH VAR = VAL . FORMS形式的代码转换为(LET* ((VAR VAL)) . FORMS)；</span></span><br><span class="line"><span class="string">将:WITH (VAR1 VAR2) = VAL . FORMS形式的代码转换为(DESTRUCTURING-BIND (VAR1 VAR2) VAL . FORMS)。"</span></span><br><span class="line">  (<span class="name">check-type</span> forms list)</span><br><span class="line">  (<span class="name">setf</span> forms (<span class="name">reverse</span> forms))</span><br><span class="line">  (<span class="name">let</span> (<span class="name">form</span></span><br><span class="line">        (<span class="name">stack</span> '()))</span><br><span class="line">    (<span class="name">block</span> <span class="literal">nil</span></span><br><span class="line">      (<span class="name">loop</span></span><br><span class="line">         (<span class="name">when</span> (<span class="name">null</span> forms)</span><br><span class="line">           (<span class="name">return-from</span> <span class="literal">nil</span>))</span><br><span class="line"></span><br><span class="line">         (<span class="name">setf</span> form (<span class="name">pop</span> forms))</span><br><span class="line">         (<span class="name">cond</span> ((<span class="name">eq</span> form <span class="symbol">:with</span>)</span><br><span class="line">                (<span class="name">let</span> ((<span class="name">place</span> (<span class="name">pop</span> stack)))</span><br><span class="line">                  <span class="comment">;; 下一个元素必须是一个名称为等号的符号</span></span><br><span class="line">                  (<span class="name">let</span> ((<span class="name">e</span> (<span class="name">pop</span> stack)))</span><br><span class="line">                    (<span class="name">assert</span> (<span class="name">symbolp</span> e))</span><br><span class="line">                    (<span class="name">assert</span> (<span class="name">string=</span> (<span class="name">symbol-name</span> e) <span class="string">"="</span>)))</span><br><span class="line">                  (<span class="name">let</span> ((<span class="name">val</span> (<span class="name">pop</span> stack)))</span><br><span class="line">                    (<span class="name">etypecase</span> place</span><br><span class="line">                      (<span class="name">cons</span></span><br><span class="line">                       <span class="comment">;; 展开为DESTRUCTURING-BIND</span></span><br><span class="line">                       (<span class="name">setf</span> stack `((destructuring-bind ,place ,val ,@stack))))</span><br><span class="line">                      (<span class="name">symbol</span></span><br><span class="line">                       <span class="comment">;; 如果STAKC中仅有一个LET*表达式就将新的绑定合并进去，否则创建新的LET*表达式</span></span><br><span class="line">                       (<span class="name">cond</span> ((<span class="name">and</span> (<span class="name">=</span> (<span class="name">length</span> stack) <span class="number">1</span>)</span><br><span class="line">                                   (<span class="name">consp</span> (<span class="name">car</span> stack))</span><br><span class="line">                                   (<span class="name">eq</span> (<span class="name">caar</span> stack) 'let*))</span><br><span class="line">                              (<span class="name">let*</span> ((<span class="name">form</span> (<span class="name">pop</span> stack))</span><br><span class="line">                                     (<span class="name">bindings</span> (<span class="name">second</span> form)))</span><br><span class="line">                                (<span class="name">setf</span> (<span class="name">second</span> form)</span><br><span class="line">                                      `((,place ,val) ,@bindings))</span><br><span class="line">                                (<span class="name">push</span> form stack)))</span><br><span class="line">                             (<span class="name">t</span></span><br><span class="line">                              (<span class="name">setf</span> stack `((let* ((,place ,val)) ,@stack))))))))</span><br><span class="line">                  ))</span><br><span class="line">               (<span class="name">t</span></span><br><span class="line">                (<span class="name">push</span> form stack)))))</span><br><span class="line">    </span><br><span class="line">    (<span class="name">if</span> (<span class="name">=</span> (<span class="name">length</span> stack) <span class="number">1</span>)</span><br><span class="line">        (<span class="name">car</span> stack)</span><br><span class="line">        `(progn ,@stack))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmacro</span> vertical-let* (<span class="name">&amp;body</span> body)</span><br><span class="line">  <span class="string">"不需要不停缩进的LET*"</span></span><br><span class="line">  (<span class="name">vertical-let/aux</span> body))</span><br></pre></td></tr></table></figure><h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>除了<code>let</code>和<code>destructuring-bind</code>，Common Lisp还提供了名为<code>multiple-value-bind</code>的宏，用于捕捉从一个函数返回的多个值。如果又要修改<code>vertical-let</code>的话，多半就是为了支持它了吧。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&quot;序言&quot;&gt;&lt;a href=&quot;#序言&quot; class=&quot;headerlink&quot; title=&quot;序言&quot;&gt;&lt;/a&gt;序言&lt;/h1&gt;&lt;p&gt;因为觉得Common Lisp原生的&lt;code&gt;let&lt;/code&gt;操作符在许多时候不够好用，我编写了&lt;code&gt;vertical-let&lt;/code&gt;。（详情可以参见这篇&lt;a href=&quot;https://liutos.github.io/2019/03/13/%E6%9B%B4%E8%BF%87%E7%A8%8B%E5%BC%8F%E7%9A%84let%E2%80%94%E2%80%94vertical-let/&quot;&gt;文章&lt;/a&gt;）比起原生的&lt;code&gt;let&lt;/code&gt;，&lt;code&gt;vertical-let&lt;/code&gt;的优势在于：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;有效减少代码的缩进——尤其是嵌套使用&lt;code&gt;let&lt;/code&gt;的时候；&lt;/li&gt;
+&lt;li&gt;方便增减binding，对其余代码的布局没有影响。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;除了&lt;code&gt;let&lt;/code&gt;，&lt;code&gt;destructuring-bind&lt;/code&gt;也是一个常用的声明binding的语法。但如果用在&lt;code&gt;vertical-let&lt;/code&gt;中的话，会打乱原有的代码布局。比如原本的代码为&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="实战CommonLisp" scheme="https://liutos.github.io/categories/%E5%AE%9E%E6%88%98CommonLisp/"/>
+    
+    
+      <category term="commonlisp" scheme="https://liutos.github.io/tags/commonlisp/"/>
+    
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
+      <category term="macro" scheme="https://liutos.github.io/tags/macro/"/>
+    
+      <category term="宏" scheme="https://liutos.github.io/tags/%E5%AE%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>提升条目为第一个孩子节点</title>
@@ -77,9 +113,9 @@
       <category term="实战CommonLisp" scheme="https://liutos.github.io/categories/%E5%AE%9E%E6%88%98CommonLisp/"/>
     
     
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
-    
       <category term="commonlisp" scheme="https://liutos.github.io/tags/commonlisp/"/>
+    
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
   </entry>
   
@@ -88,7 +124,7 @@
     <link href="https://liutos.github.io/2020/01/10/%E5%BF%AB%E9%80%9F%E8%AE%BE%E7%BD%AE%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%BC%80%E5%A7%8B%E6%97%B6%E9%97%B4%EF%BC%88%E4%B8%8B%EF%BC%89/"/>
     <id>https://liutos.github.io/2020/01/10/快速设置任务的开始时间（下）/</id>
     <published>2020-01-10T15:12:41.000Z</published>
-    <updated>2020-01-10T15:27:15.855Z</updated>
+    <updated>2020-02-11T08:10:12.870Z</updated>
     
     <content type="html"><![CDATA[<blockquote><p>“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。</p></blockquote><h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>在<a href="https://liutos.github.io/2020/01/09/%E5%BF%AB%E9%80%9F%E8%AE%BE%E7%BD%AE%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%BC%80%E5%A7%8B%E6%97%B6%E9%97%B4%EF%BC%88%E4%B8%8A%EF%BC%89/">上一篇文章</a>的末尾，我说有一个更优雅的办法实现快速设置任务的开始时间，本文便来揭秘这个办法。</p><a id="more"></a><h1 id="Helm"><a href="#Helm" class="headerlink" title="Helm"></a>Helm</h1><blockquote><p>如果说我看得比别人更远些，那是因为我站在巨人的肩膀上。<br>——牛顿</p></blockquote><p>既要支持预设选项，又要能够方便选择，一个显而易见的办法就是使用下拉列表。要在Emacs中弹出下拉列表，不需要从零开始造轮子，只要基于<a href="https://github.com/emacs-helm/helm" target="_blank" rel="noopener">Helm</a>即可轻松做到。Helm是一个增量补全及选择的框架，利用它的API，可以轻松实现带补全功能的下拉列表，并在选中某一项后执行特定的代码。</p><p>这份<a href="https://wikemacs.org/wiki/How_to_write_helm_extensions" target="_blank" rel="noopener">文档</a>清晰地说明了如何使用Helm的API。在展示具体代码前，先看看成品的效果是怎样的</p><video controls><br>  <source src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200110/基于Helm快速选择开始时间.mp4" type="video/mp4"><br></video><h1 id="show-the-code"><a href="#show-the-code" class="headerlink" title="show the code"></a>show the code</h1><p>Helm的用法朴实无华，只要调用名为<code>helm</code>的函数即可。<code>helm</code>有一个叫<code>sources</code>的重要参数，它接收一个<a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-List-Type.html" target="_blank" rel="noopener">association list</a>，并要求其中有以如下三个符号为<code>car</code>的<code>cons</code>：</p><ol><li><code>name</code>。对应的<code>cdr</code>部分是下拉列表的名字；</li><li><code>candidates</code>。对应的<code>cdr</code>部分是下拉列表的所有候选项；</li><li><code>action</code>。对应的<code>cdr</code>部分是一个函数，代表选中某一项后的处理逻辑。</li></ol><p><code>candidates</code>可以是一个association list（这也是前述的文档以及我接下来的用法），其中每个<code>cons</code>的<code>car</code>部分将作为候选项被展示，<code>cdr</code>部分则是一个“真实值”（就像是HTML的option标签的文本与它的<code>value</code>属性间的关系）。Helm贴心地提供了名为<code>helm-marked-candidates</code>的函数，帮助在这种情况下，获取被选中的候选项对应的<code>cdr</code>部分的内容。为了利用这个便捷的特性，我将候选项定义为：</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> *schedule-shortcuts*</span><br><span class="line">      '((<span class="string">"午餐"</span> . (<span class="number">12</span> <span class="number">0</span>))</span><br><span class="line">        (<span class="string">"午休"</span> . (<span class="number">13</span> <span class="number">0</span>))</span><br><span class="line">        (<span class="string">"晚餐"</span> . (<span class="number">18</span> <span class="number">35</span>))</span><br><span class="line">        (<span class="string">"晚上在家"</span> . (<span class="number">22</span> <span class="number">5</span>))))</span><br></pre></td></tr></table></figure><p>要传给<code>helm</code>函数的<code>sources</code>参数的值为：</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defvar</span> *helm-quick-schedule-source*</span><br><span class="line">  `((name . <span class="string">"设置TODO的SCHEDULED属性"</span>)</span><br><span class="line">    (candidates . *schedule-shortcuts*)</span><br><span class="line">    (action . (lambda (candidate)</span><br><span class="line">                (helm-marked-candidates)))))</span><br></pre></td></tr></table></figure><p>有了<code>*helm-quick-schedule-source*</code>，便可以一窥Helm的风采。按下<code>M-:</code>并输入<code>(helm :sources *helm-quick-schedule-source*)↵</code>，会打开一个新的buffer，其中纵向列出了“午餐”、“午休”、“晚餐”，以及“晚上在家”四个选项。可以上下移动，也可以输入目标选项的部分内容，Helm会根据输入过滤候选项。按下回车后，<code>helm</code>函数返回一个列表，装载着所选中的项对应的<code>cdr</code>部分——这是因为在<code>*helm-quick-schedule-source*</code>中<code>action</code>的部分就是直接返回这个<code>cdr</code>。</p><p>最后，只需将<code>helm</code>与上一篇文章中定义的<code>lt-next-todo</code>结合起来即可：</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> helm-quick-schedule ()</span><br><span class="line">  <span class="string">"从下拉列表选择完后SCHEDULED模式后修改当前TODO条目的SCHEDULED属性。"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">spec</span> (<span class="name">car</span> (<span class="name">helm</span> <span class="symbol">:sources</span> '(*helm-quick-schedule-source*)))))</span><br><span class="line">    (<span class="name">when</span> spec</span><br><span class="line">      (<span class="name">apply</span> 'lt-next-todo spec))))</span><br></pre></td></tr></table></figure><p>把它绑定到<code>C-c l s</code>上</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define-key</span> org-mode-map <span class="string">"\C-cls"</span> 'helm-quick-schedule)</span><br></pre></td></tr></table></figure><p>现在，当处于<code>org-mode</code>模式下的buffer时，只需要按下<code>C-c l s</code>，便可以轻松选择一个开始时间并在眨眼间设置为光标所在任务的SCHEDULED属性。</p><h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>Emacs的Helm插件本身已经提供了非常丰富的功能，例如<code>helm-bufferss-list</code>。我还利用Helm实现查询笔记的入口，待时机成熟了，一定将这方面的心得分享出来。</p>]]></content>
     
@@ -158,9 +194,9 @@
     </summary>
     
     
-      <category term="总结" scheme="https://liutos.github.io/tags/%E6%80%BB%E7%BB%93/"/>
-    
       <category term="2019" scheme="https://liutos.github.io/tags/2019/"/>
+    
+      <category term="总结" scheme="https://liutos.github.io/tags/%E6%80%BB%E7%BB%93/"/>
     
   </entry>
   
@@ -370,11 +406,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -406,11 +442,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -441,11 +477,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -508,11 +544,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -543,11 +579,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -580,11 +616,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -623,44 +659,6 @@
       <category term="时序图" scheme="https://liutos.github.io/tags/%E6%97%B6%E5%BA%8F%E5%9B%BE/"/>
     
       <category term="语绘" scheme="https://liutos.github.io/tags/%E8%AF%AD%E7%BB%98/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>拆解嵌套的表达式</title>
-    <link href="https://liutos.github.io/2019/06/14/%E6%8B%86%E8%A7%A3%E5%B5%8C%E5%A5%97%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
-    <id>https://liutos.github.io/2019/06/14/拆解嵌套的表达式/</id>
-    <published>2019-06-14T13:43:23.000Z</published>
-    <updated>2019-06-14T13:48:35.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>在<a href="http://liutos.github.io/2019/06/11/%E6%94%AF%E6%8C%81%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F/">上一篇文章</a>中，<code>jjcc2</code>函数已经可以处理加减乘除运算表达式中的变量了。也就是说，现在它可以处理如下的代码了</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">setq</span> a (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line">  (<span class="name">+</span> a a))</span><br></pre></td></tr></table></figure><p>在我的电脑上，在SLIME中依次运行下面的代码</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defvar</span> *globals* (<span class="name">make-hash-table</span>))</span><br><span class="line">(<span class="name">stringify</span> (<span class="name">jjcc2</span> '(progn (setq a (+ <span class="number">1</span> <span class="number">2</span>)) (+ a a)) *globals*) *globals*)</span><br></pre></td></tr></table></figure><p>会得到下列的汇编代码</p><a id="more"></a><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">        .data</span><br><span class="line">A: .long 0</span><br><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EAX</span><br><span class="line">        MOVL $2, %EBX</span><br><span class="line">        ADDL %EBX, %EAX</span><br><span class="line">        MOVL %EAX, A(%RIP)</span><br><span class="line">        MOVL A(%RIP), %EAX</span><br><span class="line">        MOVL A(%RIP), %EBX</span><br><span class="line">        ADDL %EBX, %EAX</span><br><span class="line">        movl %eax, %edi</span><br><span class="line">        movl $0x2000001, %eax</span><br><span class="line">        syscall</span><br></pre></td></tr></table></figure><p>现在所需要的，就是要实现一个功能（一般是一个函数），可以将</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>) (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br></pre></td></tr></table></figure><p>自动转换为上面所给出的<code>progn</code>的形式了。我这里给的例子不好，上面这段代码就算能够自动转换，也不会是最上面那段<code>progn</code>的形式的，起码会有两个变量哈哈。好了，那么怎么把上面的含有嵌套表达式的代码给转换成<code>progn</code>的形式呢？</p><p>跑个题，可以做个CPS变换呀。比如，你可以先把<code>(+ (+ 1 2) (+ 1 2))</code>写成这种形式</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+&amp;</span> <span class="number">1</span> <span class="number">2</span> (<span class="name">lambda</span> (<span class="name">a</span>)</span><br><span class="line">          (<span class="name">+&amp;</span> <span class="number">1</span> <span class="number">2</span> (<span class="name">lambda</span> (<span class="name">b</span>)</span><br><span class="line">                    (<span class="name">+</span> a b)))))</span><br></pre></td></tr></table></figure><p>上面的<code>+&amp;</code>表示它是一个带<code>continuation</code>版本的加法运算，它会把两个操作相加之后调用它的continuation。这个写法如果没有记错的话，我是从PG的《On Lisp》里面学来的（逃</p><p>你看，这多简单呀。做完CPS变换之后，只要把每一个有continuation的函数调用都重写成<code>setq</code>，符号就用回调里的参数名，值就是带回调的表达式本身；没有回调的就继续没有。最后把这些<code>setq</code>放到一个<code>progn</code>里去就可以了</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">setq</span> a (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line">  (<span class="name">setq</span> b (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line">  (<span class="name">+</span> a b))</span><br></pre></td></tr></table></figure><p>很久以前还真的写过一个对表达式做CPS变换的玩意，有兴趣的请移步<a href="http://liutos.github.io/2012/09/08/CommonLisp%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84CPS%E5%8F%98%E6%8D%A2/">这篇文章</a>。</p><p>言归正传。因为<code>jjcc2</code>只需要处理两个参数的加减乘除运算，所以不需要做通用的CPS变换那么复杂。我是这么想的：既然只有两个参数，那么我就真的在代码里先处理第一个再处理第二个。对两个参数，我都把它们放到一个<code>setq</code>的求值部分，然后把原来的表达式中的对应位置用一个新的变量名来代替即可，新变量名也好办，只要用<code>gensym</code>来生成就可以了。</p><p>其实这样是不够的，因为作为加减乘除运算的操作数的表达式本身，也可能还有嵌套的子表达式。这里必然有一个递归的过程。新的办法是，我用一个栈来存放所有不再需要被拆解的<code>setq</code>表达式，然后把这个栈在每次递归调用的时候传进去。这样一来，当所有的递归都结束的时候，就得到了一个充满了<code>setq</code>表达式的栈，以及一个所有的嵌套表达式都被替换为变量名的“顶层”表达式。</p><p>好了，说完了思路，上代码吧</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> inside-out/aux (<span class="name">expr</span> result)</span><br><span class="line">  <span class="string">"将嵌套的表达式EXPR由内而外地翻出来"</span></span><br><span class="line">  (<span class="name">check-type</span> expr list)</span><br><span class="line">  <span class="comment">;; 出于简单起见，暂时只处理加法运算</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         (<span class="name">when</span> (<span class="name">listp</span> (<span class="name">second</span> expr))</span><br><span class="line">           <span class="comment">;; 第一个操作数也是需要翻出来的</span></span><br><span class="line">           <span class="comment">;; 翻出来后，result中的第一个元素就是一个没有嵌套表达式的叶子表达式了，可以作为setq的第二个操作数</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">var</span> (<span class="name">gensym</span>)))</span><br><span class="line">             (<span class="name">setf</span> result (<span class="name">inside-out/aux</span> (<span class="name">second</span> expr) result))</span><br><span class="line">             (<span class="name">let</span> ((<span class="name">val</span> (<span class="name">pop</span> result)))</span><br><span class="line">               (<span class="name">push</span> `(setq ,var ,val) result)</span><br><span class="line">               (<span class="name">setf</span> (<span class="name">second</span> expr) var))))</span><br><span class="line">         (<span class="name">when</span> (<span class="name">listp</span> (<span class="name">third</span> expr))</span><br><span class="line">           (<span class="name">let</span> ((<span class="name">var</span> (<span class="name">gensym</span>)))</span><br><span class="line">             (<span class="name">setf</span> result (<span class="name">inside-out/aux</span> (<span class="name">third</span> expr) result))</span><br><span class="line">             (<span class="name">let</span> ((<span class="name">val</span> (<span class="name">pop</span> result)))</span><br><span class="line">               (<span class="name">push</span> `(setq ,var ,val) result)</span><br><span class="line">               (<span class="name">setf</span> (<span class="name">third</span> expr) var))))</span><br><span class="line">         (<span class="name">push</span> expr result)</span><br><span class="line">         result)</span><br><span class="line">        (<span class="name">t</span></span><br><span class="line">         (<span class="name">push</span> expr result)</span><br><span class="line">         result)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> inside-out (<span class="name">expr</span>)</span><br><span class="line">  (<span class="name">cons</span> 'progn (<span class="name">nreverse</span> (<span class="name">inside-out/aux</span> expr '()))))</span><br></pre></td></tr></table></figure><p>因为用的是栈（其实就是个list），所以最后需要用<code>nreverse</code>反转一下，才能拼上<code>progn</code>。现在，如果喂给<code>inside-out</code>一个嵌套的表达式</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">inside-out</span> '(+ (+ <span class="number">1</span> <span class="number">2</span>) (+ <span class="number">3</span> <span class="number">4</span>)))</span><br></pre></td></tr></table></figure><p>就会得到一个由内而外地翻出来的版本</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">PROGN</span></span><br><span class="line"> (<span class="name">SETQ</span> #<span class="symbol">:G688</span> (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line"> (<span class="name">SETQ</span> #<span class="symbol">:G689</span> (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>))</span><br><span class="line"> (<span class="name">+</span> #<span class="symbol">:G688</span> #<span class="symbol">:G689</span>))</span><br></pre></td></tr></table></figure><p>锵锵锵，Common Lisp中的unintern symbol再次登场。好了，现在即便是嵌套的加减乘除运算的表达式，只要先经过<code>inside-out</code>处理一下，再喂给<code>jjcc2</code>，也可以编译出结果来了，可喜可贺。</p><p>全文完。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在&lt;a href=&quot;http://liutos.github.io/2019/06/11/%E6%94%AF%E6%8C%81%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F/&quot;&gt;上一篇文章&lt;/a&gt;中，&lt;code&gt;jjcc2&lt;/code&gt;函数已经可以处理加减乘除运算表达式中的变量了。也就是说，现在它可以处理如下的代码了&lt;/p&gt;
-&lt;figure class=&quot;highlight lisp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;(&lt;span class=&quot;name&quot;&gt;progn&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  (&lt;span class=&quot;name&quot;&gt;setq&lt;/span&gt; a (&lt;span class=&quot;name&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  (&lt;span class=&quot;name&quot;&gt;+&lt;/span&gt; a a))&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;在我的电脑上，在SLIME中依次运行下面的代码&lt;/p&gt;
-&lt;figure class=&quot;highlight lisp&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;(&lt;span class=&quot;name&quot;&gt;defvar&lt;/span&gt; *globals* (&lt;span class=&quot;name&quot;&gt;make-hash-table&lt;/span&gt;))&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;(&lt;span class=&quot;name&quot;&gt;stringify&lt;/span&gt; (&lt;span class=&quot;name&quot;&gt;jjcc2&lt;/span&gt; &#39;(progn (setq a (+ &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;)) (+ a a)) *globals*) *globals*)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;会得到下列的汇编代码&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
-    
-      <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
-    
-      <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
-    
-      <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
-    
-      <category term="x64" scheme="https://liutos.github.io/tags/x64/"/>
-    
-      <category term="汇编" scheme="https://liutos.github.io/tags/%E6%B1%87%E7%BC%96/"/>
-    
-      <category term="编译器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
     
   </entry>
   
