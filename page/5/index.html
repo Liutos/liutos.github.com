@@ -202,6 +202,96 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/11/25/重复输入相似的命令的几种方法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/11/25/重复输入相似的命令的几种方法/" class="post-title-link" itemprop="url">重复输入相似的命令的几种方法</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-11-25 22:40:51" itemprop="dateCreated datePublished" datetime="2018-11-25T22:40:51+08:00">2018-11-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2018/11/25/重复输入相似的命令的几种方法/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/25/重复输入相似的命令的几种方法/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在命令行经常需要重复输入一些shell代码，例如用cd切换到某个目录、运行npm run local，或者git commit等。每次都完整地一个个字符地敲入这些命令还是很麻烦的，这种时候就要寻找可以解决重复输入，提高效率的办法了。</p>
+<p>最原始的，当然是找一个文本文件，把平时经常敲入的命令存放在其中，每当需要运行这些命令的时候就打开文件选中内容复制一下，再到终端粘贴并运行，但这未免过于原始了。</p>
+<h2 id="使用ctrl-r翻出历史命令"><a href="#使用ctrl-r翻出历史命令" class="headerlink" title="使用ctrl-r翻出历史命令"></a>使用ctrl-r翻出历史命令</h2><p>使用ctrl-r是一种不那么原始的方法。在终端中按下ctrl-r后，shell会等待进一步地输入，并根据输入从以前输入过的命令中找出匹配的一条。找到了自己所需要的命令行，直接敲击回车即可，效果如下<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/ctrl_r%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="ctrl-r的效果"><br>PS：上面是使用了<a href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">fzf</a>之后的效果，所以在敲入回车后并不会立即执行所选中的命令。原生的ctrl-r命令不支持在不同的位置上匹配输入字符，所以还是推荐一试fzf的。</p>
+<h2 id="使用alias"><a href="#使用alias" class="headerlink" title="使用alias"></a>使用alias</h2><p>alias相比于ctrl-r而言进化了一点，因为它毕竟不再需要往命令行中塞入那么多字符了——它让终端用户可以用较短的内容来代替较长的内容。例如，我就给登录我本地的MySQL的命令写了一个alias<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> myroot=<span class="string">'mysql -u root -p*******'</span></span><br></pre></td></tr></table></figure></p>
+<p>而且alias更像是宏展开，所以可以在后面添加其它内容，如下图<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/alias%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="alias的效果"><br>在myroot之后输入的test和user_info都跟着myroot展开后的结果一起喂给了shell去执行。使用alias之后，每次只需要输入较短的myroot即可。</p>
+<h2 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h2><p>如果说alias是C语言里面的宏的话，那么shell所支持的函数就是C语言里面的函数了（这不是废话么）。alias始终不太适合所要输入的内容比较多的场景——定义也特别难写，并且alias没有输入参数可言，也不适合处理需要有为妙差异的重复内容的情况。shell函数很适合这种情况，例如，我在本地编辑完一个.sd文件后需要用<a href="http://sdedit.sourceforge.net/index.html" target="_blank" rel="noopener">sdedit</a>将其转换为.png文件，方能上传到Confluence上贴到设计文档里，我希望.png文件跟.sd文件有相同的basename，那么用下面这个shell函数可以减轻一些重复输入的劳动力<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 根据.sd文件生成同名的.png文件</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">sdpng</span></span>() &#123;</span><br><span class="line">    basename=<span class="variable">$&#123;1&#125;</span></span><br><span class="line">    /usr/<span class="built_in">local</span>/bin/sdedit -t png -o <span class="variable">$&#123;basename&#125;</span>.png <span class="variable">$&#123;basename&#125;</span>.sd</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>只需要我输入一次文件名即可，效果如下<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/shell%E5%87%BD%E6%95%B0%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="shell函数的效果"></p>
+<h2 id="使用Alfred的Snippets功能"><a href="#使用Alfred的Snippets功能" class="headerlink" title="使用Alfred的Snippets功能"></a>使用Alfred的Snippets功能</h2><p><a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>带有一个叫做Snippets的特性<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Alfred%E7%9A%84Snippets%E7%89%B9%E6%80%A7.png" alt="Alfred的Snippets特性"><br>它跟上面所说的alias很相似，但它不是由shell自己处理悄悄展开的，它是显式地输入一长串的字符。比如说我定义了三个短语：gpd、gct，以及gpt，它们分别会展开为<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin develop</span><br><span class="line">git checkout <span class="built_in">test</span></span><br><span class="line">git push -u origin <span class="built_in">test</span></span><br></pre></td></tr></table></figure></p>
+<p>效果如下<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Alfred%E8%87%AA%E5%8A%A8%E5%B1%95%E5%BC%80%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="Alfred的Snippets自动展开的效果"><br>Alfred的Snippets也跟alias一样是不能接受参数的，不过支持一些占位符，可以展开为一些特定模式的动态内容。一个比较有用的是{cursor}这个占位符，可以让光标定位至此。例如我可以定义这样的一串展开结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM `user_info` WHERE `userId` = &#123;cursor&#125;\G</span><br></pre></td></tr></table></figure></p>
+<p>这样我敲入对应的短语后就可以正确定位到WHERE语句，然后直接输入要查询的参数即可，效果如下<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/cursor%E5%8D%A0%E4%BD%8D%E7%AC%A6%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="cursor占位符的效果"></p>
+<p>除了Alfred之外，还有其它的通过snippet提高输入效率的软件，比如<a href="http://www.trankynam.com/atext/" target="_blank" rel="noopener">aText</a>，<a href="https://kapeli.com/dash" target="_blank" rel="noopener">Dash</a>，不过我没有实际地用过，就不多说了。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>没有代码才是最快地输入代码的方式</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/11/16/值得使用的软件之Alfred/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1062,118 +1152,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/02/23/如何用Common-Lisp实现尾递归优化/" class="post-title-link" itemprop="url">如何用Common Lisp实现尾递归优化</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-02-23 22:58:07" itemprop="dateCreated datePublished" datetime="2017-02-23T22:58:07+08:00">2017-02-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2017/02/23/如何用Common-Lisp实现尾递归优化/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/23/如何用Common-Lisp实现尾递归优化/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="什么是尾递归"><a href="#什么是尾递归" class="headerlink" title="什么是尾递归"></a>什么是尾递归</h2><p>如果一个函数在定义时引用了自身，那么这个函数就是一个递归函数。例如我们所熟知的阶乘就可以通过递归函数的形式予以定义</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> fact (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">&lt;=</span> n <span class="number">0</span>)</span><br><span class="line">      <span class="number">1</span></span><br><span class="line">      (<span class="name">*</span> n (<span class="name">fact</span> (<span class="number">1</span>- n)))))</span><br></pre></td></tr></table></figure>
-<p>在if语句的备选路径上，正在定义的函数<code>fact</code>被自身所调用，因此<code>fact</code>就是一个递归函数了。递归有一类较为特殊的形式，叫做尾递归，它们的特征是递归函数的调用位于被定义函数的最后一个步骤。也就是说，这个递归调用的返回值也就是整个函数调用的返回值，后面不再有其它的计算步骤了。例如实现了辗转相除法的下面这个函数就是尾递归的</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-gcd (<span class="name">a</span> b)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">zerop</span> a) b)</span><br><span class="line">        ((<span class="name">zerop</span> b) a)</span><br><span class="line">        (<span class="name">t</span> (<span class="name">my-gcd</span> b (<span class="name">mod</span> a b)))))</span><br></pre></td></tr></table></figure>
-<p>此处命名为<code>my-gcd</code>，是因为在Common Lisp中已经预置了一个叫做<code>gcd</code>的函数了</p>
-<h2 id="什么是尾递归优化"><a href="#什么是尾递归优化" class="headerlink" title="什么是尾递归优化"></a>什么是尾递归优化</h2><p>递归调用其实也就是函数调用，每一次调用都需要保存当前的执行上下文（寄存器的值、程序计数器的值等信息）并压入栈中。如果递归调用得非常深，那么很可能将栈空间消耗殆尽导致程序崩溃，因此很多时候都会选择使用循环来实现用递归实现的效果。尾递归形式的一个优势，就在于编译器可以对其进行优化，使得原本需要添加一个栈帧的函数调用操作，直接重用当前的调用中所使用的栈帧即可。这样一来，递归函数的调用就不会无节制地消耗栈空间了。</p>
-<p>另一种对尾递归进行优化的方式，则是将其改写为【赋值】与【跳转】。例如对于上面的<code>my-gcd</code>函数，可以改写为如下形式</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-gcd (<span class="name">a</span> b)</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   rec</span><br><span class="line">     (<span class="name">cond</span> ((<span class="name">zerop</span> a) (<span class="name">return-from</span> my-gcd b))</span><br><span class="line">           ((<span class="name">zerop</span> b) (<span class="name">return-from</span> my-gcd a))</span><br><span class="line">           (<span class="name">t</span> (<span class="name">progn</span></span><br><span class="line">                (<span class="name">psetf</span> a b</span><br><span class="line">                       b (<span class="name">mod</span> a b))</span><br><span class="line">                (<span class="name">go</span> rec))))))</span><br></pre></td></tr></table></figure>
-<h2 id="如何在Common-Lisp中实现"><a href="#如何在Common-Lisp中实现" class="headerlink" title="如何在Common Lisp中实现"></a>如何在Common Lisp中实现</h2><p>如果要使用递归的形式定义一个计算列表长度的函数，那么很可能会写出这样子的代码</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span>)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">      <span class="number">0</span></span><br><span class="line">      (<span class="number">1</span>+ (<span class="name">my-length</span> (<span class="name">rest</span> lst)))))</span><br></pre></td></tr></table></figure>
-<p>采用累加器的思路，可以将上述函数改写为下面的尾递归形式</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">      acc</span><br><span class="line">      (<span class="name">my-length</span> (<span class="name">rest</span> lst) (<span class="number">1</span>+ acc))))</span><br></pre></td></tr></table></figure>
-<p>对于第二个版本的<code>my-length</code>函数，同样可以手动改写为基于【赋值】和【跳转】的实现形式，结果如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   rec</span><br><span class="line">     (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">         (<span class="name">return-from</span> my-length acc)</span><br><span class="line">         (<span class="name">progn</span></span><br><span class="line">           (<span class="name">psetf</span> lst (<span class="name">rest</span> lst)</span><br><span class="line">                  acc (<span class="number">1</span>+ acc))</span><br><span class="line">           (<span class="name">go</span> rec)))))</span><br></pre></td></tr></table></figure>
-<p>你可能已经注意到了，<code>my-gcd</code>和<code>my-length</code>函数的改写都是很有规律的，甚至可以通过一个宏来帮助我们自动完成这种变换。这个宏所需要做的事情其实只有三件：</p>
-<ol>
-<li>将原本的定义中的函数体包裹在一个<code>tagbody</code>中</li>
-<li>将原本作为返回值的表达式包裹在一个<code>return-from</code>中</li>
-<li>将递归调用的表达式改为按顺序执行的<code>psetf</code>和<code>go</code>的组合</li>
-</ol>
-<p>为了降低一下实现难度，第二点暂时就不处理了，函数的实现者必须手动编写<code>return-from</code>语句。因此，如果只考虑首尾两个条件，首先，可以考虑实现第三条，将函数体内的递归调用修改为<code>progn</code>、<code>psetf</code>和<code>go</code>的组合。要实现这个变换，可以使用<code>macrolet</code>，如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   rec</span><br><span class="line">     (<span class="name">macrolet</span> ((<span class="name">my-length</span> (<span class="name">&amp;rest</span> args)</span><br><span class="line">                  `(progn</span><br><span class="line">                     (psetf ,@(mapcan #'list '(lst acc) args))</span><br><span class="line">                     (go rec))))</span><br><span class="line">       (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">           (<span class="name">return-from</span> my-length acc)</span><br><span class="line">           (<span class="name">my-length</span> (<span class="name">rest</span> lst) (<span class="number">1</span>+ acc))))))</span><br></pre></td></tr></table></figure>
-<p>为了自动生成上面的代码，我编写了这样的一个宏</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> define-rec (<span class="name">name</span> lambda-list <span class="symbol">&amp;body</span> body)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">rec</span> (<span class="name">gensym</span>)))</span><br><span class="line">    `(defun ,name ,lambda-list</span><br><span class="line">       (tagbody</span><br><span class="line">          ,rec</span><br><span class="line">          (macrolet ((,name (&amp;rest exprs)</span><br><span class="line">                       ,``(progn</span><br><span class="line">                            (psetf ,@(mapcan #'list ',lambda-list exprs))</span><br><span class="line">                            (go ,',rec))))</span><br><span class="line">            ,@body)))))</span><br></pre></td></tr></table></figure>
-<p>利用上面这个宏编写一个计算列表长度的尾递归形式的函数，代码如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define-rec</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">      (<span class="name">return-from</span> my-length acc)</span><br><span class="line">      (<span class="name">my-length</span> (<span class="name">rest</span> lst) (<span class="number">1</span>+ acc))))</span><br></pre></td></tr></table></figure>
-<p>利用<code>macroexpand-1</code>或者是SLIME提供的展开一次宏的调试功能，在我的及其上得到的代码如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">DEFUN</span> MY-LENGTH (<span class="name">LST</span> ACC)</span><br><span class="line">  (<span class="name">TAGBODY</span></span><br><span class="line">   #<span class="symbol">:G937</span></span><br><span class="line">    (<span class="name">MACROLET</span> ((<span class="name">MY-LENGTH</span> (<span class="name">&amp;REST</span> EXPRS)</span><br><span class="line">                 `(PROGN</span><br><span class="line">                   (PSETF ,@(MAPCAN #'LIST '(LST ACC) EXPRS))</span><br><span class="line">                   (GO ,'#:G937))))</span><br><span class="line">      (<span class="name">IF</span> (<span class="name">NULL</span> LST)</span><br><span class="line">          (<span class="name">RETURN-FROM</span> MY-LENGTH ACC)</span><br><span class="line">          (<span class="name">MY-LENGTH</span> (<span class="name">REST</span> LST) (<span class="number">1</span>+ ACC))))))</span><br></pre></td></tr></table></figure>
-<p>跟上面手写的代码没有太大的差别，并且用于计算所得到的列表长度也是正确的。那么如何验证这个函数是采用了【赋值】和【跳转】的机制来完成运算的呢？可以借助Common Lisp提供的<code>trace</code>函数。如果使用的真实执行递归调用的<code>my-length</code>函数的定义，那么执行<code>(trace my-length)</code>后运行<code>(my-length &#39;(1 2 4 5) 0)</code>，在我的机器上会输出如下内容</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">my-length</span> '(<span class="number">1</span> <span class="number">2</span> <span class="number">4</span> <span class="number">5</span>) <span class="number">0</span>)</span><br><span class="line">  0: (MY-LENGTH (1 2 4 5) 0)</span><br><span class="line">    1: (MY-LENGTH (2 4 5) 1)</span><br><span class="line">      2: (MY-LENGTH (4 5) 2)</span><br><span class="line">        3: (MY-LENGTH (5) 3)</span><br><span class="line">          4: (MY-LENGTH NIL 4)</span><br><span class="line">          4: MY-LENGTH returned 4</span><br><span class="line">        3: MY-LENGTH returned 4</span><br><span class="line">      2: MY-LENGTH returned 4</span><br><span class="line">    1: MY-LENGTH returned 4</span><br><span class="line">  0: MY-LENGTH returned 4</span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></table></figure>
-<p>而如果是使用<code>define-rec</code>宏定义的<code>my-length</code>，求值同样的表达式的输出为</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">my-length</span> '(<span class="number">1</span> <span class="number">2</span> <span class="number">4</span> <span class="number">5</span>) <span class="number">0</span>)</span><br><span class="line">  0: (MY-LENGTH (1 2 4 5) 0)</span><br><span class="line">  0: MY-LENGTH returned 4</span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></table></figure>
-<p>显然，这当中没有递归的函数调用，<code>my-length</code>确实不需要调用自身。</p>
-<p>全文完</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1244,7 +1222,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-count">62</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1257,7 +1235,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">89</span>
+        <span class="site-state-item-count">91</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

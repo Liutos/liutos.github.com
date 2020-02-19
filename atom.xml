@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2020-02-12T07:41:42.481Z</updated>
+  <updated>2020-02-19T03:42:19.953Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>免除频繁输入ssh密码的烦恼</title>
+    <link href="https://liutos.github.io/2020/02/19/%E5%85%8D%E9%99%A4%E9%A2%91%E7%B9%81%E8%BE%93%E5%85%A5ssh%E5%AF%86%E7%A0%81%E7%9A%84%E7%83%A6%E6%81%BC/"/>
+    <id>https://liutos.github.io/2020/02/19/免除频繁输入ssh密码的烦恼/</id>
+    <published>2020-02-19T03:40:18.000Z</published>
+    <updated>2020-02-19T03:42:19.953Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>在入手MacBook Pro前，我的开发环境主要是一个运行在VirtualBox中的Mint发行版。在这个系统中，只要运行一次<code>git push</code>并输入passphrase（下称密码）后，之后便不再需要输入了——即使ssh登录远程机器也是如此。</p><p>但用上Mac后发现，这里的ssh没有这个方便的特性——每次运行<code>git push</code>或<code>ssh</code>，都需要输入密码，颇不方便。</p><p>为了避免一遍又一遍地输入密码，每次登录后，我都会运行<code>ssh-add</code>来一劳永逸地解决问题</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure><p>自从升级到macOS Catalina后，如果在合盖睡眠前没有注销的话，下次开盖唤醒极有可能卡死在登录界面。无奈之下，我每天都需要注销并在第二天重新登录，以至于每天都得运行<code>ssh-add</code>并输入密码。久而久之，这也挺烦人的。</p><h1 id="一次失败的优化"><a href="#一次失败的优化" class="headerlink" title="一次失败的优化"></a>一次失败的优化</h1><a id="more"></a><p>为了省却每次都输入长达14个字符的密码的烦恼，我想到了<code>expect(1)</code>，这是一种可以交互式地控制其它命令的脚本语言。遗憾的是，经过一番折腾，仍然没办法成功让expect把密码输入给<code>ssh-add</code>，我只好继续寻找其它的办法。</p><h1 id="一次成功的优化"><a href="#一次成功的优化" class="headerlink" title="一次成功的优化"></a>一次成功的优化</h1><p>某天在阅读<code>ssh-add</code>的<code>man</code>文档时，了解到原来<code>ssh-add</code>有一个<code>-K</code>选项，可以在添加身份到<code>ssh-agent</code>时，将密码存储到用户的keychain中。同时还有一个<code>-A</code>选项，可以让<code>ssh-add</code>使用来自于keychain的密码——这意味着可以不用一遍又一遍地输入！</p><p>那么接下来要做的事情已经很清楚了。先手动运行一次带<code>-K</code>选项的<code>ssh-add</code></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add -K ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure><p>并输入密码——这将会是在Mac上的最后一次输入。再用<code>-A</code>选项调用<code>ssh-add</code></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line">ssh-add -A ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure><p>我把上面这段代码保存为文件<code>/Users/liutos/SourceCode/shell/auto_ssh_add/auto_ssh_add.sh</code>，它很快就会被用到。最后，写一个Launchd的配置文件<code>~/Library/LaunchAgents/com.liutos.tools.sshAdd.plist</code></p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">"1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>com.liutos.tools.sshAdd<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>Program<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/liutos/SourceCode/shell/auto_ssh_add/auto_ssh_add.sh<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>RunAtLoad<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardOutPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>/tmp/auto_ssh_add.log<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardErrorPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>/tmp/auto_ssh_add.err<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure><p>从现在起，再也不需要一遍又一遍地输入ssh的密码了——一次也不需要。</p><h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>要是有哪些读者朋友成功地用<code>expect</code>实现自动输入密码的，还望不吝赐教;)</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;序言&quot;&gt;&lt;a href=&quot;#序言&quot; class=&quot;headerlink&quot; title=&quot;序言&quot;&gt;&lt;/a&gt;序言&lt;/h1&gt;&lt;p&gt;在入手MacBook Pro前，我的开发环境主要是一个运行在VirtualBox中的Mint发行版。在这个系统中，只要运行一次&lt;code&gt;git push&lt;/code&gt;并输入passphrase（下称密码）后，之后便不再需要输入了——即使ssh登录远程机器也是如此。&lt;/p&gt;
+&lt;p&gt;但用上Mac后发现，这里的ssh没有这个方便的特性——每次运行&lt;code&gt;git push&lt;/code&gt;或&lt;code&gt;ssh&lt;/code&gt;，都需要输入密码，颇不方便。&lt;/p&gt;
+&lt;p&gt;为了避免一遍又一遍地输入密码，每次登录后，我都会运行&lt;code&gt;ssh-add&lt;/code&gt;来一劳永逸地解决问题&lt;/p&gt;
+&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ssh-add ~/.ssh/id_rsa&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;自从升级到macOS Catalina后，如果在合盖睡眠前没有注销的话，下次开盖唤醒极有可能卡死在登录界面。无奈之下，我每天都需要注销并在第二天重新登录，以至于每天都得运行&lt;code&gt;ssh-add&lt;/code&gt;并输入密码。久而久之，这也挺烦人的。&lt;/p&gt;
+&lt;h1 id=&quot;一次失败的优化&quot;&gt;&lt;a href=&quot;#一次失败的优化&quot; class=&quot;headerlink&quot; title=&quot;一次失败的优化&quot;&gt;&lt;/a&gt;一次失败的优化&lt;/h1&gt;
+    
+    </summary>
+    
+    
+      <category term="macos" scheme="https://liutos.github.io/tags/macos/"/>
+    
+      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
+    
+      <category term="ssh" scheme="https://liutos.github.io/tags/ssh/"/>
+    
+  </entry>
   
   <entry>
     <title>重构vertical-let，支持解构</title>
@@ -42,9 +71,9 @@
       <category term="实战CommonLisp" scheme="https://liutos.github.io/categories/%E5%AE%9E%E6%88%98CommonLisp/"/>
     
     
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
-    
       <category term="commonlisp" scheme="https://liutos.github.io/tags/commonlisp/"/>
+    
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="macro" scheme="https://liutos.github.io/tags/macro/"/>
     
@@ -113,9 +142,9 @@
       <category term="实战CommonLisp" scheme="https://liutos.github.io/categories/%E5%AE%9E%E6%88%98CommonLisp/"/>
     
     
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
-    
       <category term="commonlisp" scheme="https://liutos.github.io/tags/commonlisp/"/>
+    
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
   </entry>
   
@@ -194,9 +223,9 @@
     </summary>
     
     
-      <category term="总结" scheme="https://liutos.github.io/tags/%E6%80%BB%E7%BB%93/"/>
-    
       <category term="2019" scheme="https://liutos.github.io/tags/2019/"/>
+    
+      <category term="总结" scheme="https://liutos.github.io/tags/%E6%80%BB%E7%BB%93/"/>
     
   </entry>
   
@@ -308,11 +337,11 @@
     
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
-      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
-    
       <category term="vscode" scheme="https://liutos.github.io/tags/vscode/"/>
     
       <category term="对比" scheme="https://liutos.github.io/tags/%E5%AF%B9%E6%AF%94/"/>
+    
+      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
     
   </entry>
   
@@ -406,11 +435,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -442,11 +471,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -477,11 +506,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -544,11 +573,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -579,11 +608,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -616,11 +645,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
-    
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     
@@ -629,36 +658,6 @@
       <category term="汇编" scheme="https://liutos.github.io/tags/%E6%B1%87%E7%BC%96/"/>
     
       <category term="编译器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%AF%91%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>时序图绘制工具走马观花</title>
-    <link href="https://liutos.github.io/2019/06/18/%E6%97%B6%E5%BA%8F%E5%9B%BE%E7%BB%98%E5%88%B6%E5%B7%A5%E5%85%B7%E8%B5%B0%E9%A9%AC%E8%A7%82%E8%8A%B1/"/>
-    <id>https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/</id>
-    <published>2019-06-18T14:01:00.000Z</published>
-    <updated>2019-06-18T14:10:33.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="为什么我会需要绘制时序图"><a href="#为什么我会需要绘制时序图" class="headerlink" title="为什么我会需要绘制时序图"></a>为什么我会需要绘制时序图</h2><p>我司在做一些咋看之下比较复杂的需求的时候，都需要先写设计文档，不过我猜想这种规矩应该在很多公司都有才对，我并没有其它公司没有这种规矩的言外之意。然后呢，我个人比较习惯按照“从外到内”的方式来写设计文档，因此，在文档的开篇我总是会描述一下一个需求的全局视图，一般来说，就是用绘图的方式。对于一些复杂的活动需求里的流程，咋一看觉得会涉及到多个系统间的调用的时候，我就会选择画一幅时序图了。</p><p>需要事先说明的是，我没有正儿八经地系统学习过UML方面的内容，所以我画出来的图都只是一些不算很规范的野鸡时序图，当然了，我也不知道这世界上到底有没有规范的时序图画法。</p><p>为了画时序图，用过几款工具。它们的共同点，就是都是“语绘”的，也就是通过写代码的方式来描述所想要的图，然后让这些工具帮你把这张图给“画出来”。我个人更喜欢这种方式，而不是拖拖拉拉，不过这纯粹是个人喜好的问题而已。</p><h2 id="走马观花"><a href="#走马观花" class="headerlink" title="走马观花"></a>走马观花</h2><p><a href="http://www.websequencediagrams.com是我接触到的第一个“语绘”时序图的工具。打开它之后，就会看到它的实例代码和效果图了，截图如下" target="_blank" rel="noopener">www.websequencediagrams.com是我接触到的第一个“语绘”时序图的工具。打开它之后，就会看到它的实例代码和效果图了，截图如下</a></p><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/websequencediagrams%E9%A6%96%E9%A1%B5.png" alt=""></p><p>用这个网站的工具画出来的时序图会有一种【手绘】的感觉</p><p><a href="http://sdedit.sourceforge.net/index.html" target="_blank" rel="noopener"><code>sdedit</code></a>是我第二款使用的绘图工具，是一款用Java开发的本地工具，只需要编写好一个<code>.sd</code>文件，然后用下列的命令处理即可</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sdedit -t png -o a.png a.sd</span><br></pre></td></tr></table></figure><p><code>sdedit</code>绘制时序图的代码的语法跟WebSequenceDiagrams不同，在Emacs中似乎也没有找到别人写好的适合编辑<code>.sd</code>文件的主模式，后来我自己定义了一个简陋的主模式来用，如下</p><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> sdedit-highlights</span><br><span class="line">      '((<span class="string">"Actor\\|Node"</span> . font-lock-function-name-face)))</span><br><span class="line"></span><br><span class="line">(<span class="name">define-derived-mode</span> sdedit-mode fundamental-mode <span class="string">"sdedit"</span></span><br><span class="line">  <span class="string">"编辑.sd文件的主模式"</span></span><br><span class="line">  (<span class="name">setq</span> font-lock-defaults '(sdedit-highlights)))</span><br><span class="line"></span><br><span class="line"><span class="comment">;;; 代码是从下面这个网页给的例子改动来的</span></span><br><span class="line"><span class="comment">;;; https://www.emacswiki.org/emacs/CompileCommand</span></span><br><span class="line">(<span class="name">add-hook</span> 'sdedit-mode-hook</span><br><span class="line">          (<span class="name">lambda</span> ()</span><br><span class="line">            (<span class="name">unless</span> (<span class="name">file-exists-p</span> <span class="string">"Makefile"</span>)</span><br><span class="line">              (<span class="name">set</span> (<span class="name">make-local-variable</span> 'compile-command)</span><br><span class="line">                   (<span class="name">let*</span> ((<span class="name">buffer-name</span> (<span class="name">buffer-name</span>))</span><br><span class="line">                          (<span class="name">base-name</span> (<span class="name">car</span> (<span class="name">split-string</span> buffer-name <span class="string">"\\."</span>))))</span><br><span class="line">                     (<span class="name">format</span> <span class="string">"/usr/local/bin/sdedit -t png -o %s.png %s.sd"</span> base-name base-name))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">add-to-list</span> 'auto-mode-alist</span><br><span class="line">             '(<span class="string">"\\.sd$"</span> . sdedit-mode))</span><br></pre></td></tr></table></figure><p>勉勉强强可以接受</p><p>sequencediagram.org则是最近刚发掘到的一个不错的绘制时序图的在线工具。它的绘制语法跟WebSequenceDiagrams是一样的，并且它还有一个不错的教程。打开它的网站后，点击左侧的这个图标</p><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/sequencediagram.org%E7%9A%84%E6%95%99%E7%A8%8B%E5%85%A5%E5%8F%A3.png" alt=""></p><p>便可以看到详尽的语法教程。</p><p>sequencediagram.org绘制出来的时序图是这三个工具中最符合我的审美的，今后应当会成为我绘制时序图的主力工具。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          
-        
-      
-    
-    </summary>
-    
-    
-      <category term="sequencediagram" scheme="https://liutos.github.io/tags/sequencediagram/"/>
-    
-      <category term="时序图" scheme="https://liutos.github.io/tags/%E6%97%B6%E5%BA%8F%E5%9B%BE/"/>
-    
-      <category term="语绘" scheme="https://liutos.github.io/tags/%E8%AF%AD%E7%BB%98/"/>
     
   </entry>
   
