@@ -202,6 +202,143 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/01/02/2019年总结/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/02/2019年总结/" class="post-title-link" itemprop="url">2019年总结</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-02 22:06:19 / 修改时间：22:17:07" itemprop="dateCreated datePublished" datetime="2020-01-02T22:06:19+08:00">2020-01-02</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/01/02/2019年总结/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/02/2019年总结/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>9102年都已经过去好几天了，现在才来产出年终总结。</p>
+<h1 id="个人项目"><a href="#个人项目" class="headerlink" title="个人项目"></a>个人项目</h1><h2 id="cuckoo——定时提醒工具"><a href="#cuckoo——定时提醒工具" class="headerlink" title="cuckoo——定时提醒工具"></a>cuckoo——定时提醒工具</h2><p>在<a href="https://liutos.github.io/2018/12/29/2018%E5%B9%B4%E5%BA%A6%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/">18年的总结</a>中，我提到自己开发了一个名为<code>cuckoo</code>的工具，用来代替macOS的提醒事项、日历，以及由crontab调用的shell脚本。这个目标在19年得以实现，<code>cuckoo</code>已经完全取代了它们。</p>
+<p><code>cuckoo</code>实现了以下功能：</p>
+<ol>
+<li>创建一次性和周期性的提醒。<code>cuckoo</code>甚至可以在正确的二月最后一天弹出提醒——不管是平年还是闰年；</li>
+<li>利用<a href="https://github.com/vjeantet/alerter" target="_blank" rel="noopener"><code>alerter</code></a>，<code>cuckoo</code>可以在提醒弹出后推迟它（5分钟、10分钟），或推迟到指定的时刻；</li>
+<li>利用<a href="http://sc.ftqq.com/3.version" target="_blank" rel="noopener">Server酱</a>，<code>cuckoo</code>可以把提醒以微信消息推给手机；</li>
+<li>利用<a href="https://www.controlplaneapp.com/" target="_blank" rel="noopener"><code>ControlPlane</code></a>，实现按场景提醒——比如10点钟若在公司就提醒自己开晨会，若在家则绝不弹出。</li>
+</ol>
+<p>我还提供了给Emacs用的minor mode和Alfred Workflow，以提高易用性：</p>
+<ol>
+<li>在Emacs的org-mode中启用这个minor mode后，只需要按下<code>C-c r</code>便可为光标所在的条目创建提醒；</li>
+<li>一个条目切换至<code>DONE</code>或<code>CANCELLED</code>状态时，也会自动更改<code>cuckoo</code>中任务的状态（感兴趣的读者可以移步<a href="http://liutos.github.io/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/">之前的文章</a>）；</li>
+<li>Alfred Workflow便于创建一次性提醒——比如提醒自己在25分钟后打开支付宝的蚂蚁庄园看看有没有鸡贼。</li>
+</ol>
+<h2 id="wa——Alfred-Workflow脚本"><a href="#wa——Alfred-Workflow脚本" class="headerlink" title="wa——Alfred Workflow脚本"></a>wa——Alfred Workflow脚本</h2><p>在18年入手MBP后不久，我便入手了<a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>，并购买了<a href="https://www.alfredapp.com/powerpack/" target="_blank" rel="noopener">Powerpack</a>。平均每天使用Alfred 110次，大多是Snippets（auto expansion真香）、Clipboard（临时存储文字和图片的绝佳位置）、Workflow。常用的Workflow都是我自己开发的：</p>
+<ol>
+<li><code>unit</code>用于快速输入不同时间长度的秒数的，例如输入6天的秒数<code>6 * 24 * 60 * 60 * 1000</code>；</li>
+<li><code>upload</code>用于上传图片到GitHub，把GitHub当图床用（感兴趣的读者可以移步这篇<a href="https://liutos.github.io/2018/12/07/%E6%8A%8AGitHub%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A/">文章</a>）；</li>
+<li><code>gt</code>用于获取指定日期的UNIX时间戳、<code>int</code>用于获取一些预设的时间戳（例如“昨天0点”）；</li>
+<li><code>yl</code>用于精确设定macOS的音量；</li>
+<li><code>bqb</code>用于斗图（感兴趣的读者可以移步<a href="https://liutos.github.io/2019/12/16/%E8%AE%A9%E6%96%97%E5%9B%BE%E8%B5%A2%E5%9C%A8%E8%B5%B7%E8%B7%91%E7%BA%BF%E4%B8%8A/">这里</a>）。</li>
+</ol>
+<p>这些脚本都收集在名为wa的私有仓库中。由于需求比较稳定，这个仓库的迭代不多。</p>
+<h2 id="jjcc——将LISP语言编译为x64汇编"><a href="#jjcc——将LISP语言编译为x64汇编" class="headerlink" title="jjcc——将LISP语言编译为x64汇编"></a>jjcc——将LISP语言编译为x64汇编</h2><p>不害臊地说，<code>jjcc</code>是一个用Common Lisp写就的编译器，运行在<a href="https://common-lisp.net/project/slime/" target="_blank" rel="noopener">SLIME</a>中，如果投喂它某种LISP方言代码，就可以编译出跑在macOS上的x64汇编代码。这是我的第一款生成汇编指令的编译器，为此还恶补了不少汇编语言知识，尤其是x64的calling convention。这款编译器的开发过程写成了文章发表在博客和知乎上，感兴趣的读者可以移步这个<a href="https://zhuanlan.zhihu.com/lessmore" target="_blank" rel="noopener">专栏</a>。</p>
+<p>在完成了蹩脚的自定义函数特性后，我读了《An Incremental Approach to Compiler Construction》这篇论文，它循序渐进地开发一个Scheme语言到x86汇编的编译器，并且阶段划分得更好，后来我也按照论文的思路重新实现了一遍。</p>
+<h2 id="savemoney——未完待续的RescueTime代替品"><a href="#savemoney——未完待续的RescueTime代替品" class="headerlink" title="savemoney——未完待续的RescueTime代替品"></a>savemoney——未完待续的RescueTime代替品</h2><p>19年10月份时RescueTime Premium到期，由于太鸡肋了便不再续费。我仍然有time-tracking的需求，于是打算自己动手写一个代替品。皇天不负有心人，我找到了<a href="https://www.npmjs.com/package/active-win" target="_blank" rel="noopener"><code>active-win</code></a>这个库，它可以获取当前有焦点的窗口的元信息。基于这个库我写了两个脚本：</p>
+<ol>
+<li><code>savemoney.js</code>，每隔一秒调用<code>active-win</code>获取当前激活窗口的元信息，然后写入到Redis中；</li>
+<li><code>accounting.js</code>，不停地从Redis中取出数据，运算后写入到MySQL中。</li>
+</ol>
+<p>目前仅仅是将数据记录在了MySQL中，没有做报表和统计。这两个脚本通过Launchd在每次登录后自动运行。</p>
+<h1 id="写作"><a href="#写作" class="headerlink" title="写作"></a>写作</h1><p>19年在GitHub博客一共发表了28篇博文，数量差强人意，质量亟待提高。在读了<a href="https://maxoxo.me/pyramid-theory/" target="_blank" rel="noopener">利用金字塔原理写出好文章</a>后，我逐渐改进自己的写作方法，以期写得更有条理。</p>
+<p>除了GitHub博客和SegmentFault，我还在知乎上发表了一些文章，大多是关于jjcc编译器的。刚才我说文章的质量亟待提高，如果你看过jjcc编译器系列的文章的话，一定会很同意我的观点。</p>
+<p>博客和SegmentFault的受众很小，于是我又开通了微信订阅号，希望可以在技术圈子里更多的展示自己——有没有值得展示的内容另说。在订阅号上发表文章多了一种无形的压力，毕竟这些内容更容易被同学、同事、同行看到（前提是人家乐意看）。万一写的很糟糕，可就糗大了。目前订阅号关注者寥寥，有兴趣的可以微信搜索“小打小闹写点bug”关注。</p>
+<h1 id="学习、进修"><a href="#学习、进修" class="headerlink" title="学习、进修"></a>学习、进修</h1><p>19年读完的书不多：</p>
+<ol>
+<li>《MongoDB in Action》，没什么太大的收获；</li>
+<li>《High Performance MySQL》，看过后确实有些帮助，切实根据书中的指导调优过生产环境的MySQL；</li>
+<li>《Algorithms》，光看没练手；</li>
+<li>《Linux Shell Scripting Cookbook》，看着看着幡然醒悟这东西只要用到的时候查阅就足够了，遂弃之。</li>
+</ol>
+<p>还有许多在读经典书籍，如《Clean Architecture》、《重构》。刚开始我会在上下班搭地铁时读这些书，后来将看书时间固定在了每天下午一点至一点半。这些在读的书像一条队列，我每天会读队头的书，然后放到队尾。这样一来，每天都在涉猎不同领域的内容。</p>
+<p>在18年9月，我闭门造车地整理了一份Web后端软件工程师的技能树，再据此来寻找要读的书。例如，上述的《MongoDB in Action》是依据“后端知识/文档数据库/MongoDB”找的，《Linux Shell Scripting Cookbook》是依据“后端知识/命令行操作”找的。技能树整理得好不好暂且按下不表，但渐渐地我忘记了看书的初衷，成了“为看而看”。看似每天中午都在学习，实际上由于目的性不强，收获不大。由于每天读不同类型的书，同一个主题的学习过程也变得支离破碎。这个学习方法已经到了迫切需要优化的地步。</p>
+<h1 id="macOS更新换代——AppleScript来袭、Chrome上位"><a href="#macOS更新换代——AppleScript来袭、Chrome上位" class="headerlink" title="macOS更新换代——AppleScript来袭、Chrome上位"></a>macOS更新换代——AppleScript来袭、Chrome上位</h1><p>19年10月升级到macOS Catalina，然后问题便接踵而至。首当其冲的是<code>alerter</code>和<code>terminal-notifier</code>没法用了，无法在右上角弹出提醒。一番折腾后不见起色，只好先用AppleScript代替，让<code>cuckoo</code>可以弹出提醒。AppleScript的<code>display notification</code>功能远不及<code>alerter</code>那么丰富，聊胜于无吧。</p>
+<p>Firefox也开始闹别扭。只要打开Firefox稍微用两下，就会有一个名为FirefoxWebCP Extension的进程疯狂地使用CPU，Firefox内的各标签页也纷纷失灵转圈，几天下来都是如此。没办法，只好起用Chrome。稍微磨合后发现Chrome其实挺不错，各方面都今非昔比。以前之所以一直坚守在Firefox的阵营，主要是因为：</p>
+<ol>
+<li>Firefox的Pocket插件更好用——早年间不需要打开Pocket的网站即可查看自己的列表，不过自从Firefox集成Pocket后，这个优势已经荡然无存；</li>
+<li>Firefox的Vimperator更好用——这也一样，Vimperator逝者已逝，继承者Vim vixen和Chrome的Vimium大同小异；</li>
+<li>Firefox的地址栏搜索浏览历史更好用，这一点迄今未被Chrome超越——Chrome的地址栏要么搜不到，要么必须输入更多关键词，然后还是搜不到。</li>
+</ol>
+<p>希望Mozilla在2020年可以修复这个问题，让我重回Firefox的怀抱。</p>
+<h1 id="CL虐我千万遍，我待CL如初见"><a href="#CL虐我千万遍，我待CL如初见" class="headerlink" title="CL虐我千万遍，我待CL如初见"></a>CL虐我千万遍，我待CL如初见</h1><p>2019年的Common Lisp依然让人哀其不幸怒其不争，我也依然痴迷于这门古怪的语言。但痴迷不能当饭吃，要将CL投入到实际应用实在太难。且不说<a href="https://www.quicklisp.org/beta/" target="_blank" rel="noopener">Quicklisp</a>上库的数量远不及PyPI和NPM，质量也令人抓狂。这不，都9102年了，访问一个返回JSON数据的HTTP接口，还得先用<a href="https://edicl.github.io/drakma/" target="_blank" rel="noopener"><code>drakma</code></a>发出请求（也许不支持HTTP/2），再用<code>flexi-streams</code>将字节数组转换为UTF-8编码的字符串，再用<code>cl-json</code>解析一番。拿到一个列表对象后，再用<code>car</code>、<code>cdr</code>、<code>assoc</code>一顿操作猛如虎，才能拿到需要的数据。</p>
+<p>2020年，MAKE CL GREAT AGAIN！</p>
+<h1 id="记账"><a href="#记账" class="headerlink" title="记账"></a>记账</h1><p>在年中的时候，萌生了换记账软件的想法，因为挖财用起来越来越不爽了，而且整天记流水账也没什么收获。一番摸索后，我决定尝试一下复式记账法，并选择了GNU Cash——早年间用过一次，但没看入门手册就开始用，根本玩不转。这一次倒是读了<a href="https://www.gnucash.org/viewdoc.phtml?rev=3&amp;lang=C&amp;doc=guide" target="_blank" rel="noopener">手册</a>，但GNU Cash的UI和操作方式还是无法让我心动；之后知道了<a href="http://furius.ca/beancount/" target="_blank" rel="noopener">beancount</a>，却无法在我的系统中顺利运行；最终我选择了<a href="https://www.ledger-cli.org/" target="_blank" rel="noopener">ledger</a>，它是一个命令行程序，不负责记录，只负责读取手打显诚意的交易明细，然后产出报表。Emacs有一个<a href="https://github.com/ledger/ledger-mode" target="_blank" rel="noopener">ledger-mode</a>插件，两者配合用来记账超痛快。</p>
+<h1 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h1><p>在2020年我希望至少能完成：</p>
+<ol>
+<li>发布<code>cuckoo</code>；</li>
+<li>发布<code>wa</code>；</li>
+<li>开发一个<code>alerter</code>的代替品；</li>
+<li>写更多的博文，让微信订阅号的粉丝涨到130；</li>
+<li>给CL写一些库解决一些常见的需求</li>
+</ol>
+<p>最后</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2020%E5%B9%B4%E4%BC%9A%E5%92%8C2019%E5%B9%B4%E4%B8%80%E6%A0%B7%E7%83%82.jpeg" alt=""></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1212,90 +1349,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/" class="post-title-link" itemprop="url">一个有用的org-agenda-custom-commands的例子</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-08-11 22:37:28 / 修改时间：22:38:59" itemprop="dateCreated datePublished" datetime="2019-08-11T22:37:28+08:00">2019-08-11</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/11/一个有用的org-agenda-custom-commands的例子/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>好久没有写了，文章的开头，照例还是要吹吹水的。</p>
-<p>自从更新了基于org-mode的待办事项的管理模式后，感觉整个人都日益神清气爽起来。究其原因，大概是因为现在处理inbox.org和安排第二天的行程的时候，有一个相对可行的操作方法可以参考了，所以每次处理这两件事情的时候，也就没有那么纠结了。同时，还因为采取了一种尽量goal-oriented的TODO管理方法，最大程度上杜绝了一些不必要的TODO被收集起来，从而也减轻了内心的焦虑感。</p>
-<p>言归正传，这篇文章是要讲一个我自定义的org-mode的Agenda视图的command的。这条命令是下面这样子的</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> org-agenda-custom-commands</span><br><span class="line">      '((<span class="string">"f"</span> <span class="string">"查看TODO条目（按创建时间排序）"</span> todo <span class="string">"TODO"</span></span><br><span class="line">         ((org-agenda-sorting-strategy '(priority-down time-up))))))</span><br></pre></td></tr></table></figure>
-<p>俗话说的好，要检验自己是不是懂得某个东西，只要看看自己能不能把这个东西给别人讲清楚就可以了。如果讲清楚了，没有哪里需要emmmm的地方，那么就可以认为这个东西基本上自己是真的懂得了。</p>
-<p>那么<code>org-agenda-custom-commands</code>是干嘛用的呢。官方文档的链接在这里：<a href="https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html" target="_blank" rel="noopener">https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html</a> ——哎哟喂，其实如果你们身处在Emacs之中来看这篇文章的话，只要按下<code>C-h v</code>，然后在minibuffer中输入<code>org-agenda-custom-commands</code>的话，也就可以看到关于这个变量的说明了啦。不过上面这个文档的好处是它有附赠一些例子。</p>
-<p>总而言之，<code>org-agenda-custom-commands</code>是一个变量，通过给这个变量赋值，可以在<code>org-mode</code>的Agenda视图中，添加一些自定义的功能及对应的快捷键。例如，如果在Emacs中求值我上面所给的Elisp代码，然后按下<code>C-c a</code>，便会看到类似于下面这样的提示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84Agenda%E8%A7%86%E5%9B%BE%E6%8F%90%E9%86%92%E4%BF%A1%E6%81%AF.png" alt=""></p>
-<p>这时候，如果按下<code>f</code>键，Emacs就会按照上面代码中描述的那样找出所有关键字为<code>TODO</code>的条目，然后按照【先优先级降序，然后时间戳升序】的方式来排列它们。在我的电脑上的效果如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E7%9A%84%E6%95%88%E6%9E%9C.png" alt=""></p>
-<p>可以看到，首先出现的条目是标注为最高的A优先级的两条，然后是在heading内容的开头含有时间戳的条目。</p>
-<p>对我来说，这样的一个好处是可以将未处理过的TODO按照时间顺序列出来，从而避免了所有的TODO条目先是按照文件的名称集中起来，然后又按照它们在文件中的顺序从上往下地排列起来。毕竟文件内的TODO都是聚合在各自不同的更高级的heading之下的，它们之间的上下关系体现不出什么东西。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1366,7 +1419,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">65</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
