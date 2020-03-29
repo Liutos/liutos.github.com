@@ -47,20 +47,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。  序言因为觉得Common Lisp原生的let操作符在许多时候不够好用，我编写了vertical-let。（详情可以参见这篇文章）比起原生的let，vertical-let的优势在于：  有">
-<meta name="keywords" content="lisp,commonlisp,macro,宏">
+  <meta name="description" content="“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。  半年前我在这篇文章中展示了在Emacs中查阅笔记的效果——用emacs-request请求ElasticSearch查询关键字、基于helm以下拉菜单的方式展示查询结果的标题（即问题），最后打开浏览器查看笔记内容。稍加使用就发现一些不足之处">
+<meta name="keywords" content="emacs,elisp,实战Elisp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="重构vertical-let，支持解构">
-<meta property="og:url" content="https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/index.html">
+<meta property="og:title" content="改良在Emacs中浏览笔记的方式">
+<meta property="og:url" content="https://liutos.github.io/2020/03/29/改良在Emacs中浏览笔记的方式/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。  序言因为觉得Common Lisp原生的let操作符在许多时候不够好用，我编写了vertical-let。（详情可以参见这篇文章）比起原生的let，vertical-let的优势在于：  有">
+<meta property="og:description" content="“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。  半年前我在这篇文章中展示了在Emacs中查阅笔记的效果——用emacs-request请求ElasticSearch查询关键字、基于helm以下拉菜单的方式展示查询结果的标题（即问题），最后打开浏览器查看笔记内容。稍加使用就发现一些不足之处">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-02-12T07:41:42.481Z">
+<meta property="og:updated_time" content="2020-03-29T09:00:07.194Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="重构vertical-let，支持解构">
-<meta name="twitter:description" content="《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。  序言因为觉得Common Lisp原生的let操作符在许多时候不够好用，我编写了vertical-let。（详情可以参见这篇文章）比起原生的let，vertical-let的优势在于：  有">
+<meta name="twitter:title" content="改良在Emacs中浏览笔记的方式">
+<meta name="twitter:description" content="“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。  半年前我在这篇文章中展示了在Emacs中查阅笔记的效果——用emacs-request请求ElasticSearch查询关键字、基于helm以下拉菜单的方式展示查询结果的标题（即问题），最后打开浏览器查看笔记内容。稍加使用就发现一些不足之处">
 
-<link rel="canonical" href="https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/">
+<link rel="canonical" href="https://liutos.github.io/2020/03/29/改良在Emacs中浏览笔记的方式/">
 
 
 <script id="page-configurations">
@@ -72,7 +72,7 @@
   };
 </script>
 
-  <title>重构vertical-let，支持解构 | 小打小闹写点bug</title>
+  <title>改良在Emacs中浏览笔记的方式 | 小打小闹写点bug</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -203,7 +203,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/03/29/改良在Emacs中浏览笔记的方式/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -216,7 +216,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          重构vertical-let，支持解构
+          改良在Emacs中浏览笔记的方式
         </h1>
 
         <div class="post-meta">
@@ -227,7 +227,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-02-12 15:36:46 / 修改时间：15:41:42" itemprop="dateCreated datePublished" datetime="2020-02-12T15:36:46+08:00">2020-02-12</time>
+              <time title="创建时间：2020-03-29 16:56:39 / 修改时间：17:00:07" itemprop="dateCreated datePublished" datetime="2020-03-29T16:56:39+08:00">2020-03-29</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -235,8 +235,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/实战CommonLisp/" itemprop="url" rel="index">
-                    <span itemprop="name">实战CommonLisp</span>
+                  <a href="/categories/实战Elisp/" itemprop="url" rel="index">
+                    <span itemprop="name">实战Elisp</span>
                   </a>
                 </span>
             </span>
@@ -250,8 +250,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2020/02/12/重构vertical-let，支持解构/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/02/12/重构vertical-let，支持解构/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2020/03/29/改良在Emacs中浏览笔记的方式/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/29/改良在Emacs中浏览笔记的方式/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -267,47 +267,32 @@
 
       
         <blockquote>
-<p>《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。</p>
+<p>“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。</p>
 </blockquote>
-<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>因为觉得Common Lisp原生的<code>let</code>操作符在许多时候不够好用，我编写了<code>vertical-let</code>。（详情可以参见这篇<a href="https://liutos.github.io/2019/03/13/%E6%9B%B4%E8%BF%87%E7%A8%8B%E5%BC%8F%E7%9A%84let%E2%80%94%E2%80%94vertical-let/">文章</a>）比起原生的<code>let</code>，<code>vertical-let</code>的优势在于：</p>
+<p>半年前我在<a href="https://liutos.github.io/2019/10/20/%E5%9C%A8Emacs%E4%B8%AD%E6%90%AD%E5%BB%BA%E7%AC%94%E8%AE%B0%E6%9F%A5%E9%98%85%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%B0%9D%E8%AF%95/">这篇文章</a>中展示了在Emacs中查阅笔记的效果——用<a href="https://github.com/tkf/emacs-request" target="_blank" rel="noopener">emacs-request</a>请求ElasticSearch查询关键字、基于<a href="https://github.com/emacs-helm/helm" target="_blank" rel="noopener">helm</a>以下拉菜单的方式展示查询结果的标题（即问题），最后打开浏览器查看笔记内容。稍加使用就发现一些不足之处：</p>
 <ol>
-<li>有效减少代码的缩进——尤其是嵌套使用<code>let</code>的时候；</li>
-<li>方便增减binding，对其余代码的布局没有影响。</li>
+<li>需要离开Emacs打开浏览器。我更希望能在Emacs中查看；</li>
+<li>ES的响应内容为JSON，要快速地辨认出<code>question</code>和<code>answer</code>字段比较困难；</li>
+<li>一个问题的答案往往是多行的，但在浏览器中<code>answer</code>字段是以一行的形式展示的，不利于阅读。</li>
 </ol>
-<p>除了<code>let</code>，<code>destructuring-bind</code>也是一个常用的声明binding的语法。但如果用在<code>vertical-let</code>中的话，会打乱原有的代码布局。比如原本的代码为</p>
-<a id="more"></a>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line"> <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line"> <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line"> (<span class="name">+</span> a b))</span><br></pre></td></tr></table></figure>
-<p>如果加入<code>destructuring-bind</code>，就会导致从它之后的代码都增加了一级缩进</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line"> <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line"> <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line"> (<span class="name">destructuring-bind</span> (<span class="name">c</span>) '(<span class="number">3</span>)</span><br><span class="line">   (<span class="name">+</span> a b c))) <span class="comment">; &lt;- 这一行开始多了一级缩进，之后的代码全都受到影响</span></span><br></pre></td></tr></table></figure>
-<p>我更希望能写成下面这样</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line"> <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line"> <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line"> <span class="symbol">:with</span> (<span class="name">c</span>) = '(<span class="number">3</span>)</span><br><span class="line"> (<span class="name">+</span> a b c))</span><br></pre></td></tr></table></figure>
-<p>然而<code>vertical-let</code>目前的实现方式很难支持这种新语法。</p>
-<p>在<code>vertical-let</code>内部，将参数分成了“binding”和“form”两种类型，压入到同一个栈中，再逐一弹出处理。如果要支持展开成<code>destructuring-bind</code>，那么：</p>
+<p>为了解决这些问题，我实现了一种新的查看笔记内容的方式。</p>
+<h1 id="改良后的效果"><a href="#改良后的效果" class="headerlink" title="改良后的效果"></a>改良后的效果</h1><a id="more"></a>
+<video controls><br>  <source src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200329/改良后的笔记查阅方式.mp4" type="video/mp4"><br></video>
+
+<h1 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h1><p>我的目标是：</p>
 <ol>
-<li>如果弹出的是“binding”，就需要决定是将其与旧的合并（都是<code>let</code>的binding的情况），还是先处理已有的变量<code>bindings</code>和<code>forms</code>中的内容（这里又涉及到是组成<code>let</code>还是组成<code>destructuring-bind</code>）；</li>
-<li>如果弹出的是“form”，也要考虑与上述场景类似的情况。</li>
+<li>在不脱离Emacs的情况下浏览笔记内容；</li>
+<li>提供org-mode的语法高亮。</li>
 </ol>
-<p>可想而知，这会让<code>vertical-let</code>的代码膨胀得厉害，并且显得很混乱。因此，必须先优化一番<code>vertical-let</code>。</p>
-<h1 id="重构vertical-let"><a href="#重构vertical-let" class="headerlink" title="重构vertical-let"></a>重构vertical-let</h1><p>新的思路是：</p>
+<p>为此，先用被选中笔记的<code>_id</code>请求ES，取回完整的JSON。接着，将<code>_source</code>中的<code>question</code>和<code>answer</code>字段的内容拼接在一起（以<code>\n</code>作为分隔符）。最后，在Emacs中新建一个buffer、启用org-mode、插入拼接后的内容，并设置该buffer为只读。大功告成！</p>
+<p>完整的代码如下</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; 调用ElasticSearch查询笔记</span></span><br><span class="line">(<span class="name">require</span> 'request)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq (<span class="name">query</span>)</span><br><span class="line">  <span class="string">"向ElasticSearch查询QUERY匹配的笔记"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">response</span>))</span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:9200/faq/_search"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">encode-coding-string</span></span><br><span class="line">            (<span class="name">json-encode</span></span><br><span class="line">             (<span class="name">list</span></span><br><span class="line">              (<span class="name">cons</span> <span class="string">"query"</span> (<span class="name">list</span></span><br><span class="line">                             (<span class="name">cons</span> <span class="string">"multi_match"</span> (<span class="name">list</span></span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"fields"</span> (<span class="name">list</span> <span class="string">"answer"</span> <span class="string">"question"</span>))</span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"query"</span> query)))))))</span><br><span class="line">            'utf-8)</span><br><span class="line">     <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">     <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">setq</span> data (<span class="name">decode-coding-string</span> data 'utf-8))</span><br><span class="line">                 (<span class="name">setq</span> response (<span class="name">json-read-from-string</span> data))))</span><br><span class="line">     <span class="symbol">:sync</span> <span class="literal">t</span>)</span><br><span class="line">    response))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> make-faq-candidates (<span class="name">response</span>)</span><br><span class="line">  <span class="string">"将查询ElasticSearch的结果构造为helm可以识别的candidates格式"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">hits</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits response))))))</span><br><span class="line">    (<span class="name">mapcar</span> (<span class="name">lambda</span> (<span class="name">doc</span>)</span><br><span class="line">              (<span class="name">let</span> ((<span class="name">_source</span> (<span class="name">cdr</span> (<span class="name">assoc</span> '_source doc))))</span><br><span class="line">                (<span class="name">cons</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'question _source))</span><br><span class="line">                      <span class="comment">;; (cdr (assoc 'answer (assoc '_source doc)))</span></span><br><span class="line">                      (<span class="name">cdr</span> (<span class="name">assoc</span> '_id doc)))))</span><br><span class="line">            hits)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defvar</span> faq-query <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq-candidates ()</span><br><span class="line">  (<span class="name">make-faq-candidates</span> (<span class="name">faq</span> faq-query)))</span><br><span class="line"></span><br><span class="line"><span class="comment">;;; 创建新的buffer并将ElasticSearch的内容展示在其中</span></span><br><span class="line">(<span class="name">defun</span> show-faq (<span class="name">text</span>)</span><br><span class="line">  <span class="comment">;; 创建一个buffer，显示它并选中这个窗口</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">buffer</span> (<span class="name">get-buffer-create</span> <span class="string">"*FAQ*"</span>)))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">window</span> (<span class="name">display-buffer</span> buffer)))</span><br><span class="line">      (<span class="name">select-window</span> window)</span><br><span class="line">      <span class="comment">;; 用新的内容覆盖原来的内容</span></span><br><span class="line">      (<span class="name">setq</span> inhibit-read-only <span class="literal">t</span>)</span><br><span class="line">      (<span class="name">org-mode</span>)</span><br><span class="line">      (<span class="name">erase-buffer</span>)</span><br><span class="line">      (<span class="name">insert</span> text)</span><br><span class="line">      (<span class="name">read-only-mode</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let (response</span><br><span class="line">                          (url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (message <span class="string">"url is %s"</span> url)</span><br><span class="line">                      (request</span><br><span class="line">                       url</span><br><span class="line">                       :parser 'buffer-string</span><br><span class="line">                       :success (cl-function</span><br><span class="line">                                 (lambda (&amp;key data &amp;allow-other-keys)</span><br><span class="line">                                   (setq data (decode-coding-string data 'utf-8))</span><br><span class="line">                                   (setq response (json-read-from-string data))))</span><br><span class="line">                       :sync <span class="literal">t</span>)</span><br><span class="line">                      ;; 从文档中提取出问题和答案，拼装成原本在.org文件中的模样</span><br><span class="line">                      (let ((answer (cdr (assoc 'answer (assoc '_source response))))</span><br><span class="line">                            (question (cdr (assoc 'question (assoc '_source response)))))</span><br><span class="line">                        (show-faq</span><br><span class="line">                         (concat question <span class="string">"\n"</span> answer))))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> lt-ask ()</span><br><span class="line">  <span class="string">"交互式地从minibuffer中读取笔记的关键词并展示选项"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">content</span> (<span class="name">read-from-minibuffer</span> <span class="string">"笔记关键词："</span>)))</span><br><span class="line">    (<span class="name">setq</span> faq-query content)</span><br><span class="line">    (<span class="name">helm</span> <span class="symbol">:sources</span> '(faq-helm-sources))))</span><br></pre></td></tr></table></figure>
+<p>与之前版本的差异主要在于：</p>
 <ol>
-<li>从尾部开始遍历<code>vertical-let</code>的参数列表；</li>
-<li>如果遍历到的元素不是符号<code>:with</code>，就认为是一个可以求值的表达式，将其压栈。显然，这个栈的元素的顺序，与<code>vertical-let</code>的参数列表的顺序是一致的，可以直接用于合成<code>let</code>表达式；</li>
-<li>如果遍历到的元素是符号<code>:with</code>，就从栈中弹出三个元素（它们依次是变量名、等号、待求值的表达式）；</li>
-<li>将变量名、待求值的表达式，以及栈内所有元素组成只有一个binding的的<code>let</code>表达式，重新压栈。</li>
+<li>变量<code>faq-helm-sources</code>中的<code>action</code>部分多了很多内容，主要是请求ES和拼接字段；</li>
+<li>新增了<code>show-faq</code>函数用于显示问题及其答案。</li>
 </ol>
-<p>当参数列表遍历完后，再看看这个栈：</p>
-<ol>
-<li>如果只有一个元素，就是<code>vertical-let</code>的展开结果；</li>
-<li>否则，将它们作为<code>progn</code>的参数，返回一个<code>progn</code>表达式。</li>
-</ol>
-<h1 id="支持destructuring-bind"><a href="#支持destructuring-bind" class="headerlink" title="支持destructuring-bind"></a>支持destructuring-bind</h1><p>在上面的算法中，遇到符号<code>:with</code>后只需要构造出<code>let</code>表达式即可。为了支持展开成<code>destructuring-bind</code>，需要根据栈顶元素类型来做不同处理：</p>
-<ol>
-<li>如果是<code>cons</code>，就展开为<code>destructuring-bind</code>——毕竟<code>destructuring-bind</code>是无法嵌套的；</li>
-<li>如果是<code>symbol</code>，就展开为<code>let</code>（如果栈只有一个元素并且是<code>let</code>表达式，那么可以将新的binding合并进去，减少展开后代码的缩进）。</li>
-</ol>
-<p>现在，可以完整地实现<code>vertical-let</code>了</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> vertical-let/aux (<span class="name">forms</span>)</span><br><span class="line">  <span class="string">"将FORMS转换为基于DESTRUCTURING-BIND和LET*实现的形式。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">将:WITH VAR = VAL . FORMS形式的代码转换为(LET* ((VAR VAL)) . FORMS)；</span></span><br><span class="line"><span class="string">将:WITH (VAR1 VAR2) = VAL . FORMS形式的代码转换为(DESTRUCTURING-BIND (VAR1 VAR2) VAL . FORMS)。"</span></span><br><span class="line">  (<span class="name">check-type</span> forms list)</span><br><span class="line">  (<span class="name">setf</span> forms (<span class="name">reverse</span> forms))</span><br><span class="line">  (<span class="name">let</span> (<span class="name">form</span></span><br><span class="line">        (<span class="name">stack</span> '()))</span><br><span class="line">    (<span class="name">block</span> <span class="literal">nil</span></span><br><span class="line">      (<span class="name">loop</span></span><br><span class="line">         (<span class="name">when</span> (<span class="name">null</span> forms)</span><br><span class="line">           (<span class="name">return-from</span> <span class="literal">nil</span>))</span><br><span class="line"></span><br><span class="line">         (<span class="name">setf</span> form (<span class="name">pop</span> forms))</span><br><span class="line">         (<span class="name">cond</span> ((<span class="name">eq</span> form <span class="symbol">:with</span>)</span><br><span class="line">                (<span class="name">let</span> ((<span class="name">place</span> (<span class="name">pop</span> stack)))</span><br><span class="line">                  <span class="comment">;; 下一个元素必须是一个名称为等号的符号</span></span><br><span class="line">                  (<span class="name">let</span> ((<span class="name">e</span> (<span class="name">pop</span> stack)))</span><br><span class="line">                    (<span class="name">assert</span> (<span class="name">symbolp</span> e))</span><br><span class="line">                    (<span class="name">assert</span> (<span class="name">string=</span> (<span class="name">symbol-name</span> e) <span class="string">"="</span>)))</span><br><span class="line">                  (<span class="name">let</span> ((<span class="name">val</span> (<span class="name">pop</span> stack)))</span><br><span class="line">                    (<span class="name">etypecase</span> place</span><br><span class="line">                      (<span class="name">cons</span></span><br><span class="line">                       <span class="comment">;; 展开为DESTRUCTURING-BIND</span></span><br><span class="line">                       (<span class="name">setf</span> stack `((destructuring-bind ,place ,val ,@stack))))</span><br><span class="line">                      (<span class="name">symbol</span></span><br><span class="line">                       <span class="comment">;; 如果STAKC中仅有一个LET*表达式就将新的绑定合并进去，否则创建新的LET*表达式</span></span><br><span class="line">                       (<span class="name">cond</span> ((<span class="name">and</span> (<span class="name">=</span> (<span class="name">length</span> stack) <span class="number">1</span>)</span><br><span class="line">                                   (<span class="name">consp</span> (<span class="name">car</span> stack))</span><br><span class="line">                                   (<span class="name">eq</span> (<span class="name">caar</span> stack) 'let*))</span><br><span class="line">                              (<span class="name">let*</span> ((<span class="name">form</span> (<span class="name">pop</span> stack))</span><br><span class="line">                                     (<span class="name">bindings</span> (<span class="name">second</span> form)))</span><br><span class="line">                                (<span class="name">setf</span> (<span class="name">second</span> form)</span><br><span class="line">                                      `((,place ,val) ,@bindings))</span><br><span class="line">                                (<span class="name">push</span> form stack)))</span><br><span class="line">                             (<span class="name">t</span></span><br><span class="line">                              (<span class="name">setf</span> stack `((let* ((,place ,val)) ,@stack))))))))</span><br><span class="line">                  ))</span><br><span class="line">               (<span class="name">t</span></span><br><span class="line">                (<span class="name">push</span> form stack)))))</span><br><span class="line">    </span><br><span class="line">    (<span class="name">if</span> (<span class="name">=</span> (<span class="name">length</span> stack) <span class="number">1</span>)</span><br><span class="line">        (<span class="name">car</span> stack)</span><br><span class="line">        `(progn ,@stack))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmacro</span> vertical-let* (<span class="name">&amp;body</span> body)</span><br><span class="line">  <span class="string">"不需要不停缩进的LET*"</span></span><br><span class="line">  (<span class="name">vertical-let/aux</span> body))</span><br></pre></td></tr></table></figure>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>除了<code>let</code>和<code>destructuring-bind</code>，Common Lisp还提供了名为<code>multiple-value-bind</code>的宏，用于捕捉从一个函数返回的多个值。如果又要修改<code>vertical-let</code>的话，多半就是为了支持它了吧。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>挺好奇各位读者朋友是怎么记笔记和看笔记的XD</p>
 
     </div>
 
@@ -346,7 +331,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/" title="重构vertical-let，支持解构">https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/</a>
+    <a href="https://liutos.github.io/2020/03/29/改良在Emacs中浏览笔记的方式/" title="改良在Emacs中浏览笔记的方式">https://liutos.github.io/2020/03/29/改良在Emacs中浏览笔记的方式/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -358,10 +343,9 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
-              <a href="/tags/commonlisp/" rel="tag"><i class="fa fa-tag"></i> commonlisp</a>
-              <a href="/tags/macro/" rel="tag"><i class="fa fa-tag"></i> macro</a>
-              <a href="/tags/宏/" rel="tag"><i class="fa fa-tag"></i> 宏</a>
+              <a href="/tags/emacs/" rel="tag"><i class="fa fa-tag"></i> emacs</a>
+              <a href="/tags/elisp/" rel="tag"><i class="fa fa-tag"></i> elisp</a>
+              <a href="/tags/实战Elisp/" rel="tag"><i class="fa fa-tag"></i> 实战Elisp</a>
           </div>
 
         
@@ -370,13 +354,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/11/提升条目为第一个孩子节点/" rel="prev" title="提升条目为第一个孩子节点">
-      <i class="fa fa-chevron-left"></i> 提升条目为第一个孩子节点
+    <a href="/2020/03/26/我是怎么把笔记导入ElasticSearch的/" rel="prev" title="我是怎么把笔记导入ElasticSearch的">
+      <i class="fa fa-chevron-left"></i> 我是怎么把笔记导入ElasticSearch的
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/02/19/免除频繁输入ssh密码的烦恼/" rel="next" title="免除频繁输入ssh密码的烦恼">
-      免除频繁输入ssh密码的烦恼 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -443,7 +424,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重构vertical-let"><span class="nav-number">2.</span> <span class="nav-text">重构vertical-let</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#支持destructuring-bind"><span class="nav-number">3.</span> <span class="nav-text">支持destructuring-bind</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#改良后的效果"><span class="nav-number">1.</span> <span class="nav-text">改良后的效果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现方法"><span class="nav-number">2.</span> <span class="nav-text">实现方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -615,9 +596,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/",
-            identifier: "2020/02/12/重构vertical-let，支持解构/",
-            title: "重构vertical-let，支持解构"
+            url: "https://liutos.github.io/2020/03/29/改良在Emacs中浏览笔记的方式/",
+            identifier: "2020/03/29/改良在Emacs中浏览笔记的方式/",
+            title: "改良在Emacs中浏览笔记的方式"
           }
         }
       });
