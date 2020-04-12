@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
@@ -10,10 +8,10 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+
 
 
 <script id="hexo-configurations">
@@ -46,7 +44,7 @@
   };
 </script>
 
-<script data-ad-client="ca-pub-4199841931601311" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="一个没事找事的例子当在Common Lisp中定义宏的时候，常常会使用到反引号（`）。比方说，我有这么一个函数1234(defun foobar ()  (+ 1 1)  (+ 2 3)  (+ 5 8)) 它被调用后会返回最后一个表达式的结果——13。如果我希望在第二个表达式计算后就把结果返回给外部的调用者的话，可以用return-from1234(defun foobar ()  (+ 1 1">
 <meta name="keywords" content="common lisp,macro,宏">
 <meta property="og:type" content="article">
@@ -74,7 +72,7 @@
 
   <title>编写嵌套反引号的宏 | 小打小闹写点bug</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
       if (CONFIG.hostname === location.hostname) {
         window.dataLayer = window.dataLayer || [];
@@ -112,13 +110,13 @@
   </style>
 </noscript>
 
-</head>
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"></noscript></head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
+<body itemscope="" itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
     <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-meta">
 
@@ -187,7 +185,7 @@
     <span>0%</span>
   </div>
 
-  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 
 
     <main class="main">
@@ -205,13 +203,13 @@
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/11/27/编写嵌套反引号的宏/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="小打小闹写点bug">
     </span>
       <header class="post-header">
@@ -261,29 +259,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="一个没事找事的例子"><a href="#一个没事找事的例子" class="headerlink" title="一个没事找事的例子"></a>一个没事找事的例子</h2><p>当在Common Lisp中定义宏的时候，常常会使用到反引号（`）。比方说，我有这么一个函数<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
-<p>它被调用后会返回最后一个表达式的结果——13。如果我希望在第二个表达式计算后就把结果返回给外部的调用者的话，可以用<code>return-from</code><br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">return-from</span> foobar (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
+        <h2 id="一个没事找事的例子"><a href="#一个没事找事的例子" class="headerlink" title="一个没事找事的例子"></a>一个没事找事的例子</h2><p>当在Common Lisp中定义宏的时候，常常会使用到反引号（`）。比方说，我有这么一个函数<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>它被调用后会返回最后一个表达式的结果——13。如果我希望在第二个表达式计算后就把结果返回给外部的调用者的话，可以用<code>return-from</code><br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">return-from</span> foobar (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></tbody></table></figure><p></p>
 <p>当然了，这属于没事找事，因为完全可以把最后两个表达式放到一个<code>prog1</code>（这也是没事找事），或者直接点，把最后一个表达式删掉来做到同样的效果——但如果是这样的话这篇东西就写不下去了，所以我偏要用<code>return-from</code>。</p>
-<p>还有一个更加没事找事的办法，就是用<code>macrolet</code>定义一个局部的宏来代替<code>return-from</code>——我很想把这个新的宏叫做<code>return</code>，但这样<a href="http://www.sbcl.org/" target="_blank" rel="noopener">SBCL</a>会揍我一顿，所以我只好把这个宏叫做<code>bye</code>（叫做<code>exit</code>也会被揍）<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">macrolet</span> ((<span class="name">bye</span> (<span class="name">&amp;optional</span> value)</span><br><span class="line">               `(return-from foobar ,value)))</span><br><span class="line">    (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">    (<span class="name">bye</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">    (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>)))</span><br></pre></td></tr></table></figure></p>
-<p>如果我有另一个叫做<code>foobaz</code>的函数<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">6</span>))</span><br></pre></td></tr></table></figure></p>
-<p>也想要拥有<code>bye</code>这种想来就来想走就走的能力的话，可以依葫芦画瓢地包含一个<code>macrolet</code><br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz ()</span><br><span class="line">  (<span class="name">macrolet</span> ((<span class="name">bye</span> (<span class="name">&amp;optional</span> value)</span><br><span class="line">               `(return-from foobaz ,value)))</span><br><span class="line">    (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br><span class="line">    (<span class="name">bye</span> (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>))</span><br><span class="line">    (<span class="name">+</span> <span class="number">5</span> <span class="number">6</span>)))</span><br></pre></td></tr></table></figure></p>
-<p>好了，现在我觉得每次都需要在函数体内粘贴一份<code>bye</code>的实现代码太麻烦了，想要减少这种重复劳作。于是乎，我打算写一个宏来帮我复制粘贴代码。既然要定义宏，那么首先应当定义这个宏的名字以及用法，姑且是这么用的吧<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">with-bye</span> foobar</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">bye</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
+<p>还有一个更加没事找事的办法，就是用<code>macrolet</code>定义一个局部的宏来代替<code>return-from</code>——我很想把这个新的宏叫做<code>return</code>，但这样<a href="http://www.sbcl.org/" target="_blank" rel="noopener">SBCL</a>会揍我一顿，所以我只好把这个宏叫做<code>bye</code>（叫做<code>exit</code>也会被揍）<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">macrolet</span> ((<span class="name">bye</span> (<span class="name">&amp;optional</span> value)</span><br><span class="line">               `(return-from foobar ,value)))</span><br><span class="line">    (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">    (<span class="name">bye</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">    (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>)))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>如果我有另一个叫做<code>foobaz</code>的函数<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">6</span>))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>也想要拥有<code>bye</code>这种想来就来想走就走的能力的话，可以依葫芦画瓢地包含一个<code>macrolet</code><br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz ()</span><br><span class="line">  (<span class="name">macrolet</span> ((<span class="name">bye</span> (<span class="name">&amp;optional</span> value)</span><br><span class="line">               `(return-from foobaz ,value)))</span><br><span class="line">    (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br><span class="line">    (<span class="name">bye</span> (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>))</span><br><span class="line">    (<span class="name">+</span> <span class="number">5</span> <span class="number">6</span>)))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>好了，现在我觉得每次都需要在函数体内粘贴一份<code>bye</code>的实现代码太麻烦了，想要减少这种重复劳作。于是乎，我打算写一个宏来帮我复制粘贴代码。既然要定义宏，那么首先应当定义这个宏的名字以及用法，姑且是这么用的吧<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">with-bye</span> foobar</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">bye</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></tbody></table></figure><p></p>
 <p><code>with-bye</code>这个宏需要能够展开成上面的手动编写的<code>foobar</code>中的函数体的代码形式，那么<code>with-bye</code>的定义中，就一定会含有<code>macrolet</code>的代码，同时也就含有了反引号——好了，现在要来处理嵌套的反引号了。</p>
-<p><a href="https://blog.csdn.net/xiaojianpitt/article/details/7747230" target="_blank" rel="noopener">这篇文章</a>有个不错的讲解，各位不妨先看看。现在，让我来机械化地操作一遍，给出<code>with-bye</code>的定义。首先，要确定生成的目标代码中，那一些部分是可变的。对于<code>with-bye</code>而言，<code>return-from</code>的第一个参数已经<code>macrolet</code>的函数体是可变的，那么不妨把这两部分先抽象为参数<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
-<p>但这样是不够的，因为<code>name</code>是一个在最外层绑定的，但它被放在了两层的反引号当中，如果它只有一个前缀的逗号，那么它就无法在外层的反引号求值的时候被替换为目标的<code>FOOBAR</code>符号。因此，需要在<code>,name</code>之前再添加一个反引号<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,,name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
-<p>如果你在Emacs中对上述的表达式进行求值，那么它吐出来的结果实际上是<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">MACROLET</span> ((<span class="name">BYE</span> (<span class="name">&amp;OPTIONAL</span> VALUE)</span><br><span class="line">             `(RETURN-FROM ,FOOBAR ,VALUE)))</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">BYE</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://blog.csdn.net/xiaojianpitt/article/details/7747230" target="_blank" rel="noopener">这篇文章</a>有个不错的讲解，各位不妨先看看。现在，让我来机械化地操作一遍，给出<code>with-bye</code>的定义。首先，要确定生成的目标代码中，那一些部分是可变的。对于<code>with-bye</code>而言，<code>return-from</code>的第一个参数已经<code>macrolet</code>的函数体是可变的，那么不妨把这两部分先抽象为参数<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>但这样是不够的，因为<code>name</code>是一个在最外层绑定的，但它被放在了两层的反引号当中，如果它只有一个前缀的逗号，那么它就无法在外层的反引号求值的时候被替换为目标的<code>FOOBAR</code>符号。因此，需要在<code>,name</code>之前再添加一个反引号<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,,name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>如果你在Emacs中对上述的表达式进行求值，那么它吐出来的结果实际上是<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">MACROLET</span> ((<span class="name">BYE</span> (<span class="name">&amp;OPTIONAL</span> VALUE)</span><br><span class="line">             `(RETURN-FROM ,FOOBAR ,VALUE)))</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">BYE</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></tbody></table></figure><p></p>
 <p>显然，这还是不对。如果生成了上面这样的代码，那么对于<code>bye</code>而言<code>FOOBAR</code>就是一个未绑定的符号了。之所以会这样，是因为</p>
 <ol>
 <li><code>name</code>在绑定的时候输入的是一个符号，并且</li>
 <li><code>name</code>被用在了嵌套的反引号内，它会被求值两次——第一次求值得到符号<code>foobar</code>，第二次则是<code>foobar</code>会被求值</li>
 </ol>
-<p>因此，为了对抗第二次的求值，需要给<code>,name</code>加上一个前缀的引号（‘），最终效果如下<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,',name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
-<p>所以<code>with-bye</code>的定义是这样的<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> with-bye (<span class="name">name</span> <span class="symbol">&amp;body</span> body)</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,',name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></table></figure></p>
+<p>因此，为了对抗第二次的求值，需要给<code>,name</code>加上一个前缀的引号（‘），最终效果如下<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,',name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>所以<code>with-bye</code>的定义是这样的<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> with-bye (<span class="name">name</span> <span class="symbol">&amp;body</span> body)</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,',name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></tbody></table></figure><p></p>
 <h2 id="机械化的操作方法"><a href="#机械化的操作方法" class="headerlink" title="机械化的操作方法"></a>机械化的操作方法</h2><p>我大言不惭地总结一下，刚才的操作步骤是这样的。首先，找出一段有规律的、需要被用宏来实现的目标代码；然后，识别其中的可变的代码，给这些可变的代码的位置起一个名字（例如上文中的<code>name</code>和<code>body</code>），将它们作为<code>let</code>表达式的绑定，把目标代码装进同一个<code>let</code>表达式中。此时，目标代码被加上了一层反引号，而根据每个名字出现的位置的不同，为它们适当地补充一个前缀的逗号；最后，如果在嵌套的反引号中出现的名字无法被求值多次——比如符号或者列表，那么还需要给它们在第一个逗号后面插入一个引号，避免被求值两次招致未绑定的错误。</p>
-<h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2><p>就用上面所引用的文章里的例子好了。有一天我觉得Common Lisp中一些常用的宏的名字实在是太长了想要精简一下——毕竟敲键盘也是会累的——假装没有自动补全的功能。我可能会定义下面这两个宏<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> d-bind (<span class="name">&amp;body</span> body)</span><br><span class="line">  `(destructuring-bind ,@body))</span><br><span class="line">(<span class="name">defmacro</span> mv-bind (<span class="name">&amp;body</span> body)</span><br><span class="line">  `(multiple-value-bind ,@body))</span><br></pre></td></tr></table></figure></p>
-<p>显然，这里的代码的写法出现了重复模式，不妨试用按照机械化的操作手法来提炼出一个宏。第一步，先识别出其中可变的内容。对于上面这个例子而言，变化的地方其实只有两个名字——新宏的名字（<code>d-bind</code>和<code>mv-bind</code>），以及旧宏的名字（<code>destructuring-bind</code>和<code>multiple-value-bind</code>）。第二步，给它们命名并剥离成<code>let</code>表达式的绑定，得到如下的代码<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">new-name</span> 'd-bind)</span><br><span class="line">      (<span class="name">old-name</span> 'destructuring-bind))</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,old-name ,@body)))</span><br></pre></td></tr></table></figure></p>
-<p>因为<code>old-name</code>处于嵌套的反引号中，但是它是由最外层的<code>let</code>定义的，所以应当添上一个前缀的逗号，得到<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">new-name</span> 'd-bind)</span><br><span class="line">      (<span class="name">old-name</span> 'destructuring-bind))</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,,old-name ,@body)))</span><br></pre></td></tr></table></figure></p>
-<p>最后，因为<code>old-name</code>绑定的是一个符号，不能被两次求值（第二次是在<code>defmacro</code>定义的新宏中展开，此时<code>old-name</code>已经被替换为了<code>destructuring-bind</code>，而它对于新宏而言是一个自由变量，并没有被绑定），所以需要有一个单引号来阻止第二次的求值——因为需要的就是符号<code>destructuring-bind</code>本身。所以，最终的代码为<br><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> define-abbreviation (<span class="name">new-name</span> old-name)</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,',old-name ,@body)))</span><br></pre></td></tr></table></figure></p>
+<h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2><p>就用上面所引用的文章里的例子好了。有一天我觉得Common Lisp中一些常用的宏的名字实在是太长了想要精简一下——毕竟敲键盘也是会累的——假装没有自动补全的功能。我可能会定义下面这两个宏<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> d-bind (<span class="name">&amp;body</span> body)</span><br><span class="line">  `(destructuring-bind ,@body))</span><br><span class="line">(<span class="name">defmacro</span> mv-bind (<span class="name">&amp;body</span> body)</span><br><span class="line">  `(multiple-value-bind ,@body))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>显然，这里的代码的写法出现了重复模式，不妨试用按照机械化的操作手法来提炼出一个宏。第一步，先识别出其中可变的内容。对于上面这个例子而言，变化的地方其实只有两个名字——新宏的名字（<code>d-bind</code>和<code>mv-bind</code>），以及旧宏的名字（<code>destructuring-bind</code>和<code>multiple-value-bind</code>）。第二步，给它们命名并剥离成<code>let</code>表达式的绑定，得到如下的代码<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">new-name</span> 'd-bind)</span><br><span class="line">      (<span class="name">old-name</span> 'destructuring-bind))</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,old-name ,@body)))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>因为<code>old-name</code>处于嵌套的反引号中，但是它是由最外层的<code>let</code>定义的，所以应当添上一个前缀的逗号，得到<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">new-name</span> 'd-bind)</span><br><span class="line">      (<span class="name">old-name</span> 'destructuring-bind))</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,,old-name ,@body)))</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>最后，因为<code>old-name</code>绑定的是一个符号，不能被两次求值（第二次是在<code>defmacro</code>定义的新宏中展开，此时<code>old-name</code>已经被替换为了<code>destructuring-bind</code>，而它对于新宏而言是一个自由变量，并没有被绑定），所以需要有一个单引号来阻止第二次的求值——因为需要的就是符号<code>destructuring-bind</code>本身。所以，最终的代码为<br></p><figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> define-abbreviation (<span class="name">new-name</span> old-name)</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,',old-name ,@body)))</span><br></pre></td></tr></tbody></table></figure><p></p>
 <p>试一下就可以确认这个<code>define-abbreviation</code>是能用的（笑</p>
 <h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>能够指导编写宏的、万能的、机械化的操作方法，我想应该是不存在的</p>
 
@@ -523,7 +521,7 @@
 
 <div class="copyright">
   
-  &copy; 
+  © 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
@@ -550,12 +548,12 @@
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
-<script src="/js/schemes/pisces.js"></script>
-<script src="/js/next-boot.js"></script>
+  
+  
+  
+
+
+
 
 
 
@@ -579,7 +577,12 @@
 
   
 
-<script>
+
+
+
+
+
+<script src="/bundle.js"></script><script>
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -588,8 +591,8 @@
   }
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
-</script>
-<script>
+;
+
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
       DISQUS.reset({
@@ -608,7 +611,5 @@
       (d.head || d.body).appendChild(s);
     }
   });
-</script>
-
-<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
-</html>
+;
+!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

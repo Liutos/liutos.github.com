@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
@@ -10,10 +8,10 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+
 
 
 <script id="hexo-configurations">
@@ -46,7 +44,7 @@
   };
 </script>
 
-<script data-ad-client="ca-pub-4199841931601311" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="在UC就职时养成了一个习惯，就是将自己所参与的项目的源代码都存放在一个名为uc的目录下。换了工作之后这个习惯仍然保留下来了，只不过原本名为uc的目录现在改名了（假设这个目录叫做work）。在新公司参与的项目比较多，因此在这个work目录下有许多的子目录，大致上的结构如下 123work/|-- A/|-- B/ 其中A和B分别表示一个项目的源代码目录。在work目录下存放的直接是A和B两个项目的目">
 <meta name="keywords" content="bash">
 <meta property="og:type" content="article">
@@ -74,7 +72,7 @@
 
   <title>如何自定义命令行补全 | 小打小闹写点bug</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
       if (CONFIG.hostname === location.hostname) {
         window.dataLayer = window.dataLayer || [];
@@ -112,13 +110,13 @@
   </style>
 </noscript>
 
-</head>
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"></noscript></head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
+<body itemscope="" itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
     <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-meta">
 
@@ -187,7 +185,7 @@
     <span>0%</span>
   </div>
 
-  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 
 
     <main class="main">
@@ -205,13 +203,13 @@
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/01/20/如何自定义命令行补全/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="小打小闹写点bug">
     </span>
       <header class="post-header">
@@ -262,19 +260,19 @@
 
       
         <p>在UC就职时养成了一个习惯，就是将自己所参与的项目的源代码都存放在一个名为uc的目录下。换了工作之后这个习惯仍然保留下来了，只不过原本名为uc的目录现在改名了（假设这个目录叫做work）。在新公司参与的项目比较多，因此在这个work目录下有许多的子目录，大致上的结构如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">work/</span><br><span class="line">|-- A/</span><br><span class="line">|-- B/</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">work/</span><br><span class="line">|-- A/</span><br><span class="line">|-- B/</span><br></pre></td></tr></tbody></table></figure>
 <p>其中A和B分别表示一个项目的源代码目录。在work目录下存放的直接是A和B两个项目的目录。work目录本身是放置在<code>~/src/</code>这个目录下的，因此项目A和B的完整根目录路径是<code>~/src/work/A/</code>和<code>~/src/work/B/</code>。由于参与的项目比较多，经常需要在几个项目间交替着编码，因此经常会在终端键入下面的指令</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/src/work/A/ <span class="comment"># 或者</span></span><br><span class="line"><span class="built_in">cd</span> ~/src/work/B/</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/src/work/A/ <span class="comment"># 或者</span></span><br><span class="line"><span class="built_in">cd</span> ~/src/work/B/</span><br></pre></td></tr></tbody></table></figure>
 <p>不得不说这样确实是非常的麻烦，因此我很快就定义了一个shell函数来简化这串命令，这个shell函数的定义如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">she</span></span>() &#123;</span><br><span class="line">    dir=<span class="variable">$&#123;1&#125;</span></span><br><span class="line">    target=<span class="string">"/home/liutos/src/work/<span class="variable">$&#123;dir&#125;</span>"</span></span><br><span class="line">    <span class="keyword">if</span> [ -d <span class="string">"<span class="variable">$&#123;target&#125;</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">cd</span> <span class="string">"<span class="variable">$&#123;target&#125;</span>"</span></span><br><span class="line">        <span class="built_in">return</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">she</span></span>() {</span><br><span class="line">    dir=<span class="variable">${1}</span></span><br><span class="line">    target=<span class="string">"/home/liutos/src/work/<span class="variable">${dir}</span>"</span></span><br><span class="line">    <span class="keyword">if</span> [ -d <span class="string">"<span class="variable">${target}</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">cd</span> <span class="string">"<span class="variable">${target}</span>"</span></span><br><span class="line">        <span class="built_in">return</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>有了这个辅助工具后，要切换到项目A和B中就简单多了，只需要输入</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">she A <span class="comment"># 或者</span></span><br><span class="line">she B</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">she A <span class="comment"># 或者</span></span><br><span class="line">she B</span><br></pre></td></tr></tbody></table></figure>
 <p>即可。但一使用起来就会发现，原本直接使用cd命令时所能享用的目录名补全功能没有了！绝大多数情况下补全功能是非常有用的，为此打算动手为she函数配备一个目录名的补全功能。显然自定义命令行补全的想法已经有前人实践过了，略加搜索就可以找到这么一篇<a href="http://www.shareditor.com/blogshow/?blogId=22" target="_blank" rel="noopener">指南</a>。模仿文章中的方法，我先是写了下面的代码骨架</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">&#125;</span><br><span class="line">complete -F _she she</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">}</span><br><span class="line">complete -F _she she</span><br></pre></td></tr></tbody></table></figure>
 <p>我的想法是只要当前的输入能够作为work下的一个目录名字的前缀，那么就认为这个子目录是本次补全的目标。为此，我需要先获取到work目录下的所有子目录的名称。利用ls命令可以做到这一点，同时为了便于处理，在这里将ls返回的文件名列表作为数组保存起来。修改后的_she函数的代码如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(ls ~/src/work/))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(ls ~/src/work/))</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>现在，只要遍历<code>${dirs}</code>并找出第一个以用户输入的<code>${cur}</code>为名字前缀的目录即可。最终_she函数的定义如下</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() &#123;</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(ls ~/src/work/))</span><br><span class="line">    <span class="keyword">for</span> dir <span class="keyword">in</span> <span class="variable">$&#123;dirs[@]&#125;</span></span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">case</span> <span class="variable">$&#123;dir&#125;</span> <span class="keyword">in</span></span><br><span class="line">            <span class="variable">$&#123;cur&#125;</span>*)</span><br><span class="line">                COMPREPLY=<span class="string">"<span class="variable">$&#123;dir&#125;</span>"</span></span><br><span class="line">                <span class="built_in">return</span> 0</span><br><span class="line">                ;;</span><br><span class="line">        <span class="keyword">esac</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(ls ~/src/work/))</span><br><span class="line">    <span class="keyword">for</span> dir <span class="keyword">in</span> <span class="variable">${dirs[@]}</span></span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">case</span> <span class="variable">${dir}</span> <span class="keyword">in</span></span><br><span class="line">            <span class="variable">${cur}</span>*)</span><br><span class="line">                COMPREPLY=<span class="string">"<span class="variable">${dir}</span>"</span></span><br><span class="line">                <span class="built_in">return</span> 0</span><br><span class="line">                ;;</span><br><span class="line">        <span class="keyword">esac</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
     </div>
 
@@ -509,7 +507,7 @@
 
 <div class="copyright">
   
-  &copy; 
+  © 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
@@ -536,12 +534,12 @@
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
-<script src="/js/schemes/pisces.js"></script>
-<script src="/js/next-boot.js"></script>
+  
+  
+  
+
+
+
 
 
 
@@ -565,7 +563,12 @@
 
   
 
-<script>
+
+
+
+
+
+<script src="/bundle.js"></script><script>
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -574,8 +577,8 @@
   }
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
-</script>
-<script>
+;
+
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
       DISQUS.reset({
@@ -594,7 +597,5 @@
       (d.head || d.body).appendChild(s);
     }
   });
-</script>
-
-<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
-</html>
+;
+!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

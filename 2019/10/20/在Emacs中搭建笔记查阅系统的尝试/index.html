@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
@@ -10,10 +8,10 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+
 
 
 <script id="hexo-configurations">
@@ -46,7 +44,7 @@
   };
 </script>
 
-<script data-ad-client="ca-pub-4199841931601311" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="给Emacs写插件有种痛并快乐着的感觉。虽然这个发挥创意的过程很有趣，但是Elisp写起来总有种别扭的感觉。一方面，我把它当成是Common Lisp，写的时候没有觉得“这个用法可能会有问题”；另一方面，它又不是普通的写lisp代码，还要一边写一边摸索Emacs中的一些概念。不过总体而言，还是挺好玩的，除了没有一个像模像样的REPL之外。 来龙去脉我用Emacs记录了不少的“笔记”。虽说我自己将其">
 <meta name="keywords" content="emacs,elisp,elasticsearch,note-taking,笔记">
 <meta property="og:type" content="article">
@@ -78,7 +76,7 @@
 
   <title>在Emacs中搭建笔记查阅系统的尝试 | 小打小闹写点bug</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
       if (CONFIG.hostname === location.hostname) {
         window.dataLayer = window.dataLayer || [];
@@ -116,13 +114,13 @@
   </style>
 </noscript>
 
-</head>
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"></noscript></head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
+<body itemscope="" itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
     <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-meta">
 
@@ -191,7 +189,7 @@
     <span>0%</span>
   </div>
 
-  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 
 
     <main class="main">
@@ -209,13 +207,13 @@
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="小打小闹写点bug">
     </span>
       <header class="post-header">
@@ -269,10 +267,10 @@
 <h2 id="牛刀小试"><a href="#牛刀小试" class="headerlink" title="牛刀小试"></a>牛刀小试</h2><p>为了可以在Emacs中查看笔记内容，我打算借助于Helm的力量。<a href="https://emacs-helm.github.io/helm/" target="_blank" rel="noopener">Helm</a>是Emacs的一个补全的框架，可以用来呈现一系列的候选项，然后选中后触发一些什么动作。我期望的形式，是在Emacs中按下某种快捷键或者输入某个命令行，可以在minibuffer中输入自己要查询的内容，然后Emacs查询ElasticSearch并最终通过Helm来呈现这些查询内容匹配的笔记条目。目前的成果是下面这样子的</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/lt-ask%E7%9A%84%E5%80%99%E9%80%89%E5%88%97%E8%A1%A8.png" alt=""></p>
 <p>具体的做法其实也很简单。首先，要知道Helm是如何被使用的。通过这篇<a href="https://wikemacs.org/wiki/How_to_write_helm_extensions" target="_blank" rel="noopener">文档</a>，初步了解到只需要定一个变量，并通过<code>:sources</code>关键字参数传递给<code>helm</code>这个函数即可。我所定义的传递给<code>helm</code>函数的“source”如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br></pre></td></tr></table></figure>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br></pre></td></tr></tbody></table></figure>
 <p>其中<code>faq-candidates</code>的作用便是根据minibuffer中的关键字查询ElasticSearch并组织好一个结构返回给<code>helm</code>。需要注意的是，<code>faq-candidates</code>必须是一个无参的函数才行，但输入的数据又偏偏需要从minibuffer中获取。因此，我的做法是约定一个变量<code>faq-query</code>，在调用<code>helm</code>之前首先调用<code>read-from-minibuffer</code>函数读取输入，然后将输入的字符串赋值给<code>faq-query</code>，之后当<code>helm</code>开始使用这个source的时候，<code>faq-candidates</code>函数便不需要参数，而可以直接从<code>faq-query</code>中拿到自己需要的搜索内容向ElasticSearch请求了。当然了，如果有像Common Lisp动态作用域的话，也就不需要定义这么一个全局变量了，对Emacs全局的侵入会更少一点。</p>
 <p>目前能够做到的也仅仅是查询ElasticSearch，并在选中某个条目并按下回车的时候打开浏览器来查看而已，之后应该会继续完善。目前的完整代码如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; 调用ElasticSearch查询笔记</span></span><br><span class="line">(<span class="name">require</span> 'request)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq (<span class="name">query</span>)</span><br><span class="line">  <span class="string">"向ElasticSearch查询QUERY匹配的笔记"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">response</span>))</span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:9200/faq/_search"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">encode-coding-string</span></span><br><span class="line">            (<span class="name">json-encode</span></span><br><span class="line">             (<span class="name">list</span></span><br><span class="line">              (<span class="name">cons</span> <span class="string">"query"</span> (<span class="name">list</span></span><br><span class="line">                             (<span class="name">cons</span> <span class="string">"multi_match"</span> (<span class="name">list</span></span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"fields"</span> (<span class="name">list</span> <span class="string">"answer"</span> <span class="string">"question"</span>))</span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"query"</span> query)))))))</span><br><span class="line">            'utf-8)</span><br><span class="line">     <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">     <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">setq</span> data (<span class="name">decode-coding-string</span> data 'utf-8))</span><br><span class="line">                 (<span class="name">setq</span> response (<span class="name">json-read-from-string</span> data))))</span><br><span class="line">     <span class="symbol">:sync</span> <span class="literal">t</span>)</span><br><span class="line">    response))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> make-faq-candidates (<span class="name">response</span>)</span><br><span class="line">  <span class="string">"将查询ElasticSearch的结果构造为helm可以识别的candidates格式"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">hits</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits response))))))</span><br><span class="line">    (<span class="name">mapcar</span> (<span class="name">lambda</span> (<span class="name">doc</span>)</span><br><span class="line">              (<span class="name">let</span> ((<span class="name">_source</span> (<span class="name">cdr</span> (<span class="name">assoc</span> '_source doc))))</span><br><span class="line">                (<span class="name">cons</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'question _source))</span><br><span class="line">                      (<span class="name">cdr</span> (<span class="name">assoc</span> '_id doc)))))</span><br><span class="line">            hits)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defvar</span> faq-query <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq-candidates ()</span><br><span class="line">  (<span class="name">make-faq-candidates</span> (<span class="name">faq</span> faq-query)))</span><br><span class="line"></span><br><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> lt-ask ()</span><br><span class="line">  <span class="string">"交互式地从minibuffer中读取笔记的关键词并展示选项"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">content</span> (<span class="name">read-from-minibuffer</span> <span class="string">"笔记关键词："</span>)))</span><br><span class="line">    (<span class="name">setq</span> faq-query content)</span><br><span class="line">    (<span class="name">helm</span> <span class="symbol">:sources</span> '(faq-helm-sources))))</span><br></pre></td></tr></table></figure>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; 调用ElasticSearch查询笔记</span></span><br><span class="line">(<span class="name">require</span> 'request)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq (<span class="name">query</span>)</span><br><span class="line">  <span class="string">"向ElasticSearch查询QUERY匹配的笔记"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">response</span>))</span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:9200/faq/_search"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">encode-coding-string</span></span><br><span class="line">            (<span class="name">json-encode</span></span><br><span class="line">             (<span class="name">list</span></span><br><span class="line">              (<span class="name">cons</span> <span class="string">"query"</span> (<span class="name">list</span></span><br><span class="line">                             (<span class="name">cons</span> <span class="string">"multi_match"</span> (<span class="name">list</span></span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"fields"</span> (<span class="name">list</span> <span class="string">"answer"</span> <span class="string">"question"</span>))</span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"query"</span> query)))))))</span><br><span class="line">            'utf-8)</span><br><span class="line">     <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">     <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">setq</span> data (<span class="name">decode-coding-string</span> data 'utf-8))</span><br><span class="line">                 (<span class="name">setq</span> response (<span class="name">json-read-from-string</span> data))))</span><br><span class="line">     <span class="symbol">:sync</span> <span class="literal">t</span>)</span><br><span class="line">    response))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> make-faq-candidates (<span class="name">response</span>)</span><br><span class="line">  <span class="string">"将查询ElasticSearch的结果构造为helm可以识别的candidates格式"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">hits</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits response))))))</span><br><span class="line">    (<span class="name">mapcar</span> (<span class="name">lambda</span> (<span class="name">doc</span>)</span><br><span class="line">              (<span class="name">let</span> ((<span class="name">_source</span> (<span class="name">cdr</span> (<span class="name">assoc</span> '_source doc))))</span><br><span class="line">                (<span class="name">cons</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'question _source))</span><br><span class="line">                      (<span class="name">cdr</span> (<span class="name">assoc</span> '_id doc)))))</span><br><span class="line">            hits)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defvar</span> faq-query <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq-candidates ()</span><br><span class="line">  (<span class="name">make-faq-candidates</span> (<span class="name">faq</span> faq-query)))</span><br><span class="line"></span><br><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> lt-ask ()</span><br><span class="line">  <span class="string">"交互式地从minibuffer中读取笔记的关键词并展示选项"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">content</span> (<span class="name">read-from-minibuffer</span> <span class="string">"笔记关键词："</span>)))</span><br><span class="line">    (<span class="name">setq</span> faq-query content)</span><br><span class="line">    (<span class="name">helm</span> <span class="symbol">:sources</span> '(faq-helm-sources))))</span><br></pre></td></tr></tbody></table></figure>
 <p>有不少值得吐槽的地方，不过都先按下不表吧，各位读者有兴趣的话可以留言交流一下XD</p>
 
     </div>
@@ -513,7 +511,7 @@
 
 <div class="copyright">
   
-  &copy; 
+  © 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
@@ -540,12 +538,12 @@
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
-<script src="/js/schemes/pisces.js"></script>
-<script src="/js/next-boot.js"></script>
+  
+  
+  
+
+
+
 
 
 
@@ -569,7 +567,12 @@
 
   
 
-<script>
+
+
+
+
+
+<script src="/bundle.js"></script><script>
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -578,8 +581,8 @@
   }
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
-</script>
-<script>
+;
+
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
       DISQUS.reset({
@@ -598,7 +601,5 @@
       (d.head || d.body).appendChild(s);
     }
   });
-</script>
-
-<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
-</html>
+;
+!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
@@ -10,10 +8,10 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+
 
 
 <script id="hexo-configurations">
@@ -46,7 +44,7 @@
   };
 </script>
 
-<script data-ad-client="ca-pub-4199841931601311" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="不久前在办公室抓取某网站S被对方发现，导致对方自动屏蔽了来自办公室网络的所有HTTP请求，连正儿八经地用浏览器打开也不行。为了可以摸索出“改头换面”（改HTTP头部）访问的方法，必须先成功访问至少一次，看看发出的HTTP头部是怎样的才行。恰好想起自己有一台腾讯云服务器，登上去用curl访问网站S，发现是成功的（也就是尚未被屏蔽）。既然如此，干脆在服务器上部署一套Squid作为正向代理，帮助办公网络">
 <meta name="keywords" content="教程,tutorial,squid">
 <meta property="og:type" content="article">
@@ -74,7 +72,7 @@
 
   <title>远程请求Squid | 小打小闹写点bug</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
       if (CONFIG.hostname === location.hostname) {
         window.dataLayer = window.dataLayer || [];
@@ -112,13 +110,13 @@
   </style>
 </noscript>
 
-</head>
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"></noscript></head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
+<body itemscope="" itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
     <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-meta">
 
@@ -187,7 +185,7 @@
     <span>0%</span>
   </div>
 
-  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 
 
     <main class="main">
@@ -205,13 +203,13 @@
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/05/18/远程请求Squid/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="小打小闹写点bug">
     </span>
       <header class="post-header">
@@ -263,18 +261,18 @@
       
         <p>不久前在办公室抓取某网站S被对方发现，导致对方自动屏蔽了来自办公室网络的所有HTTP请求，连正儿八经地用浏览器打开也不行。为了可以摸索出“改头换面”（改HTTP头部）访问的方法，必须先成功访问至少一次，看看发出的HTTP头部是怎样的才行。恰好想起自己有一台腾讯云服务器，登上去用<code>curl</code>访问网站S，发现是成功的（也就是尚未被屏蔽）。既然如此，干脆在服务器上部署一套Squid作为正向代理，帮助办公网络的请求成功抵达网站S并拿到响应页面。</p>
 <p>用<code>apt-get</code>安装了<code>squid</code>软件包后启动并监听端口8321，在办公网络下将公网地址和8321端口作为代理配置传递给<code>curl</code>的<code>-x</code>选项，访问网站S。不料Squid拒绝了我的请求，返回了如下内容（节选自<code>curl -v</code>命令的输出）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt; HTTP/1.1 403 Forbidden</span><br><span class="line">&lt; Server: squid/3.5.12</span><br><span class="line">&lt; Mime-Version: 1.0</span><br><span class="line">&lt; Date: Wed, 17 May 2017 15:18:08 GMT</span><br><span class="line">&lt; Content-Type: text/html;charset=utf-8</span><br><span class="line">&lt; Content-Length: 3531</span><br><span class="line">&lt; X-Squid-Error: ERR_ACCESS_DENIED 0</span><br><span class="line">&lt; Vary: Accept-Language</span><br><span class="line">&lt; Content-Language: en</span><br><span class="line">&lt; X-Cache: MISS from VM-44-136-ubuntu</span><br><span class="line">&lt; X-Cache-Lookup: NONE from VM-44-136-ubuntu:8321</span><br><span class="line">&lt; Via: 1.1 VM-44-136-ubuntu (squid/3.5.12)</span><br><span class="line">&lt; Connection: keep-alive</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt; HTTP/1.1 403 Forbidden</span><br><span class="line">&lt; Server: squid/3.5.12</span><br><span class="line">&lt; Mime-Version: 1.0</span><br><span class="line">&lt; Date: Wed, 17 May 2017 15:18:08 GMT</span><br><span class="line">&lt; Content-Type: text/html;charset=utf-8</span><br><span class="line">&lt; Content-Length: 3531</span><br><span class="line">&lt; X-Squid-Error: ERR_ACCESS_DENIED 0</span><br><span class="line">&lt; Vary: Accept-Language</span><br><span class="line">&lt; Content-Language: en</span><br><span class="line">&lt; X-Cache: MISS from VM-44-136-ubuntu</span><br><span class="line">&lt; X-Cache-Lookup: NONE from VM-44-136-ubuntu:8321</span><br><span class="line">&lt; Via: 1.1 VM-44-136-ubuntu (squid/3.5.12)</span><br><span class="line">&lt; Connection: keep-alive</span><br></pre></td></tr></tbody></table></figure>
 <p>经过一番Google，才知道原来是Squid的配置导致的。在Squid配置文件（/etc/squid/squid.conf）中，默认的acl和http_access指令的设置如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">acl SSL_ports port 443</span><br><span class="line">acl Safe_ports port 80          # http</span><br><span class="line">acl Safe_ports port 21          # ftp</span><br><span class="line">acl Safe_ports port 443         # https</span><br><span class="line">acl Safe_ports port 70          # gopher</span><br><span class="line">acl Safe_ports port 210         # wais</span><br><span class="line">acl Safe_ports port 1025-65535  # unregistered ports</span><br><span class="line">acl Safe_ports port 280         # http-mgmt</span><br><span class="line">acl Safe_ports port 488         # gss-http</span><br><span class="line">acl Safe_ports port 591         # filemaker</span><br><span class="line">acl Safe_ports port 777         # multiling http</span><br><span class="line">acl CONNECT method CONNECT</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http_access deny !Safe_ports</span><br><span class="line">http_access deny CONNECT !SSL_ports</span><br><span class="line">http_access allow localhost manager</span><br><span class="line">http_access deny manager</span><br><span class="line">http_access allow localhost</span><br><span class="line">http_access deny all</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">acl SSL_ports port 443</span><br><span class="line">acl Safe_ports port 80          # http</span><br><span class="line">acl Safe_ports port 21          # ftp</span><br><span class="line">acl Safe_ports port 443         # https</span><br><span class="line">acl Safe_ports port 70          # gopher</span><br><span class="line">acl Safe_ports port 210         # wais</span><br><span class="line">acl Safe_ports port 1025-65535  # unregistered ports</span><br><span class="line">acl Safe_ports port 280         # http-mgmt</span><br><span class="line">acl Safe_ports port 488         # gss-http</span><br><span class="line">acl Safe_ports port 591         # filemaker</span><br><span class="line">acl Safe_ports port 777         # multiling http</span><br><span class="line">acl CONNECT method CONNECT</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http_access deny !Safe_ports</span><br><span class="line">http_access deny CONNECT !SSL_ports</span><br><span class="line">http_access allow localhost manager</span><br><span class="line">http_access deny manager</span><br><span class="line">http_access allow localhost</span><br><span class="line">http_access deny all</span><br></pre></td></tr></tbody></table></figure>
 <p>由于Squid是按照第一条匹配的http_access指令来决定允许还是拒绝的，因为来自我办公网络的请求实际上命中的是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access deny all</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access deny all</span><br></pre></td></tr></tbody></table></figure>
 <p>因此被拒绝是必然的。为了可以接受来自办公网络发起的请求，首先需要新增一行acl指令。通过Squid的日志（/var/log/squid/access.log）可以查看到被拒绝的请求的IP地址是多少，此处假设IP地址为8.7.198.45，那么相应的acl指令如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acl myclients src 8.7.198.45</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acl myclients src 8.7.198.45</span><br></pre></td></tr></tbody></table></figure>
 <p>此处的myclients为自定义的名称，顾名思义，它表示“我的客户端”；src是一种acl类型，表示客户端的IP地址；8.7.198.45是src类型下的参数，也就是我所使用的客户端发出的请求的来源IP地址。配置了acl后，还需要配置http_access指令。这个就简单多了，只要允许上面创建的这个acl的访问即可，内容如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access allow myclients</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access allow myclients</span><br></pre></td></tr></tbody></table></figure>
 <p>之后再重启Squid服务即可</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service squid restart</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service squid restart</span><br></pre></td></tr></tbody></table></figure>
 <p>这时候再从办公网络中以腾讯云服务器上的Squid为正向代理发出请求，就不会再被Squid拒绝了。</p>
 <p>全文完</p>
 
@@ -513,7 +511,7 @@
 
 <div class="copyright">
   
-  &copy; 
+  © 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
@@ -540,12 +538,12 @@
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
-<script src="/js/schemes/pisces.js"></script>
-<script src="/js/next-boot.js"></script>
+  
+  
+  
+
+
+
 
 
 
@@ -569,7 +567,12 @@
 
   
 
-<script>
+
+
+
+
+
+<script src="/bundle.js"></script><script>
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -578,8 +581,8 @@
   }
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
-</script>
-<script>
+;
+
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
       DISQUS.reset({
@@ -598,7 +601,5 @@
       (d.head || d.body).appendChild(s);
     }
   });
-</script>
-
-<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
-</html>
+;
+!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

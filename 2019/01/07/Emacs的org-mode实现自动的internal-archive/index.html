@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<!DOCTYPE html><html lang="zh-CN"><head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
@@ -10,10 +8,10 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-<link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+
 
 
 <script id="hexo-configurations">
@@ -46,7 +44,7 @@
   };
 </script>
 
-<script data-ad-client="ca-pub-4199841931601311" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="缘由org-mode是一个Emacs内置的major mode，当打开一个后缀为.org的文件时就会被启用。在官网的介绍中提到，它可以用于管理待办事项，而这也正是我目前使用org-mode最多的场合。比如，我用它来记录漫画的阅读进度，每一话或每一章就是一个标记了TODO关键字的条目，读完那一话或那一章后就会将对应的条目标记为DONE。一般我会一周一次地归档自己标记为DONE的条目，但由于一次要处理">
 <meta name="keywords" content="org-mode,emacs">
 <meta property="og:type" content="article">
@@ -74,7 +72,7 @@
 
   <title>Emacs的org-mode实现自动的internal archive | 小打小闹写点bug</title>
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
       if (CONFIG.hostname === location.hostname) {
         window.dataLayer = window.dataLayer || [];
@@ -112,13 +110,13 @@
   </style>
 </noscript>
 
-</head>
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"></noscript></head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
+<body itemscope="" itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
     <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-meta">
 
@@ -187,7 +185,7 @@
     <span>0%</span>
   </div>
 
-  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 
 
     <main class="main">
@@ -205,13 +203,13 @@
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="小打小闹写点bug">
     </span>
       <header class="post-header">
@@ -260,9 +258,9 @@
 <h2 id="菜谱"><a href="#菜谱" class="headerlink" title="菜谱"></a>菜谱</h2><p>对于每一个被完成的单独的阅读任务，我的做法是将其<a href="https://orgmode.org/manual/Internal-archiving.html" target="_blank" rel="noopener">internal archive</a>。等到一整本漫画都读完之后，再将整个以漫画名命名的条目归档到别的文件中去。要实现自动的internal archive，最简单直接的办法是借助于org-mode提供的各种hook。</p>
 <p>org-mode提供了许多的hook，在官方的<a href="https://orgmode.org/worg/doc.html#org-after-demote-entry-hook" target="_blank" rel="noopener">文档</a>中有一一列举 。其中，名为<code>org-after-todo-state-change-hook</code>的便是我所需要的钩子。只需往这个变量所绑定的列表中添加一个函数，那么这个函数便会在条目切换状态时（比如从TODO切换到DONE）被org-mode调用。</p>
 <p>最终的ELisp代码如下</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> lt-archive-if-manga ()</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">state</span> org-state))</span><br><span class="line">    (<span class="name">when</span> (<span class="name">string=</span> state <span class="string">"DONE"</span>)</span><br><span class="line">      (<span class="name">let</span> ((<span class="name">tags</span> (<span class="name">org-get-tags-at</span>)))</span><br><span class="line">        (<span class="name">when</span> (<span class="name">member</span> <span class="string">"漫画"</span> tags)</span><br><span class="line">          (<span class="name">org-toggle-archive-tag</span>))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">add-to-list</span> 'org-after-todo-state-change-hook 'lt-archive-if-manga <span class="literal">t</span>)</span><br></pre></td></tr></table></figure>
-<p>稍微解释一下。从<code>C-h v org-after-todo-state-change-hook RET</code>的文档可以得知，条目的新状态可以通过变量<code>org-state</code>获取。取得新状态（是个字符串）后，首先检查其是否为<code>&quot;DONE&quot;</code>。如果是，再检查这个条目是否为一个阅读漫画的任务。</p>
-<p>在我的用法中，凡是漫画条目，都打上了名为<code>&quot;漫画&quot;</code>的标签。因此，使用函数<code>org-get-tags-at</code>取得一个条目的所有标签（包括从父级条目继承下来的），再用<code>member</code>函数判断这些标签中是否包含字符串<code>&quot;漫画&quot;</code>。如果有，就调用<code>org-toggle-archive-tag</code>将该条目internal archive。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> lt-archive-if-manga ()</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">state</span> org-state))</span><br><span class="line">    (<span class="name">when</span> (<span class="name">string=</span> state <span class="string">"DONE"</span>)</span><br><span class="line">      (<span class="name">let</span> ((<span class="name">tags</span> (<span class="name">org-get-tags-at</span>)))</span><br><span class="line">        (<span class="name">when</span> (<span class="name">member</span> <span class="string">"漫画"</span> tags)</span><br><span class="line">          (<span class="name">org-toggle-archive-tag</span>))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">add-to-list</span> 'org-after-todo-state-change-hook 'lt-archive-if-manga <span class="literal">t</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>稍微解释一下。从<code>C-h v org-after-todo-state-change-hook RET</code>的文档可以得知，条目的新状态可以通过变量<code>org-state</code>获取。取得新状态（是个字符串）后，首先检查其是否为<code>"DONE"</code>。如果是，再检查这个条目是否为一个阅读漫画的任务。</p>
+<p>在我的用法中，凡是漫画条目，都打上了名为<code>"漫画"</code>的标签。因此，使用函数<code>org-get-tags-at</code>取得一个条目的所有标签（包括从父级条目继承下来的），再用<code>member</code>函数判断这些标签中是否包含字符串<code>"漫画"</code>。如果有，就调用<code>org-toggle-archive-tag</code>将该条目internal archive。</p>
 <p>传给函数<code>add-to-list</code>的第三个参数<code>t</code>的作用，是让这个新加入钩子的函数最后被调用。</p>
 <p>全文完</p>
 
@@ -501,7 +499,7 @@
 
 <div class="copyright">
   
-  &copy; 
+  © 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
@@ -528,12 +526,12 @@
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
-<script src="/js/schemes/pisces.js"></script>
-<script src="/js/next-boot.js"></script>
+  
+  
+  
+
+
+
 
 
 
@@ -557,7 +555,12 @@
 
   
 
-<script>
+
+
+
+
+
+<script src="/bundle.js"></script><script>
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -566,8 +569,8 @@
   }
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
-</script>
-<script>
+;
+
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
       DISQUS.reset({
@@ -586,7 +589,5 @@
       (d.head || d.body).appendChild(s);
     }
   });
-</script>
-
-<script>!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body>
-</html>
+;
+!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
