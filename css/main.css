@@ -1227,7 +1227,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #0a5b03;
+  background: #95adff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1571,7 +1571,6 @@ pre .javascript .function {
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  font-size: 0.984
 }
 @media (min-width: 1200px) {
   .post-body {
