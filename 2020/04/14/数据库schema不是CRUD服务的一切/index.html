@@ -53,7 +53,7 @@
 <meta property="og:site_name" content="小打小闹写点bug">
 <meta property="og:description" content="谨以本文向我脑海中那些不成熟的想法致敬。  序言受疫情影响呆在家中的这段时间里，我收尾了《Clean Architecture》。这本书给了我许多新知识和启发，包括本文的中心论点——数据库schema不是CRUD服务的一切，也是在读书过程中想到的。在书中，作者的原话是  But the database is not the data model  它出现在书中第六部分《Details》的第一个章">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-04-14T12:47:27.910Z">
+<meta property="og:updated_time" content="2020-04-14T13:05:46.751Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库schema不是CRUD服务的一切">
 <meta name="twitter:description" content="谨以本文向我脑海中那些不成熟的想法致敬。  序言受疫情影响呆在家中的这段时间里，我收尾了《Clean Architecture》。这本书给了我许多新知识和启发，包括本文的中心论点——数据库schema不是CRUD服务的一切，也是在读书过程中想到的。在书中，作者的原话是  But the database is not the data model  它出现在书中第六部分《Details》的第一个章">
@@ -225,7 +225,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-14 13:42:22 / 修改时间：20:47:27" itemprop="dateCreated datePublished" datetime="2020-04-14T13:42:22+08:00">2020-04-14</time>
+              <time title="创建时间：2020-04-14 13:42:22 / 修改时间：21:05:46" itemprop="dateCreated datePublished" datetime="2020-04-14T13:42:22+08:00">2020-04-14</time>
             </span>
 
           
@@ -291,7 +291,7 @@
 <li><code>Restriction</code>数组类型的变量<code>restrictions</code>，负责实现使用限制的检查逻辑。</li>
 </ol>
 <p>三个接口可以有各种各样的实现——定额减免、折扣减免、某年月日前可用、不可用于电子产品，等等。如此，优惠券功能具备了极大的灵活性，业务可以随心所欲，产品可以为所欲为，老板数钱数到手软，公司业绩蒸蒸日上。</p>
-<p>那么如何存储<code>Effect</code>、<code>Condition</code>、<code>Restriction</code>、<code>Coupon</code>类的实例对象呢？没有唯一的选择，既可以存储在MySQL中，也可以存储在MongoDB中，或者别的什么数据库中。不管这些数据最终如何持久化，都不会影响作为高层策略的优惠券业务逻辑。反过来，在代码中处理的不是类、接口，以及实例对象，而是直接从数据库中取出来的、贫血模型的行（或文档），处理起来就不是很优雅了——可以预见 ，代码中会充斥着许多的<code>if-else</code>判断逻辑。</p>
+<p>那么如何存储<code>Effect</code>、<code>Condition</code>、<code>Restriction</code>、<code>Coupon</code>类的实例对象呢？没有唯一的选择，既可以存储在MySQL中，也可以存储在MongoDB中，或者别的什么数据库中。不管这些数据最终如何持久化，都不会影响作为高层策略的优惠券业务逻辑。反过来，如果在代码中处理的不是类、接口，以及实例对象，而是直接从数据库中取出来的、贫血模型的行（或文档），处理起来就不是很优雅了——可以预见 ，代码中会充斥着许多的<code>if-else</code>判断逻辑。</p>
 <p>数据库只是帮忙从磁盘中读取数据的软件，它的schema不应该直接成为应用的数据模型。</p>
 <h1 id="Interface-Segregation-Principle"><a href="#Interface-Segregation-Principle" class="headerlink" title="Interface Segregation Principle"></a>Interface Segregation Principle</h1><p>不应该在HTTP接口的响应中直接暴露数据库的schema。</p>
 <p>不说别的，光是数据库schema与接口规格所使用的命名规则就足以造成差异了。也许在MySQL中用<a href="https://en.wikipedia.org/wiki/Snake_case" target="_blank" rel="noopener"><code>snake case</code></a>命名一列，却又在HTTP响应的JSON对象中用<a href="https://en.wikipedia.org/wiki/Camel_case" target="_blank" rel="noopener"><code>camel case</code></a>命名字段。</p>
