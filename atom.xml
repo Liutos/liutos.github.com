@@ -186,9 +186,9 @@
     
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
-      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
-    
       <category term="tool" scheme="https://liutos.github.io/tags/tool/"/>
+    
+      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
     
       <category term="accounting" scheme="https://liutos.github.io/tags/accounting/"/>
     
@@ -289,9 +289,9 @@
       <category term="实战CommonLisp" scheme="https://liutos.github.io/categories/%E5%AE%9E%E6%88%98CommonLisp/"/>
     
     
-      <category term="commonlisp" scheme="https://liutos.github.io/tags/commonlisp/"/>
-    
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
+      <category term="commonlisp" scheme="https://liutos.github.io/tags/commonlisp/"/>
     
       <category term="macro" scheme="https://liutos.github.io/tags/macro/"/>
     
@@ -360,9 +360,9 @@
       <category term="实战CommonLisp" scheme="https://liutos.github.io/categories/%E5%AE%9E%E6%88%98CommonLisp/"/>
     
     
-      <category term="commonlisp" scheme="https://liutos.github.io/tags/commonlisp/"/>
-    
       <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
+    
+      <category term="commonlisp" scheme="https://liutos.github.io/tags/commonlisp/"/>
     
   </entry>
   
@@ -555,11 +555,11 @@
     
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
+      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
+    
       <category term="vscode" scheme="https://liutos.github.io/tags/vscode/"/>
     
       <category term="对比" scheme="https://liutos.github.io/tags/%E5%AF%B9%E6%AF%94/"/>
-    
-      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
     
   </entry>
   
@@ -653,11 +653,11 @@
     
       <category term="common lisp" scheme="https://liutos.github.io/tags/common-lisp/"/>
     
-      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
-    
       <category term="assembly" scheme="https://liutos.github.io/tags/assembly/"/>
     
       <category term="compiler" scheme="https://liutos.github.io/tags/compiler/"/>
+    
+      <category term="lisp" scheme="https://liutos.github.io/tags/lisp/"/>
     
       <category term="setq" scheme="https://liutos.github.io/tags/setq/"/>
     

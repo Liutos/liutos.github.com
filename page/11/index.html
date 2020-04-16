@@ -1,0 +1,898 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.8.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+
+
+
+
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://liutos.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+<script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <meta name="description" content="记录编程生涯的大大小小的事情">
+<meta name="keywords" content="emacs,lisp,programming">
+<meta property="og:type" content="website">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/page/11/index.html">
+<meta property="og:site_name" content="小打小闹写点bug">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="小打小闹写点bug">
+<meta name="twitter:description" content="记录编程生涯的大大小小的事情">
+
+<link rel="canonical" href="https://liutos.github.io/page/11/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: true,
+    isPost: false
+  };
+</script>
+
+  <title>小打小闹写点bug</title>
+  
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-94082039-2');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"></noscript></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小打小闹写点bug</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">乍听之下，不无道理；仔细揣摩，胡说八道</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/08/02/MacBook-Pro使用体验/" class="post-title-link" itemprop="url">MacBook Pro使用体验</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-02 23:33:58" itemprop="dateCreated datePublished" datetime="2018-08-02T23:33:58+08:00">2018-08-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-12-02 21:29:15" itemprop="dateModified" datetime="2018-12-02T21:29:15+08:00">2018-12-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2018/08/02/MacBook-Pro使用体验/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/02/MacBook-Pro使用体验/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>生平第一次有一台自己的MacBook，使用了一段时间之后也有了自己的一番感想，特此写下来留个纪念。感想主要分为硬件以及软件两个方面，本文不会有太多的条理性</p>
+<h1 id="硬件"><a href="#硬件" class="headerlink" title="硬件"></a>硬件</h1><p>上周四晚上第一次从收件的超市老板手里接过MacBook Pro的时候，第一感觉是意想不到的沉重。回到家拆开包装，拿起机体和电源适配器的时候，也是觉得非常的重。虽然经过几天的使用后发现并没有当初那般沉重的感觉了，但总体还是超过了我的预期。</p>
+<p>接着是发现这台电脑居然没有开机键。老实说，其实这个是我在昨天才意识到的；同时，这台电脑只有四个Type-C的接口，不得不下单买了个外接的适配器。</p>
+<p>触控板的面积很大，但正如传闻中所说的，触控板非常地好用，不像我之前用的电脑触控板是塑料材质的，当手出汗的时候非常地难用。</p>
+<p>比较可惜的是，control键只在键盘的左侧有，对于使用Emacs来编码的人（指我自己）来说，是比较不方便的。虽然现在已经分别将左右的option设置成了（Windows上的）control，以及将command设置成了（Windows上的）Alt，但无名指在按键的时候还是难免误触。同时，没有独立的home/end/up/down，刚开始还真有点不习惯</p>
+<p>touchbar毕竟是一块没有力反馈的触摸屏，所以每当需要按ESC的时候都忍不住要肉眼确认一下或者按两下。但用touchbar来控制音量则非常方便</p>
+<p>散热有点糟糕。第一天晚上折腾的时候，安装完Visual Studio Code然后VSC自己卡死了，随后机器开始发热，尤其是touchbar上方靠近屏幕铰链的位置很烫——可千万不要轻易烧坏了呀</p>
+<p>电池很给力，不需要每天下班都带着重重的电源适配器回家</p>
+<h1 id="软件"><a href="#软件" class="headerlink" title="软件"></a>软件</h1><p>开机后的第一感觉就是界面新颖，虽然并不是第一次亲眼看见macOS了，但作为自己的机器来使用，认真一看确实觉得比Windows要美观，比起之前在虚拟机中使用的Mint也要更优雅统一。触控板非常地好用，尤其是三指上划用于在窗口间切换的功能非常地棒，两指点击表示右键单击的效果也非常地好，既轻盈又方便。字体很好看，就连在Emacs中展示的中文也变得可爱起来</p>
+<p>摆脱了虚拟机，也就不用再把内存用在一起重复的功能上了（比如把内存分给虚拟机的操作系统），搭配上SSD现在开启软件都非常地快。不过大概是因为虚拟机用惯了，有时候总忍不住切换到调度中心，然后找一个看起来比较像虚拟机的应用来点一下，2333</p>
+<p>以前在Mint里面用的搜狗输入法总觉得有什么欠缺，现在可以用上全功能的版本了感觉很爽快，连在Emacs中输入中文也变得畅快起来。更令人惊喜的是，不知道如何折腾，现在我居然可以在多个软件里用上Emacs的键绑定了，目前发现的包括但不限于Firefox的输入框、微信、QQ，以及有道云笔记。</p>
+<p>Mac上的一些软件很有趣，比如Alfred、Timing等等，同时也是我第一次使用zsh+oh-my-zsh，的确是很强大的工具。这两天我也开始编写自己的Workflow了，打算接着学习一下Apple Script更好地帮助自己使用这个系统。</p>
+<p>好了，就酱</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/06/04/cl-mongo用法入门/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/04/cl-mongo用法入门/" class="post-title-link" itemprop="url">cl-mongo用法入门</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-06-04 21:21:20" itemprop="dateCreated datePublished" datetime="2017-06-04T21:21:20+08:00">2017-06-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-12-02 21:29:37" itemprop="dateModified" datetime="2018-12-02T21:29:37+08:00">2018-12-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2017/06/04/cl-mongo用法入门/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/06/04/cl-mongo用法入门/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了<a href="https://github.com/fons/cl-mongo" target="_blank" rel="noopener">cl-mongo</a>这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己查阅，也为了方便有相同需求的人了解如何使用cl-mongo，于是写了这篇文章。</p>
+<p>首先使用<code>CL-MONGO:MONGO</code>函数连接MongoDB的服务器程序（mongod）。因为在我的系统上mongod进程监听的是27017这个端口，并且我希望使用的数据库名为test，因此键入如下代码来连接数据库</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:mongo</span> <span class="symbol">:db</span> <span class="string">"test"</span></span><br><span class="line">                <span class="symbol">:host</span> <span class="string">"127.0.0.1"</span></span><br><span class="line">                <span class="symbol">:port</span> <span class="number">27017</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>连接上了数据库后，首先尝试往其中写入一个文档。假设现在要记录的是发出的HTTP请求的信息，那么一个可以写入的基本信息就是请求的目标地址。假设在命令行的mongo shell中输入的内容如下</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.insert({<span class="attr">uri</span>: <span class="string">'http://example.com'</span>});</span><br></pre></td></tr></tbody></table></figure>
+<p>那么使用cl-mongo提供的<code>DB.INSERT</code>函数达到上述效果的代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.insert <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>求值上述代码后返回值为NIL。为了将上述写入的文档重新查询出来，需要使用cl-mongo提供的<code>DB.FIND</code>函数。因为只有一个文档，所以直接查询就可以查看到结果了。在mongo shell中我们可以使用如下代码查询</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.find();</span><br></pre></td></tr></tbody></table></figure>
+<p>使用<code>DB.FIND</code>函数的话编写的代码可能会长得像下面这样</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>在我的系统上求值了上述代码后在REPL中输出的内容如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">((<span class="number">86</span> <span class="number">449</span> <span class="number">0</span> <span class="number">1</span> <span class="number">8</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span> <span class="string">"http_request"</span>)</span><br><span class="line"> (<span class="name">&lt;CL-MONGO</span><span class="symbol">:DOCUMENT&gt;</span> : { </span><br><span class="line">   _id : CL-MONGO:<span class="symbol">:BSON-OID</span> [#(<span class="number">89</span> <span class="number">52</span> <span class="number">26</span> <span class="number">160</span> <span class="number">109</span> <span class="number">156</span> <span class="number">254</span> <span class="number">71</span> <span class="number">184</span> <span class="number">115</span> <span class="number">102</span> <span class="number">30</span>)]</span><br><span class="line">   elements : <span class="number">1</span>}</span><br><span class="line"></span><br><span class="line">))</span><br></pre></td></tr></tbody></table></figure>
+<p>值得注意的是，<code>DB.FIND</code>的返回值不完全是文档组成的数组，而是在这个结果集的数组之外又多了一层列表，并且列表的第一个元素还是一个一看之下不知其所以然的子列表。由于cl-mongo的GitHub上没有提及这个玩意儿的来历，我也没有深入去了解<code>DB.FIND</code>函数的实现代码，因此这个元素就先忽略它吧。如果需要使用<code>DB.FIND</code>查询到的结果，那么开发者需要对<code>DB.FIND</code>的返回值应用一下函数<code>SECOND</code>才行，如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>返回值的列表中的每一个元素都是<code>CL-MONGO:DOCUMENT</code>这个类的实例对象，如果要直接使用还是稍微有点不方便的，因此我写了一个函数用来将<code>DB.FIND</code>函数查询到的<code>CL-MONGO:DOCUMENT</code>的实例对象都转换为较为熟悉，容易操作的数据类型——association list，函数的定义如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> document-to-alist (<span class="name">doc</span>)</span><br><span class="line">  <span class="string">"Convert a DOC of type CL-MONGO:DOCUMENT to a equivalent, serializable alist."</span></span><br><span class="line">  (<span class="name">check-type</span> doc cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">  (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">doc</span>)</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">typep</span> doc 'cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">                    (<span class="name">let</span> ((<span class="name">keys</span> (<span class="name">cl-mongo</span><span class="symbol">:get-keys</span> doc)))</span><br><span class="line">                      (<span class="name">mapcar</span> #'(lambda (key)</span><br><span class="line">                                  (cons key</span><br><span class="line">                                        (aux (cl-mongo:get-element key doc))))</span><br><span class="line">                              keys)))</span><br><span class="line">                   (<span class="name">t</span> doc))))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">id</span> (<span class="name">cl-mongo</span><span class="symbol">:doc-id</span> doc)))</span><br><span class="line">      (<span class="name">append</span> (<span class="name">aux</span> doc) (<span class="name">list</span> (<span class="name">cons</span> <span class="string">"_id"</span> id))))))</span><br></pre></td></tr></tbody></table></figure>
+<p>使用如下代码即可查看方才所写入的文档究竟长什么样子了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">document-to-alist</span> (<span class="name">first</span> (<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))))</span><br></pre></td></tr></tbody></table></figure>
+<p>如果想要修改数据库中的文档，例如增加一个字段，那么可以使用cl-mongo提供的<code>DB.UPDATE</code>函数，用法如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.update <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>)</span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"$set"</span></span><br><span class="line">                                 (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"method"</span> <span class="string">"GET"</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<p>最后如果要删除刚才所写入的这个文档，可以使用cl-mongo的<code>DB.DELETE</code>函数（我很好奇这个函数居然不是叫做DB.REMOVE），用法如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.delete <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/05/18/远程请求Squid/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/05/18/远程请求Squid/" class="post-title-link" itemprop="url">远程请求Squid</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-05-18 21:18:42" itemprop="dateCreated datePublished" datetime="2017-05-18T21:18:42+08:00">2017-05-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2017/05/18/远程请求Squid/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/05/18/远程请求Squid/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>不久前在办公室抓取某网站S被对方发现，导致对方自动屏蔽了来自办公室网络的所有HTTP请求，连正儿八经地用浏览器打开也不行。为了可以摸索出“改头换面”（改HTTP头部）访问的方法，必须先成功访问至少一次，看看发出的HTTP头部是怎样的才行。恰好想起自己有一台腾讯云服务器，登上去用<code>curl</code>访问网站S，发现是成功的（也就是尚未被屏蔽）。既然如此，干脆在服务器上部署一套Squid作为正向代理，帮助办公网络的请求成功抵达网站S并拿到响应页面。</p>
+<p>用<code>apt-get</code>安装了<code>squid</code>软件包后启动并监听端口8321，在办公网络下将公网地址和8321端口作为代理配置传递给<code>curl</code>的<code>-x</code>选项，访问网站S。不料Squid拒绝了我的请求，返回了如下内容（节选自<code>curl -v</code>命令的输出）</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt; HTTP/1.1 403 Forbidden</span><br><span class="line">&lt; Server: squid/3.5.12</span><br><span class="line">&lt; Mime-Version: 1.0</span><br><span class="line">&lt; Date: Wed, 17 May 2017 15:18:08 GMT</span><br><span class="line">&lt; Content-Type: text/html;charset=utf-8</span><br><span class="line">&lt; Content-Length: 3531</span><br><span class="line">&lt; X-Squid-Error: ERR_ACCESS_DENIED 0</span><br><span class="line">&lt; Vary: Accept-Language</span><br><span class="line">&lt; Content-Language: en</span><br><span class="line">&lt; X-Cache: MISS from VM-44-136-ubuntu</span><br><span class="line">&lt; X-Cache-Lookup: NONE from VM-44-136-ubuntu:8321</span><br><span class="line">&lt; Via: 1.1 VM-44-136-ubuntu (squid/3.5.12)</span><br><span class="line">&lt; Connection: keep-alive</span><br></pre></td></tr></tbody></table></figure>
+<p>经过一番Google，才知道原来是Squid的配置导致的。在Squid配置文件（/etc/squid/squid.conf）中，默认的acl和http_access指令的设置如下</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">acl SSL_ports port 443</span><br><span class="line">acl Safe_ports port 80          # http</span><br><span class="line">acl Safe_ports port 21          # ftp</span><br><span class="line">acl Safe_ports port 443         # https</span><br><span class="line">acl Safe_ports port 70          # gopher</span><br><span class="line">acl Safe_ports port 210         # wais</span><br><span class="line">acl Safe_ports port 1025-65535  # unregistered ports</span><br><span class="line">acl Safe_ports port 280         # http-mgmt</span><br><span class="line">acl Safe_ports port 488         # gss-http</span><br><span class="line">acl Safe_ports port 591         # filemaker</span><br><span class="line">acl Safe_ports port 777         # multiling http</span><br><span class="line">acl CONNECT method CONNECT</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http_access deny !Safe_ports</span><br><span class="line">http_access deny CONNECT !SSL_ports</span><br><span class="line">http_access allow localhost manager</span><br><span class="line">http_access deny manager</span><br><span class="line">http_access allow localhost</span><br><span class="line">http_access deny all</span><br></pre></td></tr></tbody></table></figure>
+<p>由于Squid是按照第一条匹配的http_access指令来决定允许还是拒绝的，因为来自我办公网络的请求实际上命中的是</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access deny all</span><br></pre></td></tr></tbody></table></figure>
+<p>因此被拒绝是必然的。为了可以接受来自办公网络发起的请求，首先需要新增一行acl指令。通过Squid的日志（/var/log/squid/access.log）可以查看到被拒绝的请求的IP地址是多少，此处假设IP地址为8.7.198.45，那么相应的acl指令如下</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acl myclients src 8.7.198.45</span><br></pre></td></tr></tbody></table></figure>
+<p>此处的myclients为自定义的名称，顾名思义，它表示“我的客户端”；src是一种acl类型，表示客户端的IP地址；8.7.198.45是src类型下的参数，也就是我所使用的客户端发出的请求的来源IP地址。配置了acl后，还需要配置http_access指令。这个就简单多了，只要允许上面创建的这个acl的访问即可，内容如下</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access allow myclients</span><br></pre></td></tr></tbody></table></figure>
+<p>之后再重启Squid服务即可</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service squid restart</span><br></pre></td></tr></tbody></table></figure>
+<p>这时候再从办公网络中以腾讯云服务器上的Squid为正向代理发出请求，就不会再被Squid拒绝了。</p>
+<p>全文完</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/04/30/如何使用CL实现snowflake/" class="post-title-link" itemprop="url">如何使用CL实现snowflake</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-04-30 22:59:30" itemprop="dateCreated datePublished" datetime="2017-04-30T22:59:30+08:00">2017-04-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-12-02 21:30:33" itemprop="dateModified" datetime="2018-12-02T21:30:33+08:00">2018-12-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2017/04/30/如何使用CL实现snowflake/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/30/如何使用CL实现snowflake/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR;"></a>TL;DR;</h2><p>这是一篇为了完成写作KPI而写的博客，总结起来就是提供了一种用Common Lisp实现来自于Twitter的雪花算法的实现方案。成品在<a href="https://github.com/Liutos/clitool/blob/master/cl/misc/snowflake.lisp" target="_blank" rel="noopener">这里</a>，本文只是简单地描述一下生成雪花ID的大致思路，详细内容请各位移步代码仓库查看。</p>
+<p>上述代码仓库中的snowflake算法——如果我的实现确实可以称作snowflake算法的话——的思路来自于下列两个地方：</p>
+<ol>
+<li><a href="http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/" target="_blank" rel="noopener">http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/</a></li>
+<li><a href="https://github.com/sony/sonyflake" target="_blank" rel="noopener">https://github.com/sony/sonyflake</a></li>
+</ol>
+<h2 id="如何获取时间戳"><a href="#如何获取时间戳" class="headerlink" title="如何获取时间戳"></a>如何获取时间戳</h2><p>Common Lisp本身提供了一个获取时间戳的函数，也就是<code>get-universal-time</code>，可惜的是，这个函数所返回的并不是通常意义上的<a href="https://en.wikipedia.org/wiki/Unix_time" target="_blank" rel="noopener">Epoch时间戳</a>，而是自己的一套计算时间的方式中的表示时间的整数。为了获得UNIX时间戳，需要借助于第三方库<a href="https://common-lisp.net/project/local-time/manual.html" target="_blank" rel="noopener"><code>local-time</code></a>。为了可以获取到毫秒精度的时间戳，一个可运行的函数如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> now ()</span><br><span class="line">  <span class="string">"Returns the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC."</span></span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">now</span> (<span class="name">local-time</span><span class="symbol">:now</span>))</span><br><span class="line">         (<span class="name">seconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-to-unix</span> now))</span><br><span class="line">         (<span class="name">milliseconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-millisecond</span> now)))</span><br><span class="line">    (<span class="name">+</span> (<span class="name">*</span> <span class="number">1000</span> seconds) milliseconds)))</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="如何获取机器ID"><a href="#如何获取机器ID" class="headerlink" title="如何获取机器ID"></a>如何获取机器ID</h2><p>这里参考了Sony的雪花ID算法中的思路，基于机器的内网IP地址来生成机器ID。当然了，Common Lisp标准中是没有提供获取机器的内网IP地址的方法的，这一点也可以借助于第三方库实现，选用的是<a href="https://common-lisp.net/project/ip-interfaces/" target="_blank" rel="noopener"><code>ip-interfaces</code></a>。通过这个库提供的<code>get-ip-interfaces</code>函数可以获取到机器的所有“接口”，遍历这个接口的列表后即可找出其中的内网IP。一台机器可能会有多个内网IP，我的方法是选用了第一个找到的内网IP地址。当然了，还需要一个将向量转化为数值的函数，并取出转化为数值后的IP地址的低10位，作为机器ID。</p>
+<h2 id="序号"><a href="#序号" class="headerlink" title="序号"></a>序号</h2><p>如果希望生成的ID是保持递增的，那么就需要维护一个可以原子递增的数值计数器。在真实的使用中可以通过Redis的INCR指令来生成这一个ID，但是因为这里的雪花ID算法是作为一个独立的库实现的，不需要依赖于数据库等外部组建，因此这里就直接使用了Common Lisp自带的<code>random</code>函数来生成这个序号了。</p>
+<p>全文完</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" class="post-title-link" itemprop="url">如何检查一组区间中是否存在两个区间有交集</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-03-19 22:49:46" itemprop="dateCreated datePublished" datetime="2017-03-19T22:49:46+08:00">2017-03-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2017/03/19/如何检查一组区间中是否存在两个区间有交集/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/19/如何检查一组区间中是否存在两个区间有交集/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>假设有N个区间，将它们表达为<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_i,%20e_i%5D" alt="">，其中下标i位于区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">中</p>
+<p>为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">而言，都有<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_i%20%3C%20b_%7Bi+1%7D" alt="">（这里的i小于N-1）。</p>
+<p>为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系</p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k" alt=""></p>
+<p>这是因为如果<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3C%20b_k" alt="">，那么所有位于区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_j,%20e_j%5D" alt="">中的数都将会小于 b_k，那么第j个区间与第k个区间就不可能有交集了，因此上述不等式一定成立。再加上这一组区间都是按照区间的下界递增排序的，那么必然有</p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_k%20%3C%20e_j" alt=""></p>
+<p>假设<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?k%20-%20j%20%3E%201" alt="">，由于k和j都是正整数，这意味着在第j和第k个区间之间，必然还存在着一个区间l，那么这个区间的必然满足</p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_l" alt=""></p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k%20%3E%20b_l" alt=""></p>
+<p>这就意味着第j个区间和第l个区间也存在交集，它们的交集是子区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_l,%20e_j%5D" alt="">（这里假设<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_l%20%3E%20e_j" alt="">）。这就说明了，如果可以在一组区间中找到两个不相邻的区间，它们存在重叠的部分，那么一定可以找到第三个区间，使得这个区间与其中的一个区间也存在重叠。</p>
+<p>这表示如果我们要判定一组区间是否存在重叠，那么只需要先将它们基于区间的起点按照递增排序后，比较每一对相邻的两个区间是否存在重叠即可。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+  </div>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">…</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Liutos</p>
+  <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Liutos" title="GitHub → https://github.com/Liutos" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://segmentfault.com/u/liutos" title="SegmentFault → https://segmentfault.com/u/liutos" rel="noopener" target="_blank"><i class="fa fa-fw fa-stack-overflow"></i>SegmentFault</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://xfy.herokuapp.com/" title="http://xfy.herokuapp.com/" rel="noopener" target="_blank">:- op( xfy ).</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.hsyyf.me/" title="http://www.hsyyf.me/" rel="noopener" target="_blank">月下叹逍遥/寒山烟雨</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.lainme.com/doku.php" title="http://www.lainme.com/doku.php" rel="noopener" target="_blank">Lainme's Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://lengxx.com/" title="http://lengxx.com/" rel="noopener" target="_blank">冷轩信</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://forum.ubuntu.org.cn/" title="http://forum.ubuntu.org.cn/" rel="noopener" target="_blank">Ubuntu中文论坛</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y-window.github.com/" title="http://y-window.github.com/" rel="noopener" target="_blank">Window的空间</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.thev.net/PaulLiu/" title="http://www.thev.net/PaulLiu/" rel="noopener" target="_blank">九瓜老师的博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://weibo.com/liutos" title="http://weibo.com/liutos" rel="noopener" target="_blank">博主的微博</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://github.com/Liutos" title="http://github.com/Liutos" rel="noopener" target="_blank">博主的GitHub页面</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  © 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liutos</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+<script src="/bundle.js"></script><script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Liutos.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+;
+!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

@@ -200,7 +200,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/27/如何编译progn/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/11/30/一些自我感觉良好的命名约定/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -214,260 +214,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/05/27/如何编译progn/" class="post-title-link" itemprop="url">如何编译progn</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-05-27 22:38:22 / 修改时间：22:41:00" itemprop="dateCreated datePublished" datetime="2019-05-27T22:38:22+08:00">2019-05-27</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/05/27/如何编译progn/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/27/如何编译progn/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="progn是什么玩意"><a href="#progn是什么玩意" class="headerlink" title="progn是什么玩意"></a>progn是什么玩意</h2><p><code>progn</code>是Common Lisp里面的一个special operator，见这份文档的说明：<a href="http://clhs.lisp.se/Body/s_progn.htm" target="_blank" rel="noopener">http://clhs.lisp.se/Body/s_progn.htm</a></p>
-<h2 id="为嘛要编译这东西"><a href="#为嘛要编译这东西" class="headerlink" title="为嘛要编译这东西"></a>为嘛要编译这东西</h2><p>现在已经支持了二元四则运算了，但现在这里有一个大问题，就是这四个运算没办法嵌套着组合使用。比如，遇到下面这样的代码，<code>jjcc2</code>函数就懵逼了</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> <span class="number">1</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br></pre></td></tr></tbody></table></figure>
-<p>那要编译这种代码的话怎么办呢？一个比较直观的做法，是引入临时变量，来保存嵌套在其中的表达式的求值结果，然后再用变量来代替原本嵌套的表达式。修改后的代码可能长这个样子</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> a (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">(<span class="name">+</span> <span class="number">1</span> a)</span><br></pre></td></tr></tbody></table></figure>
-<p>显然，这是有先后的时间依赖关系的两条语句，因此应当使用<code>progn</code>将它们包裹起来，结果如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">setq</span> a (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> a))</span><br></pre></td></tr></tbody></table></figure>
-<p>这样整个表达式的求值结果，或者说它被编译之后的运行结果，应当就是在寄存器<code>EAX</code>中放入整数6了。所以，本篇将来解决对<code>progn</code>的编译问题。</p>
-<h2 id="如何编译progn"><a href="#如何编译progn" class="headerlink" title="如何编译progn"></a>如何编译progn</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/05/27/如何编译progn/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/23/支持减、乘，以及除/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/23/支持减、乘，以及除/" class="post-title-link" itemprop="url">支持减、乘，以及除</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-05-23 21:50:19 / 修改时间：21:56:18" itemprop="dateCreated datePublished" datetime="2019-05-23T21:50:19+08:00">2019-05-23</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/05/23/支持减、乘，以及除/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/23/支持减、乘，以及除/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在<a href="http://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/">上一篇文章</a>中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。</p>
-<p>我自己模仿着x64的调用约定，规定四则运算的结果始终放在<code>EAX</code>这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到<code>EAX</code>寄存器中，再从<code>EAX</code>中减去或者除掉右操作数。</p>
-<p>在摸索除法的汇编代码怎么生成时，遇到了个费解的问题，最后才知道，原来需要把<code>EAX</code>寄存器的符号扩展到高位的<code>EDX</code>寄存器中去。对于<code>as</code>这个汇编器来说，需要用到<a href="https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-49/index.html" target="_blank" rel="noopener"><code>CLTD</code></a>指令。</p>
-<p>最后，<code>jjcc2</code>和<code>stringify</code>两个函数被修改为如下的样子</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/05/23/支持减、乘，以及除/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/21/Evernote与Leanote/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/21/Evernote与Leanote/" class="post-title-link" itemprop="url">Evernote与Leanote</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-05-21 22:38:19 / 修改时间：22:40:13" itemprop="dateCreated datePublished" datetime="2019-05-21T22:38:19+08:00">2019-05-21</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/05/21/Evernote与Leanote/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/21/Evernote与Leanote/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近开始重新用起了Evernote，当然还有Leanote，不过不算是“重新“而已。这两者各有各的优缺点，下面分别列举一下</p>
-<h2 id="Evernote的优缺点以及和Leanote的对比"><a href="#Evernote的优缺点以及和Leanote的对比" class="headerlink" title="Evernote的优缺点以及和Leanote的对比"></a>Evernote的优缺点以及和Leanote的对比</h2><p>Evernote可以比较灵活地调整文字的字号，如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Evernote%E4%B8%AD%E7%9A%84%E5%AD%97%E5%8F%B7%E9%80%89%E6%8B%A9.png" alt="image-20190515124117460"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/05/21/Evernote与Leanote/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/17/一个简陋的四则运算编译器实现/" class="post-title-link" itemprop="url">开发一个trivial的lisp编译器（一）</a>
+            <a href="/2019/11/30/一些自我感觉良好的命名约定/" class="post-title-link" itemprop="url">一些适用于Node.js的命名约定</a>
         </h1>
 
         <div class="post-meta">
@@ -477,14 +224,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-05-17 21:57:50" itemprop="dateCreated datePublished" datetime="2019-05-17T21:57:50+08:00">2019-05-17</time>
+              <time title="创建时间：2019-11-30 20:32:33" itemprop="dateCreated datePublished" datetime="2019-11-30T20:32:33+08:00">2019-11-30</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-10 12:59:00" itemprop="dateModified" datetime="2019-12-10T12:59:00+08:00">2019-12-10</time>
+                <time title="修改时间：2019-12-07 15:59:17" itemprop="dateModified" datetime="2019-12-07T15:59:17+08:00">2019-12-07</time>
               </span>
 
           
@@ -496,8 +243,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/05/17/一个简陋的四则运算编译器实现/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/17/一个简陋的四则运算编译器实现/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2019/11/30/一些自我感觉良好的命名约定/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/30/一些自我感觉良好的命名约定/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -512,22 +259,68 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>我已经记不清写过多少个lisp-like语言的解释器，以及编译成自制字节码的编译器了，但我想这一次依然不会是最后一个。我还记得之所以入坑写第一个解释器，是因为当时正好学了一点Common Lisp，数据结构的课本中又正好提到一种叫做广义表的数据结构，顿时觉得：“这个广义表不是正好可以表达CL中的atom和cons吗？”于是便尝试写一段程序解析输入、创建广义表，并打印成S表达式。在此基础上，又尝试着实现加减乘除等运算功能，一步步地开启了编写解释器的旅程。后来我看了Peter Norvig写的<a href="https://en.wikipedia.org/wiki/Paradigms_of_AI_Programming" target="_blank" rel="noopener">《Paradigms of AI Programming》</a>，里面有两章分别讲了如何编写解释器和编译器——编译到一个自制虚拟机的字节码的那种。在巨擘的指引下，我也开始写起了trivial的编译器。</p>
-<p>这次开工的这一款有所不同：它不再将lisp-like代码编译成架空虚拟机的字节码，而是编译成macOS的x64汇编代码，着实是一个不小的挑战。众所周知，lisp-like的语言（Scheme、Common Lisp、Clojure等）都是一些高级语言，它们摆弄着一些高层次的概念：cons、continua、lambda、symbol，等等。这些语言中的概念无法直接对应到x64汇编上，因此我必须填补它们之间的鸿沟；另一方面，我对x86汇编可以说是一窍不通，完全是一边搜索资料一边写，生成的汇编代码的运行效率多半很低。但，管它呢，只要好玩就足够了。</p>
-<p>开始来实现一个lisp-like语言到x64汇编的trivial编译器吧。</p>
-<h1 id="编译加法运算"><a href="#编译加法运算" class="headerlink" title="编译加法运算"></a>编译加法运算</h1><p>如果你看过<a href="https://book.douban.com/subject/3296317/" target="_blank" rel="noopener">龙书</a>，或其它经典的编译原理方面的书，那肯定知道编译器是一个很复杂的玩意儿。但我的编译器很简单，它会从一个小小的二元加法计算器开始演化。为了偷懒不写编译器的前端，我会使用Common Lisp来编写这个编译器的代码，也方便我直接从最让人兴奋的、生成汇编代码的环节入手。</p>
-<p>首先从最简单的两个小整数的加法运算开始。在lisp家族的语言，比如Common Lisp中，一段加法运算的代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>对于寄存器可以容纳的整数的相加，直接输出<code>add</code>指令即可，两个操作数可以暂时随意地存放到寄存器中。按照这个思路，一个简单的、可以编译小整数加法运算的编译器就出来了</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (addl %eax %ebx)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> stringify (<span class="name">asm</span>)</span><br><span class="line">  <span class="string">"根据jjcc2产生的S表达式生成汇编代码字符串"</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .section __TEXT,__text,regular,pure_instructions~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .globl _main~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"_main:~%"</span>)</span><br><span class="line">  (<span class="name">dolist</span> (<span class="name">ins</span> asm)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A, ~A~%"</span></span><br><span class="line">            (<span class="name">first</span> ins)</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">second</span> ins))</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">third</span> ins))))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl %ebx, %edi~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl $0x2000001, %eax~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        syscall~%"</span>))</span><br></pre></td></tr></tbody></table></figure>
-<p>在 REPL 中运行如下代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">stringify</span> (<span class="name">jjcc2</span> '(+ <span class="number">1</span> <span class="number">2</span>)))</span><br></pre></td></tr></tbody></table></figure>
-<p>得到如下的汇编代码</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EAX</span><br><span class="line">        MOVL $2, %EBX</span><br><span class="line">        ADDL %EAX, %EBX</span><br><span class="line">        movl %ebx, %edi</span><br><span class="line">        movl $0x2000001, %eax</span><br><span class="line">        syscall</span><br></pre></td></tr></tbody></table></figure>
-<p>将这段代码保存到名为<code>jjcc.s</code>的文件中再运行下列的命令，就得到一个能运行的<code>a.out</code>可执行文件了</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">as -o jjcc.o jjcc.s</span><br><span class="line">gcc jjcc.o</span><br><span class="line">./a.out</span><br><span class="line">echo $? # 输出3</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>有了这个基本的框架后，便可以开始扩展出很多功能了。比如除了加法，还可以支持减法、乘法，以及除法；可以支持<code>progn</code>，实现顺序求值多个表达式的效果；可以支持<code>setq</code>，实现变量和赋值的功能，等等。</p>
-<p>此外，这一小段代码也有不少问题。比如调用<code>format</code>输出<code>.section</code>的代码来自于<code>gcc -S</code>的结果，可以用更简短的<code>.text</code>代替；生成的汇编代码中，指令助记符和寄存器名字的大小写不统一，等等。之后我会尝试重构，将代码写得更好。</p>
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><blockquote>
+<p>There are only two hard things in Computer Science: cache invalidation and naming things.</p>
+<p>– Phil Karlton</p>
+</blockquote>
+<p>我<del>乔鲁诺·乔巴拿</del>有一个梦想，便是要成为程序员巨星。但如果你看过我写的代码，便知道我还远远够不上“巨星”二字。我的代码中有许多不一致的命名：</p>
+<ol>
+<li>常量的命名时而是全大写的（如<code>WAIT_CONFIRM</code>），时而是全小写的；</li>
+<li>某个项目大部分命名用的是camel case（如<code>TaskController</code>），但由于数据库中的列名用了snake case（如<code>context_id</code>），导致项目中与数据库列有关的代码混用了camel case和snake case（如<code>restricted_hours[new Date(timestamp * 1000).getHours()] = 1;</code>）；</li>
+<li>同样是构造复杂对象的函数，它们的前缀可能会是build、create、make，甚至compute中的任何一个；</li>
+<li>明明是一个数组，却用了单数的<code>order</code>作为变量名。</li>
+</ol>
+<p>之所以如此混乱，正是因为我没有遵循一套一致的命名规则。每当我在一个项目中蹦出一些新想法时，便会跃跃欲试——不，我真的就用上了。我不曾整理过自己的命名规则（天哪我已经写了三年的JavaScript了），以至于无从判断“新想法”是否真的新——也许它是一个已经被我抛弃的规则。</p>
+<p>为了不再深陷不一致命名的泥潭，我定下了本篇的命名规则，期望它们为以后的我指点迷津。</p>
+<h1 id="变量名"><a href="#变量名" class="headerlink" title="变量名"></a>变量名</h1><h2 id="通用规则"><a href="#通用规则" class="headerlink" title="通用规则"></a>通用规则</h2><ul>
+<li>变量名使用camel case的命名风格。例如，使用<code>namingConvention</code>，而不是<code>naming_convention</code>；</li>
+<li>在尽量遵循规则的基础上随机应变。</li>
+</ul>
+<h2 id="变量名的单复数规则"><a href="#变量名的单复数规则" class="headerlink" title="变量名的单复数规则"></a>变量名的单复数规则</h2><ul>
+<li>如果一个变量存储的值的类型为数组（即该变量作为<code>Array.isArray</code>方法的参数时结果为真），那么变量的名称就使用复数形式。例如，使用<code>fruits = []</code>而不是<code>fruit = []</code>。</li>
+<li>如果一个变量存储的值的类型为集合（即<code>Set</code>这个类型），那么变量的名称应当使用单词unique为前缀。例如，使用<code>uniqueUserIds</code>而不是<code>userIdSet</code>。</li>
+</ul>
+<h2 id="布尔变量的命名规则"><a href="#布尔变量的命名规则" class="headerlink" title="布尔变量的命名规则"></a>布尔变量的命名规则</h2><p>如果一个变量的值的类型为<code>boolean</code>，那么变量的名称应当以下列单词为前缀：</p>
+<ul>
+<li>is。当变量表达一个二元状态的时候，例如<code>isFull</code>、<code>isEmpty</code>。在is后面的应当是一个形容词；</li>
+<li>has。当变量表达历史上是否发生过某个事件的时候，例如<code>hasPaid</code>、<code>hasArrived</code>。在has后面的应当是一个动词，并且采用过去分词；</li>
+<li>can。当变量表达某种权限的时候，例如<code>canWrite</code>、<code>canExecute</code>。在can后面的应当是一个动词，并且采用现在分词。</li>
+</ul>
+<h2 id="数值变量的命名规则"><a href="#数值变量的命名规则" class="headerlink" title="数值变量的命名规则"></a>数值变量的命名规则</h2><ul>
+<li>如果变量中存储的是一系列数字中的最大值，那么变量的名称应当以max为前缀，例如<code>maxScore</code>。如果是最小值，则是以min为前缀，例如<code>minScore</code>；</li>
+<li>如果变量中存储的是一系列数字的和，那么变量的名称应当以total为前缀，例如<code>totalIncome</code>；</li>
+<li>如果变量中存储的是数组的长度，那么变量的名称可以用numberOf为前缀，例如<code>numberOfUsers</code>。</li>
+</ul>
+<h2 id="字符串变量的命名规则"><a href="#字符串变量的命名规则" class="headerlink" title="字符串变量的命名规则"></a>字符串变量的命名规则</h2><ul>
+<li>如果表达的是人名、品牌名、公司名、数据库中的表名，那么变量的名称可以用单词name结尾，例如<code>customerName</code>、<code>brandName</code>、<code>companyName</code>；</li>
+<li>如果表达的是按键或按钮上刻着的文字、纸质表格或电子表单上输入框左侧的简短说明，那么变量的名称可以用单词label结尾，例如<code>buttonLabel</code>；</li>
+<li>不允许使用单词content</li>
+</ul>
+<h1 id="函数名"><a href="#函数名" class="headerlink" title="函数名"></a>函数名</h1><ul>
+<li>函数的名称应当由动词和名词组成，例如<code>readFile</code>、<code>writeFile</code>；</li>
+<li>如果函数的功能是将参数转换为另一种形式的输出（比如进制转换、币种转换），那么函数的名称应当以单词to为前缀，例如<code>toDollar</code>、<code>toHexadecimal</code>；</li>
+<li>如果函数的功能是检验参数并返回一个布尔值，那么函数的名称应当以单词check为前缀，例如<code>checkIsDirectory</code>、<code>checkIsExecutable</code>；</li>
+<li>如果函数的功能是“计数”，那么函数的名称应当以单词count为前缀，并且其中被计数的对象应当为复数形式，例如<code>countPaidOrders</code>。</li>
+</ul>
+<h2 id="构造型函数的命名规则"><a href="#构造型函数的命名规则" class="headerlink" title="构造型函数的命名规则"></a>构造型函数的命名规则</h2><ul>
+<li>如果表达的是从无到有地创造一个对象，那么函数名可以用create作为前缀，例如<code>createObject</code>；</li>
+<li>如果表达的是将一些输入原封不动地放在一起（可能输入之间添加了其它东西）创造出一个对象，那么函数名可以用make作为前缀，例如<code>makeFloor</code>。进一步地，如果函数不改变输入的相对顺序，那么函数名可以用concat，例如<code>concatString</code>；</li>
+<li>如果函数会将根据输入创造出具有不止一个层级的对象，那么函数名可以用build作为前缀，例如<code>buildBinarySearchTree</code>。</li>
+</ul>
+<h2 id="修改型函数的命名规则"><a href="#修改型函数的命名规则" class="headerlink" title="修改型函数的命名规则"></a>修改型函数的命名规则</h2><ul>
+<li>如果函数负责更新数据库中的记录，那么函数名应当以单词update为前缀；</li>
+<li>如果函数修改的是一些可枚举的状态，那么函数名应当以单词change为前缀。</li>
+</ul>
+<h1 id="类名"><a href="#类名" class="headerlink" title="类名"></a>类名</h1><ul>
+<li>类的名称应当采用capital case的命名风格，例如<code>DatabaseConnection</code>；</li>
+<li>类的名称应当以一个名词结尾；</li>
+<li>如果类的存在是为了使用某种设计模式，那么类名应当可以反映在设计模式中所处的位置，例如在State模式中，代表具体状态的类的名称可以是<code>InitialState</code>、<code>UnpaidState</code>。</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://hackernoon.com/the-art-of-naming-variables-52f44de00aad" target="_blank" rel="noopener">The art of naming variables</a></li>
+<li><a href="https://google.github.io/styleguide/jsguide.html" target="_blank" rel="noopener">Google JavaScript Style Guide</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Letter_case" target="_blank" rel="noopener">Letter case</a></li>
+</ul>
 
       
     </div>
@@ -547,7 +340,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/11/21/Emacs走马观花/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -561,7 +354,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/05/07/Boostnote及对记笔记的思考/" class="post-title-link" itemprop="url">Boostnote及对记笔记的思考</a>
+            <a href="/2019/11/21/Emacs走马观花/" class="post-title-link" itemprop="url">带你见识一下传说中的Emacs</a>
         </h1>
 
         <div class="post-meta">
@@ -571,14 +364,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-05-07 23:06:43" itemprop="dateCreated datePublished" datetime="2019-05-07T23:06:43+08:00">2019-05-07</time>
+              <time title="创建时间：2019-11-21 22:06:51" itemprop="dateCreated datePublished" datetime="2019-11-21T22:06:51+08:00">2019-11-21</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-05-14 22:57:51" itemprop="dateModified" datetime="2019-05-14T22:57:51+08:00">2019-05-14</time>
+                <time title="修改时间：2019-11-26 22:01:01" itemprop="dateModified" datetime="2019-11-26T22:01:01+08:00">2019-11-26</time>
               </span>
 
           
@@ -590,8 +383,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/05/07/Boostnote及对记笔记的思考/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/07/Boostnote及对记笔记的思考/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2019/11/21/Emacs走马观花/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/21/Emacs走马观花/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -606,485 +399,409 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>这篇文章就是在<a href="https://boostnote.io/" target="_blank" rel="noopener">Boostnote</a> 中写成的XD</p>
-<h2 id="来龙去脉"><a href="#来龙去脉" class="headerlink" title="来龙去脉"></a>来龙去脉</h2><p>有一阵子，我沉迷于“笔记软件狩猎”中——就是不停寻找各种各样的笔记软件，再一个个试用，企图从中选出一个最强大的。回想起来，我尝试过有道云笔记、印象笔记、Quiver、Boostnote、OneNote、Yu Writer、Leanote（在本地搭建），等等。大部分都是浅尝辄止，例如OneNote，当我发现它不支持代码块语法高亮时，就放弃了它。目前仍然在使用的是Boostnote，并且也是最令我满意的。</p>
+          <p>本文通过与VSCode作对比，来简单地介绍Emacs的基本功能、特点，以及一些插件。本文所说的Emacs指的是<a href="https://www.gnu.org/software/emacs/" target="_blank" rel="noopener">GNU Emacs</a>，下文简称Emacs。</p>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><ul>
+<li>Emacs是一个文本编辑器，就像<a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VSCode</a>那样。它可以用来写代码、Markdown，以及其它任何纯文本；</li>
+<li>在Emacs中打开的每个文件都有一个“主模式”（major mode），就像在VSCode中每个文件都可以设置一种语言模式；</li>
+<li>除了主模式，在Emacs中还可以同时启用多个“次模式”（minor mode）。每一个次模式都可以提供自己的个性化功能；</li>
+<li>可以用一门叫ELisp的编程语言为Emacs开发插件，扩展新功能。有许多现成的插件可以安装使用。</li>
+</ul>
+<h1 id="与VSCode对比"><a href="#与VSCode对比" class="headerlink" title="与VSCode对比"></a>与VSCode对比</h1><p>接下来通过与VSCode作对比，来直观地感受一下Emacs的基本功能。</p>
+<h2 id="外观"><a href="#外观" class="headerlink" title="外观"></a>外观</h2><p>Emacs的官网上有一张应用截图</p>
+<p><img src="/images/loading.png" data-original="https://www.gnu.org/software/emacs/images/teaser.png" alt="Emacs的官网截图"></p>
+<p>第一眼看起来和VSCode还是非常不一样的</p>
+<p><img src="/images/loading.png" data-original="https://code.visualstudio.com/assets/home/home-screenshot-mac.png" alt="VSCode的官网截图"></p>
+<p>默认的Emacs界面上也会有菜单栏、工具栏，以及底下的状态栏（在Emacs中其实这一行叫做mode line），这些元素在VSCode上也可以找到。VSCode一般给人的印象还有侧边栏、资源管理器视图，以及minimap视图。Emacs的默认底色是白色，而VSCode则是黑色。</p>
+<h2 id="键盘操作"><a href="#键盘操作" class="headerlink" title="键盘操作"></a>键盘操作</h2><p>Emacs有着丰富的快捷键（在Emacs中称之为key binding），但一些常见的功能的快捷键与VSCode等其它软件并不相同，如下表所示</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Emacs</th>
+<th>VSCode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新建文件</td>
+<td><code>C-x C-f</code></td>
+<td><code>⌘n</code></td>
+</tr>
+<tr>
+<td>打开文件或目录</td>
+<td><code>C-x C-f</code></td>
+<td><code>⌘o</code></td>
+</tr>
+<tr>
+<td>保存文件</td>
+<td><code>C-x C-s</code></td>
+<td><code>⌘s</code></td>
+</tr>
+<tr>
+<td>另存为</td>
+<td><code>C-x C-w</code></td>
+<td><code>⇧⌘s</code></td>
+</tr>
+<tr>
+<td>撤销</td>
+<td><code>C-x u</code></td>
+<td><code>⌘z</code></td>
+</tr>
+<tr>
+<td>剪切</td>
+<td><code>C-w</code></td>
+<td><code>⌘x</code></td>
+</tr>
+<tr>
+<td>复制</td>
+<td><code>M-w</code></td>
+<td><code>⌘c</code></td>
+</tr>
+<tr>
+<td>粘贴</td>
+<td><code>C-y</code></td>
+<td><code>⌘v</code></td>
+</tr>
+<tr>
+<td>查找</td>
+<td><code>C-s</code></td>
+<td><code>⌘f</code></td>
+</tr>
+</tbody>
+</table>
+<p>在上表中，<code>C-x</code>表示先按住<code>control</code>键再按<code>x</code>键，<code>M-w</code>表示先按住<code>alt</code>键再按<code>w</code>键；<code>⌘</code>表示Mac上的<code>command</code>键、<code>⇧</code>表示<code>shift</code>键。此外，在Emacs中还可以使用<code>C-p</code>、<code>C-nn</code>、<code>C-b</code>，以及<code>C-f</code>键来往上、下、左、右四个方向移动光标，不需要移动手臂便可以在编辑的文件中到处移动，提高效率。VSCode也可以使用Emacs风格的快捷键，如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/VSCode%E8%AE%BE%E7%BD%AE%E9%94%AE%E7%9B%98%E6%98%A0%E5%B0%84.png" alt=""></p>
+<h2 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a>文件管理</h2><p>VSCode自带美观大方的标签页功能，此外还可以将编辑器横向及纵向拆分，如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/VSCode%E7%9A%84%E6%A0%87%E7%AD%BE%E9%A1%B5.png" alt=""></p>
+<p>Emacs默认是没有标签页的功能的，但也支持切割编辑器，比如在下图中，就将编辑器分为左右两部分，并且左侧还被分为了上下两部分，这三个区域可以展示相同或不同的三个文件。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%88%87%E5%89%B2%E7%BC%96%E8%BE%91%E5%99%A8.png" alt=""></p>
+<h2 id="默认的编程语言支持"><a href="#默认的编程语言支持" class="headerlink" title="默认的编程语言支持"></a>默认的编程语言支持</h2><p>VSCode支持非常多的编程语言，点击窗口右下角的语言模式便可以看到这份清单</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%BC%8F%E5%88%97%E8%A1%A8.png" alt=""></p>
+<p>Emacs虽然没有这么一份清单，但支持的语言的数量也是不遑多让的。不过仅仅是默认的Emacs的话，对编程语言的支持没有VSCode那么开箱即用。例如，比起Emacs，VSCode默认对JavaScript的支持就很好，不仅仅有语法高亮、自动补全，并且还有基于变量类型、函数定义，以及导入的模块等信息实现的智能补全，而Emacs只有平凡的基于文本的语法高亮和自动补全罢了。</p>
+<h2 id="搜索功能"><a href="#搜索功能" class="headerlink" title="搜索功能"></a>搜索功能</h2><p>除了按下<code>⌘f</code>在文件内搜索之外，VSCode左侧工具栏中有一个名为搜索的入口，可以实现在打开的项目的所有文件中搜索特定内容的功能，并且还能用于替换。Emacs尽管没有这么一个GUI入口，但提供了<code>grep</code>命令来做到同样的事情。</p>
+<p>在Emacs中按下<code>M-x</code>后输入<code>grep</code>并按回车，便会在minibuffer中等待使用者的进一步输入</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/grep%E5%91%BD%E4%BB%A4.png" alt=""></p>
+<p>显然，这是直接调用了同名的命令行程序<code>grep</code>来实现搜索的，控制选项比VSCode的搜索功能要丰富许多。</p>
+<h2 id="集成git"><a href="#集成git" class="headerlink" title="集成git"></a>集成git</h2><p>git可以说已经成为了日常开发中不可或缺的一个工具，如果能够在编辑器内方便地调用git的话会大大提高效率。VSCode通过左侧工具栏的源代码管理入口提供了这个功能，在Emacs中则是通过一个叫做<code>VC dir</code>的主模式提供这个功能。</p>
+<p>在Emacs中按下快捷键<code>C-x v d</code>，然后输入使用git管理的项目的目录地址，便会打开一个新的编辑区域</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/VCdir%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<p>当处于这个模式下时，会有一些新的快捷键可以用，比如将光标移动到显示<code>edited</code>的行上按下等号键，可以打开另一个编辑区域查看该文件的修改内容；按下<code>m</code>键可以选中光标所在行的文件，然后按<code>v</code>键打开一个新的编辑区域来填写commit message，写完之后按下<code>C-c C-c</code>提交（即调用<code>git commit</code>命令）；最后按下<code>q</code>键可以退出<code>VC dir</code>模式的编辑区域。</p>
+<h2 id="集成终端"><a href="#集成终端" class="headerlink" title="集成终端"></a>集成终端</h2><p>在VSCode中通过选中顶部菜单的“查看”，再点击“集成终端”，便可以打开命令行，然后像平时在其它的终端模拟器中那样使用命令。Emacs中也可以打开终端，方法是按下快捷键<code>M-x</code>然后输入<code>eshell</code>并回车，然后Emacs便会在当前窗口中打开一个名为<code>*eshell*</code>的编辑区域，显示命令行提示符和闪烁的光标，并等待使用者的进一步交互。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/eshell%E7%AA%97%E5%8F%A3.png" alt=""></p>
+<p>有意思的是，这不是一个真正的命令行程序。比如在<code>*eshell*</code>中输入<code>which pwd</code>，输出结果是<code>eshell/pwd is a compiled Lisp function in ‘em-dirs.el’.</code>。也就是说，<code>eshell</code>中的某一些命令是Emacs重新实现的；此外，在<code>*eshell*</code>中可以运行Emacs的扩展语言——ELisp。比如输入<code>(+ 1 1)</code>并按下回车，会输出2。</p>
+<h2 id="扩展能力"><a href="#扩展能力" class="headerlink" title="扩展能力"></a>扩展能力</h2><p>VSCode有一个<a href="https://marketplace.visualstudio.com/" target="_blank" rel="noopener">插件市场</a></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%8F%92%E4%BB%B6%E5%B8%82%E5%9C%BA.jpg" alt=""></p>
+<p>Emacs也有<a href="https://melpa.org/#/?q=yy" target="_blank" rel="noopener">一个</a>，不过得承认这个网页确实没有VSCode阵营的吸引人</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/melpa%E9%A6%96%E9%A1%B5.png" alt=""></p>
+<p>在Emacs中按下<code>M-x</code>后输入<code>package-install</code>回车，Emacs会等待用户输入要安装的插件的名字——可以按下<code>⇥</code>键（Mac上的tab键）让Emacs尝试自动补全。确认名字无误后再按回车便可以安装使用了——但一般还需要做一些微调。</p>
+<h1 id="炫酷的特性和插件"><a href="#炫酷的特性和插件" class="headerlink" title="炫酷的特性和插件"></a>炫酷的特性和插件</h1><p>除了上面与VSCode对比的一些基本操作以外，Emacs还有自身的一些特色功能，更有世上的众多优秀程序员为Emacs贡献了不胜枚举的优秀插件，它们极大地扩展了Emacs的能力，提升了文字编辑这项活动的效率，甚至超越了文字编辑。</p>
+<h2 id="内置的功能"><a href="#内置的功能" class="headerlink" title="内置的功能"></a>内置的功能</h2><h3 id="颜色主题"><a href="#颜色主题" class="headerlink" title="颜色主题"></a>颜色主题</h3><p>Emacs也可以安装颜色主题来改变外观。我比较喜欢的一款主题是<code>gruvbox-light-soft</code>，只需要在Emacs的配置文件中写上<code>(load-theme 'gruvbox-light-soft t)</code>即可启用。在这个主题的<a href="https://github.com/greduan/emacs-theme-gruvbox" target="_blank" rel="noopener">仓库主页</a>可以看到一些效果图。</p>
+<h3 id="将当前行居中或置顶"><a href="#将当前行居中或置顶" class="headerlink" title="将当前行居中或置顶"></a>将当前行居中或置顶</h3><p>Emacs可以用纯键盘的操作，将光标当前所在的行移到窗口的中间来显示。我特别喜欢这个功能，之前用VSCode时候一直想找这个功能的等价物，可惜没找着。在Emacs中，按下一次<code>control+l</code>，光标所在的行就会移动到窗口的中间；按下第二次，则移动到窗口的顶部展示；再按一次，会去到窗口的底部。如果再按一次，那么就跟第一次一样回到窗口的中间。每当Emacs正在编辑的内容已经去到屏幕上较低的位置时，我便会用这个功能校正一下。</p>
+<p>比起用鼠标拖动滚动条或者用滚轮来滚动，我更喜欢这种表意更清晰的方式。</p>
+<h3 id="纯键盘选中一片区域"><a href="#纯键盘选中一片区域" class="headerlink" title="纯键盘选中一片区域"></a>纯键盘选中一片区域</h3><p>在Emacs中可以用单击鼠标右键的方式来选中一片区域。当按下鼠标右键的时候，从光标所在的位置开始，到鼠标点击的位置结束的内容便会被选中。但我个人更喜欢纯键盘的操作，首先是在要选中的内容的起点按下快捷键<code>C-@</code>，这时候Emacs会在minibuffer中打印一条<code>Mark set</code>的消息。然后移动光标——用方向键还是用一系列的快捷键，甚至直接跳转到某一行也可以——到待选中的内容的终点。这时候加在起点和终点间的内容便会被选中，它们会有特殊的背景色，如下动图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%BA%AF%E9%94%AE%E7%9B%98%E9%80%89%E4%B8%AD%E4%B8%80%E7%89%87%E5%8C%BA%E5%9F%9F.gif" alt=""></p>
+<p>因为按<code>C-@</code>实在是太别扭了，所以我将这个快捷键修改为了<code>M-SPC</code>（先按住<code>alt</code>键再按下空格键）。如果更喜欢鼠标操作的话，也可以像在VSCode中那样，在终点按住<code>shift</code>键再单击鼠标左键。</p>
+<h3 id="矩形编辑"><a href="#矩形编辑" class="headerlink" title="矩形编辑"></a>矩形编辑</h3><p>在VSCode中按住<code>shift</code>和<code>option</code>键，再单击鼠标右键并拖动就可以选中一片矩形的区域，在Emacs中也支持这样的矩形编辑的功能。像下图这样，先定位到要选中为矩形区域的左上角按下<code>C-@</code>，再移动光标到目标矩形区域的右下角，最后按下快捷键<code>C-x r k</code>即可。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%9F%A9%E5%BD%A2%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA.gif" alt=""></p>
+<h2 id="惊艳的插件"><a href="#惊艳的插件" class="headerlink" title="惊艳的插件"></a>惊艳的插件</h2><h3 id="快速跳转"><a href="#快速跳转" class="headerlink" title="快速跳转"></a>快速跳转</h3><p>Emacs本身支持跳转到指定的某一行，只需要按下快捷键<code>M-g M-g</code>然后输入行号并回车即可。但我一般是不显示行号的，所以这个功能其实比较少用。我使用一个名为<a href="https://github.com/abo-abo/avy" target="_blank" rel="noopener">avy</a>的插件来增强跳转功能，主要用的是它提供的<code>avy-goto-line</code>函数。依照这个插件的<a href="https://github.com/abo-abo/avy#avy-goto-line" target="_blank" rel="noopener">文档</a>，我为这个函数配置了快捷键<code>M-g f</code>，因此当我想要快速地跳转到屏幕上可见的区域中、离光标所在位置稍微有点远的行时，我便按下这个快捷键，然后按照提示按下相应的英文字母键既可，具体效果参见下面的演示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8avy%E5%9C%A8%E8%A1%8C%E9%97%B4%E8%B7%B3%E8%BD%AC.gif" alt=""></p>
+<h3 id="发出HTTP请求"><a href="#发出HTTP请求" class="headerlink" title="发出HTTP请求"></a>发出HTTP请求</h3><p>VSCode中有一个叫做<a href="https://marketplace.visualstudio.com/items?itemName=humao.rest-client" target="_blank" rel="noopener">REST Client</a>的插件，Emacs中则是有一个叫做<a href="https://github.com/pashky/restclient.el" target="_blank" rel="noopener">restclient.el</a>的主模式。借助于<code>restclient.el</code>便可以直接在一个文本文件中写好自己要发出的HTTP请求的内容，然后一键触发。之前我是用<a href="https://insomnia.rest/" target="_blank" rel="noopener">Insomnia</a>这个工具的，尽管它很强大，但很多时候我不需要那么强大的功能，而且Insomnia消耗内存比较多，于是我便回到<code>restclient.el</code>上了。<code>restclient.el</code>的效果大致如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8restclient.el%E5%8F%91%E5%87%BA%E8%AF%B7%E6%B1%82.png" alt=""></p>
+<h3 id="增强的git集成功能"><a href="#增强的git集成功能" class="headerlink" title="增强的git集成功能"></a>增强的git集成功能</h3><p>尽管Emacs自带了<code>VC dir</code>这个主模式，但我更喜欢用<a href="https://github.com/magit/magit" target="_blank" rel="noopener">magit</a>这个插件，尤其是它的<code>magit-discard</code>功能，可以在查看代码的差异的过程中方便地舍弃一些不必要的修改（例如添加一行<code>console.log</code>的调用）。例如下图，通过按下<code>n</code>将光标移动到某一片修改上再按下<code>k</code>键，Emacs便会询问使用者是否要“丢弃”这一块改动。如果按下<code>y</code>，那么这一块被选中的区域的内容便会恢复到git当中未修改的状态。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/magit-discard.png" alt=""></p>
+<h3 id="增强的文件内搜索功能"><a href="#增强的文件内搜索功能" class="headerlink" title="增强的文件内搜索功能"></a>增强的文件内搜索功能</h3><p>Emacs默认的搜索使用的是<code>search-forward</code>函数，插件<a href="https://github.com/abo-abo/swiper#swiper" target="_blank" rel="noopener">swiper</a>提供的功能更强大——不仅可以是字符串的完全匹配，也可以基于正则表达式来搜索，并且展示效果更直观，如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/swiper%E7%9A%84%E9%AB%98%E4%BA%AE%E5%92%8C%E9%A2%84%E8%A7%88.png" alt=""></p>
+<h3 id="代码片段工具"><a href="#代码片段工具" class="headerlink" title="代码片段工具"></a>代码片段工具</h3><p>VSCode自带了一个“用户代码片段”的功能（通过顶部菜单“Code”，再选中“首选项”可以看到），可以用来定义一些短语，这些短语会在被选中的时候展开为完整的内容。Emacs有一个名为<a href="https://github.com/joaotavora/yasnippet" target="_blank" rel="noopener">yasnippet</a>的插件也提供了类似的功能，但定义代码片段的语法不同。并且，<code>yasnippet</code>支持在短语的定义中嵌入ELisp代码，扩展性远远高于只能使用字符串及占位符的VSCode的等价功能。</p>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><p>Emacs还有许多有意思的插件，比如<a href="https://github.com/gonewest818/dimmer.el" target="_blank" rel="noopener">dimmer.el</a>，可以让当前没有获得焦点的窗口显示得黯淡一点；<a href="https://github.com/ledger/ledger-mode" target="_blank" rel="noopener">ledger-mode</a>，可以用Emacs来记账。这里就不一一列举了，各位有兴趣的话可以自己摸索Emacs，相信会遇到自己喜欢的插件的。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>比起家大业大的VSCode，Emacs算不上是开箱即用。它没有VSCode那么友好的界面和平易近人的操作方式，人气也没有VSCode那么旺，当遇到问题的时候可能没那么好求助到人，并且学习曲线（小众的预设快捷键、冷门的扩展语言）也比较高。但Emacs的扩展能力很强，现有的插件已经很丰富了，可以满足大部分的需求，遇到问题也可以到有模有样的<a href="https://emacs-china.org/" target="_blank" rel="noopener">论坛</a>求助。如果喜欢折腾的话，Emacs会是一个不错的选择，至少我自己用得很开心。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/10/29/将二叉树写到磁盘上/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/29/将二叉树写到磁盘上/" class="post-title-link" itemprop="url">将二叉树写到磁盘上</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-10-29 22:51:29 / 修改时间：23:06:07" itemprop="dateCreated datePublished" datetime="2019-10-29T22:51:29+08:00">2019-10-29</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/10/29/将二叉树写到磁盘上/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/29/将二叉树写到磁盘上/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>有一阵子很好奇一个问题：MySQL到底是如何将内存中的B+树写入到磁盘文件中的。明明是一棵树，要怎样才能存储成线性的字节流呢？干脆自己动手，试着实现一个简单的版本，来帮助自己摸点门道。虽然想法很不错，不过一上来就面对噩梦级别的B+树也太为难人了，因此就先从简单的二叉树入手吧。</p>
+<h2 id="出来吧，二叉搜索树"><a href="#出来吧，二叉搜索树" class="headerlink" title="出来吧，二叉搜索树"></a>出来吧，二叉搜索树</h2><p>本文使用Common Lisp进行开发。</p>
+<p>首先定义这棵二叉搜索树的节点的类型</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defclass</span> &lt;node&gt; ()</span><br><span class="line">  ((<span class="name">data</span></span><br><span class="line">    <span class="symbol">:accessor</span> node-data</span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:data</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"节点中的数据"</span>)</span><br><span class="line">   (<span class="name">left</span></span><br><span class="line">    <span class="symbol">:accessor</span> node-left</span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:left</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"左子树"</span>)</span><br><span class="line">   (<span class="name">right</span></span><br><span class="line">    <span class="symbol">:accessor</span> node-right</span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:right</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"右子树"</span>))</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"二叉搜索树的节点"</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>基于节点进一步定义二叉树的类型</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">deftype</span> &lt;bst&gt; () '(or &lt;node&gt; null))</span><br></pre></td></tr></tbody></table></figure>
+<p>如此一来，要创建节点和空树都是浑然天成的事情了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> make-node (<span class="name">data</span> left right)</span><br><span class="line">  <span class="string">"创建一个二叉搜索树的节点"</span></span><br><span class="line">  (<span class="name">check-type</span> data integer)</span><br><span class="line">  (<span class="name">check-type</span> left &lt;bst&gt;)</span><br><span class="line">  (<span class="name">check-type</span> right &lt;bst&gt;)</span><br><span class="line">  (<span class="name">make-instance</span> '&lt;node&gt;</span><br><span class="line">                 <span class="symbol">:data</span> data</span><br><span class="line">                 <span class="symbol">:left</span> left</span><br><span class="line">                 <span class="symbol">:right</span> right))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> make-empty-bst ()</span><br><span class="line">  <span class="string">"创建一颗空树"</span></span><br><span class="line">  <span class="literal">nil</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>要判断一颗二叉树是否为空树只需要简单包装一下<code>cl:null</code>函数即可</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> empty-bst-p (<span class="name">bst</span>)</span><br><span class="line">  <span class="string">"检查BST是否为一个空的二叉搜索树"</span></span><br><span class="line">  (<span class="name">null</span> bst))</span><br></pre></td></tr></tbody></table></figure>
+<p>为了生成必要的测试数据，需要提供一个往二叉树中添加数据的功能</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> insert-node (<span class="name">bst</span> data)</span><br><span class="line">  <span class="string">"往一颗现有的二叉搜索树BST中加入一个数据，并返回这颗新的二叉搜索树"</span></span><br><span class="line">  (<span class="name">check-type</span> bst &lt;bst&gt;)</span><br><span class="line">  (<span class="name">check-type</span> data integer)</span><br><span class="line">  (<span class="name">when</span> (<span class="name">empty-bst-p</span> bst)</span><br><span class="line">    (<span class="name">return-from</span> insert-node</span><br><span class="line">      (<span class="name">make-node</span> data</span><br><span class="line">                 (<span class="name">make-empty-bst</span>)</span><br><span class="line">                 (<span class="name">make-empty-bst</span>))))</span><br><span class="line"></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">&lt;</span> data (<span class="name">node-data</span> bst))</span><br><span class="line">         (<span class="name">setf</span> (<span class="name">node-left</span> bst)</span><br><span class="line">               (<span class="name">insert-node</span> (<span class="name">node-left</span> bst) data))</span><br><span class="line">         bst)</span><br><span class="line">        (<span class="name">t</span></span><br><span class="line">         (<span class="name">setf</span> (<span class="name">node-right</span> bst)</span><br><span class="line">               (<span class="name">insert-node</span> (<span class="name">node-right</span> bst) data))</span><br><span class="line">         bst)))</span><br></pre></td></tr></tbody></table></figure>
+<p>有了<code>insert-node</code>便可以从空树开始构筑起一棵二叉搜索树</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> create-bst (<span class="name">numbers</span>)</span><br><span class="line">  <span class="string">"根据NUMBERS中的数值构造一棵二叉搜索树。相当于NUMBERS中的数字从左往右地插入到一棵空的二叉搜索树中"</span></span><br><span class="line">  (<span class="name">check-type</span> numbers list)</span><br><span class="line">  (<span class="name">reduce</span> #'(lambda (bst data)</span><br><span class="line">              (insert-node bst data))</span><br><span class="line">          numbers</span><br><span class="line">          <span class="symbol">:initial-value</span> (<span class="name">make-empty-bst</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<p>现在来生成稍后测试用的二叉树</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defvar</span> *bst* (<span class="name">create-bst</span> '(<span class="number">2</span> <span class="number">1</span> <span class="number">3</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<p>模仿命令行工具<code>tree</code>的格式，提供一个打印二叉树的功能</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> print-spaces (<span class="name">n</span>)</span><br><span class="line">  <span class="string">"打印N个空格"</span></span><br><span class="line">  (<span class="name">dotimes</span> (<span class="name">i</span> n)</span><br><span class="line">    (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">" "</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> print-bst (<span class="name">bst</span>)</span><br><span class="line">  <span class="string">"打印二叉树BST到标准输出"</span></span><br><span class="line">  (<span class="name">check-type</span> bst &lt;bst&gt;)</span><br><span class="line">  (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">bst</span> depth)</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">empty-bst-p</span> bst)</span><br><span class="line">                    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"^~%"</span>))</span><br><span class="line">                   (<span class="name">t</span></span><br><span class="line">                    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~%"</span> (<span class="name">node-data</span> bst))</span><br><span class="line">                    (<span class="name">print-spaces</span> (<span class="name">*</span> <span class="number">2</span> depth))</span><br><span class="line">                    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"|-"</span>)</span><br><span class="line">                    (<span class="name">aux</span> (<span class="name">node-left</span> bst) (<span class="number">1</span>+ depth))</span><br><span class="line">                    (<span class="name">print-spaces</span> (<span class="name">*</span> <span class="number">2</span> depth))</span><br><span class="line">                    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"`-"</span>)</span><br><span class="line">                    (<span class="name">aux</span> (<span class="name">node-right</span> bst) (<span class="number">1</span>+ depth))))))</span><br><span class="line">    (<span class="name">aux</span> bst <span class="number">0</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<p>二叉树<code>*bst*</code>的打印结果如下</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">|-1</span><br><span class="line">  |-^</span><br><span class="line">  `-^</span><br><span class="line">`-3</span><br><span class="line">  |-^</span><br><span class="line">  `-^</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="接下来终于要写盘了"><a href="#接下来终于要写盘了" class="headerlink" title="接下来终于要写盘了"></a>接下来终于要写盘了</h2><p>总算要开始实现将二叉树写入磁盘文件的功能了。将内存中的二叉树写入到文件中，相当于将树形的数据结构转换为线性的存储结构——毕竟磁盘上的文件可以认为就是线性的字节流。在这块字节流中，除了要保存每一个节点的数据之外，同样重要的还有节点间的父子关系。</p>
+<p>有很多种写盘的方法。比如说，可以模仿<a href="https://www.jianshu.com/p/934d95a80e6d" target="_blank" rel="noopener">树的顺序存储结构</a>将二叉树序列化到磁盘上。以上面的二叉树<code>*bst*</code>为例，它是一棵满二叉树，如果采用顺序存储，那么首先分配一个长度为3的数组，在下标为0的位置存储根节点的数字2，在下标为1的位置存储左孩子的数字1，在下标为2的位置存储右孩子的数字3，如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/bst.png" alt=""></p>
+<p>推广到高度为<code>h</code>的二叉树，则需要长度为$2^h-1$的数组来存储所有节点的数据。假设每一个节点的数据都是32位整数类型，那么一棵高度为<code>h</code>的二叉树在磁盘上便需要占据$4·(2^h-1)$个字节。这个做法虽然可行，但比较浪费存储空间。它将节点间的父子关系用隐式的下标关系来代替，节省了存储左右子树的“指针”所需的空间，比较适合存储满二叉树或接近满的二叉树。</p>
+<p>对于稀疏的二叉树，如果在序列化后的字节流中显式地记录节点间的父子关系，便可以节省很多不存在的节点所占据的存储空间。比如说，对于每一个节点，都序列化为磁盘上的12个字节：</p>
+<ol>
+<li>下标为0到3的4个字节，存储的是节点中的数据；</li>
+<li>下标为4到7的4个字节，存储的是节点的左子树在文件中的偏移；</li>
+<li>下标为8到11的4个字节，存储的是节点的右子树在文件中的偏移</li>
+</ol>
+<p>如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/bst2.png" alt=""></p>
+<p>上面的数组表示磁盘上的一个文件，每一个方格为一个字节，每个方格在文件内的偏移从左往右依次增大。由于采用后序遍历的方式依次序列化二叉树中的节点数据和指针，因此左孩子首先被写入文件，然后是右孩子，最后才是根节点。推广到所有的二叉树，便是先将左右子树追加写入磁盘文件，再将根节点的数据、左子树根节点在文件内的偏移，以及右子树根节点在文件内的偏移追加到文件末尾；如果左右子树是空的，那么以偏移0表示。</p>
+<p>这是一个递归的过程，而每一次递归调用应当返回两个值：</p>
+<ol>
+<li>写入的总字节数<code>bytes</code></li>
+<li>根节点所占据的字节数<code>root-bytes</code></li>
+</ol>
+<p><code>bytes</code>便是右子树开始写入时的文件偏移，必须依靠这个信息确定右子树的每一个节点在文件内的偏移；使用<code>bytes</code>减去<code>root-bytes</code>，再加上左子树开始写入时的偏移量，便可以得知左子树的根节点在文件内的位置。最终实现写盘功能的代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; 定义序列化二叉树的函数</span></span><br><span class="line">(<span class="name">defun</span> write-fixnum/32 (<span class="name">n</span> stream)</span><br><span class="line">  <span class="string">"将定长数字N输出为32位的比特流"</span></span><br><span class="line">  (<span class="name">check-type</span> n fixnum)</span><br><span class="line">  (<span class="name">check-type</span> stream stream)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">octets</span> (<span class="name">bit-smasher</span><span class="symbol">:octets&lt;-</span> n)))</span><br><span class="line">    (<span class="name">setf</span> octets (<span class="name">coerce</span> octets 'list))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> <span class="number">4</span> (<span class="name">length</span> octets)))</span><br><span class="line">      (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">      (<span class="name">push</span> <span class="number">0</span> octets))</span><br><span class="line">    (<span class="name">dolist</span> (<span class="name">n</span> octets)</span><br><span class="line">      (<span class="name">write-byte</span> n stream))))</span><br><span class="line"></span><br><span class="line"><span class="comment">;;; 这是一个递归的函数，写入一棵二叉树的逻辑，就是先写入左子树，再写入右子树，最后写入根节点，也就是后序遍历</span></span><br><span class="line"><span class="comment">;;; 由于要序列化为字节流，因此需要用字节流中的偏移的形式代替内存中的指针，实现从根节点指向左右子树</span></span><br><span class="line"><span class="comment">;;; offset是开始序列化bst的时候，在字节流中所处的偏移，同时也是这颗树第一个被写入的节点在字节流中的偏移</span></span><br><span class="line"><span class="comment">;;; 每次调用write-bst-bytes后的返回值有两个，分别为二叉树一共写入的字节数，以及根节点所占的字节数</span></span><br><span class="line">(<span class="name">defun</span> write-bst-bytes (<span class="name">bst</span> stream offset)</span><br><span class="line">  <span class="string">"将二叉树BST序列化为字节写入到流STREAM中。OFFSET表示BST的第一个字节距离文件头的偏移"</span></span><br><span class="line">  (<span class="name">check-type</span> bst &lt;bst&gt;)</span><br><span class="line">  (<span class="name">check-type</span> stream stream)</span><br><span class="line">  (<span class="name">check-type</span> offset integer)</span><br><span class="line">  (<span class="name">when</span> (<span class="name">empty-bst-p</span> bst)</span><br><span class="line">    (<span class="name">return-from</span> write-bst-bytes</span><br><span class="line">      (<span class="name">values</span> <span class="number">0</span> <span class="number">0</span>)))</span><br><span class="line"></span><br><span class="line">  <span class="comment">;; 以后序遍历的方式处理整棵二叉树</span></span><br><span class="line">  (<span class="name">multiple-value-bind</span> (<span class="name">left-bytes</span> left-root-bytes)</span><br><span class="line">      (<span class="name">write-bst-bytes</span> (<span class="name">node-left</span> bst) stream offset)</span><br><span class="line"></span><br><span class="line">    (<span class="name">multiple-value-bind</span> (<span class="name">right-bytes</span> right-root-bytes)</span><br><span class="line">        (<span class="name">write-bst-bytes</span> (<span class="name">node-right</span> bst) stream (<span class="name">+</span> offset left-bytes))</span><br><span class="line"></span><br><span class="line">      (<span class="name">write-fixnum/32</span> (<span class="name">node-data</span> bst) stream)</span><br><span class="line">      (<span class="name">if</span> (<span class="name">zerop</span> left-bytes)</span><br><span class="line">          (<span class="name">write-fixnum/32</span> <span class="number">0</span> stream)</span><br><span class="line">          (<span class="name">write-fixnum/32</span> (<span class="name">-</span> (<span class="name">+</span> offset left-bytes) left-root-bytes) stream))</span><br><span class="line">      (<span class="name">if</span> (<span class="name">zerop</span> right-bytes)</span><br><span class="line">          (<span class="name">write-fixnum/32</span> <span class="number">0</span> stream)</span><br><span class="line">          (<span class="name">write-fixnum/32</span> (<span class="name">-</span> (<span class="name">+</span> offset left-bytes right-bytes) right-root-bytes) stream))</span><br><span class="line">      <span class="comment">;; 之所以要加上12个字节，是因为在写完了左右子树之后，就紧邻着写根节点了。因此，根节点就是在从right-node-offset的位置，接着写完右子树的根节点后的位置，而右子树的根节点占12个字节</span></span><br><span class="line">      (<span class="name">let</span> ((<span class="name">root-bytes</span> (<span class="name">*</span> <span class="number">3</span> <span class="number">4</span>)))</span><br><span class="line">        (<span class="name">values</span> (<span class="name">+</span> left-bytes right-bytes root-bytes)</span><br><span class="line">                root-bytes)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> write-bst-to-file (<span class="name">bst</span> filespec)</span><br><span class="line">  <span class="string">"将二叉树BST序列化为字节流并写入到文件中"</span></span><br><span class="line">  (<span class="name">check-type</span> bst &lt;bst&gt;)</span><br><span class="line">  (<span class="name">with-open-file</span> (<span class="name">stream</span> filespec</span><br><span class="line">                          <span class="symbol">:direction</span> <span class="symbol">:output</span></span><br><span class="line">                          <span class="symbol">:element-type</span> '(unsigned-byte <span class="number">8</span>)</span><br><span class="line">                          <span class="symbol">:if-exists</span> <span class="symbol">:supersede</span>)</span><br><span class="line">    (<span class="name">write-fixnum/32</span> (<span class="name">char-code</span> #\m) stream)</span><br><span class="line">    (<span class="name">write-fixnum/32</span> (<span class="name">char-code</span> #\y) stream)</span><br><span class="line">    (<span class="name">write-fixnum/32</span> (<span class="name">char-code</span> #\b) stream)</span><br><span class="line">    (<span class="name">write-fixnum/32</span> (<span class="name">char-code</span> #\s) stream)</span><br><span class="line">    (<span class="name">write-fixnum/32</span> (<span class="name">char-code</span> #\<span class="literal">t</span>) stream)</span><br><span class="line">    (<span class="name">write-bst-bytes</span> bst stream (<span class="name">*</span> <span class="number">5</span> <span class="number">4</span>))))</span><br></pre></td></tr></tbody></table></figure>
+<p>现在可以将<code>*bst*</code>写入文件了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">write-bst-to-file</span> *bst* <span class="string">"/tmp/bst.dat"</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>使用<code>hexdump</code>验证写入的效果</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%BB%93%E6%9E%84.png" alt=""></p>
+<p>文件最开始的五个字节依次存储着字符串<code>"mybst"</code>的ASCII码，为的就是让最早被写入文件中的根节点——也就是二叉树最左下角的节点——的偏移不为0，以免在后续反序列化的时候，从该节点的父节点中读到左子树的偏移为0——这样会被误认为是一棵空树的。</p>
+<p>有哪里写得不好的还请各位读者不吝赐教。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" class="post-title-link" itemprop="url">在Emacs中搭建笔记查阅系统的尝试</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-10-20 14:42:33 / 修改时间：14:48:42" itemprop="dateCreated datePublished" datetime="2019-10-20T14:42:33+08:00">2019-10-20</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>给Emacs写插件有种痛并快乐着的感觉。虽然这个发挥创意的过程很有趣，但是Elisp写起来总有种别扭的感觉。一方面，我把它当成是Common Lisp，写的时候没有觉得“这个用法可能会有问题”；另一方面，它又不是普通的写lisp代码，还要一边写一边摸索Emacs中的一些概念。不过总体而言，还是挺好玩的，除了没有一个像模像样的REPL之外。</p>
+<h2 id="来龙去脉"><a href="#来龙去脉" class="headerlink" title="来龙去脉"></a>来龙去脉</h2><p>我用Emacs记录了不少的“笔记”。虽说我自己将其称为笔记，但是它们更像是我把遇到的一些问题和解决方法给记录下来，而没有太多自己的感悟。它们的外观倒是高度的一致，见下图</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%94%A8org-mode%E8%AE%B0%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
+<p>（第一次尝试给自己的图片打水印，有点好玩）每一个一级条目都是一个问题，并且这个文件中只有一级条目。而条目下的内容则是对标题的问题的回答。其中还有代码块——也就是写着BEGIN_SRC和END_SRC的那部分。用org-mode来记录笔记有几个好处，其中一个便是可以在笔记中插入任何Emacs支持的编程语言代码片段并具备语法高亮。当然了，还有一个巨大的优势，便是org-mode尽管看似花里胡哨，骨子里却是正统的纯文本文件，它可以很方便地在其它工具中处理。</p>
+<p>而我用来处理的其中一个工具便是ElasticSearch。比如说，上图的第一条笔记，在ElasticSearch中存成了下面这样的结构</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%9F%A5%E7%9C%8BElasticSearch%E4%B8%AD%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
+<p>本来我是写了一个Alfred的Workflow来查询ElasticSearch的，但是奈何Workflow那种一行行的方式展示org-mode格式的笔记不太友好，因此便打算直接在Emacs中查询并查看笔记内容。</p>
+<h2 id="牛刀小试"><a href="#牛刀小试" class="headerlink" title="牛刀小试"></a>牛刀小试</h2><p>为了可以在Emacs中查看笔记内容，我打算借助于Helm的力量。<a href="https://emacs-helm.github.io/helm/" target="_blank" rel="noopener">Helm</a>是Emacs的一个补全的框架，可以用来呈现一系列的候选项，然后选中后触发一些什么动作。我期望的形式，是在Emacs中按下某种快捷键或者输入某个命令行，可以在minibuffer中输入自己要查询的内容，然后Emacs查询ElasticSearch并最终通过Helm来呈现这些查询内容匹配的笔记条目。目前的成果是下面这样子的</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/lt-ask%E7%9A%84%E5%80%99%E9%80%89%E5%88%97%E8%A1%A8.png" alt=""></p>
+<p>具体的做法其实也很简单。首先，要知道Helm是如何被使用的。通过这篇<a href="https://wikemacs.org/wiki/How_to_write_helm_extensions" target="_blank" rel="noopener">文档</a>，初步了解到只需要定一个变量，并通过<code>:sources</code>关键字参数传递给<code>helm</code>这个函数即可。我所定义的传递给<code>helm</code>函数的“source”如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br></pre></td></tr></tbody></table></figure>
+<p>其中<code>faq-candidates</code>的作用便是根据minibuffer中的关键字查询ElasticSearch并组织好一个结构返回给<code>helm</code>。需要注意的是，<code>faq-candidates</code>必须是一个无参的函数才行，但输入的数据又偏偏需要从minibuffer中获取。因此，我的做法是约定一个变量<code>faq-query</code>，在调用<code>helm</code>之前首先调用<code>read-from-minibuffer</code>函数读取输入，然后将输入的字符串赋值给<code>faq-query</code>，之后当<code>helm</code>开始使用这个source的时候，<code>faq-candidates</code>函数便不需要参数，而可以直接从<code>faq-query</code>中拿到自己需要的搜索内容向ElasticSearch请求了。当然了，如果有像Common Lisp动态作用域的话，也就不需要定义这么一个全局变量了，对Emacs全局的侵入会更少一点。</p>
+<p>目前能够做到的也仅仅是查询ElasticSearch，并在选中某个条目并按下回车的时候打开浏览器来查看而已，之后应该会继续完善。目前的完整代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; 调用ElasticSearch查询笔记</span></span><br><span class="line">(<span class="name">require</span> 'request)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq (<span class="name">query</span>)</span><br><span class="line">  <span class="string">"向ElasticSearch查询QUERY匹配的笔记"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">response</span>))</span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:9200/faq/_search"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">encode-coding-string</span></span><br><span class="line">            (<span class="name">json-encode</span></span><br><span class="line">             (<span class="name">list</span></span><br><span class="line">              (<span class="name">cons</span> <span class="string">"query"</span> (<span class="name">list</span></span><br><span class="line">                             (<span class="name">cons</span> <span class="string">"multi_match"</span> (<span class="name">list</span></span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"fields"</span> (<span class="name">list</span> <span class="string">"answer"</span> <span class="string">"question"</span>))</span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"query"</span> query)))))))</span><br><span class="line">            'utf-8)</span><br><span class="line">     <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">     <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">setq</span> data (<span class="name">decode-coding-string</span> data 'utf-8))</span><br><span class="line">                 (<span class="name">setq</span> response (<span class="name">json-read-from-string</span> data))))</span><br><span class="line">     <span class="symbol">:sync</span> <span class="literal">t</span>)</span><br><span class="line">    response))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> make-faq-candidates (<span class="name">response</span>)</span><br><span class="line">  <span class="string">"将查询ElasticSearch的结果构造为helm可以识别的candidates格式"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">hits</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits response))))))</span><br><span class="line">    (<span class="name">mapcar</span> (<span class="name">lambda</span> (<span class="name">doc</span>)</span><br><span class="line">              (<span class="name">let</span> ((<span class="name">_source</span> (<span class="name">cdr</span> (<span class="name">assoc</span> '_source doc))))</span><br><span class="line">                (<span class="name">cons</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'question _source))</span><br><span class="line">                      (<span class="name">cdr</span> (<span class="name">assoc</span> '_id doc)))))</span><br><span class="line">            hits)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defvar</span> faq-query <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq-candidates ()</span><br><span class="line">  (<span class="name">make-faq-candidates</span> (<span class="name">faq</span> faq-query)))</span><br><span class="line"></span><br><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> lt-ask ()</span><br><span class="line">  <span class="string">"交互式地从minibuffer中读取笔记的关键词并展示选项"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">content</span> (<span class="name">read-from-minibuffer</span> <span class="string">"笔记关键词："</span>)))</span><br><span class="line">    (<span class="name">setq</span> faq-query content)</span><br><span class="line">    (<span class="name">helm</span> <span class="symbol">:sources</span> '(faq-helm-sources))))</span><br></pre></td></tr></tbody></table></figure>
+<p>有不少值得吐槽的地方，不过都先按下不表吧，各位读者有兴趣的话可以留言交流一下XD</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/10/11/如何编译defun/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/11/如何编译defun/" class="post-title-link" itemprop="url">如何编译defun</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-10-11 22:32:54 / 修改时间：22:34:47" itemprop="dateCreated datePublished" datetime="2019-10-11T22:32:54+08:00">2019-10-11</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/10/11/如何编译defun/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/11/如何编译defun/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文讲解如何编译<code>defun</code>。在Common Lisp中，<code>defun</code>用于定义函数。例如，下列的代码定义了函数<code>foo</code></p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foo (<span class="name">a</span>)</span><br><span class="line">  <span class="string">"一个名为FOO的函数"</span></span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> a))</span><br><span class="line">  (<span class="number">1</span>+ <span class="number">1</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>在<code>defun</code>的<a href="http://clhs.lisp.se/Body/m_defun.htm" target="_blank" rel="noopener">语法</a>中，第一行的字符串是这个函数的文档，可以用<code>documentation</code>函数获取；第二行是declaration。（不管是documentation还是declaration，也许要等到自举的那一天才能够支持了）目前只打算支持如下这般朴素的<code>defun</code>用法：</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/05/07/Boostnote及对记笔记的思考/#more" rel="contents">
+              <a class="btn" href="/2019/10/11/如何编译defun/#more" rel="contents">
                 阅读全文 »
               </a>
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/03/13/更过程式的let——vertical-let/" class="post-title-link" itemprop="url">更过程式的let——vertical-let</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-03-13 23:02:59 / 修改时间：23:04:17" itemprop="dateCreated datePublished" datetime="2019-03-13T23:02:59+08:00">2019-03-13</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/03/13/更过程式的let——vertical-let/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/03/13/更过程式的let——vertical-let/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>作为一名自诩的non-trivial的Common Lisp程序员，在编码的时候经常会遇到令人不愉快的地方，其中一个便是<a href="http://www.lispworks.com/documentation/HyperSpec/Body/s_let_l.htm#let" target="_blank" rel="noopener">LET</a>。</p>
-<p>一段典型的<code>LET</code>的示例代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> <span class="number">1</span>))</span><br><span class="line">   a)</span><br></pre></td></tr></tbody></table></figure>
-<p>大多数时候，<code>LET</code>不会只有一个绑定。并且，也不会只是绑定一个常量这么简单，而应当是下面这样的</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">      (<span class="name">b</span> (<span class="name">bar</span> z)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
-<p>有时候我会想看看某一个绑定的值——最好是在它计算完毕后立即查看。如果要查看<code>foo</code>函数的返回值，可以这样写</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">      (<span class="name">b</span> (<span class="name">bar</span> z)))</span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
-<p>如果调用<code>foo</code>和<code>bar</code>都顺利的话上面的代码也就够了。比较棘手的情况是，如果<code>a</code>的值不符合预期，会导致<code>b</code>的计算过程出状况（尽管在上面的代码中看似不会）。这种情况多出现在<code>LET*</code>的使用中，如下面所示</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">       (<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
-<p>如果错误的<code>a</code>会导致<code>bar</code>的调用出错，那么在调用<code>function1</code>之前才调用<code>print</code>打印<code>a</code>已经为时过晚了——毕竟调用<code>bar</code>的时候就抛出<code>condition</code>往调用链的上游走了。一种方法是写成下面这样子</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">let</span> ((<span class="name">tmp</span> (<span class="name">foo</span> x y)))</span><br><span class="line">            (<span class="name">print</span> tmp)</span><br><span class="line">            tmp))</span><br><span class="line">       (<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
-<p>这也太丑了！要不然写成下面这样子？</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y)))</span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">    (<span class="name">function1</span> a b)</span><br><span class="line">    (<span class="name">function2</span> a b)))</span><br></pre></td></tr></tbody></table></figure>
-<p>本来一个<code>LET</code>就可以做到的事情，这下子用了两个，还导致缩进更深了一级。如果有十个变量需要打印，就会增加十个<code>LET</code>和十层缩进。如果心血来潮想查看一个变量的值，还要大幅调整代码。</p>
-<p>问题大概就出在<code>LET</code>和<code>LET*</code>的语法上。以<code>LET</code>为例，它由截然分开的<code>bindings</code>和<code>forms</code>组成，两者不能互相穿插。因此，如果想在<code>bindings</code>中求值一段表达式，只能将<code>bindings</code>切开，写成两个<code>LET</code>的形式。好像写一个新的宏可以解决这个问题？是的，<code>vertical-let</code>就是。</p>
-<p><code>vertical-let</code>是一个我自己写的宏，源代码<a href="https://github.com/Liutos/clitool/blob/master/cl/sak.lisp#L9" target="_blank" rel="noopener">在此</a>。其用法如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line">  <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line">  a)</span><br></pre></td></tr></tbody></table></figure>
-<p>它借鉴了<code>LOOP</code>中绑定变量的方式（即<code>:with</code>和<code>=</code>），绑定变量和用于求值的代码还可以交织在一起，如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line">  <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line">  (<span class="name">+</span> a b))</span><br></pre></td></tr></tbody></table></figure>
-<p><code>vertical-let</code>最终会展开为<code>LET</code>，比如上面的代码，会展开为如下的代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">LET</span> ((<span class="name">A</span> <span class="number">1</span>))</span><br><span class="line">  (<span class="name">PRINT</span> A)</span><br><span class="line">  (<span class="name">LET</span> ((<span class="name">B</span> <span class="number">2</span>))</span><br><span class="line">    (<span class="name">+</span> A B)))</span><br></pre></td></tr></tbody></table></figure>
-<p><code>vertical-let</code>的算法很简单。它遍历表达式列表，当遇到<code>:with</code>时就把接下来的三个元素分别视为变量名、等号，以及待求值的表达式，将三者打包进一个列表中，再压栈；当遇到其它值时，就视为待求值的表达式（将会组成<code>LET</code>的<code>forms</code>部分），也放进列表中再压栈（具体方法参见源代码）。</p>
-<p>将所有值都遍历并压栈后，接下来要遍历这个栈中的元素。先准备两个空的栈——一个存放<code>bindings</code>，一个存放<code>forms</code>。接着，对于每一个从栈中弹出的元素，分为如下两种情况：</p>
-<ol>
-<li>如果表示<code>binding</code>，则直接压入存放<code>bindings</code>的栈，否则；</li>
-<li>如果是待求值的表达式，并且上一个出栈的元素是<code>binding</code>，则说明已经有一段完整的<code>LET</code>的内容被集齐。因此，将目前在两个栈中的内容全部弹出，组合为一个<code>LET</code>表达式再压入存放<code>forms</code>的栈中。然后将方才弹出的表达式也压入<code>forms</code>。重复上述过程直至所有元素都被处理，最后将还在两个栈中的内容也组合为一个<code>LET</code>表达式便结束了。</li>
-</ol>
-<p>全文完</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/02/28/不同工具查看代码分支diff的差异/" class="post-title-link" itemprop="url">不同工具查看代码分支diff的差异</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-02-28 22:53:46 / 修改时间：22:55:46" itemprop="dateCreated datePublished" datetime="2019-02-28T22:53:46+08:00">2019-02-28</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/02/28/不同工具查看代码分支diff的差异/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/02/28/不同工具查看代码分支diff的差异/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文只是简单地讲述我自己在使用<a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">GNU Emacs</a>、<a href="https://git-fork.com/" target="_blank" rel="noopener">Fork</a>，以及<a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a>查看Git仓库的不同分支的diff上的经历。</p>
-<h2 id="Emacs"><a href="#Emacs" class="headerlink" title="Emacs"></a>Emacs</h2><p>当使用Emacs时，我更喜欢用<code>M-x package-install</code>安装的<a href="https://github.com/magit/magit" target="_blank" rel="noopener"><code>magit</code></a>提供的功能——<code>magit-diff</code>，而不是它自带的<code>vc-dir</code>。按下<code>M-x</code>，输入<code>magit-diff</code>并敲下回车后，Emacs会在minibuffer中等待用户输入要比较的分支。就像在shell中使用<code>git-diff</code>一样，只需要输入两个以<code>..</code>连接的分支名并敲下回车，就可以列出它们间的差异。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E5%B7%AE%E5%BC%82.png" alt=""></p>
-<p>上图是master与re两个分支间的差异。<code>magit-diff</code>会列出两个分支间不一致的文件，与直接使用<code>git-diff</code>命令没有不同。往下滚动跨过文件清单后，还可以查看单个文件的差异。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E6%97%B6%E7%9A%84%E5%85%B7%E4%BD%93%E6%96%87%E4%BB%B6%E5%B7%AE%E5%BC%82.png" alt=""></p>
-<h2 id="Fork"><a href="#Fork" class="headerlink" title="Fork"></a>Fork</h2><p>第一次知道Fork是在知乎闲逛的时候，好像是在浏览“Mac下有什么值得推荐的软件”这类问题时看到的。某一次，为了能直观地查看两个commit间的差异，便试用了一番，效果确实不错。Fork的界面如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E7%9A%84%E7%95%8C%E9%9D%A2%E6%A6%82%E8%A7%88.png" alt=""></p>
-<p>还记得，当时为了能够比较两个commit间的差异，我还在Fork的菜单栏中翻了很久——虽然是毫无收获。结果发现，原来只需要选中两个commit就可以了。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E4%B8%AD%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AAcommit%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82.png" alt=""></p>
-<p>图片两行蓝色的就是我选中的两个commit——先用鼠标点击其一，按住<code>control</code>键后再选中另一个即可。图片下方的部分与<code>magit-diff</code>差不多，应该也算是一目了然了。</p>
-<h2 id="Visual-Studio-Code"><a href="#Visual-Studio-Code" class="headerlink" title="Visual Studio Code"></a>Visual Studio Code</h2><p>原本我觉得Fork已经足够好了，某一天在用VSCode时才忽然发现，在Fork中显示的代码差异，是没有语法高亮的。通常来说，即使没有语法高亮，查看短小的diff也不成问题。但如果差异的内容很多，或是diff位于一个很长的函数内部，这时光靠diff来做代码审查已经不太够了——因为不好确定在这片diff中出现的变量和函数，到底是不是正确地定义了的。</p>
-<p>后来我发现，VSCode自带的“源代码管理”，即便是在查看diff时也是有语法高亮的——不仅有语法高亮，对于Node.js代码而言，还有ESLint的提示和“跳转到定义”的功能，awesome！不愧是全宇宙最好用的编辑器（笑</p>
-<p>为了可以用VSCode来查看两个分支间的差异，放狗搜了一下，找到了神器<a href="https://github.com/eamodio/vscode-gitlens" target="_blank" rel="noopener">GitLens</a>。</p>
-<p>安装GitLens后，VSCode的最左侧会多出一个菜单项，在其中可以方便地选择两个分支来进行比较。首先，找到一个要比较的分支，选择“Select for Compare”。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png" alt=""></p>
-<p>再选中另一个要比较的分支，右键单击选择“Compare with Selected”，然后便可以在下方看到VSCode罗列出不一致的文件清单了。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png" alt=""></p>
-<p>VSCode是最吼的！</p>
-<p>全文完。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/02/05/拿Emacs对接我的cuckoo/" class="post-title-link" itemprop="url">拿Emacs对接我的cuckoo</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-02-05 15:17:08 / 修改时间：15:19:57" itemprop="dateCreated datePublished" datetime="2019-02-05T15:17:08+08:00">2019-02-05</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/02/05/拿Emacs对接我的cuckoo/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/02/05/拿Emacs对接我的cuckoo/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>cuckoo是一个我自己开发的类似待办事项的工具，运行在我本地的电脑上。它有如下两个接口：</p>
-<ol>
-<li>传入一个UNIX Epoch时间戳创建提醒</li>
-<li>传入一个标题以及提醒的ID来创建任务</li>
-</ol>
-<p>这样一来，便能在设定的时刻调用<a href="https://github.com/vjeantet/alerter" target="_blank" rel="noopener"><code>alerter</code></a>在屏幕右上角弹出提醒。</p>
-<p>我喜欢用<a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">Emacs</a>的<a href="https://orgmode.org/" target="_blank" rel="noopener">org-mode</a>来安排任务，但可惜的是，org-mode没有定点提醒的功能（如果有的话希望来个人打我的脸XD）。开发了cuckoo后，忽然灵机一动——何不给Emacs添砖加瓦，让它可以把org-mode中的条目内容（所谓的heading）当做任务丢给cuckoo，以此来实现定点提醒呢。感觉是个好主意，马上着手写这么些Elisp函数。</p>
-<p>PS：读者朋友们就不用执着于我的cuckoo究竟是怎样的接口定义了。</p>
-<p>为了实现所需要的功能，让我从结果反过来推导一番。首先，需要提炼一个TODO条目的标题和时间戳（用来创建提醒获取ID），才能调用cuckoo的接口。标题就是org-mode中一个TODO条目的heading text，在Emacs中用下面的代码获取</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">nth</span> <span class="number">4</span> (<span class="name">org-heading-components</span>))</span><br></pre></td></tr></tbody></table></figure>
-<p><code>org-headline-components</code>在光标位于TODO条目上的时候，会返回许多信息（参见下图）</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/org-heading-components%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.png" alt=""></p>
-<p>其中下标为4的component就是我所需要的内容。</p>
-<p>接着便是要获取一个提醒的ID。ID当然是从cuckoo的接口中返回的，这就需要能够解析JSON格式的文本。在Emacs中解析JSON序列化后的文本可以用<a href="https://github.com/ryancrum/json.el" target="_blank" rel="noopener">json</a>这个库，示例代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">s</span> <span class="string">"{\"remind\":{\"create_at\":\"2019-01-11T14:53:59.000Z\",\"duration\":null,\"id\":41,\"restricted_hours\":null,\"timestamp\":1547216100,\"update_at\":\"2019-01-11T14:53:59.000Z\"}}"</span>))</span><br><span class="line">  (<span class="name">cdr</span> (<span class="name">assoc</span> 'id (<span class="name">cdr</span> (<span class="name">car</span> (<span class="name">json-read-from-string</span> s))))))</span><br></pre></td></tr></tbody></table></figure>
-<p>既然知道如何解析（同时还知道如何提取解析后的内容），那么接下来便是要能够获取上述示例代码中的<code>s</code>。<code>s</code>来自于HTTP响应的body，为了发出HTTP请求，可以用Emacs的<a href="https://github.com/tkf/emacs-request" target="_blank" rel="noopener">request</a>库，示例代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">this-request</span> (<span class="name">request</span></span><br><span class="line">                      <span class="string">"http://localhost:7001/remind"</span></span><br><span class="line">                      <span class="symbol">:data</span> <span class="string">"{\"timestamp\":1547216100}"</span></span><br><span class="line">                      <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">                      <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">                      <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">                      <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">                                (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                                  (<span class="name">message</span> <span class="string">"data: %S"</span> data)))</span><br><span class="line">                      <span class="symbol">:sync</span> <span class="literal">t</span>))</span><br><span class="line">       (<span class="name">data</span> (<span class="name">request-response-data</span> this-request)))</span><br><span class="line">  data)</span><br></pre></td></tr></tbody></table></figure>
-<p>此处的<code>:sync</code>参数花了我好长的时间才捣鼓出来——看了一下<code>request</code>函数的docstring后才发现，原来需要传递<code>:sync</code>为<code>t</code>才可以让<code>request</code>函数阻塞地调用，否则一调用<code>request</code>就立马返回了<code>nil</code>。</p>
-<p>现在需要的就是构造<code>:data</code>的值了，其中的关键是生成秒级的UNIX Epoch时间戳，这个时间戳可以通过TODO条目的<code>SCHEDULED</code>属性转换而来。比如，一个条目的<code>SCHEDULED</code>属性的值可能是<code>&lt;2019-01-11 Fri 22:15&gt;</code>，将这个字符串传递给<code>date-to-time</code>函数可以解析成代表着秒数的几个数字</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">date-to-time</span> <span class="string">"&lt;2019-01-11 Fri 22:15&gt;"</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>时间戳字符串要怎么拿到？答案是使用org-mode的<code>org-entry-get</code>函数</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">org-entry-get</span> <span class="literal">nil</span> <span class="string">"SCHEDULED"</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>PS：需要先将光标定位在一个TODO条目上。</p>
-<p>至此，所有的原件都准备齐全了，最终我的Elisp代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> scheduled-to-time (<span class="name">scheduled</span>)</span><br><span class="line">  <span class="string">"将TODO条目的SCHEDULED属性转换为UNIX时间戳"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">lst</span> (<span class="name">date-to-time</span> scheduled)))</span><br><span class="line">    (<span class="name">+</span> (<span class="name">*</span> (<span class="name">car</span> lst) (<span class="name">expt</span> <span class="number">2</span> <span class="number">16</span>))</span><br><span class="line">       (<span class="name">cadr</span> lst))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> create-remind-in-cuckoo (<span class="name">timestamp</span>)</span><br><span class="line">  <span class="string">"往cuckoo中创建一个定时提醒并返回这个刚创建的提醒的ID"</span></span><br><span class="line">  (<span class="name">let</span> (<span class="name">remind-id</span>)</span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:7001/remind"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">json-encode-alist</span></span><br><span class="line">            (<span class="name">list</span> (<span class="name">cons</span> <span class="string">"timestamp"</span> timestamp)))</span><br><span class="line">     <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">     <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">     <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">message</span> <span class="string">"返回内容为：%S"</span> data)</span><br><span class="line">                 (<span class="name">let</span> ((<span class="name">remind</span> (<span class="name">json-read-from-string</span> data)))</span><br><span class="line">                   (<span class="name">setq</span> remind-id (<span class="name">cdr</span> (<span class="name">assoc</span> 'id (<span class="name">cdr</span> (<span class="name">car</span> remind))))))))</span><br><span class="line">     <span class="symbol">:sync</span> <span class="literal">t</span>)</span><br><span class="line">    remind-id))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> create-task-in-cuckoo ()</span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">brief</span>)</span><br><span class="line">        (<span class="name">remind-id</span>))</span><br><span class="line"></span><br><span class="line">    (<span class="name">setq</span> brief (<span class="name">nth</span> <span class="number">4</span> (<span class="name">org-heading-components</span>)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">let*</span> ((<span class="name">scheduled</span> (<span class="name">org-entry-get</span> <span class="literal">nil</span> <span class="string">"SCHEDULED"</span>))</span><br><span class="line">           (<span class="name">timestamp</span> (<span class="name">scheduled-to-time</span> scheduled)))</span><br><span class="line">      (<span class="name">setq</span> remind-id (<span class="name">create-remind-in-cuckoo</span> timestamp)))</span><br><span class="line">    </span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:7001/task"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">concat</span> <span class="string">"brief="</span> (<span class="name">url-encode-url</span> brief) <span class="string">"&amp;detail=&amp;remind_id="</span> (<span class="name">format</span> <span class="string">"%S"</span> remind-id))</span><br><span class="line">     <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">message</span> <span class="string">"任务创建完毕"</span>))))))</span><br></pre></td></tr></tbody></table></figure>
-<p>在<code>create-task-in-cuckoo</code>中，之所以没有再传递<code>application/json</code>形式的数据给cuckoo，是因为不管我怎么测试，始终无法避免中文字符在传递到接口的时候变成了<code>\u</code>编码的形式，不得已而为之，只好把中文先做一遍url encoding，然后再通过表单的形式（<code>form/x-www-urlencode</code>）发送给接口了。</p>
-<p>全文完。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/28/Project-Euler第69题/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/01/28/Project-Euler第69题/" class="post-title-link" itemprop="url">Project-Euler第69题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-01-28 23:21:22 / 修改时间：23:26:03" itemprop="dateCreated datePublished" datetime="2019-01-28T23:21:22+08:00">2019-01-28</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/01/28/Project-Euler第69题/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/28/Project-Euler第69题/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>大学的时候挺喜欢解<a href="https://projecteuler.net/" target="_blank" rel="noopener">Project Euler</a>上的题目的，尤其是它不在乎答题者使用哪一门编程语言，甚至还有很多参与者是使用pen&amp;paper来解题的。去年开始重新开始做Project Euler上的题目，而<a href="https://projecteuler.net/problem=69" target="_blank" rel="noopener">第69题</a>则是最近刚刚解决的一题。惭愧的是，因为不晓得欧拉函数的计算公式（甚至都没有想过欧拉函数有没有可以用来计算的公式），所以这一题我是用暴力计算的方法来解决的。尽管花了40分钟左右才找出了问题的答案，但欧拉函数的计算方法本身还是让我觉得挺有意思的，下面我就来讲讲我在计算欧拉函数方面做的一些尝试。</p>
-<p>69题本身很容易读懂，就是要找到一个不大于一百万的正整数<code>n</code>，这个<code>n</code>与以它为参的欧拉函数值的比值能够达到最大。欧拉函数的介绍可以看<a href="https://zh.wikipedia.org/wiki/%E6%AC%A7%E6%8B%89%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">维基百科</a>，简而言之，就是在不大于<code>n</code>的正整数中与<code>n</code>互质的数的个数，具体的例子可以参见69题描述中给出的表格。</p>
-<p>网上可以找到别人的<a href="https://www.jianshu.com/p/d0fad6213433" target="_blank" rel="noopener">解法</a>，基本的思路是：按从小到大的顺序，对于一百万以内的每个素数，都计算出它们的倍数的欧拉函数值的一部分——即对于素数<code>p</code>计算出<code>1-1/p</code>并与这个位置上原来的值相乘。当遍历完一百万以内的所有素数后，也就计算出每一个位置上的欧拉函数值，再遍历一次就可以计算出比值最大的数字了。</p>
-<p>但我今天要讲的是笨方法。</p>
-<p>笨方法的关键就是乖巧地计算出每一个数字的欧拉函数值。而其中最笨的，当属挑出每一个不大于<code>n</code>的因数，计算它们与<code>n</code>的最大公约数，并根据这个最大公约数是否为1，来决定是否给某一个计数器加一。示例代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">count</span> <span class="number">0</span>))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">i</span> n count)</span><br><span class="line">      (<span class="name">when</span> (<span class="name">=</span> (<span class="name">gcd</span> (<span class="number">1</span>+ i) n) <span class="number">1</span>)</span><br><span class="line">        (<span class="name">incf</span> count)))))</span><br></pre></td></tr></tbody></table></figure>
-<p>这个<code>phi</code>可以稍微改进一下。例如，如果一个数a与<code>n</code>不是互质的，那么<code>a</code>的倍数（小于<code>n</code>的那一些）也一定不会与<code>n</code>互质。因此，每当遇到这么一个因数<code>a</code>，就知道后续的<code>2a</code>、<code>3a</code>等等，都不再需要计算其与<code>n</code>的最大公约数了。改进后的算法代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi (<span class="name">n</span>)</span><br><span class="line">  <span class="string">"通过将不互质的比特设置为1并计算为0的比特的个数来计算phi函数"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">bits</span> (<span class="name">make-array</span> n <span class="symbol">:element-type</span> 'bit <span class="symbol">:initial-element</span> <span class="number">0</span>))</span><br><span class="line">        (<span class="name">count</span> <span class="number">0</span>))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">i</span> n)</span><br><span class="line">      (<span class="name">cond</span> ((<span class="name">=</span> (<span class="name">bit</span> bits i) <span class="number">1</span>)</span><br><span class="line">             <span class="comment">;; 该比特已经为1，说明已经在比它小的倍数被处理时一并被标记了</span></span><br><span class="line">             )</span><br><span class="line">            ((<span class="name">=</span> i (<span class="number">1</span>- n))</span><br><span class="line">             <span class="comment">;; 只处理比上界要小的数字</span></span><br><span class="line">             )</span><br><span class="line">            ((<span class="name">/=</span> (<span class="name">gcd</span> (<span class="number">1</span>+ i) n) <span class="number">1</span>)</span><br><span class="line">             <span class="comment">;; 除了当前这个不互质的数字之外，还需要将这个数字的倍数也一并处理</span></span><br><span class="line">             (<span class="name">dotimes</span> (<span class="name">j</span> (<span class="name">floor</span> n (<span class="number">1</span>+ i)))</span><br><span class="line">               (<span class="name">let*</span> ((<span class="name">j</span> (<span class="number">1</span>+ j))</span><br><span class="line">                      (<span class="name">m</span> (<span class="name">*</span> (<span class="number">1</span>+ i) j)))</span><br><span class="line">                 (<span class="name">setf</span> (<span class="name">bit</span> bits (<span class="number">1</span>- m)) <span class="number">1</span>))))</span><br><span class="line">            (<span class="name">t</span> (<span class="name">incf</span> count))))</span><br><span class="line">    count))</span><br></pre></td></tr></tbody></table></figure>
-<p>为了节省内存空间，这里用了一个bitmap来标记小于<code>n</code>的每一个数字是否与<code>n</code>互质——1表示不互质，0表示互质。</p>
-<p>其实并不需要遍历所有比<code>n</code>小的数字，只要遍历所有<code>n</code>的素因子即可。比如，将8分解为素因子，就是3个2，那么对于小于8的所有2的倍数（4和6）都是与8不互质的。基于这个方法，将所有的素因子的倍数所对应的位置为1，再数一下总共有多少个0比特即可。</p>
-<p>对每个<code>n</code>都进行质因数分解效率不高，先生成一个一百万以内的素数表吧</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> primep (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">&lt;</span> n <span class="number">2</span>) <span class="literal">nil</span>)</span><br><span class="line">	((<span class="name">=</span> <span class="number">2</span> n) <span class="literal">t</span>)</span><br><span class="line">	(<span class="name">t</span></span><br><span class="line">	 (<span class="name">let</span> ((<span class="name">bnd</span> (<span class="name">truncate</span> (<span class="name">sqrt</span> n))))</span><br><span class="line">	   (<span class="name">labels</span> ((<span class="name">rec</span> (<span class="name">test</span>)</span><br><span class="line">		      (<span class="name">cond</span> ((<span class="name">&gt;</span> test bnd) <span class="literal">t</span>)</span><br><span class="line">			    ((<span class="name">=</span> <span class="number">0</span> (<span class="name">rem</span> n test)) <span class="literal">nil</span>)</span><br><span class="line">			    (<span class="name">t</span> (<span class="name">rec</span> (<span class="number">1</span>+ test))))))</span><br><span class="line">	     (<span class="name">rec</span> <span class="number">2</span>))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defvar</span> *primes-in-1000000* <span class="literal">nil</span>)</span><br><span class="line">(<span class="name">defun</span> generate-primes-in-1000000 ()</span><br><span class="line">  (<span class="name">dotimes</span> (<span class="name">i</span> <span class="number">1000000</span>)</span><br><span class="line">    (<span class="name">when</span> (<span class="name">primep</span> (<span class="number">1</span>+ i))</span><br><span class="line">      (<span class="name">push</span> (<span class="number">1</span>+ i) *primes-in-1000000*)))</span><br><span class="line">  (<span class="name">setf</span> *primes-in-1000000* (<span class="name">nreverse</span> *primes-in-1000000*)))</span><br></pre></td></tr></tbody></table></figure>
-<p>然后对于一个给定的<code>n</code>，遍历所有小于它的素数并对相应的倍数所在的比特置一就可以了，示例代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi3 (<span class="name">n</span>)</span><br><span class="line">  <span class="string">"直接用素数表来做筛法"</span></span><br><span class="line">  (<span class="name">prog</span></span><br><span class="line">      ((<span class="name">bits</span> (<span class="name">make-array</span> n <span class="symbol">:element-type</span> 'bit <span class="symbol">:initial-element</span> <span class="number">0</span>)))</span><br><span class="line">     (<span class="name">dolist</span> (<span class="name">num</span> *primes-in-1000000*)</span><br><span class="line">       (<span class="name">cond</span> ((<span class="name">&gt;</span> num n)</span><br><span class="line">              (<span class="name">go</span> <span class="symbol">:return</span>))</span><br><span class="line">             ((<span class="name">zerop</span> (<span class="name">mod</span> n num))</span><br><span class="line">              (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">i</span>)</span><br><span class="line">                         (<span class="name">when</span> (<span class="name">&lt;</span> i n)</span><br><span class="line">                           (<span class="name">setf</span> (<span class="name">bit</span> bits i) <span class="number">1</span>)</span><br><span class="line">                           (<span class="name">aux</span> (<span class="name">+</span> i num)))))</span><br><span class="line">                (<span class="name">aux</span> (<span class="number">1</span>- num))))))</span><br><span class="line">     <span class="symbol">:return</span></span><br><span class="line">     (<span class="name">return-from</span> phi3</span><br><span class="line">       (<span class="name">count-if</span> (<span class="name">lambda</span> (<span class="name">bit</span>) (<span class="name">zerop</span> bit)) bits))))</span><br></pre></td></tr></tbody></table></figure>
-<p>PS：写这个<code>phi3</code>的时候发现Common Lisp提供了一个<a href="http://clhs.lisp.se/Body/m_prog_.htm" target="_blank" rel="noopener"><code>prog</code></a>宏，这个宏倒是真的挺好用。</p>
-<p>改进了两轮，其实这仍然是笨方法。即便是用<code>phi3</code>，用来计算题目的答案也花了40多分钟。</p>
-<p>全文完</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/01/11/一些在Emacs中搜索文本的方法/" class="post-title-link" itemprop="url">一些在Emacs中搜索文本的方法</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-01-11 21:37:18 / 修改时间：21:38:07" itemprop="dateCreated datePublished" datetime="2019-01-11T21:37:18+08:00">2019-01-11</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/01/11/一些在Emacs中搜索文本的方法/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/11/一些在Emacs中搜索文本的方法/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在Emacs中写代码的时候，常常需要查找一个函数、方法，或者变量的定义。如果是正在写Common Lisp，那么<a href="https://common-lisp.net/project/slime/" target="_blank" rel="noopener">SLIME</a>已经配置好了相应的快捷键<code>M-.</code>，只需要将光标移动到要查看的函数、方法，或者变量的名字上，按下<code>M-.</code>便可以跳转过去——再按一下<code>M-,</code>还能回到原来的位置。</p>
-<p>如果是写其它语言的代码，很多时候都没办法方便地跳转过去，这时候就需要依赖于文本搜索了，这也是本篇所要讲述的主题。</p>
-<p>通常情况下，用<code>C-s</code>和<code>C-r</code>就足够了——一个负责“往下”搜索一个负责“往上”搜索。尤其在安装了Emacs的插件<a href="https://github.com/abo-abo/swiper" target="_blank" rel="noopener">swiper</a>之后，只需使用<code>C-s</code>便可以同时查看到上下两个方向的匹配文本。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/swiper%E6%97%B6%E7%9A%84minibuffer.png" alt=""></p>
-<p>但<code>C-s</code>也有其局限性。例如，它不能跨文件搜索，如果要查看的函数、方法，或者变量的定义不在当前buffer中，就不得不手动在多个buffer间切换并频繁按下<code>C-s</code>了。</p>
-<p>有多种办法可以解决上面这种问题。例如，可以用Emacs的<code>projectile-ag</code>。通常，如果代码散布在多个源文件中，那么它们多半是放在一个项目中——比如一个Git仓库。打开位于项目中的文件时，Emacs的<code>projectile-mode</code>就会启动。此时，按下<code>C-c C-p s s</code>这套组合键，会调用<code>projectile-ag</code>函数。<code>projectile-ag</code>会在minibuffer中等候输入要搜索的内容，按下回车后，Emacs会调用命令行工具<a href="https://github.com/ggreer/the_silver_searcher" target="_blank" rel="noopener">ag</a>来搜索这个项目下的所有文件，找出匹配关键字的行并显示。</p>
-<p><code>projectile-ag</code>函数会打开另一个buffer来展示搜索结果，一个示例如下</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ag --literal --group --line-number --column --color --color-match 30\;43 --color-path 1\;32 --smart-case --stats -- emacs .</span><br><span class="line">0 matches</span><br><span class="line">0 files contained matches</span><br><span class="line">36 files searched</span><br><span class="line">111365 bytes searched</span><br><span class="line">0.007795 seconds</span><br></pre></td></tr></tbody></table></figure>
-<p>使用<code>projectile-ag</code>的前提是要搜索的文件都在同一个一个项目中，但并非所有时候都满足这个要求。这时，可以用Emacs的<code>find-grep</code>函数。</p>
-<p><code>find-grep</code>函数调起后同样要求使用者在minibuffer输入内容，但它更原始一点</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/find-grep%E7%9A%84%E7%AD%89%E5%80%99.png" alt=""></p>
-<p>光标会定位在<code>-e</code>选项之后，需要填补交给<code>grep</code>的正则表达式。由于minibuffer中给出的是完整的、将会被运行的命令，因此可以也给<code>find</code>命令添加一些选项和参数，来改变搜索行为。</p>
-<p>如果是在一个Node.js项目中搜索，一般还要让<code>find</code>忽略一些文件，如node_modules目录下的大量依赖，或者构建产生出来的.css和.js文件。这些文件中的行不仅很可能会命中输入的正则表达式，还极可能成片地出现，占据搜索结果中的半壁江山。</p>
-<p>除了<code>grep</code>之外，还有许多命令行的文本搜索工具，例如<a href="https://github.com/samaaron/ack" target="_blank" rel="noopener"><code>ack</code></a>和<a href="https://github.com/BurntSushi/ripgrep" target="_blank" rel="noopener"><code>rg</code></a>，并且它们都称自己更快。要在Emacs中使用它们也很简单，尤其是后者还有相应的插件<a href="https://github.com/dajva/rg.el" target="_blank" rel="noopener"><code>rg.el</code></a>可以方便调起。</p>
-<p>如果经常要控制<code>find</code>来忽略node_modules，可以考虑用<code>git-grep</code>。<code>man git-grep</code>中说到，它只会搜索tracked的文件</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/git-grep%E7%9A%84man%E6%96%87%E6%A1%A3.png" alt="git-grep的man文档"></p>
-<p>node_modules一般都不会被git跟踪，自然也就不会被搜索。</p>
-<p>全文完</p>
-
       
     </div>
 
@@ -1103,7 +820,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">…</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">…</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
