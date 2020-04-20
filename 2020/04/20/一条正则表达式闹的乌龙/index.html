@@ -45,20 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="google-site-verification: google8319ab079b67b016.html">
+  <meta name="description" content="序言我要编写一个Elisp函数，其核心逻辑涉及到替换字符串中一个符合某种模式的子串。举个例子，字符串为&amp;quot;[2020-02-15 Sat 14:19]《业务逻辑需要关心同步还是异步吗？》&amp;quot;，需要替换的是其中的[2020-02-15 Sat 14:19]。 这个由日期和时间组成的前缀在每一次我按下C-c c t的时候会自动产生，因为在org-capture-templates中就是">
 <meta name="keywords" content="emacs,lisp,programming">
-<meta property="og:type" content="website">
-<meta property="og:title" content="小打小闹写点bug">
-<meta property="og:url" content="https://liutos.github.io/google8319ab079b67b016.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一条正则表达式闹的乌龙">
+<meta property="og:url" content="https://liutos.github.io/2020/04/20/一条正则表达式闹的乌龙/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="google-site-verification: google8319ab079b67b016.html">
+<meta property="og:description" content="序言我要编写一个Elisp函数，其核心逻辑涉及到替换字符串中一个符合某种模式的子串。举个例子，字符串为&amp;quot;[2020-02-15 Sat 14:19]《业务逻辑需要关心同步还是异步吗？》&amp;quot;，需要替换的是其中的[2020-02-15 Sat 14:19]。 这个由日期和时间组成的前缀在每一次我按下C-c c t的时候会自动产生，因为在org-capture-templates中就是">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-27T14:44:45.000Z">
+<meta property="og:updated_time" content="2020-04-20T12:27:22.769Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="小打小闹写点bug">
-<meta name="twitter:description" content="google-site-verification: google8319ab079b67b016.html">
+<meta name="twitter:title" content="一条正则表达式闹的乌龙">
+<meta name="twitter:description" content="序言我要编写一个Elisp函数，其核心逻辑涉及到替换字符串中一个符合某种模式的子串。举个例子，字符串为&amp;quot;[2020-02-15 Sat 14:19]《业务逻辑需要关心同步还是异步吗？》&amp;quot;，需要替换的是其中的[2020-02-15 Sat 14:19]。 这个由日期和时间组成的前缀在每一次我按下C-c c t的时候会自动产生，因为在org-capture-templates中就是">
 
-<link rel="canonical" href="https://liutos.github.io/google8319ab079b67b016">
+<link rel="canonical" href="https://liutos.github.io/2020/04/20/一条正则表达式闹的乌龙/">
 
 
 <script id="page-configurations">
@@ -66,12 +66,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false
+    isPost: true
   };
 </script>
 
-  <title> | 小打小闹写点bug
-  </title>
+  <title>一条正则表达式闹的乌龙 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -193,44 +192,156 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
           <div class="content">
             
 
   <div class="posts-expand">
-    
-    
-    
-    <div class="post-block" lang="zh-CN">
+      
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/04/20/一条正则表达式闹的乌龙/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一条正则表达式闹的乌龙
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">
-</h1>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
 
-<div class="post-meta">
+              <time title="创建时间：2020-04-20 20:26:47 / 修改时间：20:27:22" itemprop="dateCreated datePublished" datetime="2020-04-20T20:26:47+08:00">2020-04-20</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/04/20/一条正则表达式闹的乌龙/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/20/一条正则表达式闹的乌龙/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
   
 
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>我要编写一个Elisp函数，其核心逻辑涉及到替换字符串中一个符合某种模式的子串。举个例子，字符串为<code>"[2020-02-15 Sat 14:19]《业务逻辑需要关心同步还是异步吗？》"</code>，需要替换的是其中的<code>[2020-02-15 Sat 14:19]</code>。</p>
+<p>这个由日期和时间组成的前缀在每一次我按下<code>C-c c t</code>的时候会自动产生，因为在<code>org-capture-templates</code>中就是这么设置的</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> org-capture-templates</span><br><span class="line">      '((<span class="string">"t"</span> <span class="string">"Todo"</span> entry (file+headline <span class="string">"~/Dropbox/gtd/inbox.org"</span> <span class="string">"Tasks"</span>)</span><br><span class="line">         <span class="string">"* TODO %U%?\n  :PROPERTIES:\n  :CREATED_AT: %U\n  :ID: %(uuidgen-4)\n  :END:"</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<p>更具体一点，它们产生自其中的转义序列<code>%U</code>（详情可以参见org-mode的文档<a href="https://orgmode.org/manual/Template-expansion.html#Template-expansion" target="_blank" rel="noopener">Template expansion</a>）。</p>
+<p>经过一番不是特别仔细的搜索后，我决定用<code>string-match</code>和<code>replace-match</code>函数来完成上述替换子串的需求。</p>
+<p>然后便闹了两个乌龙。</p>
+<h1 id="string-match不支持扩展的正则语法"><a href="#string-match不支持扩展的正则语法" class="headerlink" title="string-match不支持扩展的正则语法"></a><code>string-match</code>不支持扩展的正则语法</h1><p>为了匹配形如<code>[2020-02-15 Sat 14:19]</code>这样的字符串，我的直觉便驱使我写出了这样的正则表达式</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"^\\[\\d+-\\d+-\\d+ \\w+ \\d+:\\d+\\]"</span></span><br></pre></td></tr></tbody></table></figure>
+<p>在Node.js或其它支持<a href="https://www.regular-expressions.info/shorthand.html" target="_blank" rel="noopener">Shorthand Character Classes</a>的语言中，上面的正则表达式是可用的。</p>
+<p>但是Elisp偏偏不是这样的语言！（Elisp所支持的正则表达式语法可以参见这篇<a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Regexps.html" target="_blank" rel="noopener">文档</a>）因此，在Elisp中只好用下面这个正则表达式</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"^\\[[0-9]+-[0-9]+-[0-9]+ [A-Za-z]+ [0-9]+:[0-9]+\\]"</span></span><br></pre></td></tr></tbody></table></figure>
+<p>虽然Elisp不支持<code>Shorthand Character Classes</code>，但它确实支持<a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Char-Classes.html#Char-Classes" target="_blank" rel="noopener"><code>Character Classes</code></a>，但这样写出来的正则表达式更长了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"^\\[[[:digit:]]+-[[:digit:]]+-[[:digit:]]+ [[:alpha:]]+ [[:digit:]]+:[[:digit:]]+\\]"</span></span><br></pre></td></tr></tbody></table></figure>
+<p>我猜你宁可写前一种对吧。</p>
+<h1 id="replace-match不返回新字符串"><a href="#replace-match不返回新字符串" class="headerlink" title="replace-match不返回新字符串"></a><code>replace-match</code>不返回新字符串</h1><p>这货是用来修改一个buffer中的内容的……</p>
+<h1 id="一种Workaround"><a href="#一种Workaround" class="headerlink" title="一种Workaround"></a>一种Workaround</h1><p>最后我根据需求的实际情况，综合使用<code>string-match</code>、<code>substring</code>，以及<code>format</code>实现了替换子串的功能</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> lt-org--starts-with-timestamp-p (<span class="name">text</span>)</span><br><span class="line">  <span class="string">"返回T或NIL表示输入字符串是否以一个inactive timestamp开头。"</span></span><br><span class="line">  <span class="comment">;; Emacs的正则表达式并不支持如\d和\w这样的类，所以要写成[0-9]和[A-Za-z]的形式</span></span><br><span class="line">  (<span class="name">string-match</span> <span class="string">"^\\[[0-9]+-[0-9]+-[0-9]+ [A-Za-z]+ [0-9]+:[0-9]+\\]"</span> text))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> lt-org--delay-timestamp (<span class="name">text</span> new-timestamp)</span><br><span class="line">  <span class="string">"用NEW-TIMESTAMP替换TEXT中的inactive timestamp。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">如果TEXT没有以inactive timestamp开头，则直接添加NEW-TIMESTAMP。"</span></span><br><span class="line">  (<span class="name">format</span> <span class="string">"%s%s"</span> new-timestamp</span><br><span class="line">          (<span class="name">if</span> (<span class="name">lt-org--starts-with-timestamp-p</span> text)</span><br><span class="line">              (<span class="name">substring</span> text <span class="number">22</span>)</span><br><span class="line">              text)))</span><br></pre></td></tr></tbody></table></figure>
+<p>过了很久后，我终于发现了在Elisp中做字符串替换的正确做法……</p>
+<h1 id="正确答案"><a href="#正确答案" class="headerlink" title="正确答案"></a>正确答案</h1><p>只要用<code>replace-regexp-in-string</code>函数就足够了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">replace-regexp-in-string</span> <span class="string">"^\\[[0-9]+-[0-9]+-[0-9]+ [A-Za-z]+ [0-9]+:[0-9]+\\]"</span> <span class="string">"abc"</span> <span class="string">"[2020-02-15 Sat 14:19]《业务逻辑需要关心同步还是异步吗？》"</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>结果为<code>"abc《业务逻辑需要关心同步还是异步吗？》"</code>，替换很成功。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如何在浩如烟海的知识（搜索引擎、在线文档）中找到自己需要的东西，也是一门学问啊。</p>
+
+    </div>
+
+    
+    
+    <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/loading.png" data-original="/uploads/WechatIMG2934.jpeg" alt="Liutos wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
 </div>
-
-</header>
-
+        <div class="reward-container">
+  <div>你的一点心意，我的十分动力。</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
       
-      
-      
-      <div class="post-body">
-          google-site-verification: google8319ab079b67b016.html
+      <div style="display: inline-block;">
+        <img src="/images/loading.png" data-original="/images/WeChatpay.png" alt="Liutos 微信支付">
+        <p>微信支付</p>
       </div>
       
-      
-      
-    </div>
-    
+      <div style="display: inline-block;">
+        <img src="/images/loading.png" data-original="/images/Alipay.jpg" alt="Liutos 支付宝">
+        <p>支付宝</p>
+      </div>
 
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Liutos
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://liutos.github.io/2020/04/20/一条正则表达式闹的乌龙/" title="一条正则表达式闹的乌龙">https://liutos.github.io/2020/04/20/一条正则表达式闹的乌龙/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/14/数据库schema不是CRUD服务的一切/" rel="prev" title="数据库schema不是CRUD服务的一切">
+      <i class="fa fa-chevron-left"></i> 数据库schema不是CRUD服务的一切
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
     
-    
-    
+  </article>
+  
+  
+  
+
   </div>
 
 
@@ -289,6 +400,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#string-match不支持扩展的正则语法"><span class="nav-number">2.</span> <span class="nav-text">string-match不支持扩展的正则语法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#replace-match不返回新字符串"><span class="nav-number">3.</span> <span class="nav-text">replace-match不返回新字符串</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一种Workaround"><span class="nav-number">4.</span> <span class="nav-text">一种Workaround</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正确答案"><span class="nav-number">5.</span> <span class="nav-text">正确答案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">6.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -474,9 +586,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/google8319ab079b67b016.html",
-            identifier: "google8319ab079b67b016.html",
-            title: ""
+            url: "https://liutos.github.io/2020/04/20/一条正则表达式闹的乌龙/",
+            identifier: "2020/04/20/一条正则表达式闹的乌龙/",
+            title: "一条正则表达式闹的乌龙"
           }
         }
       });

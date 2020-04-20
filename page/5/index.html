@@ -200,6 +200,88 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/10/11/如何编译defun/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/11/如何编译defun/" class="post-title-link" itemprop="url">如何编译defun</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-10-11 22:32:54 / 修改时间：22:34:47" itemprop="dateCreated datePublished" datetime="2019-10-11T22:32:54+08:00">2019-10-11</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/10/11/如何编译defun/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/11/如何编译defun/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文讲解如何编译<code>defun</code>。在Common Lisp中，<code>defun</code>用于定义函数。例如，下列的代码定义了函数<code>foo</code></p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foo (<span class="name">a</span>)</span><br><span class="line">  <span class="string">"一个名为FOO的函数"</span></span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> a))</span><br><span class="line">  (<span class="number">1</span>+ <span class="number">1</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>在<code>defun</code>的<a href="http://clhs.lisp.se/Body/m_defun.htm" target="_blank" rel="noopener">语法</a>中，第一行的字符串是这个函数的文档，可以用<code>documentation</code>函数获取；第二行是declaration。（不管是documentation还是declaration，也许要等到自举的那一天才能够支持了）目前只打算支持如下这般朴素的<code>defun</code>用法：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/10/11/如何编译defun/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/09/18/编译return语句/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -524,93 +606,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/07/03/编译大于运算符/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/03/编译大于运算符/" class="post-title-link" itemprop="url">编译大于运算符</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-07-03 22:27:24" itemprop="dateCreated datePublished" datetime="2019-07-03T22:27:24+08:00">2019-07-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-07-10 20:01:16" itemprop="dateModified" datetime="2019-07-10T20:01:16+08:00">2019-07-10</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/07/03/编译大于运算符/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/03/编译大于运算符/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>原定的计划中这一篇应当是要讲如何编译<a href="http://clhs.lisp.se/Body/s_if.htm" target="_blank" rel="noopener">if</a>表达式的，但是我发现没什么东西可以作为if的test-form的部分的表达式，所以觉得，要不还是先实现一下比较两个数字这样子的功能吧。说干就干，我决定用大于运算符来作为例子——大于运算符就是指<a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_eq_sle.htm#GT" target="_blank" rel="noopener"><code>&gt;</code></a>啦。所以，我的目标是要编译下面这样的代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">&gt;</span> <span class="number">1</span> <span class="number">2</span>)</span><br></pre></td></tr></tbody></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/03/编译大于运算符/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -681,7 +676,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-count">69</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
