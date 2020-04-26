@@ -200,6 +200,93 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" class="post-title-link" itemprop="url">在Emacs中搭建笔记查阅系统的尝试</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-10-20 14:42:33 / 修改时间：14:48:42" itemprop="dateCreated datePublished" datetime="2019-10-20T14:42:33+08:00">2019-10-20</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>给Emacs写插件有种痛并快乐着的感觉。虽然这个发挥创意的过程很有趣，但是Elisp写起来总有种别扭的感觉。一方面，我把它当成是Common Lisp，写的时候没有觉得“这个用法可能会有问题”；另一方面，它又不是普通的写lisp代码，还要一边写一边摸索Emacs中的一些概念。不过总体而言，还是挺好玩的，除了没有一个像模像样的REPL之外。</p>
+<h2 id="来龙去脉"><a href="#来龙去脉" class="headerlink" title="来龙去脉"></a>来龙去脉</h2><p>我用Emacs记录了不少的“笔记”。虽说我自己将其称为笔记，但是它们更像是我把遇到的一些问题和解决方法给记录下来，而没有太多自己的感悟。它们的外观倒是高度的一致，见下图</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%94%A8org-mode%E8%AE%B0%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
+<p>（第一次尝试给自己的图片打水印，有点好玩）每一个一级条目都是一个问题，并且这个文件中只有一级条目。而条目下的内容则是对标题的问题的回答。其中还有代码块——也就是写着BEGIN_SRC和END_SRC的那部分。用org-mode来记录笔记有几个好处，其中一个便是可以在笔记中插入任何Emacs支持的编程语言代码片段并具备语法高亮。当然了，还有一个巨大的优势，便是org-mode尽管看似花里胡哨，骨子里却是正统的纯文本文件，它可以很方便地在其它工具中处理。</p>
+<p>而我用来处理的其中一个工具便是ElasticSearch。比如说，上图的第一条笔记，在ElasticSearch中存成了下面这样的结构</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%9F%A5%E7%9C%8BElasticSearch%E4%B8%AD%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
+<p>本来我是写了一个Alfred的Workflow来查询ElasticSearch的，但是奈何Workflow那种一行行的方式展示org-mode格式的笔记不太友好，因此便打算直接在Emacs中查询并查看笔记内容。</p>
+<h2 id="牛刀小试"><a href="#牛刀小试" class="headerlink" title="牛刀小试"></a>牛刀小试</h2><p>为了可以在Emacs中查看笔记内容，我打算借助于Helm的力量。<a href="https://emacs-helm.github.io/helm/" target="_blank" rel="noopener">Helm</a>是Emacs的一个补全的框架，可以用来呈现一系列的候选项，然后选中后触发一些什么动作。我期望的形式，是在Emacs中按下某种快捷键或者输入某个命令行，可以在minibuffer中输入自己要查询的内容，然后Emacs查询ElasticSearch并最终通过Helm来呈现这些查询内容匹配的笔记条目。目前的成果是下面这样子的</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/lt-ask%E7%9A%84%E5%80%99%E9%80%89%E5%88%97%E8%A1%A8.png" alt=""></p>
+<p>具体的做法其实也很简单。首先，要知道Helm是如何被使用的。通过这篇<a href="https://wikemacs.org/wiki/How_to_write_helm_extensions" target="_blank" rel="noopener">文档</a>，初步了解到只需要定一个变量，并通过<code>:sources</code>关键字参数传递给<code>helm</code>这个函数即可。我所定义的传递给<code>helm</code>函数的“source”如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br></pre></td></tr></tbody></table></figure>
+<p>其中<code>faq-candidates</code>的作用便是根据minibuffer中的关键字查询ElasticSearch并组织好一个结构返回给<code>helm</code>。需要注意的是，<code>faq-candidates</code>必须是一个无参的函数才行，但输入的数据又偏偏需要从minibuffer中获取。因此，我的做法是约定一个变量<code>faq-query</code>，在调用<code>helm</code>之前首先调用<code>read-from-minibuffer</code>函数读取输入，然后将输入的字符串赋值给<code>faq-query</code>，之后当<code>helm</code>开始使用这个source的时候，<code>faq-candidates</code>函数便不需要参数，而可以直接从<code>faq-query</code>中拿到自己需要的搜索内容向ElasticSearch请求了。当然了，如果有像Common Lisp动态作用域的话，也就不需要定义这么一个全局变量了，对Emacs全局的侵入会更少一点。</p>
+<p>目前能够做到的也仅仅是查询ElasticSearch，并在选中某个条目并按下回车的时候打开浏览器来查看而已，之后应该会继续完善。目前的完整代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; 调用ElasticSearch查询笔记</span></span><br><span class="line">(<span class="name">require</span> 'request)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq (<span class="name">query</span>)</span><br><span class="line">  <span class="string">"向ElasticSearch查询QUERY匹配的笔记"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">response</span>))</span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:9200/faq/_search"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">encode-coding-string</span></span><br><span class="line">            (<span class="name">json-encode</span></span><br><span class="line">             (<span class="name">list</span></span><br><span class="line">              (<span class="name">cons</span> <span class="string">"query"</span> (<span class="name">list</span></span><br><span class="line">                             (<span class="name">cons</span> <span class="string">"multi_match"</span> (<span class="name">list</span></span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"fields"</span> (<span class="name">list</span> <span class="string">"answer"</span> <span class="string">"question"</span>))</span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"query"</span> query)))))))</span><br><span class="line">            'utf-8)</span><br><span class="line">     <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">     <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">setq</span> data (<span class="name">decode-coding-string</span> data 'utf-8))</span><br><span class="line">                 (<span class="name">setq</span> response (<span class="name">json-read-from-string</span> data))))</span><br><span class="line">     <span class="symbol">:sync</span> <span class="literal">t</span>)</span><br><span class="line">    response))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> make-faq-candidates (<span class="name">response</span>)</span><br><span class="line">  <span class="string">"将查询ElasticSearch的结果构造为helm可以识别的candidates格式"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">hits</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits response))))))</span><br><span class="line">    (<span class="name">mapcar</span> (<span class="name">lambda</span> (<span class="name">doc</span>)</span><br><span class="line">              (<span class="name">let</span> ((<span class="name">_source</span> (<span class="name">cdr</span> (<span class="name">assoc</span> '_source doc))))</span><br><span class="line">                (<span class="name">cons</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'question _source))</span><br><span class="line">                      (<span class="name">cdr</span> (<span class="name">assoc</span> '_id doc)))))</span><br><span class="line">            hits)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defvar</span> faq-query <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq-candidates ()</span><br><span class="line">  (<span class="name">make-faq-candidates</span> (<span class="name">faq</span> faq-query)))</span><br><span class="line"></span><br><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> lt-ask ()</span><br><span class="line">  <span class="string">"交互式地从minibuffer中读取笔记的关键词并展示选项"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">content</span> (<span class="name">read-from-minibuffer</span> <span class="string">"笔记关键词："</span>)))</span><br><span class="line">    (<span class="name">setq</span> faq-query content)</span><br><span class="line">    (<span class="name">helm</span> <span class="symbol">:sources</span> '(faq-helm-sources))))</span><br></pre></td></tr></tbody></table></figure>
+<p>有不少值得吐槽的地方，不过都先按下不表吧，各位读者有兴趣的话可以留言交流一下XD</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/10/11/如何编译defun/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -525,87 +612,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/10/调用C标准库的exit函数/" class="post-title-link" itemprop="url">调用C标准库的exit函数</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-07-10 19:58:06 / 修改时间：21:40:54" itemprop="dateCreated datePublished" datetime="2019-07-10T19:58:06+08:00">2019-07-10</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/07/10/调用C标准库的exit函数/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/10/调用C标准库的exit函数/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在<a href="http://liutos.github.io/2019/07/03/%E7%BC%96%E8%AF%91%E5%A4%A7%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6/">上一篇文章</a>中，实现了对大于号（<code>&gt;</code>）的处理，那么对<code>if</code>表达式的编译也就是信手拈来的事了，不解释太多。在本篇中，将会讲述一下如何产生可以调用来自于C语言标准库的<code>exit(3)</code>函数的汇编代码。</p>
-<p>在Common Lisp中并没有一个叫做<code>EXIT</code>的内置函数，所以如同之前实现的<code>_exit</code>一样，我会新增一种需要识别的<code>(first expr)</code>，即符号<code>exit</code>。为了可以调用C语言标准库中的<code>exit</code>函数，需要遵循调用约定。对于<code>exit</code>这种只有一个参数的函数而言，情形比较简单，只需要跟对<code>_exit</code>一样处理即可。刚开始，我写下的代码是这样的</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/07/10/调用C标准库的exit函数/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -677,14 +683,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">69</span>
+          <span class="site-state-item-count">70</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">

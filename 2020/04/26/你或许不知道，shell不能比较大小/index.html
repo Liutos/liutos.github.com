@@ -1,0 +1,692 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.8.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+
+
+
+
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://liutos.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+<script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <meta name="description" content="“究竟在干什么”是一系列关于软件开发过程中背后运作原理的文章，每一篇文章旨在讲解一些在日常编程实践中常见但可能并不为人所熟知的技术细节，抛砖引玉，期待激发读者朋友的更多思考。  如何在shell中比较大小？如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写[ blablabla ]这样的代码  例如，如果想知道当前的UNIX时间是否已经以16开头，可以用下列的shell">
+<meta name="keywords" content="emacs,lisp,programming">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你或许不知道，shell不能比较大小">
+<meta property="og:url" content="https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/index.html">
+<meta property="og:site_name" content="小打小闹写点bug">
+<meta property="og:description" content="“究竟在干什么”是一系列关于软件开发过程中背后运作原理的文章，每一篇文章旨在讲解一些在日常编程实践中常见但可能并不为人所熟知的技术细节，抛砖引玉，期待激发读者朋友的更多思考。  如何在shell中比较大小？如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写[ blablabla ]这样的代码  例如，如果想知道当前的UNIX时间是否已经以16开头，可以用下列的shell">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:updated_time" content="2020-04-26T14:16:38.614Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="你或许不知道，shell不能比较大小">
+<meta name="twitter:description" content="“究竟在干什么”是一系列关于软件开发过程中背后运作原理的文章，每一篇文章旨在讲解一些在日常编程实践中常见但可能并不为人所熟知的技术细节，抛砖引玉，期待激发读者朋友的更多思考。  如何在shell中比较大小？如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写[ blablabla ]这样的代码  例如，如果想知道当前的UNIX时间是否已经以16开头，可以用下列的shell">
+<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
+
+<link rel="canonical" href="https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>你或许不知道，shell不能比较大小 | 小打小闹写点bug</title>
+  
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-94082039-2');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"></noscript></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小打小闹写点bug</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">乍听之下，不无道理；仔细揣摩，胡说八道</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          你或许不知道，shell不能比较大小
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-26 21:19:01 / 修改时间：22:16:38" itemprop="dateCreated datePublished" datetime="2020-04-26T21:19:01+08:00">2020-04-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/究竟在干什么系列/" itemprop="url" rel="index">
+                    <span itemprop="name">究竟在干什么系列</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/04/26/你或许不知道，shell不能比较大小/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/26/你或许不知道，shell不能比较大小/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>“究竟在干什么”是一系列关于软件开发过程中背后运作原理的文章，每一篇文章旨在讲解一些在日常编程实践中常见但可能并不为人所熟知的技术细节，抛砖引玉，期待激发读者朋友的更多思考。</p>
+</blockquote>
+<h1 id="如何在shell中比较大小？"><a href="#如何在shell中比较大小？" class="headerlink" title="如何在shell中比较大小？"></a>如何在shell中比较大小？</h1><p>如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写<code>[ blablabla ]</code>这样的代码</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/搜索“shell比较”的结果.jpg" alt=""></p>
+<p>例如，如果想知道当前的UNIX时间是否已经以<code>16</code>开头，可以用下列的shell代码</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">ts=$(date '+%s')</span><br><span class="line">if [ "${ts}" -gt 1600000000 -a "${ts}" -lt 1700000000 ]; then</span><br><span class="line">    echo '当前的UNIX时间戳已经以16开头啦。'</span><br><span class="line">else</span><br><span class="line">    echo '当前的UNIX时间戳还没以16开头哦。'</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
+<p>当我写这个的时候，<code>date '+%s'</code>的值为<code>1587901648</code>，所以运行后走的是<code>else</code>的分支。</p>
+<p>除了用<code>-gt</code>表示大于之外，还有各种各样的其它比较运算符，例如下列的四个运算符</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>作用</th>
+<th>示例代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-ge</code></td>
+<td>大于或等于</td>
+<td><code>[ 2 -ge 1 ]</code></td>
+</tr>
+<tr>
+<td><code>-eq</code></td>
+<td>等于</td>
+<td><code>[ 1 -eq 1 ]</code></td>
+</tr>
+<tr>
+<td><code>-le</code></td>
+<td>小于或等于</td>
+<td><code>[ 2 -le 3 ]</code></td>
+</tr>
+<tr>
+<td><code>-lt</code></td>
+<td>小于</td>
+<td><code>[ 3 -lt 4 ]</code></td>
+</tr>
+</tbody>
+</table>
+<p>还有一些“测试”类型的运算符，例如</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>作用</th>
+<th>示例代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-b file</code></td>
+<td>测试<code>file</code>是否存在并且是个块设备</td>
+<td><code>[ -b /dev/disk0 ]</code></td>
+</tr>
+<tr>
+<td><code>-c file</code></td>
+<td>测试<code>file</code>是否存在并且是个字符设备</td>
+<td><code>[ -c /dev/tty ]</code></td>
+</tr>
+</tbody>
+</table>
+<h1 id="是shell的语法么？"><a href="#是shell的语法么？" class="headerlink" title="[是shell的语法么？"></a><code>[</code>是shell的语法么？</h1><p>大部分写shell代码的人或许会认为，<code>[]</code>是shell语言用于实现一系列的比较操作的特殊语法。但实际上，<code>[]</code>并不是一个语法——<code>[</code>是一个独立的命令行程序，<code>]</code>则什么都不是，仅仅是一个普通的字符。</p>
+<p>在bash中使用<code>which</code>命令可以看到<code>[</code>的真面目</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/which方括号的结果.jpg" alt=""></p>
+<p><code>[</code>是一个独立的程序，对，你没有看错（鲍尔默脸）。而且<code>[</code>有它自己的man文档</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/方括号的man文档.jpg" alt=""></p>
+<p>在man文档中出现了另外一个命令<code>test</code>，它和<code>[</code>的功能是一模一样的。或许<code>test</code>是一个“yet another [”？真相却更简单一点——<code>test</code>和<code>[</code>是同一个东西</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/左方括号和test是同一个东西.jpg" alt=""></p>
+<h1 id="源代码的二三事"><a href="#源代码的二三事" class="headerlink" title="[源代码的二三事"></a><code>[</code>源代码的二三事</h1><p>可以在GitHub上找到<code>[</code>和<code>test</code>的<a href="https://github.com/freebsd/freebsd/blob/master/bin/test/test.c" target="_blank" rel="noopener">源代码</a>，代码很短，稍微读一下可以发现不少有意思的地方。</p>
+<p>众所周知，如果在shell代码中使用<code>[</code>做比较运算，必须写上对应的右方括号<code>]</code>。但既然<code>[</code>是一个普通的外部程序，那么这个匹配括号的检查显然不会是shell来做的——没错，<code>[</code>自己会检查是否有写上相应的右方括号，这一段逻辑在源文件的<code>main</code>函数开始不久就出现了。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/检测右方括号是否存在.jpg" alt=""></p>
+<p>这个检查只有在程序被以<code>[</code>的名字启动的时候才会生效，所以<code>test 1 -eq 1</code>是不需要写括号的。</p>
+<p>其实除了上文中给出的那些比较和测试运算符之外，<code>[</code>也支持复杂的逻辑运算表达式，比如文章开头的示例代码中的<code>-a</code>就是逻辑与的意思。在代码的注释中还贴心地给出了所接受的参数的BNF</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/test接受的语法.jpg" alt=""></p>
+<p>而解析参数的过程则是一个手写的递归下降语法分析器，在源代码中可以找到与上面的产生式对应的多个函数：<code>oexpr</code>、<code>aexpr</code>、<code>nexpr</code>、<code>primary</code>，以及<code>binop</code>。</p>
+<p>由于在shell语言中，0表示逻辑真，而1表示逻辑假（与C语言相反），所以在<code>main</code>函数中，如果发现传入的第一个参数为感叹号（<code>!</code>，表示逻辑取反），则将<code>oexpr</code>的调用结果直接返回，否则需要将结果取反后再从<code>main</code>函数中返回——给操作系统。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/调用oexpr后取反.jpg" alt=""></p>
+<h1 id="shell真的不原生支持比较？"><a href="#shell真的不原生支持比较？" class="headerlink" title="shell真的不原生支持比较？"></a>shell真的不原生支持比较？</h1><p>尽管在bash中，<code>[</code>的确是作为一个外部程序存在的，但在zsh中却相反</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/test作为内置命令.jpg" alt=""></p>
+<p>而且，即使是bash也并非完全没有原生的比较操作——此处需要召唤<code>[[</code>。<code>[[</code>是shell的<em>保留字</em>，它是一个<em>less suprise</em>版本的<code>[</code>，在Stack Overflow上有不少关于它的问答值得一看：</p>
+<ol>
+<li><a href="https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash" target="_blank" rel="noopener">https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash</a></li>
+<li><a href="https://stackoverflow.com/questions/669452/is-double-square-brackets-preferable-over-single-square-brackets-in-ba" target="_blank" rel="noopener">https://stackoverflow.com/questions/669452/is-double-square-brackets-preferable-over-single-square-brackets-in-ba</a></li>
+</ol>
+<p>第二个链接的回答中还给出了一个值得一看的、关于bash中的“测试”功能的<a href="http://mywiki.wooledge.org/BashGuide/Practices#Bash_Tests" target="_blank" rel="noopener">指引</a>，其中甚至提到了</p>
+<blockquote>
+<p>It can produce surprising results, especially for people starting shell scripting that think [ ] is part of the shell syntax.</p>
+</blockquote>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>不得不承认，本文标题党了一把，shell还是自身就具备比较大小这样的功能的。</p>
+
+    </div>
+
+    
+    
+    <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/loading.png" data-original="/uploads/WechatIMG2934.jpeg" alt="Liutos wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+        <div class="reward-container">
+  <div>你的一点心意，我的十分动力。</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/loading.png" data-original="/images/WeChatpay.png" alt="Liutos 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/loading.png" data-original="/images/Alipay.jpg" alt="Liutos 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Liutos
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/" title="你或许不知道，shell不能比较大小">https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/20/一条正则表达式闹的乌龙/" rel="prev" title="一条正则表达式闹的乌龙">
+      <i class="fa fa-chevron-left"></i> 一条正则表达式闹的乌龙
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#如何在shell中比较大小？"><span class="nav-number">1.</span> <span class="nav-text">如何在shell中比较大小？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#是shell的语法么？"><span class="nav-number">2.</span> <span class="nav-text">[是shell的语法么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#源代码的二三事"><span class="nav-number">3.</span> <span class="nav-text">[源代码的二三事</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shell真的不原生支持比较？"><span class="nav-number">4.</span> <span class="nav-text">shell真的不原生支持比较？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+  <p class="site-author-name" itemprop="name">Liutos</p>
+  <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">100</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Liutos" title="GitHub → https://github.com/Liutos" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://segmentfault.com/u/liutos" title="SegmentFault → https://segmentfault.com/u/liutos" rel="noopener" target="_blank"><i class="fa fa-fw fa-stack-overflow"></i>SegmentFault</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://xfy.herokuapp.com/" title="http://xfy.herokuapp.com/" rel="noopener" target="_blank">:- op( xfy ).</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.hsyyf.me/" title="http://www.hsyyf.me/" rel="noopener" target="_blank">月下叹逍遥/寒山烟雨</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.lainme.com/doku.php" title="http://www.lainme.com/doku.php" rel="noopener" target="_blank">Lainme's Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://lengxx.com/" title="http://lengxx.com/" rel="noopener" target="_blank">冷轩信</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://forum.ubuntu.org.cn/" title="http://forum.ubuntu.org.cn/" rel="noopener" target="_blank">Ubuntu中文论坛</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y-window.github.com/" title="http://y-window.github.com/" rel="noopener" target="_blank">Window的空间</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.thev.net/PaulLiu/" title="http://www.thev.net/PaulLiu/" rel="noopener" target="_blank">九瓜老师的博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://weibo.com/liutos" title="http://weibo.com/liutos" rel="noopener" target="_blank">博主的微博</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://github.com/Liutos" title="http://github.com/Liutos" rel="noopener" target="_blank">博主的GitHub页面</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  © 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liutos</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+
+<script src="/bundle.js"></script><script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Liutos.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+;
+
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/",
+            identifier: "2020/04/26/你或许不知道，shell不能比较大小/",
+            title: "你或许不知道，shell不能比较大小"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Liutos.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+;
+!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
