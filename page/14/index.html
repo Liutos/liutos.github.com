@@ -200,6 +200,111 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2012/10/26/递归、闭包、面向对象/" class="post-title-link" itemprop="url">递归、闭包、面向对象</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2012-10-26 12:56:12" itemprop="dateCreated datePublished" datetime="2012-10-26T12:56:12+08:00">2012-10-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2012/10/26/递归、闭包、面向对象/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2012/10/26/递归、闭包、面向对象/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="话题由来"><a href="#话题由来" class="headerlink" title="话题由来"></a>话题由来</h2><p>参加了不少IT公司的笔试，有些题目遇到的次数还是比较多的，例如给一系列字符和一个空栈，询问你选项中的哪一个是不可能出现的出栈顺序这样的问题。另外一道题目，就是我这里要拿来讲的，不过我讲的和题目本身不直接相关，只是恰好和题目所要完成的任务有重合罢了。这道题目就是“给出一颗二叉树的先序遍历和中序遍历的输出结果，请给出这个二叉树的后序遍历的输出结果”。</p>
+<p>这道题目其实非常简单，尽管我一开始遇到的时候仍然是手足无措的（谁没有年少无知过呢对不），不过一两次之后就轻车熟路了，知道了这样的题目的行之有效的解法。举个例子，先序的序列和中序的序列分别是”abfce”和”bface”，那么这棵二叉树就是这样子的<br><img src="/images/loading.png" data-original="/pictures/postree.png"></p>
+<p>可以知道，后序遍历的输出结果为”fbeca”。怎么得到这棵二叉树呢？其实很简单，首先根据先序遍历的定义，所以在先序遍历结果中的第一个元素一定是整棵二叉树的根结点，也就是a，那么根据中序遍历的定义，在a左边出现的序列就是左子树的中序遍历结果，在a的右边的就是右子树的中序遍历结果，它们分别是”bf”和”ce”。并且可以知道，在先序遍历中与它们对应的片段应该也是”bf”和”ce”。在对”bf”做同样的处理，就可以知道b是根结点，而左子树为空且右子树为单节点f，另一棵子树的根结点为c且左子树为空，右子树为单节点e。</p>
+<p>那么，怎么用程序来自动化呢？</p>
+<h2 id="C语言的递归版本"><a href="#C语言的递归版本" class="headerlink" title="C语言的递归版本"></a>C语言的递归版本</h2><p>以文字来描述根据先序和中序来构造二叉树的算法还是很好理解的。为了描述方便，取几个名字。把先序遍历的结果叫做preseq，中序遍历的输出结果叫做inseq，并且把它们当作C语言中的数组那样来取出元素（例如preseq[0]表示第一个元素），再给它们一个方便取出片段的语法糖，例如preseq[0..2]表示取出下标从0到2的三个元素组成一个新的输出序列。</p>
+<p>首先，取出preseq的第一个元素preseq[0]，可以知道它肯定是目前正在处理的整棵二叉树的根结点，接着在inseq中寻找这个根结点，于是就可以把inseq分成三段，第一段是左子树的中序输出结果inseq1，第二段是根结点本身inseq2，第三段则是右子树的中序输出结果inseq3。同样的，preseq也可以分成三部分：第一个元素就是根结点，记为preseq1，然后是和inseq1等长的一个子串，也就是左子树的先序遍历的输出结果，剩下的，就是和inseq3等长的子串，即右子树的先序遍历输出结果了。既然有得到了先序和中序遍历的输出结果各一对，那么接下来只要对对应的一对输出结果递归调用原来的功能就可以了。递归的base case，就是输出结果只有一个元素的情况。这时候只需要生成一个没有左右子树的节点即可。</p>
+<p>我写了两个版本，第一个是很简单很直接的实现，就是完全按照上面所说的思路来做的，因此其中充满了字符串的复制操作，详见代码（其中的make_tree_by_prein函数就是实现了上面的算法的代码）</p>
+<script src="https://gist.github.com/3951810.js"> </script>
+
+<p>第二个版本避免了字符串的复制操作，不过没有第一个版本的make_tree_by_prein函数那么好理解了。这里只有修改后的make_tree_by_prein函数的代码</p>
+<script src="https://gist.github.com/3952212.js?file=make\_tree\_by\_prein.c"></script>
+
+<h2 id="CommonLisp和Java的版本"><a href="#CommonLisp和Java的版本" class="headerlink" title="CommonLisp和Java的版本"></a>CommonLisp和Java的版本</h2><p>C语言中的第二个版本在CommonLisp和Java里面可以改得更好一点，这多亏了CommonLisp的闭包特性和Java的OO方式。在C实现的第二个版本中，make_tree_by_prein函数有两个参数，而辅助函数make_tree_aux则需要两个参数。其中参数preseq和inseq是两个在传递过程中完成不会被修改的参数，它们之所以被作为参数，仅仅是因为C语言中只有两种方式在函数间共享一些信息：</p>
+<ul>
+<li>函数参数</li>
+<li>全局变量</li>
+</ul>
+<p>因为不想使用全局变量，所以只好在参数列表中动手脚了，不过在CommonLisp和Java的实现，就有办法可以在函数之间以受控的方式共享信息。例如下面用CommonLisp实现的make-tree-by-prein函数</p>
+<script src="https://gist.github.com/3952212.js?file=make-tree-by-prein.lisp"></script>
+
+<p>函数make-tree-by-prein利用labels在函数体内部定义了一个闭包aux，preseq和inseq则是在词法范围内可见的变量，因为在aux内部依然可以访问到它们，这样就不需要将它们作为aux的两个参数来进行传递了。而Java的实现也是类似的，在Java中方法从属于类，并且它们可以共享同一个类的实例中的所有变量，因此直接使用这些变量即可，代码如下（因为Java同样没有办法定义内部函数的关系，所以只好定义一个用private修饰的方法makeTreeAux了。）</p>
+<script src="https://gist.github.com/3952212.js?file=TreePost.java"></script>
+
+<p>不是有人说吗？OO是穷人的闭包；闭包是穷人的OO;-)</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>总算把讲思路贴代码的东西弄完了，可以好好扯淡一番了=。=话说上课的时候有个考研的同学找我讲话（班里的一名胖子，在算法方面有很厉害的嗅觉），就是问我对于用算法来实现“根据先序和中序输出结果如何构造二叉树”有没有思路。递归的方法其实很容易就可以想出来了，加之我之前已经想过这类题目要怎么系统地解决，所以很快就说出来了。然后我就觉得用C语言可以像上面那样写出一个高效（即没什么字符串复制操作）的版本，接着又想到这个可以用Lisp（或者其它带闭包的语言）来实现得更好，又想到了用Java也可以实现闭包的那类效果，再接着又觉得可以发篇文章来讨论讨论，于是就有这样的一篇东西了。</p>
+<p>对于具体实现某个功能的技术，我貌似没有特别地挑剔，甚至可以说，对于加入到编程语言中的任何特性，我都没有太挑剔的，只要好用，那么我就很可能会接纳——当然了，我也无法保证自己在找到一个反例之后不会把这句话给改掉当作自己没有这么说过，不过暂时没有想到这种情况，所以就先当作我是这样的人吧。举个例子，对于Haskell我很喜欢，也很喜欢纯函数语言的说法，即“纯函数是非常有利于程序编写的”。不过对于副作用我也没有持完全拒绝的态度，即使我在编程的过程中也会尽量遵循函数式编程的规矩（尽量避免副作用）。可是副作用实际上避无可避，倒不如拥抱它们。或许正是因为这个原因，我才会喜欢OCaml更甚于Haskell吧——至少目前是这样的。</p>
+<p>我也喜欢惰性计算，尤其是其带来的效果——无限长的列表推到看起来实在是帅得不行，并且还可以使得编写的程序拥有了函数式的外观和命令式的效率（例如《SICP》中举的例子，用惰性计算结合map、filter和reduce）。拥有惰性计算有利无害，何乐而不为呢～或许也正是因为自己对特性的需求是多多益善，所以才喜欢Common Lisp吧。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/10/18/涂色笔试题的动态规划解法/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -599,104 +704,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2012/08/31/连分数与ProjectEuler的第66题/" class="post-title-link" itemprop="url">连分数与ProjectEuler的第66题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2012-08-31 23:01:07" itemprop="dateCreated datePublished" datetime="2012-08-31T23:01:07+08:00">2012-08-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2012/08/31/连分数与ProjectEuler的第66题/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2012/08/31/连分数与ProjectEuler的第66题/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="可耻的蛮力法"><a href="#可耻的蛮力法" class="headerlink" title="可耻的蛮力法"></a>可耻的蛮力法</h2><p><a href="http://projecteuler.net/problem=66" target="_blank" rel="noopener">ProjectEuler的第66题的传送门</a>。话说今天挺累的，去实习单位那边做了一下小小的阶段性总结，然后走回了学校的另一个门，吃完饭又走回学校另一头的我自己的宿舍，别提有多累了。看来今天这样的运动量也够了，今晚的跑步就先搁置了吧。好了，回到正题，也就是ProjectEuler的第66题。第66题乍看起来似乎很简单，无非就是查找一个满足条件的所有x当中的最大值而已。于是像几乎所有的其它题目一样，我尝试使用蛮力法来解决这个题目，而为了保险起见，我为自己的查找单个d所对应的最小的x的函数的查找过程设置了上界，因此保证了每一个函数调用都会结束。然后就开始对所有小于1000的d进行查找了，一开始判断一个数是不是平方数的方法有误，计算出了结果却是错的。待我修改了之后重新运行了一次程序，结果更令我大吃一惊——对于d为61的情况，在上限之下找不到结果——尼玛我设的上界可是一亿啊！（最近对一亿特别有感情）</p>
-<h2 id="抛弃蛮力法重新上路"><a href="#抛弃蛮力法重新上路" class="headerlink" title="抛弃蛮力法重新上路"></a>抛弃蛮力法重新上路</h2><p>再试了几次之后，我确定自己的方法是没有错的，所以真正的答案就是对于有些d而言结果确实无法在上界之下找到（最后计算到了真正的答案之后我才发现自己用蛮力法是多么的天真无邪可爱不懂事……）。于是我放弃了自己的方法，转而在网上寻找别人的求助。在Google中输入关键字后，很快就有英文的博客出现在了候选项中。为了不放过任何的学习机会，我点击了第一个。进去之后才发现，这个问题原来还真不简单……</p>
-<h3 id="数学的逆袭"><a href="#数学的逆袭" class="headerlink" title="数学的逆袭"></a>数学的逆袭</h3><p>ProjectEuler的第66题是一道不折不扣的<em>数学题</em>。在第一个博客中，我看到了博主提到了<em>丢番图方程</em>以及两个我不太懂的单词convergent和continue fraction。这时候还没啥感觉，只是对博主说他以0.x级别的速度做出来这道题目感到震惊和难以置信，然后又转而去看了Google到的<a href="http://eli.thegreenplace.net/2009/06/19/project-euler-problem-66-and-continued-fractions/" target="_blank" rel="noopener">第二个链接</a>。说实在的，真的非常感谢这个链接的博主，因为正是他的指引才让我知道了一个<a href="http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/cfINTRO.html" target="_blank" rel="noopener">关于连分数的极好的讲解</a>，看完了博主的文章后大致知道了这道题目是怎么一回事，然后就一头扎进了那个讲解里面去看了。好吧，为了做题我又回去研究数学了。</p>
-<h3 id="大致的数学内容"><a href="#大致的数学内容" class="headerlink" title="大致的数学内容"></a>大致的数学内容</h3><p>首先题目中出现的方程是所谓的“丢番图方程”，并且可以归为更具体的类别叫做“佩尔方程”，幸运的是，对于<em>佩尔方程</em>的解是一个已经研究过的问题，并且根据维基百科上的说明，当d不为平方数时，佩尔方程对每一个d都有解，这是由拉格朗日证明了的。所以即使是使用蛮力法，也尽可以放心地去从1开始遍历所有的自然数——你总会找到那个心仪的它的！除了证明了有解之外，佩尔方程的解法也是被人们研究过的，并且有几种不同的解法。可惜的是本人的英语水平和数学水平都不是很强，只能看懂中文维基百科中关于佩尔方程的<em>用连分数求解</em>的<a href="http://zh.wikipedia.org/wiki/佩尔方程#.E4.BD.A9.E5.B0.94.E6.96.B9.E7.A8.8B.E7.9A.84.E8.A7.A3" target="_blank" rel="noopener">方法</a>，因此也决定了使用这个方法来解决第66题。</p>
-<h2 id="重点来了：怎么计算一个数的算术平方根的连分数形式？"><a href="#重点来了：怎么计算一个数的算术平方根的连分数形式？" class="headerlink" title="重点来了：怎么计算一个数的算术平方根的连分数形式？"></a>重点来了：怎么计算一个数的算术平方根的连分数形式？</h2><p>方法来源在前面提及的<a href="http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/cfINTRO.html" target="_blank" rel="noopener">关于连分数的极好的讲解</a>那里，不过重点其实在于用程序实现这个东西。一开始的时候我觉得这个东西可能要用到符号计算，然后就开始在那里纠结要用怎样的方式来表达一个数的算术平方根才好。到后来我盯了那个表格很久之后我才发现我错了，根本不是酱紫的！压根就不需要什么符号计算，只是纯粹的数值计算就足够了。这一切的一切的关键，就在于怎么把一个数拆分成一个整数加上一个未知数的倒数的形式。</p>
-<p>（为了方便起见用了原文中的例子）首先，如果要计算√14，那么按照算法（请自己看上面的链接里的英文原文）的第一步，要找到一个数m，使得m的平方是一个最接近14的完全平方数。显然这个数是9，但是怎么算呢？可以一个个地从1开始找（太慢了一边去！），另一个方法是用计算器求平方根的功能直接计算得到3.7416575，然后对这个结果取<em>不大于它的最大整数</em>（也就是所谓的floor），得到了3。那么就可以把√14表示成3+1/x1的形式。</p>
-<p>这样我们得到了√14的一个等级的连分数近似形式3/1（也就是3啊）。显然3*3-14*1*1得到-5，所以连分数3/1不是所希望的解，因此需要继续计算第二级的连分数近似，那么要怎么算呢？我们只要把上式中的x1也表示成连分数的形式就可以了，但是必须先求出x1的某个数值表示形式，不然无法应用上面的第一步。方法是把x1用√14和其它数来表示。于是有</p>
-<pre><code>x1 = 1/(√14-3) = (√14+3)/(√14-3)(√14+3) = (√14+3)/5
-</code></pre><p>按照前面的方法，floor((√14+3)/5)的结果为1，所以x1可以写成1+1/x2的形式，那么√14就可以写成3+1/(1+1/x2)的形式，忽略未知的1/x2就得到了连分数4/1，仍然不是方程x^2-Dy^2=1的解。总之继续这么进行下去，就可以得到满足上面的方程的整数解了，并且其中的x必定是所有解当中最小的一个。</p>
-<h3 id="规律在哪？紧盯表格！"><a href="#规律在哪？紧盯表格！" class="headerlink" title="规律在哪？紧盯表格！"></a>规律在哪？紧盯表格！</h3><p>表格的第一列是Finding，显然，每一行的Finding的值决定了在Step 1中计算得到的红色的数字是多少。如果知道了每一行的Finding是多少，就有办法计算出那些红色的数字了。在Finding中出现的x1、x2和x3，其实就是前一行最后所计算出来的那些值罢了。不难发现x1、x2和x3其实都有相同的结构，那就是它们都是(√14-a)/b的形式。而a和b分别为3、2、2和5、2、5。如果再想想就会知道，其实一开始的√14也满足这样的形式。对于√14而言，a为0而b为1。既然有了规律和相应的符号表示，那么就可以从代数的角度来找规律了。加入要计算算术平方根的数是n，红色的要计算的数为m，那么在第i次计算中</p>
-<pre><code>(√n+a_(i-1))/b_(i-1) = m_i + 1/x_i
-</code></pre><p>显然要计算的就是m_i和x_i，而x_i其实就是由a_i和b_i所构成的，因此变换x_i就可以得到</p>
-<pre><code>x_i = (√n-(a_(i-1) - m_ib_(i-1)))/((n-(a_(i-1) - m_ib_(i-1))^2)/b_(i-1))
-</code></pre><p>上面的公式太丑了，LaTeX版本在<a href="https://raw.github.com/Liutos/liutos.github.com/master/xi.png" target="_blank" rel="noopener">这里</a>。这样也就知道了对应于这个xi的a和b分别为多少了，参见前面给出的LaTeX所描述的公式的图片的链接。这些公式实际上是递推公式，也就是说你必须有了前一个值之后才能计算出下一个值。如果是希望快速计算出指定的连分数的一个部分的话，那么这种方式不适合，不过用在这里却刚好，因为我不知道第几个连分数的部分才是解，所以一定是从第一个近似连分数一直迭代过去的。</p>
-<p>知道了计算方法，那么剩下的编码过程也就简单了很多了，详情请参见<a href="https://github.com/Liutos/Project-Euler/blob/master/lisp/pro66.lisp" target="_blank" rel="noopener">我的解法</a>。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>这一次的收获还真不少。首先是关于题目本身的。以前我做ProjectEuler的题目，几乎都是直接使用蛮力法来解决的，不过这一次蛮力法彻底失败了，因为消耗的时间实在是太久了所以没有必要完全计算出来了（实际上我没有完全计算，因为设置了上限在中途就发现问题了）。而上网搜索才发现这其实是一道彻头彻尾的数学题——当然了，还是需要写程序来算的。也强烈地让我认识到了，PE的题目看中的，真的如之前在豆瓣上的讨论所看到的，注重的是数学能力，而不是运用一些经典的算法的能力。第二个，是关于所谓的“过早优化是万恶之源”的说法的感想。</p>
-<p>一开始我并不知道用蛮力法来计算是不实际的，因此我一直在尝试着改进蛮力法的性能——是的，我还没有确定这个东西是否能够正确地计算出结果的时候我已经开始考虑优化的事情了。问题出在哪里呢？就在于我对于所遇到的很多题目都是尝试使用蛮力法来解决的，以致于我有了这样的思维定势：每当我发现运行时间过长时，我就会觉得一定是我的代码性能不好，因此会尝试对其进行优化，例如加上类型声明或者使用记忆化之类的。可是偏偏这样走上了歪路，因为正确的做法是分析一下问题，找到正确的解法，而不是在错误的解法上不断地尝试优化。如果我一直优化下去，那么永远不会得到正确的答案——过早优化是万恶之源～</p>
-<p>第三条——糟糕，洗完澡忘记了第三条是什么了！&gt;_&lt;（总算想起来了，于23:36）在这一次的解法中，对于连分数的构造是一个递推的过程，实际上就有种可以用递归来解决的味道。刚想着怎么表示这么一个构造连分数的过程的时候，我忽然灵光一闪，想到了只看过却从来没有使用过的技术——把闭包当作数据结构来使用。于是根据自己看《SICP》的经验，我弄了个叫做make-cf的函数，只要传递一个整数给它，那么就可以得到相应的一个闭包，对这个闭包做不同的操作就有不同的结果，而且那些状态信息还可以由闭包自己保持。等我用起来之后才发现，用闭包好像是一个很有用的想法，因为</p>
-<pre><code>这样子相当具有复用的可能！
-</code></pre><p>代码中的make-cf、update-cf、to-cf和get-cf-list，完全可以写入一个package中然后作为一个独立的模块来提供，这样子以后的一些程序也可以使用了——PE上好像还有不少用到连分数的题目呢^_^虽然用CLOS完全可以实现这里提及的闭包的功能，可是比起CLOS提供的面向对象功能，闭包反而更有封装的感觉。总之在CLOS和闭包中，我更喜欢这种用闭包来实现的风格;-)</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -768,7 +775,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">71</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -781,7 +788,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">101</span>
+        <span class="site-state-item-count">103</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

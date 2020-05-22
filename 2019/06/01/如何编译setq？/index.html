@@ -46,7 +46,7 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="Common Lisp中的setq类似于其它语言中的赋值语句，它可以给一个符号对象设定一个值，类似于将一个值赋值给一个变量一样。简单起见，在jjcc2中，我会将所有的符号都作为全局的一个label来实现。也就是说，如果代码中出现了 1(setq a 1) 这样的代码，那么在最后生成的代码中，就会相应的在.data段中有一个同名的label，其中存放着数值1。 既然都是全局变量，那么只需要准备一个容">
-<meta name="keywords" content="common lisp,lisp,assembly,compiler,setq,x64,汇编,编译器">
+<meta name="keywords" content="common lisp,assembly,compiler,lisp,setq,x64,汇编,编译器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何编译setq？">
 <meta property="og:url" content="https://liutos.github.io/2019/06/01/如何编译setq？/index.html">
@@ -322,9 +322,9 @@
           
           <div class="post-tags">
               <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
-              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
               <a href="/tags/assembly/" rel="tag"><i class="fa fa-tag"></i> assembly</a>
               <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
               <a href="/tags/setq/" rel="tag"><i class="fa fa-tag"></i> setq</a>
               <a href="/tags/x64/" rel="tag"><i class="fa fa-tag"></i> x64</a>
               <a href="/tags/汇编/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
@@ -424,7 +424,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">71</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -437,7 +437,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">101</span>
+        <span class="site-state-item-count">103</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
