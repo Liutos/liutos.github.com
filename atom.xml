@@ -40,9 +40,9 @@
       <category term="究竟在干什么系列" scheme="https://liutos.github.io/categories/%E7%A9%B6%E7%AB%9F%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88%E7%B3%BB%E5%88%97/"/>
     
     
-      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
-    
       <category term="bash" scheme="https://liutos.github.io/tags/bash/"/>
+    
+      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
     
       <category term="redirection" scheme="https://liutos.github.io/tags/redirection/"/>
     
@@ -76,9 +76,9 @@
     
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
-      <category term="vscode" scheme="https://liutos.github.io/tags/vscode/"/>
-    
       <category term="tool" scheme="https://liutos.github.io/tags/tool/"/>
+    
+      <category term="vscode" scheme="https://liutos.github.io/tags/vscode/"/>
     
       <category term="绘图" scheme="https://liutos.github.io/tags/%E7%BB%98%E5%9B%BE/"/>
     
@@ -108,9 +108,9 @@
       <category term="究竟在干什么系列" scheme="https://liutos.github.io/categories/%E7%A9%B6%E7%AB%9F%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88%E7%B3%BB%E5%88%97/"/>
     
     
-      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
-    
       <category term="bash" scheme="https://liutos.github.io/tags/bash/"/>
+    
+      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
     
   </entry>
   
@@ -316,9 +316,9 @@
     
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
-      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
-    
       <category term="tool" scheme="https://liutos.github.io/tags/tool/"/>
+    
+      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
     
       <category term="accounting" scheme="https://liutos.github.io/tags/accounting/"/>
     
