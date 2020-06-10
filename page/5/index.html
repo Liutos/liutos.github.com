@@ -200,6 +200,146 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/11/30/一些自我感觉良好的命名约定/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/11/30/一些自我感觉良好的命名约定/" class="post-title-link" itemprop="url">一些适用于Node.js的命名约定</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-30 20:32:33" itemprop="dateCreated datePublished" datetime="2019-11-30T20:32:33+08:00">2019-11-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-07 15:59:17" itemprop="dateModified" datetime="2019-12-07T15:59:17+08:00">2019-12-07</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/11/30/一些自我感觉良好的命名约定/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/30/一些自我感觉良好的命名约定/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><blockquote>
+<p>There are only two hard things in Computer Science: cache invalidation and naming things.</p>
+<p>– Phil Karlton</p>
+</blockquote>
+<p>我<del>乔鲁诺·乔巴拿</del>有一个梦想，便是要成为程序员巨星。但如果你看过我写的代码，便知道我还远远够不上“巨星”二字。我的代码中有许多不一致的命名：</p>
+<ol>
+<li>常量的命名时而是全大写的（如<code>WAIT_CONFIRM</code>），时而是全小写的；</li>
+<li>某个项目大部分命名用的是camel case（如<code>TaskController</code>），但由于数据库中的列名用了snake case（如<code>context_id</code>），导致项目中与数据库列有关的代码混用了camel case和snake case（如<code>restricted_hours[new Date(timestamp * 1000).getHours()] = 1;</code>）；</li>
+<li>同样是构造复杂对象的函数，它们的前缀可能会是build、create、make，甚至compute中的任何一个；</li>
+<li>明明是一个数组，却用了单数的<code>order</code>作为变量名。</li>
+</ol>
+<p>之所以如此混乱，正是因为我没有遵循一套一致的命名规则。每当我在一个项目中蹦出一些新想法时，便会跃跃欲试——不，我真的就用上了。我不曾整理过自己的命名规则（天哪我已经写了三年的JavaScript了），以至于无从判断“新想法”是否真的新——也许它是一个已经被我抛弃的规则。</p>
+<p>为了不再深陷不一致命名的泥潭，我定下了本篇的命名规则，期望它们为以后的我指点迷津。</p>
+<h1 id="变量名"><a href="#变量名" class="headerlink" title="变量名"></a>变量名</h1><h2 id="通用规则"><a href="#通用规则" class="headerlink" title="通用规则"></a>通用规则</h2><ul>
+<li>变量名使用camel case的命名风格。例如，使用<code>namingConvention</code>，而不是<code>naming_convention</code>；</li>
+<li>在尽量遵循规则的基础上随机应变。</li>
+</ul>
+<h2 id="变量名的单复数规则"><a href="#变量名的单复数规则" class="headerlink" title="变量名的单复数规则"></a>变量名的单复数规则</h2><ul>
+<li>如果一个变量存储的值的类型为数组（即该变量作为<code>Array.isArray</code>方法的参数时结果为真），那么变量的名称就使用复数形式。例如，使用<code>fruits = []</code>而不是<code>fruit = []</code>。</li>
+<li>如果一个变量存储的值的类型为集合（即<code>Set</code>这个类型），那么变量的名称应当使用单词unique为前缀。例如，使用<code>uniqueUserIds</code>而不是<code>userIdSet</code>。</li>
+</ul>
+<h2 id="布尔变量的命名规则"><a href="#布尔变量的命名规则" class="headerlink" title="布尔变量的命名规则"></a>布尔变量的命名规则</h2><p>如果一个变量的值的类型为<code>boolean</code>，那么变量的名称应当以下列单词为前缀：</p>
+<ul>
+<li>is。当变量表达一个二元状态的时候，例如<code>isFull</code>、<code>isEmpty</code>。在is后面的应当是一个形容词；</li>
+<li>has。当变量表达历史上是否发生过某个事件的时候，例如<code>hasPaid</code>、<code>hasArrived</code>。在has后面的应当是一个动词，并且采用过去分词；</li>
+<li>can。当变量表达某种权限的时候，例如<code>canWrite</code>、<code>canExecute</code>。在can后面的应当是一个动词，并且采用现在分词。</li>
+</ul>
+<h2 id="数值变量的命名规则"><a href="#数值变量的命名规则" class="headerlink" title="数值变量的命名规则"></a>数值变量的命名规则</h2><ul>
+<li>如果变量中存储的是一系列数字中的最大值，那么变量的名称应当以max为前缀，例如<code>maxScore</code>。如果是最小值，则是以min为前缀，例如<code>minScore</code>；</li>
+<li>如果变量中存储的是一系列数字的和，那么变量的名称应当以total为前缀，例如<code>totalIncome</code>；</li>
+<li>如果变量中存储的是数组的长度，那么变量的名称可以用numberOf为前缀，例如<code>numberOfUsers</code>。</li>
+</ul>
+<h2 id="字符串变量的命名规则"><a href="#字符串变量的命名规则" class="headerlink" title="字符串变量的命名规则"></a>字符串变量的命名规则</h2><ul>
+<li>如果表达的是人名、品牌名、公司名、数据库中的表名，那么变量的名称可以用单词name结尾，例如<code>customerName</code>、<code>brandName</code>、<code>companyName</code>；</li>
+<li>如果表达的是按键或按钮上刻着的文字、纸质表格或电子表单上输入框左侧的简短说明，那么变量的名称可以用单词label结尾，例如<code>buttonLabel</code>；</li>
+<li>不允许使用单词content</li>
+</ul>
+<h1 id="函数名"><a href="#函数名" class="headerlink" title="函数名"></a>函数名</h1><ul>
+<li>函数的名称应当由动词和名词组成，例如<code>readFile</code>、<code>writeFile</code>；</li>
+<li>如果函数的功能是将参数转换为另一种形式的输出（比如进制转换、币种转换），那么函数的名称应当以单词to为前缀，例如<code>toDollar</code>、<code>toHexadecimal</code>；</li>
+<li>如果函数的功能是检验参数并返回一个布尔值，那么函数的名称应当以单词check为前缀，例如<code>checkIsDirectory</code>、<code>checkIsExecutable</code>；</li>
+<li>如果函数的功能是“计数”，那么函数的名称应当以单词count为前缀，并且其中被计数的对象应当为复数形式，例如<code>countPaidOrders</code>。</li>
+</ul>
+<h2 id="构造型函数的命名规则"><a href="#构造型函数的命名规则" class="headerlink" title="构造型函数的命名规则"></a>构造型函数的命名规则</h2><ul>
+<li>如果表达的是从无到有地创造一个对象，那么函数名可以用create作为前缀，例如<code>createObject</code>；</li>
+<li>如果表达的是将一些输入原封不动地放在一起（可能输入之间添加了其它东西）创造出一个对象，那么函数名可以用make作为前缀，例如<code>makeFloor</code>。进一步地，如果函数不改变输入的相对顺序，那么函数名可以用concat，例如<code>concatString</code>；</li>
+<li>如果函数会将根据输入创造出具有不止一个层级的对象，那么函数名可以用build作为前缀，例如<code>buildBinarySearchTree</code>。</li>
+</ul>
+<h2 id="修改型函数的命名规则"><a href="#修改型函数的命名规则" class="headerlink" title="修改型函数的命名规则"></a>修改型函数的命名规则</h2><ul>
+<li>如果函数负责更新数据库中的记录，那么函数名应当以单词update为前缀；</li>
+<li>如果函数修改的是一些可枚举的状态，那么函数名应当以单词change为前缀。</li>
+</ul>
+<h1 id="类名"><a href="#类名" class="headerlink" title="类名"></a>类名</h1><ul>
+<li>类的名称应当采用capital case的命名风格，例如<code>DatabaseConnection</code>；</li>
+<li>类的名称应当以一个名词结尾；</li>
+<li>如果类的存在是为了使用某种设计模式，那么类名应当可以反映在设计模式中所处的位置，例如在State模式中，代表具体状态的类的名称可以是<code>InitialState</code>、<code>UnpaidState</code>。</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a href="https://hackernoon.com/the-art-of-naming-variables-52f44de00aad" target="_blank" rel="noopener">The art of naming variables</a></li>
+<li><a href="https://google.github.io/styleguide/jsguide.html" target="_blank" rel="noopener">Google JavaScript Style Guide</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Letter_case" target="_blank" rel="noopener">Letter case</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/11/21/Emacs走马观花/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -676,88 +816,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/09/18/编译return语句/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/09/18/编译return语句/" class="post-title-link" itemprop="url">编译return语句</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-09-18 22:01:33 / 修改时间：22:05:37" itemprop="dateCreated datePublished" datetime="2019-09-18T22:01:33+08:00">2019-09-18</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/09/18/编译return语句/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/09/18/编译return语句/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Common Lisp中有一个叫做<a href="http://www.lispworks.com/documentation/HyperSpec/Body/m_return.htm" target="_blank" rel="noopener"><code>return</code></a>的宏，它的作用和平常在C、Java，或者Node.js里面见到的<code>return</code>关键字完全不一样。Common Lisp中的<code>return</code>用于从一个块（<a href="http://www.lispworks.com/documentation/HyperSpec/Body/s_block.htm" target="_blank" rel="noopener"><code>block</code></a>）中返的，而不是从一个函数中返回。用<code>return</code>可以写出下面这样的代码，符号<code>YOU-WILL-NOT-SEE-ME</code>永远不会被打印</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foo ()</span><br><span class="line">  (<span class="name">block</span> <span class="literal">nil</span></span><br><span class="line">    (<span class="name">return</span> <span class="number">123</span>)</span><br><span class="line">    (<span class="name">print</span> 'you-will-not-see-me)))</span><br></pre></td></tr></tbody></table></figure>
-<p>求值<code>return</code>，就将123作为<code>block</code>的返回值从中返回了，后面的<code>print</code>并没有机会执行——在SBCL中编译上面这段<code>defun</code>的时候，编译器甚至已经给出了提醒</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/09/18/编译return语句/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -829,7 +887,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">73</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -842,7 +900,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">103</span>
+        <span class="site-state-item-count">105</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

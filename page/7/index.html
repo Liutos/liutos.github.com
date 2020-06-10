@@ -200,6 +200,95 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/06/26/inside-out-aux如何支持对-exit的调用/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/" class="post-title-link" itemprop="url">inside-out/aux如何支持对_exit的调用</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-26 21:44:25" itemprop="dateCreated datePublished" datetime="2019-06-26T21:44:25+08:00">2019-06-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-07-10 20:01:04" itemprop="dateModified" datetime="2019-07-10T20:01:04+08:00">2019-07-10</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/06/26/inside-out-aux如何支持对-exit的调用/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/26/inside-out-aux如何支持对-exit的调用/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在<a href="http://liutos.github.io/2019/06/14/%E6%8B%86%E8%A7%A3%E5%B5%8C%E5%A5%97%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F/">上一篇文章</a>中，新增了两个函数：<code>inside-out</code>以及<code>inside-out/aux</code>——曾经想过将<code>inside-out/aux</code>放到前者的函数中用<code>labels</code>来定义，但担心不好调试，所以剥离了出来成为一个独立的函数——<code>inside-out</code>基本上只是驱动了后者，真正地将嵌套表达式拆解开来的还是<code>inside-out/aux</code>。因此，为了让让这个编译器最终可以处理如下形式的代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">_exit</span> (<span class="name">+</span> (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>) <span class="number">3</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>就需要先对<code>inside-out/aux</code>进行一番改造，使其可以处理上述代码。</p>
+<p>在此之前，先处理一下<code>inside-out/aux</code>目前的一些问题。在之前的实现中，由于使用了<code>setf</code>对输入参数<code>expr</code>进行了修改，因此在<code>example3</code>中的列表实际上在第二次运行的时候已经不是代码中看到的那样子了。所以，先将<code>inside-out/aux</code>改写为更pure的形式</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/06/26/inside-out-aux如何支持对-exit的调用/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -532,94 +621,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/27/如何编译progn/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/05/27/如何编译progn/" class="post-title-link" itemprop="url">如何编译progn</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-05-27 22:38:22 / 修改时间：22:41:00" itemprop="dateCreated datePublished" datetime="2019-05-27T22:38:22+08:00">2019-05-27</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/05/27/如何编译progn/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/27/如何编译progn/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="progn是什么玩意"><a href="#progn是什么玩意" class="headerlink" title="progn是什么玩意"></a>progn是什么玩意</h2><p><code>progn</code>是Common Lisp里面的一个special operator，见这份文档的说明：<a href="http://clhs.lisp.se/Body/s_progn.htm" target="_blank" rel="noopener">http://clhs.lisp.se/Body/s_progn.htm</a></p>
-<h2 id="为嘛要编译这东西"><a href="#为嘛要编译这东西" class="headerlink" title="为嘛要编译这东西"></a>为嘛要编译这东西</h2><p>现在已经支持了二元四则运算了，但现在这里有一个大问题，就是这四个运算没办法嵌套着组合使用。比如，遇到下面这样的代码，<code>jjcc2</code>函数就懵逼了</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> <span class="number">1</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br></pre></td></tr></tbody></table></figure>
-<p>那要编译这种代码的话怎么办呢？一个比较直观的做法，是引入临时变量，来保存嵌套在其中的表达式的求值结果，然后再用变量来代替原本嵌套的表达式。修改后的代码可能长这个样子</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> a (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">(<span class="name">+</span> <span class="number">1</span> a)</span><br></pre></td></tr></tbody></table></figure>
-<p>显然，这是有先后的时间依赖关系的两条语句，因此应当使用<code>progn</code>将它们包裹起来，结果如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">setq</span> a (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> a))</span><br></pre></td></tr></tbody></table></figure>
-<p>这样整个表达式的求值结果，或者说它被编译之后的运行结果，应当就是在寄存器<code>EAX</code>中放入整数6了。所以，本篇将来解决对<code>progn</code>的编译问题。</p>
-<h2 id="如何编译progn"><a href="#如何编译progn" class="headerlink" title="如何编译progn"></a>如何编译progn</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/05/27/如何编译progn/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -691,7 +692,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">73</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -704,7 +705,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">103</span>
+        <span class="site-state-item-count">105</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
