@@ -200,6 +200,119 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/09/09/那么，Prolog，告诉我怎么走/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/09/那么，Prolog，告诉我怎么走/" class="post-title-link" itemprop="url">那么，Prolog，告诉我怎么走</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-09 21:42:32 / 修改时间：21:56:51" itemprop="dateCreated datePublished" datetime="2020-09-09T21:42:32+08:00">2020-09-09</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/09/09/那么，Prolog，告诉我怎么走/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/09/那么，Prolog，告诉我怎么走/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>今年四月左右，我心血来潮地为自己立了一个学习Prolog的目标——对，就是那门以逻辑编程和人工智能为卖点的语言。不仅要学会它的基本用法，还妄想用它像朋友圈广告里的Python那样，用来处理Excel文件中的大数据！</p>
+<p>尽管处理大数据是开个玩笑，但学习Prolog的目标是真的。既然要学习一门编程语言，就必须找一本靠谱的教材。在无中生友之后，我选择了<del>由谭浩强老先生主编的</del><a href="http://www.learnprolognow.org/lpnpage.php?pageid=online" target="_blank" rel="noopener">《Learn Prolog Now》</a>作为入门读物。</p>
+<p>尽管《Learn Prolog Now》的内容一点也不real world，却循序渐进、非常地适合初学者，每一章的结尾还准备了“上机题”。出人意料的是，仅仅在第三章就遇到了不会做的题目。在焦急地苦战一番未果后，我拖着疲惫的身躯搁置了它，继续学习后面的章节。</p>
+<p>时隔五个月，我再次尝试解答这道题目。却惊喜地发现，只需要冷静地分析再仔细运用前三章学过的知识，解决这道题目也就是水到渠成的事情了。</p>
+<h1 id="所以到底是个什么题？"><a href="#所以到底是个什么题？" class="headerlink" title="所以到底是个什么题？"></a>所以到底是个什么题？</h1><p>讲了这么多，是时候揭晓这它的真面目了。由于第三题以第二题为基础，因此一并搬运了过来</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/第二第三题的描述.jpg" alt=""></p>
+<p>感兴趣的朋友也可以直接移步<a href="http://www.learnprolognow.org/lpnpage.php?pagetype=html&amp;pageid=lpn-htmlse12#x25-38066x2" target="_blank" rel="noopener">源网页</a>查看。</p>
+<p>看完上面的题目，只学过主流编程语言的朋友大概会是一头雾水，毕竟无论是代码还是术语，都与平日里使用的大相径庭。我来试着解释一下。像<code>byCar(auckland, hamilton)</code>和<code>byTrain(metz, frankfurt)</code>这样的代码，用Prolog的术语来讲叫做“事实”。就像数学中的公理一样，它们总是成立的。如果向Prolog提问，它会给出肯定的回答</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/向Prolog查询事实.jpg" alt=""></p>
+<p><code>byCar</code>和<code>byTrain</code>被称为“谓词”，<code>auckland</code>和<code>hamilton</code>则是“原子”。</p>
+<p>第二题要求定义<code>travel/2</code>，第三题要求定义<code>travel/3</code>。<code>travel</code>是谓词的名字，2和3则是它所接受的参数的个数。定义一个谓词就是给出描述它何时成立的“规则”，举个例子，可以定义一个名为<code>len</code>的谓词，只有当第二个参数等于第一个参数的长度时才成立</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/定义计算长度的谓词的例子.jpg" alt=""></p>
+<p>以大写字母开头的标识符（如题目中的<code>X</code>，上图中的<code>T</code>、<code>L</code>）是变量，在归一化（unification）时Prolog能够为它们赋值使得查询成立。</p>
+<p>鉴于本文不是Prolog的入门教程，各位读者如果想进一步了解Prolog，还请移步《Learn Prolog Now》的相关章节。</p>
+<h1 id="先解决第二题吧"><a href="#先解决第二题吧" class="headerlink" title="先解决第二题吧"></a>先解决第二题吧</h1><p>讲了这么多，该进入正题了。第二题其实不难，细心的读者应该已经发现，这题可以用递归来解决（就像上文的<code>len</code>一样）。</p>
+<p>设谓词<code>travel</code>的两个参数分别叫做<code>S</code>和<code>E</code>，各代表起点和终点。显然，<code>travel(S, E)</code>成立，当且仅当：</p>
+<ol>
+<li>可以从<code>S</code>搭乘汽车（<code>byCar</code>）、火车（<code>byTrain</code>），或飞机（<code>byPlane</code>）抵达<code>E</code>，或者；</li>
+<li>存在另一个城市<code>M</code>，可以从<code>S</code>搭乘汽车、火车，或飞机抵达<code>M</code>，并且<code>travel(M, E)</code>也成立。</li>
+</ol>
+<p>上述算法可以轻松地写成Prolog代码</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">byCar(auckland,hamilton).</span><br><span class="line">byCar(hamilton,raglan).</span><br><span class="line">byCar(valmont,saarbruecken).</span><br><span class="line">byCar(valmont,metz).</span><br><span class="line"></span><br><span class="line">byTrain(metz,frankfurt).</span><br><span class="line">byTrain(saarbruecken,frankfurt).</span><br><span class="line">byTrain(metz,paris).</span><br><span class="line">byTrain(saarbruecken,paris).</span><br><span class="line"></span><br><span class="line">byPlane(frankfurt,bangkok).</span><br><span class="line">byPlane(frankfurt,singapore).</span><br><span class="line">byPlane(paris,losAngeles).</span><br><span class="line">byPlane(bangkok,auckland).</span><br><span class="line">byPlane(singapore,auckland).</span><br><span class="line">byPlane(losAngeles,auckland).</span><br><span class="line"></span><br><span class="line">travel(<span class="symbol">S</span>, <span class="symbol">E</span>) :- just_go(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">travel(<span class="symbol">S</span>, <span class="symbol">E</span>) :- just_go(<span class="symbol">S</span>, <span class="symbol">M</span>), travel(<span class="symbol">M</span>, <span class="symbol">E</span>).</span><br><span class="line"></span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byCar(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byTrain(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byPlane(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br></pre></td></tr></tbody></table></figure>
+<p>让Prolog告诉咱们这个<code>travel/2</code>写得对不对</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/travel2效果演示.jpg" alt=""></p>
+<p>精彩！</p>
+<h1 id="你话我猜？"><a href="#你话我猜？" class="headerlink" title="你话我猜？"></a>你话我猜？</h1><p>Prolog不仅知道一个查询是否成立，还知道这个查询在什么参数下成立。例如，可以让Prolog告诉咱们，从<code>valmont</code>可以抵达哪一些城市，以及哪一些城市可以抵达<code>auckland</code></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/让Prolog回答起点和终点.jpg" alt=""></p>
+<p>这正是在接下来的题目中需要发扬光大的能力。</p>
+<h1 id="终于来到第三题"><a href="#终于来到第三题" class="headerlink" title="终于来到第三题"></a>终于来到第三题</h1><p>第三题所要求的<code>travel</code>是一个接受三个参数的谓词，第三个参数由从起点到终点的途径城市构成。设这个新的变量为<code>R</code>，那么<code>travel(S, E, R)</code>成立当且仅当：</p>
+<ol>
+<li>可以从<code>S</code>抵达<code>E</code>，并且<code>R</code>为<code>go(S, E)</code>，或者；</li>
+<li>存在另一个城市<code>M</code>，以及另一条路径<code>R2</code>。可以从<code>S</code>抵达<code>M</code>，并且<code>travel(M, E, R2)</code>成立，并且<code>R</code>为<code>go(S, M, R2)</code>。</li>
+</ol>
+<p>那么如何在规则中描述<code>R</code>的结构呢？莫非是像上面的谓词<code>len</code>那样，在<code>:-</code>的右侧写上形如<code>R is go(S, M, R2)</code>这样的代码？</p>
+<p>并不是。</p>
+<p>借助Prolog强大的模式匹配能力，只需要在<code>:-</code>的左边声明<code>R</code>的结构即可</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">byCar(auckland,hamilton).</span><br><span class="line">byCar(hamilton,raglan).</span><br><span class="line">byCar(valmont,saarbruecken).</span><br><span class="line">byCar(valmont,metz).</span><br><span class="line"></span><br><span class="line">byTrain(metz,frankfurt).</span><br><span class="line">byTrain(saarbruecken,frankfurt).</span><br><span class="line">byTrain(metz,paris).</span><br><span class="line">byTrain(saarbruecken,paris).</span><br><span class="line"></span><br><span class="line">byPlane(frankfurt,bangkok).</span><br><span class="line">byPlane(frankfurt,singapore).</span><br><span class="line">byPlane(paris,losAngeles).</span><br><span class="line">byPlane(bangkok,auckland).</span><br><span class="line">byPlane(singapore,auckland).</span><br><span class="line">byPlane(losAngeles,auckland).</span><br><span class="line"></span><br><span class="line">travel(<span class="symbol">S</span>, <span class="symbol">E</span>, go(<span class="symbol">S</span>, <span class="symbol">E</span>)) :- just_go(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">travel(<span class="symbol">S</span>, <span class="symbol">E</span>, go(<span class="symbol">S</span>, <span class="symbol">M</span>, <span class="symbol">R</span>)) :- just_go(<span class="symbol">S</span>, <span class="symbol">M</span>), travel(<span class="symbol">M</span>, <span class="symbol">E</span>, <span class="symbol">R</span>).</span><br><span class="line"></span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byCar(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byTrain(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byPlane(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br></pre></td></tr></tbody></table></figure>
+<p>加载这段代码后，就能让Prolog告诉我们，如何从<code>valmont</code>去往<code>losAngeles</code>了</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/travel3效果演示.jpg" alt=""></p>
+<p>Prolog不仅找出了题目中所给出的答案（见上图的第二行<code>X =</code>），还找出了另外一条可行的路径。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>确实不难，难怪可以作为第三章的习题。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/08/02/没有除法的除法——LeetCode第29题/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -607,105 +720,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/06/25/MySQL的NOT-EXISTS遭遇战/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/25/MySQL的NOT-EXISTS遭遇战/" class="post-title-link" itemprop="url">MySQL的NOT EXISTS遭遇战</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-06-25 22:12:40 / 修改时间：22:15:19" itemprop="dateCreated datePublished" datetime="2020-06-25T22:12:40+08:00">2020-06-25</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/06/25/MySQL的NOT-EXISTS遭遇战/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/06/25/MySQL的NOT-EXISTS遭遇战/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="浅尝一下NOT-EXISTS"><a href="#浅尝一下NOT-EXISTS" class="headerlink" title="浅尝一下NOT EXISTS"></a>浅尝一下<code>NOT EXISTS</code></h1><p>最近老婆在看视频学习MySQL，然后碰到了这样一道习题：有三个表，分别记录学生、课程，以及学生选修了什么课程的信息，问如何用<code>NOT EXISTS</code>找出选修了所有课程的学生。</p>
-<p>为了避免想破脑袋编造一些尴尬的学生姓名和课程名，我简化了一下习题中的表的结构，只留下它们的ID列。建表语句如下</p>
-<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 学生表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`student`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 课程表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`course`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 选修关系</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`elective`</span> (</span><br><span class="line">  <span class="string">`student_id`</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`course_id`</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (<span class="string">`student_id`</span>) <span class="keyword">REFERENCES</span> <span class="string">`student`</span>(<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (<span class="string">`course_id`</span>) <span class="keyword">REFERENCES</span> <span class="string">`course`</span>(<span class="string">`id`</span>)</span><br><span class="line">);</span><br></pre></td></tr></tbody></table></figure>
-<p>还需要给它们塞入一些示例数据</p>
-<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`student`</span> (<span class="string">`id`</span>) <span class="keyword">VALUES</span> (<span class="number">1</span>), (<span class="number">2</span>), (<span class="number">3</span>), (<span class="number">4</span>), (<span class="number">5</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`course`</span> (<span class="string">`id`</span>) <span class="keyword">VALUES</span> (<span class="number">1</span>), (<span class="number">2</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`elective`</span> (<span class="string">`course_id`</span>, <span class="string">`student_id`</span>) <span class="keyword">VALUES</span> (<span class="number">1</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">5</span>), (<span class="number">1</span>, <span class="number">5</span>);</span><br></pre></td></tr></tbody></table></figure>
-<p>显然，只有<code>id</code>列的值为1和5的学生是选修了全部课程的。用<code>NOT EXISTS</code>写出来的SQL语句如下</p>
-<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * </span><br><span class="line"><span class="keyword">FROM</span>   <span class="string">`student`</span> </span><br><span class="line"><span class="keyword">WHERE</span>  <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> (<span class="keyword">SELECT</span> * </span><br><span class="line">                   <span class="keyword">FROM</span>   <span class="string">`course`</span> </span><br><span class="line">                   <span class="keyword">WHERE</span>  <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> (<span class="keyword">SELECT</span> * </span><br><span class="line">                                      <span class="keyword">FROM</span>   <span class="string">`elective`</span> </span><br><span class="line">                                      <span class="keyword">WHERE</span>  <span class="string">`student`</span>.<span class="string">`id`</span> = </span><br><span class="line">                                             <span class="string">`elective`</span>.<span class="string">`student_id`</span> </span><br><span class="line">                                             <span class="keyword">AND</span> <span class="string">`course`</span>.<span class="string">`id`</span> = </span><br><span class="line">                                     <span class="string">`elective`</span>.<span class="string">`course_id`</span>));</span><br></pre></td></tr></tbody></table></figure>
-<p>在<a href="https://dbeaver.io/" target="_blank" rel="noopener">DBEaver</a>中运行后的结果为</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200625/双重NOT_EXISTS的执行结果.jpg" alt="在DBEaver中执行的结果"></p>
-<p>正确地找出了两个选修了所有课程的学生的<code>id</code>。</p>
-<h1 id="如何理解双重NOT-EXISTS"><a href="#如何理解双重NOT-EXISTS" class="headerlink" title="如何理解双重NOT EXISTS"></a>如何理解双重<code>NOT EXISTS</code></h1><p>当第一次被请教这道习题的时候，我其实并不能理解<code>NOT EXISTS</code>的含义。直到后来去看<code>EXISTS</code>的<a href="https://dev.mysql.com/doc/refman/8.0/en/exists-and-not-exists-subqueries.html" target="_blank" rel="noopener">文档</a>，才顿悟了上面的SQL。</p>
-<p>我的理解方法是将双重<code>NOT EXISTS</code>转换为三层循环。以上面的SQL为例，转述为人话就是：找出<code>student</code>表中所有的、<strong>没有</strong>任何一门<code>course</code>表中的课程是<strong>没有</strong>选修的、的学生——双重的 <strong>没有</strong>。</p>
-<p>转换为三层循环大概长这样</p>
-<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> student <span class="keyword">of</span> students) {</span><br><span class="line">  <span class="comment">// 是否存在学生未选修的课程</span></span><br><span class="line">  <span class="keyword">let</span> existSuchCourse = <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> course <span class="keyword">of</span> courses) {</span><br><span class="line">    <span class="keyword">let</span> existSuchElective = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> elective <span class="keyword">of</span> electives) {</span><br><span class="line">      <span class="keyword">if</span> (elective.student_id === student.id &amp;&amp; elective.course_id === course.id) {</span><br><span class="line">        existSuchElective = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 如果遍历完elective表的记录后，existSuchElective仍然为false，说明的确有一门课程是没有选修记录的</span></span><br><span class="line">    <span class="comment">// 那么便意味着“存在至少一门课程，使得当前被遍历的学生与该课程没有选修关系”。</span></span><br><span class="line">    <span class="keyword">if</span> (!existSuchElective) {</span><br><span class="line">      existSuchCourse = <span class="literal">true</span>;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="comment">// 如果遍历完一圈后确实没有找到“未选修”的课程，说明这名学生全都选修了</span></span><br><span class="line">  <span class="keyword">if</span> (!existSuchCourse) {</span><br><span class="line">    <span class="built_in">console</span>.log(student);</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="NOT-EXISTS的本质"><a href="#NOT-EXISTS的本质" class="headerlink" title="NOT EXISTS的本质"></a><code>NOT EXISTS</code>的本质</h1><p>即使不强行理解，也可以让MySQL明确告知双重<code>NOT EXISTS</code>是怎么运作的。用<code>EXPLAIN</code>解释上面的SQL的结果如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200625/双重NOT_EXISTS的EXPLAIN结果.jpg" alt=""></p>
-<p>MySQL的<a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html" target="_blank" rel="noopener">EXPLAIN命令的文档</a>中说明了如何解读执行计划</p>
-<blockquote>
-<p>EXPLAIN returns a row of information for each table used in the SELECT statement. It lists the tables in the output in the order that MySQL would read them while processing the statement. This means that MySQL reads a row from the first table, then finds a matching row in the second table, and then in the third table, and so on. When all tables are processed, MySQL outputs the selected columns and backtracks through the table list until a table is found for which there are more matching rows. The next row is read from this table and the process continues with the next table.</p>
-</blockquote>
-<p>以上面的<code>EXPLAIN</code>为例，MySQL从<code>student</code>表中读出一行，再从<code>course</code>表中读取一行，最后从<code>elective</code>表中读取一行，然后看看<code>WHERE</code>子句是否能够被满足。如果可以，就输出从<code>student</code>表中读出来的这行数据。上图第2和第3行的<code>select_type</code>都是<code>DEPENDENT SUBQUERY</code>，表示它们依赖于“外层”的查询上下文——<code>elective</code>的<code>WHERE</code>子句依赖于<code>student</code>和<code>course</code>中读出来的行。</p>
-<p>似乎和方才的三重循环有异曲同工之妙呢。</p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>像<code>NOT EXISTS</code>这么“高阶”的功能我从未在业务代码中读过和使用过——别说<code>NOT EXISTS</code>，就算是<code>EXISTS</code>也是从未有之，甚至连子查询也极少。毕竟“正经的互联网公司”只是把MySQL<del>当妹妹</del>当一个具备复杂查询查询功能的key-value数据库来使用（笑</p>
-<p>比起双重<code>NOT EXISTS</code>，我更可能凭直觉写出基于子查询的解决方法</p>
-<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * </span><br><span class="line"><span class="keyword">FROM</span>   <span class="string">`student`</span> </span><br><span class="line"><span class="keyword">WHERE</span>  <span class="string">`id`</span> <span class="keyword">IN</span> (<span class="keyword">SELECT</span> <span class="string">`student_id`</span> </span><br><span class="line">                <span class="keyword">FROM</span>   <span class="string">`elective`</span> </span><br><span class="line">                <span class="keyword">GROUP</span>  <span class="keyword">BY</span> <span class="string">`student_id`</span> </span><br><span class="line">                <span class="keyword">HAVING</span>( <span class="keyword">Count</span>(<span class="number">0</span>) ) = <span class="number">2</span>);</span><br></pre></td></tr></tbody></table></figure>
-<p>我甚至觉得会有人把数据库里的行读进内存然后用应用层代码来找出选修了全部课程的学生！</p>
-<p>全文完。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -777,7 +791,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-count">79</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -200,6 +200,103 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/08/12/sdedit使用方法介绍（混沌向）/" class="post-title-link" itemprop="url">sdedit使用方法介绍（混沌向）</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-12 08:52:54" itemprop="dateCreated datePublished" datetime="2018-08-12T08:52:54+08:00">2018-08-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-12-02 21:30:00" itemprop="dateModified" datetime="2018-12-02T21:30:00+08:00">2018-12-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2018/08/12/sdedit使用方法介绍（混沌向）/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/12/sdedit使用方法介绍（混沌向）/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近在寻找绘制时序图的过程中遇到了sdedit，感觉非常适合自己使用，故写这么篇文章向自己也向有同样需求的其它开发人员介绍一些这款软件</p>
+<p>sdedit在macOS上安装还是非常容易的，只需要使用homebrew就可以轻松安装，命令如下</p>
+<pre><code>brew install sdedit
+</code></pre><p>之后sdedit就会被安装到/usr/local/bin 这个目录下，在命令中输入sdedit就可以启动了。</p>
+<p>输入sdedit后会启动一个Java Swing写的GUI程序，具体的外观和布局就不介绍了，这里主要讲解一下sdedit所支持的语法</p>
+<h1 id="sdedit中绘图的常用语法"><a href="#sdedit中绘图的常用语法" class="headerlink" title="sdedit中绘图的常用语法"></a>sdedit中绘图的常用语法</h1><p>PS：我对UML中的一些术语并不了解，下面的介绍是可能有错误的，具体请以sdedit的官方文档（<a href="http://sdedit.sourceforge.net/enter_text/" target="_blank" rel="noopener">http://sdedit.sourceforge.net/enter_text/</a>）为准。同时，既然有官方文档了，我就不在此翻译一遍了，只记录一些常用的用法</p>
+<p>如果需要输入整个时序图的标题（姑且叫做标题），那么可以使用下面的语法</p>
+<pre><code>#![一键获取手机号并登录的交互流程]
+</code></pre><p>即以UNIX中的shebang开头，后面通过一对方括号包住标题内容即可</p>
+<p>如果需要绘制一个参与时序图的节点，那么使用下面的语法（摘抄自官方文档）</p>
+<pre><code>&lt;name&gt;:&lt;Type&gt;[&lt;flags&gt;] "&lt;label&gt;"
+</code></pre><p>其中，<name>就是节点的唯一名字，之后当描述节点间的交互时需要这个字段，请给每一个节点都取一个独一无二的名字（就像取变量名那样）；<type>部分顾名思义就是类型，虽然我在使用的时候这个字段的值也是随心所欲地写的，但这个字段对sdedit而言似乎有特殊含义——例如，如果这个字段填入的是Actor，那么绘制出来的就会是一个人形的节点，在用来表示用户的时候特别有用；（flags我还没有用过就不介绍了）；label可以理解为节点的文案，如果不填<label>，那么节点在最终绘制的图中展示的时候用的就是<name>作为名字</name></label></type></name></p>
+<p>定义好节点之后，就需要把各个节点在不同的时间用不同的消息联系起来了。描述节点间联系用的语法是（摘自官网）</p>
+<pre><code>&lt;caller&gt;[&lt;s&gt;]:&lt;answer&gt;=&lt;callee&gt;[m].&lt;message&gt;
+</code></pre><p>其中的caller和callee都是写的节点的<name>（所以name需要时独一无二的），这样就会绘制出两条线——一条实线从caller指向callee，以及一条虚线从callee指向caller，以及在callee的生命周期下绘制出一个纵向的矩形，表示callee的处理过程；<message>是从caller发往callee的消息，例如参数的描述；如果需要同时描述从callee返回的结果，那么就需要填写在上述语法的的<answer>的位置——个人觉得这个语法是有点奇怪的</answer></message></name></p>
+<h2 id="生成图片"><a href="#生成图片" class="headerlink" title="生成图片"></a>生成图片</h2><p>上面的这些文本描述都需要输入到sdedit的文本框中（唯一UI上的右下角），之后点击保存就可以得到一个XXX.sdx的文件了。由于在我的电脑上，sdedit的GUI上的导出功能用起来非常有问题，所以我摸索出来的是在命令行导出图片文件的做法（并且可以导出的格式似乎更丰富）。总体的用法是</p>
+<pre><code>sdedit -t &lt;类型&gt; -o &lt;输出文件名&gt; &lt;原始的.sdx文件&gt;
+</code></pre><p>输出文件名随性地取即可，其中类型对常用的都有支持（svg、png、jpg，和bmp），我一般常用的是png，然后就可以得到一张PNG图片了（便可以美美地用到设计文档里了）</p>
+<p>配图什么的等我哪天特别闲了再补充上来吧</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/08/02/MacBook-Pro使用体验/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -571,95 +668,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/03/19/如何检查一组区间中是否存在两个区间有交集/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" class="post-title-link" itemprop="url">如何检查一组区间中是否存在两个区间有交集</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-03-19 22:49:46" itemprop="dateCreated datePublished" datetime="2017-03-19T22:49:46+08:00">2017-03-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2017/03/19/如何检查一组区间中是否存在两个区间有交集/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/19/如何检查一组区间中是否存在两个区间有交集/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>假设有N个区间，将它们表达为<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_i,%20e_i%5D" alt="">，其中下标i位于区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">中</p>
-<p>为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D" alt="">而言，都有<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_i%20%3C%20b_%7Bi+1%7D" alt="">（这里的i小于N-1）。</p>
-<p>为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系</p>
-<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k" alt=""></p>
-<p>这是因为如果<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3C%20b_k" alt="">，那么所有位于区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_j,%20e_j%5D" alt="">中的数都将会小于 b_k，那么第j个区间与第k个区间就不可能有交集了，因此上述不等式一定成立。再加上这一组区间都是按照区间的下界递增排序的，那么必然有</p>
-<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_k%20%3C%20e_j" alt=""></p>
-<p>假设<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?k%20-%20j%20%3E%201" alt="">，由于k和j都是正整数，这意味着在第j和第k个区间之间，必然还存在着一个区间l，那么这个区间的必然满足</p>
-<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_l" alt=""></p>
-<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k%20%3E%20b_l" alt=""></p>
-<p>这就意味着第j个区间和第l个区间也存在交集，它们的交集是子区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_l,%20e_j%5D" alt="">（这里假设<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_l%20%3E%20e_j" alt="">）。这就说明了，如果可以在一组区间中找到两个不相邻的区间，它们存在重叠的部分，那么一定可以找到第三个区间，使得这个区间与其中的一个区间也存在重叠。</p>
-<p>这表示如果我们要判定一组区间是否存在重叠，那么只需要先将它们基于区间的起点按照递增排序后，比较每一对相邻的两个区间是否存在重叠即可。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -731,7 +739,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-count">79</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
