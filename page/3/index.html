@@ -200,6 +200,179 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/26/你或许不知道，shell不能比较大小/" class="post-title-link" itemprop="url">你或许不知道，shell不能比较大小</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-26 21:19:01 / 修改时间：22:25:16" itemprop="dateCreated datePublished" datetime="2020-04-26T21:19:01+08:00">2020-04-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/究竟在干什么系列/" itemprop="url" rel="index">
+                    <span itemprop="name">究竟在干什么系列</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/04/26/你或许不知道，shell不能比较大小/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/26/你或许不知道，shell不能比较大小/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>“究竟在干什么”是一系列关于软件开发过程中背后运作原理的文章，每一篇文章旨在讲解一些在日常编程实践中常见但可能并不为人所熟知的技术细节，抛砖引玉，期待激发读者朋友的更多思考。</p>
+</blockquote>
+<h1 id="如何在shell中比较大小？"><a href="#如何在shell中比较大小？" class="headerlink" title="如何在shell中比较大小？"></a>如何在shell中比较大小？</h1><p>如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写<code>[ blablabla ]</code>这样的代码</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/搜索“shell比较”的结果.jpg" alt=""></p>
+<p>例如，如果想知道当前的UNIX时间是否已经以<code>16</code>开头，可以用下列的shell代码</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">ts=$(date '+%s')</span><br><span class="line">if [ "${ts}" -gt 1600000000 -a "${ts}" -lt 1700000000 ]; then</span><br><span class="line">    echo '当前的UNIX时间戳已经以16开头啦。'</span><br><span class="line">else</span><br><span class="line">    echo '当前的UNIX时间戳还没以16开头哦。'</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
+<p>当我写这个的时候，<code>date '+%s'</code>的值为<code>1587901648</code>，所以运行后走的是<code>else</code>的分支。</p>
+<p>除了用<code>-gt</code>表示大于之外，还有各种各样的其它比较运算符，例如下列的四个运算符</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>作用</th>
+<th>示例代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-ge</code></td>
+<td>大于或等于</td>
+<td><code>[ 2 -ge 1 ]</code></td>
+</tr>
+<tr>
+<td><code>-eq</code></td>
+<td>等于</td>
+<td><code>[ 1 -eq 1 ]</code></td>
+</tr>
+<tr>
+<td><code>-le</code></td>
+<td>小于或等于</td>
+<td><code>[ 2 -le 3 ]</code></td>
+</tr>
+<tr>
+<td><code>-lt</code></td>
+<td>小于</td>
+<td><code>[ 3 -lt 4 ]</code></td>
+</tr>
+</tbody>
+</table>
+<p>还有一些“测试”类型的运算符，例如</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>作用</th>
+<th>示例代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-b file</code></td>
+<td>测试<code>file</code>是否存在并且是个块设备</td>
+<td><code>[ -b /dev/disk0 ]</code></td>
+</tr>
+<tr>
+<td><code>-c file</code></td>
+<td>测试<code>file</code>是否存在并且是个字符设备</td>
+<td><code>[ -c /dev/tty ]</code></td>
+</tr>
+</tbody>
+</table>
+<h1 id="是shell的语法么？"><a href="#是shell的语法么？" class="headerlink" title="[是shell的语法么？"></a><code>[</code>是shell的语法么？</h1><p>大部分写shell代码的人或许会认为，<code>[]</code>是shell语言用于实现一系列的比较操作的特殊语法。但实际上，<code>[]</code>并不是一个语法——<code>[</code>是一个独立的命令行程序，<code>]</code>则什么都不是，仅仅是一个普通的字符。</p>
+<p>在bash中使用<code>which</code>命令可以看到<code>[</code>的真面目</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/which方括号的结果.jpg" alt=""></p>
+<p><code>[</code>是一个独立的程序，对，你没有看错（鲍尔默脸）。而且<code>[</code>有它自己的man文档</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/方括号的man文档.jpg" alt=""></p>
+<p>在man文档中出现了另外一个命令<code>test</code>，它和<code>[</code>的功能是一模一样的。或许<code>test</code>是一个“yet another [”？真相却更简单一点——<code>test</code>和<code>[</code>是同一个东西</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/左方括号和test是同一个东西.jpg" alt=""></p>
+<h1 id="源代码的二三事"><a href="#源代码的二三事" class="headerlink" title="[源代码的二三事"></a><code>[</code>源代码的二三事</h1><p>可以在GitHub上找到<code>[</code>和<code>test</code>的<a href="https://github.com/freebsd/freebsd/blob/master/bin/test/test.c" target="_blank" rel="noopener">源代码</a>，代码很短，稍微读一下可以发现不少有意思的地方。</p>
+<p>众所周知，如果在shell代码中使用<code>[</code>做比较运算，必须写上对应的右方括号<code>]</code>。但既然<code>[</code>是一个普通的外部程序，那么这个匹配括号的检查显然不会是shell来做的——没错，<code>[</code>自己会检查是否有写上相应的右方括号，这一段逻辑在源文件的<code>main</code>函数开始不久就出现了。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/检测右方括号是否存在.jpg" alt=""></p>
+<p>这个检查只有在程序被以<code>[</code>的名字启动的时候才会生效，所以<code>test 1 -eq 1</code>是不需要写括号的。</p>
+<p>其实除了上文中给出的那些比较和测试运算符之外，<code>[</code>也支持复杂的逻辑运算表达式，比如文章开头的示例代码中的<code>-a</code>就是逻辑与的意思。在代码的注释中还贴心地给出了所接受的参数的BNF</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/test接受的语法.jpg" alt=""></p>
+<p>而解析参数的过程则是一个手写的递归下降语法分析器，在源代码中可以找到与上面的产生式对应的多个函数：<code>oexpr</code>、<code>aexpr</code>、<code>nexpr</code>、<code>primary</code>，以及<code>binop</code>。</p>
+<p>由于在shell语言中，0表示逻辑真，而1表示逻辑假（与C语言相反），所以在<code>main</code>函数中，如果发现传入的第一个参数为感叹号（<code>!</code>，表示逻辑取反），则将<code>oexpr</code>的调用结果直接返回，否则需要将结果取反后再从<code>main</code>函数中返回——给操作系统。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/调用oexpr后取反.jpg" alt=""></p>
+<h1 id="shell真的不原生支持比较？"><a href="#shell真的不原生支持比较？" class="headerlink" title="shell真的不原生支持比较？"></a>shell真的不原生支持比较？</h1><p>尽管在bash中，<code>[</code>的确是作为一个外部程序存在的，但在zsh中却相反</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/test作为内置命令.jpg" alt=""></p>
+<p>而且，即使是bash也并非完全没有原生的比较操作——此处需要召唤<code>[[</code>。<code>[[</code>是shell的<em>保留字</em>，它是一个<em>less suprise</em>版本的<code>[</code>，在Stack Overflow上有不少关于它的问答值得一看：</p>
+<ol>
+<li><a href="https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash" target="_blank" rel="noopener">https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash</a></li>
+<li><a href="https://stackoverflow.com/questions/669452/is-double-square-brackets-preferable-over-single-square-brackets-in-ba" target="_blank" rel="noopener">https://stackoverflow.com/questions/669452/is-double-square-brackets-preferable-over-single-square-brackets-in-ba</a></li>
+</ol>
+<p>第二个链接的回答中还给出了一个值得一看的、关于bash中的“测试”功能的<a href="http://mywiki.wooledge.org/BashGuide/Practices#Bash_Tests" target="_blank" rel="noopener">指引</a>，其中甚至提到了</p>
+<blockquote>
+<p>It can produce surprising results, especially for people starting shell scripting that think [ ] is part of the shell syntax.</p>
+</blockquote>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>不得不承认，本文标题党了一把，shell还是自身就具备比较大小这样的功能的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/04/20/一条正则表达式闹的乌龙/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -619,109 +792,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/03/21/弥补org-refile的不足/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/21/弥补org-refile的不足/" class="post-title-link" itemprop="url">弥补org-refile的不足</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-03-21 17:10:57 / 修改时间：17:12:59" itemprop="dateCreated datePublished" datetime="2020-03-21T17:10:57+08:00">2020-03-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/实战Elisp/" itemprop="url" rel="index">
-                    <span itemprop="name">实战Elisp</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/03/21/弥补org-refile的不足/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/21/弥补org-refile的不足/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。</p>
-</blockquote>
-<p><a href="https://zh.wikipedia.org/wiki/%E5%B0%BD%E7%AE%A1%E5%8E%BB%E5%81%9A#%E6%90%9C%E9%9B%86" target="_blank" rel="noopener">GTD</a>的第一条原则是“搜集”，为此我有一个<code>inbox.org</code>文件，专门记录所有的新想法、新任务。我会在每晚的固定时间处理其中的内容——有些可以马上开始做并做完，更多的则是移动到其它<code>.org</code>文件中，等待排期。</p>
-<p>org-mode有一个内置的快捷键<code>C-c C-w</code>，专门完成将条目（org-mode的术语，即<code>.org</code>文件中带星号前缀的一行，参见<a href="https://orgmode.org/worg/org-glossary.html#entry" target="_blank" rel="noopener">An Explanation of Basic Org-Mode Concepts</a>）移动到其它<code>.org</code>文件的需求，但它有一个缺陷——不能把条目移动到其它<code>.org</code>文件的顶层，而这是我经常需要做的。</p>
-<p>为了移动到顶层，需要：</p>
-<ol>
-<li>使用<code>org-cut-subtree</code>命令剪切当前条目（其实还会包括条目的子节点，但<code>inbox.org</code>中的条目基本上都没有子节点）；</li>
-<li>打开目标的<code>.org</code>文件；</li>
-<li>将光标定位到文件末尾；</li>
-<li>使用<code>org-paste-subtree</code>命令粘贴条目。</li>
-</ol>
-<p>为了轻松完成上述四个步骤，<code>org-refile-to-eof</code>函数应运而生。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/03/21/弥补org-refile的不足/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -793,7 +863,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -200,6 +200,101 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/09/18/flexi-streams用法简介/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/09/18/flexi-streams用法简介/" class="post-title-link" itemprop="url">flexi-streams用法简介</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-09-18 23:14:50" itemprop="dateCreated datePublished" datetime="2018-09-18T23:14:50+08:00">2018-09-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-12-02 21:29:44" itemprop="dateModified" datetime="2018-12-02T21:29:44+08:00">2018-12-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2018/09/18/flexi-streams用法简介/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/18/flexi-streams用法简介/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>每过一段时间总会燃起一种用Common Lisp（下文简称CL）来写Web应用的冲动，继而就会开始感慨在CL的生态圈中居然没有一款好用的Web框架。尽管放狗搜索“common lisp web framework”可以找到一些——例如Caveman2，以及在Cliki中记录的一些其它框架。然后使用过其中一部分的人就会知道，大部分用起来的体验都不咋地。</p>
+<p>在业界摸爬打滚了一小段时光（从业几年姑且可以这么说吧）后，感觉制作一款专门用于编写JSON-in-JSON-out的Web应用的Web框架应该是一个不错的点子——反正大家都是发出application/json的请求期望application/json的响应，于是乎就撸起袖子自己干了。不过完全从零开始编写起是不现实的，于是乎选择了一个“平台”来作为基础。这个平台就是<a href="https://github.com/fukamachi/clack" target="_blank" rel="noopener">Clack</a>啦</p>
+<p>Clack会负责屏蔽下层的Web Server的差异，它只需要我提供一个函数给它作为来访的HTTP请求的“handler”即可，然后在这个handler中我就可以为所欲为啦。Clack在收到HTTP请求后，会把HTTP请求中的一些信息组织为一个列表类型的值传递给这个handler。在这个handler中，我只需要综合运用CAR、CDR之类的奇怪名字的函数就可以拿到自己需要的东西了——当然了，鉴于这个列表是个plist，用CL提供的DESTRUCTURING-BIND就可以很方便地提取啦。</p>
+<p>在这个plist中，就有一个叫做:RAW-BODY的p，它的值是一个“流”——是的，就是那种文件流的流！但它又不是一个路边随处可见的妖艳贱货的流，而是一个来自FLEXI-STREAMS这个包（指CL中的package）的流。<a href="https://edicl.github.io/flexi-streams/" target="_blank" rel="noopener">FLEXI-STREAMS</a>是一个提供流操作的库，鉴于我没有看过<a href="http://www.nhplace.com/kent/CL/Issues/stream-definition-by-user.html" target="_blank" rel="noopener">Gray streams</a>相关的内容，就不在这里瞎逼逼误导读者了。总而言之，我必须找到一个办法可以从一个FLEXI-STREAMS提供的输入流类型的值中读出一些东西来。</p>
+<p>其实这个办法很简单，就是用CL原生提供的读取流的函数即可——比如READ-SEQUENCE这样的函数。不过我得验证一下不是，为此，我需要有办法可以构造出一个FLEXI-STREAMS流类型的值出来。FLEXI-STREAMS提供了一个叫做MAKE-FLEXI-STREAM的函数，显然这个就是我所需要调用的最后一个函数了。从它的描述来看，它需要一个CL中的原生流来作为第一个参数才行。为此，我试了一下下面的代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">text</span> <span class="string">"Hello, world!"</span>))</span><br><span class="line">  (<span class="name">with-input-from-string</span> (<span class="name">s</span> text)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">buffer</span> (<span class="name">make-array</span> (<span class="name">length</span> text)))</span><br><span class="line">          (<span class="name">fs</span> (<span class="name">flexi-streams</span><span class="symbol">:make-flexi-stream</span> s)))</span><br><span class="line">      (<span class="name">read-sequence</span> buffer fs))))</span><br></pre></td></tr></tbody></table></figure>
+<p>遗憾的是，运行上面的代码会报错</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">The value</span><br><span class="line">  #\H</span><br><span class="line">is not of type</span><br><span class="line">  (UNSIGNED-BYTE 8)</span><br><span class="line">when setting an element of (ARRAY (UNSIGNED-BYTE 8))</span><br><span class="line">   [Condition of type TYPE-ERROR]</span><br><span class="line"></span><br><span class="line">Restarts:</span><br><span class="line"> 0: [RETRY] Retry SLIME interactive evaluation request.</span><br><span class="line"> 1: [*ABORT] Return to SLIME's top level.</span><br><span class="line"> 2: [ABORT] abort thread (#&lt;THREAD "worker" RUNNING {1007766D53}&gt;)</span><br><span class="line"></span><br><span class="line">Backtrace:</span><br><span class="line">  0: ((SB-VM::OPTIMIZED-DATA-VECTOR-SET (UNSIGNED-BYTE 8)) #&lt;unavailable argument&gt; #&lt;unavailable argument&gt; #&lt;unavailable argument&gt;)</span><br><span class="line">  1: (SB-IMPL:ANSI-STREAM-READ-SEQUENCE #(0 0 0 0 0 0 ...) #&lt;SB-IMPL::STRING-INPUT-STREAM {1007975973}&gt; 0 13)</span><br><span class="line">  2: (READ-SEQUENCE #(0 0 0 0 0 0 ...) #&lt;SB-IMPL::STRING-INPUT-STREAM {1007975973}&gt; :START 0 :END 13)</span><br><span class="line">  3: ((FLET FLEXI-STREAMS::FILL-BUFFER :IN FLEXI-STREAMS::READ-SEQUENCE*) 13)</span><br><span class="line">  4: ((:METHOD FLEXI-STREAMS::READ-SEQUENCE* (FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT T T T T)) #&lt;FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT (:ISO-8859-1 :EOL-STYLE :LF) {1007975B43}&gt; #&lt;FLEXI-STREAMS:FLEXI-INPUT-STRE..</span><br><span class="line">  5: ((:METHOD STREAM-READ-SEQUENCE (TRIVIAL-GRAY-STREAMS:FUNDAMENTAL-INPUT-STREAM T)) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM {1007975C73}&gt; #(0 0 0 0 0 0 ...) 0 NIL) [fast-method]</span><br><span class="line">  6: (READ-SEQUENCE #(0 0 0 0 0 0 ...) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM {1007975C73}&gt; :START 0 :END NIL)</span><br><span class="line">  7: ((LAMBDA ()))</span><br><span class="line">  8: (SB-INT:SIMPLE-EVAL-IN-LEXENV (LET ((TEXT "Hello, world!")) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))) #&lt;NULL-LEXENV&gt;)</span><br><span class="line">  9: (EVAL (LET ((TEXT "Hello, world!")) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))))</span><br><span class="line"> 10: ((LAMBDA NIL :IN SWANK:INTERACTIVE-EVAL))</span><br><span class="line"> --more--</span><br></pre></td></tr></tbody></table></figure>
+<p>既然在调用READ-SEQUENCE的时候出状况了，不妨试试下面的代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">text</span> <span class="string">"Hello, world!"</span>))</span><br><span class="line">  (<span class="name">with-input-from-string</span> (<span class="name">s</span> text)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">fs</span> (<span class="name">flexi-streams</span><span class="symbol">:make-flexi-stream</span> s)))</span><br><span class="line">      (<span class="name">read-char</span> fs))))</span><br></pre></td></tr></tbody></table></figure>
+<p>再次令人遗憾的，它会抛出另一个状况（CL中的condition啦）</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#&lt;SB-IMPL::STRING-INPUT-STREAM {10020A7243}&gt; is not a binary input stream.</span><br><span class="line">   [Condition of type SIMPLE-TYPE-ERROR]</span><br><span class="line"></span><br><span class="line">Restarts:</span><br><span class="line"> 0: [RETRY] Retry SLIME interactive evaluation request.</span><br><span class="line"> 1: [*ABORT] Return to SLIME's top level.</span><br><span class="line"> 2: [ABORT] abort thread (#&lt;THREAD "worker" RUNNING {1001F6E813}&gt;)</span><br><span class="line"></span><br><span class="line">Backtrace:</span><br><span class="line">  0: (SB-KERNEL:ILL-BIN #&lt;SB-IMPL::STRING-INPUT-STREAM {10020A7243}&gt;)</span><br><span class="line">  1: (READ-BYTE #&lt;SB-IMPL::STRING-INPUT-STREAM {10020A7243}&gt; NIL NIL)</span><br><span class="line">  2: ((:METHOD FLEXI-STREAMS::READ-BYTE* (FLEXI-STREAMS:FLEXI-INPUT-STREAM)) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM {10020A74C3}&gt;) [fast-method]</span><br><span class="line">  3: ((:METHOD FLEXI-STREAMS::OCTETS-TO-CHAR-CODE (FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT T)) #&lt;FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT (:ISO-8859-1 :EOL-STYLE :LF) {10020A7393}&gt; #&lt;unavailable argument&gt;) [fast-me..</span><br><span class="line">  4: ((:METHOD STREAM-READ-CHAR (FLEXI-STREAMS:FLEXI-INPUT-STREAM)) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM {10020A74C3}&gt;) [fast-method]</span><br><span class="line">  5: (READ-CHAR #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM {10020A74C3}&gt; T NIL #&lt;unused argument&gt;)</span><br><span class="line">  6: ((LAMBDA ()))</span><br><span class="line">  7: (SB-INT:SIMPLE-EVAL-IN-LEXENV (LET ((TEXT "Hello, world!")) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))) #&lt;NULL-LEXENV&gt;)</span><br><span class="line">  8: (EVAL (LET ((TEXT "Hello, world!")) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))))</span><br><span class="line">  9: ((LAMBDA NIL :IN SWANK:INTERACTIVE-EVAL))</span><br><span class="line"> --more--</span><br></pre></td></tr></tbody></table></figure>
+<p>看来从一开始提供给MAKE-FLEXI-STREAM函数的参数就应当是一个“二进制”的流才对。为此，我需要借助FLEXI-STREAMS自身的力量——调用它的STRING-TO-OCTETS函数。使用这个函数，可以将一个字符串转换为某种编码下的字节数组，例如下面的代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">flexi-streams</span><span class="symbol">:string-to-octets</span> <span class="string">"Hello"</span>) <span class="comment">;#(72 101 108 108 111)</span></span><br></pre></td></tr></tbody></table></figure>
+<p>得到一串“octet”后，还需要将其转换为“流”才行。再次借助FLEXI-STREAMS的力量，调用它的MAKE-IN-MEMORY-INPUT-STREAM函数，然后将这个函数调用的返回值作为MAKE-FLEXI-STREAM的第一个参数即可，最终的代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">text</span> <span class="string">"Hello, world!"</span>)           <span class="comment">; 原始文本</span></span><br><span class="line">       (<span class="name">octets</span> (<span class="name">flexi-streams</span><span class="symbol">:string-to-octets</span> text)) <span class="comment">; 使用flexi-streams转换为字节数组，因为下一个函数只接受这种类型的参数</span></span><br><span class="line">       (<span class="name">memory-input</span> (<span class="name">flexi-streams</span><span class="symbol">:make-in-memory-input-stream</span> octets)) <span class="comment">; 同样先转换为内存中的流，因为下一个函数只接受这种类型的参数</span></span><br><span class="line">       (<span class="name">flexi-stream</span> (<span class="name">flexi-streams</span><span class="symbol">:make-flexi-stream</span> memory-input)) <span class="comment">; 终于可以得到一个真正的flexi-stream了</span></span><br><span class="line">       (<span class="name">buffer</span> (<span class="name">make-array</span> (<span class="name">flexi-streams</span><span class="symbol">:octet-length</span> text)))) <span class="comment">; 这里其实用字节的长度还是用字符的长度（flexi-streams:char-length）都没差</span></span><br><span class="line">  (<span class="name">read-sequence</span> buffer flexi-stream)   <span class="comment">; 可以像处理CL中的流那样处理flexi-stream</span></span><br><span class="line">  (<span class="name">print</span> (<span class="name">coerce</span> buffer 'string)))      <span class="comment">; 把字节数组拼成字符串再输出比较好看</span></span><br></pre></td></tr></tbody></table></figure>
+<p>全文完</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/08/12/sdedit使用方法介绍（混沌向）/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -579,95 +674,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/04/30/如何使用CL实现snowflake/" class="post-title-link" itemprop="url">如何使用CL实现snowflake</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-04-30 22:59:30" itemprop="dateCreated datePublished" datetime="2017-04-30T22:59:30+08:00">2017-04-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-12-02 21:30:33" itemprop="dateModified" datetime="2018-12-02T21:30:33+08:00">2018-12-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2017/04/30/如何使用CL实现snowflake/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/30/如何使用CL实现snowflake/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR;"></a>TL;DR;</h2><p>这是一篇为了完成写作KPI而写的博客，总结起来就是提供了一种用Common Lisp实现来自于Twitter的雪花算法的实现方案。成品在<a href="https://github.com/Liutos/clitool/blob/master/cl/misc/snowflake.lisp" target="_blank" rel="noopener">这里</a>，本文只是简单地描述一下生成雪花ID的大致思路，详细内容请各位移步代码仓库查看。</p>
-<p>上述代码仓库中的snowflake算法——如果我的实现确实可以称作snowflake算法的话——的思路来自于下列两个地方：</p>
-<ol>
-<li><a href="http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/" target="_blank" rel="noopener">http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/</a></li>
-<li><a href="https://github.com/sony/sonyflake" target="_blank" rel="noopener">https://github.com/sony/sonyflake</a></li>
-</ol>
-<h2 id="如何获取时间戳"><a href="#如何获取时间戳" class="headerlink" title="如何获取时间戳"></a>如何获取时间戳</h2><p>Common Lisp本身提供了一个获取时间戳的函数，也就是<code>get-universal-time</code>，可惜的是，这个函数所返回的并不是通常意义上的<a href="https://en.wikipedia.org/wiki/Unix_time" target="_blank" rel="noopener">Epoch时间戳</a>，而是自己的一套计算时间的方式中的表示时间的整数。为了获得UNIX时间戳，需要借助于第三方库<a href="https://common-lisp.net/project/local-time/manual.html" target="_blank" rel="noopener"><code>local-time</code></a>。为了可以获取到毫秒精度的时间戳，一个可运行的函数如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> now ()</span><br><span class="line">  <span class="string">"Returns the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC."</span></span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">now</span> (<span class="name">local-time</span><span class="symbol">:now</span>))</span><br><span class="line">         (<span class="name">seconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-to-unix</span> now))</span><br><span class="line">         (<span class="name">milliseconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-millisecond</span> now)))</span><br><span class="line">    (<span class="name">+</span> (<span class="name">*</span> <span class="number">1000</span> seconds) milliseconds)))</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="如何获取机器ID"><a href="#如何获取机器ID" class="headerlink" title="如何获取机器ID"></a>如何获取机器ID</h2><p>这里参考了Sony的雪花ID算法中的思路，基于机器的内网IP地址来生成机器ID。当然了，Common Lisp标准中是没有提供获取机器的内网IP地址的方法的，这一点也可以借助于第三方库实现，选用的是<a href="https://common-lisp.net/project/ip-interfaces/" target="_blank" rel="noopener"><code>ip-interfaces</code></a>。通过这个库提供的<code>get-ip-interfaces</code>函数可以获取到机器的所有“接口”，遍历这个接口的列表后即可找出其中的内网IP。一台机器可能会有多个内网IP，我的方法是选用了第一个找到的内网IP地址。当然了，还需要一个将向量转化为数值的函数，并取出转化为数值后的IP地址的低10位，作为机器ID。</p>
-<h2 id="序号"><a href="#序号" class="headerlink" title="序号"></a>序号</h2><p>如果希望生成的ID是保持递增的，那么就需要维护一个可以原子递增的数值计数器。在真实的使用中可以通过Redis的INCR指令来生成这一个ID，但是因为这里的雪花ID算法是作为一个独立的库实现的，不需要依赖于数据库等外部组建，因此这里就直接使用了Common Lisp自带的<code>random</code>函数来生成这个序号了。</p>
-<p>全文完</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -739,7 +745,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

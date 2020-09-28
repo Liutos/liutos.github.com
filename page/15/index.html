@@ -200,6 +200,109 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/01/17/Common-Lisp的restart特性/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/01/17/Common-Lisp的restart特性/" class="post-title-link" itemprop="url">Common Lisp的restart特性</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-01-17 22:51:52" itemprop="dateCreated datePublished" datetime="2017-01-17T22:51:52+08:00">2017-01-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-12-02 21:28:48" itemprop="dateModified" datetime="2018-12-02T21:28:48+08:00">2018-12-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2017/01/17/Common-Lisp的restart特性/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/01/17/Common-Lisp的restart特性/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>主流的编程语言中，表示出现错误的手段不外乎两种：</p>
+<ul>
+<li>函数调用返回错误码</li>
+<li>函数调用抛出异常</li>
+</ul>
+<p>C语言就属于前者，它的fopen(3)函数在成功打开文件时返回一个FILE指针，失败时返回NULL，并将错误代码写入全局变量errno；Ruby语言属于后者，它的File.open方法在找不到文件时抛出ENOENT的异常，在File.open之外包裹一层begin…rescue…end即可捕捉其抛出的异常。</p>
+<p>Common Lisp的错误机制叫做状况系统（Condition System），与异常机制相似，可以实现抛出异常（使用函数error）和捕捉异常（使用宏handler-case）。但与其它语言的异常机制不同的地方在于，状况系统有一种名为RESTART的特性，能够由使用者、或者由代码决定是否要、以及如何从错误中恢复过来。听起来很别致也很诡异，不妨继续往下看。</p>
+<p>假设我有一个Web框架，它提供了将日志记录到文件中的功能。这个功能需要先调用名为init-logger的函数进行初始化，该函数实现如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-logger ()</span><br><span class="line">  (<span class="name">with-open-file</span> (<span class="name">s</span> <span class="string">"/tmp/log/web.log"</span></span><br><span class="line">                     <span class="symbol">:direction</span> <span class="symbol">:output</span></span><br><span class="line">                     <span class="symbol">:if-exists</span> <span class="symbol">:supersede</span>)</span><br><span class="line">    (<span class="name">format</span> s <span class="string">"Logger module starting..."</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<p>这个函数被框架的初始化代码所调用，如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-framework ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Framework starting...~%"</span>)</span><br><span class="line">  (<span class="name">init-plugin</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> init-plugin ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Plugins starting...~%"</span>)</span><br><span class="line">  (<span class="name">init-logger</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>而框架的初始化代码则由应用的初始化代码所调用，如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-app ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Application starting...~%"</span>)</span><br><span class="line">  (<span class="name">init-framework</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>如果在目录<code>/tmp/log</code>不存在时调用init-app函数，我将会收到一个错误，说明其无法找到<code>/tmp/log/web.log</code>这个文件。为了避免错误打断了应用的正常启动流程，可以让init-app函数负责创建这个用于存放日志文件的目录。将init-app函数改写为如下形式</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-app ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Application starting...~%"</span>)</span><br><span class="line">  (<span class="name">ensure-directories-exist</span> <span class="string">"/tmp/log/"</span>)</span><br><span class="line">  (<span class="name">init-framework</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>尽管这种做法确实可行，但它导致应用层的代码（init-app函数）必须了解位于底层的日志模块的实现细节。直觉告诉我这样子是不对的，框架的事情应该由框架本身提供方案来解决。借助Common Lisp的restart功能，框架确实可以对外提供一种解决方案。</p>
+<p>首先需要主动检测用于存放日志文件的目录是否存在。借助UIOP这个包可以写出如下代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-logger ()</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">dir</span> <span class="string">"/tmp/log/"</span>))</span><br><span class="line">    (<span class="name">unless</span> (<span class="name">uiop</span><span class="symbol">:directory-exists-p</span> dir)</span><br><span class="line">      (<span class="name">error</span> 'file-error <span class="symbol">:pathname</span> dir))</span><br><span class="line">    (<span class="name">with-open-file</span> (<span class="name">s</span> (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"~Aweb.log"</span> dir)</span><br><span class="line">                       <span class="symbol">:direction</span> <span class="symbol">:output</span></span><br><span class="line">                       <span class="symbol">:if-exists</span> <span class="symbol">:supersede</span>)</span><br><span class="line">      (<span class="name">format</span> s <span class="string">"Logger module starting..."</span>))))</span><br></pre></td></tr></tbody></table></figure>
+<p>接着，init-logger需要主动为调用者提供目录不存在的问题的解决方案，一种办法就是当这个目录不存在时，可以由调用者选择是否创建。使用Common Lisp的<code>restart-case</code>宏，我将init-logger改写为如下形式</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-logger ()</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">dir</span> <span class="string">"/tmp/log/"</span>))</span><br><span class="line">    (<span class="name">restart-case</span></span><br><span class="line">        (<span class="name">unless</span> (<span class="name">uiop</span><span class="symbol">:directory-exists-p</span> dir)</span><br><span class="line">          (<span class="name">error</span> 'file-error <span class="symbol">:pathname</span> dir))</span><br><span class="line">      (<span class="name">create-log-directory</span> ()</span><br><span class="line">        <span class="symbol">:report</span> (<span class="name">lambda</span> (<span class="name">stream</span>)</span><br><span class="line">                  (<span class="name">format</span> stream <span class="string">"Create the directory ~A"</span> dir))</span><br><span class="line">        (<span class="name">ensure-directories-exist</span> dir)))</span><br><span class="line">    (<span class="name">with-open-file</span> (<span class="name">s</span> (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"~Aweb.log"</span> dir)</span><br><span class="line">                       <span class="symbol">:direction</span> <span class="symbol">:output</span></span><br><span class="line">                       <span class="symbol">:if-exists</span> <span class="symbol">:supersede</span>)</span><br><span class="line">      (<span class="name">format</span> s <span class="string">"Logger module starting..."</span>))))</span><br></pre></td></tr></tbody></table></figure>
+<p>此时如果调用第一版的init-app函数，那么init-logger仍将抛出异常（类型为file-error与之前一样）并将我带入到SBCL（我用的是SBCL）的调试器中，但看到的内容会稍有不同</p>
+<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">error on file <span class="string">"/tmp/log"</span></span><br><span class="line">   [Condition of type FILE-ERROR]</span><br><span class="line"></span><br><span class="line">Restarts:</span><br><span class="line"> 0: [CREATE-LOG-DIRECTORY] Create the directory /tmp/log ;; &lt;- 新增了这一行</span><br><span class="line"> 1: [RETRY] Retry SLIME REPL evaluation request.</span><br><span class="line"> 2: [*ABORT] Return to SLIME's top level.</span><br><span class="line"> 3: [ABORT] abort thread (#&lt;THREAD "new-repl-thread" RUNNING {1001F958A3}&gt;)</span><br></pre></td></tr></tbody></table></figure>
+<p>在Restarts中新增了名为create-log-directory的一项，这正是在init-logger中通过<code>restart-case</code>定义的新的”恢复措施“。我输入0触发这个restart，Common Lisp会回到它被定义的<code>restart-case</code>宏相应的子句中执行其中的表达式，也就是调用<code>CL:ENSURE-DIRECTORY-EXIST</code>函数创建/tmp/log。</p>
+<p>如果总是希望执行<code>CREATE-LOG-DIRECTORY</code>这个选项来创建存放日志文件的目录，可以直接在代码中指定，只需要配合使用Common Lisp的<code>handler-bind</code>和<code>invoke-restart</code>函数即可，最终init-app函数的实现如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> init-app ()</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Application starting...~%"</span>)</span><br><span class="line">  (<span class="name">handler-bind</span></span><br><span class="line">      ((<span class="name">file-error</span> #'(lambda (c)</span><br><span class="line">                       (declare (ignorable c))</span><br><span class="line">                       (invoke-restart 'create-log-directory))))</span><br><span class="line">    (<span class="name">init-framework</span>)))</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/01/10/手动安装mysql/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -614,96 +717,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/09/20/三个角度思考问题的不同结果/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2012/09/20/三个角度思考问题的不同结果/" class="post-title-link" itemprop="url">三个角度思考问题的不同结果</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2012-09-20 22:46:46" itemprop="dateCreated datePublished" datetime="2012-09-20T22:46:46+08:00">2012-09-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-11-29 22:48:53" itemprop="dateModified" datetime="2018-11-29T22:48:53+08:00">2018-11-29</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2012/09/20/三个角度思考问题的不同结果/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2012/09/20/三个角度思考问题的不同结果/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="问题一：50个瓶子的故事"><a href="#问题一：50个瓶子的故事" class="headerlink" title="问题一：50个瓶子的故事"></a>问题一：50个瓶子的故事</h2><p>一个青年走进了一家便利店买了，爽快地购买了50瓶饮料，并且跟老板扬言说他可以一口气全部喝完。老板听了笑了觉得起来，因为这实在是太不可思议了，并且跟青年保证可以用三个空的瓶子换得一瓶新的饮料继续喝。青年微微一笑，随手拿起了一瓶并且一口气喝下了第一瓶，然后用神情的眼眸望向老板，问到：“呵呵，老板，你猜一下，我最后总共可以喝到多少瓶饮料呢？”而此刻的你，就是那个双眼中充满了疑惑的老板……</p>
-<h2 id="threebodies：三种思考方式"><a href="#threebodies：三种思考方式" class="headerlink" title="threebodies：三种思考方式"></a>threebodies：三种思考方式</h2><h3 id="思路一：一遍又一遍地计算！"><a href="#思路一：一遍又一遍地计算！" class="headerlink" title="思路一：一遍又一遍地计算！"></a>思路一：一遍又一遍地计算！</h3><p>老板想，这个年轻人可能会采用这样的策略来喝饮料：首先把50瓶饮料全部喝掉，这样就可以得到50个空瓶子，然后用50个空瓶子来和自己进行交换，可以换得16瓶新的饮料，并且还剩下了2个原有的空瓶。接下来再把16瓶新装的饮料喝完，这样就得到了18个空瓶子，那么就可以继续和自己进行交换了。然后可以用全部的18个瓶子换得6瓶新饮料，并且再喝掉。再用6个空瓶子换得2瓶饮料继续喝掉，那么就会剩下2个空瓶，也就没办法再继续换下去了，所以最后的结果应该是74瓶！</p>
-<p>在α世界线中的你，也就是老板就是这样子想的，他得出的结果是74瓶。可惜的是，青年技高一筹，他向你伸出手说：“老板，可以不可以借一瓶给我，这样我喝完之后就有3个空瓶了，还给了就相当于一瓶新的饮料，你也不亏啊。”你想了想，觉得倒也合情合理，于是答应了。所以最终的结果是，青年一共喝了75瓶饮料。</p>
-<h3 id="思路二：找出递推公式！"><a href="#思路二：找出递推公式！" class="headerlink" title="思路二：找出递推公式！"></a>思路二：找出递推公式！</h3><p>老板是个函数式语言程序员，他发现了要计算这样的过程的结果，可以利用递归！他假设了有一个函数叫做F，这个函数接受一个正整数作为参数，并且可以计算出这个正整数所对应的总共可以额外获得的饮料的数量。如果用50作为参数，那么就是在计算这个青年所提出的问题了。那么怎么递归呢？从一个特殊的情况考虑就是50瓶拿出3瓶来喝掉，并且换得一瓶新饮料，那么也就是说现在得到了一瓶新饮料，并且还剩下48瓶，所以关系应该是：F(50)=1+F(48)，以此类推，F(48)=1+F(46)，F(46)=1+F(44)等等。那么递推公式就是</p>
-<pre><code>F(n)=1+F(n-2)。
-</code></pre><p>而最终的基础情形是n为1（当一开始的n为奇数时）或者n为2（当一开始的n为偶数时），它们对应的值分别为0和1（因为对于下降到n为2的情况，可以和老板借一瓶来凑数），所以如果一开始的参数为50，那么最后的计算结果将是F(50)=24+F(2)，即25。那么将可以额外获得的25瓶加上原来的50瓶，青年总共可以喝到75瓶饮料。这一次，β世界线中的你终于得到了正确的答案。</p>
-<h3 id="思路三：列方程！"><a href="#思路三：列方程！" class="headerlink" title="思路三：列方程！"></a>思路三：列方程！</h3><p>老板是个数学家，他首先意识到了青年可能会向自己借饮料，于是他开始列方程了：假设青年向自己借了x瓶饮料，那么他必须在喝完所有的饮料之后偿还这x瓶，为了能够正好喝完所有饮料而又不需要多还空瓶或者多买几瓶，那么他所借的饮料的数量应该满足这个方程</p>
-<pre><code>50+x=3x。
-</code></pre><p>解方程，得到结果为75。在γ世界线中，老板几乎在听到了青年的问题后的瞬间回答了这个问题，青年先是吃了一惊，然后发出了爽朗的笑声……</p>
-<h2 id="问题二：圆与弦的故事"><a href="#问题二：圆与弦的故事" class="headerlink" title="问题二：圆与弦的故事"></a>问题二：圆与弦的故事</h2><p>很久之前在学校里面的一家书店里面买了一本书，连我自己也觉得不可思议的是，这本书既不是轻小说也不是计算机类的书，它的名字叫做《悖论简史》，副标题还很唬人，叫做“哲学和心灵的迷宫”。这本书里面提到了很多有趣的故事，其中一个是由约瑟夫·路易斯·伯特兰在1889年提出的一个问题：在一个圆内任意拉一条弦，这条弦的长度比圆的内接等边三角形的边长还要长的概率是多少？这个问题在维基百科上也有收录，叫<a href="http://zh.wikipedia.org/wiki/伯特蘭悖論_(概率論" target="_blank" rel="noopener">伯特兰悖论</a>)。</p>
-<p>至于这个问题的三种解答方法，我就不一一赘述了，反正我也不觉得自己能够把故事再用青年人和老板来重演一遍，各位读者就自己看维基百科上面的说明好了。不过我觉得这个题目很有意思，非常的有意思。首先它和问题一一样，可以从三个不同的角度来进行解答，问题在于，问题一的三个答案在同样的前提下是一样的（即允许青年向老板借一瓶饮料，而实际上即使不能借，前两个思路算出来的结果也是正确的），可是对于伯特兰悖论而言，三种方法算出来的结果截然不同！不过现实和数学毕竟是不一样的，答案终究只有一个，这个是用实践就可以证明的。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>从不同的角度看待不同的问题，除了会得到不同的解法之外，不同的解法甚至还可能得出不同的答案，但是这样的答案尽管互相之间是矛盾的，却无法从推理过程中看出问题，不得不承认，数学有时候真的是一种很神奇的东西，尽管不少时候我都会觉得，数学就是符号和规则的游戏，只是碰巧现实世界的模型和数学所使用的模型一致罢了。算了，我对数学的理解也不深刻，就不继续民科下去了。总之，以后多尝试从不同的角度看问题，或许真的会有不同的收获。啊，怎么感觉这文章虎头蛇尾的？！</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -775,7 +788,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">79</span>
+          <span class="site-state-item-count">80</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
