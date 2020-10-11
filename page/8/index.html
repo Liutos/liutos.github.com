@@ -200,6 +200,90 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/" class="post-title-link" itemprop="url">一个有用的org-agenda-custom-commands的例子</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-08-11 22:37:28 / 修改时间：22:38:59" itemprop="dateCreated datePublished" datetime="2019-08-11T22:37:28+08:00">2019-08-11</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/08/11/一个有用的org-agenda-custom-commands的例子/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/11/一个有用的org-agenda-custom-commands的例子/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>好久没有写了，文章的开头，照例还是要吹吹水的。</p>
+<p>自从更新了基于org-mode的待办事项的管理模式后，感觉整个人都日益神清气爽起来。究其原因，大概是因为现在处理inbox.org和安排第二天的行程的时候，有一个相对可行的操作方法可以参考了，所以每次处理这两件事情的时候，也就没有那么纠结了。同时，还因为采取了一种尽量goal-oriented的TODO管理方法，最大程度上杜绝了一些不必要的TODO被收集起来，从而也减轻了内心的焦虑感。</p>
+<p>言归正传，这篇文章是要讲一个我自定义的org-mode的Agenda视图的command的。这条命令是下面这样子的</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> org-agenda-custom-commands</span><br><span class="line">      '((<span class="string">"f"</span> <span class="string">"查看TODO条目（按创建时间排序）"</span> todo <span class="string">"TODO"</span></span><br><span class="line">         ((org-agenda-sorting-strategy '(priority-down time-up))))))</span><br></pre></td></tr></tbody></table></figure>
+<p>俗话说的好，要检验自己是不是懂得某个东西，只要看看自己能不能把这个东西给别人讲清楚就可以了。如果讲清楚了，没有哪里需要emmmm的地方，那么就可以认为这个东西基本上自己是真的懂得了。</p>
+<p>那么<code>org-agenda-custom-commands</code>是干嘛用的呢。官方文档的链接在这里：<a href="https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html" target="_blank" rel="noopener">https://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html</a> ——哎哟喂，其实如果你们身处在Emacs之中来看这篇文章的话，只要按下<code>C-h v</code>，然后在minibuffer中输入<code>org-agenda-custom-commands</code>的话，也就可以看到关于这个变量的说明了啦。不过上面这个文档的好处是它有附赠一些例子。</p>
+<p>总而言之，<code>org-agenda-custom-commands</code>是一个变量，通过给这个变量赋值，可以在<code>org-mode</code>的Agenda视图中，添加一些自定义的功能及对应的快捷键。例如，如果在Emacs中求值我上面所给的Elisp代码，然后按下<code>C-c a</code>，便会看到类似于下面这样的提示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84Agenda%E8%A7%86%E5%9B%BE%E6%8F%90%E9%86%92%E4%BF%A1%E6%81%AF.png" alt=""></p>
+<p>这时候，如果按下<code>f</code>键，Emacs就会按照上面代码中描述的那样找出所有关键字为<code>TODO</code>的条目，然后按照【先优先级降序，然后时间戳升序】的方式来排列它们。在我的电脑上的效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs%E7%9A%84org-mode%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E7%9A%84%E6%95%88%E6%9E%9C.png" alt=""></p>
+<p>可以看到，首先出现的条目是标注为最高的A优先级的两条，然后是在heading内容的开头含有时间戳的条目。</p>
+<p>对我来说，这样的一个好处是可以将未处理过的TODO按照时间顺序列出来，从而避免了所有的TODO条目先是按照文件的名称集中起来，然后又按照它们在文件中的顺序从上往下地排列起来。毕竟文件内的TODO都是聚合在各自不同的更高级的heading之下的，它们之间的上下关系体现不出什么东西。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -540,95 +624,11 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/06/14/拆解嵌套的表达式/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/06/14/拆解嵌套的表达式/" class="post-title-link" itemprop="url">拆解嵌套的表达式</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-06-14 21:43:23 / 修改时间：21:48:35" itemprop="dateCreated datePublished" datetime="2019-06-14T21:43:23+08:00">2019-06-14</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/06/14/拆解嵌套的表达式/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/14/拆解嵌套的表达式/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在<a href="http://liutos.github.io/2019/06/11/%E6%94%AF%E6%8C%81%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F/">上一篇文章</a>中，<code>jjcc2</code>函数已经可以处理加减乘除运算表达式中的变量了。也就是说，现在它可以处理如下的代码了</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">setq</span> a (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>))</span><br><span class="line">  (<span class="name">+</span> a a))</span><br></pre></td></tr></tbody></table></figure>
-<p>在我的电脑上，在SLIME中依次运行下面的代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defvar</span> *globals* (<span class="name">make-hash-table</span>))</span><br><span class="line">(<span class="name">stringify</span> (<span class="name">jjcc2</span> '(progn (setq a (+ <span class="number">1</span> <span class="number">2</span>)) (+ a a)) *globals*) *globals*)</span><br></pre></td></tr></tbody></table></figure>
-<p>会得到下列的汇编代码</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/06/14/拆解嵌套的表达式/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">…</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">…</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -695,7 +695,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-count">81</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -708,7 +708,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">108</span>
+        <span class="site-state-item-count">109</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
