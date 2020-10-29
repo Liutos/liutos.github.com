@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://liutos.github.io/"/>
-  <updated>2020-10-11T02:56:12.431Z</updated>
+  <updated>2020-10-29T14:07:17.539Z</updated>
   <id>https://liutos.github.io/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>精确之美——用TikZ画硬盘示意图</title>
+    <link href="https://liutos.github.io/2020/10/29/%E7%B2%BE%E7%A1%AE%E4%B9%8B%E7%BE%8E%E2%80%94%E2%80%94%E7%94%A8TikZ%E7%94%BB%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE/"/>
+    <id>https://liutos.github.io/2020/10/29/精确之美——用TikZ画硬盘示意图/</id>
+    <published>2020-10-29T05:42:17.000Z</published>
+    <updated>2020-10-29T14:07:17.539Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>备考某等级考试的时候，在教材中碰到了几个一直不太理解的、关于硬盘的概念：磁道、柱面号、扇区。然而教材没有配图，无法直观地了解这些概念的物理形态。维基百科的<a href="https://zh.wikipedia.org/wiki/%E7%A1%AC%E7%9B%98" target="_blank" rel="noopener">硬盘</a>词条页中倒是有一副不错的示意图，我截图搬运了过来</p><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/维基百科机械硬盘示意图.png" alt="机械硬盘示意图"></p><p>原图是一张SVG图片，本质上是一堆指令——也就是所谓的语绘啦。我是一个语绘爱好者，也想试试看能否用代码画一幅差不多的图出来。</p><p>在旧文<a href="https://liutos.github.io/2020/05/07/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E2%80%94%E2%80%94%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/">《程序员特有的画图方式——语绘工具小入门》</a>中，我演示过几款写代码画图的工具，但它们都不适合用来绘制几何图形，所以这次它们没有用武之地。</p><p>本来我想试试用<a href="https://zh.wikipedia.org/wiki/MetaPost" target="_blank" rel="noopener">MetaPost</a>来画的，但鉴于“入门”了太多次，这次还是换点新花样吧。这一次，我用LaTeX+TikZ来画。</p><h1 id="TikZ是什么及光速入门"><a href="#TikZ是什么及光速入门" class="headerlink" title="TikZ是什么及光速入门"></a>TikZ是什么及光速入门</h1><p>著名的<del>压泡面神器、麻将桌脚垫</del>《TAOCP》的作者发明了<a href="https://zh.wikipedia.org/wiki/TeX" target="_blank" rel="noopener">TeX</a>，知名的<del>Raft竞品</del>Paxos算法的作者在此基础上创造了<a href="https://zh.wikipedia.org/wiki/LaTeX" target="_blank" rel="noopener">LaTeX</a>，它们都是<del>程序员简历</del>论文排版的好帮手。而TikZ则是如虎添翼地在LaTeX中实现了简单易懂的绘图功能的一个<del>红包</del>宏包（macro package，TeX的术语）。简而言之，TikZ自定义了一套“语言”，可以在用LaTeX编写的文档中画出各种图形。</p><p>百闻不如一见，我演示一下如何用TikZ画一条线段、一个圆，以及一段圆弧。先将下列的代码保存到一个文件<code>three_in_one.tex</code>中</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">\documentclass&#123;standalone&#125;</span><br><span class="line">\usepackage&#123;tikz&#125;</span><br><span class="line">\usetikzlibrary&#123;shapes.geometric, arrows&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">\begin&#123;tikzpicture&#125;[scale=2]</span><br><span class="line">  %% 画一条从原点指向(1, 1)的线段</span><br><span class="line">  \draw (0, 0) -- (1, 1);</span><br><span class="line">  %% 画一个以(1, 1)为圆心，半径为2的圆。</span><br><span class="line">  \draw (1, 1) circle (2);</span><br><span class="line">  %% 画一段以原点为圆心，半径为1，张开角度为30度的圆弧。</span><br><span class="line">  \draw (1, 0) arc (0:30:1);</span><br><span class="line">\end&#123;tikzpicture&#125;</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure><p>再使用<code>xelatex</code>将其编译成PDF文件（<code>xelatex</code>可以通过安装TeXLive 2020获得）</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xelatex three_in_one.tex</span><br></pre></td></tr></table></figure><p>此时便得到了<code>three_in_one.pdf</code>文件。为了可以在文章中显示，我用ImageMagick将其转换为PNG文件</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">convert three_in_one.pdf /tmp/three_in_one.png</span><br></pre></td></tr></table></figure><p>最终的图片如下</p><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/three_in_one.png" alt=""></p><p>简单，就像画一匹马一样简单。</p><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/怎样画马.jpeg" alt=""></p><p>现在该来试试用TikZ复刻维基百科上的硬盘示意图了。</p><h1 id="来点同心圆"><a href="#来点同心圆" class="headerlink" title="来点同心圆"></a>来点同心圆</h1><p>在原图中最引人注目的，当属那十几个同心圆了。简单起见，我只画六个圆。这六个圆的半径相差<code>1pt</code>（<code>pt</code>是TikZ默认的长度单位），从<code>3pt</code>一直递增到<code>8pt</code>，它们的圆心都在坐标原点<code>(0, 0)</code>上。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">%% 为了节省篇幅，只给出TikZ部分的代码。</span><br><span class="line">\begin&#123;tikzpicture&#125;</span><br><span class="line">  \draw (0, 0) circle (3);</span><br><span class="line">  \draw (0, 0) circle (4);</span><br><span class="line">  \draw (0, 0) circle (5);</span><br><span class="line">  \draw (0, 0) circle (6);</span><br><span class="line">  \draw (0, 0) circle (7);</span><br><span class="line">  \draw (0, 0) circle (8);</span><br><span class="line">\end&#123;tikzpicture&#125;</span><br></pre></td></tr></table></figure><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_circle.png" alt=""></p><h1 id="来点等分线"><a href="#来点等分线" class="headerlink" title="来点等分线"></a>来点等分线</h1><p>原图中有12根线段，将每一个圆等分成了全等的12份。从前一节的内容可知，要用<code>\draw</code>命令绘制线段，需要的是线段两端的坐标，那么这批坐标要怎么计算呢？尽管可以用三角函数计算出这些点的笛卡尔坐标，但在TikZ中可以用更方便的极坐标来指定这些点。</p><p>以原图中从X轴开始逆时针旋转遇到的第一条线段为例，它在半径为<code>3pt</code>的圆上的点的坐标为<code>(30:3)</code>（30是极坐标中的角度，3是半径长度），而在半径为<code>8pt</code>的圆上的点的坐标为<code>(30:8)</code>，因此可以用<code>\draw (30:3) -- (30:8)</code>来画出这根线段。</p><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_30.png" alt=""></p><p>通过调整其中的角度可以画出剩余的其它线段。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;tikzpicture&#125;</span><br><span class="line">  \draw (0, 0) circle (3);</span><br><span class="line">  \draw (0, 0) circle (4);</span><br><span class="line">  \draw (0, 0) circle (5);</span><br><span class="line">  \draw (0, 0) circle (6);</span><br><span class="line">  \draw (0, 0) circle (7);</span><br><span class="line">  \draw (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  \draw (0:3) -- (0:8);</span><br><span class="line">  \draw (30:3) -- (30:8);</span><br><span class="line">  \draw (60:3) -- (60:8);</span><br><span class="line">  \draw (90:3) -- (90:8);</span><br><span class="line">  \draw (120:3) -- (120:8);</span><br><span class="line">  \draw (150:3) -- (150:8);</span><br><span class="line">  \draw (180:3) -- (180:8);</span><br><span class="line">  \draw (210:3) -- (210:8);</span><br><span class="line">  \draw (240:3) -- (240:8);</span><br><span class="line">  \draw (270:3) -- (270:8);</span><br><span class="line">  \draw (300:3) -- (300:8);</span><br><span class="line">  \draw (330:3) -- (330:8);</span><br><span class="line">\end&#123;tikzpicture&#125;</span><br></pre></td></tr></table></figure><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_split.png" alt=""></p><h1 id="来张色图"><a href="#来张色图" class="headerlink" title="来张色图"></a>来张色图</h1><p>原图大致的骨架已经画完了，现在来尝试给它上色。在TikZ中，可以用<code>\fill</code>命令给一段封闭的曲线上色。比如用<code>\fill[red] (0, 0) -- (1, 0) -- (1, 1) -- (0, 1) -- cycle</code>可以将左下角在原点、边长为<code>1pt</code>的正方形涂成红色。</p><p>先给原图中的区域B上色。区域B是一个扇形，它由两根长度为<code>8pt</code>的半径和一段夹角为30度的圆弧构成。要描述这段封闭曲线，可以借助入门一节中介绍的<code>arc</code>命令。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;tikzpicture&#125;</span><br><span class="line">  %% 给区域B上色。</span><br><span class="line">  \fill[blue] (0, 0) -- (30:8) arc (30:60:8) -- cycle;</span><br><span class="line"></span><br><span class="line">  \draw (0, 0) circle (3);</span><br><span class="line">  \draw (0, 0) circle (4);</span><br><span class="line">  \draw (0, 0) circle (5);</span><br><span class="line">  \draw (0, 0) circle (6);</span><br><span class="line">  \draw (0, 0) circle (7);</span><br><span class="line">  \draw (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  \draw (0:3) -- (0:8);</span><br><span class="line">  \draw (30:3) -- (30:8);</span><br><span class="line">  \draw (60:3) -- (60:8);</span><br><span class="line">  \draw (90:3) -- (90:8);</span><br><span class="line">  \draw (120:3) -- (120:8);</span><br><span class="line">  \draw (150:3) -- (150:8);</span><br><span class="line">  \draw (180:3) -- (180:8);</span><br><span class="line">  \draw (210:3) -- (210:8);</span><br><span class="line">  \draw (240:3) -- (240:8);</span><br><span class="line">  \draw (270:3) -- (270:8);</span><br><span class="line">  \draw (300:3) -- (300:8);</span><br><span class="line">  \draw (330:3) -- (330:8);</span><br><span class="line">\end&#123;tikzpicture&#125;</span><br></pre></td></tr></table></figure><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_B.png" alt=""></p><p><code>\fill</code>命令那一行最后的<code>cycle</code>的意思，是让曲线回到起点组成一个封闭的形状。另外，<code>\fill</code>命令需要写在<code>\draw</code>命令之前，是为了避免蓝色颜料将区域内的圆弧给盖住了。</p><p>对于区域C和区域D，方法是一样的，只是描述封闭曲线的坐标不同罢了。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;tikzpicture&#125;</span><br><span class="line">  %% 给区域B上色。</span><br><span class="line">  \fill[blue] (0, 0) -- (30:8) arc (30:60:8) -- cycle;</span><br><span class="line">  %% 给区域C上色。</span><br><span class="line">  \fill[purple] (30:4) -- (30:5) arc (30:60:5) -- (60:4) -- (60:4) arc (60:30:4);</span><br><span class="line">  %% 给区域D上色。</span><br><span class="line">  \fill[green] (240:6) -- (240:7) arc (240:330:7) -- (330:6) -- (330:6) arc (330:240:6);</span><br><span class="line"></span><br><span class="line">  \draw (0, 0) circle (3);</span><br><span class="line">  \draw (0, 0) circle (4);</span><br><span class="line">  \draw (0, 0) circle (5);</span><br><span class="line">  \draw (0, 0) circle (6);</span><br><span class="line">  \draw (0, 0) circle (7);</span><br><span class="line">  \draw (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  \draw (0:3) -- (0:8);</span><br><span class="line">  \draw (30:3) -- (30:8);</span><br><span class="line">  \draw (60:3) -- (60:8);</span><br><span class="line">  \draw (90:3) -- (90:8);</span><br><span class="line">  \draw (120:3) -- (120:8);</span><br><span class="line">  \draw (150:3) -- (150:8);</span><br><span class="line">  \draw (180:3) -- (180:8);</span><br><span class="line">  \draw (210:3) -- (210:8);</span><br><span class="line">  \draw (240:3) -- (240:8);</span><br><span class="line">  \draw (270:3) -- (270:8);</span><br><span class="line">  \draw (300:3) -- (300:8);</span><br><span class="line">  \draw (330:3) -- (330:8);</span><br><span class="line">\end&#123;tikzpicture&#125;</span><br></pre></td></tr></table></figure><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_CD.png" alt=""></p><h1 id="给环形上色"><a href="#给环形上色" class="headerlink" title="给环形上色"></a>给环形上色</h1><p>聪明的读者也许已经发现了，区域A的环形没办法用这种方式来描述。不过没关系，只要将其视为上下半两部分，再分别上色即可。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;tikzpicture&#125;</span><br><span class="line">  %% 环的上半部分</span><br><span class="line">  \fill[red] (4, 0) -- (5, 0) arc (0:180:5) -- (-4, 0) -- (-4, 0) arc (180:0:4);</span><br><span class="line">  %% 环的下半部分</span><br><span class="line">  \fill[red] (4, 0) -- (5, 0) arc (360:180:5) -- (-4, 0) -- (-4, 0) arc (180:360:4);</span><br><span class="line">  %% 给区域B上色。</span><br><span class="line">  \fill[blue] (0, 0) -- (30:8) arc (30:60:8) -- cycle;</span><br><span class="line">  %% 给区域C上色。</span><br><span class="line">  \fill[purple] (30:4) -- (30:5) arc (30:60:5) -- (60:4) -- (60:4) arc (60:30:4);</span><br><span class="line">  %% 给区域D上色。</span><br><span class="line">  \fill[green] (240:6) -- (240:7) arc (240:330:7) -- (330:6) -- (330:6) arc (330:240:6);</span><br><span class="line"></span><br><span class="line">  \draw (0, 0) circle (3);</span><br><span class="line">  \draw (0, 0) circle (4);</span><br><span class="line">  \draw (0, 0) circle (5);</span><br><span class="line">  \draw (0, 0) circle (6);</span><br><span class="line">  \draw (0, 0) circle (7);</span><br><span class="line">  \draw (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  \draw (0:3) -- (0:8);</span><br><span class="line">  \draw (30:3) -- (30:8);</span><br><span class="line">  \draw (60:3) -- (60:8);</span><br><span class="line">  \draw (90:3) -- (90:8);</span><br><span class="line">  \draw (120:3) -- (120:8);</span><br><span class="line">  \draw (150:3) -- (150:8);</span><br><span class="line">  \draw (180:3) -- (180:8);</span><br><span class="line">  \draw (210:3) -- (210:8);</span><br><span class="line">  \draw (240:3) -- (240:8);</span><br><span class="line">  \draw (270:3) -- (270:8);</span><br><span class="line">  \draw (300:3) -- (300:8);</span><br><span class="line">  \draw (330:3) -- (330:8);</span><br><span class="line">\end&#123;tikzpicture&#125;</span><br></pre></td></tr></table></figure><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_ring.png" alt=""></p><h1 id="润色一下"><a href="#润色一下" class="headerlink" title="润色一下"></a>润色一下</h1><p>用macOS的“数码测色计”看了一下原图中各个区域的颜色的RGB值，区域A大概是<code>(236, 133, 130)</code>、区域B大概是<code>(122, 127, 237)</code>、区域C大概是<code>(131, 132, 139)</code>、区域D大概是<code>(0, 151, 27)</code>。接下来我让TikZ以这四种指定的颜色填充图中的四个区域，先用LaTeX的<code>\definecolor</code>命令定义四个新的颜色的名字。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">%% 下列四行代码置于document环境之前</span><br><span class="line">\definecolor&#123;areaA&#125;&#123;RGB&#125;&#123;236,133,130&#125;</span><br><span class="line">\definecolor&#123;areaB&#125;&#123;RGB&#125;&#123;122,127,237&#125;</span><br><span class="line">\definecolor&#123;areaC&#125;&#123;RGB&#125;&#123;131,32,139&#125;</span><br><span class="line">\definecolor&#123;areaD&#125;&#123;RGB&#125;&#123;0,151,27&#125;</span><br></pre></td></tr></table></figure><p>再替换掉<code>\fill</code>命令中的颜色名即可</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">\begin&#123;tikzpicture&#125;</span><br><span class="line">  %% 环的上半部分</span><br><span class="line">  \fill[areaA] (4, 0) -- (5, 0) arc (0:180:5) -- (-4, 0) -- (-4, 0) arc (180:0:4);</span><br><span class="line">  %% 环的下半部分</span><br><span class="line">  \fill[areaA] (4, 0) -- (5, 0) arc (360:180:5) -- (-4, 0) -- (-4, 0) arc (180:360:4);</span><br><span class="line">  %% 给区域B上色。</span><br><span class="line">  \fill[areaB] (0, 0) -- (30:8) arc (30:60:8) -- cycle;</span><br><span class="line">  %% 给区域C上色。</span><br><span class="line">  \fill[areaC] (30:4) -- (30:5) arc (30:60:5) -- (60:4) -- (60:4) arc (60:30:4);</span><br><span class="line">  %% 给区域D上色。</span><br><span class="line">  \fill[areaD] (240:6) -- (240:7) arc (240:330:7) -- (330:6) -- (330:6) arc (330:240:6);</span><br><span class="line"></span><br><span class="line">  \draw (0, 0) circle (3);</span><br><span class="line">  \draw (0, 0) circle (4);</span><br><span class="line">  \draw (0, 0) circle (5);</span><br><span class="line">  \draw (0, 0) circle (6);</span><br><span class="line">  \draw (0, 0) circle (7);</span><br><span class="line">  \draw (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  \draw (0:3) -- (0:8);</span><br><span class="line">  \draw (30:3) -- (30:8);</span><br><span class="line">  \draw (60:3) -- (60:8);</span><br><span class="line">  \draw (90:3) -- (90:8);</span><br><span class="line">  \draw (120:3) -- (120:8);</span><br><span class="line">  \draw (150:3) -- (150:8);</span><br><span class="line">  \draw (180:3) -- (180:8);</span><br><span class="line">  \draw (210:3) -- (210:8);</span><br><span class="line">  \draw (240:3) -- (240:8);</span><br><span class="line">  \draw (270:3) -- (270:8);</span><br><span class="line">  \draw (300:3) -- (300:8);</span><br><span class="line">  \draw (330:3) -- (330:8);</span><br><span class="line">\end&#123;tikzpicture&#125;</span><br></pre></td></tr></table></figure><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_color.png" alt=""></p><h1 id="图文并茂"><a href="#图文并茂" class="headerlink" title="图文并茂"></a>图文并茂</h1><p>剩下的需要复刻的东西就是原图中的文字以及标注用的线了。线很容易画，只要规定了坐标后用<code>\draw</code>命令即可。比如说，我可以把四条线定义如下，其中的坐标和线段的长度纯粹是个人偏好</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">\draw (75:4.5) -- (75:9);</span><br><span class="line">\draw (40:7.5) -- (40:9);</span><br><span class="line">\draw (50:4.5) -- (50:9);</span><br><span class="line">\draw (285:6.5) -- (285:9);</span><br></pre></td></tr></table></figure><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_line.png" alt=""></p><p>线画完了，再到每一根线的“终点”标上文字说明，这需要用到TikZ的<code>node</code>功能。用法很简单，就是在需要标注文字的坐标后，紧跟着关键字<code>node</code>，以及一段用花括号包裹的文本即可</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">\documentclass&#123;standalone&#125;</span><br><span class="line">\usepackage&#123;tikz&#125;</span><br><span class="line">\usepackage&#123;xeCJK&#125;</span><br><span class="line">\setCJKmainfont&#123;Songti TC&#125;</span><br><span class="line">\usetikzlibrary&#123;shapes.geometric, arrows&#125;</span><br><span class="line">\definecolor&#123;areaA&#125;&#123;RGB&#125;&#123;236,133,130&#125;</span><br><span class="line">\definecolor&#123;areaB&#125;&#123;RGB&#125;&#123;122,127,237&#125;</span><br><span class="line">\definecolor&#123;areaC&#125;&#123;RGB&#125;&#123;131,32,139&#125;</span><br><span class="line">\definecolor&#123;areaD&#125;&#123;RGB&#125;&#123;0,151,27&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">\begin&#123;tikzpicture&#125;</span><br><span class="line">  %% 环的上半部分</span><br><span class="line">  \fill[areaA] (4, 0) -- (5, 0) arc (0:180:5) -- (-4, 0) -- (-4, 0) arc (180:0:4);</span><br><span class="line">  %% 环的下半部分</span><br><span class="line">  \fill[areaA] (4, 0) -- (5, 0) arc (360:180:5) -- (-4, 0) -- (-4, 0) arc (180:360:4);</span><br><span class="line">  %% 给区域B上色。</span><br><span class="line">  \fill[areaB] (0, 0) -- (30:8) arc (30:60:8) -- cycle;</span><br><span class="line">  %% 给区域C上色。</span><br><span class="line">  \fill[areaC] (30:4) -- (30:5) arc (30:60:5) -- (60:4) -- (60:4) arc (60:30:4);</span><br><span class="line">  %% 给区域D上色。</span><br><span class="line">  \fill[areaD] (240:6) -- (240:7) arc (240:330:7) -- (330:6) -- (330:6) arc (330:240:6);</span><br><span class="line"></span><br><span class="line">  \draw (0, 0) circle (3);</span><br><span class="line">  \draw (0, 0) circle (4);</span><br><span class="line">  \draw (0, 0) circle (5);</span><br><span class="line">  \draw (0, 0) circle (6);</span><br><span class="line">  \draw (0, 0) circle (7);</span><br><span class="line">  \draw (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  \draw (0:3) -- (0:8);</span><br><span class="line">  \draw (30:3) -- (30:8);</span><br><span class="line">  \draw (60:3) -- (60:8);</span><br><span class="line">  \draw (90:3) -- (90:8);</span><br><span class="line">  \draw (120:3) -- (120:8);</span><br><span class="line">  \draw (150:3) -- (150:8);</span><br><span class="line">  \draw (180:3) -- (180:8);</span><br><span class="line">  \draw (210:3) -- (210:8);</span><br><span class="line">  \draw (240:3) -- (240:8);</span><br><span class="line">  \draw (270:3) -- (270:8);</span><br><span class="line">  \draw (300:3) -- (300:8);</span><br><span class="line">  \draw (330:3) -- (330:8);</span><br><span class="line"></span><br><span class="line">  \draw (75:4.5) -- (75:9) node &#123;磁道&#125;;</span><br><span class="line">  \draw (40:7.5) -- (40:9) node &#123;扇面&#125;;</span><br><span class="line">  \draw (50:4.5) -- (50:9) node &#123;扇区&#125;;</span><br><span class="line">  \draw (285:6.5) -- (285:9) node &#123;簇&#125;;</span><br><span class="line">\end&#123;tikzpicture&#125;</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_text.png" alt=""></p><p>需要留意的是，我在源代码开头的位置，引入了<code>xeCJK</code>宏包（<code>\usepackage{xeCJK}</code>），并且指定了中文内容用的字体为宋体（<code>\setCJKmainfont{Songti TC}</code>），这样才能成功编译。</p><p>至此，复刻算是完成了。</p><h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>本文只是管中窥豹，TikZ还可以画出其它更复杂更美轮美奂的图形，有兴趣的读者可以移步<a href="https://texample.net/tikz/examples/" target="_blank" rel="noopener">这里</a>观赏。此外，TikZ也可以“编程”，比如下面的两行代码便足矣画出上文中12行代码才完成的等分线</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\foreach \x in &#123;0,30,60,90,120,150,180,210,240,270,300,330&#125;</span><br><span class="line">\draw (\x:3) -- (\x:8);</span><br></pre></td></tr></table></figure><p>TikZ的更多潜力和乐趣，就由各位读者自己探索吧。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          
+        
+      
+    
+    </summary>
+    
+    
+      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
+    
+      <category term="语绘" scheme="https://liutos.github.io/tags/%E8%AF%AD%E7%BB%98/"/>
+    
+      <category term="绘图" scheme="https://liutos.github.io/tags/%E7%BB%98%E5%9B%BE/"/>
+    
+      <category term="latex" scheme="https://liutos.github.io/tags/latex/"/>
+    
+      <category term="tikz" scheme="https://liutos.github.io/tags/tikz/"/>
+    
+  </entry>
   
   <entry>
     <title>Emacs的avy插件</title>
@@ -42,9 +76,9 @@
     
       <category term="编辑器" scheme="https://liutos.github.io/tags/%E7%BC%96%E8%BE%91%E5%99%A8/"/>
     
-      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
-    
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
+      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
     
       <category term="效率" scheme="https://liutos.github.io/tags/%E6%95%88%E7%8E%87/"/>
     
@@ -74,13 +108,13 @@
     
       <category term="editor" scheme="https://liutos.github.io/tags/editor/"/>
     
-      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
-    
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
-      <category term="vscode" scheme="https://liutos.github.io/tags/vscode/"/>
+      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
     
       <category term="tool" scheme="https://liutos.github.io/tags/tool/"/>
+    
+      <category term="vscode" scheme="https://liutos.github.io/tags/vscode/"/>
     
   </entry>
   
@@ -160,9 +194,9 @@
     </summary>
     
     
-      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
-    
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
+      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
     
       <category term="实战Elisp" scheme="https://liutos.github.io/tags/%E5%AE%9E%E6%88%98Elisp/"/>
     
@@ -218,9 +252,9 @@
     </summary>
     
     
-      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
-    
       <category term="bash" scheme="https://liutos.github.io/tags/bash/"/>
+    
+      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
     
       <category term="命令行" scheme="https://liutos.github.io/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/"/>
     
@@ -312,9 +346,9 @@
       <category term="究竟在干什么系列" scheme="https://liutos.github.io/categories/%E7%A9%B6%E7%AB%9F%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88%E7%B3%BB%E5%88%97/"/>
     
     
-      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
-    
       <category term="bash" scheme="https://liutos.github.io/tags/bash/"/>
+    
+      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
     
       <category term="redirection" scheme="https://liutos.github.io/tags/redirection/"/>
     
@@ -348,9 +382,9 @@
     
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
-      <category term="vscode" scheme="https://liutos.github.io/tags/vscode/"/>
-    
       <category term="tool" scheme="https://liutos.github.io/tags/tool/"/>
+    
+      <category term="vscode" scheme="https://liutos.github.io/tags/vscode/"/>
     
       <category term="绘图" scheme="https://liutos.github.io/tags/%E7%BB%98%E5%9B%BE/"/>
     
@@ -380,9 +414,9 @@
       <category term="究竟在干什么系列" scheme="https://liutos.github.io/categories/%E7%A9%B6%E7%AB%9F%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88%E7%B3%BB%E5%88%97/"/>
     
     
-      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
-    
       <category term="bash" scheme="https://liutos.github.io/tags/bash/"/>
+    
+      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
     
   </entry>
   
@@ -410,9 +444,9 @@
       <category term="实战Elisp" scheme="https://liutos.github.io/categories/%E5%AE%9E%E6%88%98Elisp/"/>
     
     
-      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
-    
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
+      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
     
       <category term="实战Elisp" scheme="https://liutos.github.io/tags/%E5%AE%9E%E6%88%98Elisp/"/>
     
@@ -480,9 +514,9 @@
       <category term="实战Elisp" scheme="https://liutos.github.io/categories/%E5%AE%9E%E6%88%98Elisp/"/>
     
     
-      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
-    
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
+      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
     
       <category term="实战Elisp" scheme="https://liutos.github.io/tags/%E5%AE%9E%E6%88%98Elisp/"/>
     
@@ -552,9 +586,9 @@
       <category term="实战Elisp" scheme="https://liutos.github.io/categories/%E5%AE%9E%E6%88%98Elisp/"/>
     
     
-      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
-    
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
+    
+      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
     
       <category term="实战Elisp" scheme="https://liutos.github.io/tags/%E5%AE%9E%E6%88%98Elisp/"/>
     
@@ -588,9 +622,9 @@
     
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
-      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
-    
       <category term="tool" scheme="https://liutos.github.io/tags/tool/"/>
+    
+      <category term="工具" scheme="https://liutos.github.io/tags/%E5%B7%A5%E5%85%B7/"/>
     
       <category term="accounting" scheme="https://liutos.github.io/tags/accounting/"/>
     
@@ -628,40 +662,11 @@
       <category term="实战Elisp" scheme="https://liutos.github.io/categories/%E5%AE%9E%E6%88%98Elisp/"/>
     
     
-      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
-    
       <category term="emacs" scheme="https://liutos.github.io/tags/emacs/"/>
     
+      <category term="elisp" scheme="https://liutos.github.io/tags/elisp/"/>
+    
       <category term="实战Elisp" scheme="https://liutos.github.io/tags/%E5%AE%9E%E6%88%98Elisp/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>免除频繁输入ssh密码的烦恼</title>
-    <link href="https://liutos.github.io/2020/02/19/%E5%85%8D%E9%99%A4%E9%A2%91%E7%B9%81%E8%BE%93%E5%85%A5ssh%E5%AF%86%E7%A0%81%E7%9A%84%E7%83%A6%E6%81%BC/"/>
-    <id>https://liutos.github.io/2020/02/19/免除频繁输入ssh密码的烦恼/</id>
-    <published>2020-02-19T03:40:18.000Z</published>
-    <updated>2020-02-19T03:42:19.953Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>在入手MacBook Pro前，我的开发环境主要是一个运行在VirtualBox中的Mint发行版。在这个系统中，只要运行一次<code>git push</code>并输入passphrase（下称密码）后，之后便不再需要输入了——即使ssh登录远程机器也是如此。</p><p>但用上Mac后发现，这里的ssh没有这个方便的特性——每次运行<code>git push</code>或<code>ssh</code>，都需要输入密码，颇不方便。</p><p>为了避免一遍又一遍地输入密码，每次登录后，我都会运行<code>ssh-add</code>来一劳永逸地解决问题</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure><p>自从升级到macOS Catalina后，如果在合盖睡眠前没有注销的话，下次开盖唤醒极有可能卡死在登录界面。无奈之下，我每天都需要注销并在第二天重新登录，以至于每天都得运行<code>ssh-add</code>并输入密码。久而久之，这也挺烦人的。</p><h1 id="一次失败的优化"><a href="#一次失败的优化" class="headerlink" title="一次失败的优化"></a>一次失败的优化</h1><a id="more"></a><p>为了省却每次都输入长达14个字符的密码的烦恼，我想到了<code>expect(1)</code>，这是一种可以交互式地控制其它命令的脚本语言。遗憾的是，经过一番折腾，仍然没办法成功让expect把密码输入给<code>ssh-add</code>，我只好继续寻找其它的办法。</p><h1 id="一次成功的优化"><a href="#一次成功的优化" class="headerlink" title="一次成功的优化"></a>一次成功的优化</h1><p>某天在阅读<code>ssh-add</code>的<code>man</code>文档时，了解到原来<code>ssh-add</code>有一个<code>-K</code>选项，可以在添加身份到<code>ssh-agent</code>时，将密码存储到用户的keychain中。同时还有一个<code>-A</code>选项，可以让<code>ssh-add</code>使用来自于keychain的密码——这意味着可以不用一遍又一遍地输入！</p><p>那么接下来要做的事情已经很清楚了。先手动运行一次带<code>-K</code>选项的<code>ssh-add</code></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add -K ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure><p>并输入密码——这将会是在Mac上的最后一次输入。再用<code>-A</code>选项调用<code>ssh-add</code></p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">ssh-add -A ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure><p>我把上面这段代码保存为文件<code>/Users/liutos/SourceCode/shell/auto_ssh_add/auto_ssh_add.sh</code>，它很快就会被用到。最后，写一个Launchd的配置文件<code>~/Library/LaunchAgents/com.liutos.tools.sshAdd.plist</code></p><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">"1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>com.liutos.tools.sshAdd<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>Program<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/liutos/SourceCode/shell/auto_ssh_add/auto_ssh_add.sh<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>RunAtLoad<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardOutPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>/tmp/auto_ssh_add.log<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardErrorPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>/tmp/auto_ssh_add.err<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></table></figure><p>从现在起，再也不需要一遍又一遍地输入ssh的密码了——一次也不需要。</p><h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>要是有哪些读者朋友成功地用<code>expect</code>实现自动输入密码的，还望不吝赐教;)</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;序言&quot;&gt;&lt;a href=&quot;#序言&quot; class=&quot;headerlink&quot; title=&quot;序言&quot;&gt;&lt;/a&gt;序言&lt;/h1&gt;&lt;p&gt;在入手MacBook Pro前，我的开发环境主要是一个运行在VirtualBox中的Mint发行版。在这个系统中，只要运行一次&lt;code&gt;git push&lt;/code&gt;并输入passphrase（下称密码）后，之后便不再需要输入了——即使ssh登录远程机器也是如此。&lt;/p&gt;
-&lt;p&gt;但用上Mac后发现，这里的ssh没有这个方便的特性——每次运行&lt;code&gt;git push&lt;/code&gt;或&lt;code&gt;ssh&lt;/code&gt;，都需要输入密码，颇不方便。&lt;/p&gt;
-&lt;p&gt;为了避免一遍又一遍地输入密码，每次登录后，我都会运行&lt;code&gt;ssh-add&lt;/code&gt;来一劳永逸地解决问题&lt;/p&gt;
-&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ssh-add ~/.ssh/id_rsa&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;自从升级到macOS Catalina后，如果在合盖睡眠前没有注销的话，下次开盖唤醒极有可能卡死在登录界面。无奈之下，我每天都需要注销并在第二天重新登录，以至于每天都得运行&lt;code&gt;ssh-add&lt;/code&gt;并输入密码。久而久之，这也挺烦人的。&lt;/p&gt;
-&lt;h1 id=&quot;一次失败的优化&quot;&gt;&lt;a href=&quot;#一次失败的优化&quot; class=&quot;headerlink&quot; title=&quot;一次失败的优化&quot;&gt;&lt;/a&gt;一次失败的优化&lt;/h1&gt;
-    
-    </summary>
-    
-    
-      <category term="macos" scheme="https://liutos.github.io/tags/macos/"/>
-    
-      <category term="shell" scheme="https://liutos.github.io/tags/shell/"/>
-    
-      <category term="ssh" scheme="https://liutos.github.io/tags/ssh/"/>
     
   </entry>
   
