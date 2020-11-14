@@ -540,7 +540,7 @@
 <h1 id="如何在shell中比较大小？"><a href="#如何在shell中比较大小？" class="headerlink" title="如何在shell中比较大小？"></a>如何在shell中比较大小？</h1><p>如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写<code>[ blablabla ]</code>这样的代码</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/搜索“shell比较”的结果.jpg" alt=""></p>
 <p>例如，如果想知道当前的UNIX时间是否已经以<code>16</code>开头，可以用下列的shell代码</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">ts=$(date '+%s')</span><br><span class="line">if [ "${ts}" -gt 1600000000 -a "${ts}" -lt 1700000000 ]; then</span><br><span class="line">    echo '当前的UNIX时间戳已经以16开头啦。'</span><br><span class="line">else</span><br><span class="line">    echo '当前的UNIX时间戳还没以16开头哦。'</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">ts=$(date '+%s')</span><br><span class="line">if [ "${ts}" -gt 1600000000 -a "${ts}" -lt 1700000000 ]; then</span><br><span class="line">    echo '当前的UNIX时间戳已经以16开头啦。'</span><br><span class="line">else</span><br><span class="line">    echo '当前的UNIX时间戳还没以16开头哦。'</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
 <p>当我写这个的时候，<code>date '+%s'</code>的值为<code>1587901648</code>，所以运行后走的是<code>else</code>的分支。</p>
 <p>除了用<code>-gt</code>表示大于之外，还有各种各样的其它比较运算符，例如下列的四个运算符</p>
 <table>
@@ -1089,6 +1089,7 @@
   
 
   
+
 
 
 
