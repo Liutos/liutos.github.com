@@ -200,6 +200,115 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/06/10/用org-mode管理API测试用例/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/06/10/用org-mode管理API测试用例/" class="post-title-link" itemprop="url">用org-mode管理API测试用例</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-06-10 21:31:58 / 修改时间：21:58:19" itemprop="dateCreated datePublished" datetime="2020-06-10T21:31:58+08:00">2020-06-10</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/06/10/用org-mode管理API测试用例/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/06/10/用org-mode管理API测试用例/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="API测试用例是什么？"><a href="#API测试用例是什么？" class="headerlink" title="API测试用例是什么？"></a>API测试用例是什么？</h1><p>在互联网大行其道的今天，身为一名电商平台的程序员，必定经常与HTTP API打交道，一个常见的情况便是做API测试。抛开可以用单元测试代替的，很多时候需要真地发出HTTP请求才行。这些负责发出HTTP请求的东西可能是一行<code>curl</code>命令，可能是一个<code>.js</code>文件，也可能是一个在postman中点击按钮的操作，但不管形态如何，它们便是API测试用例。尽管名字中带有“用例”二字，但很多时候是由人来校验结果的，用例更关注发出怎样的HTTP请求。</p>
+<h1 id="为什么要管理它们？"><a href="#为什么要管理它们？" class="headerlink" title="为什么要管理它们？"></a>为什么要管理它们？</h1><p>不同于每天在浏览器中发生成千上万次的、平凡的HTTP（或HTTPS）请求，API测试用例是值得一番精心管理的，因为：</p>
+<ol>
+<li><p>API测试用例通常会重复使用，因此必须将它们持久化保存。也许是保存成shell脚本，也许是保存成脚本语言源文件，也许是保存为某一款软件的数据文件；</p>
+</li>
+<li><p>需要为多个API编写测试用例，因此必须区分不同的API对应的测试用例。例如，负责管理业务资源的服务（比如一个管理商品数据的、提供RESTful API的服务），起码需要提供增删查改的功能，那么也就需要有增删查改对应的API测试用例；</p>
+</li>
+<li><p>需要为多个服务的API编写用例，因此必须区分不同的服务对应的测试用例集。例如，既然有商品服务，那么极可能还有订单服务、优惠券服务、物流服务，等等，每个服务又都有增删查改的功能，这些不同服务的API也需要各自的测试用例；</p>
+</li>
+<li><p>需要区分不同的运行环境。通常本地、开发、测试，以及生产环境是互相隔离的，一个用例中的参数往往不能照搬到另一个环境中。</p>
+</li>
+</ol>
+<p>API、服务，以及环境这三个维度上的区别，使得测试用例的数量显著增加，如不进行管理，当要用时，要么不得不从零开始再写一遍脚本，要么得翻查很久才能找到所需的用例。</p>
+<h1 id="用org-mode管理"><a href="#用org-mode管理" class="headerlink" title="用org-mode管理"></a>用org-mode管理</h1><h2 id="org-mode是什么？"><a href="#org-mode是什么？" class="headerlink" title="org-mode是什么？"></a>org-mode是什么？</h2><p><code>org-mode</code>是一款Emacs编辑器的扩展，它让使用者能够用快速高效的纯文本方式来记笔记、维护待办事项、安排计划，以及编写文档。<code>org-mode</code>的精髓在于它的大纲组织能力，以及依托于Emacs的扩展能力，两者使其正好可以胜任管理API测试用例的工作。一个<code>.org</code>文件的示例如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/org-mode官网示例.jpg" alt="org-mode官网的示例截图"></p>
+<h2 id="如何用org-mode管理API测试用例？"><a href="#如何用org-mode管理API测试用例？" class="headerlink" title="如何用org-mode管理API测试用例？"></a>如何用org-mode管理API测试用例？</h2><p>尽管<code>org-mode</code>提供了丰富的功能，但只是管理API测试用例的话，并用不上太多花里胡哨的东西，只需要<code>org-mode</code>的大纲功能和<code>org-babel</code>特性即可。</p>
+<p>首先用不同的<code>.org</code>文件区分不同的环境。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/用不同的org文件区分环境.jpg" alt=""></p>
+<p>接着用不同层级的headline区分不同的服务、资源类型，以及API。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/用不同层级的headline管理的示例.jpg" alt=""></p>
+<p>然后用<code>org-mode</code>的<a href="https://orgmode.org/manual/Structure-of-Code-Blocks.html" target="_blank" rel="noopener">代码块</a>语法来编写HTTP请求。以请求<code>https://httpbin.org/uuid</code>为例</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#+BEGIN_SRC restclient</span><br><span class="line">  GET https://httpbin.org/uuid</span><br><span class="line">#+END_SRC</span><br></pre></td></tr></tbody></table></figure>
+<p><code>#+BEGIN_SRC</code>和<code>#+END_SRC</code>分别表示开启和结束代码块，<code>restclient</code>表示这个代码块内的代码可以用Emacs的<code>restclient-mode</code>来编辑。在代码块中，<code>GET https://httpbin.org/uuid</code>表示以GET方法请求<code>https://httpbin.org/uuid</code>。</p>
+<p>安装了<a href="https://github.com/pashky/restclient.el" target="_blank" rel="noopener"><code>restclient</code></a>后，将光标定位在代码块上并按下<code>ctrl-c '</code>，可以进入一个单独的buffer编辑其中的源代码</p>
+<video controls=""><br>  <source src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/进入restclient模式的buffer.mp4" type="video/mp4"><br></video>
+
+<p>最后，如果配置了<code>org-babel</code>，甚至可以直接在代码块上按下<code>ctrl-c ctrl-c</code>来发出HTTP请求。</p>
+<p><video controls=""><br>  <source src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/org-mode中发出HTTP请求.mp4" type="video/mp4"><br></video><br>可以看到，HTTP响应的内容会保留在这个<code>.org</code>文件中。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>以前我也用过其它的工具来管理API测试用例：</p>
+<ol>
+<li>刚工作的时候用的是Postman，那时候Postman还是Chrome的一个插件；</li>
+<li>后来出于对Firefox浏览器的喜爱，找了一个叫RESTClient的插件来代替postman，久而久之发觉两者的差距蛮大，终究无法代替；</li>
+<li>接着遇到了Emacs中的<code>restclient.el</code>，于是用了好一段时间的纯<code>restclient-mode</code>（没有搭配<code>org-mode</code>）；</li>
+<li>再后来开始用Mac办公了，便开始寻找Mac下的这类工具，遇到了<a href="https://insomnia.rest/" target="_blank" rel="noopener">Insomnia</a>。如果有人找我推荐用于HTTP API测试的GUI工具的话，我会毫无不犹豫地推荐这款。</li>
+</ol>
+<p>再后来，我又回到了Emacs，并用<code>org-mode</code>来管理这些API测试用例。目前这是最适合我的一种方式。</p>
+<p>全文完。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/05/22/重定向的时候shell在干什么？/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -747,124 +856,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/04/14/数据库schema不是CRUD服务的一切/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/14/数据库schema不是CRUD服务的一切/" class="post-title-link" itemprop="url">数据库schema不是CRUD服务的一切</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-04-14 13:42:22 / 修改时间：21:05:46" itemprop="dateCreated datePublished" datetime="2020-04-14T13:42:22+08:00">2020-04-14</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/04/14/数据库schema不是CRUD服务的一切/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/14/数据库schema不是CRUD服务的一切/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <center>谨以本文向我脑海中那些不成熟的想法致敬。</center>
-
-<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>受疫情影响呆在家中的这段时间里，我收尾了<a href="https://book.douban.com/subject/26915970/" target="_blank" rel="noopener">《Clean Architecture》</a>。这本书给了我许多新知识和启发，包括本文的中心论点——数据库schema不是CRUD服务的一切，也是在读书过程中想到的。在书中，作者的原话是</p>
-<blockquote>
-<p>But the database is not the data model</p>
-</blockquote>
-<p>它出现在书中第六部分《Details》的第一个章节中。作者认为，从架构的角度来看，数据库不是一个实体而是一个细节，不足以成为架构中的一个元素。他甚至打了个比方：数据库对于架构而言，就好像门把手对于房子一般。并且，作者进一步澄清了他的观点：他口中所说的数据库，不是指的数据模型。应用内的数据结构对架构而言至关重要，但数据库并不是数据模型。</p>
-<p>这不禁让我回忆起了自己早期写设计文档的套路。</p>
-<p>在我的从业生涯早期（说得好像我从业很久了一样），每当需要开发一个新的Web服务时，必须先写一份简要的设计文档，向上级清楚地表达我的实现思路，包括：</p>
-<ol>
-<li>如何与其它服务协作完成产品提出的需求；</li>
-<li>服务的接口描述；</li>
-<li>数据的存储结构；</li>
-<li>关键的算法等。</li>
-</ol>
-<p>那时候的我会先考虑数据的存储结构，然后定义接口，最后才是与其它服务的协作。这些早期设计文档的其中一个特点是：接口的响应格式，与数据的存储结构是相同的。</p>
-<p>比方说我要设计一个网上商城的订单服务，可能会提供如下查询特定订单的接口</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /order/:id</span><br></pre></td></tr></tbody></table></figure>
-<p>其响应格式可能如下</p>
-<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">{</span><br><span class="line">  order: {</span><br><span class="line">    id: <span class="string">'F122663A-A5DC-451A-9B79-92DCE2EE41F1'</span>,</span><br><span class="line">    price: <span class="string">'100.00'</span>,</span><br><span class="line">    products: [</span><br><span class="line">      {</span><br><span class="line">        id: <span class="number">1</span>,</span><br><span class="line">        name: <span class="string">'MacBook Pro'</span>,</span><br><span class="line">        price: <span class="string">'19999.00'</span></span><br><span class="line">      },</span><br><span class="line">      {</span><br><span class="line">        id: <span class="number">2</span>,</span><br><span class="line">        name: <span class="string">'iPhone'</span>,</span><br><span class="line">        price: <span class="string">'6999.00'</span></span><br><span class="line">      }</span><br><span class="line">    ]</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>为了保存这种“不平坦”的对象，将会用MongoDB作为存储——除了文档的主键<code>_id</code>之外，其它字段在接口和存储之间一一对应。</p>
-<p>不仅仅是响应格式，在这个Web服务内所操作的也是同样结构的对象。用<a href="https://mongodb.github.io/node-mongodb-native/" target="_blank" rel="noopener">MongoDB Node.JS Driver</a>获得的订单恰好是一个JS对象，它与collection的文档有着一模一样的结构。之后这些对象会在代码内到处流通，不加修饰地使用。定义了数据库schema（就算是用MongoDB也有一套脑内的schema）后，其它的一切也就跟着确定了。</p>
-<p>业界甚至有工具可以直接从数据库得到API，比如<a href="https://github.com/PostgREST/postgrest" target="_blank" rel="noopener">postgrest</a>。</p>
-<p>很多时候，数据库schema成了一个应用内事实上的数据模型。但是，即便它们可以偶然一样，也不要认为它们总应该一样。</p>
-<h1 id="适合存储，不一定适合计算"><a href="#适合存储，不一定适合计算" class="headerlink" title="适合存储，不一定适合计算"></a>适合存储，不一定适合计算</h1><p>以MySQL为例，在<code>CREATE TABLE</code>语句中某一列的类型实际上决定的是存储时分配的空间的多少。但适合存储的类型，并不一定也适合业务逻辑的运算。</p>
-<p>比如说，要在MySQL中存储“开关型”的数据，即诸如“是否启用”或“是否已支付”这样非此即彼的状态时，通常定义为<code>TINYINT</code>类型，用0表示逻辑假（“未启用”和“未支付”），1表示逻辑真（“已启用”和“已支付”）。但对代码而言，比起用数值类型，布尔类型才是更恰当的选择。尤其是当所选择的语言并没有将0与<code>false</code>、1与<code>true</code>等价起来的时候——在Common Lisp中，<code>(if 0 1 2)</code>的求值结果为1。</p>
-<h1 id="适合计算，不一定适合存储"><a href="#适合计算，不一定适合存储" class="headerlink" title="适合计算，不一定适合存储"></a>适合计算，不一定适合存储</h1><p>通常数据结构在内存中比在磁盘上要容易表达得多，所以代码中使用的数据结构会比数据库中存储的要灵活不少，这同样造成了两者的不匹配。</p>
-<p>以我自己开发的提醒工具<a href="https://github.com/Liutos/cuckoo" target="_blank" rel="noopener"><code>cuckoo</code></a>为例，应用内有两种对象：任务和提醒。任务描述了要做的事情，提醒描述了在什么时候该告诉用户。显然，提醒是一个依赖于任务的弱实体。在cuckoo的代码中，任务是<code>Task</code>类的实例对象，有一个名为<code>remind</code>的成员变量存储着提醒。</p>
-<p>但这样的结构不方便存储在MySQL中。遵照关系型数据库设计的第一范式，任务和提醒分别被存储在<code>t_task</code>和<code>t_remind</code>表中，两者通过<code>t_task.remind_id</code>联系起来。</p>
-<p>当然，也可以在一开始就用MongoDB来存储这些数据（甚至可以用对象数据库？不过我没玩过）。尤其是cuckoo只是一个小玩意儿，MySQL和MongoDB都足以胜任。但作为一名有理想的程序员，在做设计的时候，不应该让低层细节过分干预高层策略。（在《Clean Architecture》中，越是接近I/O的越是low-level，反之则是high-level。）</p>
-<h1 id="面向业务逻辑，而非存储结构"><a href="#面向业务逻辑，而非存储结构" class="headerlink" title="面向业务逻辑，而非存储结构"></a>面向业务逻辑，而非存储结构</h1><p>业务逻辑和规则才是一个服务的核心，应该把更多精力花在实现业务逻辑的数据结构和算法上。</p>
-<p>以网上商城中常见的优惠券功能为例。优惠券服务所管理的优惠券往往有着各种效果、条件，以及限制。为了保持灵活性，优惠券类（下称<code>Coupon</code>）的实例对象中会有三种接口类型的成员变量：</p>
-<ol>
-<li><code>Effect</code>类型的变量<code>effect</code>，负责实现优惠效果的计算逻辑；</li>
-<li><code>Condition</code>数组类型的变量<code>conditions</code>，负责实现使用条件的检查逻辑；</li>
-<li><code>Restriction</code>数组类型的变量<code>restrictions</code>，负责实现使用限制的检查逻辑。</li>
-</ol>
-<p>三个接口可以有各种各样的实现——定额减免、折扣减免、某年月日前可用、不可用于电子产品，等等。如此，优惠券功能具备了极大的灵活性，业务可以随心所欲，产品可以为所欲为，老板数钱数到手软，公司业绩蒸蒸日上。</p>
-<p>那么如何存储<code>Effect</code>、<code>Condition</code>、<code>Restriction</code>、<code>Coupon</code>类的实例对象呢？没有唯一的选择，既可以存储在MySQL中，也可以存储在MongoDB中，或者别的什么数据库中。不管这些数据最终如何持久化，都不会影响作为高层策略的优惠券业务逻辑。反过来，如果在代码中处理的不是类、接口，以及实例对象，而是直接从数据库中取出来的、贫血模型的行（或文档），处理起来就不是很优雅了——可以预见 ，代码中会充斥着许多的<code>if-else</code>判断逻辑。</p>
-<p>数据库只是帮忙从磁盘中读取数据的软件，它的schema不应该直接成为应用的数据模型。</p>
-<h1 id="Interface-Segregation-Principle"><a href="#Interface-Segregation-Principle" class="headerlink" title="Interface Segregation Principle"></a>Interface Segregation Principle</h1><p>不应该在HTTP接口的响应中直接暴露数据库的schema。</p>
-<p>不说别的，光是数据库schema与接口规格所使用的命名规则就足以造成差异了。也许在MySQL中用<a href="https://en.wikipedia.org/wiki/Snake_case" target="_blank" rel="noopener"><code>snake case</code></a>命名一列，却又在HTTP响应的JSON对象中用<a href="https://en.wikipedia.org/wiki/Camel_case" target="_blank" rel="noopener"><code>camel case</code></a>命名字段。</p>
-<p>此外，除非这些接口仅仅实现增删查改、没有任何的业务逻辑或规则，否则一个服务更应当提供与业务需求恰好契合的接口。仍然以上文的优惠券服务为例，尽管内部可能<code>Effect</code>、<code>Condition</code>、<code>Restriction</code>、<code>Coupon</code>等诸多概念，但<del>煮不在乎</del>用户不在乎，他们只想看到用人话说出来的优惠券效果以及使用规则——用户甚至不关心条件和限制有何不同。</p>
-<p>如果优惠券服务直接将数据库中的行（或文档）序列化成JSON返回给调用者，会导致封装的泄露。每一个查询优惠券的调用方，都必须了解优惠券的内部表示形式，必须知道效果由<code>effect</code>描述、用券后的订单金额是多少、<code>conditions</code>中有关于过期与否的信息，等等。每增加一个优惠券服务的使用者，就相应地增加一套描述这些内容的代码。甚至当优惠券服务自身重构的时候，也许牵连到众多的调用方。</p>
-<p>如果直接将存储结构暴露给调用者的话，又何必再做一个Web服务呢。</p>
-<h1 id="切勿矫枉过正"><a href="#切勿矫枉过正" class="headerlink" title="切勿矫枉过正"></a>切勿矫枉过正</h1><p>的确存在这样的例子，数据库schema、数据模型，以及HTTP响应结构三者相同。这是因为比起维护数据库schema与数据模型的转换规则，以及DTO与数据模型的转换规则而言，在领域代码中直接使用数据库schema来表达数据模型的成本更低一点。尽管数据库schema不是Web服务的一切，但很多时候可以因地制宜地妥协一下。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -936,7 +927,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-count">83</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

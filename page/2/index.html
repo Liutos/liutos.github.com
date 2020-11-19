@@ -200,6 +200,111 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/08/02/没有除法的除法——LeetCode第29题/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/08/02/没有除法的除法——LeetCode第29题/" class="post-title-link" itemprop="url">没有除法的除法——LeetCode第29题</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-08-02 21:41:22 / 修改时间：22:21:47" itemprop="dateCreated datePublished" datetime="2020-08-02T21:41:22+08:00">2020-08-02</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/08/02/没有除法的除法——LeetCode第29题/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/08/02/没有除法的除法——LeetCode第29题/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>7月初的时候挑战了一下LeetCode的<a href="https://leetcode.com/problems/divide-two-integers/" target="_blank" rel="noopener">第29题</a>（中等难度，似乎没什么值得夸耀的），题目要求在不使用除、乘，以及模运算的情况下，实现整数相除的函数。</p>
+<p>既然被除数和除数都是整数，那么用减法就可以实现除除法了（多么naive的想法）。一个trivial的、用JavaScript编写的函数可以是下面这样的（为了简单起见，只考虑两个参数皆为正整数的情况）</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">divide</span>(<span class="params">n, m</span>) </span>{</span><br><span class="line">  <span class="keyword">let</span> acc = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (n &gt;= m) {</span><br><span class="line">    n -= m;</span><br><span class="line">    acc += <span class="number">1</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> acc;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>如此朴素的<code>divide</code>函数提交给LeetCode是不会被接受的的——它会在像2147483648除以2这样的测试用例上超时。可以在本地运行一下感受下究竟有多慢</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  nodejs time node divide.js</span><br><span class="line">2147483648/2=1073741824</span><br><span class="line">node divide.js  1.14s user 0.01s system 99% cpu 1.161 total</span><br></pre></td></tr></tbody></table></figure>
+<p>那么有没有更快的计算两个整数的商的算法呢？答案当然是肯定的。</p>
+<h1 id="尝试优化"><a href="#尝试优化" class="headerlink" title="尝试优化"></a>尝试优化</h1><p>一眼就可以看出，运行次数最多的是其中的<code>while</code>循环。以2147483648除以2为例，<code>while</code>循环中的语句要被执行1073741824次。为了提升运行速度，必须减少循环的次数。</p>
+<p>既然每次从<code>n</code>中减去<code>m</code>需要执行<code>n/m</code>次，那么如果改为每次从中减去<code>2m</code>，不就只需要执行<code>(n/m)/2</code>次了么？循环的次数一下子就减少了一半，想想都觉得兴奋啊。每次减<code>2m</code>，并且自增2的算法的代码及其运行效果如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">➜  nodejs cat divide2.js</span><br><span class="line">function divide(n, m) {</span><br><span class="line">  let acc = 0;</span><br><span class="line">  let m2 = m &lt;&lt; 1; // 因为题目要求不能用乘法，所以用左移来代替乘以2。</span><br><span class="line">  while (n &gt;= m2) {</span><br><span class="line">    n -= m2;</span><br><span class="line">    acc += 2;</span><br><span class="line">  }</span><br><span class="line">  while (n &gt;= m) {</span><br><span class="line">    n -= m;</span><br><span class="line">    acc += 1;</span><br><span class="line">  }</span><br><span class="line">  return acc;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">console.log(`2147483648/2=${divide(2147483648, 2)}`);</span><br><span class="line">➜  nodejs time node divide2.js</span><br><span class="line">2147483648/2=1073741824</span><br><span class="line">node divide2.js  2.65s user 0.01s system 99% cpu 2.674 total</span><br></pre></td></tr></tbody></table></figure>
+<p>尽管耗时不降反升，令场面一度十分尴尬，但根据理论分析可知，第一个循环的运行次数仅为原来的一半，而第二个循环的运行次数最多为1次，可以知道这个优化的方向是没问题的。</p>
+<p>如果计算<code>m2</code>的时候左移的次数为2，那么<code>acc</code>的自增步长需要相应地调整为4，第一个循环的次数将大幅下降至268435456，第二个循环的次数不会超过4；如果左移次数为3，那么<code>acc</code>的步长增至8，第一个循环的次数降至134217728，第二个循环的次数不会超过8。</p>
+<p>显然，左移不能无限地进行下去，因为<code>m2</code>的值早晚会超过<code>n</code>。很容易算出左移次数的一个上限为</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/N的计算公式small.jpeg" alt=""></p>
+<p>对数符号意味着即便对于很大的<code>n</code>和很小的<code>m</code>，上述公式的结果也不会很大，因此可以显著地提升整数除法的计算效率。</p>
+<p>在开始写代码前，让我先来简单地证明一下这个方法算出来的商与直接计算<code>n/m</code>是相等的。</p>
+<h1 id="一个简单的证明"><a href="#一个简单的证明" class="headerlink" title="一个简单的证明"></a>一个简单的证明</h1><p>记被减数为<code>n</code>，减数为<code>m</code>。显然，存在一个正整数<code>N</code>，使得</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/N的存在性small.jpeg" alt=""></p>
+<p>令</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/p的计算公式small.jpeg" alt=""></p>
+<p>，再令</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/r的定义small.jpeg" alt=""></p>
+<p>，那么<code>n</code>除以<code>m</code>等价于</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/n除以m的变换small.jpeg" alt=""></p>
+<p>证明完毕。</p>
+<p>从上面的公式还可以知道，新算法将原本规模为<code>n</code>的问题转换为了一个规模为<code>r</code>的相同问题，这意味着可以用递归的方式来优雅地编写最终的代码。</p>
+<h1 id="完整的代码"><a href="#完整的代码" class="headerlink" title="完整的代码"></a>完整的代码</h1><p>最终的<code>divide</code>函数的代码如下</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">divide</span>(<span class="params">n, m</span>) </span>{</span><br><span class="line">  <span class="keyword">if</span> (n &lt; m) {</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> n2 = n;</span><br><span class="line">  <span class="keyword">let</span> N = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">// 用右移代替左移，避免溢出。</span></span><br><span class="line">  <span class="keyword">while</span> ((n2 &gt;&gt; <span class="number">1</span>) &gt; m) {</span><br><span class="line">    N += <span class="number">1</span>;</span><br><span class="line">    n2 = n2 &gt;&gt; <span class="number">1</span>;</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// `power`表示公式中2的N次幂</span></span><br><span class="line">  <span class="comment">// `product`代表`power`与被除数`m`的乘积</span></span><br><span class="line">  <span class="keyword">let</span> power = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">let</span> product = m;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; N; i++) {</span><br><span class="line">    power = power &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    product = product &lt;&lt; <span class="number">1</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> power + divide(n - product, m);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>这个可比最开始的<code>divide</code>要快得多了，有图有真相</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  nodejs time node divide3.js</span><br><span class="line">2147483648/2=1073741824</span><br><span class="line">node divide3.js  0.03s user 0.01s system 95% cpu 0.044 total</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如果以<code>T(n, m)</code>表示被除数为<code>n</code>，除数为<code>m</code>时的算法时间复杂度，那么它的递推公式可以写成下列的形式</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/时间复杂度的递推公式small.jpeg" alt=""></p>
+<p>但这玩意儿看起来并不能用主定理直接求出解析式，所以很遗憾，我也不知道这个算法的时间复杂度究竟如何——尽管我猜测就是<code>N</code>的计算公式。</p>
+<p>如果有哪位好心的读者朋友知道的话，还望不吝赐教。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/07/24/如何高效地给多行文本添加前后缀/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -601,115 +706,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/06/10/用org-mode管理API测试用例/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/10/用org-mode管理API测试用例/" class="post-title-link" itemprop="url">用org-mode管理API测试用例</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-06-10 21:31:58 / 修改时间：21:58:19" itemprop="dateCreated datePublished" datetime="2020-06-10T21:31:58+08:00">2020-06-10</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/06/10/用org-mode管理API测试用例/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/06/10/用org-mode管理API测试用例/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="API测试用例是什么？"><a href="#API测试用例是什么？" class="headerlink" title="API测试用例是什么？"></a>API测试用例是什么？</h1><p>在互联网大行其道的今天，身为一名电商平台的程序员，必定经常与HTTP API打交道，一个常见的情况便是做API测试。抛开可以用单元测试代替的，很多时候需要真地发出HTTP请求才行。这些负责发出HTTP请求的东西可能是一行<code>curl</code>命令，可能是一个<code>.js</code>文件，也可能是一个在postman中点击按钮的操作，但不管形态如何，它们便是API测试用例。尽管名字中带有“用例”二字，但很多时候是由人来校验结果的，用例更关注发出怎样的HTTP请求。</p>
-<h1 id="为什么要管理它们？"><a href="#为什么要管理它们？" class="headerlink" title="为什么要管理它们？"></a>为什么要管理它们？</h1><p>不同于每天在浏览器中发生成千上万次的、平凡的HTTP（或HTTPS）请求，API测试用例是值得一番精心管理的，因为：</p>
-<ol>
-<li><p>API测试用例通常会重复使用，因此必须将它们持久化保存。也许是保存成shell脚本，也许是保存成脚本语言源文件，也许是保存为某一款软件的数据文件；</p>
-</li>
-<li><p>需要为多个API编写测试用例，因此必须区分不同的API对应的测试用例。例如，负责管理业务资源的服务（比如一个管理商品数据的、提供RESTful API的服务），起码需要提供增删查改的功能，那么也就需要有增删查改对应的API测试用例；</p>
-</li>
-<li><p>需要为多个服务的API编写用例，因此必须区分不同的服务对应的测试用例集。例如，既然有商品服务，那么极可能还有订单服务、优惠券服务、物流服务，等等，每个服务又都有增删查改的功能，这些不同服务的API也需要各自的测试用例；</p>
-</li>
-<li><p>需要区分不同的运行环境。通常本地、开发、测试，以及生产环境是互相隔离的，一个用例中的参数往往不能照搬到另一个环境中。</p>
-</li>
-</ol>
-<p>API、服务，以及环境这三个维度上的区别，使得测试用例的数量显著增加，如不进行管理，当要用时，要么不得不从零开始再写一遍脚本，要么得翻查很久才能找到所需的用例。</p>
-<h1 id="用org-mode管理"><a href="#用org-mode管理" class="headerlink" title="用org-mode管理"></a>用org-mode管理</h1><h2 id="org-mode是什么？"><a href="#org-mode是什么？" class="headerlink" title="org-mode是什么？"></a>org-mode是什么？</h2><p><code>org-mode</code>是一款Emacs编辑器的扩展，它让使用者能够用快速高效的纯文本方式来记笔记、维护待办事项、安排计划，以及编写文档。<code>org-mode</code>的精髓在于它的大纲组织能力，以及依托于Emacs的扩展能力，两者使其正好可以胜任管理API测试用例的工作。一个<code>.org</code>文件的示例如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/org-mode官网示例.jpg" alt="org-mode官网的示例截图"></p>
-<h2 id="如何用org-mode管理API测试用例？"><a href="#如何用org-mode管理API测试用例？" class="headerlink" title="如何用org-mode管理API测试用例？"></a>如何用org-mode管理API测试用例？</h2><p>尽管<code>org-mode</code>提供了丰富的功能，但只是管理API测试用例的话，并用不上太多花里胡哨的东西，只需要<code>org-mode</code>的大纲功能和<code>org-babel</code>特性即可。</p>
-<p>首先用不同的<code>.org</code>文件区分不同的环境。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/用不同的org文件区分环境.jpg" alt=""></p>
-<p>接着用不同层级的headline区分不同的服务、资源类型，以及API。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/用不同层级的headline管理的示例.jpg" alt=""></p>
-<p>然后用<code>org-mode</code>的<a href="https://orgmode.org/manual/Structure-of-Code-Blocks.html" target="_blank" rel="noopener">代码块</a>语法来编写HTTP请求。以请求<code>https://httpbin.org/uuid</code>为例</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#+BEGIN_SRC restclient</span><br><span class="line">  GET https://httpbin.org/uuid</span><br><span class="line">#+END_SRC</span><br></pre></td></tr></tbody></table></figure>
-<p><code>#+BEGIN_SRC</code>和<code>#+END_SRC</code>分别表示开启和结束代码块，<code>restclient</code>表示这个代码块内的代码可以用Emacs的<code>restclient-mode</code>来编辑。在代码块中，<code>GET https://httpbin.org/uuid</code>表示以GET方法请求<code>https://httpbin.org/uuid</code>。</p>
-<p>安装了<a href="https://github.com/pashky/restclient.el" target="_blank" rel="noopener"><code>restclient</code></a>后，将光标定位在代码块上并按下<code>ctrl-c '</code>，可以进入一个单独的buffer编辑其中的源代码</p>
-<video controls=""><br>  <source src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/进入restclient模式的buffer.mp4" type="video/mp4"><br></video>
-
-<p>最后，如果配置了<code>org-babel</code>，甚至可以直接在代码块上按下<code>ctrl-c ctrl-c</code>来发出HTTP请求。</p>
-<p><video controls=""><br>  <source src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/org-mode中发出HTTP请求.mp4" type="video/mp4"><br></video><br>可以看到，HTTP响应的内容会保留在这个<code>.org</code>文件中。</p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>以前我也用过其它的工具来管理API测试用例：</p>
-<ol>
-<li>刚工作的时候用的是Postman，那时候Postman还是Chrome的一个插件；</li>
-<li>后来出于对Firefox浏览器的喜爱，找了一个叫RESTClient的插件来代替postman，久而久之发觉两者的差距蛮大，终究无法代替；</li>
-<li>接着遇到了Emacs中的<code>restclient.el</code>，于是用了好一段时间的纯<code>restclient-mode</code>（没有搭配<code>org-mode</code>）；</li>
-<li>再后来开始用Mac办公了，便开始寻找Mac下的这类工具，遇到了<a href="https://insomnia.rest/" target="_blank" rel="noopener">Insomnia</a>。如果有人找我推荐用于HTTP API测试的GUI工具的话，我会毫无不犹豫地推荐这款。</li>
-</ol>
-<p>再后来，我又回到了Emacs，并用<code>org-mode</code>来管理这些API测试用例。目前这是最适合我的一种方式。</p>
-<p>全文完。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -781,7 +777,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-count">83</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
