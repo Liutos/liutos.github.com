@@ -46,7 +46,7 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="cuckoo是一个我自己开发的类似待办事项的工具，运行在我本地的电脑上。它有如下两个接口：  传入一个UNIX Epoch时间戳创建提醒 传入一个标题以及提醒的ID来创建任务  这样一来，便能在设定的时刻调用alerter在屏幕右上角弹出提醒。 我喜欢用Emacs的org-mode来安排任务，但可惜的是，org-mode没有定点提醒的功能（如果有的话希望来个人打我的脸XD）。开发了cuckoo后，">
-<meta name="keywords" content="org-mode,elisp,emacs,lisp">
+<meta name="keywords" content="org-mode,emacs,elisp,lisp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="拿Emacs对接我的cuckoo">
 <meta property="og:url" content="https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/index.html">
@@ -333,8 +333,8 @@
           
           <div class="post-tags">
               <a href="/tags/org-mode/" rel="tag"><i class="fa fa-tag"></i> org-mode</a>
-              <a href="/tags/elisp/" rel="tag"><i class="fa fa-tag"></i> elisp</a>
               <a href="/tags/emacs/" rel="tag"><i class="fa fa-tag"></i> emacs</a>
+              <a href="/tags/elisp/" rel="tag"><i class="fa fa-tag"></i> elisp</a>
               <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
           </div>
 
@@ -366,10 +366,13 @@
           
       <div class="tabs tabs-comment">
         <ul class="nav-tabs">
-            <li class="tab"><a href="#comment-disqus">disqus</a></li>
             <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-disqus">disqus</a></li>
         </ul>
         <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
             <div class="tab-pane disqus" id="comment-disqus">
               
   <div class="comments">
@@ -378,9 +381,6 @@
     </div>
   </div>
   
-            </div>
-            <div class="tab-pane gitalk" id="comment-gitalk">
-              <div class="comments" id="gitalk-container"></div>
             </div>
         </div>
       </div>
@@ -444,7 +444,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">84</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -608,6 +608,23 @@
 
 
 <script src="/bundle.js"></script><script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'b3dc0ec32cfae81fbffd',
+      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
+      repo: 'gitalk',
+      owner: 'Liutos',
+      admin: ['Liutos'],
+      id: '4a1bcb895402f463301bdd338bfc08b7',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+;
+
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -636,22 +653,5 @@
       (d.head || d.body).appendChild(s);
     }
   });
-;
-
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID: 'b3dc0ec32cfae81fbffd',
-      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
-      repo: 'gitalk',
-      owner: 'Liutos',
-      admin: ['Liutos'],
-      id: '4a1bcb895402f463301bdd338bfc08b7',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
 ;
 !function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

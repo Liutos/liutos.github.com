@@ -1,0 +1,667 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.8.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+
+
+
+
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://liutos.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+<script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <meta name="description" content="有一天，我用Homebrew安装了一些软件——因为已经是一个月前的事情了，所以已经记不清是安装了什么。安装后并没有立即出现什么问题，只是又过了两天我重新启动电脑后，发现同样是由Homebrew安装的Emacs不由分说地无法启动了。这下可麻烦了，毕竟我是org-mode的重度使用者，还需要偶尔用SLIME写点Common Lisp的代码，而它们都运行在Emacs中。 直觉告诉我，也许重新安装一下Em">
+<meta name="keywords" content="emacs,lisp,programming">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自己动手丰衣足食——用Hammerspoon控制Emacs的窗口">
+<meta property="og:url" content="https://liutos.github.io/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/index.html">
+<meta property="og:site_name" content="小打小闹写点bug">
+<meta property="og:description" content="有一天，我用Homebrew安装了一些软件——因为已经是一个月前的事情了，所以已经记不清是安装了什么。安装后并没有立即出现什么问题，只是又过了两天我重新启动电脑后，发现同样是由Homebrew安装的Emacs不由分说地无法启动了。这下可麻烦了，毕竟我是org-mode的重度使用者，还需要偶尔用SLIME写点Common Lisp的代码，而它们都运行在Emacs中。 直觉告诉我，也许重新安装一下Em">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:updated_time" content="2020-12-20T13:00:07.698Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="自己动手丰衣足食——用Hammerspoon控制Emacs的窗口">
+<meta name="twitter:description" content="有一天，我用Homebrew安装了一些软件——因为已经是一个月前的事情了，所以已经记不清是安装了什么。安装后并没有立即出现什么问题，只是又过了两天我重新启动电脑后，发现同样是由Homebrew安装的Emacs不由分说地无法启动了。这下可麻烦了，毕竟我是org-mode的重度使用者，还需要偶尔用SLIME写点Common Lisp的代码，而它们都运行在Emacs中。 直觉告诉我，也许重新安装一下Em">
+<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
+
+<link rel="canonical" href="https://liutos.github.io/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>自己动手丰衣足食——用Hammerspoon控制Emacs的窗口 | 小打小闹写点bug</title>
+  
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-94082039-2');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小打小闹写点bug</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">乍听之下，不无道理；仔细揣摩，胡说八道</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          自己动手丰衣足食——用Hammerspoon控制Emacs的窗口
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-20 21:00:07" itemprop="dateCreated datePublished" datetime="2020-12-20T21:00:07+08:00">2020-12-20</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>有一天，我用<code>Homebrew</code>安装了一些软件——因为已经是一个月前的事情了，所以已经记不清是安装了什么。安装后并没有立即出现什么问题，只是又过了两天我重新启动电脑后，发现同样是由<code>Homebrew</code>安装的<code>Emacs</code>不由分说地无法启动了。这下可麻烦了，毕竟我是<code>org-mode</code>的重度使用者，还需要偶尔用<code>SLIME</code>写点Common Lisp的代码，而它们都运行在<code>Emacs</code>中。</p>
+<p>直觉告诉我，也许重新安装一下<code>Emacs</code>，一切就可以恢复正常。重装了<code>Emacs</code>后，又遇到了别的问题——用<code>BetterTouchTools</code>在Touch Bar中添加的按钮，无法在<code>Emacs</code>已经启动的情况下，切换到它的窗口上。</p>
+<p>非要说，问题其实也不大，毕竟很多时候是将MacBook Pro合上盖子当主机用的，Touch Bar在工作时的使用频率并不高。此外，糊<code>Node.js</code>等语言的代码时也用不到<code>Emacs</code>——还是<code>VSCode</code>更合适。</p>
+<p>但这就是令人不爽，因此我决定要解决它——用<code>Hammerspoon</code>。</p>
+<h1 id="Hammerspoon是什么？"><a href="#Hammerspoon是什么？" class="headerlink" title="Hammerspoon是什么？"></a>Hammerspoon是什么？</h1><p><code>Hammerspoon</code>的<a href="https://www.hammerspoon.org/" target="_blank" rel="noopener">官网</a>很好地说明了这款工具的定位和原理</p>
+<blockquote>
+<p>This is a tool for powerful automation of OS X. At its core, Hammerspoon is just a bridge between the operating system and a Lua scripting  engine. What gives Hammerspoon its power is a set of extensions that expose  specific pieces of system functionality, to the user.</p>
+</blockquote>
+<ol>
+<li>它运行在OS X上——现在应该叫macOS；</li>
+<li>它是用来自动化操作的——就像系统内置的<code>Automator</code>或第三方的<code>Alfred Workflow</code>那样；</li>
+<li>它的原理是将操作系统的功能封装成了可以用<code>Lua</code>代码调用的模块；</li>
+</ol>
+<p>例如下面的代码</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"E"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">  hs.alert.show(<span class="string">"Hello World!"</span>)</span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>就可以让使用者在按下组合键<code>⌘⌥⌃e</code>的时候，在屏幕正中间显示<code>Hello World!</code>这段文本</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201220/hammerspoon的示例.jpg" alt=""></p>
+<h1 id="为什么用Hammerspoon？"><a href="#为什么用Hammerspoon？" class="headerlink" title="为什么用Hammerspoon？"></a>为什么用Hammerspoon？</h1><p><code>Hammerspoon</code>正好可以解决我的问题，它的<code>hs.window</code>模块既可以让使用者遍历所有打开的窗口（用<a href="https://www.hammerspoon.org/docs/hs.window.html#allWindows" target="_blank" rel="noopener"><code>hs.window.allWindows</code>函数</a>），也可以聚焦到指定的窗口上（用<a href="https://www.hammerspoon.org/docs/hs.window.html#focus" target="_blank" rel="noopener"><code>focus</code>方法</a>）。有了它们，将<code>Emacs</code>调到最前面（front-most）来也就是水到渠成的事情了：</p>
+<ol>
+<li>调用函数<code>hs.window.allWindows</code>函数，获得所有窗口的列表；</li>
+<li>逐个检查列表中的窗口对象，如果属于<code>Emacs</code>的，就调用窗口的方法<code>focus</code>，并跳出循环。</li>
+</ol>
+<p>剩下的两个问题便是：</p>
+<ol>
+<li><code>Emacs</code>的<code>bundle ID</code>是什么；</li>
+<li>如何知道一个窗口对象的<code>bundle ID</code>。</li>
+</ol>
+<h1 id="Emacs的bundle-ID"><a href="#Emacs的bundle-ID" class="headerlink" title="Emacs的bundle ID"></a>Emacs的bundle ID</h1><p><code>Bundle ID</code>可以在macOS中独一无二地标识一个应用。要想知道<code>Emacs</code>的<code>bundle ID</code>是什么，只需要打开文件<code>/Applications/Emacs.app/Contents/Info.plist</code>，看看其中键为<code>CFBundleIdentifier</code>的值即可。</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜  Contents grep -A 1 <span class="string">'CFBundleIdentifier'</span> Info.plist</span><br><span class="line">	&lt;key&gt;CFBundleIdentifier&lt;/key&gt;</span><br><span class="line">	&lt;string&gt;org.gnu.Emacs&lt;/string&gt;</span><br><span class="line">➜  Contents</span><br></pre></td></tr></tbody></table></figure>
+<p>可以看到，<code>Emacs</code>的<code>bundle ID</code>是<code>org.gnu.Emacs</code>。</p>
+<h1 id="来点Lua代码吧"><a href="#来点Lua代码吧" class="headerlink" title="来点Lua代码吧"></a>来点Lua代码吧</h1><p>有了<code>Emacs</code>的<code>bundle ID</code>，接下来就可以在<code>Hammerspoon</code>中定义快捷键了。由于最后会通过Touch Bar上的按钮来触发这组快捷键，复杂点也不要紧，因此我直接沿用了<code>Hammerspoon</code>的入门指引中作为例子的<code>⌘⌥⌃w</code></p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>为了在一个循环中逐个遍历窗口对象，将<code>hs.window.allWindows</code>的返回值保存到一个局部变量中</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>照着简书上的<a href="https://www.jianshu.com/p/de5a4b132918" target="_blank" rel="noopener">这篇文章</a>，依葫芦画瓢地用<code>for</code>和<code>pairs</code>来遍历变量<code>windows</code></p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>窗口自身没有<code>bundle ID</code>，为此需要先获取窗口所属的应用。查看文档可以知道，有一个<a href="https://www.hammerspoon.org/docs/hs.window.html#application" target="_blank" rel="noopener"><code>application</code>方法</a>正是用来获取应用对象的</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">         <span class="keyword">local</span> app = win:application()</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>调用<code>allWindows</code>时使用的是英文句号（<code>.</code>），调用<code>application</code>则是用冒号（<code>:</code>），这正是<code>Lua</code>中调用函数与方法时语法上的差异。</p>
+<p>再用应用的<a href="https://www.hammerspoon.org/docs/hs.application.html#bundleID" target="_blank" rel="noopener"><code>bundleID</code></a>方法获得它的<code>bundle ID</code></p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">         <span class="keyword">local</span> app = win:application()</span><br><span class="line">         <span class="keyword">local</span> bundleID = app:bundleID()</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>现在，只要变量<code>bundleID</code>等于<code>Emacs</code>的<code>bundle ID</code>就可以聚焦到当前遍历的窗口上了</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">         <span class="keyword">local</span> app = win:application()</span><br><span class="line">         <span class="keyword">local</span> bundleID = app:bundleID()</span><br><span class="line">         <span class="keyword">if</span> bundleID == <span class="string">"org.gnu.Emacs"</span> <span class="keyword">then</span></span><br><span class="line">            win:focus()</span><br><span class="line">         <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="让Touch-Bar按钮触发这一切"><a href="#让Touch-Bar按钮触发这一切" class="headerlink" title="让Touch Bar按钮触发这一切"></a>让Touch Bar按钮触发这一切</h1><p>只需要在<code>BetterTouchTools</code>中配置一下即可</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201220/用BTT触发Hammerspoon的快捷键.jpg" alt=""></p>
+<p>这个方法比此前唤起<code>/Applications/Emacs.app</code>的方式更好，因为它只依赖于<code>Emacs</code>逻辑上亘古不变的东西——<code>bundle ID</code>，而不依赖于其物理上的安装位置。</p>
+
+    </div>
+
+    
+    
+    <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/loading.png" data-original="/uploads/WechatIMG2934.jpeg" alt="Liutos wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+        <div class="reward-container">
+  <div>你的一点心意，我的十分动力。</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/loading.png" data-original="/images/WeChatpay.png" alt="Liutos 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/loading.png" data-original="/images/Alipay.jpg" alt="Liutos 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Liutos
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://liutos.github.io/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/" title="自己动手丰衣足食——用Hammerspoon控制Emacs的窗口">https://liutos.github.io/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/18/一箭双雕——org-mode中的ID和CUSTOM-ID字段/" rel="prev" title="一箭双雕——org-mode中的ID和CUSTOM_ID字段">
+      <i class="fa fa-chevron-left"></i> 一箭双雕——org-mode中的ID和CUSTOM_ID字段
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+      <div class="tabs tabs-comment">
+        <ul class="nav-tabs">
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-disqus">disqus</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
+            <div class="tab-pane disqus" id="comment-disqus">
+              
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+            </div>
+        </div>
+      </div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hammerspoon是什么？"><span class="nav-number">1.</span> <span class="nav-text">Hammerspoon是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么用Hammerspoon？"><span class="nav-number">2.</span> <span class="nav-text">为什么用Hammerspoon？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Emacs的bundle-ID"><span class="nav-number">3.</span> <span class="nav-text">Emacs的bundle ID</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#来点Lua代码吧"><span class="nav-number">4.</span> <span class="nav-text">来点Lua代码吧</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#让Touch-Bar按钮触发这一切"><span class="nav-number">5.</span> <span class="nav-text">让Touch Bar按钮触发这一切</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+  <p class="site-author-name" itemprop="name">Liutos</p>
+  <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">111</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Liutos" title="GitHub → https://github.com/Liutos" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://segmentfault.com/u/liutos" title="SegmentFault → https://segmentfault.com/u/liutos" rel="noopener" target="_blank"><i class="fa fa-fw fa-stack-overflow"></i>SegmentFault</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.hsyyf.me/" title="http://www.hsyyf.me/" rel="noopener" target="_blank">月下叹逍遥/寒山烟雨</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.lainme.com/doku.php" title="http://www.lainme.com/doku.php" rel="noopener" target="_blank">Lainme's Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://lengxx.com/" title="http://lengxx.com/" rel="noopener" target="_blank">冷轩信</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://forum.ubuntu.org.cn/" title="http://forum.ubuntu.org.cn/" rel="noopener" target="_blank">Ubuntu中文论坛</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y-window.github.com/" title="http://y-window.github.com/" rel="noopener" target="_blank">Window的空间</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.thev.net/PaulLiu/" title="http://www.thev.net/PaulLiu/" rel="noopener" target="_blank">九瓜老师的博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://weibo.com/liutos" title="http://weibo.com/liutos" rel="noopener" target="_blank">博主的微博</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://github.com/Liutos" title="http://github.com/Liutos" rel="noopener" target="_blank">博主的GitHub页面</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  © 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liutos</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+<script src="/bundle.js"></script><script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'b3dc0ec32cfae81fbffd',
+      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
+      repo: 'gitalk',
+      owner: 'Liutos',
+      admin: ['Liutos'],
+      id: 'd7b811b5e03feaf4a531ef1ee2859491',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+;
+
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Liutos.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+;
+
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://liutos.github.io/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/",
+            identifier: "2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/",
+            title: "自己动手丰衣足食——用Hammerspoon控制Emacs的窗口"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Liutos.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+;
+!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
