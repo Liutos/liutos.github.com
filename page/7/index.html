@@ -200,6 +200,145 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/12/21/当我们git-merge的时候到底在merge什么/" class="post-title-link" itemprop="url">当我们git merge的时候到底在merge什么</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-21 15:26:36" itemprop="dateCreated datePublished" datetime="2019-12-21T15:26:36+08:00">2019-12-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-04-26 21:17:28" itemprop="dateModified" datetime="2020-04-26T21:17:28+08:00">2020-04-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/究竟在干什么系列/" itemprop="url" rel="index">
+                    <span itemprop="name">究竟在干什么系列</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/12/21/当我们git-merge的时候到底在merge什么/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/12/21/当我们git-merge的时候到底在merge什么/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>我在上大学的时候并没有接触过VCS（版本控制系统）。虽然曾经在Google Code发布过去项目，但是以压缩包的形式发布的；与室友合作开发计算机网络这门课的课程设计时，也没有用上。直到入职第一家公司后才真正开始使用，当时用的是Git，此后也始终没用过其它的VCS——SVN仅仅耳闻未曾使用——转眼间已经用了六年多的Git了。</p>
+<p>尽管日常使用问题不大，但对于Git的内部运行原理我仍然是一知半解——也不是我谦虚，基本就是不懂吧。例如，使用<code>git add</code>、<code>git commit</code>、<code>git branch</code>等命令的时候，Git在背后究竟做了什么，我是答不上来的。好在互联网上有许多这方面的资料可供学习，我硬着头皮看了不少文档和博客后，总算是习得了一些皮毛。</p>
+<p>现在，我试着循序渐进地讲解一遍吧。</p>
+<h1 id="git-add的时候发生了什么？"><a href="#git-add的时候发生了什么？" class="headerlink" title="git add的时候发生了什么？"></a>git add的时候发生了什么？</h1><p>首先创建出一个仓库并向其中添加一个文件</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir git-test</span><br><span class="line">cd git-test</span><br><span class="line">git init</span><br><span class="line">echo 'hello' &gt; a</span><br><span class="line">git add .</span><br></pre></td></tr></tbody></table></figure>
+<p>到此为止，暂时不要提交改动。现在，我来看看Git到底在背后做了些什么。Git的秘密都藏在叫做<code>.git</code>的目录中，尤其是其中的<code>objects</code>目录。用<code>tree</code>命令查看这个目录的结果如下</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.git/objects</span><br><span class="line">├── ce</span><br><span class="line">│&nbsp;&nbsp; └── 013625030ba8dba906f756967f9e9ca394464a</span><br><span class="line">├── info</span><br><span class="line">└── pack</span><br></pre></td></tr></tbody></table></figure>
+<p>与运行<code>git add</code>前相比，多出了一个叫<code>ce</code>的目录，以及位于其中的叫<code>013625030ba8dba906f756967f9e9ca394464a</code>的文件。这个文件其实就是<code>a</code>的一个“副本”，其中存储着文件<code>a</code>的内容。但是不能用<code>cat</code>直接查看，因为Git对这个文件做了压缩。可以用<code>pigz</code>来得到压缩前的原文，示例代码如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pigz -d &lt; .git/objects/ce/013625030ba8dba906f756967f9e9ca394464a</span><br></pre></td></tr></tbody></table></figure>
+<p>结果为</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">blob 6hello</span><br></pre></td></tr></tbody></table></figure>
+<p>Git生成这个文件的规则其实不复杂。首先Git会计算原文件的长度，即6（之所以是6，是因为用<code>echo</code>和重定向写入文件<code>a</code>时，添加了一个换行符）。然后，Git将一个固定的前缀<code>blob</code>（此处有一个空格）、文件长度、一个空字符（ASCII码为0的字符），以及文件内容这四者连接成一个字符串，并计算这个字符串的SHA1摘要。具体到文件<code>a</code>，可以用下面的命令试着计算</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">printf "blob 6\0hello\n" | shasum</span><br></pre></td></tr></tbody></table></figure>
+<p>或者用Git内置的<code>hash-object</code>子命令会更简单</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git hash-object a</span><br></pre></td></tr></tbody></table></figure>
+<p>不管是哪一个命令，算出来的摘要都是<code>ce013625030ba8dba906f756967f9e9ca394464a</code>。然后Git会取前两个字符（<code>ce</code>）作为目录名，在<code>.git/objects</code>下创建新的目录。以从第三个字符开始的剩余内容（<code>013625030ba8dba906f756967f9e9ca394464a</code>）为文件名，将方才拼接好的内容压缩后写如文件。这种文件用Git的术语来讲叫做<code>blob</code>对象，稍后还会遇到<code>tree</code>类型和<code>commit</code>类型的对象。</p>
+<h1 id="git-commit的时候发生了什么？"><a href="#git-commit的时候发生了什么？" class="headerlink" title="git commit的时候发生了什么？"></a>git commit的时候发生了什么？</h1><p>接下来提交改动</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config user.email 'foobar'</span><br><span class="line">git config user.name 'foobar'</span><br><span class="line">git commit -m 'test'</span><br></pre></td></tr></tbody></table></figure>
+<p>此时会发现<code>.git/objects</code>下新增了两个文件</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.git/objects</span><br><span class="line">├── 09</span><br><span class="line">│&nbsp;&nbsp; └── 76950c1fdbcb52435a433913017bf044b3a58f # 新的</span><br><span class="line">├── 14</span><br><span class="line">│&nbsp;&nbsp; └── c77e71bd06df41e1509280cfba045e1db2aa5f # 新的</span><br><span class="line">├── ce</span><br><span class="line">│&nbsp;&nbsp; └── 013625030ba8dba906f756967f9e9ca394464a</span><br><span class="line">├── info</span><br><span class="line">└── pack</span><br></pre></td></tr></tbody></table></figure>
+<p>用<code>git cat-file -t</code>可以查看这两个新文件的类型</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git cat-file -t 14c77e71bd06df41e1509280cfba045e1db2aa5f # 输出commit</span><br><span class="line">git cat-file -t 0976950c1fdbcb52435a433913017bf044b3a58f # 输出tree</span><br></pre></td></tr></tbody></table></figure>
+<p>也可以用<code>git cat-file -p</code>以可读的方式输出新文件的内容。例如用<code>git cat-file -p 0976950c1fdbcb52435a433913017bf044b3a58f</code>输出<code>tree</code>类型的对象的内容，结果为</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">100644 blob ce013625030ba8dba906f756967f9e9ca394464a	a</span><br></pre></td></tr></tbody></table></figure>
+<p><code>tree</code>类型的对象中记录着Git所追踪的文件的元信息，包括文件的权限、在Git中的对象类型、对象摘要，以及文件名。另一个<code>commit</code>类型的对象中存储着本次提交的信息，用<code>git cat-file -p</code>查看的结果如下</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tree 0976950c1fdbcb52435a433913017bf044b3a58f</span><br><span class="line">author foobar &lt;foobar&gt; 1576676836 +0800</span><br><span class="line">committer foobar &lt;foobar&gt; 1576676836 +0800</span><br><span class="line"></span><br><span class="line">test</span><br></pre></td></tr></tbody></table></figure>
+<p>第一行表示这个<code>commit</code>对象指向的是哪一个<code>tree</code>对象，从这个<code>tree</code>对象出发，可以遍历仓库中直到本次提交为止、所有被Git追踪的文件。<code>commit</code>指向<code>tree</code>，<code>tree</code>可以指向<code>blob</code>也可以指向其它的<code>tree</code>，<code>blob</code>就像是树中的叶子节点，不再指向其它的对象，它们之间的关系如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/commit_tree_blob.jpeg" alt=""></p>
+<h1 id="git-branch的时候发生了什么？"><a href="#git-branch的时候发生了什么？" class="headerlink" title="git branch的时候发生了什么？"></a>git branch的时候发生了什么？</h1><p>Git的<code>branch</code>子命令用于创建新分支——虽然我平时更多地使用<code>git checkout -b</code>。既然<code>add</code>和<code>commit</code>的时候，Git会创建出<code>blob</code>、<code>tree</code>，以及<code>commit</code>类型的对象，那么创建新分支的时候，Git是不是也会创建名为<code>branch</code>的对象呢？答案是否定的。</p>
+<p>Git的分支非常简单——它仅仅是指向某个<code>commit</code>对象的引用，就像是<code>*nix</code>系统中的符号链接一样。所有分支都存储在<code>.git/refs/heads</code>之下。例如文件<code>.git/refs/heads/master</code>中便存储着<code>master</code>分支上的最新提交的摘要</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat .git/refs/heads/master # 输出14c77e71bd06df41e1509280cfba045e1db2aa5f</span><br></pre></td></tr></tbody></table></figure>
+<p>这就是在Git中创建新分支的成本很低的原因——不过是复制一下当前分支在<code>.git/refs/heads</code>下的同名文件而已。我创建一个新分支<code>develop</code>并提交一个新文件<code>b</code>，<code>.git/objects</code>下会多出三个文件</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b develop</span><br><span class="line">echo 'good' &gt; b</span><br><span class="line">git add b</span><br><span class="line">git commit -m 'new branch'</span><br></pre></td></tr></tbody></table></figure>
+<p>三个新文件分别存储着文件<code>b</code>的内容（一个<code>blob</code>对象）、文件<code>b</code>的元信息（一个<code>tree</code>对象），以及本次提交（一个<code>commit</code>对象）。这些文件中没有任何关于<code>develop</code>分支的信息，<code>develop</code>分支仅仅是一个存在于<code>.git/refs/heads/</code>目录下的同名文件。</p>
+<h1 id="git-merge一个子代时发生了什么？"><a href="#git-merge一个子代时发生了什么？" class="headerlink" title="git merge一个子代时发生了什么？"></a>git merge一个子代时发生了什么？</h1><p><code>develop</code>分支是从<code>master</code>分叉出来，将<code>develop</code>合并回<code>master</code>时，Git会进行一次<code>fast-forward</code>的合并。虽然名字很唬人但其实Git做的事情非常简单，只需要将<code>.git/refs/heads/master</code>文件的内容修改为与<code>develop</code>相同的摘要即可。</p>
+<p>也可以要求Git不使用<code>fast-forward</code>。先用<code>git reset --hard HEAD^1</code>将<code>master</code>分支回退到第一次提交的状态，然后使用下列的命令再次将<code>develop</code>合并进来</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge --no-ff develop</span><br></pre></td></tr></tbody></table></figure>
+<p>这一次，Git不再简单地修改<code>.git/refs/heads/master</code>文件了事，而是会创建一个新的<code>commit</code>对象。在我的电脑上，这个新的<code>commit</code>对象的摘要为<code>d1403bb629c7a636c724069b22875ed882b54bcc</code>，使用<code>git cat-file -p</code>看看它的内容</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tree e960ed43b8e6b5fe9b4e57b806f70796da820056</span><br><span class="line">parent 14c77e71bd06df41e1509280cfba045e1db2aa5f</span><br><span class="line">parent db891542d3e44448433ba86c7cd636d8aec3da54</span><br><span class="line">author foobar &lt;foobar&gt; 1576679608 +0800</span><br><span class="line">committer foobar &lt;foobar&gt; 1576679608 +0800</span><br><span class="line"></span><br><span class="line">Merge branch 'develop'</span><br></pre></td></tr></tbody></table></figure>
+<p>有趣的是，这个<code>commit</code>对象有两个“父级”的<code>commit</code>，而不像平常所认识的树形数据结构那般只有一个“父节点”。显然，这两个父节点分别是合并前的<code>master</code>分支的最新一次提交，以及<code>develop</code>的最新提交。</p>
+<p>虽然创建了一个新的<code>commit</code>对象，但其实<code>develop</code>分支的最新提交持有的便是整个仓库的最新版本，所以不需要创建新的<code>tree</code>，合并所产生的<code>commit</code>直接与<code>develop</code>分支的最新提交共用同一个<code>tree</code>对象便足够了——在上面输出内容的第一行的摘要，就是<code>develop</code>分支的最新<code>commit</code>所指向的<code>tree</code>对象的摘要。</p>
+<p>至此，终于解决了我一直以来的一个困惑。我曾天真地以为，Git在合并两个分支的时候，会将待合进来的分支中的所有多出来的改动，复制到要合进去的分支中去。这都是因为我没有理解分支的本质，Git的分支并不是一根水管，没有哪一个提交是只能装在一个特定的分支中的。Git合并的时候，就像是在一个immutable的树上做修改，只需要创建不多的新<code>commit</code>和<code>tree</code>对象，再引用已经存在的旧<code>commit</code>和<code>tree</code>对象即可。否则，哪能快速地完成两个分支的合并呢。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>没想到还写了蛮多内容的，经过这么几次试验，我对Git的核心原理也算略知一二了，暂时不打算继续深入。各位读者如果有兴趣，可以试着制造一次有冲突的合并，然后看看冲突解决的前后，<code>.git/objects</code>目录下会有什么变化。</p>
+<p>最后，在摸索Git原理的过程中，我找到了不少优质的参考资料，这里一并奉上：</p>
+<ol>
+<li><a href="https://nfarina.com/post/9868516270/git-is-simpler" target="_blank" rel="noopener">https://nfarina.com/post/9868516270/git-is-simpler</a></li>
+<li><a href="https://maryrosecook.com/blog/post/git-from-the-inside-out" target="_blank" rel="noopener">https://maryrosecook.com/blog/post/git-from-the-inside-out</a></li>
+<li><a href="http://www-cs-students.stanford.edu/~blynn/gitmagic/ch08.html" target="_blank" rel="noopener">http://www-cs-students.stanford.edu/~blynn/gitmagic/ch08.html</a></li>
+<li><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank" rel="noopener">https://git-scm.com/book/en/v2/Git-Internals-Git-Objects</a></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/12/16/让斗图赢在起跑线上/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -756,93 +895,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" class="post-title-link" itemprop="url">在Emacs中搭建笔记查阅系统的尝试</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-10-20 14:42:33 / 修改时间：14:48:42" itemprop="dateCreated datePublished" datetime="2019-10-20T14:42:33+08:00">2019-10-20</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/10/20/在Emacs中搭建笔记查阅系统的尝试/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/20/在Emacs中搭建笔记查阅系统的尝试/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>给Emacs写插件有种痛并快乐着的感觉。虽然这个发挥创意的过程很有趣，但是Elisp写起来总有种别扭的感觉。一方面，我把它当成是Common Lisp，写的时候没有觉得“这个用法可能会有问题”；另一方面，它又不是普通的写lisp代码，还要一边写一边摸索Emacs中的一些概念。不过总体而言，还是挺好玩的，除了没有一个像模像样的REPL之外。</p>
-<h2 id="来龙去脉"><a href="#来龙去脉" class="headerlink" title="来龙去脉"></a>来龙去脉</h2><p>我用Emacs记录了不少的“笔记”。虽说我自己将其称为笔记，但是它们更像是我把遇到的一些问题和解决方法给记录下来，而没有太多自己的感悟。它们的外观倒是高度的一致，见下图</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E7%94%A8org-mode%E8%AE%B0%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
-<p>（第一次尝试给自己的图片打水印，有点好玩）每一个一级条目都是一个问题，并且这个文件中只有一级条目。而条目下的内容则是对标题的问题的回答。其中还有代码块——也就是写着BEGIN_SRC和END_SRC的那部分。用org-mode来记录笔记有几个好处，其中一个便是可以在笔记中插入任何Emacs支持的编程语言代码片段并具备语法高亮。当然了，还有一个巨大的优势，便是org-mode尽管看似花里胡哨，骨子里却是正统的纯文本文件，它可以很方便地在其它工具中处理。</p>
-<p>而我用来处理的其中一个工具便是ElasticSearch。比如说，上图的第一条笔记，在ElasticSearch中存成了下面这样的结构</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E6%9F%A5%E7%9C%8BElasticSearch%E4%B8%AD%E7%9A%84%E7%AC%94%E8%AE%B0.png" alt=""></p>
-<p>本来我是写了一个Alfred的Workflow来查询ElasticSearch的，但是奈何Workflow那种一行行的方式展示org-mode格式的笔记不太友好，因此便打算直接在Emacs中查询并查看笔记内容。</p>
-<h2 id="牛刀小试"><a href="#牛刀小试" class="headerlink" title="牛刀小试"></a>牛刀小试</h2><p>为了可以在Emacs中查看笔记内容，我打算借助于Helm的力量。<a href="https://emacs-helm.github.io/helm/" target="_blank" rel="noopener">Helm</a>是Emacs的一个补全的框架，可以用来呈现一系列的候选项，然后选中后触发一些什么动作。我期望的形式，是在Emacs中按下某种快捷键或者输入某个命令行，可以在minibuffer中输入自己要查询的内容，然后Emacs查询ElasticSearch并最终通过Helm来呈现这些查询内容匹配的笔记条目。目前的成果是下面这样子的</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/lt-ask%E7%9A%84%E5%80%99%E9%80%89%E5%88%97%E8%A1%A8.png" alt=""></p>
-<p>具体的做法其实也很简单。首先，要知道Helm是如何被使用的。通过这篇<a href="https://wikemacs.org/wiki/How_to_write_helm_extensions" target="_blank" rel="noopener">文档</a>，初步了解到只需要定一个变量，并通过<code>:sources</code>关键字参数传递给<code>helm</code>这个函数即可。我所定义的传递给<code>helm</code>函数的“source”如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br></pre></td></tr></tbody></table></figure>
-<p>其中<code>faq-candidates</code>的作用便是根据minibuffer中的关键字查询ElasticSearch并组织好一个结构返回给<code>helm</code>。需要注意的是，<code>faq-candidates</code>必须是一个无参的函数才行，但输入的数据又偏偏需要从minibuffer中获取。因此，我的做法是约定一个变量<code>faq-query</code>，在调用<code>helm</code>之前首先调用<code>read-from-minibuffer</code>函数读取输入，然后将输入的字符串赋值给<code>faq-query</code>，之后当<code>helm</code>开始使用这个source的时候，<code>faq-candidates</code>函数便不需要参数，而可以直接从<code>faq-query</code>中拿到自己需要的搜索内容向ElasticSearch请求了。当然了，如果有像Common Lisp动态作用域的话，也就不需要定义这么一个全局变量了，对Emacs全局的侵入会更少一点。</p>
-<p>目前能够做到的也仅仅是查询ElasticSearch，并在选中某个条目并按下回车的时候打开浏览器来查看而已，之后应该会继续完善。目前的完整代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; 调用ElasticSearch查询笔记</span></span><br><span class="line">(<span class="name">require</span> 'request)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq (<span class="name">query</span>)</span><br><span class="line">  <span class="string">"向ElasticSearch查询QUERY匹配的笔记"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">response</span>))</span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:9200/faq/_search"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">encode-coding-string</span></span><br><span class="line">            (<span class="name">json-encode</span></span><br><span class="line">             (<span class="name">list</span></span><br><span class="line">              (<span class="name">cons</span> <span class="string">"query"</span> (<span class="name">list</span></span><br><span class="line">                             (<span class="name">cons</span> <span class="string">"multi_match"</span> (<span class="name">list</span></span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"fields"</span> (<span class="name">list</span> <span class="string">"answer"</span> <span class="string">"question"</span>))</span><br><span class="line">                                                  (<span class="name">cons</span> <span class="string">"query"</span> query)))))))</span><br><span class="line">            'utf-8)</span><br><span class="line">     <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">     <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">setq</span> data (<span class="name">decode-coding-string</span> data 'utf-8))</span><br><span class="line">                 (<span class="name">setq</span> response (<span class="name">json-read-from-string</span> data))))</span><br><span class="line">     <span class="symbol">:sync</span> <span class="literal">t</span>)</span><br><span class="line">    response))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> make-faq-candidates (<span class="name">response</span>)</span><br><span class="line">  <span class="string">"将查询ElasticSearch的结果构造为helm可以识别的candidates格式"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">hits</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits (<span class="name">cdr</span> (<span class="name">assoc</span> 'hits response))))))</span><br><span class="line">    (<span class="name">mapcar</span> (<span class="name">lambda</span> (<span class="name">doc</span>)</span><br><span class="line">              (<span class="name">let</span> ((<span class="name">_source</span> (<span class="name">cdr</span> (<span class="name">assoc</span> '_source doc))))</span><br><span class="line">                (<span class="name">cons</span> (<span class="name">cdr</span> (<span class="name">assoc</span> 'question _source))</span><br><span class="line">                      (<span class="name">cdr</span> (<span class="name">assoc</span> '_id doc)))))</span><br><span class="line">            hits)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defvar</span> faq-query <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> faq-candidates ()</span><br><span class="line">  (<span class="name">make-faq-candidates</span> (<span class="name">faq</span> faq-query)))</span><br><span class="line"></span><br><span class="line">(<span class="name">setq</span> faq-helm-sources</span><br><span class="line">      `((name . <span class="string">"FAQ at Emacs"</span>)</span><br><span class="line">        (candidates . faq-candidates)</span><br><span class="line">        (action . (lambda (candidate)</span><br><span class="line">                    (let ((url (format <span class="string">"http://localhost:9200/faq/_doc/%s"</span> candidate)))</span><br><span class="line">                      (browse-url url))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> lt-ask ()</span><br><span class="line">  <span class="string">"交互式地从minibuffer中读取笔记的关键词并展示选项"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">content</span> (<span class="name">read-from-minibuffer</span> <span class="string">"笔记关键词："</span>)))</span><br><span class="line">    (<span class="name">setq</span> faq-query content)</span><br><span class="line">    (<span class="name">helm</span> <span class="symbol">:sources</span> '(faq-helm-sources))))</span><br></pre></td></tr></tbody></table></figure>
-<p>有不少值得吐槽的地方，不过都先按下不表吧，各位读者有兴趣的话可以留言交流一下XD</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -914,7 +966,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-count">85</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1013,7 +1065,7 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
