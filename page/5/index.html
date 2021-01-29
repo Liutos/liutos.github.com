@@ -200,6 +200,102 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/03/26/我是怎么把笔记导入ElasticSearch的/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/26/我是怎么把笔记导入ElasticSearch的/" class="post-title-link" itemprop="url">我是怎么把笔记导入ElasticSearch的</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-26 22:51:56 / 修改时间：23:01:26" itemprop="dateCreated datePublished" datetime="2020-03-26T22:51:56+08:00">2020-03-26</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/03/26/我是怎么把笔记导入ElasticSearch的/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/26/我是怎么把笔记导入ElasticSearch的/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>尽管我最近开始用<a href="https://github.com/tamlok/vnote" target="_blank" rel="noopener">VNote</a>做读书或读在线文档的笔记，但更多的时候，我把经验型知识都记录在一个名为<code>my_note</code>的Git仓库中。这个仓库中有许多.org`文件：</p>
+<ol>
+<li><code>TeX.org</code>，记录与<code>LaTeX</code>相关的问题和解决方法；</li>
+<li><code>asm.org</code>，记录的是与编写汇编语言程序相关的问题和解决办法；</li>
+<li><code>cl.org</code>，记录的是与编写Common Lisp代码相关的问题和解决办法；</li>
+</ol>
+<p>这些内容被我称为FAQ。尽管不同的文件记载着不同方面的内容，但它们的格式是一致的：</p>
+<ol>
+<li>每个文件都以org-mode的语法书写；</li>
+<li>文件中只有一级条目，没有嵌套；</li>
+<li>每一个条目的标题就是一个问题的表述，下方的文字则是这个问题的答案。</li>
+</ol>
+<p>A picture is worth a thousand words</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200326/TeX笔记中的内容.jpeg" alt=""></p>
+<p>这些问题都比较常见（不然怎么叫FAQ呢——也许上图的不算常见吧），回过头来查找的机率很高。显然，在纷繁复杂的文字中凭肉眼寻找关键字是低效的，即使是祭出<code>grep</code>，用正则表达式这样的大杀器来查找也不是特别称手——因为并不知道怎样的正则表达式可以匹配到寻找的内容——也许多写了关键词，也许少写了，也许顺序不对。</p>
+<p>对于搜索这类非结构的文字资料来说，全文检索是一个更好的选择，因此，我是把这些内容丢进ElasticSearch里再查找的。</p>
+<h1 id="解析并导入到ElasticSearch"><a href="#解析并导入到ElasticSearch" class="headerlink" title="解析并导入到ElasticSearch"></a>解析并导入到ElasticSearch</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/26/我是怎么把笔记导入ElasticSearch的/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/03/21/弥补org-refile的不足/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -571,110 +667,11 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/02/12/重构vertical-let，支持解构/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/12/重构vertical-let，支持解构/" class="post-title-link" itemprop="url">重构vertical-let，支持解构</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-02-12 15:36:46 / 修改时间：15:41:42" itemprop="dateCreated datePublished" datetime="2020-02-12T15:36:46+08:00">2020-02-12</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/实战CommonLisp/" itemprop="url" rel="index">
-                    <span itemprop="name">实战CommonLisp</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/02/12/重构vertical-let，支持解构/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/02/12/重构vertical-let，支持解构/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。</p>
-</blockquote>
-<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>因为觉得Common Lisp原生的<code>let</code>操作符在许多时候不够好用，我编写了<code>vertical-let</code>。（详情可以参见这篇<a href="https://liutos.github.io/2019/03/13/%E6%9B%B4%E8%BF%87%E7%A8%8B%E5%BC%8F%E7%9A%84let%E2%80%94%E2%80%94vertical-let/">文章</a>）比起原生的<code>let</code>，<code>vertical-let</code>的优势在于：</p>
-<ol>
-<li>有效减少代码的缩进——尤其是嵌套使用<code>let</code>的时候；</li>
-<li>方便增减binding，对其余代码的布局没有影响。</li>
-</ol>
-<p>除了<code>let</code>，<code>destructuring-bind</code>也是一个常用的声明binding的语法。但如果用在<code>vertical-let</code>中的话，会打乱原有的代码布局。比如原本的代码为</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/02/12/重构vertical-let，支持解构/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">…</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">…</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -741,7 +738,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-count">86</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -754,7 +751,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">111</span>
+        <span class="site-state-item-count">113</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
