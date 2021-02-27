@@ -200,6 +200,115 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/11/18/一箭双雕——org-mode中的ID和CUSTOM-ID字段/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/11/18/一箭双雕——org-mode中的ID和CUSTOM-ID字段/" class="post-title-link" itemprop="url">一箭双雕——org-mode中的ID和CUSTOM_ID字段</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-11-18 21:44:36" itemprop="dateCreated datePublished" datetime="2020-11-18T21:44:36+08:00">2020-11-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-19 20:59:04" itemprop="dateModified" datetime="2020-11-19T20:59:04+08:00">2020-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/实战Elisp/" itemprop="url" rel="index">
+                    <span itemprop="name">实战Elisp</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/11/18/一箭双雕——org-mode中的ID和CUSTOM-ID字段/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/11/18/一箭双雕——org-mode中的ID和CUSTOM-ID字段/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。</p>
+</blockquote>
+<p>在<code>org-mode</code>中，一个条目（entry）可以设置多个属性（<a href="https://orgmode.org/guide/Properties.html" target="_blank" rel="noopener">Properties</a>）。有的属性是<code>org-mode</code>内置的，有它们的特殊用途。有的属性是自定义的，用在一些插件或仅仅用于记录信息。<code>CUSTOM_ID</code>属于前者，而<code>ID</code>属性后者。</p>
+<h1 id="CUSTOM-ID"><a href="#CUSTOM-ID" class="headerlink" title="CUSTOM_ID"></a>CUSTOM_ID</h1><p><code>CUSTOM_ID</code>用于跳转。<code>org-mode</code>支持丰富的<a href="https://orgmode.org/manual/External-Links.html" target="_blank" rel="noopener">外部链接</a>格式，其中之一便是链接到指定<code>.org</code>文件的指定<code>CUSTOM_ID</code>的条目。</p>
+<p>比如在一个<code>.org</code>文件中有<code>file:/Users/liutos/Dropbox/gtd/roles/writer.org::#d1bdc978-a8ce-4266-9ffa-b6041f818431</code>这么一段文本，那么当光标置于这个文本中时，按下快捷键<code>C-c C-o</code>，Emacs便会打开文件<code>/Users/liutos/Dropbox/gtd/roles/writer.org</code>，并将光标对应的条目上。</p>
+<h1 id="ID"><a href="#ID" class="headerlink" title="ID"></a>ID</h1><p><code>ID</code>用于联系两个条目。一个名叫<code>org-edna</code>的第三方插件能够实现两个条目间的依赖，其中一个要素便是条目的<code>ID</code>属性。</p>
+<p>比如我有一个<code>讲解Ada语言</code>的任务（以一个条目的形式存在），同时也有一个<code>学习Ada语言</code>的任务（另一个条目）。显然，必须先学习一番才能讲给他人听，所以第一个条目依赖于第二个条目，于是我先给<code>学习Ada语言</code>的条目设置一个<code>ID</code>属性，值为<code>905fc2f4-4e28-4966-84fa-84c9e6bae96c</code>，然后再为<code>讲解Ada语言</code>的条目中设置一个<code>BLOCKER</code>属性，值为<code>ids(905fc2f4-4e28-4966-84fa-84c9e6bae96c)</code>。如此一来，当<code>讲解Ada语言</code>的条目出现在<code>*Org Agenda*</code>中时，Emacs会将其置灰显示，代表它处于阻塞的状态，必须先处理它的依赖才行。</p>
+<h1 id="自动填充CUSTOM-ID和ID"><a href="#自动填充CUSTOM-ID和ID" class="headerlink" title="自动填充CUSTOM_ID和ID"></a>自动填充CUSTOM_ID和ID</h1><p>建立依赖和跳转都是很常用的功能，因此我会给每一个条目都设置<code>CUSTOM_ID</code>和<code>ID</code>属性。为了免除每次都手动设置的麻烦，我用<code>org-mode</code>的<a href="https://orgmode.org/manual/Capture-templates.html" target="_blank" rel="noopener">capture-template</a>特性来实现自动填充。</p>
+<p>capture-template是<code>org-mode</code>的又一项利器，用于生成条目间共性的内容，比如行首的星号、关键字，以及写入到哪一个文件的哪一个层级中。<code>org-mode</code>的官网便有一个例子</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> org-capture-templates</span><br><span class="line">      '((<span class="string">"t"</span> <span class="string">"Todo"</span> entry (file+headline <span class="string">"~/org/gtd.org"</span> <span class="string">"Tasks"</span>)</span><br><span class="line">         <span class="string">"* TODO %?\n  %i\n  %a"</span>)</span><br><span class="line">        (<span class="string">"j"</span> <span class="string">"Journal"</span> entry (file+datetree <span class="string">"~/org/journal.org"</span>)</span><br><span class="line">         <span class="string">"* %?\nEntered on %U\n  %i\n  %a"</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<p>在capture-template中除了可以用预置的<a href="https://orgmode.org/manual/Template-expansion.html" target="_blank" rel="noopener">占位符</a>（比如上文的<code>%U</code>、<code>%i</code>，以及<code>%a</code>），还可以调用任意的Elisp函数——这正适合填充<code>ID</code>和<code>CUSTOM_ID</code>这类不重复，并且有一定的格式要求的属性。<code>ID</code>属性的值可以用来自于第三方插件<code>uuidgen</code>的<code>uuidgen-4</code>函数来生成</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> org-capture-templates</span><br><span class="line">      '((<span class="string">"t"</span> <span class="string">"Todo"</span> entry (file+headline <span class="string">"~/org/gtd.org"</span> <span class="string">"Tasks"</span>)</span><br><span class="line">         <span class="string">"* TODO %?  :PROPERTIES:\n  :CUSTOM_ID: %(uuidgen-4)\n  :ID: %(uuidgen-4)\n  :END:"</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<p>美中不足的是，<code>CUSTOM_ID</code>和<code>ID</code>的值是不同的，因为<code>uuidgen-4</code>每次都会返回不同的字符串。有没有什么办法能够让它们一样的呢？答案是肯定的。</p>
+<h1 id="一式两份"><a href="#一式两份" class="headerlink" title="一式两份"></a>一式两份</h1><p>既然两次调用<code>uuidgen-4</code>的结果不同，那么就将第一次调用后的结果保存起来，然后重复使用即可。思路很简单，实现代码也很直白</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> (<span class="name">lt-org-capture--uuid</span>)</span><br><span class="line">  (<span class="name">defun</span> lt-org-capture-uuidgen ()</span><br><span class="line">    <span class="string">"生成一个UUID并填充到词法作用域的变量中。"</span></span><br><span class="line">    (<span class="name">setf</span> lt-org-capture--uuid (<span class="name">uuidgen-4</span>))</span><br><span class="line">    lt-org-capture--uuid)</span><br><span class="line">  (<span class="name">defun</span> lt-org-capture-uuidclr ()</span><br><span class="line">    <span class="string">"返回生成好的UUID并清空它。"</span></span><br><span class="line">    lt-org-capture--uuid))</span><br></pre></td></tr></tbody></table></figure>
+<p>capture-template也是水到渠成的</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> org-capture-templates</span><br><span class="line">      '((<span class="string">"t"</span> <span class="string">"Todo"</span> entry (file+headline <span class="string">"~/org/gtd.org"</span> <span class="string">"Tasks"</span>)</span><br><span class="line">         <span class="string">"* TODO %?  :PROPERTIES:\n  :CUSTOM_ID: %(lt-org-capture-uuidgen)\n  :ID: %(lt-org-capture-uuidclr)\n  :END:"</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>在上面的函数定义中，我试图利用词法作用域特性，使得<code>lt-org-capture--uuid</code>只能被<code>lt-org-capture-uuidgen</code>和<code>lt-org-capture-uuidclr</code>读写。遗憾的是，Elisp并不支持词法作用域，<code>lt-org-capture--uuid</code>实际上是一个全局变量——完全可以用<code>C-h v</code>来审视它。</p>
+<p>全文完。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/10/29/精确之美——用TikZ画硬盘示意图/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -640,111 +749,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/08/02/没有除法的除法——LeetCode第29题/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/02/没有除法的除法——LeetCode第29题/" class="post-title-link" itemprop="url">没有除法的除法——LeetCode第29题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-08-02 21:41:22 / 修改时间：22:21:47" itemprop="dateCreated datePublished" datetime="2020-08-02T21:41:22+08:00">2020-08-02</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/08/02/没有除法的除法——LeetCode第29题/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/08/02/没有除法的除法——LeetCode第29题/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>7月初的时候挑战了一下LeetCode的<a href="https://leetcode.com/problems/divide-two-integers/" target="_blank" rel="noopener">第29题</a>（中等难度，似乎没什么值得夸耀的），题目要求在不使用除、乘，以及模运算的情况下，实现整数相除的函数。</p>
-<p>既然被除数和除数都是整数，那么用减法就可以实现除除法了（多么naive的想法）。一个trivial的、用JavaScript编写的函数可以是下面这样的（为了简单起见，只考虑两个参数皆为正整数的情况）</p>
-<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">divide</span>(<span class="params">n, m</span>) </span>{</span><br><span class="line">  <span class="keyword">let</span> acc = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (n &gt;= m) {</span><br><span class="line">    n -= m;</span><br><span class="line">    acc += <span class="number">1</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> acc;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>如此朴素的<code>divide</code>函数提交给LeetCode是不会被接受的的——它会在像2147483648除以2这样的测试用例上超时。可以在本地运行一下感受下究竟有多慢</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  nodejs time node divide.js</span><br><span class="line">2147483648/2=1073741824</span><br><span class="line">node divide.js  1.14s user 0.01s system 99% cpu 1.161 total</span><br></pre></td></tr></tbody></table></figure>
-<p>那么有没有更快的计算两个整数的商的算法呢？答案当然是肯定的。</p>
-<h1 id="尝试优化"><a href="#尝试优化" class="headerlink" title="尝试优化"></a>尝试优化</h1><p>一眼就可以看出，运行次数最多的是其中的<code>while</code>循环。以2147483648除以2为例，<code>while</code>循环中的语句要被执行1073741824次。为了提升运行速度，必须减少循环的次数。</p>
-<p>既然每次从<code>n</code>中减去<code>m</code>需要执行<code>n/m</code>次，那么如果改为每次从中减去<code>2m</code>，不就只需要执行<code>(n/m)/2</code>次了么？循环的次数一下子就减少了一半，想想都觉得兴奋啊。每次减<code>2m</code>，并且自增2的算法的代码及其运行效果如下</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">➜  nodejs cat divide2.js</span><br><span class="line">function divide(n, m) {</span><br><span class="line">  let acc = 0;</span><br><span class="line">  let m2 = m &lt;&lt; 1; // 因为题目要求不能用乘法，所以用左移来代替乘以2。</span><br><span class="line">  while (n &gt;= m2) {</span><br><span class="line">    n -= m2;</span><br><span class="line">    acc += 2;</span><br><span class="line">  }</span><br><span class="line">  while (n &gt;= m) {</span><br><span class="line">    n -= m;</span><br><span class="line">    acc += 1;</span><br><span class="line">  }</span><br><span class="line">  return acc;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">console.log(`2147483648/2=${divide(2147483648, 2)}`);</span><br><span class="line">➜  nodejs time node divide2.js</span><br><span class="line">2147483648/2=1073741824</span><br><span class="line">node divide2.js  2.65s user 0.01s system 99% cpu 2.674 total</span><br></pre></td></tr></tbody></table></figure>
-<p>尽管耗时不降反升，令场面一度十分尴尬，但根据理论分析可知，第一个循环的运行次数仅为原来的一半，而第二个循环的运行次数最多为1次，可以知道这个优化的方向是没问题的。</p>
-<p>如果计算<code>m2</code>的时候左移的次数为2，那么<code>acc</code>的自增步长需要相应地调整为4，第一个循环的次数将大幅下降至268435456，第二个循环的次数不会超过4；如果左移次数为3，那么<code>acc</code>的步长增至8，第一个循环的次数降至134217728，第二个循环的次数不会超过8。</p>
-<p>显然，左移不能无限地进行下去，因为<code>m2</code>的值早晚会超过<code>n</code>。很容易算出左移次数的一个上限为</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/N的计算公式small.jpeg" alt=""></p>
-<p>对数符号意味着即便对于很大的<code>n</code>和很小的<code>m</code>，上述公式的结果也不会很大，因此可以显著地提升整数除法的计算效率。</p>
-<p>在开始写代码前，让我先来简单地证明一下这个方法算出来的商与直接计算<code>n/m</code>是相等的。</p>
-<h1 id="一个简单的证明"><a href="#一个简单的证明" class="headerlink" title="一个简单的证明"></a>一个简单的证明</h1><p>记被减数为<code>n</code>，减数为<code>m</code>。显然，存在一个正整数<code>N</code>，使得</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/N的存在性small.jpeg" alt=""></p>
-<p>令</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/p的计算公式small.jpeg" alt=""></p>
-<p>，再令</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/r的定义small.jpeg" alt=""></p>
-<p>，那么<code>n</code>除以<code>m</code>等价于</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/n除以m的变换small.jpeg" alt=""></p>
-<p>证明完毕。</p>
-<p>从上面的公式还可以知道，新算法将原本规模为<code>n</code>的问题转换为了一个规模为<code>r</code>的相同问题，这意味着可以用递归的方式来优雅地编写最终的代码。</p>
-<h1 id="完整的代码"><a href="#完整的代码" class="headerlink" title="完整的代码"></a>完整的代码</h1><p>最终的<code>divide</code>函数的代码如下</p>
-<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">divide</span>(<span class="params">n, m</span>) </span>{</span><br><span class="line">  <span class="keyword">if</span> (n &lt; m) {</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> n2 = n;</span><br><span class="line">  <span class="keyword">let</span> N = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">// 用右移代替左移，避免溢出。</span></span><br><span class="line">  <span class="keyword">while</span> ((n2 &gt;&gt; <span class="number">1</span>) &gt; m) {</span><br><span class="line">    N += <span class="number">1</span>;</span><br><span class="line">    n2 = n2 &gt;&gt; <span class="number">1</span>;</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// `power`表示公式中2的N次幂</span></span><br><span class="line">  <span class="comment">// `product`代表`power`与被除数`m`的乘积</span></span><br><span class="line">  <span class="keyword">let</span> power = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">let</span> product = m;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; N; i++) {</span><br><span class="line">    power = power &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    product = product &lt;&lt; <span class="number">1</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> power + divide(n - product, m);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>这个可比最开始的<code>divide</code>要快得多了，有图有真相</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜  nodejs time node divide3.js</span><br><span class="line">2147483648/2=1073741824</span><br><span class="line">node divide3.js  0.03s user 0.01s system 95% cpu 0.044 total</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如果以<code>T(n, m)</code>表示被除数为<code>n</code>，除数为<code>m</code>时的算法时间复杂度，那么它的递推公式可以写成下列的形式</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200802/时间复杂度的递推公式small.jpeg" alt=""></p>
-<p>但这玩意儿看起来并不能用主定理直接求出解析式，所以很遗憾，我也不知道这个算法的时间复杂度究竟如何——尽管我猜测就是<code>N</code>的计算公式。</p>
-<p>如果有哪位好心的读者朋友知道的话，还望不吝赐教。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -816,7 +820,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">87</span>
+          <span class="site-state-item-count">88</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
