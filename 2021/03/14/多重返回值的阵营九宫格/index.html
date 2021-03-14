@@ -1,0 +1,669 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.8.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+
+
+
+
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://liutos.github.io').hostname,
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+<script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <meta name="description" content="通常在糊业务代码的时候，不管是函数、方法，还是宏，都只会有一个返回值。比如在C语言用于检查一个字符是否为阿拉伯数字的isdigit函数就只会返回是（1）或否（0） 12345678910#include &amp;lt;ctype.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;intmain(int argc, char *argv[])&amp;#123;    char c = 'a';    p">
+<meta name="keywords" content="lisp,编程语言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多重返回值的阵营九宫格">
+<meta property="og:url" content="https://liutos.github.io/2021/03/14/多重返回值的阵营九宫格/index.html">
+<meta property="og:site_name" content="小打小闹写点bug">
+<meta property="og:description" content="通常在糊业务代码的时候，不管是函数、方法，还是宏，都只会有一个返回值。比如在C语言用于检查一个字符是否为阿拉伯数字的isdigit函数就只会返回是（1）或否（0） 12345678910#include &amp;lt;ctype.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;intmain(int argc, char *argv[])&amp;#123;    char c = 'a';    p">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:image" content="https://liutos.github.io/images/loading.png">
+<meta property="og:updated_time" content="2021-03-14T07:57:18.761Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="多重返回值的阵营九宫格">
+<meta name="twitter:description" content="通常在糊业务代码的时候，不管是函数、方法，还是宏，都只会有一个返回值。比如在C语言用于检查一个字符是否为阿拉伯数字的isdigit函数就只会返回是（1）或否（0） 12345678910#include &amp;lt;ctype.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;intmain(int argc, char *argv[])&amp;#123;    char c = 'a';    p">
+<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
+
+<link rel="canonical" href="https://liutos.github.io/2021/03/14/多重返回值的阵营九宫格/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>多重返回值的阵营九宫格 | 小打小闹写点bug</title>
+  
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-94082039-2');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小打小闹写点bug</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">乍听之下，不无道理；仔细揣摩，胡说八道</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Liutos" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/03/14/多重返回值的阵营九宫格/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          多重返回值的阵营九宫格
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-14 15:52:34 / 修改时间：15:57:18" itemprop="dateCreated datePublished" datetime="2021-03-14T15:52:34+08:00">2021-03-14</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/03/14/多重返回值的阵营九宫格/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/14/多重返回值的阵营九宫格/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>通常在糊业务代码的时候，不管是函数、方法，还是宏，都只会有一个返回值。比如在C语言用于检查一个字符是否为阿拉伯数字的<code>isdigit</code>函数就只会返回是（1）或否（0）</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctype.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">char</span> c = <span class="string">'a'</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"isdigit('%c') is %d\n"</span>, c, <span class="built_in">isdigit</span>(c));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>但有时候如果一个函数、方法，或宏可以返回多个值的话会更加方便。例如，在Python中<code>dict</code>类型有一个实例方法<code>get</code>，它可以取得<code>dict</code>实例中与给定的键对应的值。但如果有一个键在字典中的值为<code>None</code>，那么光凭<code>get</code>的返回值无法准确判断这个键是否存在——除非你给它一个非<code>None</code>的默认值</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(d, key)</span>:</span></span><br><span class="line">    print(<span class="string">"d.get('{0}') is {1}\t'{0}' in d is {2}"</span>.format(key, d.get(key), key <span class="keyword">in</span> d))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    d = {</span><br><span class="line">        <span class="string">'foo'</span>: <span class="string">'bar'</span>,</span><br><span class="line">        <span class="string">'baz'</span>: <span class="keyword">None</span>,</span><br><span class="line">    }</span><br><span class="line">    test(d, <span class="string">'foo'</span>)</span><br><span class="line">    test(d, <span class="string">'baz'</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>发展了这么多年的编程语言，又怎么会连一次调用、多值返回这么简单的事情都做不到呢。事实上，有各种各样、各显神通的返回多个值的方法，我给其中的一些做了个分类</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210314/多重返回值的定义阵营九宫格.png" alt=""></p>
+<h1 id="Lisp的multiple-value-bind"><a href="#Lisp的multiple-value-bind" class="headerlink" title="Lisp的multiple-value-bind"></a>Lisp的<code>multiple-value-bind</code></h1><p>Common Lisp（简称为CL）的多重返回值当之无愧是其中最正统、最好用的实现方式。以它的内置函数<code>truncate</code>为例，它的第一个返回值为第一个参数除以第二个参数的商，第二个返回值为对应的余数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">truncate</span> <span class="number">10</span> <span class="number">3</span>)</span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></tbody></table></figure>
+<p>如果不加修饰地调用<code>truncate</code>，就像其它只返回一个值的函数一样，也只会拿到一个返回值</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">q</span> (<span class="name">truncate</span> <span class="number">10</span> <span class="number">3</span>)))</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"q = ~D~%"</span> q))</span><br><span class="line">q = <span class="number">3</span></span><br></pre></td></tr></tbody></table></figure>
+<p>除非用<code>multiple-value-bind</code>来捕获一个函数产生的所有返回值</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">multiple-value-bind</span> (<span class="name">q</span> r)</span><br><span class="line">             (<span class="name">truncate</span> <span class="number">10</span> <span class="number">3</span>)</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"q = ~D~8Tr = ~D~%"</span> q r))</span><br><span class="line">q = <span class="number">3</span>   r = <span class="number">1</span></span><br></pre></td></tr></tbody></table></figure>
+<p>CL的方案的优点在于它十分灵活。即使将一个函数从返回单个值改为返回多个值，也不会导致原本调用该函数的位置要全部修改一遍——对修改封闭，对扩展开放（误）。</p>
+<h1 id="Go的多重返回值"><a href="#Go的多重返回值" class="headerlink" title="Go的多重返回值"></a>Go的多重返回值</h1><p>踩在C语言肩膀上的Go也能够从函数中返回多个值。在<code>io/ioutil</code>包的<a href="https://golang.org/pkg/io/ioutil/" target="_blank" rel="noopener">官方文档</a>中有大量的例子，比如用<code>ReadAll</code>方法从字符串衍生的流中读取全部内容，就会返回两个值</p>
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"io/ioutil"</span></span><br><span class="line">	<span class="string">"log"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">	s := <span class="string">"Hello, world!"</span></span><br><span class="line">	reader := strings.NewReader(s)</span><br><span class="line">	bytes, err := ioutil.ReadAll(reader)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> {</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	}</span><br><span class="line">	fmt.Printf(<span class="string">"bytes is %s"</span>, bytes)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>Go以这种方式取代了C语言中用返回值表达成功与否、再通过指针传出读到的数据的风格。由于这个模式在有用的Go程序中到处出现，因此Gopher们用的都是定制的键盘（误）</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210314/go的错误检查.jpg" alt=""></p>
+<p>不同于前文的<code>multiple-value-bind</code>，如果一个函数或方法返回多个值，那么调用者必须捕获每一个值，否则编译无法通过</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">➜  try cat try_read_all_ignore_err.go</span><br><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	"fmt"</span><br><span class="line">	"io/ioutil"</span><br><span class="line">	"strings"</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() {</span><br><span class="line">	s := "Hello, world!"</span><br><span class="line">	reader := strings.NewReader(s)</span><br><span class="line">	bytes := ioutil.ReadAll(reader)</span><br><span class="line">	fmt.Printf("bytes is %s", bytes)</span><br><span class="line">}</span><br><span class="line">➜  try go build try_read_all_ignore_err.go</span><br><span class="line"><span class="meta">#</span> command-line-arguments</span><br><span class="line">./try_read_all_ignore_err.go:12:8: assignment mismatch: 1 variable but ioutil.ReadAll returns 2 values</span><br></pre></td></tr></tbody></table></figure>
+<p>这一要求也是合理的，毕竟多重返回值机制主要用于向调用者传递出错原因——既然可能出错，那么就必须要检查一番。</p>
+<h1 id="Python和Rust的解构"><a href="#Python和Rust的解构" class="headerlink" title="Python和Rust的解构"></a>Python和Rust的解构</h1><p>就像CL的<code>truncate</code>函数一样，Python中的函数<code>divmod</code>也可以同时返回两个数相除的商和余数，并且咋看之下也是返回多个值的形式</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    q, r = divmod(<span class="number">10</span>, <span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'q = {}\tr = {}'</span>.format(q, r))</span><br></pre></td></tr></tbody></table></figure>
+<p>但本质上，这是因为Python支持<a href="https://docs.python.org/3/reference/simple_stmts.html#assignment-statements" target="_blank" rel="noopener">解构</a>，同时<a href="https://docs.python.org/3/library/functions.html#divmod" target="_blank" rel="noopener"><code>divmod</code></a>返回的是一个由商和余数组成的元组。这样的做法与CL的真·奥义·多重返回值的差异在于，如果只想要<code>divmod</code>的第一个值，那么等号左侧也要写成对应的结构</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    q, _ = divmod(<span class="number">10</span>, <span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'q = {}'</span>.format(q))</span><br></pre></td></tr></tbody></table></figure>
+<p>在支持解构的语言中都可以模仿出多重返回值，例如Rust</p>
+<figure class="highlight rust"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">divmod</span></span>(a: <span class="built_in">u32</span>, b: <span class="built_in">u32</span>) -&gt; (<span class="built_in">u32</span>, <span class="built_in">u32</span>) {</span><br><span class="line">    (a / b, a % b)</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() {</span><br><span class="line">    <span class="keyword">let</span> (q, r) = divmod(<span class="number">10</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"q = {}\tr = {}"</span>, q, r);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="Prolog的归一"><a href="#Prolog的归一" class="headerlink" title="Prolog的归一"></a>Prolog的归一</h1><p>到了Prolog这里，画风就有点不一样了。首先Prolog既没有函数，也没有方法，更没有宏。在Prolog中，像<code>length/2</code>和<code>member/2</code>这样的东西叫做<code>functor</code>，它们之于Prolog中的列表，就犹如CL的<code>length</code>和<code>member</code>之于列表、Python的<code>len</code>函数和<code>in</code>操作符之于列表，JavaScript的<code>length</code>属性和<code>indexOf</code>方法之于数组……</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210314/prolog的length和member.jpg" alt=""></p>
+<p>其次，Prolog并不“返回”一个<code>functor</code>的“调用结果”，它只是判断输入的查询是否成立，以及给出使查询成立的变量值。在第一个查询中，<code>length/2</code>的第二个参数为变量<code>L</code>，因此Prolog给出了使这个查询成立的<code>L</code>的值4；第二个查询中没有变量，Prolog只是简单地给出查询是否成立；第三个查询中，Prolog给出了四个能够使查询成立的变量<code>X</code>的值。</p>
+<p>由于Prolog会给出查询中每一个变量的值，可以用这个特性来模拟多重返回值。例如，可以让Prolog一次性给出两个数字的和、差、积，和商</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210314/同时计算出和查积商.jpg" alt=""></p>
+<p>麻烦之处在于就算只想要得到两数之和，也必须用占位符填在后三个参数上：<code>jjcc(10, 3, S, _, _, _)</code>。</p>
+<h1 id="作弊的指针与全局变量"><a href="#作弊的指针与全局变量" class="headerlink" title="作弊的指针与全局变量"></a>作弊的指针与全局变量</h1><p>尽管在开篇的时候提到了C语言中的函数无法返回多个值，但如果像上文的Prolog那般允许修改参数的话，C语言也是可以做到的，谁让它有指针这个强力特性呢。例如，<code>stat(2)</code>函数就会将关于一个文件的信息填充到参数中所指向的结构体的内存中</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span><br><span class="line">{</span><br><span class="line">    <span class="keyword">char</span> *path = <span class="string">"./try_stat.c"</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">buf</span>;</span></span><br><span class="line">    stat(path, &amp;buf);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"inode's number of %s is %llu\n"</span>, path, buf.st_ino);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>查看<code>man 2 stat</code>可以知道<code>struct stat</code>类型中有非常多的内容，这显然也是一种多重返回值。同样的手法，在Go中也可以运用，例如用于把从数据库中读取出来的行的数据写入目标数据结构的<a href="https://golang.org/pkg/database/sql/#Rows.Scan" target="_blank" rel="noopener"><code>Scan</code>方法</a>。</p>
+<p>最后，如果只要能让调用者感知就行，那么全局变量未尝不是一种通用的多重返回值机制。例如在C语言中的<code>strtol</code>函数，就会在无法转换出任何数字的时候返回0并设置<code>errno</code>，因此检查<code>errno</code>是必须的步骤</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">try_conversion</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *str)</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="keyword">long</span> num = strtol(str, <span class="literal">NULL</span>, <span class="number">10</span>);</span><br><span class="line">    <span class="keyword">if</span> (errno == EINVAL || errno == ERANGE)</span><br><span class="line">    {</span><br><span class="line">        <span class="keyword">char</span> message[<span class="number">64</span>];</span><br><span class="line">        <span class="built_in">snprintf</span>(message, <span class="keyword">sizeof</span>(message), <span class="string">"strtol(\"%s\")"</span>, str);</span><br><span class="line">        perror(message);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"strtol(\"%s\") is %ld\n"</span>, str, num);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span><br><span class="line">{</span><br><span class="line">    try_conversion(<span class="string">"233"</span>);</span><br><span class="line">    try_conversion(<span class="string">"0"</span>);</span><br><span class="line">    try_conversion(<span class="string">"lisp"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>鉴于<code>errno</code>是一个全局变量，<code>strtol</code>的使用者完全有可能忘记要检查。相比之下，Go的<a href="https://golang.org/pkg/strconv/" target="_blank" rel="noopener">strconv</a>包的函数都将转换过程中的错误以第二个参数的形式返回给调用者，用起来更安全。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>按照<a href="https://mp.weixin.qq.com/s/8T0rrl5dkwtYB_XCbAhACQ" target="_blank" rel="noopener">《代码写得不好，不要总觉得是自己抽象得不好》</a>这篇文章的说法，代码写成什么样子完全是由产品经理决定的。但产品经理又怎么会在意你用的技术是怎么实现多重返回值的呢。综上所述，这个特性没用（误）。</p>
+<p>全文完。</p>
+
+    </div>
+
+    
+    
+    <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center;">
+  <img id="wechat_subscriber_qcode" src="/images/loading.png" data-original="/uploads/WechatIMG2934.jpeg" alt="Liutos wechat" style="width: 200px; max-width: 100%;">
+  <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+        <div class="reward-container">
+  <div>你的一点心意，我的十分动力。</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/loading.png" data-original="/images/WeChatpay.png" alt="Liutos 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/loading.png" data-original="/images/Alipay.jpg" alt="Liutos 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Liutos
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://liutos.github.io/2021/03/14/多重返回值的阵营九宫格/" title="多重返回值的阵营九宫格">https://liutos.github.io/2021/03/14/多重返回值的阵营九宫格/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+              <a href="/tags/编程语言/" rel="tag"><i class="fa fa-tag"></i> 编程语言</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/27/终端看片指日可待/" rel="prev" title="终端看片指日可待">
+      <i class="fa fa-chevron-left"></i> 终端看片指日可待
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+      <div class="tabs tabs-comment">
+        <ul class="nav-tabs">
+            <li class="tab"><a href="#comment-disqus">disqus</a></li>
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane disqus" id="comment-disqus">
+              
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+            </div>
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
+        </div>
+      </div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Lisp的multiple-value-bind"><span class="nav-number">1.</span> <span class="nav-text">Lisp的multiple-value-bind</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Go的多重返回值"><span class="nav-number">2.</span> <span class="nav-text">Go的多重返回值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Python和Rust的解构"><span class="nav-number">3.</span> <span class="nav-text">Python和Rust的解构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Prolog的归一"><span class="nav-number">4.</span> <span class="nav-text">Prolog的归一</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#作弊的指针与全局变量"><span class="nav-number">5.</span> <span class="nav-text">作弊的指针与全局变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">6.</span> <span class="nav-text">后记</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+  <p class="site-author-name" itemprop="name">Liutos</p>
+  <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">89</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Liutos" title="GitHub → https://github.com/Liutos" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-fw fa-rss"></i>RSS</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://segmentfault.com/u/liutos" title="SegmentFault → https://segmentfault.com/u/liutos" rel="noopener" target="_blank"><i class="fa fa-fw fa-stack-overflow"></i>SegmentFault</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.hsyyf.me/" title="http://www.hsyyf.me/" rel="noopener" target="_blank">月下叹逍遥/寒山烟雨</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.lainme.com/doku.php" title="http://www.lainme.com/doku.php" rel="noopener" target="_blank">Lainme's Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://lengxx.com/" title="http://lengxx.com/" rel="noopener" target="_blank">冷轩信</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://forum.ubuntu.org.cn/" title="http://forum.ubuntu.org.cn/" rel="noopener" target="_blank">Ubuntu中文论坛</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://y-window.github.com/" title="http://y-window.github.com/" rel="noopener" target="_blank">Window的空间</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.thev.net/PaulLiu/" title="http://www.thev.net/PaulLiu/" rel="noopener" target="_blank">九瓜老师的博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://weibo.com/liutos" title="http://weibo.com/liutos" rel="noopener" target="_blank">博主的微博</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://github.com/Liutos" title="http://github.com/Liutos" rel="noopener" target="_blank">博主的GitHub页面</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  © 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liutos</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+<script src="/bundle.js"></script><script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Liutos.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+;
+
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://liutos.github.io/2021/03/14/多重返回值的阵营九宫格/",
+            identifier: "2021/03/14/多重返回值的阵营九宫格/",
+            title: "多重返回值的阵营九宫格"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://Liutos.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+;
+
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'b3dc0ec32cfae81fbffd',
+      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
+      repo: 'gitalk',
+      owner: 'Liutos',
+      admin: ['Liutos'],
+      id: '5c7231e459a67ad8cb234ecd06876cad',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+;
+!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
