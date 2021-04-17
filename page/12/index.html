@@ -200,6 +200,100 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/05/17/一个简陋的四则运算编译器实现/" class="post-title-link" itemprop="url">开发一个trivial的lisp编译器（一）</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-17 21:57:50" itemprop="dateCreated datePublished" datetime="2019-05-17T21:57:50+08:00">2019-05-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-10 12:59:00" itemprop="dateModified" datetime="2019-12-10T12:59:00+08:00">2019-12-10</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/05/17/一个简陋的四则运算编译器实现/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/17/一个简陋的四则运算编译器实现/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>我已经记不清写过多少个lisp-like语言的解释器，以及编译成自制字节码的编译器了，但我想这一次依然不会是最后一个。我还记得之所以入坑写第一个解释器，是因为当时正好学了一点Common Lisp，数据结构的课本中又正好提到一种叫做广义表的数据结构，顿时觉得：“这个广义表不是正好可以表达CL中的atom和cons吗？”于是便尝试写一段程序解析输入、创建广义表，并打印成S表达式。在此基础上，又尝试着实现加减乘除等运算功能，一步步地开启了编写解释器的旅程。后来我看了Peter Norvig写的<a href="https://en.wikipedia.org/wiki/Paradigms_of_AI_Programming" target="_blank" rel="noopener">《Paradigms of AI Programming》</a>，里面有两章分别讲了如何编写解释器和编译器——编译到一个自制虚拟机的字节码的那种。在巨擘的指引下，我也开始写起了trivial的编译器。</p>
+<p>这次开工的这一款有所不同：它不再将lisp-like代码编译成架空虚拟机的字节码，而是编译成macOS的x64汇编代码，着实是一个不小的挑战。众所周知，lisp-like的语言（Scheme、Common Lisp、Clojure等）都是一些高级语言，它们摆弄着一些高层次的概念：cons、continua、lambda、symbol，等等。这些语言中的概念无法直接对应到x64汇编上，因此我必须填补它们之间的鸿沟；另一方面，我对x86汇编可以说是一窍不通，完全是一边搜索资料一边写，生成的汇编代码的运行效率多半很低。但，管它呢，只要好玩就足够了。</p>
+<p>开始来实现一个lisp-like语言到x64汇编的trivial编译器吧。</p>
+<h1 id="编译加法运算"><a href="#编译加法运算" class="headerlink" title="编译加法运算"></a>编译加法运算</h1><p>如果你看过<a href="https://book.douban.com/subject/3296317/" target="_blank" rel="noopener">龙书</a>，或其它经典的编译原理方面的书，那肯定知道编译器是一个很复杂的玩意儿。但我的编译器很简单，它会从一个小小的二元加法计算器开始演化。为了偷懒不写编译器的前端，我会使用Common Lisp来编写这个编译器的代码，也方便我直接从最让人兴奋的、生成汇编代码的环节入手。</p>
+<p>首先从最简单的两个小整数的加法运算开始。在lisp家族的语言，比如Common Lisp中，一段加法运算的代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>对于寄存器可以容纳的整数的相加，直接输出<code>add</code>指令即可，两个操作数可以暂时随意地存放到寄存器中。按照这个思路，一个简单的、可以编译小整数加法运算的编译器就出来了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (addl %eax %ebx)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> stringify (<span class="name">asm</span>)</span><br><span class="line">  <span class="string">"根据jjcc2产生的S表达式生成汇编代码字符串"</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .section __TEXT,__text,regular,pure_instructions~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .globl _main~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"_main:~%"</span>)</span><br><span class="line">  (<span class="name">dolist</span> (<span class="name">ins</span> asm)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A, ~A~%"</span></span><br><span class="line">            (<span class="name">first</span> ins)</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">second</span> ins))</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">third</span> ins))))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl %ebx, %edi~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl $0x2000001, %eax~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        syscall~%"</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>在 REPL 中运行如下代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">stringify</span> (<span class="name">jjcc2</span> '(+ <span class="number">1</span> <span class="number">2</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<p>得到如下的汇编代码</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EAX</span><br><span class="line">        MOVL $2, %EBX</span><br><span class="line">        ADDL %EAX, %EBX</span><br><span class="line">        movl %ebx, %edi</span><br><span class="line">        movl $0x2000001, %eax</span><br><span class="line">        syscall</span><br></pre></td></tr></tbody></table></figure>
+<p>将这段代码保存到名为<code>jjcc.s</code>的文件中再运行下列的命令，就得到一个能运行的<code>a.out</code>可执行文件了</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">as -o jjcc.o jjcc.s</span><br><span class="line">gcc jjcc.o</span><br><span class="line">./a.out</span><br><span class="line">echo $? # 输出3</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>有了这个基本的框架后，便可以开始扩展出很多功能了。比如除了加法，还可以支持减法、乘法，以及除法；可以支持<code>progn</code>，实现顺序求值多个表达式的效果；可以支持<code>setq</code>，实现变量和赋值的功能，等等。</p>
+<p>此外，这一小段代码也有不少问题。比如调用<code>format</code>输出<code>.section</code>的代码来自于<code>gcc -S</code>的结果，可以用更简短的<code>.text</code>代替；生成的汇编代码中，指令助记符和寄存器名字的大小写不统一，等等。之后我会尝试重构，将代码写得更好。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -573,95 +667,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/28/Project-Euler第69题/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/01/28/Project-Euler第69题/" class="post-title-link" itemprop="url">Project-Euler第69题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-01-28 23:21:22 / 修改时间：23:26:03" itemprop="dateCreated datePublished" datetime="2019-01-28T23:21:22+08:00">2019-01-28</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/01/28/Project-Euler第69题/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/28/Project-Euler第69题/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>大学的时候挺喜欢解<a href="https://projecteuler.net/" target="_blank" rel="noopener">Project Euler</a>上的题目的，尤其是它不在乎答题者使用哪一门编程语言，甚至还有很多参与者是使用pen&amp;paper来解题的。去年开始重新开始做Project Euler上的题目，而<a href="https://projecteuler.net/problem=69" target="_blank" rel="noopener">第69题</a>则是最近刚刚解决的一题。惭愧的是，因为不晓得欧拉函数的计算公式（甚至都没有想过欧拉函数有没有可以用来计算的公式），所以这一题我是用暴力计算的方法来解决的。尽管花了40分钟左右才找出了问题的答案，但欧拉函数的计算方法本身还是让我觉得挺有意思的，下面我就来讲讲我在计算欧拉函数方面做的一些尝试。</p>
-<p>69题本身很容易读懂，就是要找到一个不大于一百万的正整数<code>n</code>，这个<code>n</code>与以它为参的欧拉函数值的比值能够达到最大。欧拉函数的介绍可以看<a href="https://zh.wikipedia.org/wiki/%E6%AC%A7%E6%8B%89%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">维基百科</a>，简而言之，就是在不大于<code>n</code>的正整数中与<code>n</code>互质的数的个数，具体的例子可以参见69题描述中给出的表格。</p>
-<p>网上可以找到别人的<a href="https://www.jianshu.com/p/d0fad6213433" target="_blank" rel="noopener">解法</a>，基本的思路是：按从小到大的顺序，对于一百万以内的每个素数，都计算出它们的倍数的欧拉函数值的一部分——即对于素数<code>p</code>计算出<code>1-1/p</code>并与这个位置上原来的值相乘。当遍历完一百万以内的所有素数后，也就计算出每一个位置上的欧拉函数值，再遍历一次就可以计算出比值最大的数字了。</p>
-<p>但我今天要讲的是笨方法。</p>
-<p>笨方法的关键就是乖巧地计算出每一个数字的欧拉函数值。而其中最笨的，当属挑出每一个不大于<code>n</code>的因数，计算它们与<code>n</code>的最大公约数，并根据这个最大公约数是否为1，来决定是否给某一个计数器加一。示例代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">count</span> <span class="number">0</span>))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">i</span> n count)</span><br><span class="line">      (<span class="name">when</span> (<span class="name">=</span> (<span class="name">gcd</span> (<span class="number">1</span>+ i) n) <span class="number">1</span>)</span><br><span class="line">        (<span class="name">incf</span> count)))))</span><br></pre></td></tr></tbody></table></figure>
-<p>这个<code>phi</code>可以稍微改进一下。例如，如果一个数a与<code>n</code>不是互质的，那么<code>a</code>的倍数（小于<code>n</code>的那一些）也一定不会与<code>n</code>互质。因此，每当遇到这么一个因数<code>a</code>，就知道后续的<code>2a</code>、<code>3a</code>等等，都不再需要计算其与<code>n</code>的最大公约数了。改进后的算法代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi (<span class="name">n</span>)</span><br><span class="line">  <span class="string">"通过将不互质的比特设置为1并计算为0的比特的个数来计算phi函数"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">bits</span> (<span class="name">make-array</span> n <span class="symbol">:element-type</span> 'bit <span class="symbol">:initial-element</span> <span class="number">0</span>))</span><br><span class="line">        (<span class="name">count</span> <span class="number">0</span>))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">i</span> n)</span><br><span class="line">      (<span class="name">cond</span> ((<span class="name">=</span> (<span class="name">bit</span> bits i) <span class="number">1</span>)</span><br><span class="line">             <span class="comment">;; 该比特已经为1，说明已经在比它小的倍数被处理时一并被标记了</span></span><br><span class="line">             )</span><br><span class="line">            ((<span class="name">=</span> i (<span class="number">1</span>- n))</span><br><span class="line">             <span class="comment">;; 只处理比上界要小的数字</span></span><br><span class="line">             )</span><br><span class="line">            ((<span class="name">/=</span> (<span class="name">gcd</span> (<span class="number">1</span>+ i) n) <span class="number">1</span>)</span><br><span class="line">             <span class="comment">;; 除了当前这个不互质的数字之外，还需要将这个数字的倍数也一并处理</span></span><br><span class="line">             (<span class="name">dotimes</span> (<span class="name">j</span> (<span class="name">floor</span> n (<span class="number">1</span>+ i)))</span><br><span class="line">               (<span class="name">let*</span> ((<span class="name">j</span> (<span class="number">1</span>+ j))</span><br><span class="line">                      (<span class="name">m</span> (<span class="name">*</span> (<span class="number">1</span>+ i) j)))</span><br><span class="line">                 (<span class="name">setf</span> (<span class="name">bit</span> bits (<span class="number">1</span>- m)) <span class="number">1</span>))))</span><br><span class="line">            (<span class="name">t</span> (<span class="name">incf</span> count))))</span><br><span class="line">    count))</span><br></pre></td></tr></tbody></table></figure>
-<p>为了节省内存空间，这里用了一个bitmap来标记小于<code>n</code>的每一个数字是否与<code>n</code>互质——1表示不互质，0表示互质。</p>
-<p>其实并不需要遍历所有比<code>n</code>小的数字，只要遍历所有<code>n</code>的素因子即可。比如，将8分解为素因子，就是3个2，那么对于小于8的所有2的倍数（4和6）都是与8不互质的。基于这个方法，将所有的素因子的倍数所对应的位置为1，再数一下总共有多少个0比特即可。</p>
-<p>对每个<code>n</code>都进行质因数分解效率不高，先生成一个一百万以内的素数表吧</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> primep (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">&lt;</span> n <span class="number">2</span>) <span class="literal">nil</span>)</span><br><span class="line">	((<span class="name">=</span> <span class="number">2</span> n) <span class="literal">t</span>)</span><br><span class="line">	(<span class="name">t</span></span><br><span class="line">	 (<span class="name">let</span> ((<span class="name">bnd</span> (<span class="name">truncate</span> (<span class="name">sqrt</span> n))))</span><br><span class="line">	   (<span class="name">labels</span> ((<span class="name">rec</span> (<span class="name">test</span>)</span><br><span class="line">		      (<span class="name">cond</span> ((<span class="name">&gt;</span> test bnd) <span class="literal">t</span>)</span><br><span class="line">			    ((<span class="name">=</span> <span class="number">0</span> (<span class="name">rem</span> n test)) <span class="literal">nil</span>)</span><br><span class="line">			    (<span class="name">t</span> (<span class="name">rec</span> (<span class="number">1</span>+ test))))))</span><br><span class="line">	     (<span class="name">rec</span> <span class="number">2</span>))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defvar</span> *primes-in-1000000* <span class="literal">nil</span>)</span><br><span class="line">(<span class="name">defun</span> generate-primes-in-1000000 ()</span><br><span class="line">  (<span class="name">dotimes</span> (<span class="name">i</span> <span class="number">1000000</span>)</span><br><span class="line">    (<span class="name">when</span> (<span class="name">primep</span> (<span class="number">1</span>+ i))</span><br><span class="line">      (<span class="name">push</span> (<span class="number">1</span>+ i) *primes-in-1000000*)))</span><br><span class="line">  (<span class="name">setf</span> *primes-in-1000000* (<span class="name">nreverse</span> *primes-in-1000000*)))</span><br></pre></td></tr></tbody></table></figure>
-<p>然后对于一个给定的<code>n</code>，遍历所有小于它的素数并对相应的倍数所在的比特置一就可以了，示例代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi3 (<span class="name">n</span>)</span><br><span class="line">  <span class="string">"直接用素数表来做筛法"</span></span><br><span class="line">  (<span class="name">prog</span></span><br><span class="line">      ((<span class="name">bits</span> (<span class="name">make-array</span> n <span class="symbol">:element-type</span> 'bit <span class="symbol">:initial-element</span> <span class="number">0</span>)))</span><br><span class="line">     (<span class="name">dolist</span> (<span class="name">num</span> *primes-in-1000000*)</span><br><span class="line">       (<span class="name">cond</span> ((<span class="name">&gt;</span> num n)</span><br><span class="line">              (<span class="name">go</span> <span class="symbol">:return</span>))</span><br><span class="line">             ((<span class="name">zerop</span> (<span class="name">mod</span> n num))</span><br><span class="line">              (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">i</span>)</span><br><span class="line">                         (<span class="name">when</span> (<span class="name">&lt;</span> i n)</span><br><span class="line">                           (<span class="name">setf</span> (<span class="name">bit</span> bits i) <span class="number">1</span>)</span><br><span class="line">                           (<span class="name">aux</span> (<span class="name">+</span> i num)))))</span><br><span class="line">                (<span class="name">aux</span> (<span class="number">1</span>- num))))))</span><br><span class="line">     <span class="symbol">:return</span></span><br><span class="line">     (<span class="name">return-from</span> phi3</span><br><span class="line">       (<span class="name">count-if</span> (<span class="name">lambda</span> (<span class="name">bit</span>) (<span class="name">zerop</span> bit)) bits))))</span><br></pre></td></tr></tbody></table></figure>
-<p>PS：写这个<code>phi3</code>的时候发现Common Lisp提供了一个<a href="http://clhs.lisp.se/Body/m_prog_.htm" target="_blank" rel="noopener"><code>prog</code></a>宏，这个宏倒是真的挺好用。</p>
-<p>改进了两轮，其实这仍然是笨方法。即便是用<code>phi3</code>，用来计算题目的答案也花了40多分钟。</p>
-<p>全文完</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -733,7 +738,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">89</span>
+          <span class="site-state-item-count">90</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
