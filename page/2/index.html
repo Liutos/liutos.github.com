@@ -200,6 +200,178 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/01/29/format，不只是格式化/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/29/format，不只是格式化/" class="post-title-link" itemprop="url">format，不只是格式化</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-29 23:05:51 / 修改时间：23:07:32" itemprop="dateCreated datePublished" datetime="2021-01-29T23:05:51+08:00">2021-01-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/实战CommonLisp/" itemprop="url" rel="index">
+                    <span itemprop="name">实战CommonLisp</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/01/29/format，不只是格式化/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/29/format，不只是格式化/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。</p>
+</blockquote>
+<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>写了一段时间的Python后，总觉得它跟Common Lisp（下文简称CL）有亿点点像。例如，Python和CL都支持可变数量的函数参数。在Python中写作</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(* args)</span>:</span></span><br><span class="line">    print(args)</span><br></pre></td></tr></tbody></table></figure>
+<p>而在CL中则写成</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foo (<span class="name">&amp;rest</span> args)</span><br><span class="line">  (<span class="name">print</span> args))</span><br></pre></td></tr></tbody></table></figure>
+<p>Python的语法更紧凑，而CL的语法表意更清晰。此外，它们也都支持关键字参数。在Python中写成</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bar</span><span class="params">(*, a=None, b=None)</span>:</span></span><br><span class="line">    print(<span class="string">'a={}\tb={}'</span>.format(a, b))</span><br></pre></td></tr></tbody></table></figure>
+<p>而在CL中则是</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> bar (<span class="name">&amp;key</span> (<span class="name">a</span> <span class="literal">nil</span>) (<span class="name">b</span> <span class="literal">nil</span>))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"a=~A~8Tb=~A~%"</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+<p>尽管CL的<code>&amp;key</code>仍然更清晰，但声明参数默认值的语法确实是Python更胜一筹。</p>
+<p>细心的读者可能发现了，在Python中有一个叫做<code>format</code>的方法（属于字符串类），而在CL则有一个叫做<code>format</code>的函数。并且，从上面的例子来看，它们都负责生成格式化的字符串，那么它们有相似之处吗？</p>
+<p>答案是否定的，CL的<code>format</code>简直就是格式化打印界的一股泥石流。</p>
+<h1 id="format的基本用法"><a href="#format的基本用法" class="headerlink" title="format的基本用法"></a><code>format</code>的基本用法</h1><p>不妨从上面的示例代码入手介绍CL中的<code>format</code>（下文在不引起歧义的情况下，简称为<code>format</code>）的基本用法。首先，它需要至少两个参数：</p>
+<ul>
+<li>第一个参数控制了<code>format</code>将会把格式化后的字符串打印到什么地方。<code>t</code>表示打印到标准输出；</li>
+<li>第二个参数则是本文的主角，名为控制字符串（control-string）。它指导<code>format</code>如何格式化。</li>
+</ul>
+<p>听起来很神秘，但其实跟C语言的<code>fprintf</code>也没什么差别。</p>
+<p>在控制字符串中，一般会有许多像占位符一般的命令（directive）。正如Python的<code>format</code>方法中，有各式各样的<a href="https://docs.python.org/3/library/string.html#formatspec" target="_blank" rel="noopener">format_spec</a>能够格式化对应类型的数据，控制字符串中的命令也有很多种，常见的有：</p>
+<ul>
+<li>打印二进制数字的<code>~B</code>，例如<code>(format t "~B" 5)</code>会打印出101；</li>
+<li>打印八进制数字的<code>~O</code>，例如<code>(format t "~O" 8)</code>会打印出10；</li>
+<li>打印十进制数字的<code>~D</code>；</li>
+<li>打印十六进制数字的<code>~X</code>，例如<code>(format t "~X" 161)</code>会打印出A1；</li>
+<li>打印任意一种类型的<code>~A</code>，一般打印字符串的时候会用到。</li>
+</ul>
+<p>另外，<code>format</code>的命令也支持参数。在Python中，可以用下列代码打印右对齐的、左侧填充字符0的、二进制形式的数字5</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'{:0&gt;8b}'</span>.format(<span class="number">5</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p><code>format</code>函数也可以做到同样的事情</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~8,'0B"</span> <span class="number">5</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>到这里为止，你可能会觉得<code>format</code>的控制字符串，不过就是将花括号去掉、冒号换成波浪线，以及参数语法不一样的<code>format</code>方法的翻版罢了。</p>
+<p>接下来，让我们进入<code>format</code>的黑科技领域。</p>
+<h1 id="format的高级用法"><a href="#format的高级用法" class="headerlink" title="format的高级用法"></a><code>format</code>的高级用法</h1><h2 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h2><p>前面列举了打印二、八、十，以及十六进制的命令，但<code>format</code>还支持其它的进制。使用命令<code>~R</code>搭配参数，<code>format</code>可以打印数字从2到36进制的所有形态。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~3R~%"</span> <span class="number">36</span>)   <span class="comment">; 以 3进制打印数字36，结果为1100</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~5R~%"</span> <span class="number">36</span>)   <span class="comment">; 以 5进制打印数字36，结果为 121</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~7R~%"</span> <span class="number">36</span>)   <span class="comment">; 以 7进制打印数字36，结果为  51</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~11R~%"</span> <span class="number">36</span>)  <span class="comment">; 以11进制打印数字36，结果为  33</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~13R~%"</span> <span class="number">36</span>)  <span class="comment">; 以13进制打印数字36，结果为  2A</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~17R~%"</span> <span class="number">36</span>)  <span class="comment">; 以17进制打印数字36，结果为  22</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~19R~%"</span> <span class="number">36</span>)  <span class="comment">; 以19进制打印数字36，结果为  1H</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~23R~%"</span> <span class="number">36</span>)  <span class="comment">; 以23进制打印数字36，结果为  1D</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~29R~%"</span> <span class="number">36</span>)  <span class="comment">; 以29进制打印数字36，结果为  17</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~31R~%"</span> <span class="number">36</span>)  <span class="comment">; 以31进制打印数字36，结果为  15</span></span><br></pre></td></tr></tbody></table></figure>
+<p>之所以最大为36进制，是因为十个阿拉伯数字，加上二十六个英文字母正好是三十六个。那如果不给<code>~R</code>加任何参数，会使用0进制吗？非也，<code>format</code>会把数字打印成英文单词</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~R~%"</span> <span class="number">123</span>) <span class="comment">; 打印出one hundred twenty-three</span></span><br></pre></td></tr></tbody></table></figure>
+<p>甚至可以让<code>format</code>打印罗马数字，只要加上<code>@</code>这个修饰符即可</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~@R~%"</span> <span class="number">123</span>) <span class="comment">; 打印出CXXIII</span></span><br></pre></td></tr></tbody></table></figure>
+<p>天晓得为什么要内置这么冷门的功能。</p>
+<h2 id="大小写转换"><a href="#大小写转换" class="headerlink" title="大小写转换"></a>大小写转换</h2><p>你，作为一名细心的读者，可能留意到了，<code>format</code>的<code>~X</code>只能打印出大写字母，而在Python的<code>format</code>方法中，<code>{:x}</code>可以输出小写字母的十六进制数字。即使你在<code>format</code>函数中使用<code>~x</code>也是无效的，因为命令是大小写不敏感的（case insensitive）。</p>
+<p>那要怎么实现打印小写字母的十六进制数字呢？答案是使用新的命令<code>~(</code>，以及它配套的命令<code>~)</code></p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~(~X~)~%"</span> <span class="number">26</span>) <span class="comment">; 打印1a</span></span><br></pre></td></tr></tbody></table></figure>
+<p>配合<code>:</code>和<code>@</code>修饰符，一共可以实现四种大小写风格</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~(hello world~)~%"</span>)   <span class="comment">; 打印hello world</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~:(hello world~)~%"</span>)  <span class="comment">; 打印Hello World</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~@(hello world~)~%"</span>)  <span class="comment">; 打印Hello world</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~:@(hello world~)~%"</span>) <span class="comment">; 打印HELLO WORLD</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="对齐控制"><a href="#对齐控制" class="headerlink" title="对齐控制"></a>对齐控制</h2><p>在Python的<code>format</code>方法中，可以控制打印出的内容的宽度，这一点在“<code>format</code>的基本用法”中已经演示过了。如果设置的最小宽度（在上面的例子中，是8）超过了打印的内容所占据的宽度（在上面的例子中，是3），那么还可以控制其采用左对齐、右对齐，还是居中对齐。</p>
+<p>在CL的<code>format</code>函数中，不管是<code>~B</code>、<code>~D</code>、<code>~O</code>，还是<code>~X</code>，都没有控制对齐方式的选项，数字总是右对齐。要控制对齐方式，需要用到<code>~&lt;</code>和它配套的<code>~&gt;</code>。例如，下面的CL代码可以让数字在八个宽度中左对齐</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"|~8&lt;~B~;~&gt;|"</span> <span class="number">5</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>打印内容为<code>|101     |</code>。<code>~&lt;</code>跟前面提到的其它命令不一样，它不消耗控制字符串之后的参数，它只控制<code>~&lt;</code>和<code>~&gt;</code>之间的字符串的布局。这意味着，即使<code>~&lt;</code>和<code>~&gt;</code>之间是字符串常量，它也可以起作用。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"|~8,,,'-&lt;~;hello~&gt;|"</span> <span class="number">5</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>上面的代码运行后会打印出<code>|---hello|</code>：8表示用于打印的最小宽度；三个逗号（<code>,</code>）之间为空，表示忽略<code>~&lt;</code>的第二和第三个参数；第四个参数控制着打印结果中用于填充的字符，由于<code>-</code>不是数字，因此需要加上单引号前缀；<code>~;</code>是内部的分隔符，由于它的存在，<code>hello</code>成了最右侧的字符串，因此会被右对齐。</p>
+<p>如果<code>~&lt;</code>和<code>~&gt;</code>之间的内容被<code>~;</code>分隔成了三部分，还可以实现左对齐、居中对齐，以及右对齐的效果</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"|~24&lt;left~;middle~;right~&gt;|"</span>) <span class="comment">; 打印出|left    middle     right|</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p>通常情况下，控制字符串中的命令会消耗参数，比如<code>~B</code>和<code>~D</code>等命令。也有像<code>~&lt;</code>这样不消耗参数的命令。但有的命令甚至可以做到“一参多用”，那就是<code>~*</code>。比如，给<code>~*</code>加上冒号修饰，就可以让上一个被消耗的参数重新被消耗一遍</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~8D~:*~8D~8D~%"</span> <span class="number">1</span> <span class="number">2</span>) <span class="comment">; 打印出       1       1       2</span></span><br></pre></td></tr></tbody></table></figure>
+<p>在<code>~8D</code>消耗了参数1之后，<code>~:*</code>让下一个被消耗的参数重新指向了1，因此第二个<code>~8D</code>拿到的参数仍然是1，最后一个拿到了2。尽管控制字符串中看起来有三个<code>~D</code>命令而参数只有两个，却依然可以正常打印。</p>
+<p>在<code>format</code>的文档中一个不错的例子，就是让<code>~*</code>和<code>~P</code>搭配使用。<code>~P</code>可以根据它对应的参数是否大于1，来打印出字母<code>s</code>或者什么都不打印。配合<code>~:*</code>就可以实现根据参数打印出单词的单数或复数形式的功能</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D dog~:*~P~%"</span> <span class="number">1</span>) <span class="comment">; 打印出1 dog</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D dog~:*~P~%"</span> <span class="number">2</span>) <span class="comment">; 打印出2 dogs</span></span><br></pre></td></tr></tbody></table></figure>
+<p>甚至你可以组合一下前面的毕生所学</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~@(~R dog~:*~P~)~%"</span> <span class="number">2</span>) <span class="comment">; 打印出Two dogs</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="条件打印"><a href="#条件打印" class="headerlink" title="条件打印"></a>条件打印</h2><p>命令<code>~[</code>和<code>~]</code>也是成对出现的，它们的作用是选择性打印，不过比起编程语言中的<code>if</code>，更像是取数组某个下标的元素</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~[~;one~;two~;three~]~%"</span> <span class="number">1</span>) <span class="comment">; 打印one</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~[~;one~;two~;three~]~%"</span> <span class="number">2</span>) <span class="comment">; 打印two</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~[~;one~;two~;three~]~%"</span> <span class="number">3</span>) <span class="comment">; 打印three</span></span><br></pre></td></tr></tbody></table></figure>
+<p>但这个特性还挺鸡肋的。想想，你肯定不会无缘无故传入一个数字来作为下标，而这个作为下标的数字很可能本身就是通过<code>position</code>之类的函数计算出来的，而<code>position</code>就要求传入待查找的<code>item</code>和整个列表<code>sequence</code>，而为了用上<code>~[</code>你还得把列表中的每个元素硬编码到控制字符串中，颇有南辕北辙的味道。</p>
+<p>给它加上冒号修饰符之后倒是有点用处，比如可以将CL中的真（<code>NIL</code>以外的所有对象）和假（<code>NIL</code>）打印成单词<code>true</code>和<code>false</code></p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~:[false~;true~]"</span> <span class="literal">nil</span>) <span class="comment">; 打印false</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="循环打印"><a href="#循环打印" class="headerlink" title="循环打印"></a>循环打印</h2><p>圆括号和方括号都用了，又怎么能少了花括号呢。没错，<code>~{</code>也是一个命令，它的作用是遍历列表。例如，想要打印出一个列表中的每个元素，并且两两之间用逗号和空格分开的话，可以用下列代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~{~D~^, ~}"</span> '(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)) <span class="comment">; 打印出1, 2, 3</span></span><br></pre></td></tr></tbody></table></figure>
+<p><code>~{</code>和<code>~}</code>之间也可以有不止一个命令，例如下列代码中每次会消耗列表中的两个元素</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"{~{\"~A\": ~D~^, ~}}"</span> '(<span class="symbol">:a</span> <span class="number">3</span> <span class="symbol">:b</span> <span class="number">2</span> <span class="symbol">:c</span> <span class="number">1</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>打印结果为<code>{"A": 3, "B": 2, "C": 1}</code>。如果把这两个<code>format</code>表达式拆成用循环写的、不使用<code>format</code>的等价形式，大约是下面这样子</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">; 与(format t "~{~D~^, ~}" '(1 2 3))等价</span></span><br><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">do</span> ((<span class="name">lst</span> '(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) (<span class="name">cdr</span> lst)))</span><br><span class="line">      ((<span class="name">null</span> lst))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">e</span> (<span class="name">car</span> lst)))</span><br><span class="line">      (<span class="name">princ</span> e)</span><br><span class="line">      (<span class="name">when</span> (<span class="name">cdr</span> lst)</span><br><span class="line">        (<span class="name">princ</span> <span class="string">", "</span>))))</span><br><span class="line">  (<span class="name">princ</span> #\Newline))</span><br><span class="line"></span><br><span class="line"><span class="comment">; 与(format t "{~{\"~A\": ~D~^, ~}}" '(:a 3 :b 2 :c 1))等价</span></span><br><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">princ</span> <span class="string">"{"</span>)</span><br><span class="line">  (<span class="name">do</span> ((<span class="name">lst</span> '(<span class="symbol">:c</span> <span class="number">3</span> <span class="symbol">:b</span> <span class="number">2</span> <span class="symbol">:a</span> <span class="number">1</span>) (<span class="name">cddr</span> lst)))</span><br><span class="line">      ((<span class="name">null</span> lst))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">key</span> (<span class="name">car</span> lst))</span><br><span class="line">          (<span class="name">val</span> (<span class="name">cadr</span> lst)))</span><br><span class="line">      (<span class="name">princ</span> <span class="string">"\""</span>)</span><br><span class="line">      (<span class="name">princ</span> key)</span><br><span class="line">      (<span class="name">princ</span> <span class="string">"\": "</span>)</span><br><span class="line">      (<span class="name">princ</span> val)</span><br><span class="line">      (<span class="name">when</span> (<span class="name">cddr</span> lst)</span><br><span class="line">        (<span class="name">princ</span> <span class="string">", "</span>))))</span><br><span class="line">  (<span class="name">princ</span> <span class="string">"}"</span>)</span><br><span class="line">  (<span class="name">princ</span> #\Newline))</span><br></pre></td></tr></tbody></table></figure>
+<p>这么看来，<code>~{</code>确实可以让使用者写出更紧凑的代码。</p>
+<h2 id="参数化参数"><a href="#参数化参数" class="headerlink" title="参数化参数"></a>参数化参数</h2><p>在前面的例子中，尽管用<code>~R</code>搭配不同的参数可以将数字打印成不同进制的形式，但毕竟这个参数是固化在控制字符串中的，局限性很大。例如，如果我想要定义一个函数<code>print-x-in-base-y</code>，使得参数<code>x</code>可以打印为<code>y</code>进程的形式，那么也许会这么写</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> print-x-in-base-y (<span class="name">x</span> y)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">control-string</span> (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"~~~DR"</span> y)))</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> control-string x)))</span><br></pre></td></tr></tbody></table></figure>
+<p>但<code>format</code>的灵活性，允许使用者将命令的前缀参数也放到控制字符串之后的列表中，因此可以写成如下更简练的实现</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> print-x-in-base-y (<span class="name">x</span> y)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~VR"</span> y x))</span><br></pre></td></tr></tbody></table></figure>
+<p>而且不只一个，你可以把所有参数都写成参数的形式</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> print-x-in-base-y (<span class="name">x</span></span><br><span class="line">                          <span class="symbol">&amp;optional</span> y</span><br><span class="line">                          <span class="symbol">&amp;rest</span> args</span><br><span class="line">                          <span class="symbol">&amp;key</span> mincol padchar commachar commainterval)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> args))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~V,V,V,V,VR"</span></span><br><span class="line">          y mincol padchar commachar commainterval x))</span><br></pre></td></tr></tbody></table></figure>
+<p>恭喜你重新发明了<code>~R</code>，而且还不支持<code>:</code>和<code>@</code>修饰符。</p>
+<h2 id="自定义命令"><a href="#自定义命令" class="headerlink" title="自定义命令"></a>自定义命令</h2><p>要在CL中打印形如<code>2021-01-29 22:43</code>这样的日期和时间字符串，是一件比较麻烦的事情</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">multiple-value-bind</span> (<span class="name">sec</span> min hour date mon year)</span><br><span class="line">    (<span class="name">decode-universal-time</span> (<span class="name">get-universal-time</span>))</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> sec))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~4D-~2,'0D-~2,'0D ~2,'0D:~2,'0D~%"</span></span><br><span class="line">          year mon date hour min))</span><br></pre></td></tr></tbody></table></figure>
+<p>谁让CL没有内置像Python的<code>datetime</code>模块这般完善的功能呢。不过，借助<code>format</code>的<code>~/</code>命令，我们可以在控制字符串中写上要调用的自定义函数，来深度定制打印出来的内容。以打印上述格式的日期和时间为例，首先定义一个后续要用的自定义函数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> yyyy-mm-dd-HH-MM (<span class="name">dest</span> arg is-colon-p is-at-p <span class="symbol">&amp;rest</span> args)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> args is-at-p is-colon-p))</span><br><span class="line">  (<span class="name">multiple-value-bind</span> (<span class="name">sec</span> min hour date mon year)</span><br><span class="line">      (<span class="name">decode-universal-time</span> arg)</span><br><span class="line">    (<span class="name">declare</span> (<span class="name">ignorable</span> sec))</span><br><span class="line">    (<span class="name">format</span> dest <span class="string">"~4D-~2,'0D-~2,'0D ~2,'0D:~2,'0D~%"</span></span><br><span class="line">            year mon date hour min)))</span><br></pre></td></tr></tbody></table></figure>
+<p>然后便可以直接在控制字符串中使用它的名字</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~/yyyy-mm-dd-HH-MM/"</span> (<span class="name">get-universal-time</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>在我的机器上运行的时候，打印内容为<code>2021-01-29 22:51</code>。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p><code>format</code>可以做的事情还有很多，CL的HyperSpec中有关于<code>format</code>函数的<a href="http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/Body/sec_22-3.html" target="_blank" rel="noopener">详细介绍</a>，CL爱好者一定不容错过。</p>
+<p>最后，其实Python跟CL并不怎么像。每每看到Python中的<code>__eq__</code>、<code>__ge__</code>，以及<code>__len__</code>等方法的巧妙运用时，身为一名Common Lisp爱好者，我都会流露出羡慕的神情。纵然CL被称为可扩展的编程语言，这些平凡的功能却依旧无法方便地做到呢。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/01/02/年轻人的第一个VSCode插件/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -661,111 +833,11 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/10/11/Emacs的avy插件/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/10/11/Emacs的avy插件/" class="post-title-link" itemprop="url">Emacs的avy插件</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-10-11 10:07:27 / 修改时间：10:56:12" itemprop="dateCreated datePublished" datetime="2020-10-11T10:07:27+08:00">2020-10-11</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/10/11/Emacs的avy插件/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/11/Emacs的avy插件/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>用Emacs的时候，我习惯将它分成“四个部分”</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/Emacs分成四部分.jpg" alt=""></p>
-<p>怎么弄的呢？一般是先按<code>C-x 3</code>分出左右两个window，再到各个window中用<code>C-x 2</code>分出上下两个window——这不是我的笔误，在Emacs的术语中，用来显示一个buffer的区域就叫做一个<a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Windows.html" target="_blank" rel="noopener">window</a>。而常常被人们冠名为window的、最外层的窗体，则叫做<a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Frames.html#Frames" target="_blank" rel="noopener">frame</a>。</p>
-<p>这样划分后，多次按下<code>C-Tab</code>（我把这个快捷键绑定到了命令<code>other-window</code>上），便可以按照左上、左下、右上、右下的顺序轮换当前聚焦的window了。</p>
-<p>如果需要从其它window中复制内容到当前window中粘贴，操作会麻烦一点。以右上角需要左下角的内容为例：</p>
-<ol>
-<li>按三次<code>C-Tab</code>换到左下角的window中——用快捷键是因为我不想去挪鼠标；</li>
-<li>按<code>k</code>或<code>j</code>上下移动光标到目标行——用<code>k</code>和<code>j</code>是因为用了<code>evil-mode</code>插件（参见<a href="https://liutos.github.io/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/">这篇文章</a>）；</li>
-<li>复制内容，再按一次<code>C-Tab</code>回到原来的window中粘贴。</li>
-</ol>
-<p>听起来可麻烦了。</p>
-<p>好在Emacs有一个非常好用的插件，可以把第1和第2个步骤合在一起完成。</p>
-<h1 id="avy"><a href="#avy" class="headerlink" title="avy"></a>avy</h1><p>这个非常好用的插件就是<a href="https://github.com/abo-abo/avy" target="_blank" rel="noopener">avy</a>，它提供的<code>avy-goto-line</code>函数可以一步到位地完成上面的第1和第2个步骤。</p>
-<p>用Emacs的包管理器就可以安装它</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M-x package-install RET avy RET</span><br></pre></td></tr></tbody></table></figure>
-<p>接着要为命令<code>avy-goto-line</code>绑定一个喜欢的快捷键</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">global-set-key</span> (<span class="name">kbd</span> <span class="string">"M-g f"</span>) 'avy-goto-line)</span><br></pre></td></tr></tbody></table></figure>
-<p>至此便可以在Emacs中愉快地使用<code>M-g f</code>来快速跳转到当前或其它window中的行了。百闻不如一见，我来演示一番。</p>
-<h1 id="avy-goto-line"><a href="#avy-goto-line" class="headerlink" title="avy-goto-line"></a>avy-goto-line</h1><p><del>众所周知，</del>我用org-mode来跟踪自己的学习计划，还会将摸索过程中的一些半成品代码保存到org-mode的条目中。例如，我想要将左下角的window中的三个函数的定义，复制到右上角的代码块中去</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/移动前的景象.jpg" alt=""></p>
-<p>于是我先按下<code>M-g f</code>，让<code>avy</code>为每一行赋予一个标记</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/按下快捷键之后的景象.jpg" alt=""></p>
-<p>因为希望切换到左下角的window的第一行，所以我先按下<code>j</code></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/按下字母j之后的景象.jpg" alt=""></p>
-<p>此时，在前一幅截图中不以字母<code>j</code>开始的标记统统消失了，而以字母<code>j</code>开始的标记则只留下了从第二个字符开始的部分。</p>
-<p>再按下字母<code>l</code>，就可以将焦点切换到左下角的window，并且将光标移动到第一行的行首了。然后只需要选中内容、复制，并返回原来的window中粘贴即可。完整的过程如下</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/使用avy-goto-line的全过程.gif" alt=""></p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如果在按下组合键<code>M-g f</code>后，接着按下的是数字键的话，<code>avy-goto-line</code>会认为使用者打算跳转到指定的行。它将在Emacs的minibuffer中继续等待输入更多的数字或按下回车。不过我不怎么用这个功能，因为我没有让Emacs显示行号，按行号来跳转对我并不方便。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">…</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">…</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -832,7 +904,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-count">91</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -845,7 +917,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">116</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
