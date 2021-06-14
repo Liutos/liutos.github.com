@@ -200,6 +200,89 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/23/支持减、乘，以及除/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/05/23/支持减、乘，以及除/" class="post-title-link" itemprop="url">支持减、乘，以及除</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-05-23 21:50:19 / 修改时间：21:56:18" itemprop="dateCreated datePublished" datetime="2019-05-23T21:50:19+08:00">2019-05-23</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/05/23/支持减、乘，以及除/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/23/支持减、乘，以及除/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在<a href="http://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/">上一篇文章</a>中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。</p>
+<p>我自己模仿着x64的调用约定，规定四则运算的结果始终放在<code>EAX</code>这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到<code>EAX</code>寄存器中，再从<code>EAX</code>中减去或者除掉右操作数。</p>
+<p>在摸索除法的汇编代码怎么生成时，遇到了个费解的问题，最后才知道，原来需要把<code>EAX</code>寄存器的符号扩展到高位的<code>EDX</code>寄存器中去。对于<code>as</code>这个汇编器来说，需要用到<a href="https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-49/index.html" target="_blank" rel="noopener"><code>CLTD</code></a>指令。</p>
+<p>最后，<code>jjcc2</code>和<code>stringify</code>两个函数被修改为如下的样子</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/05/23/支持减、乘，以及除/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/21/Evernote与Leanote/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -559,97 +642,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/02/28/不同工具查看代码分支diff的差异/" class="post-title-link" itemprop="url">不同工具查看代码分支diff的差异</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-02-28 22:53:46 / 修改时间：22:55:46" itemprop="dateCreated datePublished" datetime="2019-02-28T22:53:46+08:00">2019-02-28</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/02/28/不同工具查看代码分支diff的差异/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/02/28/不同工具查看代码分支diff的差异/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文只是简单地讲述我自己在使用<a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">GNU Emacs</a>、<a href="https://git-fork.com/" target="_blank" rel="noopener">Fork</a>，以及<a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a>查看Git仓库的不同分支的diff上的经历。</p>
-<h2 id="Emacs"><a href="#Emacs" class="headerlink" title="Emacs"></a>Emacs</h2><p>当使用Emacs时，我更喜欢用<code>M-x package-install</code>安装的<a href="https://github.com/magit/magit" target="_blank" rel="noopener"><code>magit</code></a>提供的功能——<code>magit-diff</code>，而不是它自带的<code>vc-dir</code>。按下<code>M-x</code>，输入<code>magit-diff</code>并敲下回车后，Emacs会在minibuffer中等待用户输入要比较的分支。就像在shell中使用<code>git-diff</code>一样，只需要输入两个以<code>..</code>连接的分支名并敲下回车，就可以列出它们间的差异。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E5%B7%AE%E5%BC%82.png" alt=""></p>
-<p>上图是master与re两个分支间的差异。<code>magit-diff</code>会列出两个分支间不一致的文件，与直接使用<code>git-diff</code>命令没有不同。往下滚动跨过文件清单后，还可以查看单个文件的差异。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E6%97%B6%E7%9A%84%E5%85%B7%E4%BD%93%E6%96%87%E4%BB%B6%E5%B7%AE%E5%BC%82.png" alt=""></p>
-<h2 id="Fork"><a href="#Fork" class="headerlink" title="Fork"></a>Fork</h2><p>第一次知道Fork是在知乎闲逛的时候，好像是在浏览“Mac下有什么值得推荐的软件”这类问题时看到的。某一次，为了能直观地查看两个commit间的差异，便试用了一番，效果确实不错。Fork的界面如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E7%9A%84%E7%95%8C%E9%9D%A2%E6%A6%82%E8%A7%88.png" alt=""></p>
-<p>还记得，当时为了能够比较两个commit间的差异，我还在Fork的菜单栏中翻了很久——虽然是毫无收获。结果发现，原来只需要选中两个commit就可以了。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E4%B8%AD%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AAcommit%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82.png" alt=""></p>
-<p>图片两行蓝色的就是我选中的两个commit——先用鼠标点击其一，按住<code>control</code>键后再选中另一个即可。图片下方的部分与<code>magit-diff</code>差不多，应该也算是一目了然了。</p>
-<h2 id="Visual-Studio-Code"><a href="#Visual-Studio-Code" class="headerlink" title="Visual Studio Code"></a>Visual Studio Code</h2><p>原本我觉得Fork已经足够好了，某一天在用VSCode时才忽然发现，在Fork中显示的代码差异，是没有语法高亮的。通常来说，即使没有语法高亮，查看短小的diff也不成问题。但如果差异的内容很多，或是diff位于一个很长的函数内部，这时光靠diff来做代码审查已经不太够了——因为不好确定在这片diff中出现的变量和函数，到底是不是正确地定义了的。</p>
-<p>后来我发现，VSCode自带的“源代码管理”，即便是在查看diff时也是有语法高亮的——不仅有语法高亮，对于Node.js代码而言，还有ESLint的提示和“跳转到定义”的功能，awesome！不愧是全宇宙最好用的编辑器（笑</p>
-<p>为了可以用VSCode来查看两个分支间的差异，放狗搜了一下，找到了神器<a href="https://github.com/eamodio/vscode-gitlens" target="_blank" rel="noopener">GitLens</a>。</p>
-<p>安装GitLens后，VSCode的最左侧会多出一个菜单项，在其中可以方便地选择两个分支来进行比较。首先，找到一个要比较的分支，选择“Select for Compare”。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png" alt=""></p>
-<p>再选中另一个要比较的分支，右键单击选择“Compare with Selected”，然后便可以在下方看到VSCode罗列出不一致的文件清单了。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png" alt=""></p>
-<p>VSCode是最吼的！</p>
-<p>全文完。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -721,7 +713,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-count">92</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -200,6 +200,104 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/08/31/连分数与ProjectEuler的第66题/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2012/08/31/连分数与ProjectEuler的第66题/" class="post-title-link" itemprop="url">连分数与ProjectEuler的第66题</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2012-08-31 23:01:07" itemprop="dateCreated datePublished" datetime="2012-08-31T23:01:07+08:00">2012-08-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2012/08/31/连分数与ProjectEuler的第66题/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2012/08/31/连分数与ProjectEuler的第66题/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="可耻的蛮力法"><a href="#可耻的蛮力法" class="headerlink" title="可耻的蛮力法"></a>可耻的蛮力法</h2><p><a href="http://projecteuler.net/problem=66" target="_blank" rel="noopener">ProjectEuler的第66题的传送门</a>。话说今天挺累的，去实习单位那边做了一下小小的阶段性总结，然后走回了学校的另一个门，吃完饭又走回学校另一头的我自己的宿舍，别提有多累了。看来今天这样的运动量也够了，今晚的跑步就先搁置了吧。好了，回到正题，也就是ProjectEuler的第66题。第66题乍看起来似乎很简单，无非就是查找一个满足条件的所有x当中的最大值而已。于是像几乎所有的其它题目一样，我尝试使用蛮力法来解决这个题目，而为了保险起见，我为自己的查找单个d所对应的最小的x的函数的查找过程设置了上界，因此保证了每一个函数调用都会结束。然后就开始对所有小于1000的d进行查找了，一开始判断一个数是不是平方数的方法有误，计算出了结果却是错的。待我修改了之后重新运行了一次程序，结果更令我大吃一惊——对于d为61的情况，在上限之下找不到结果——尼玛我设的上界可是一亿啊！（最近对一亿特别有感情）</p>
+<h2 id="抛弃蛮力法重新上路"><a href="#抛弃蛮力法重新上路" class="headerlink" title="抛弃蛮力法重新上路"></a>抛弃蛮力法重新上路</h2><p>再试了几次之后，我确定自己的方法是没有错的，所以真正的答案就是对于有些d而言结果确实无法在上界之下找到（最后计算到了真正的答案之后我才发现自己用蛮力法是多么的天真无邪可爱不懂事……）。于是我放弃了自己的方法，转而在网上寻找别人的求助。在Google中输入关键字后，很快就有英文的博客出现在了候选项中。为了不放过任何的学习机会，我点击了第一个。进去之后才发现，这个问题原来还真不简单……</p>
+<h3 id="数学的逆袭"><a href="#数学的逆袭" class="headerlink" title="数学的逆袭"></a>数学的逆袭</h3><p>ProjectEuler的第66题是一道不折不扣的<em>数学题</em>。在第一个博客中，我看到了博主提到了<em>丢番图方程</em>以及两个我不太懂的单词convergent和continue fraction。这时候还没啥感觉，只是对博主说他以0.x级别的速度做出来这道题目感到震惊和难以置信，然后又转而去看了Google到的<a href="http://eli.thegreenplace.net/2009/06/19/project-euler-problem-66-and-continued-fractions/" target="_blank" rel="noopener">第二个链接</a>。说实在的，真的非常感谢这个链接的博主，因为正是他的指引才让我知道了一个<a href="http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/cfINTRO.html" target="_blank" rel="noopener">关于连分数的极好的讲解</a>，看完了博主的文章后大致知道了这道题目是怎么一回事，然后就一头扎进了那个讲解里面去看了。好吧，为了做题我又回去研究数学了。</p>
+<h3 id="大致的数学内容"><a href="#大致的数学内容" class="headerlink" title="大致的数学内容"></a>大致的数学内容</h3><p>首先题目中出现的方程是所谓的“丢番图方程”，并且可以归为更具体的类别叫做“佩尔方程”，幸运的是，对于<em>佩尔方程</em>的解是一个已经研究过的问题，并且根据维基百科上的说明，当d不为平方数时，佩尔方程对每一个d都有解，这是由拉格朗日证明了的。所以即使是使用蛮力法，也尽可以放心地去从1开始遍历所有的自然数——你总会找到那个心仪的它的！除了证明了有解之外，佩尔方程的解法也是被人们研究过的，并且有几种不同的解法。可惜的是本人的英语水平和数学水平都不是很强，只能看懂中文维基百科中关于佩尔方程的<em>用连分数求解</em>的<a href="http://zh.wikipedia.org/wiki/佩尔方程#.E4.BD.A9.E5.B0.94.E6.96.B9.E7.A8.8B.E7.9A.84.E8.A7.A3" target="_blank" rel="noopener">方法</a>，因此也决定了使用这个方法来解决第66题。</p>
+<h2 id="重点来了：怎么计算一个数的算术平方根的连分数形式？"><a href="#重点来了：怎么计算一个数的算术平方根的连分数形式？" class="headerlink" title="重点来了：怎么计算一个数的算术平方根的连分数形式？"></a>重点来了：怎么计算一个数的算术平方根的连分数形式？</h2><p>方法来源在前面提及的<a href="http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/cfINTRO.html" target="_blank" rel="noopener">关于连分数的极好的讲解</a>那里，不过重点其实在于用程序实现这个东西。一开始的时候我觉得这个东西可能要用到符号计算，然后就开始在那里纠结要用怎样的方式来表达一个数的算术平方根才好。到后来我盯了那个表格很久之后我才发现我错了，根本不是酱紫的！压根就不需要什么符号计算，只是纯粹的数值计算就足够了。这一切的一切的关键，就在于怎么把一个数拆分成一个整数加上一个未知数的倒数的形式。</p>
+<p>（为了方便起见用了原文中的例子）首先，如果要计算√14，那么按照算法（请自己看上面的链接里的英文原文）的第一步，要找到一个数m，使得m的平方是一个最接近14的完全平方数。显然这个数是9，但是怎么算呢？可以一个个地从1开始找（太慢了一边去！），另一个方法是用计算器求平方根的功能直接计算得到3.7416575，然后对这个结果取<em>不大于它的最大整数</em>（也就是所谓的floor），得到了3。那么就可以把√14表示成3+1/x1的形式。</p>
+<p>这样我们得到了√14的一个等级的连分数近似形式3/1（也就是3啊）。显然3*3-14*1*1得到-5，所以连分数3/1不是所希望的解，因此需要继续计算第二级的连分数近似，那么要怎么算呢？我们只要把上式中的x1也表示成连分数的形式就可以了，但是必须先求出x1的某个数值表示形式，不然无法应用上面的第一步。方法是把x1用√14和其它数来表示。于是有</p>
+<pre><code>x1 = 1/(√14-3) = (√14+3)/(√14-3)(√14+3) = (√14+3)/5
+</code></pre><p>按照前面的方法，floor((√14+3)/5)的结果为1，所以x1可以写成1+1/x2的形式，那么√14就可以写成3+1/(1+1/x2)的形式，忽略未知的1/x2就得到了连分数4/1，仍然不是方程x^2-Dy^2=1的解。总之继续这么进行下去，就可以得到满足上面的方程的整数解了，并且其中的x必定是所有解当中最小的一个。</p>
+<h3 id="规律在哪？紧盯表格！"><a href="#规律在哪？紧盯表格！" class="headerlink" title="规律在哪？紧盯表格！"></a>规律在哪？紧盯表格！</h3><p>表格的第一列是Finding，显然，每一行的Finding的值决定了在Step 1中计算得到的红色的数字是多少。如果知道了每一行的Finding是多少，就有办法计算出那些红色的数字了。在Finding中出现的x1、x2和x3，其实就是前一行最后所计算出来的那些值罢了。不难发现x1、x2和x3其实都有相同的结构，那就是它们都是(√14-a)/b的形式。而a和b分别为3、2、2和5、2、5。如果再想想就会知道，其实一开始的√14也满足这样的形式。对于√14而言，a为0而b为1。既然有了规律和相应的符号表示，那么就可以从代数的角度来找规律了。加入要计算算术平方根的数是n，红色的要计算的数为m，那么在第i次计算中</p>
+<pre><code>(√n+a_(i-1))/b_(i-1) = m_i + 1/x_i
+</code></pre><p>显然要计算的就是m_i和x_i，而x_i其实就是由a_i和b_i所构成的，因此变换x_i就可以得到</p>
+<pre><code>x_i = (√n-(a_(i-1) - m_ib_(i-1)))/((n-(a_(i-1) - m_ib_(i-1))^2)/b_(i-1))
+</code></pre><p>上面的公式太丑了，LaTeX版本在<a href="https://raw.github.com/Liutos/liutos.github.com/master/xi.png" target="_blank" rel="noopener">这里</a>。这样也就知道了对应于这个xi的a和b分别为多少了，参见前面给出的LaTeX所描述的公式的图片的链接。这些公式实际上是递推公式，也就是说你必须有了前一个值之后才能计算出下一个值。如果是希望快速计算出指定的连分数的一个部分的话，那么这种方式不适合，不过用在这里却刚好，因为我不知道第几个连分数的部分才是解，所以一定是从第一个近似连分数一直迭代过去的。</p>
+<p>知道了计算方法，那么剩下的编码过程也就简单了很多了，详情请参见<a href="https://github.com/Liutos/Project-Euler/blob/master/lisp/pro66.lisp" target="_blank" rel="noopener">我的解法</a>。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>这一次的收获还真不少。首先是关于题目本身的。以前我做ProjectEuler的题目，几乎都是直接使用蛮力法来解决的，不过这一次蛮力法彻底失败了，因为消耗的时间实在是太久了所以没有必要完全计算出来了（实际上我没有完全计算，因为设置了上限在中途就发现问题了）。而上网搜索才发现这其实是一道彻头彻尾的数学题——当然了，还是需要写程序来算的。也强烈地让我认识到了，PE的题目看中的，真的如之前在豆瓣上的讨论所看到的，注重的是数学能力，而不是运用一些经典的算法的能力。第二个，是关于所谓的“过早优化是万恶之源”的说法的感想。</p>
+<p>一开始我并不知道用蛮力法来计算是不实际的，因此我一直在尝试着改进蛮力法的性能——是的，我还没有确定这个东西是否能够正确地计算出结果的时候我已经开始考虑优化的事情了。问题出在哪里呢？就在于我对于所遇到的很多题目都是尝试使用蛮力法来解决的，以致于我有了这样的思维定势：每当我发现运行时间过长时，我就会觉得一定是我的代码性能不好，因此会尝试对其进行优化，例如加上类型声明或者使用记忆化之类的。可是偏偏这样走上了歪路，因为正确的做法是分析一下问题，找到正确的解法，而不是在错误的解法上不断地尝试优化。如果我一直优化下去，那么永远不会得到正确的答案——过早优化是万恶之源～</p>
+<p>第三条——糟糕，洗完澡忘记了第三条是什么了！&gt;_&lt;（总算想起来了，于23:36）在这一次的解法中，对于连分数的构造是一个递推的过程，实际上就有种可以用递归来解决的味道。刚想着怎么表示这么一个构造连分数的过程的时候，我忽然灵光一闪，想到了只看过却从来没有使用过的技术——把闭包当作数据结构来使用。于是根据自己看《SICP》的经验，我弄了个叫做make-cf的函数，只要传递一个整数给它，那么就可以得到相应的一个闭包，对这个闭包做不同的操作就有不同的结果，而且那些状态信息还可以由闭包自己保持。等我用起来之后才发现，用闭包好像是一个很有用的想法，因为</p>
+<pre><code>这样子相当具有复用的可能！
+</code></pre><p>代码中的make-cf、update-cf、to-cf和get-cf-list，完全可以写入一个package中然后作为一个独立的模块来提供，这样子以后的一些程序也可以使用了——PE上好像还有不少用到连分数的题目呢^_^虽然用CLOS完全可以实现这里提及的闭包的功能，可是比起CLOS提供的面向对象功能，闭包反而更有封装的感觉。总之在CLOS和闭包中，我更喜欢这种用闭包来实现的风格;-)</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/08/24/PE的第26题/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -352,7 +450,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">91</span>
+          <span class="site-state-item-count">92</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
