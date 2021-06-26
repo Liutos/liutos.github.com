@@ -45,23 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="为什么我会需要绘制时序图我司在做一些咋看之下比较复杂的需求的时候，都需要先写设计文档，不过我猜想这种规矩应该在很多公司都有才对，我并没有其它公司没有这种规矩的言外之意。然后呢，我个人比较习惯按照“从外到内”的方式来写设计文档，因此，在文档的开篇我总是会描述一下一个需求的全局视图，一般来说，就是用绘图的方式。对于一些复杂的活动需求里的流程，咋一看觉得会涉及到多个系统间的调用的时候，我就会选择画一幅时">
-<meta name="keywords" content="sequencediagram,时序图,语绘">
+  <meta name="description" content="忆往昔峥嵘岁月稠在Python的语言标准的Comparisions章节中提到  Also unlike C, expressions like a &amp;lt; b &amp;lt; c have the interpretation that is conventional in mathematics  也就是说，在C语言中要写成a &amp;lt; b &amp;amp;&amp;amp; b &amp;lt; c的表达式，在Pyth">
+<meta name="keywords" content="lisp,commonlisp,macro,宏">
 <meta property="og:type" content="article">
-<meta property="og:title" content="时序图绘制工具走马观花">
-<meta property="og:url" content="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/index.html">
+<meta property="og:title" content="模拟小于运算符的短路特性">
+<meta property="og:url" content="https://liutos.github.io/2021/06/26/模拟小于运算符的短路特性/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="为什么我会需要绘制时序图我司在做一些咋看之下比较复杂的需求的时候，都需要先写设计文档，不过我猜想这种规矩应该在很多公司都有才对，我并没有其它公司没有这种规矩的言外之意。然后呢，我个人比较习惯按照“从外到内”的方式来写设计文档，因此，在文档的开篇我总是会描述一下一个需求的全局视图，一般来说，就是用绘图的方式。对于一些复杂的活动需求里的流程，咋一看觉得会涉及到多个系统间的调用的时候，我就会选择画一幅时">
+<meta property="og:description" content="忆往昔峥嵘岁月稠在Python的语言标准的Comparisions章节中提到  Also unlike C, expressions like a &amp;lt; b &amp;lt; c have the interpretation that is conventional in mathematics  也就是说，在C语言中要写成a &amp;lt; b &amp;amp;&amp;amp; b &amp;lt; c的表达式，在Pyth">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2019-06-18T14:10:33.000Z">
+<meta property="og:updated_time" content="2021-06-26T03:07:50.416Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="时序图绘制工具走马观花">
-<meta name="twitter:description" content="为什么我会需要绘制时序图我司在做一些咋看之下比较复杂的需求的时候，都需要先写设计文档，不过我猜想这种规矩应该在很多公司都有才对，我并没有其它公司没有这种规矩的言外之意。然后呢，我个人比较习惯按照“从外到内”的方式来写设计文档，因此，在文档的开篇我总是会描述一下一个需求的全局视图，一般来说，就是用绘图的方式。对于一些复杂的活动需求里的流程，咋一看觉得会涉及到多个系统间的调用的时候，我就会选择画一幅时">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
+<meta name="twitter:title" content="模拟小于运算符的短路特性">
+<meta name="twitter:description" content="忆往昔峥嵘岁月稠在Python的语言标准的Comparisions章节中提到  Also unlike C, expressions like a &amp;lt; b &amp;lt; c have the interpretation that is conventional in mathematics  也就是说，在C语言中要写成a &amp;lt; b &amp;amp;&amp;amp; b &amp;lt; c的表达式，在Pyth">
 
-<link rel="canonical" href="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/">
+<link rel="canonical" href="https://liutos.github.io/2021/06/26/模拟小于运算符的短路特性/">
 
 
 <script id="page-configurations">
@@ -73,7 +70,7 @@
   };
 </script>
 
-  <title>时序图绘制工具走马观花 | 小打小闹写点bug</title>
+  <title>模拟小于运算符的短路特性 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -204,7 +201,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/06/26/模拟小于运算符的短路特性/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/微信.jpg">
@@ -217,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          时序图绘制工具走马观花
+          模拟小于运算符的短路特性
         </h1>
 
         <div class="post-meta">
@@ -228,7 +225,18 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-06-18 22:01:00 / 修改时间：22:10:33" itemprop="dateCreated datePublished" datetime="2019-06-18T22:01:00+08:00">2019-06-18</time>
+              <time title="创建时间：2021-06-26 11:02:53 / 修改时间：11:07:50" itemprop="dateCreated datePublished" datetime="2021-06-26T11:02:53+08:00">2021-06-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/实战CommonLisp/" itemprop="url" rel="index">
+                    <span itemprop="name">实战CommonLisp</span>
+                  </a>
+                </span>
             </span>
 
           
@@ -240,8 +248,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/06/18/时序图绘制工具走马观花/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/18/时序图绘制工具走马观花/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/06/26/模拟小于运算符的短路特性/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/06/26/模拟小于运算符的短路特性/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -256,21 +264,36 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="为什么我会需要绘制时序图"><a href="#为什么我会需要绘制时序图" class="headerlink" title="为什么我会需要绘制时序图"></a>为什么我会需要绘制时序图</h2><p>我司在做一些咋看之下比较复杂的需求的时候，都需要先写设计文档，不过我猜想这种规矩应该在很多公司都有才对，我并没有其它公司没有这种规矩的言外之意。然后呢，我个人比较习惯按照“从外到内”的方式来写设计文档，因此，在文档的开篇我总是会描述一下一个需求的全局视图，一般来说，就是用绘图的方式。对于一些复杂的活动需求里的流程，咋一看觉得会涉及到多个系统间的调用的时候，我就会选择画一幅时序图了。</p>
-<p>需要事先说明的是，我没有正儿八经地系统学习过UML方面的内容，所以我画出来的图都只是一些不算很规范的野鸡时序图，当然了，我也不知道这世界上到底有没有规范的时序图画法。</p>
-<p>为了画时序图，用过几款工具。它们的共同点，就是都是“语绘”的，也就是通过写代码的方式来描述所想要的图，然后让这些工具帮你把这张图给“画出来”。我个人更喜欢这种方式，而不是拖拖拉拉，不过这纯粹是个人喜好的问题而已。</p>
-<h2 id="走马观花"><a href="#走马观花" class="headerlink" title="走马观花"></a>走马观花</h2><p><a href="http://www.websequencediagrams.com是我接触到的第一个“语绘”时序图的工具。打开它之后，就会看到它的实例代码和效果图了，截图如下" target="_blank" rel="noopener">www.websequencediagrams.com是我接触到的第一个“语绘”时序图的工具。打开它之后，就会看到它的实例代码和效果图了，截图如下</a></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/websequencediagrams%E9%A6%96%E9%A1%B5.png" alt=""></p>
-<p>用这个网站的工具画出来的时序图会有一种【手绘】的感觉</p>
-<p><a href="http://sdedit.sourceforge.net/index.html" target="_blank" rel="noopener"><code>sdedit</code></a>是我第二款使用的绘图工具，是一款用Java开发的本地工具，只需要编写好一个<code>.sd</code>文件，然后用下列的命令处理即可</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sdedit -t png -o a.png a.sd</span><br></pre></td></tr></tbody></table></figure>
-<p><code>sdedit</code>绘制时序图的代码的语法跟WebSequenceDiagrams不同，在Emacs中似乎也没有找到别人写好的适合编辑<code>.sd</code>文件的主模式，后来我自己定义了一个简陋的主模式来用，如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> sdedit-highlights</span><br><span class="line">      '((<span class="string">"Actor\\|Node"</span> . font-lock-function-name-face)))</span><br><span class="line"></span><br><span class="line">(<span class="name">define-derived-mode</span> sdedit-mode fundamental-mode <span class="string">"sdedit"</span></span><br><span class="line">  <span class="string">"编辑.sd文件的主模式"</span></span><br><span class="line">  (<span class="name">setq</span> font-lock-defaults '(sdedit-highlights)))</span><br><span class="line"></span><br><span class="line"><span class="comment">;;; 代码是从下面这个网页给的例子改动来的</span></span><br><span class="line"><span class="comment">;;; https://www.emacswiki.org/emacs/CompileCommand</span></span><br><span class="line">(<span class="name">add-hook</span> 'sdedit-mode-hook</span><br><span class="line">          (<span class="name">lambda</span> ()</span><br><span class="line">            (<span class="name">unless</span> (<span class="name">file-exists-p</span> <span class="string">"Makefile"</span>)</span><br><span class="line">              (<span class="name">set</span> (<span class="name">make-local-variable</span> 'compile-command)</span><br><span class="line">                   (<span class="name">let*</span> ((<span class="name">buffer-name</span> (<span class="name">buffer-name</span>))</span><br><span class="line">                          (<span class="name">base-name</span> (<span class="name">car</span> (<span class="name">split-string</span> buffer-name <span class="string">"\\."</span>))))</span><br><span class="line">                     (<span class="name">format</span> <span class="string">"/usr/local/bin/sdedit -t png -o %s.png %s.sd"</span> base-name base-name))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">add-to-list</span> 'auto-mode-alist</span><br><span class="line">             '(<span class="string">"\\.sd$"</span> . sdedit-mode))</span><br></pre></td></tr></tbody></table></figure>
-<p>勉勉强强可以接受</p>
-<p>sequencediagram.org则是最近刚发掘到的一个不错的绘制时序图的在线工具。它的绘制语法跟WebSequenceDiagrams是一样的，并且它还有一个不错的教程。打开它的网站后，点击左侧的这个图标</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/sequencediagram.org%E7%9A%84%E6%95%99%E7%A8%8B%E5%85%A5%E5%8F%A3.png" alt=""></p>
-<p>便可以看到详尽的语法教程。</p>
-<p>sequencediagram.org绘制出来的时序图是这三个工具中最符合我的审美的，今后应当会成为我绘制时序图的主力工具。</p>
+        <p><del>忆往昔峥嵘岁月稠</del>在Python的语言标准的<a href="https://docs.python.org/3/reference/expressions.html#comparisons" target="_blank" rel="noopener">Comparisions章节</a>中提到</p>
+<blockquote>
+<p>Also unlike C, expressions like a &lt; b &lt; c have the interpretation that is conventional in mathematics</p>
+</blockquote>
+<p>也就是说，在C语言中要写成<code>a &lt; b &amp;&amp; b &lt; c</code>的表达式，在Python中可以写成<code>a &lt; b &lt; c</code>。并且，标准中还提到</p>
+<blockquote>
+<p>Comparisons can be chained arbitrarily, e.g., x &lt; y &lt;= z is equivalent to x &lt; y and y &lt;= z, except that y is evaluated only once (but in both cases z is not evaluated at all when x &lt; y is found to be false).</p>
+</blockquote>
+<p>一般将这种性质成为短路。因此，像<code>2 &lt; 1 &lt; (1 / 0)</code>这样的表达式在Python中不会引发异常，而是返回<code>False</code>。</p>
+<p>Python的小于号能拥有短路特性，是因为它并非一个普通函数，而是有语言层面加持的操作符。而在Common Lisp（下称CL）中，小于号仅仅是一个普通函数，就像Haskell中的小于号也是一个函数一般。不同的是，CL的小于号能接受多于两个的参数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">&lt;</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">-1</span>) <span class="comment">; 结果为NIL</span></span><br></pre></td></tr></tbody></table></figure>
+<p>但它并没有短路特性</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">&lt;</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">-1</span> (<span class="name">/</span> <span class="number">1</span> <span class="number">0</span>)) <span class="comment">; 引发名为DIVISION-BY-ZERO的错误</span></span><br></pre></td></tr></tbody></table></figure>
+<p>要想模拟出具有短路特性的小于号，必须借助于宏的力量。</p>
+<h1 id="想生成什么样的代码"><a href="#想生成什么样的代码" class="headerlink" title="想生成什么样的代码"></a>想生成什么样的代码</h1><p>要想写出一个宏，必须先设想出它的语法，以及它会展开成什么样的代码。姑且为这个宏起名为<code>less-than</code>，它的语法应当为</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> less-than (<span class="name">form</span> <span class="symbol">&amp;rest</span> more-forms)</span><br><span class="line">  <span class="comment">; TBC</span></span><br><span class="line">  )</span><br></pre></td></tr></tbody></table></figure>
+<p>至于它的展开结果可以有多种选择。例如，可以<code>(less-than 2 1 (/ 1 0))</code>展开为自身具有短路特性的<code>and</code>形式</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">and</span> (<span class="name">&lt;</span> <span class="number">2</span> <span class="number">1</span>) (<span class="name">&lt;</span> <span class="number">1</span> (<span class="name">/</span> <span class="number">1</span> <span class="number">0</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<p>但就像在C语言中用宏朴素地实现计算二者最大值的<code>MAX</code>宏一样，上面的展开方式在一些情况下会招致重复求值</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">less-than</span> <span class="number">1</span> (<span class="name">progn</span> (<span class="name">print</span> 'hello) <span class="number">2</span>) <span class="number">3</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>因此，起码要展开为<code>and</code>和<code>let</code>的搭配</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">g917</span> <span class="number">1</span>)</span><br><span class="line">      (<span class="name">g918</span> (<span class="name">progn</span> (<span class="name">print</span> 'hello) <span class="number">2</span>)))</span><br><span class="line">  (<span class="name">and</span> (<span class="name">&lt;</span> g917 g918)</span><br><span class="line">       (<span class="name">let</span> ((<span class="name">g919</span> <span class="number">3</span>))</span><br><span class="line">         (<span class="name">&lt;</span> g918 g919))))</span><br></pre></td></tr></tbody></table></figure>
+<p>要想展开为这种结构，可以如这般实现<code>less-than</code></p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> less-than (<span class="name">form</span> <span class="symbol">&amp;rest</span> more-forms)</span><br><span class="line">  (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">lhs</span> forms)</span><br><span class="line">             <span class="string">"LHS表示紧接着下一次要比较的、小于号的左操作数。"</span></span><br><span class="line">             (<span class="name">unless</span> forms</span><br><span class="line">               (<span class="name">return-from</span> aux))</span><br><span class="line">             (<span class="name">let*</span> ((<span class="name">rhs</span> (<span class="name">gensym</span>))</span><br><span class="line">                    (<span class="name">rv</span> (<span class="name">aux</span> rhs (<span class="name">rest</span> forms))))</span><br><span class="line">               (<span class="name">if</span> rv</span><br><span class="line">                   `(let ((,rhs ,(first forms)))</span><br><span class="line">                      (and (&lt; ,lhs ,rhs)</span><br><span class="line">                           ,rv))</span><br><span class="line">                   `(&lt; ,lhs ,(first forms))))))</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">null</span> more-forms)</span><br><span class="line">           `(&lt; ,form))</span><br><span class="line">          (<span class="name">t</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">lhs</span> (<span class="name">gensym</span>)))</span><br><span class="line">             `(let ((,lhs ,form))</span><br><span class="line">                ,(aux lhs more-forms)))))))</span><br></pre></td></tr></tbody></table></figure>
+<p>用上面的输入验证一下是否会导致重复求值</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">macroexpand-1</span> '(less-than <span class="number">1</span> (progn (print 'hello) <span class="number">2</span>) <span class="number">3</span>))</span><br><span class="line">(<span class="name">LET</span> ((<span class="name">#</span><span class="symbol">:G942</span> <span class="number">1</span>))</span><br><span class="line">  (<span class="name">LET</span> ((<span class="name">#</span><span class="symbol">:G943</span> (<span class="name">PROGN</span> (<span class="name">PRINT</span> 'HELLO) <span class="number">2</span>)))</span><br><span class="line">    (<span class="name">AND</span> (<span class="name">&lt;</span> #<span class="symbol">:G942</span> #<span class="symbol">:G943</span>) (<span class="name">&lt;</span> #<span class="symbol">:G943</span> <span class="number">3</span>))))</span><br><span class="line">T</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="优化一下"><a href="#优化一下" class="headerlink" title="优化一下"></a>优化一下</h1><p>显然<code>less-than</code>可以优化，只需要简单地运用递归的技巧即可</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> less-than (<span class="name">form</span> <span class="symbol">&amp;rest</span> more-forms)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">&lt;=</span> (<span class="name">length</span> more-forms) <span class="number">1</span>)</span><br><span class="line">         `(&lt; ,form ,@more-forms))</span><br><span class="line">        (<span class="name">t</span></span><br><span class="line">         (<span class="name">let</span> ((<span class="name">lhs</span> (<span class="name">gensym</span>))</span><br><span class="line">               (<span class="name">rhs</span> (<span class="name">gensym</span>)))</span><br><span class="line">           `(let ((,lhs ,form)</span><br><span class="line">                  (,rhs ,(first more-forms)))</span><br><span class="line">              (and (&lt; ,lhs ,rhs)</span><br><span class="line">                   (less-than ,rhs ,@(rest more-forms))))))))</span><br></pre></td></tr></tbody></table></figure>
+<p>展开后的代码简短得多</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">macroexpand-1</span> '(less-than <span class="number">1</span> (progn (print 'hello) <span class="number">2</span>) <span class="number">3</span>))</span><br><span class="line">(<span class="name">LET</span> ((<span class="name">#</span><span class="symbol">:G955</span> <span class="number">1</span>) (<span class="name">#</span><span class="symbol">:G956</span> (<span class="name">PROGN</span> (<span class="name">PRINT</span> 'HELLO) <span class="number">2</span>)))</span><br><span class="line">  (<span class="name">AND</span> (<span class="name">&lt;</span> #<span class="symbol">:G955</span> #<span class="symbol">:G956</span>) (<span class="name">LESS-THAN</span> #<span class="symbol">:G956</span> <span class="number">3</span>)))</span><br><span class="line">T</span><br></pre></td></tr></tbody></table></figure>
 
     </div>
 
@@ -309,7 +332,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/" title="时序图绘制工具走马观花">https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/</a>
+    <a href="https://liutos.github.io/2021/06/26/模拟小于运算符的短路特性/" title="模拟小于运算符的短路特性">https://liutos.github.io/2021/06/26/模拟小于运算符的短路特性/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -321,9 +344,10 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/sequencediagram/" rel="tag"><i class="fa fa-tag"></i> sequencediagram</a>
-              <a href="/tags/时序图/" rel="tag"><i class="fa fa-tag"></i> 时序图</a>
-              <a href="/tags/语绘/" rel="tag"><i class="fa fa-tag"></i> 语绘</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+              <a href="/tags/commonlisp/" rel="tag"><i class="fa fa-tag"></i> commonlisp</a>
+              <a href="/tags/macro/" rel="tag"><i class="fa fa-tag"></i> macro</a>
+              <a href="/tags/宏/" rel="tag"><i class="fa fa-tag"></i> 宏</a>
           </div>
 
         
@@ -332,13 +356,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/06/14/拆解嵌套的表达式/" rel="prev" title="拆解嵌套的表达式">
-      <i class="fa fa-chevron-left"></i> 拆解嵌套的表达式
+    <a href="/2021/06/14/从AOP到method-combination/" rel="prev" title="从AOP到method-combination">
+      <i class="fa fa-chevron-left"></i> 从AOP到method-combination
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2019/06/26/inside-out-aux如何支持对-exit的调用/" rel="next" title="inside-out/aux如何支持对_exit的调用">
-      inside-out/aux如何支持对_exit的调用 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -418,7 +439,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么我会需要绘制时序图"><span class="nav-number">1.</span> <span class="nav-text">为什么我会需要绘制时序图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#走马观花"><span class="nav-number">2.</span> <span class="nav-text">走马观花</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#想生成什么样的代码"><span class="nav-number">1.</span> <span class="nav-text">想生成什么样的代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优化一下"><span class="nav-number">2.</span> <span class="nav-text">优化一下</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -605,7 +626,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '29a2bcb910ca0275459a15c7ae5a630d',
+      id: 'd2a7ba46de2e46dc83613a4bc51bf792',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -629,9 +650,9 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/",
-            identifier: "2019/06/18/时序图绘制工具走马观花/",
-            title: "时序图绘制工具走马观花"
+            url: "https://liutos.github.io/2021/06/26/模拟小于运算符的短路特性/",
+            identifier: "2021/06/26/模拟小于运算符的短路特性/",
+            title: "模拟小于运算符的短路特性"
           }
         }
       });

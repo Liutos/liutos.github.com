@@ -46,7 +46,7 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="“究竟在干什么”是一系列关于软件开发过程中背后运作原理的文章，每一篇文章旨在讲解一些在日常编程实践中常见但可能并不为人所熟知的技术细节，抛砖引玉，期待激发读者朋友的更多思考。  如何在shell中比较大小？如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写[ blablabla ]这样的代码  例如，如果想知道当前的UNIX时间是否已经以16开头，可以用下列的shell">
-<meta name="keywords" content="bash,shell">
+<meta name="keywords" content="shell,bash">
 <meta property="og:type" content="article">
 <meta property="og:title" content="你或许不知道，shell不能比较大小">
 <meta property="og:url" content="https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/index.html">
@@ -279,7 +279,7 @@
 <h1 id="如何在shell中比较大小？"><a href="#如何在shell中比较大小？" class="headerlink" title="如何在shell中比较大小？"></a>如何在shell中比较大小？</h1><p>如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写<code>[ blablabla ]</code>这样的代码</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/搜索“shell比较”的结果.jpg" alt=""></p>
 <p>例如，如果想知道当前的UNIX时间是否已经以<code>16</code>开头，可以用下列的shell代码</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">ts=$(date '+%s')</span><br><span class="line">if [ "${ts}" -gt 1600000000 -a "${ts}" -lt 1700000000 ]; then</span><br><span class="line">    echo '当前的UNIX时间戳已经以16开头啦。'</span><br><span class="line">else</span><br><span class="line">    echo '当前的UNIX时间戳还没以16开头哦。'</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">ts=$(date '+%s')</span><br><span class="line">if [ "${ts}" -gt 1600000000 -a "${ts}" -lt 1700000000 ]; then</span><br><span class="line">    echo '当前的UNIX时间戳已经以16开头啦。'</span><br><span class="line">else</span><br><span class="line">    echo '当前的UNIX时间戳还没以16开头哦。'</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
 <p>当我写这个的时候，<code>date '+%s'</code>的值为<code>1587901648</code>，所以运行后走的是<code>else</code>的分支。</p>
 <p>除了用<code>-gt</code>表示大于之外，还有各种各样的其它比较运算符，例如下列的四个运算符</p>
 <table>
@@ -413,8 +413,8 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/bash/" rel="tag"><i class="fa fa-tag"></i> bash</a>
               <a href="/tags/shell/" rel="tag"><i class="fa fa-tag"></i> shell</a>
+              <a href="/tags/bash/" rel="tag"><i class="fa fa-tag"></i> bash</a>
           </div>
 
         
@@ -445,10 +445,13 @@
           
       <div class="tabs tabs-comment">
         <ul class="nav-tabs">
-            <li class="tab"><a href="#comment-disqus">disqus</a></li>
             <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-disqus">disqus</a></li>
         </ul>
         <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
             <div class="tab-pane disqus" id="comment-disqus">
               
   <div class="comments">
@@ -457,9 +460,6 @@
     </div>
   </div>
   
-            </div>
-            <div class="tab-pane gitalk" id="comment-gitalk">
-              <div class="comments" id="gitalk-container"></div>
             </div>
         </div>
       </div>
@@ -524,7 +524,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">92</span>
+          <span class="site-state-item-count">93</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -688,6 +688,23 @@
 
 
 <script src="/bundle.js"></script><script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'b3dc0ec32cfae81fbffd',
+      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
+      repo: 'gitalk',
+      owner: 'Liutos',
+      admin: ['Liutos'],
+      id: 'aee60c03761b1bfd483b34a40513773c',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+;
+
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -716,22 +733,5 @@
       (d.head || d.body).appendChild(s);
     }
   });
-;
-
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID: 'b3dc0ec32cfae81fbffd',
-      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
-      repo: 'gitalk',
-      owner: 'Liutos',
-      admin: ['Liutos'],
-      id: 'aee60c03761b1bfd483b34a40513773c',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
 ;
 !function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

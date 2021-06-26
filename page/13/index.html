@@ -200,6 +200,106 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/03/13/更过程式的let——vertical-let/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/03/13/更过程式的let——vertical-let/" class="post-title-link" itemprop="url">更过程式的let——vertical-let</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-03-13 23:02:59 / 修改时间：23:04:17" itemprop="dateCreated datePublished" datetime="2019-03-13T23:02:59+08:00">2019-03-13</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/03/13/更过程式的let——vertical-let/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/03/13/更过程式的let——vertical-let/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>作为一名自诩的non-trivial的Common Lisp程序员，在编码的时候经常会遇到令人不愉快的地方，其中一个便是<a href="http://www.lispworks.com/documentation/HyperSpec/Body/s_let_l.htm#let" target="_blank" rel="noopener">LET</a>。</p>
+<p>一段典型的<code>LET</code>的示例代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> <span class="number">1</span>))</span><br><span class="line">   a)</span><br></pre></td></tr></tbody></table></figure>
+<p>大多数时候，<code>LET</code>不会只有一个绑定。并且，也不会只是绑定一个常量这么简单，而应当是下面这样的</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">      (<span class="name">b</span> (<span class="name">bar</span> z)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+<p>有时候我会想看看某一个绑定的值——最好是在它计算完毕后立即查看。如果要查看<code>foo</code>函数的返回值，可以这样写</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">      (<span class="name">b</span> (<span class="name">bar</span> z)))</span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+<p>如果调用<code>foo</code>和<code>bar</code>都顺利的话上面的代码也就够了。比较棘手的情况是，如果<code>a</code>的值不符合预期，会导致<code>b</code>的计算过程出状况（尽管在上面的代码中看似不会）。这种情况多出现在<code>LET*</code>的使用中，如下面所示</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">       (<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+<p>如果错误的<code>a</code>会导致<code>bar</code>的调用出错，那么在调用<code>function1</code>之前才调用<code>print</code>打印<code>a</code>已经为时过晚了——毕竟调用<code>bar</code>的时候就抛出<code>condition</code>往调用链的上游走了。一种方法是写成下面这样子</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">let</span> ((<span class="name">tmp</span> (<span class="name">foo</span> x y)))</span><br><span class="line">            (<span class="name">print</span> tmp)</span><br><span class="line">            tmp))</span><br><span class="line">       (<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+<p>这也太丑了！要不然写成下面这样子？</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y)))</span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">    (<span class="name">function1</span> a b)</span><br><span class="line">    (<span class="name">function2</span> a b)))</span><br></pre></td></tr></tbody></table></figure>
+<p>本来一个<code>LET</code>就可以做到的事情，这下子用了两个，还导致缩进更深了一级。如果有十个变量需要打印，就会增加十个<code>LET</code>和十层缩进。如果心血来潮想查看一个变量的值，还要大幅调整代码。</p>
+<p>问题大概就出在<code>LET</code>和<code>LET*</code>的语法上。以<code>LET</code>为例，它由截然分开的<code>bindings</code>和<code>forms</code>组成，两者不能互相穿插。因此，如果想在<code>bindings</code>中求值一段表达式，只能将<code>bindings</code>切开，写成两个<code>LET</code>的形式。好像写一个新的宏可以解决这个问题？是的，<code>vertical-let</code>就是。</p>
+<p><code>vertical-let</code>是一个我自己写的宏，源代码<a href="https://github.com/Liutos/clitool/blob/master/cl/sak.lisp#L9" target="_blank" rel="noopener">在此</a>。其用法如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line">  <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line">  a)</span><br></pre></td></tr></tbody></table></figure>
+<p>它借鉴了<code>LOOP</code>中绑定变量的方式（即<code>:with</code>和<code>=</code>），绑定变量和用于求值的代码还可以交织在一起，如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line">  <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line">  (<span class="name">+</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+<p><code>vertical-let</code>最终会展开为<code>LET</code>，比如上面的代码，会展开为如下的代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">LET</span> ((<span class="name">A</span> <span class="number">1</span>))</span><br><span class="line">  (<span class="name">PRINT</span> A)</span><br><span class="line">  (<span class="name">LET</span> ((<span class="name">B</span> <span class="number">2</span>))</span><br><span class="line">    (<span class="name">+</span> A B)))</span><br></pre></td></tr></tbody></table></figure>
+<p><code>vertical-let</code>的算法很简单。它遍历表达式列表，当遇到<code>:with</code>时就把接下来的三个元素分别视为变量名、等号，以及待求值的表达式，将三者打包进一个列表中，再压栈；当遇到其它值时，就视为待求值的表达式（将会组成<code>LET</code>的<code>forms</code>部分），也放进列表中再压栈（具体方法参见源代码）。</p>
+<p>将所有值都遍历并压栈后，接下来要遍历这个栈中的元素。先准备两个空的栈——一个存放<code>bindings</code>，一个存放<code>forms</code>。接着，对于每一个从栈中弹出的元素，分为如下两种情况：</p>
+<ol>
+<li>如果表示<code>binding</code>，则直接压入存放<code>bindings</code>的栈，否则；</li>
+<li>如果是待求值的表达式，并且上一个出栈的元素是<code>binding</code>，则说明已经有一段完整的<code>LET</code>的内容被集齐。因此，将目前在两个栈中的内容全部弹出，组合为一个<code>LET</code>表达式再压入存放<code>forms</code>的栈中。然后将方才弹出的表达式也压入<code>forms</code>。重复上述过程直至所有元素都被处理，最后将还在两个栈中的内容也组合为一个<code>LET</code>表达式便结束了。</li>
+</ol>
+<p>全文完</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/02/28/不同工具查看代码分支diff的差异/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -565,88 +665,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/07/Emacs的org-mode实现自动的internal-archive/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/01/07/Emacs的org-mode实现自动的internal-archive/" class="post-title-link" itemprop="url">Emacs的org-mode实现自动的internal archive</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-01-07 13:50:53 / 修改时间：14:18:51" itemprop="dateCreated datePublished" datetime="2019-01-07T13:50:53+08:00">2019-01-07</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/01/07/Emacs的org-mode实现自动的internal-archive/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/07/Emacs的org-mode实现自动的internal-archive/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h2><p><a href="https://orgmode.org/" target="_blank" rel="noopener">org-mode</a>是一个<a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">Emacs</a>内置的major mode，当打开一个后缀为<code>.org</code>的文件时就会被启用。在官网的介绍中提到，它可以用于管理待办事项，而这也正是我目前使用org-mode最多的场合。比如，我用它来记录漫画的阅读进度，每一话或每一章就是一个标记了TODO关键字的条目，读完那一话或那一章后就会将对应的条目标记为DONE。一般我会一周一次地归档自己标记为DONE的条目，但由于一次要处理的条目可能很多，逐一将它们归档比较繁琐，因此，便打算二次开发实现一个自动归档的功能。</p>
-<p>需要事先声明的是，本文不是org-mode的入门教程，也不会讲解如何配置org-mode。对这方面有兴趣的读者，可以自己搜索一番，资料还是相当丰富的。</p>
-<h2 id="菜谱"><a href="#菜谱" class="headerlink" title="菜谱"></a>菜谱</h2><p>对于每一个被完成的单独的阅读任务，我的做法是将其<a href="https://orgmode.org/manual/Internal-archiving.html" target="_blank" rel="noopener">internal archive</a>。等到一整本漫画都读完之后，再将整个以漫画名命名的条目归档到别的文件中去。要实现自动的internal archive，最简单直接的办法是借助于org-mode提供的各种hook。</p>
-<p>org-mode提供了许多的hook，在官方的<a href="https://orgmode.org/worg/doc.html#org-after-demote-entry-hook" target="_blank" rel="noopener">文档</a>中有一一列举 。其中，名为<code>org-after-todo-state-change-hook</code>的便是我所需要的钩子。只需往这个变量所绑定的列表中添加一个函数，那么这个函数便会在条目切换状态时（比如从TODO切换到DONE）被org-mode调用。</p>
-<p>最终的ELisp代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> lt-archive-if-manga ()</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">state</span> org-state))</span><br><span class="line">    (<span class="name">when</span> (<span class="name">string=</span> state <span class="string">"DONE"</span>)</span><br><span class="line">      (<span class="name">let</span> ((<span class="name">tags</span> (<span class="name">org-get-tags-at</span>)))</span><br><span class="line">        (<span class="name">when</span> (<span class="name">member</span> <span class="string">"漫画"</span> tags)</span><br><span class="line">          (<span class="name">org-toggle-archive-tag</span>))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">add-to-list</span> 'org-after-todo-state-change-hook 'lt-archive-if-manga <span class="literal">t</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>稍微解释一下。从<code>C-h v org-after-todo-state-change-hook RET</code>的文档可以得知，条目的新状态可以通过变量<code>org-state</code>获取。取得新状态（是个字符串）后，首先检查其是否为<code>"DONE"</code>。如果是，再检查这个条目是否为一个阅读漫画的任务。</p>
-<p>在我的用法中，凡是漫画条目，都打上了名为<code>"漫画"</code>的标签。因此，使用函数<code>org-get-tags-at</code>取得一个条目的所有标签（包括从父级条目继承下来的），再用<code>member</code>函数判断这些标签中是否包含字符串<code>"漫画"</code>。如果有，就调用<code>org-toggle-archive-tag</code>将该条目internal archive。</p>
-<p>传给函数<code>add-to-list</code>的第三个参数<code>t</code>的作用，是让这个新加入钩子的函数最后被调用。</p>
-<p>全文完</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -718,7 +736,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">92</span>
+          <span class="site-state-item-count">93</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
