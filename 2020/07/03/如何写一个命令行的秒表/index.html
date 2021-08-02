@@ -46,7 +46,7 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="序言相信各位读者对秒表都不陌生，智能手机上通常都有这样一款软件  有一天心血来潮，便想要“复刻”一个命令行版本的秒表程序——主要是想尝试一下新学会的、“原地更新”的技能，而不是一行接一行地输出。程序的运行效果如下  那么这是怎么做的呢？ 实现思路及代码如何获取流逝的时间长度？要实现一个秒表，首先要知道从开始计时至今过了多久。在*nix系统中，表示时刻的事实标准是Epoch Time，在shell脚">
-<meta name="keywords" content="shell,bash,命令行">
+<meta name="keywords" content="bash,shell,命令行">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何写一个命令行的秒表">
 <meta property="og:url" content="https://liutos.github.io/2020/07/03/如何写一个命令行的秒表/index.html">
@@ -264,7 +264,7 @@
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200703/stopwatch的演示效果.gif" alt=""></p>
 <p>那么这是怎么做的呢？</p>
 <h1 id="实现思路及代码"><a href="#实现思路及代码" class="headerlink" title="实现思路及代码"></a>实现思路及代码</h1><h2 id="如何获取流逝的时间长度？"><a href="#如何获取流逝的时间长度？" class="headerlink" title="如何获取流逝的时间长度？"></a>如何获取流逝的时间长度？</h2><p>要实现一个秒表，首先要知道从开始计时至今过了多久。在*nix系统中，表示时刻的事实标准是<a href="https://en.wikipedia.org/wiki/Unix_time" target="_blank" rel="noopener">Epoch Time</a>，在<code>shell</code>脚本中要获取Epoch Time可以用<code>date</code>命令。再用首尾时刻相减便得到了期间流逝的秒数了，示例代码如下</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">begin_at=$(date '+%s')</span><br><span class="line"><span class="meta">#</span><span class="bash"> 睡个觉</span></span><br><span class="line">end_at=$(date '+%s')</span><br><span class="line">((interval=${end_at} - ${begin_at}))</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">begin_at=$(date '+%s')</span><br><span class="line"><span class="meta">#</span> 睡个觉</span><br><span class="line">end_at=$(date '+%s')</span><br><span class="line">((interval=${end_at} - ${begin_at}))</span><br></pre></td></tr></tbody></table></figure>
 <p>双圆括号是一种在<code>shell</code>脚本中执行算术运算的语法，其它语法可以参见<a href="http://faculty.salina.k-state.edu/tim/unix_sg/bash/math.html" target="_blank" rel="noopener">Math in Shell Scripts</a>。</p>
 <h2 id="如何换算为时分秒？"><a href="#如何换算为时分秒？" class="headerlink" title="如何换算为时分秒？"></a>如何换算为时分秒？</h2><p>有了<code>interval</code>中存储的总秒数后，换算成时分秒便是轻而易举的事情，示例代码如下</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">((hours=${interval} / 3600))</span><br><span class="line">((minutes=(${interval} % 3600) / 60))</span><br><span class="line">((seconds=(${interval} % 3600) % 60))</span><br></pre></td></tr></tbody></table></figure>
@@ -295,7 +295,7 @@
 <h2 id="如何每隔一秒钟输出一次？"><a href="#如何每隔一秒钟输出一次？" class="headerlink" title="如何每隔一秒钟输出一次？"></a>如何每隔一秒钟输出一次？</h2><p>这大概是整个程序中最简单的需求了</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">while [ 1 -eq 1 ]</span><br><span class="line">do</span><br><span class="line">    # 此处可以为所欲为</span><br><span class="line">    sleep 0.5</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
 <h2 id="完整的秒表实现"><a href="#完整的秒表实现" class="headerlink" title="完整的秒表实现"></a>完整的秒表实现</h2><p>至此，完整的秒表程序就可以实现出来了</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 秒表，以hh:mm:ss的格式展示数据</span></span><br><span class="line"></span><br><span class="line">begin_at=$(date '+%s')</span><br><span class="line"></span><br><span class="line">while [ 1 -eq 1 ]</span><br><span class="line">do</span><br><span class="line">    end_at=$(date '+%s')</span><br><span class="line">    # 算术运算：http://faculty.salina.k-state.edu/tim/unix_sg/bash/math.html</span><br><span class="line">    ((interval=${end_at} - ${begin_at}))</span><br><span class="line">    ((hours=${interval} / 3600))</span><br><span class="line">    ((minutes=(${interval} % 3600) / 60))</span><br><span class="line">    ((seconds=(${interval} % 3600) % 60))</span><br><span class="line">    tput cr</span><br><span class="line">    tput el</span><br><span class="line">    printf "%02d:%02d:%02d" ${hours} ${minutes} ${seconds}</span><br><span class="line">    sleep 0.5</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"><span class="meta">#</span> 秒表，以hh:mm:ss的格式展示数据</span><br><span class="line"></span><br><span class="line">begin_at=$(date '+%s')</span><br><span class="line"></span><br><span class="line">while [ 1 -eq 1 ]</span><br><span class="line">do</span><br><span class="line">    end_at=$(date '+%s')</span><br><span class="line">    # 算术运算：http://faculty.salina.k-state.edu/tim/unix_sg/bash/math.html</span><br><span class="line">    ((interval=${end_at} - ${begin_at}))</span><br><span class="line">    ((hours=${interval} / 3600))</span><br><span class="line">    ((minutes=(${interval} % 3600) / 60))</span><br><span class="line">    ((seconds=(${interval} % 3600) % 60))</span><br><span class="line">    tput cr</span><br><span class="line">    tput el</span><br><span class="line">    printf "%02d:%02d:%02d" ${hours} ${minutes} ${seconds}</span><br><span class="line">    sleep 0.5</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
 <p>运行后的效果正如本文开头的GIF所示。</p>
 <p>全文完。</p>
 
@@ -348,8 +348,8 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/shell/" rel="tag"><i class="fa fa-tag"></i> shell</a>
               <a href="/tags/bash/" rel="tag"><i class="fa fa-tag"></i> bash</a>
+              <a href="/tags/shell/" rel="tag"><i class="fa fa-tag"></i> shell</a>
               <a href="/tags/命令行/" rel="tag"><i class="fa fa-tag"></i> 命令行</a>
           </div>
 
@@ -460,7 +460,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">93</span>
+          <span class="site-state-item-count">94</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
