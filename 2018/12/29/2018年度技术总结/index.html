@@ -363,13 +363,10 @@
           
       <div class="tabs tabs-comment">
         <ul class="nav-tabs">
-            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
             <li class="tab"><a href="#comment-disqus">disqus</a></li>
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane gitalk" id="comment-gitalk">
-              <div class="comments" id="gitalk-container"></div>
-            </div>
             <div class="tab-pane disqus" id="comment-disqus">
               
   <div class="comments">
@@ -378,6 +375,9 @@
     </div>
   </div>
   
+            </div>
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
             </div>
         </div>
       </div>
@@ -442,7 +442,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -606,23 +606,6 @@
 
 
 <script src="/bundle.js"></script><script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID: 'b3dc0ec32cfae81fbffd',
-      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
-      repo: 'gitalk',
-      owner: 'Liutos',
-      admin: ['Liutos'],
-      id: '112c765a1f5dfba2b50664371f60ff9b',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
-;
-
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -651,5 +634,22 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       (d.head || d.body).appendChild(s);
     }
   });
+;
+
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'b3dc0ec32cfae81fbffd',
+      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
+      repo: 'gitalk',
+      owner: 'Liutos',
+      admin: ['Liutos'],
+      id: '112c765a1f5dfba2b50664371f60ff9b',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
 ;
 !function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

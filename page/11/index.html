@@ -200,6 +200,87 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/10/调用C标准库的exit函数/" class="post-title-link" itemprop="url">调用C标准库的exit函数</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-07-10 19:58:06 / 修改时间：21:40:54" itemprop="dateCreated datePublished" datetime="2019-07-10T19:58:06+08:00">2019-07-10</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/07/10/调用C标准库的exit函数/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/10/调用C标准库的exit函数/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在<a href="http://liutos.github.io/2019/07/03/%E7%BC%96%E8%AF%91%E5%A4%A7%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6/">上一篇文章</a>中，实现了对大于号（<code>&gt;</code>）的处理，那么对<code>if</code>表达式的编译也就是信手拈来的事了，不解释太多。在本篇中，将会讲述一下如何产生可以调用来自于C语言标准库的<code>exit(3)</code>函数的汇编代码。</p>
+<p>在Common Lisp中并没有一个叫做<code>EXIT</code>的内置函数，所以如同之前实现的<code>_exit</code>一样，我会新增一种需要识别的<code>(first expr)</code>，即符号<code>exit</code>。为了可以调用C语言标准库中的<code>exit</code>函数，需要遵循调用约定。对于<code>exit</code>这种只有一个参数的函数而言，情形比较简单，只需要跟对<code>_exit</code>一样处理即可。刚开始，我写下的代码是这样的</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/07/10/调用C标准库的exit函数/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/07/03/编译大于运算符/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -543,88 +624,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/06/11/支持四则运算中的变量/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/06/11/支持四则运算中的变量/" class="post-title-link" itemprop="url">支持四则运算中的变量</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-06-11 21:30:41 / 修改时间：21:37:53" itemprop="dateCreated datePublished" datetime="2019-06-11T21:30:41+08:00">2019-06-11</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/06/11/支持四则运算中的变量/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/11/支持四则运算中的变量/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在<a href="http://liutos.github.io/2019/06/01/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91setq%EF%BC%9F/">上一篇文章</a>中，<code>jjcc2</code>函数实现了对<code>setq</code>这个语句的编译。这么一来，便可以将加减乘除运算中的嵌套表达式都替换为变量了。比如，将</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>) <span class="number">3</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>中的嵌套的表达式<code>(+ 1 2)</code>用一个变量<code>G564</code>代替，变成</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/06/11/支持四则运算中的变量/#more" rel="contents">
-                阅读全文 »
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -696,7 +695,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

@@ -200,6 +200,118 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/07/03/如何写一个命令行的秒表/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/03/如何写一个命令行的秒表/" class="post-title-link" itemprop="url">如何写一个命令行的秒表</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-03 20:47:06 / 修改时间：21:26:51" itemprop="dateCreated datePublished" datetime="2020-07-03T20:47:06+08:00">2020-07-03</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/07/03/如何写一个命令行的秒表/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/07/03/如何写一个命令行的秒表/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>相信各位读者对秒表都不陌生，智能手机上通常都有这样一款软件</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200703/数字秒表.jpg" alt="来自我的小米手机的截图"></p>
+<p>有一天心血来潮，便想要“复刻”一个命令行版本的秒表程序——主要是想尝试一下新学会的、“原地更新”的技能，而不是一行接一行地输出。程序的运行效果如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200703/stopwatch的演示效果.gif" alt=""></p>
+<p>那么这是怎么做的呢？</p>
+<h1 id="实现思路及代码"><a href="#实现思路及代码" class="headerlink" title="实现思路及代码"></a>实现思路及代码</h1><h2 id="如何获取流逝的时间长度？"><a href="#如何获取流逝的时间长度？" class="headerlink" title="如何获取流逝的时间长度？"></a>如何获取流逝的时间长度？</h2><p>要实现一个秒表，首先要知道从开始计时至今过了多久。在*nix系统中，表示时刻的事实标准是<a href="https://en.wikipedia.org/wiki/Unix_time" target="_blank" rel="noopener">Epoch Time</a>，在<code>shell</code>脚本中要获取Epoch Time可以用<code>date</code>命令。再用首尾时刻相减便得到了期间流逝的秒数了，示例代码如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">begin_at=$(date '+%s')</span><br><span class="line"><span class="meta">#</span><span class="bash"> 睡个觉</span></span><br><span class="line">end_at=$(date '+%s')</span><br><span class="line">((interval=${end_at} - ${begin_at}))</span><br></pre></td></tr></tbody></table></figure>
+<p>双圆括号是一种在<code>shell</code>脚本中执行算术运算的语法，其它语法可以参见<a href="http://faculty.salina.k-state.edu/tim/unix_sg/bash/math.html" target="_blank" rel="noopener">Math in Shell Scripts</a>。</p>
+<h2 id="如何换算为时分秒？"><a href="#如何换算为时分秒？" class="headerlink" title="如何换算为时分秒？"></a>如何换算为时分秒？</h2><p>有了<code>interval</code>中存储的总秒数后，换算成时分秒便是轻而易举的事情，示例代码如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">((hours=${interval} / 3600))</span><br><span class="line">((minutes=(${interval} % 3600) / 60))</span><br><span class="line">((seconds=(${interval} % 3600) % 60))</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="如何输出形如hh-mm-ss的格式？"><a href="#如何输出形如hh-mm-ss的格式？" class="headerlink" title="如何输出形如hh:mm:ss的格式？"></a>如何输出形如<code>hh:mm:ss</code>的格式？</h2><p><code>hh:mm:ss</code>的意思是分别用两个十进制数字显示时分秒，并以冒号分隔它们。如果有任何一个单位的数值小于10，便用字符<code>0</code>填充左侧的空白。按这个格式，凌晨1点2分3秒便会显示为<code>01:02:03</code>。</p>
+<p>要在命令行中打印字符串，最容易想到的便是<code>echo</code>命令，只可惜它不能方便地实现填充字符<code>0</code>的需求。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200703/强人锁男.jpg" alt=""></p>
+<p>强人所难也不是不行，示例代码如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">hours=1</span><br><span class="line">minutes=2</span><br><span class="line">seconds=3</span><br><span class="line"></span><br><span class="line">if [ "${hours}" -lt '10' ];</span><br><span class="line">then</span><br><span class="line">   echo -n "0${hours}"</span><br><span class="line">else</span><br><span class="line">   echo -n "${hours}"</span><br><span class="line">fi</span><br><span class="line">echo -n ':'</span><br><span class="line">if [ "${minutes}" -lt '10' ];</span><br><span class="line">then</span><br><span class="line">   echo -n "0${minutes}"</span><br><span class="line">else</span><br><span class="line">   echo -n "${minutes}"</span><br><span class="line">fi</span><br><span class="line">echo -n ':'</span><br><span class="line">if [ "${seconds}" -lt '10' ];</span><br><span class="line">then</span><br><span class="line">   echo -n "0${seconds}"</span><br><span class="line">else</span><br><span class="line">   echo -n "${seconds}"</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
+<p>更优雅的方法是用<code>printf</code>命令来自动填充左侧的字符<code>0</code></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">printf "%02d:%02d:%02d" ${hours} ${minutes} ${seconds}</span><br></pre></td></tr></tbody></table></figure>
+<p><code>printf</code>命令类似于C语言中的<code>printf</code>函数——它也支持打印转义的字符，下文会提到。</p>
+<h2 id="如何覆盖已经打印的内容？"><a href="#如何覆盖已经打印的内容？" class="headerlink" title="如何覆盖已经打印的内容？"></a>如何覆盖已经打印的内容？</h2><p>今年以来我在断断续续地看<a href="https://viewsourcecode.org/snaptoken/kilo/index.html" target="_blank" rel="noopener">Build Your Own Text Editor</a>，学习如何开发文本编辑器。在这本小册子的<a href="https://viewsourcecode.org/snaptoken/kilo/03.rawInputAndOutput.html#clear-the-screen" target="_blank" rel="noopener">第三章</a>中，作者讲述了如何使用终端的转义序列（<code>escape sequence</code>）来控制屏幕上显示的东西——这正是秒表程序所需要的。</p>
+<p>例如，在终端输出转义序列<code>\x1b[2J</code>可以清空屏幕，效果如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200703/演示用转义序列清空屏幕.gif" alt=""></p>
+<p>为了覆盖已经打印出来的时分秒，需要：</p>
+<ol>
+<li>先将光标移动到行首；</li>
+<li>再清除从光标开始到行末的内容。</li>
+</ol>
+<p>查阅<a href="https://vt100.net/docs/vt100-ug/chapter3.html" target="_blank" rel="noopener">《VT100 User Guide》第三章</a>可以知道</p>
+<ol>
+<li>要把光标移动到行首可以用转义序列<code>\x1b[8D</code>。之所以是8，是因为按照<code>hh:mm:ss</code>输出时分秒后光标距离行首8个身位；</li>
+<li>要清除光标到行末内容可以用转义序列<code>\x1b[0K</code>（实际上，将光标移到行首只需要使用回车（<code>carriage return</code>）即可，但它被解释为开启新的一行了）。</li>
+</ol>
+<p>更优雅的方法甚至连转义序列也不需要，只要用<code>tput</code>命令即可，示例代码如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo -n '11:22:33'</span><br><span class="line">tput cr</span><br><span class="line">tput el</span><br><span class="line">echo '44:55:66'</span><br></pre></td></tr></tbody></table></figure>
+<p>关于<code>cr</code>和<code>el</code>，以及更多可以传给<code>tput</code>命令的参数，可以参见<code>terminfo</code>的<code>man</code>文档。</p>
+<h2 id="如何每隔一秒钟输出一次？"><a href="#如何每隔一秒钟输出一次？" class="headerlink" title="如何每隔一秒钟输出一次？"></a>如何每隔一秒钟输出一次？</h2><p>这大概是整个程序中最简单的需求了</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">while [ 1 -eq 1 ]</span><br><span class="line">do</span><br><span class="line">    # 此处可以为所欲为</span><br><span class="line">    sleep 0.5</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="完整的秒表实现"><a href="#完整的秒表实现" class="headerlink" title="完整的秒表实现"></a>完整的秒表实现</h2><p>至此，完整的秒表程序就可以实现出来了</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 秒表，以hh:mm:ss的格式展示数据</span></span><br><span class="line"></span><br><span class="line">begin_at=$(date '+%s')</span><br><span class="line"></span><br><span class="line">while [ 1 -eq 1 ]</span><br><span class="line">do</span><br><span class="line">    end_at=$(date '+%s')</span><br><span class="line">    # 算术运算：http://faculty.salina.k-state.edu/tim/unix_sg/bash/math.html</span><br><span class="line">    ((interval=${end_at} - ${begin_at}))</span><br><span class="line">    ((hours=${interval} / 3600))</span><br><span class="line">    ((minutes=(${interval} % 3600) / 60))</span><br><span class="line">    ((seconds=(${interval} % 3600) % 60))</span><br><span class="line">    tput cr</span><br><span class="line">    tput el</span><br><span class="line">    printf "%02d:%02d:%02d" ${hours} ${minutes} ${seconds}</span><br><span class="line">    sleep 0.5</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
+<p>运行后的效果正如本文开头的GIF所示。</p>
+<p>全文完。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/06/25/MySQL的NOT-EXISTS遭遇战/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -674,179 +786,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/26/你或许不知道，shell不能比较大小/" class="post-title-link" itemprop="url">你或许不知道，shell不能比较大小</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-04-26 21:19:01 / 修改时间：22:25:16" itemprop="dateCreated datePublished" datetime="2020-04-26T21:19:01+08:00">2020-04-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/究竟在干什么系列/" itemprop="url" rel="index">
-                    <span itemprop="name">究竟在干什么系列</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/04/26/你或许不知道，shell不能比较大小/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/26/你或许不知道，shell不能比较大小/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>“究竟在干什么”是一系列关于软件开发过程中背后运作原理的文章，每一篇文章旨在讲解一些在日常编程实践中常见但可能并不为人所熟知的技术细节，抛砖引玉，期待激发读者朋友的更多思考。</p>
-</blockquote>
-<h1 id="如何在shell中比较大小？"><a href="#如何在shell中比较大小？" class="headerlink" title="如何在shell中比较大小？"></a>如何在shell中比较大小？</h1><p>如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写<code>[ blablabla ]</code>这样的代码</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/搜索“shell比较”的结果.jpg" alt=""></p>
-<p>例如，如果想知道当前的UNIX时间是否已经以<code>16</code>开头，可以用下列的shell代码</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">ts=$(date '+%s')</span><br><span class="line">if [ "${ts}" -gt 1600000000 -a "${ts}" -lt 1700000000 ]; then</span><br><span class="line">    echo '当前的UNIX时间戳已经以16开头啦。'</span><br><span class="line">else</span><br><span class="line">    echo '当前的UNIX时间戳还没以16开头哦。'</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
-<p>当我写这个的时候，<code>date '+%s'</code>的值为<code>1587901648</code>，所以运行后走的是<code>else</code>的分支。</p>
-<p>除了用<code>-gt</code>表示大于之外，还有各种各样的其它比较运算符，例如下列的四个运算符</p>
-<table>
-<thead>
-<tr>
-<th>运算符</th>
-<th>作用</th>
-<th>示例代码</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>-ge</code></td>
-<td>大于或等于</td>
-<td><code>[ 2 -ge 1 ]</code></td>
-</tr>
-<tr>
-<td><code>-eq</code></td>
-<td>等于</td>
-<td><code>[ 1 -eq 1 ]</code></td>
-</tr>
-<tr>
-<td><code>-le</code></td>
-<td>小于或等于</td>
-<td><code>[ 2 -le 3 ]</code></td>
-</tr>
-<tr>
-<td><code>-lt</code></td>
-<td>小于</td>
-<td><code>[ 3 -lt 4 ]</code></td>
-</tr>
-</tbody>
-</table>
-<p>还有一些“测试”类型的运算符，例如</p>
-<table>
-<thead>
-<tr>
-<th>运算符</th>
-<th>作用</th>
-<th>示例代码</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>-b file</code></td>
-<td>测试<code>file</code>是否存在并且是个块设备</td>
-<td><code>[ -b /dev/disk0 ]</code></td>
-</tr>
-<tr>
-<td><code>-c file</code></td>
-<td>测试<code>file</code>是否存在并且是个字符设备</td>
-<td><code>[ -c /dev/tty ]</code></td>
-</tr>
-</tbody>
-</table>
-<h1 id="是shell的语法么？"><a href="#是shell的语法么？" class="headerlink" title="[是shell的语法么？"></a><code>[</code>是shell的语法么？</h1><p>大部分写shell代码的人或许会认为，<code>[]</code>是shell语言用于实现一系列的比较操作的特殊语法。但实际上，<code>[]</code>并不是一个语法——<code>[</code>是一个独立的命令行程序，<code>]</code>则什么都不是，仅仅是一个普通的字符。</p>
-<p>在bash中使用<code>which</code>命令可以看到<code>[</code>的真面目</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/which方括号的结果.jpg" alt=""></p>
-<p><code>[</code>是一个独立的程序，对，你没有看错（鲍尔默脸）。而且<code>[</code>有它自己的man文档</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/方括号的man文档.jpg" alt=""></p>
-<p>在man文档中出现了另外一个命令<code>test</code>，它和<code>[</code>的功能是一模一样的。或许<code>test</code>是一个“yet another [”？真相却更简单一点——<code>test</code>和<code>[</code>是同一个东西</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/左方括号和test是同一个东西.jpg" alt=""></p>
-<h1 id="源代码的二三事"><a href="#源代码的二三事" class="headerlink" title="[源代码的二三事"></a><code>[</code>源代码的二三事</h1><p>可以在GitHub上找到<code>[</code>和<code>test</code>的<a href="https://github.com/freebsd/freebsd/blob/master/bin/test/test.c" target="_blank" rel="noopener">源代码</a>，代码很短，稍微读一下可以发现不少有意思的地方。</p>
-<p>众所周知，如果在shell代码中使用<code>[</code>做比较运算，必须写上对应的右方括号<code>]</code>。但既然<code>[</code>是一个普通的外部程序，那么这个匹配括号的检查显然不会是shell来做的——没错，<code>[</code>自己会检查是否有写上相应的右方括号，这一段逻辑在源文件的<code>main</code>函数开始不久就出现了。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/检测右方括号是否存在.jpg" alt=""></p>
-<p>这个检查只有在程序被以<code>[</code>的名字启动的时候才会生效，所以<code>test 1 -eq 1</code>是不需要写括号的。</p>
-<p>其实除了上文中给出的那些比较和测试运算符之外，<code>[</code>也支持复杂的逻辑运算表达式，比如文章开头的示例代码中的<code>-a</code>就是逻辑与的意思。在代码的注释中还贴心地给出了所接受的参数的BNF</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/test接受的语法.jpg" alt=""></p>
-<p>而解析参数的过程则是一个手写的递归下降语法分析器，在源代码中可以找到与上面的产生式对应的多个函数：<code>oexpr</code>、<code>aexpr</code>、<code>nexpr</code>、<code>primary</code>，以及<code>binop</code>。</p>
-<p>由于在shell语言中，0表示逻辑真，而1表示逻辑假（与C语言相反），所以在<code>main</code>函数中，如果发现传入的第一个参数为感叹号（<code>!</code>，表示逻辑取反），则将<code>oexpr</code>的调用结果直接返回，否则需要将结果取反后再从<code>main</code>函数中返回——给操作系统。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/调用oexpr后取反.jpg" alt=""></p>
-<h1 id="shell真的不原生支持比较？"><a href="#shell真的不原生支持比较？" class="headerlink" title="shell真的不原生支持比较？"></a>shell真的不原生支持比较？</h1><p>尽管在bash中，<code>[</code>的确是作为一个外部程序存在的，但在zsh中却相反</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/test作为内置命令.jpg" alt=""></p>
-<p>而且，即使是bash也并非完全没有原生的比较操作——此处需要召唤<code>[[</code>。<code>[[</code>是shell的<em>保留字</em>，它是一个<em>less suprise</em>版本的<code>[</code>，在Stack Overflow上有不少关于它的问答值得一看：</p>
-<ol>
-<li><a href="https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash" target="_blank" rel="noopener">https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash</a></li>
-<li><a href="https://stackoverflow.com/questions/669452/is-double-square-brackets-preferable-over-single-square-brackets-in-ba" target="_blank" rel="noopener">https://stackoverflow.com/questions/669452/is-double-square-brackets-preferable-over-single-square-brackets-in-ba</a></li>
-</ol>
-<p>第二个链接的回答中还给出了一个值得一看的、关于bash中的“测试”功能的<a href="http://mywiki.wooledge.org/BashGuide/Practices#Bash_Tests" target="_blank" rel="noopener">指引</a>，其中甚至提到了</p>
-<blockquote>
-<p>It can produce surprising results, especially for people starting shell scripting that think [ ] is part of the shell syntax.</p>
-</blockquote>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>不得不承认，本文标题党了一把，shell还是自身就具备比较大小这样的功能的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -918,7 +857,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

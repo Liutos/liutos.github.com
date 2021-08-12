@@ -200,6 +200,120 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/01/02/年轻人的第一个VSCode插件/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/02/年轻人的第一个VSCode插件/" class="post-title-link" itemprop="url">年轻人的第一个VSCode扩展</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-02 16:18:34 / 修改时间：16:28:06" itemprop="dateCreated datePublished" datetime="2021-01-02T16:18:34+08:00">2021-01-02</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/01/02/年轻人的第一个VSCode插件/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/02/年轻人的第一个VSCode插件/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>入坑<code>VS Code</code>前，我已经是一名久经考验的<code>Emacs</code>老用户了，因此开始正式使用<code>VS Code</code>后，我第一时间启用了它的<a href="https://marketplace.visualstudio.com/items?itemName=hiro-sun.vscode-emacs" target="_blank" rel="noopener"><code>Emacs Keymap</code></a>。但不久我便发现，这套键映射缺少一个重要的快捷键——<code>ctrl-l</code>。</p>
+<p>在<code>Emacs</code>中，<code>ctrl-l</code>对应的命令是<code>recenter-top-bottom</code>，它用于将光标所在的行轮替地滚动到可视区域（即<code>Emacs</code>中的<code>window</code>）的中间、顶部，以及底部（如下图所示）</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210102/Emacs的ctrl-l效果演示.gif" alt=""></p>
+<p>这是我高频使用的一个功能，尤其是跳转到函数的定义的首行后，我习惯于连按两次，将其滚动到<code>window</code>的顶部以便在一屏中看到尽量多的内容。</p>
+<p>为了避免重复发明轮子，我先搜索了一番，找到了一个宣称实现了该功能的扩展<a href="https://marketplace.visualstudio.com/items?itemName=yeannylam.recenter-top-bottom" target="_blank" rel="noopener"><code>Recenter Top Bottom</code></a>。可惜的是，安装后并不生效。</p>
+<p>难道只能委屈自己用鼠标小心翼翼地将光标所在行滚到顶部了吗？当然不是。既然没有开箱即用的，那便自己写一个<code>VS Code</code>的扩展实现这个功能吧。</p>
+<h1 id="年轻人的第一个VS-Code扩展"><a href="#年轻人的第一个VS-Code扩展" class="headerlink" title="年轻人的第一个VS Code扩展"></a>年轻人的第一个VS Code扩展</h1><h2 id="创建VS-Code扩展的项目"><a href="#创建VS-Code扩展的项目" class="headerlink" title="创建VS Code扩展的项目"></a>创建VS Code扩展的项目</h2><p>要想入门<code>VS Code</code>扩展的开发，官方便提供了一份不错的<a href="https://code.visualstudio.com/api/get-started/your-first-extension" target="_blank" rel="noopener">教程</a>。一个扩展有许多的“八股文”代码，可以用<code>yo</code>和<code>generator-code</code>来快速生成</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g yo generator-code</span><br><span class="line">yo code</span><br></pre></td></tr></tbody></table></figure>
+<p>到这里，便得到了一个名为<code>helloworld</code>的目录了。用<code>VS Code</code>打开它，接下来要在其中大展身手。</p>
+<h2 id="实现将光标所在行垂直居中的功能"><a href="#实现将光标所在行垂直居中的功能" class="headerlink" title="实现将光标所在行垂直居中的功能"></a>实现将光标所在行垂直居中的功能</h2><p><code>VS Code</code>扩展的核心逻辑定义在文件<code>src/extension.ts</code>中。在<code>yo</code>生成的示例代码中，用<code>registerCommand</code>注册了一个名为<code>helloworld.helloWorld</code>的命令，其逻辑是简单地在右下角弹出一句<code>Hello VS Code from HelloWorld!</code>。这个回调函数，便是业务逻辑的落脚点。</p>
+<p>要想实现将光标所在行滚动到中间的功能，首先要知道<code>VS Code</code>为开发者提供了哪些支持。在摸索了一通从<code>VS Code</code>的<a href="https://code.visualstudio.com/api/references/vscode-api" target="_blank" rel="noopener"><code>API文档</code></a>后，我有了以下的线索：</p>
+<ol>
+<li>通过<code>vscode.window.activeTextEditor</code>可以取得当前聚焦的编辑器——其值可能为空（<code>undefined</code>）；</li>
+<li><code>TextEditor</code>实例的属性<code>.selection.active</code>可以取得当前光标的位置；</li>
+<li><code>TextEditor</code>实例有一个方法<code>revealRange</code>可以滚动文本来改变展示的范围，它需要一个<code>vscode.Range</code>类的实例，以及一个<code>vscode.TextEditorRevealType</code>类型的枚举值；</li>
+<li><code>vscode.TextEditorRevealType.InCenter</code>的效果是将所给定的范围展示在中间，<code>vscode.TextEditorRevealType.AtTop</code>则是置顶。</li>
+</ol>
+<p>有了这些知识储备，实现这样的一个回调函数便是信手拈来的事情了</p>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">recenterTop</span>(<span class="params"></span>) </span>{</span><br><span class="line">  <span class="keyword">const</span> editor = vscode.window.activeTextEditor;</span><br><span class="line">  <span class="keyword">if</span> (!editor) {</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">const</span> cursorPosition = editor.selection.active;</span><br><span class="line">  editor.revealRange(<span class="keyword">new</span> vscode.Range(cursorPosition, cursorPosition), vscode.TextEditorRevealType.InCenter);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>由于暂时没有配置该命令的快捷键，只能用<code>VS Code</code>的命令面板来调用</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210102/初步实现居中的效果.gif" alt=""></p>
+<h2 id="实现将光标所在行置顶的功能"><a href="#实现将光标所在行置顶的功能" class="headerlink" title="实现将光标所在行置顶的功能"></a>实现将光标所在行置顶的功能</h2><p>接下来我将实现连续调用两次<code>helloworld.helloWorld</code>命令，把光标所在行滚动到顶部的效果。在<code>Emacs</code>中，可以很轻松地知道一个命令是否被连续运行——<code>Emacs</code>有一个名为<code>last-command</code>的变量存储着上一个命令的名称，只需要检查其是否等于<code>recenter-top-bottom</code>即可。但<code>VS Code</code>没有暴露这么强大的功能，只能另辟蹊径。</p>
+<p>我的策略是，如果调用<code>helloworld.helloWorld</code>时光标的位置，与上一次调用该命令时的位置相同，就认为是连续调用。为此，需要两个在函数<code>recenterTop</code>之外定义的变量：</p>
+<ol>
+<li><code>previousPosition</code>负责记录上一次调用<code>recenterTop</code>时光标的位置，它的初始值为<code>null</code>；</li>
+<li><code>revealType</code>存储着上一次调整展示范围时传递给<code>TextEditor</code>实例的<code>revealRange</code>方法的第二个参数的值，它的初始值也为<code>null</code>。</li>
+</ol>
+<p>我的目标是尽量模拟<code>Emacs</code>中的<code>recenter-top-bottom</code>所具备的、交替使用居中、置顶效果的特点，因此：</p>
+<ol>
+<li>如果<code>revealType</code>为<code>null</code>，意味着这是第一次调用<code>recenterTop</code>，那么效果便是居中。否则；</li>
+<li>如果这一次与上一次的光标位置不同，意味着在上一次调用<code>recenterTop</code>后调用过其它命令，效果依然是居中。否则；</li>
+<li>如果<code>revealType</code>已经是居中了，就改为置顶。否则；</li>
+<li>将<code>revealType</code>改为居中。</li>
+</ol>
+<blockquote>
+<p>Talk is cheap. Show me the code.</p>
+</blockquote>
+<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> previousPosition: <span class="literal">null</span>|vscode.Position = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> revealType: <span class="literal">null</span>|vscode.TextEditorRevealType = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">recenterTop</span>(<span class="params"></span>) </span>{</span><br><span class="line">  <span class="keyword">const</span> editor = vscode.window.activeTextEditor;</span><br><span class="line">  <span class="keyword">if</span> (!editor) {</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">const</span> cursorPosition = editor.selection.active;</span><br><span class="line">  <span class="keyword">if</span> (!revealType) {</span><br><span class="line">    revealType = vscode.TextEditorRevealType.InCenter;</span><br><span class="line">  } <span class="keyword">else</span> <span class="keyword">if</span> (previousPosition &amp;&amp; !cursorPosition.isEqual(previousPosition)) {</span><br><span class="line">    revealType = vscode.TextEditorRevealType.InCenter;</span><br><span class="line">  } <span class="keyword">else</span> <span class="keyword">if</span> (revealType === vscode.TextEditorRevealType.InCenter) {</span><br><span class="line">    revealType = vscode.TextEditorRevealType.AtTop;</span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">    revealType = vscode.TextEditorRevealType.InCenter;</span><br><span class="line">  }</span><br><span class="line">  previousPosition = cursorPosition;</span><br><span class="line">  editor.revealRange(<span class="keyword">new</span> vscode.Range(cursorPosition, cursorPosition), revealType);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="定义快捷键"><a href="#定义快捷键" class="headerlink" title="定义快捷键"></a>定义快捷键</h2><p>通过命令面板来使用不是我的最终目标，通过快捷键才是。根据<code>VS Code</code>的<a href="https://code.visualstudio.com/api/references/contribution-points#contributes.keybindings" target="_blank" rel="noopener">文档</a>可以知道，只要在<code>package.json</code>的<code>contributes</code>对象中，新增名为<code>keybindings</code>的属性，并定义命令及按键序列即可。</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">{</span><br><span class="line">  <span class="comment">// 此处省略其它不必要的属性</span></span><br><span class="line">  <span class="string">"contributes"</span>: {</span><br><span class="line">    <span class="string">"keybindings"</span>:{ <span class="comment">// 新增属性</span></span><br><span class="line">      <span class="string">"command"</span>: <span class="string">"helloworld.helloWorld"</span>,</span><br><span class="line">      <span class="string">"key"</span>: <span class="string">"ctrl+l"</span></span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如果看过我之前的文章<a href="https://liutos.github.io/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/">《手指疼，写点代码缓解一下》</a>的读者应当会记得，我已经从<code>Emacs Keymap</code>“叛逃”到了<code>Vim Keymap</code>了。所以，我并没有真正用上上述的<code>VS Code</code>扩展。相反，目前高频使用的是<code>Vim Keymap</code>内置的<code>z-.</code>以及<code>z-↵</code>了——前者用于垂直居中，后者用于置顶。</p>
+<p>爱护手指，从使用<code>Vim Keymap</code>做起。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -647,112 +761,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/09/28/手指疼，写点代码缓解一下/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/28/手指疼，写点代码缓解一下/" class="post-title-link" itemprop="url">手指疼，写点代码缓解一下</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-09-28 22:29:09 / 修改时间：22:39:01" itemprop="dateCreated datePublished" datetime="2020-09-28T22:29:09+08:00">2020-09-28</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/09/28/手指疼，写点代码缓解一下/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/28/手指疼，写点代码缓解一下/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>我经常使用Emacs来干写字的活——有时候是写代码、有时候是用org-mode管理待办事项、有时候是用restclient-mode来测试HTTP API。Emacs丰富的快捷键让我可以双手不离主键盘区就做到很多事情，不过这也带来了别样的烦恼：快捷键按多了，手容易累。</p>
-<p>导致手累的第一个因素，是Emacs的不少快捷键需要按住<code>ctrl</code>来使用，而<code>ctrl</code>常常不容易按到。以我的键盘为例，<code>ctrl</code>键分布在主键盘区的最外侧</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/我所用的美式键盘举例.jpeg" alt=""></p>
-<p>为了便于尾指按到两侧的<code>ctrl</code>键，我在macOS中交换了<code>command</code>和<code>control</code>键的效果</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/交换了command和control.jpg" alt=""></p>
-<p>当需要按住两边的<code>ctrl</code>键（实际按下的是上面照片中的Windows图标键）时，手腕需要往外拐过去。这个问题在使用VSCode时同样存在，因为我在VSCode中用的也是Emacs的键映射。</p>
-<p>第二个因素是Emacs的一些快捷键太繁琐，导致使用时双手像在键盘上起舞一般到处按来按去，敲击次数过多。例如，让光标上下左右移动的快捷键分别是<code>ctrl-p</code>、<code>ctrl-n</code>、<code>ctrl-b</code>，以及<code>ctrl-f</code>，这比直接用键盘上的方向键麻烦得多。有一些功能甚至要按三组快捷键，比如<code>org-clock-out</code>要先按<code>ctrl-c</code>，再按<code>ctrl-x</code>，最后按<code>ctrl-o</code>。</p>
-<p>有没有办法既可以保留快捷键的高效，又尽量地减少击键导致的手腕和手指的疲劳呢？</p>
-<p>当然有。</p>
-<h1 id="在Emacs中改用Vim的快捷键"><a href="#在Emacs中改用Vim的快捷键" class="headerlink" title="在Emacs中改用Vim的快捷键"></a>在Emacs中改用Vim的快捷键</h1><p>既然Emacs默认的快捷键不容易按，那么不妨换成Vim风格的快捷键。同样是上下左右移动光标，在Vim中只需要单击<code>k/j/h/l</code>这四个按键即可，不仅能够单手操作，而且这四个键正好是右手”触手可及“的位置。其它的功能，例如在文件内搜索、保存文件等，也只需要按<code>/</code>和<code>:w</code>即可，比起Emacs真是”finger-friendly“得多了。</p>
-<p>那么如何才能在Emacs中用上Vim的快捷键呢？答案是用<code>evil</code>插件。先用包管理器安装它</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M-x package-install RET evil RET</span><br></pre></td></tr></tbody></table></figure>
-<p>然后在Emacs的启动配置文件中添加启用<code>evil-mode</code>的代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">require</span> 'evil)</span><br><span class="line">(<span class="name">evil-mode</span> <span class="number">1</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>现在便可以在Emacs中使用Vim风格的快捷键了</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/在Emacs中用Vim快捷键.gif" alt=""></p>
-<h1 id="定制evil-mode"><a href="#定制evil-mode" class="headerlink" title="定制evil-mode"></a>定制<code>evil-mode</code></h1><p>只是简单地启用<code>evil-mode</code>还不足以将双手从频繁的按<code>ctrl</code>中解放出来，因为在Emacs中还有不少其它的高频快捷键依赖于<code>ctrl</code>，例如用<code>ctrl-x b</code>来切换到其它的buffer中、用<code>ctrl-x ctrl-f</code>来打开或新建一个文件，甚至是用<code>ctrl-c ctrl-x ctrl-o</code>来停止一个任务的计时器。</p>
-<p>就像在数据压缩中，用较短的串来代替出现频率较高的原始字符串一样，对于高频使用且快捷键较长的功能，可以为它们绑定较短的快捷键。在<code>evil-mode</code>中，<code>g</code>是一个前缀键并且也很好按，所以我把一些重度使用的功能都绑定了在了以它为前缀的快捷键上</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; evil-mode相关的键绑定</span></span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g b"</span>) 'ido-switch-buffer)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g f"</span>) 'ido-find-file)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g o"</span>) 'org-clock-out)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g s"</span>) 'cuckoo-org-schedule)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g t"</span>) 'org-todo)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"s"</span>) 'save-buffer)</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="在VSCode中改用Vim的快捷键"><a href="#在VSCode中改用Vim的快捷键" class="headerlink" title="在VSCode中改用Vim的快捷键"></a>在VSCode中改用Vim的快捷键</h1><p>搬砖的工具是VSCode，用来写Node.js的项目，主要是因VSCode在写Node.js代码这方面确实比Emacs的<code>js-mode</code>、<code>js2-mode</code>，以及<code>tide-mode</code>之流要好用那么一点。在VSCode中我也改用了Vim的键映射，只需要在插件市场中点击安装即可</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/VSCode自带的键映射.jpg" alt=""></p>
-<p>VSCode的Vim键映射实际上是一个独立的插件<a href="https://github.com/VSCodeVim/Vim" target="_blank" rel="noopener">Vim</a>，它也支持进一步地自定义快捷键。出于个人喜好，我把<code>s</code>绑定为保存文件的功能</p>
-<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// VSCode的配置文件setting.json</span></span><br><span class="line"><span class="string">"vim.normalModeKeyBindings"</span>: [</span><br><span class="line">  {</span><br><span class="line">    <span class="string">"before"</span>: [<span class="string">"s"</span>],</span><br><span class="line">    <span class="string">"commands"</span>: [</span><br><span class="line">      <span class="string">"workbench.action.files.save"</span></span><br><span class="line">    ]</span><br><span class="line">  }</span><br><span class="line">],</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="用BetterTouchTools补充evil-mode的不足"><a href="#用BetterTouchTools补充evil-mode的不足" class="headerlink" title="用BetterTouchTools补充evil-mode的不足"></a>用BetterTouchTools补充evil-mode的不足</h1><p>尽管在Emacs中可以将常用的功能绑定到一系列的、以<code>g</code>开头的较短的快捷键上，但这一招并不能用来处理所有的快捷键，因为太多的自定义快捷键也会带来记忆上的负担。但我不会就此止步。</p>
-<p>仔细观察就会发现，多数较长的快捷键是以<code>ctrl-c</code>或<code>ctrl-x</code>作为前缀的。因此，如果能够让<code>ctrl-c</code>和<code>ctrl-x</code>更容易按——比如替换为单个按键，也有利于减少尾指按<code>ctrl</code>键的负担。</p>
-<p>要用单键来代替<code>ctrl-c</code>，光凭Emacs其实也可以做到。比如可以让<code>F10</code>被按下的时候相当于按下<code>ctrl-c</code></p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> simulate-C-c ()</span><br><span class="line">  <span class="string">"模拟输入C-c"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">setq</span> unread-command-events (<span class="name">listify-key-sequence</span> <span class="string">"\C-c"</span>)))</span><br><span class="line">(<span class="name">global-set-key</span> [f10] 'simulate-C-c)</span><br></pre></td></tr></tbody></table></figure>
-<p>问题在于它不可组合。</p>
-<p>例如，先按<code>F10</code>再按<code>ctrl-x</code>，等价于按下<code>ctrl-c ctrl-x</code>。但如果先按<code>ctrl-x</code>再按<code>F10</code>，则Emacs不会再将<code>F10</code>转换为<code>ctrl-c</code>，它只会认为我按下的是<code>ctrl-x F10</code>的键序列。</p>
-<p>既要用<code>F10</code>代替<code>ctrl-c</code>，又要具备可组合性，怎么办？我的答案是使用<a href="https://folivora.ai/" target="_blank" rel="noopener">BetterTouchTool</a>。我用BTT将<code>F9</code>到<code>F12</code>都重定义了一遍</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/用BTT重定义Fn键.jpg" alt=""></p>
-<p>如此一来，当我需要输入复杂的、含有<code>ctrl-c</code>或<code>ctrl-x</code>的快捷键的时候，只需要单击一次<code>F10</code>或<code>F11</code>就足够了，轻而易举！</p>
-<p>遗憾的是，BTT是一款macOS only的软件。</p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>或许脑机接口才是缓解手指劳损的终极解决方案吧。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -824,7 +832,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">94</span>
+          <span class="site-state-item-count">95</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
