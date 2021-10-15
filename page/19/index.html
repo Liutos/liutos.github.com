@@ -200,6 +200,110 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2013/02/18/报告层数的广度有限搜索/" class="post-title-link" itemprop="url">报告层数的广度有限搜索</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2013-02-18 22:59:40" itemprop="dateCreated datePublished" datetime="2013-02-18T22:59:40+08:00">2013-02-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2013/02/18/报告层数的广度有限搜索/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/02/18/报告层数的广度有限搜索/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h2><p>大一的时候为了装13就自己去图书馆借了很多讲解和CS有关却又还没有教或者不会教的内容的书来看，其中就有数据结构那一类的。不过我已经忘记了当时去图书馆借到的是什么样子的书了，只知道书的封面是蓝色的（要是有空的话去图书馆找找就可以知道了=。=）。不过说到数据结构方面的书，在国内大部分和计算机或者信息技术沾边的专业的学生中，比较广为人知的应该既不是《算法导论》，也不是《算法概论》，而是编者为严蔚敏的那本《数据结构C语言描述》吧。我也有幸看过，并且印象中那时候觉得那本教材还是不错的。只不过现在<strong>道行</strong>稍微有点高了，就开始有点鄙视当初习得技能的恩师了——哦，有种过河拆桥的感觉。</p>
+<h2 id="百度面试题"><a href="#百度面试题" class="headerlink" title="百度面试题"></a>百度面试题</h2><p>第一次去百度面试时，面试官看起来和蔼可亲，同样给出的问题也很和蔼可亲。当时的问题有三道，第一道是让我随意写一个二叉树的遍历的代码，我挑了个深度优先搜索来写，因为我觉得这货算得上是最容易写的代码之一了。然后面试官就让我用广度优先搜索再写一遍，我就再写了一次。说真的，队列那一部分的处理还真是让人头大，尤其是我居然稀里糊涂地把队列的处理和栈的处理混淆在一起了，结果代码看起来也是稀里糊涂的。要不是面试官大慈大悲耐心地和我商量着来修改，我可能就没有遇到第三题的机会了。不过终究第二题还是安全过关了，之后就是第三题了：给广度优先搜索增加一个返回所找到的关键字在二叉树的哪一层的功能。</p>
+<p>老实说，听到题目的当即我就想到了一种最最最简单的办法，就是修改二叉树的定义，给它增加一个数据字段来存储每一个节点究竟位于第几层就可以了嘛，唉真是简单得无趣啊=。=不过面试官说不允许这样做，那好，我再换一种办法，就是增加一个新的队列来存储每一个进入队列的节点究竟是位于哪一层的。因为一开始肯定是从第一层开始的，所以只要中间的每一个节点都不要漏掉，那么根据父节点的层数就可以推知直接的子节点的层数，那么在将每一个节点入队列的时候都有办法知道它们是在哪一层的。嗯，这个办法也很好，不过面试官也不允许增加新的队列，呃。。你这不是存心刁难我么！还好，把队列的版本稍微修改一下就可以去掉队列了，不过要增加广度优先搜索的实现函数的参数。</p>
+<h2 id="第三个版本"><a href="#第三个版本" class="headerlink" title="第三个版本"></a>第三个版本</h2><p>首先要明确这个函数的参数与返回值究竟是怎样的。因为当时这个功能是用C语言来实现的，所以只允许函数调用有一个返回值。在一开始写的两个版本中函数的返回值是所找到的二叉树中的节点，所以在第三个版本中也依然返回所查找到的节点或者是在找不到的时候返回C语言中的空——NULL。那么这样一来节点所对应的深度的信息只能通过下面的两种方法来返回了：</p>
+<ul>
+<li>全局变量</li>
+<li>传出参数</li>
+</ul>
+<p>我选择了第二种，因此查找功能需要增加一个传出参数depth，它的类型声明是int *。因此查找功能的入口函数的整体类型声明为：</p>
+<pre><code>TreeNode dfs_search_tree(Tree tree, char target, int *depth)
+</code></pre><p>（我觉得标识符取得还不错，不用解释了吧→_→）那么dfs_search_tree这个函数要如何实现具体的功能呢？现在我们是为了要在队列的版本上进行修改来实现查找功能的，那么原本需要使用队列来存储的深度信息现在应该交给函数的参数来存储，但是这个参数不能添加到入口函数中，因此我们需要一个辅助函数，就叫做dfs_search_tree_aux函数好了，它至少需要上面的函数所拥有的三个参数，并且还需要一个用来传递而不是用来返回的<em>深度</em>的信息，不妨声明为int *nd。</p>
+<p>试想一下，如果我们在处理第i层的一个节点，那么显然可以知道它的左右子树的根结点如果存在，必定会位于第i+1层，因此在广度优先搜索的函数递归调用的时候，nd参数的传递是以加一的形式进行的，即遍历子树的时候nd必定要比测试当前节点的时候加一。不过实际上这样子是不可行的，因为我们不是在测试了父节点之后就立即递归调用函数来测试两个子节点，在测试父节点的时候，只是把两个子节点给放进了队列罢了，因此没有办法通过简单地直接加一的方法来传递深度参数。我们需要的信息是，现在这个节点和上一个节点到底是不是在同一层。</p>
+<p>确定是否在同一层的一个办法，是知道每一层的节点的数目。例如第一层显然只能有一个节点，因此当测试了第一个节点后就可以知道第一层已经测试完了，那么接下来的函数调用的nd参数的值就至少应该增加一，并且应该把表示一层的节点个数的参数设置为第二层的对应值。第二层的节点个数可以利用遍历第一层的时候来得到。例如对于第i层的节点，如果每一个节点都有两个子节点，那么第i+1层的节点数目就是第i层的两倍，对于其它情况也可以很简单地推算出来。因此，我们需要额外的两个参数current_count和next_count，来分别存储当前层剩下的节点数目以及下一层目前所探测到的节点数目。现在，我们可以写出辅助函数的原型了：</p>
+<pre><code>TreeNode dfs_search_tree_aux(char target, int depth, int *nd, Queue queue, int current_count, int next_count)
+</code></pre><p>其中没有和dfs_search_tree一样的tree参数，因为在广度优先搜索中，树的节点是存储在队列queue中的。dfs_search_tree_aux这个函数的逻辑是这样子的：</p>
+<ol>
+<li>先看看队列是否为空。如果是就说明节点都已经测试完了，仍然没有找到目标节点，所以返回NULL；</li>
+<li>从队列中取出最早进入的节点。</li>
+<li>既然已经开始测试新的节点，那么当前层的剩余节点数就少了一个，因此current_count要自减一；</li>
+<li>测试节点的关键字。如果是一致的就先设置传出参数nd为depth，然后返回对应节点的指针；</li>
+<li>如果测试失败，那么就说明函数需要继续递归调用下去了。这时候需要先决定current_count和next_count的值。</li>
+<li>如果current_count为0，也就是说这一层没有节点剩下了，那么就让depth加一，把当前的节点数目（current_count）设置为下一层的节点数目（next_count），然后下一层的节点数目重新归零。</li>
+<li>接下来，测试左子树是否为空。如果非空，就把当前节点的左子树根结点入队，并给next_count加一。同样的，右子树也是类似的处理办法。</li>
+<li>最后，递归调用辅助函数本身。</li>
+</ol>
+<p>最后给出代码链接好了：<a href="https://github.com/Liutos/CLab/blob/master/binary_tree/prototype.c" target="_blank" rel="noopener">https://github.com/Liutos/CLab/blob/master/binary_tree/prototype.c</a>。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/10/26/递归、闭包、面向对象/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -587,123 +691,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2012/09/08/CommonLisp函数调用的CPS变换/" class="post-title-link" itemprop="url">CommonLisp函数调用的CPS变换</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2012-09-08 13:44:38" itemprop="dateCreated datePublished" datetime="2012-09-08T13:44:38+08:00">2012-09-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-12-02 21:28:58" itemprop="dateModified" datetime="2018-12-02T21:28:58+08:00">2018-12-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2012/09/08/CommonLisp函数调用的CPS变换/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2012/09/08/CommonLisp函数调用的CPS变换/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>之前在新浪博客上已经发表了一篇同样主题的文章了，不过心血来潮想重写一份发到这边的博客上来，顺便看看自己能不能够在自己重写这篇的东西的过程中再发掘出一些有价值的东西，充实一下内容。</p>
-<h2 id="什么是CPS"><a href="#什么是CPS" class="headerlink" title="什么是CPS"></a>什么是CPS</h2><p>首先双手奉上来自<a href="http://en.wikipedia.org/wiki/Continuation-passing_style" target="_blank" rel="noopener">维基百科的Continuation-passing-style条目</a>。CPS一般译作<em>续延传递风格</em>，这里最不好理解的词语莫过于<em>续延</em>了。维基百科上关于<a href="http://en.wikipedia.org/wiki/Continuation" target="_blank" rel="noopener">续延</a>也有详细的介绍，不过我也可以简单地介绍一下。<em>续延</em>是一种表示接下来所要进行的计算的对象，也就是你在计算了这一步之后需要继续做的事情的一个描述。举个例子，对于Common Lisp代码(+ (+ 1 2) 3)而言，最左边的参数首先会被计算，也就是Lisp实现先计算的是<em>(+ 1 2)</em>这个表达式，于是可以得到返回值为3。那么计算完了最左边的参数之后，Lisp实现接下来要做什么呢？显然，接下来会计算作为直接值的3得到3本身，然后再将第一次计算得到的3和第二次求值得到的3进行相加。而上面的这两个步骤，其实可以用Lisp中的对象进行描述，只需要用一个匿名函数就可以了，写成</p>
-<pre><code>(lambda (v) (+ v 3))。
-</code></pre><p>那么我们就可以思考，在这一个匿名函数被计算之后，再一次的<em>接下来的计算</em>又是什么呢？对于在REPL中输入的代码而言，Lisp实现会把表达式最终计算得到的返回值打印在终端上，所以我们可以认为上面的匿名函数，也就是一个计算过程，所对应的续延是</p>
-<pre><code>(lambda (u) (print u))。
-</code></pre><p>那么原来的表达式<em>(+ (+ 1 2) 3)</em>就可以写成下面这样的风格的代码：</p>
-<pre><code>(+&amp; 1 2 (lambda (v)
-          (+&amp; v 3 (lambda (u)
-                    (print u)))))
-</code></pre><p>你或许会感到奇怪：这里的<em>+&amp;</em>是个什么东西啊？+&amp;是一个和加法类似的函数，只是它除了会把前两个参数相加之外，还会将这个参数传递给作为第三个参数传入的匿名函数，并进行函数调用。按照维基百科上的说明，CPS代码有两个规范：</p>
-<ol>
-<li>每一个函数都要接受一个续延作为额外的参数；</li>
-<li>每一个函数调用中的参数都只能是一个变量或者λ表达式。</li>
-</ol>
-<p>可以说，+&amp;这样的函数是为了将代码变换成CPS才创造出来的。当然了，除了+函数需要进行变换之外，其它的普通函数（regular function）也是需要进行变换的。例如对代码<em>(\</em> (+ 1 2) 3)<em>进行变换的话，就需要为\</em>函数提供相应的变体，结果应该是：</p>
-<pre><code>(+&amp; 1 2 (lambda (v)
-          (*&amp; v 3 (lambda (u)
-                    (print u)))))。
-</code></pre><p>上面的代码中有个可以稍微琢磨的地方：为什么在两个不同的匿名函数的参数列表中偏偏要使用不同的参数名呢？事实上，在上面的两个变换出来的结果中，完全可以统一使用v或者u来作为参数名，那是因为参数v不需要在第二层嵌套的匿名函数中被使用。可是有时候一开始就进行求值的表达式不一定是马上就被使用的，例如代码<em>(- (+ 1 2) (\</em> 3 4))*的变换结果就是</p>
-<pre><code>(+&amp; 1 2 (lambda (v)
-          (*&amp; 3 4 (lambda (u)
-                    (-&amp; v u)))))。
-</code></pre><p>可以说，当参数列表表达式中不止一个<em>复杂</em>表达式时，就需要至少两个不重名的参数了。讲了这么多手动变换的事情，现在可以讨论最重要的问题了：</p>
-<h2 id="如何对Lisp代码进行CPS变换"><a href="#如何对Lisp代码进行CPS变换" class="headerlink" title="如何对Lisp代码进行CPS变换"></a>如何对Lisp代码进行CPS变换</h2><p>如果我们可以对一类简单的代码进行CPS变换了，那么如何在这个基础上对复杂的代码进行CPS变换呢？例如我们有一段简单的代码<em>(op3 (op2 (op1 a b) c) d)</em>，并且我们已经有了一个通用的功能F可以对其中的嵌套的表达式<em>(op2 (op1 a b) c)</em>进行变换，那么要如何将其和外层的对op3函数的调用结合在一起呢？显然，我们可以先把<em>(op2 (op1 a b) c)</em>换掉，换成一个普通的符号v，以表示一个变量。那么接下来我们的处理对象就是一个稍微简单的表达式<em>(op3 v c)</em>了，对于这种参数列表均由变量所构成的表达式，要将其变换成CPS代码只需要修改其函数为<em>加&amp;的形式</em>，并且添上一个额外的参数——续延就可以了。至于这个续延应该是由调用者提供，而又可以使用默认的<em>(lambda (XXX) (print XXX))</em>的。所以，上面的代码最终会变成</p>
-<pre><code>(经过F处理的代码 (lambda (v)
-                (op3&amp; v c (lambda (XXX)
-                            (print XXX)))))。
-</code></pre><p>对内层的表达式应用F处理完之后还要再计算外层表达式的续延，而计算续延正是函数F所做的事情，所以实际上对一个复杂的表达式做CPS变换，是一个递归的过程。用两段代码进行变换可以有更直观的体验：假设我们有一个正确实现的变换函数F，它接受一个代码和一个续延，并产生出对代码进行CPS变换所得到的结果。那么如果应用在代码<em>(+ (+ 1 1) 3)</em>上，就是</p>
-<pre><code>(F (+ (+ 1 1) 3) (lambda (v) (print v)))。
-</code></pre><p>显然，这段代码应该和下面的这段代码是等价的：</p>
-<pre><code>(F (+ 1 1) (lambda (u)
-             (+&amp; u 3 (lambda (v)
-                       (print v)))))。
-</code></pre><p>并且上面这段代码的续延参数部分，和下面的这段代码是等价的：</p>
-<pre><code>(F (+ u 3) (lambda (v) (print v)))。
-</code></pre><p>是不是就是说，对于一个复杂的表达式expr0，如果想要在提供一个额外续延cont0的情况下，将其正确变换成CPS形式，那么可以先提取出它的第一个被求值的子表达式expr1，将原来子表达式出现的地方替换为一个变量，那么原本的表达式就变成了expr1对应的续延cont1。此时先将cont1和cont0传入函数F进行CPS变换，得到的结果cont将会成为和expr1一起传入函数F进行变换，并最终得到对expr0和cont0进行变换的正确结果呢？显然这是对的，因为cont0紧随expr0求值，而expr0可以拆分为两部分：expr1以及紧随其求值的cont1。那么显然cont0紧随cont1求值，所以cont0是cont1的续延，同样需要进行CPS变换，然后得到新的代码作为expr1的续延继续进行变换，那么最终就会得到代码，它反映的求值顺序正是expr1 -&gt; cont1 -&gt; expr0。</p>
-<p>那么重点就在于怎么把原本的expr0给拆分成expr1和cont1，以及具体结合代码和续延的技术细节了。假设实现拆分功能的函数叫做split-funcall，那么它需要在什么情况下做什么事情呢？一般而言，split-funcall处理的是有复杂的子表达式的代码，那么它需要能够在整个表达式expr0中找出尽量左的一个复杂子表达式，也就是expr1。如果找到这样的expr1了，那么就需要同时找出对应的续延cont1并将两者都返回；如果没有这样的expr1，那么直接返回逻辑假和整个expr0就可以了。说到需要返回多个值的情况，正是Common Lisp的values函数派上大用场的时候了。</p>
-<p>对于含有复杂子表达式的情况，split-funcall函数会返回提取到的子表达式和对应的续延，那么这里的续延应该用什么样的形式来表示呢？为了方便使用从split-funcall内部所gensym出来的符号，所以直接返回一个经过构造的lambda表达式就可以了，但是在递归调用函数F时，不能直接对其进行变换处理，因为lambda表达式不是一个会对参数求值的操作符，所以真正需要变换的是lambda表达式的函数体。因此必须先拆开lambda表达式，对其函数体进行变换并再次构造成lambda表达式，以传递给函数F使用。</p>
-<p>最后，贴一下自己放在Gist上的代码:<script src="https://gist.github.com/3148312.js"> </script></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -775,7 +762,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">97</span>
+          <span class="site-state-item-count">98</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
