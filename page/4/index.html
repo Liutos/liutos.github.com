@@ -200,6 +200,123 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/" class="post-title-link" itemprop="url">自己动手丰衣足食——用Hammerspoon控制Emacs的窗口</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-20 21:00:07" itemprop="dateCreated datePublished" datetime="2020-12-20T21:00:07+08:00">2020-12-20</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>有一天，我用<code>Homebrew</code>安装了一些软件——因为已经是一个月前的事情了，所以已经记不清是安装了什么。安装后并没有立即出现什么问题，只是又过了两天我重新启动电脑后，发现同样是由<code>Homebrew</code>安装的<code>Emacs</code>不由分说地无法启动了。这下可麻烦了，毕竟我是<code>org-mode</code>的重度使用者，还需要偶尔用<code>SLIME</code>写点Common Lisp的代码，而它们都运行在<code>Emacs</code>中。</p>
+<p>直觉告诉我，也许重新安装一下<code>Emacs</code>，一切就可以恢复正常。重装了<code>Emacs</code>后，又遇到了别的问题——用<code>BetterTouchTools</code>在Touch Bar中添加的按钮，无法在<code>Emacs</code>已经启动的情况下，切换到它的窗口上。</p>
+<p>非要说，问题其实也不大，毕竟很多时候是将MacBook Pro合上盖子当主机用的，Touch Bar在工作时的使用频率并不高。此外，糊<code>Node.js</code>等语言的代码时也用不到<code>Emacs</code>——还是<code>VSCode</code>更合适。</p>
+<p>但这就是令人不爽，因此我决定要解决它——用<code>Hammerspoon</code>。</p>
+<h1 id="Hammerspoon是什么？"><a href="#Hammerspoon是什么？" class="headerlink" title="Hammerspoon是什么？"></a>Hammerspoon是什么？</h1><p><code>Hammerspoon</code>的<a href="https://www.hammerspoon.org/" target="_blank" rel="noopener">官网</a>很好地说明了这款工具的定位和原理</p>
+<blockquote>
+<p>This is a tool for powerful automation of OS X. At its core, Hammerspoon is just a bridge between the operating system and a Lua scripting  engine. What gives Hammerspoon its power is a set of extensions that expose  specific pieces of system functionality, to the user.</p>
+</blockquote>
+<ol>
+<li>它运行在OS X上——现在应该叫macOS；</li>
+<li>它是用来自动化操作的——就像系统内置的<code>Automator</code>或第三方的<code>Alfred Workflow</code>那样；</li>
+<li>它的原理是将操作系统的功能封装成了可以用<code>Lua</code>代码调用的模块；</li>
+</ol>
+<p>例如下面的代码</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"E"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">  hs.alert.show(<span class="string">"Hello World!"</span>)</span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>就可以让使用者在按下组合键<code>⌘⌥⌃e</code>的时候，在屏幕正中间显示<code>Hello World!</code>这段文本</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201220/hammerspoon的示例.jpg" alt=""></p>
+<h1 id="为什么用Hammerspoon？"><a href="#为什么用Hammerspoon？" class="headerlink" title="为什么用Hammerspoon？"></a>为什么用Hammerspoon？</h1><p><code>Hammerspoon</code>正好可以解决我的问题，它的<code>hs.window</code>模块既可以让使用者遍历所有打开的窗口（用<a href="https://www.hammerspoon.org/docs/hs.window.html#allWindows" target="_blank" rel="noopener"><code>hs.window.allWindows</code>函数</a>），也可以聚焦到指定的窗口上（用<a href="https://www.hammerspoon.org/docs/hs.window.html#focus" target="_blank" rel="noopener"><code>focus</code>方法</a>）。有了它们，将<code>Emacs</code>调到最前面（front-most）来也就是水到渠成的事情了：</p>
+<ol>
+<li>调用函数<code>hs.window.allWindows</code>函数，获得所有窗口的列表；</li>
+<li>逐个检查列表中的窗口对象，如果属于<code>Emacs</code>的，就调用窗口的方法<code>focus</code>，并跳出循环。</li>
+</ol>
+<p>剩下的两个问题便是：</p>
+<ol>
+<li><code>Emacs</code>的<code>bundle ID</code>是什么；</li>
+<li>如何知道一个窗口对象的<code>bundle ID</code>。</li>
+</ol>
+<h1 id="Emacs的bundle-ID"><a href="#Emacs的bundle-ID" class="headerlink" title="Emacs的bundle ID"></a>Emacs的bundle ID</h1><p><code>Bundle ID</code>可以在macOS中独一无二地标识一个应用。要想知道<code>Emacs</code>的<code>bundle ID</code>是什么，只需要打开文件<code>/Applications/Emacs.app/Contents/Info.plist</code>，看看其中键为<code>CFBundleIdentifier</code>的值即可。</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜  Contents grep -A 1 <span class="string">'CFBundleIdentifier'</span> Info.plist</span><br><span class="line">	&lt;key&gt;CFBundleIdentifier&lt;/key&gt;</span><br><span class="line">	&lt;string&gt;org.gnu.Emacs&lt;/string&gt;</span><br><span class="line">➜  Contents</span><br></pre></td></tr></tbody></table></figure>
+<p>可以看到，<code>Emacs</code>的<code>bundle ID</code>是<code>org.gnu.Emacs</code>。</p>
+<h1 id="来点Lua代码吧"><a href="#来点Lua代码吧" class="headerlink" title="来点Lua代码吧"></a>来点Lua代码吧</h1><p>有了<code>Emacs</code>的<code>bundle ID</code>，接下来就可以在<code>Hammerspoon</code>中定义快捷键了。由于最后会通过Touch Bar上的按钮来触发这组快捷键，复杂点也不要紧，因此我直接沿用了<code>Hammerspoon</code>的入门指引中作为例子的<code>⌘⌥⌃w</code></p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>为了在一个循环中逐个遍历窗口对象，将<code>hs.window.allWindows</code>的返回值保存到一个局部变量中</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>照着简书上的<a href="https://www.jianshu.com/p/de5a4b132918" target="_blank" rel="noopener">这篇文章</a>，依葫芦画瓢地用<code>for</code>和<code>pairs</code>来遍历变量<code>windows</code></p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>窗口自身没有<code>bundle ID</code>，为此需要先获取窗口所属的应用。查看文档可以知道，有一个<a href="https://www.hammerspoon.org/docs/hs.window.html#application" target="_blank" rel="noopener"><code>application</code>方法</a>正是用来获取应用对象的</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">         <span class="keyword">local</span> app = win:application()</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>调用<code>allWindows</code>时使用的是英文句号（<code>.</code>），调用<code>application</code>则是用冒号（<code>:</code>），这正是<code>Lua</code>中调用函数与方法时语法上的差异。</p>
+<p>再用应用的<a href="https://www.hammerspoon.org/docs/hs.application.html#bundleID" target="_blank" rel="noopener"><code>bundleID</code></a>方法获得它的<code>bundle ID</code></p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">         <span class="keyword">local</span> app = win:application()</span><br><span class="line">         <span class="keyword">local</span> bundleID = app:bundleID()</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>现在，只要变量<code>bundleID</code>等于<code>Emacs</code>的<code>bundle ID</code>就可以聚焦到当前遍历的窗口上了</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">         <span class="keyword">local</span> app = win:application()</span><br><span class="line">         <span class="keyword">local</span> bundleID = app:bundleID()</span><br><span class="line">         <span class="keyword">if</span> bundleID == <span class="string">"org.gnu.Emacs"</span> <span class="keyword">then</span></span><br><span class="line">            win:focus()</span><br><span class="line">         <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="让Touch-Bar按钮触发这一切"><a href="#让Touch-Bar按钮触发这一切" class="headerlink" title="让Touch Bar按钮触发这一切"></a>让Touch Bar按钮触发这一切</h1><p>只需要在<code>BetterTouchTools</code>中配置一下即可</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201220/用BTT触发Hammerspoon的快捷键.jpg" alt=""></p>
+<p>这个方法比此前唤起<code>/Applications/Emacs.app</code>的方式更好，因为它只依赖于<code>Emacs</code>逻辑上亘古不变的东西——<code>bundle ID</code>，而不依赖于其物理上的安装位置。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/11/18/一箭双雕——org-mode中的ID和CUSTOM-ID字段/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -636,119 +753,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/09/09/那么，Prolog，告诉我怎么走/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/09/那么，Prolog，告诉我怎么走/" class="post-title-link" itemprop="url">那么，Prolog，告诉我怎么走</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-09-09 21:42:32 / 修改时间：21:56:51" itemprop="dateCreated datePublished" datetime="2020-09-09T21:42:32+08:00">2020-09-09</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/09/09/那么，Prolog，告诉我怎么走/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/09/那么，Prolog，告诉我怎么走/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>今年四月左右，我心血来潮地为自己立了一个学习Prolog的目标——对，就是那门以逻辑编程和人工智能为卖点的语言。不仅要学会它的基本用法，还妄想用它像朋友圈广告里的Python那样，用来处理Excel文件中的大数据！</p>
-<p>尽管处理大数据是开个玩笑，但学习Prolog的目标是真的。既然要学习一门编程语言，就必须找一本靠谱的教材。在无中生友之后，我选择了<del>由谭浩强老先生主编的</del><a href="http://www.learnprolognow.org/lpnpage.php?pageid=online" target="_blank" rel="noopener">《Learn Prolog Now》</a>作为入门读物。</p>
-<p>尽管《Learn Prolog Now》的内容一点也不real world，却循序渐进、非常地适合初学者，每一章的结尾还准备了“上机题”。出人意料的是，仅仅在第三章就遇到了不会做的题目。在焦急地苦战一番未果后，我拖着疲惫的身躯搁置了它，继续学习后面的章节。</p>
-<p>时隔五个月，我再次尝试解答这道题目。却惊喜地发现，只需要冷静地分析再仔细运用前三章学过的知识，解决这道题目也就是水到渠成的事情了。</p>
-<h1 id="所以到底是个什么题？"><a href="#所以到底是个什么题？" class="headerlink" title="所以到底是个什么题？"></a>所以到底是个什么题？</h1><p>讲了这么多，是时候揭晓这它的真面目了。由于第三题以第二题为基础，因此一并搬运了过来</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/第二第三题的描述.jpg" alt=""></p>
-<p>感兴趣的朋友也可以直接移步<a href="http://www.learnprolognow.org/lpnpage.php?pagetype=html&amp;pageid=lpn-htmlse12#x25-38066x2" target="_blank" rel="noopener">源网页</a>查看。</p>
-<p>看完上面的题目，只学过主流编程语言的朋友大概会是一头雾水，毕竟无论是代码还是术语，都与平日里使用的大相径庭。我来试着解释一下。像<code>byCar(auckland, hamilton)</code>和<code>byTrain(metz, frankfurt)</code>这样的代码，用Prolog的术语来讲叫做“事实”。就像数学中的公理一样，它们总是成立的。如果向Prolog提问，它会给出肯定的回答</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/向Prolog查询事实.jpg" alt=""></p>
-<p><code>byCar</code>和<code>byTrain</code>被称为“谓词”，<code>auckland</code>和<code>hamilton</code>则是“原子”。</p>
-<p>第二题要求定义<code>travel/2</code>，第三题要求定义<code>travel/3</code>。<code>travel</code>是谓词的名字，2和3则是它所接受的参数的个数。定义一个谓词就是给出描述它何时成立的“规则”，举个例子，可以定义一个名为<code>len</code>的谓词，只有当第二个参数等于第一个参数的长度时才成立</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/定义计算长度的谓词的例子.jpg" alt=""></p>
-<p>以大写字母开头的标识符（如题目中的<code>X</code>，上图中的<code>T</code>、<code>L</code>）是变量，在归一化（unification）时Prolog能够为它们赋值使得查询成立。</p>
-<p>鉴于本文不是Prolog的入门教程，各位读者如果想进一步了解Prolog，还请移步《Learn Prolog Now》的相关章节。</p>
-<h1 id="先解决第二题吧"><a href="#先解决第二题吧" class="headerlink" title="先解决第二题吧"></a>先解决第二题吧</h1><p>讲了这么多，该进入正题了。第二题其实不难，细心的读者应该已经发现，这题可以用递归来解决（就像上文的<code>len</code>一样）。</p>
-<p>设谓词<code>travel</code>的两个参数分别叫做<code>S</code>和<code>E</code>，各代表起点和终点。显然，<code>travel(S, E)</code>成立，当且仅当：</p>
-<ol>
-<li>可以从<code>S</code>搭乘汽车（<code>byCar</code>）、火车（<code>byTrain</code>），或飞机（<code>byPlane</code>）抵达<code>E</code>，或者；</li>
-<li>存在另一个城市<code>M</code>，可以从<code>S</code>搭乘汽车、火车，或飞机抵达<code>M</code>，并且<code>travel(M, E)</code>也成立。</li>
-</ol>
-<p>上述算法可以轻松地写成Prolog代码</p>
-<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">byCar(auckland,hamilton).</span><br><span class="line">byCar(hamilton,raglan).</span><br><span class="line">byCar(valmont,saarbruecken).</span><br><span class="line">byCar(valmont,metz).</span><br><span class="line"></span><br><span class="line">byTrain(metz,frankfurt).</span><br><span class="line">byTrain(saarbruecken,frankfurt).</span><br><span class="line">byTrain(metz,paris).</span><br><span class="line">byTrain(saarbruecken,paris).</span><br><span class="line"></span><br><span class="line">byPlane(frankfurt,bangkok).</span><br><span class="line">byPlane(frankfurt,singapore).</span><br><span class="line">byPlane(paris,losAngeles).</span><br><span class="line">byPlane(bangkok,auckland).</span><br><span class="line">byPlane(singapore,auckland).</span><br><span class="line">byPlane(losAngeles,auckland).</span><br><span class="line"></span><br><span class="line">travel(<span class="symbol">S</span>, <span class="symbol">E</span>) :- just_go(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">travel(<span class="symbol">S</span>, <span class="symbol">E</span>) :- just_go(<span class="symbol">S</span>, <span class="symbol">M</span>), travel(<span class="symbol">M</span>, <span class="symbol">E</span>).</span><br><span class="line"></span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byCar(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byTrain(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byPlane(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br></pre></td></tr></tbody></table></figure>
-<p>让Prolog告诉咱们这个<code>travel/2</code>写得对不对</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/travel2效果演示.jpg" alt=""></p>
-<p>精彩！</p>
-<h1 id="你话我猜？"><a href="#你话我猜？" class="headerlink" title="你话我猜？"></a>你话我猜？</h1><p>Prolog不仅知道一个查询是否成立，还知道这个查询在什么参数下成立。例如，可以让Prolog告诉咱们，从<code>valmont</code>可以抵达哪一些城市，以及哪一些城市可以抵达<code>auckland</code></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/让Prolog回答起点和终点.jpg" alt=""></p>
-<p>这正是在接下来的题目中需要发扬光大的能力。</p>
-<h1 id="终于来到第三题"><a href="#终于来到第三题" class="headerlink" title="终于来到第三题"></a>终于来到第三题</h1><p>第三题所要求的<code>travel</code>是一个接受三个参数的谓词，第三个参数由从起点到终点的途径城市构成。设这个新的变量为<code>R</code>，那么<code>travel(S, E, R)</code>成立当且仅当：</p>
-<ol>
-<li>可以从<code>S</code>抵达<code>E</code>，并且<code>R</code>为<code>go(S, E)</code>，或者；</li>
-<li>存在另一个城市<code>M</code>，以及另一条路径<code>R2</code>。可以从<code>S</code>抵达<code>M</code>，并且<code>travel(M, E, R2)</code>成立，并且<code>R</code>为<code>go(S, M, R2)</code>。</li>
-</ol>
-<p>那么如何在规则中描述<code>R</code>的结构呢？莫非是像上面的谓词<code>len</code>那样，在<code>:-</code>的右侧写上形如<code>R is go(S, M, R2)</code>这样的代码？</p>
-<p>并不是。</p>
-<p>借助Prolog强大的模式匹配能力，只需要在<code>:-</code>的左边声明<code>R</code>的结构即可</p>
-<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">byCar(auckland,hamilton).</span><br><span class="line">byCar(hamilton,raglan).</span><br><span class="line">byCar(valmont,saarbruecken).</span><br><span class="line">byCar(valmont,metz).</span><br><span class="line"></span><br><span class="line">byTrain(metz,frankfurt).</span><br><span class="line">byTrain(saarbruecken,frankfurt).</span><br><span class="line">byTrain(metz,paris).</span><br><span class="line">byTrain(saarbruecken,paris).</span><br><span class="line"></span><br><span class="line">byPlane(frankfurt,bangkok).</span><br><span class="line">byPlane(frankfurt,singapore).</span><br><span class="line">byPlane(paris,losAngeles).</span><br><span class="line">byPlane(bangkok,auckland).</span><br><span class="line">byPlane(singapore,auckland).</span><br><span class="line">byPlane(losAngeles,auckland).</span><br><span class="line"></span><br><span class="line">travel(<span class="symbol">S</span>, <span class="symbol">E</span>, go(<span class="symbol">S</span>, <span class="symbol">E</span>)) :- just_go(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">travel(<span class="symbol">S</span>, <span class="symbol">E</span>, go(<span class="symbol">S</span>, <span class="symbol">M</span>, <span class="symbol">R</span>)) :- just_go(<span class="symbol">S</span>, <span class="symbol">M</span>), travel(<span class="symbol">M</span>, <span class="symbol">E</span>, <span class="symbol">R</span>).</span><br><span class="line"></span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byCar(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byTrain(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br><span class="line">just_go(<span class="symbol">S</span>, <span class="symbol">E</span>) :- byPlane(<span class="symbol">S</span>, <span class="symbol">E</span>).</span><br></pre></td></tr></tbody></table></figure>
-<p>加载这段代码后，就能让Prolog告诉我们，如何从<code>valmont</code>去往<code>losAngeles</code>了</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200909/travel3效果演示.jpg" alt=""></p>
-<p>Prolog不仅找出了题目中所给出的答案（见上图的第二行<code>X =</code>），还找出了另外一条可行的路径。</p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>确实不难，难怪可以作为第三章的习题。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -820,7 +824,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-count">99</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -919,7 +923,7 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

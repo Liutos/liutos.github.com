@@ -200,6 +200,98 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/09/16/ProjectEuler第18题/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2012/09/16/ProjectEuler第18题/" class="post-title-link" itemprop="url">ProjectEuler第18题</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2012-09-16 22:55:05" itemprop="dateCreated datePublished" datetime="2012-09-16T22:55:05+08:00">2012-09-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-12-02 21:29:37" itemprop="dateModified" datetime="2018-12-02T21:29:37+08:00">2018-12-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2012/09/16/ProjectEuler第18题/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2012/09/16/ProjectEuler第18题/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="先跑跑题"><a href="#先跑跑题" class="headerlink" title="先跑跑题"></a>先跑跑题</h2><p>自从辞掉了那份实习，我仿佛失去了什么东西，以致于在后来的两天里面都有一种无所事事的感觉，做什么事情都不在状态的样子。可能现在的我看起来还是那样子，不过我的自我感觉还可以，虽然看动画占了一天当中不少的时间份额，不过也总算是值得的。当然了，还有阅读小说的时间。最近买了不少小说（同时也不小心错手买了两本漫画），读了大部分，现在还剩下一本《奋斗吧！系统工程师》的第三卷没有打开来读。说到学习方面的话，最近确实是松懈了很多，丝毫没有按照自己在日程安排当中写的那样去做（回家没有网络也算一个原因吧），例如没有看《算法导论》，倒是看了不少和OCaml有关的内容，也掌握了不少OCaml的知识，感觉如果要实际使用的话，只要再努力学习一点库和领域特定的知识就足够了吧——大概是的……</p>
+<h2 id="入正题"><a href="#入正题" class="headerlink" title="入正题"></a>入正题</h2><p>ProjectEuler的第18题所需要的答案就是从三角形的最上层，到达三角形的最下层的路径中，哪一条路径上数字的和最大，计算出这个最大值就可以了。如果对动态规划的思想有点感觉的话，那么这个问题其实就是可以运用动态规划来解决的一个比较典型的例子了。按照《算法导论》一书中的描述，动态规划算法的设计可以分为下面的四个步骤：</p>
+<ul>
+<li>描述最优解的结构</li>
+<li>递归定义最优解的值</li>
+<li>按自底向上的方式计算最优解的值</li>
+<li>由计算出的结构构成一个最优解</li>
+</ul>
+<p>要想描述这里的最优解的结构，不妨自己定义一些名词以方便描述。首先给三角形中的每个元素设定一个位置，它们各自的位置由行和列来决定，最上面是第一行，而最下面是最后一行，也就是第十五行。而最上面的那个元素，就是传说中的第一行第一列，给位置取个符号，叫做P(i,j)好了，其中i代表行号，j代表列号。给路径取名为p，那么如果找到了一条从位置P(i,j)到底层的路径p，它上面的数字的和是所有从P(i,j)出发的路径中最大的，那么称这条路径p为所谓的“最大和路径”。</p>
+<h3 id="描述最优解的结构"><a href="#描述最优解的结构" class="headerlink" title="描述最优解的结构"></a>描述最优解的结构</h3><p>如果从位置P(i,j)开始的路径p是其对应的最大和路径，那么p必然包含了从位置P(i+1,j)或者P(i+1,j+1)开始的最大和路径。要证明这样的东西，可以用反证法（《算法导论》中都是这样的思路）。假设这条路径没有包含通过位置P(i+1,j)的最大和路径作为其一部分，那么就是说存在从位置P(i+1,j)开始到达底层的另一条路径p’，其上面的数字之和比p的对应的那一部分要大。如果真的是这样的话，那么只需要在原来的路径p中，将从位置P(i+1,j)开始的那一部分替换成这条新的路径p’，那么就可以构造出一条新的、从位置P(i,j)开始到达底层的最大和路径p2，并且p2包含的数字之和比p的要大。这与原来的假设，即p是最大和路径相矛盾，所以假设不成立，p包含了通过其上面每一个子位置的最大和路径。同理可以证明对于位置P(i+1,j+1)这样的关系也是成立的。</p>
+<p>这就是最优解的结构，也就是最大和路径的构成是怎样的。一个问题的最优解包含了子问题的一个最优解，这就是所谓的最优子结构性质，是运用动态规划来设计算法的一个重要的要求。现在最优解的结构已经找出来了，可是这个东西似乎不是可以拿来计算的东西，毕竟它不是一个量化的东西，所以接下来就要……</p>
+<h3 id="递归定义最优解的值"><a href="#递归定义最优解的值" class="headerlink" title="递归定义最优解的值"></a>递归定义最优解的值</h3><p>那么应该用怎样的数量来作为可以代表最优解的值呢？其实PE的这个问题本身就提供了非常好的入手点，也就是从某个位置出发，到达底层的路径上的数字的和。因为要从最优解的方面来考虑，所以可以把这个代表最优解的值设定成“从位置P(i,j)开始的最大和路径p所经过的数字的和”。不过这个定义也只是解决了最优解的值从那个方面入手的问题而已，更重要的是，这个最优解的值可以通过怎样的方法计算得来呢？显然，最大和依赖于下面一层中和位置P(i,j)相邻的两个位置所能够得到的最大和，这两个位置分别是P(i+1,j)和P(i+1,j+1)。假设在一个位置中存储的数字为a(i,j)，与一个位置相关的最大和记为S(i,j)，那么对于一般的i和j而言，S(i,j)=max{S(i+1,j), S(i+1,j+1)}+a(i,j)，其中要求j&lt;=i。有两个临界情况，它们分别是当i等于1和15时的情况，一个是处于最上层，另一个则是处于最下层。对于i=1的情况，S(1,1)就是题目所需要的答案，而对于所有i=15的情况，S(15,j)=a(15,j)。（如果可以用LaTeX来排版公式的话表意一定会更加地明确）</p>
+<h3 id="按自底向上的方式计算最优解的值"><a href="#按自底向上的方式计算最优解的值" class="headerlink" title="按自底向上的方式计算最优解的值"></a>按自底向上的方式计算最优解的值</h3><p>现在的问题就是，要怎么自底向上地计算出这个最优解的值呢？其实很简单，只要从第14层开始一层一层地往上处理就可以了。假设有一个三角形S记录着对应于每一个位置的最大和，那么对于遇到的每一层中的每一个位置P(i,j)，只需要在S(i+1,j)和S(i+1,j+1)中选择一个较大的值，然后与a(i,j)相加并且放入表S的对应位置中就可以了。这样当处理完了所有的元素后，也就是遍历到了第一层之后，表S的(1,1)位置就是最终的答案了。不过这里稍微有个可以优化的地方，就是在处理第i层的时候，每一个元素在处理完之后，原先存放的值就没有用处了，因此其实完全可以不需要再使用一个三角形S，而是直接将求和得到的阶段性的那个值放入P(i,j)中。这样下次计算上一层时也不需要三角形S了，而是直接使用下一层的数据就可以了。</p>
+<h3 id="由计算出的结构构成一个最优解"><a href="#由计算出的结构构成一个最优解" class="headerlink" title="由计算出的结构构成一个最优解"></a>由计算出的结构构成一个最优解</h3><p>第三阶段的计算实际上已经完成了这里的工作，所以可以直接编码了。代码在<a href="https://github.com/Liutos/Project-Euler/blob/master/ocaml/pro18.ml" target="_blank" rel="noopener">这里</a>，是用OCaml来写的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -567,7 +659,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-count">99</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -666,7 +758,7 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

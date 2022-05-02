@@ -200,6 +200,99 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2022/05/02/自己动手打印整数/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/02/自己动手打印整数/" class="post-title-link" itemprop="url">自己动手打印整数</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-02 11:14:03 / 修改时间：11:21:16" itemprop="dateCreated datePublished" datetime="2022-05-02T11:14:03+08:00">2022-05-02</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2022/05/02/自己动手打印整数/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/05/02/自己动手打印整数/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在 Common Lisp 中，打印整数一般用函数<code>format</code>。例如，上面的代码会往标准输出中打印出233这个数字：</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D"</span> <span class="number">233</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>除此之外，<code>format</code>还可以控制打印内容的宽度、填充字符、是否打印正负号等方面。例如，要控制打印的内容至少占据6列的话，可以用如下代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~6D"</span> <span class="number">233</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>如果不使用字符串形式的 DSL，而是以关键字参数的方式来实现一个能够达到同样效果的函数<code>format-decimal</code>，代码可能如下：</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         mincol)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。"</span></span><br><span class="line">  <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">           (<span class="name">push</span> <span class="number">0</span> digits))</span><br><span class="line">          (<span class="name">t</span></span><br><span class="line">           (<span class="name">do</span> ((<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">               ((<span class="name">zerop</span> n))</span><br><span class="line">             (<span class="name">push</span> (<span class="name">rem</span> n <span class="number">10</span>) digits))))</span><br><span class="line">    <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">    (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">      (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">        (<span class="name">princ</span> #\Space)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">      (<span class="name">princ</span> (<span class="name">code-char</span> (<span class="name">+</span> digit (<span class="name">char-code</span> #\<span class="number">0</span>)))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">233</span> <span class="symbol">:mincol</span> <span class="number">6</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>如果要求用数字0而不是空格来填充左侧的列，用<code>format</code>的写法如下：</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~6,'0D"</span> <span class="number">233</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p><code>format-decimal</code>想要做到同样的事情，可以这么写：</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space))</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表达式为了填充多余的列时所用的字符。"</span></span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">           (<span class="name">push</span> <span class="number">0</span> digits))</span><br><span class="line">          (<span class="name">t</span></span><br><span class="line">           (<span class="name">do</span> ((<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">               ((<span class="name">zerop</span> n))</span><br><span class="line">             (<span class="name">push</span> (<span class="name">rem</span> n <span class="number">10</span>) digits))))</span><br><span class="line">    <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">    (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">      (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">        (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">      (<span class="name">princ</span> (<span class="name">code-char</span> (<span class="name">+</span> digit (<span class="name">char-code</span> #\<span class="number">0</span>)))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">233</span> <span class="symbol">:mincol</span> <span class="number">6</span> <span class="symbol">:padchar</span> #\<span class="number">0</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p><code>-D</code>默认是不会打印非负整数的符号的，可以用修饰符<code>@</code>来修改这个行为。例如，<code>(format t "~6,'0@D" 233)</code>会打印出<code>00+233</code>。稍微修改一下就可以在<code>format-decimal</code>中实现同样的功能</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space)</span><br><span class="line">                         signed)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表达式为了填充多余的列时所用的字符。"</span></span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">to-digits</span> (<span class="name">n</span>)</span><br><span class="line">           <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">                    (<span class="name">push</span> #\<span class="number">0</span> digits))</span><br><span class="line">                   (<span class="name">t</span></span><br><span class="line">                    (<span class="name">do</span> ((<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">                        ((<span class="name">zerop</span> n))</span><br><span class="line">                      (<span class="name">push</span> (<span class="name">code-char</span> (<span class="name">+</span> (<span class="name">rem</span> n <span class="number">10</span>) (<span class="name">char-code</span> #\<span class="number">0</span>))) digits))))</span><br><span class="line">             digits)))</span><br><span class="line">    <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">digits</span> (<span class="name">to-digits</span> (<span class="name">abs</span> n))))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">or</span> signed (<span class="name">&lt;</span> n <span class="number">0</span>))</span><br><span class="line">        (<span class="name">push</span> (<span class="name">if</span> (<span class="name">&lt;</span> n <span class="number">0</span>) #\- #\+) digits))</span><br><span class="line">      <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">          (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">          (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">      (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">        (<span class="name">princ</span> digit)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">233</span> <span class="symbol">:mincol</span> <span class="number">6</span> <span class="symbol">:padchar</span> #\<span class="number">0</span> <span class="symbol">:signed</span> <span class="literal">t</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>除了<code>@</code>之外，<code>:</code>也是一个<code>~D</code>的修饰符，它可以让<code>format</code>每隔3个数字就打印出一个逗号，方便阅读比较长的数字。例如，下列代码会打印出<code>00+23,333</code>：</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~9,'0@:D"</span> <span class="number">23333</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>为此，给<code>format-decimal</code>新增一个关键字参数<code>comma-separated</code>来控制这一行为。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         comma-separated</span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space)</span><br><span class="line">                         signed)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">COMMA-SEPARATED 如果为 T，则每打印3个字符就打印一个逗号。</span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表示填充多余的列时所用的字符。</span></span><br><span class="line"><span class="string">SIGNED 控制是否显示非负整数的加号。"</span></span><br><span class="line">  (<span class="name">check-type</span> comma-separated boolean)</span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  (<span class="name">check-type</span> signed boolean)</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">to-digits</span> (<span class="name">n</span>)</span><br><span class="line">           <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">                    (<span class="name">push</span> #\<span class="number">0</span> digits))</span><br><span class="line">                   (<span class="name">t</span></span><br><span class="line">                    (<span class="name">do</span> ((<span class="name">count</span> <span class="number">0</span> (<span class="number">1</span>+ count))</span><br><span class="line">                         (<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">                        ((<span class="name">zerop</span> n))</span><br><span class="line">                      (<span class="name">when</span> (<span class="name">and</span> comma-separated (<span class="name">&gt;</span> count <span class="number">0</span>) (<span class="name">zerop</span> (<span class="name">rem</span> count <span class="number">3</span>)))</span><br><span class="line">                        (<span class="name">push</span> #\, digits))</span><br><span class="line">                      (<span class="name">push</span> (<span class="name">code-char</span> (<span class="name">+</span> (<span class="name">rem</span> n <span class="number">10</span>) (<span class="name">char-code</span> #\<span class="number">0</span>))) digits))))</span><br><span class="line">             digits)))</span><br><span class="line">    <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">digits</span> (<span class="name">to-digits</span> (<span class="name">abs</span> n))))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">or</span> signed (<span class="name">&lt;</span> n <span class="number">0</span>))</span><br><span class="line">        (<span class="name">push</span> (<span class="name">if</span> (<span class="name">&lt;</span> n <span class="number">0</span>) #\- #\+) digits))</span><br><span class="line">      <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">          (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">          (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">      (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">        (<span class="name">princ</span> digit)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">-23333</span> <span class="symbol">:comma-separated</span> <span class="literal">t</span> <span class="symbol">:mincol</span> <span class="number">9</span> <span class="symbol">:padchar</span> #\<span class="number">0</span> <span class="symbol">:signed</span> <span class="literal">t</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>事实上，打印分隔符的步长，以及作为分隔符的逗号都是可以定制的。例如，可以改为每隔4个数字打印一个连字符</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~9,'0,'-,4@:D"</span> <span class="number">23333</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>对于<code>format-decimal</code>来说这个修改现在很简单了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         (<span class="name">commachar</span> #\,)</span><br><span class="line">                         (<span class="name">comma-interval</span> <span class="number">3</span>)</span><br><span class="line">                         comma-separated</span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space)</span><br><span class="line">                         signed)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">COMMACHAR 表示当需要打印分隔符时的分隔符。</span></span><br><span class="line"><span class="string">COMMA-INTERVAL 表示当需要打印分隔符时需要间隔的步长。</span></span><br><span class="line"><span class="string">COMMA-SEPARATED 如果为 T，则每打印3个字符就打印一个逗号。</span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表示填充多余的列时所用的字符。</span></span><br><span class="line"><span class="string">SIGNED 控制是否显示非负整数的加号。"</span></span><br><span class="line">  (<span class="name">check-type</span> commachar character)</span><br><span class="line">  (<span class="name">check-type</span> comma-interval integer)</span><br><span class="line">  (<span class="name">check-type</span> comma-separated boolean)</span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  (<span class="name">check-type</span> signed boolean)</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">to-digits</span> (<span class="name">n</span>)</span><br><span class="line">           <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">                    (<span class="name">push</span> #\<span class="number">0</span> digits))</span><br><span class="line">                   (<span class="name">t</span></span><br><span class="line">                    (<span class="name">do</span> ((<span class="name">count</span> <span class="number">0</span> (<span class="number">1</span>+ count))</span><br><span class="line">                         (<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">                        ((<span class="name">zerop</span> n))</span><br><span class="line">                      (<span class="name">when</span> (<span class="name">and</span> comma-separated (<span class="name">&gt;</span> count <span class="number">0</span>) (<span class="name">zerop</span> (<span class="name">rem</span> count comma-interval)))</span><br><span class="line">                        (<span class="name">push</span> commachar digits))</span><br><span class="line">                      (<span class="name">push</span> (<span class="name">code-char</span> (<span class="name">+</span> (<span class="name">rem</span> n <span class="number">10</span>) (<span class="name">char-code</span> #\<span class="number">0</span>))) digits))))</span><br><span class="line">             digits)))</span><br><span class="line">    <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">digits</span> (<span class="name">to-digits</span> (<span class="name">abs</span> n))))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">or</span> signed (<span class="name">&lt;</span> n <span class="number">0</span>))</span><br><span class="line">        (<span class="name">push</span> (<span class="name">if</span> (<span class="name">&lt;</span> n <span class="number">0</span>) #\- #\+) digits))</span><br><span class="line">      <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">          (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">          (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">      (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">        (<span class="name">princ</span> digit)))))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">-23333</span> <span class="symbol">:commachar</span> #\- <span class="symbol">:comma-interval</span> <span class="number">4</span> <span class="symbol">:comma-separated</span> <span class="literal">t</span> <span class="symbol">:mincol</span> <span class="number">9</span> <span class="symbol">:padchar</span> #\<span class="number">0</span> <span class="symbol">:signed</span> <span class="literal">t</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>全文完。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/10/15/为什么管Java叫单派发以及什么是多派发/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -670,270 +763,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/08/02/屠龙术——如何运用整洁架构/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/02/屠龙术——如何运用整洁架构/" class="post-title-link" itemprop="url">屠龙术——如何运用整洁架构</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-08-02 23:13:45 / 修改时间：23:13:46" itemprop="dateCreated datePublished" datetime="2021-08-02T23:13:45+08:00">2021-08-02</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2021/08/02/屠龙术——如何运用整洁架构/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/08/02/屠龙术——如何运用整洁架构/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>或许是为了显摆，也或许是虚心学习，总之我在去年年初花了大约两个月读完了<a href="https://book.douban.com/subject/30333919/" target="_blank" rel="noopener">《架构整洁之道》</a>。但读过后也仅仅就是读了而已，尽管书中描绘了一个名为整洁架构的软件架构，但我并没有理解并应用到实际的开发中去。书中的诸多理念最终都蛰伏在了我的脑海深处。</p>
-<p>今年年初的时候我换了工作。新的单位给每人都配备了办公用的电脑，从此我也不用背着2公斤重的MacBook Pro通勤了。美中不足的地方是，我和<a href="https://github.com/Liutos/cuckoo" target="_blank" rel="noopener">cuckoo</a>之间的联系被斩断了，因为<code>cuckoo</code>是个单机程序，要在私人电脑和办公电脑上各装一份太不方便了。于是乎，我决定开两个新的项目，将<code>cuckoo</code>拆分为客户端和服务端两部分。</p>
-<p>正好，这给了我在实际的项目中践行整洁架构的机会。</p>
-<h2 id="什么是整洁架构"><a href="#什么是整洁架构" class="headerlink" title="什么是整洁架构"></a>什么是整洁架构</h2><p>不像数学领域的概念往往有一个精确的定义，书中甚至没有道出整洁架构是什么。相对的，只有一副引人入胜的架构示意图（图片摘自作者博客的<a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html" target="_blank" rel="noopener">这篇文章</a>）</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210802/整洁架构.jpg" alt=""></p>
-<p>在作者的<a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html" target="_blank" rel="noopener">文章</a>中，对图中的四个层次给出了响应的解释：</p>
-<!-- 对Entities的解释：Entities封装了企业范围内的业务规则。如果你没有经营一个企业，仅仅是开发一款应用，那么Entities就是应用的业务对象，它们封装了应用内最通用、上层的规则。 -->
-<!-- TODO: 将几个层的名字都用一对反引号包裹起来。 -->
-<ul>
-<li>Entities封装了企业范围内的业务规则。如果你没有经营一个企业，仅仅是开发一款应用，那么Entities就是应用的业务对象，它们封装了应用内最通用、上层的规则。</li>
-</ul>
-<!-- 对Use Cases的解释：Use Cases包含了与应用相关的业务规则。它封装并实现了系统的所有用例。 -->
-<ul>
-<li>Use Cases包含了与应用相关的业务规则。它封装并实现了系统的所有用例。</li>
-</ul>
-<!-- 衍生出来的问题：何谓用例（Use Cases）？ -->
-<!-- 对Interface Adapters的解释：这一层负责将最方便entities和use cases的数据转换为最方便外部系统使用的格式。在这一层以内都是抽象的，对外界诸如MVC、GUI、数据库等均是无感知的。此外，这一层也负责与外部服务通信。（可以举fledgling的repository目录下的例子） -->
-<ul>
-<li>这一层负责将最方便entities和use cases的数据转换为最方便外部系统使用的格式。在这一层以内都是抽象的，对外界诸如MVC、GUI、数据库等均是无感知的。此外，这一层也负责与外部服务通信。</li>
-<li><code>Frameworks &amp; Drivers</code>，顾名思义，这一层包含了与框架相关的代码，或者像C语言中的<code>main</code>函数这样的入口函数代码；</li>
-</ul>
-<!-- 有多少层不要紧，关键在于必须遵循依赖规则：在源代码层面，总是外层的依赖于内层的。例如，nest中use_case目录下总是依赖于entity目录、infra和repository依赖于entity目录、cli和web依赖于app、infra，以及repository等“内层”目录。 -->
-<h1 id="如何应用整洁架构"><a href="#如何应用整洁架构" class="headerlink" title="如何应用整洁架构"></a>如何应用整洁架构</h1><!-- 这里给出我的实践心得：实践整洁架构的项目的简介、目录结构的划分、语言特性的运用、设计模式的运用、SOLID原则的体现、与MVC相比更为清晰的边界。除了这些通用的，还有一些具体的编码细节：参数的传递方式、抽象方法对比NotImplementedError、返回值对比传入Presenter、更新资源的用例的输入定义、为什么不要防御性编程、无法隐藏的I/O、类方法对比实例方法、避免循环依赖 -->
-<h2 id="实际项目的例子"><a href="#实际项目的例子" class="headerlink" title="实际项目的例子"></a>实际项目的例子</h2><p>前文提到，为了满足新需求，我需要将<a href="https://github.com/Liutos/cuckoo" target="_blank" rel="noopener">cuckoo</a>改造为C/S模型。但比起缓缓地将cuckoo拆解为两部分，我更乐于大刀阔斧地从头开发开发这两个程序，于是便诞生了：</p>
-<ul>
-<li>服务端程序为<a href="https://github.com/Liutos/nest" target="_blank" rel="noopener">nest</a>，负责管理任务、计划等实体对象，并提供基于HTTP协议的API；</li>
-<li>客户端程序为<a href="https://github.com/Liutos/fledgling" target="_blank" rel="noopener">fledgling</a>，负责与<code>nest</code>通信，并在客户机上触发通知（如macOS的右上角弹出通知）。</li>
-</ul>
-<p>它们都是我依照自己对整洁架构的理解来编写的。</p>
-<h2 id="从架构理念到具体决策"><a href="#从架构理念到具体决策" class="headerlink" title="从架构理念到具体决策"></a>从架构理念到具体决策</h2><p>正如<a href="https://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank" rel="noopener">REST</a>仅仅是一种软件结构风格而不是具体的设计指南一样，整洁架构也并没有规定示意图中的分层结构该如何运用一门语言的特性来实现，这需要开发者自己去摸索。下文我给出自己在<code>nest</code>和<code>fledgling</code>项目中的做法。</p>
-<h3 id="如何安排代码目录结构"><a href="#如何安排代码目录结构" class="headerlink" title="如何安排代码目录结构"></a>如何安排代码目录结构</h3><p>在程序的代码结构中，最接近于架构示意图的分层架构的，当属代码仓库的目录结构了。模仿整洁架构中的四层结构，我在<code>nest</code>中也安排了相似的目录结构</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  nest git:(master) tree -I '__pycache__' -d ./nest</span><br><span class="line">./nest</span><br><span class="line">├── app</span><br><span class="line">│&nbsp;&nbsp; ├── entity</span><br><span class="line">│&nbsp;&nbsp; └── use_case</span><br><span class="line">├── cli</span><br><span class="line">│&nbsp;&nbsp; ├── command</span><br><span class="line">│&nbsp;&nbsp; └── config</span><br><span class="line">├── infra</span><br><span class="line">├── repository</span><br><span class="line">│&nbsp;&nbsp; └── DDL</span><br><span class="line">└── web</span><br><span class="line">    ├── config</span><br><span class="line">    ├── controller</span><br><span class="line">    └── presenter</span><br><span class="line"></span><br><span class="line">13 directories</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="nest-app-entity-目录"><a href="#nest-app-entity-目录" class="headerlink" title="nest/app/entity/目录"></a><code>nest/app/entity/</code>目录</h4><p><code>nest/app/entity/</code>目录下的各个文件分别定义了系统中的各个实体类型</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  nest git:(master) ls nest/app/entity</span><br><span class="line">__pycache__    certificate.py location.py    plan.py        task.py        user.py</span><br></pre></td></tr></tbody></table></figure>
-<p>例如：</p>
-<ul>
-<li><code>task.py</code>中定义了类<code>Task</code>，表示一个任务；</li>
-<li><code>plan.py</code>中定义了类<code>Plan</code>，表示任务的一次触发计划，等等。</li>
-</ul>
-<p><code>entity/</code>目录下的各个文件中，还定义了管理各种实体对象生命期的仓库对象，例如：</p>
-<ul>
-<li><code>task.py</code>中定义了类<code>ITaskRepository</code>，它负责增（<code>add</code>方法）删（<code>clear</code>、<code>remove</code>方法）查（<code>find</code>、<code>find_by_id</code>方法）改（同样是<code>add</code>方法）任务对象；</li>
-<li><code>plan.py</code>中定义了类<code>IPlanRepository</code>，同样能够增（<code>add</code>方法）删（<code>clear</code>、<code>remove</code>方法）查（<code>find_as_queue</code>、<code>find_by_id</code>、<code>find_by_task_id</code>方法）改（同样是<code>add</code>方法）计划对象，等等。</li>
-</ul>
-<p>实体类型都是充血模型，它们实现了系统核心的业务规则，例如：</p>
-<ul>
-<li>类<code>Plan</code>有方法<code>is_repeated</code>用于检查是否为重复性任务；</li>
-<li>有方法<code>is_visible</code>用于检查该计划在当前时间是否可见；</li>
-<li>有方法<code>rebirth</code>用于生成一个新的、下一次触发的计划，等等。</li>
-</ul>
-<p>这个目录下的内容相当于整洁架构中的<code>Entities</code>层。</p>
-<h4 id="nest-app-use-case-目录"><a href="#nest-app-use-case-目录" class="headerlink" title="nest/app/use_case/目录"></a><code>nest/app/use_case/</code>目录</h4><p><code>nest/app/use_case/</code>目录下的各个文件分别定义了系统所提供的功能</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  nest git:(master) ls nest/app/use_case</span><br><span class="line">__init__.py        authenticate.py    change_task.py     create_plan.py     delete_plan.py     get_location.py    get_task.py        list_plan.py       login.py           registration.py</span><br><span class="line">__pycache__        change_plan.py     create_location.py create_task.py     delete_task.py     get_plan.py        list_location.py   list_task.py       pop_plan.py</span><br></pre></td></tr></tbody></table></figure>
-<p>例如：</p>
-<ul>
-<li><code>authenticate.py</code>定义了系统如何认证发送当前请求的用户；</li>
-<li><code>change_task.py</code>定义了系统如何修改一个任务对象，等等。</li>
-</ul>
-<p>每一个处于该目录下的文件，只会依赖<code>nest/app/entity/</code>中的代码，并且它们都是抽象的。例如，<code>authenticate.py</code>中的类<code>AuthenticateUseCase</code>的构造方法中，要求其：</p>
-<ul>
-<li>参数<code>certificate_repository</code>必须是类<code>ICertificateRepository</code>或其子类的实例；</li>
-<li>参数<code>params</code>必须是类<code>IParams</code>或其子类的实例。</li>
-</ul>
-<p>然而<code>ICertificateRepository</code>和<code>IParams</code>其实都是抽象基类<code>ABC</code>的子类，并且它们都有被装饰器<code>abstractmethod</code>装饰的抽象方法，因此并不能直接实例化。</p>
-<p>该目录相当于整洁架构中的<code>Use Cases</code>层。</p>
-<h4 id="其它目录"><a href="#其它目录" class="headerlink" title="其它目录"></a>其它目录</h4><p>顾名思义，<code>cli</code>和<code>web</code>目录分别是与命令行程序、基于HTTP的API相关的代码，它们实现了处理来自命令行和HTTP协议的输入，以及打印到终端和返回HTTP响应的功能。<code>repository</code>目录下的各个文件实现了<code>entity</code>目录中各个抽象的仓库类的具体子类</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  nest git:(master) ls nest/repository</span><br><span class="line">DDL             __init__.py     __pycache__     certificate.py  db_operation.py location.py     plan.py         task.py         user.py</span><br></pre></td></tr></tbody></table></figure>
-<p>例如：</p>
-<ul>
-<li><code>certificate.py</code>中实现了<code>entity/</code>目录下的同名文件中的抽象类<code>ICertificateRepository</code>——一个基于内存的子类<code>MemoryCertificateRepository</code>，以及一个基于Redis的子类<code>RedisCertificateRepository</code>；</li>
-<li><code>location.py</code>中实现了<code>entity/</code>目录下的同名文件中的抽象类<code>ILocationRepository</code>——基于MySQL的子类<code>DatabaseLocationRepository</code>，等等。</li>
-</ul>
-<p>需要注意的是，除了<code>app</code>外的这些目录，并不能与整洁架构示意图中的外面两层严格对应起来。例如，尽管<code>cli</code>和<code>web</code>的名字一下子就让人认为它们处于<code>Frameworks &amp; Drivers</code>层，但<code>web/presenter/</code>目录下的内容其实与框架并无联系。反倒是从命名上看处于<code>Interface Adapters</code>层的<code>web/controller/</code>目录，其中的代码依赖于<code>Flask</code>框架。</p>
-<h3 id="如何往Use-Cases层传入数据"><a href="#如何往Use-Cases层传入数据" class="headerlink" title="如何往Use Cases层传入数据"></a>如何往<code>Use Cases</code>层传入数据</h3><p>在鲍勃大叔的文章中，提到了关于如何在层之间传递数据的原则</p>
-<blockquote>
-<p>Typically the data that crosses the boundaries is simple data structures. You can use basic structs or simple Data Transfer objects if you like.  Or the data can simply be arguments in function calls. Or you can pack  it into a hashmap, or construct it into an object.</p>
-</blockquote>
-<p>在<code>nest/app/use_case/</code>目录下的所有用例采用的都是这里提到的<code>construct it into an object</code>的方式。以<code>create_task.py</code>为例：</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IParams</span><span class="params">(ABC)</span>:</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_brief</span><span class="params">(self)</span> -&gt; str:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_keywords</span><span class="params">(self)</span> -&gt; List[str]:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_user_id</span><span class="params">(self)</span> -&gt; int:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></tbody></table></figure>
-<ul>
-<li>用内置模块<code>abc</code>中的抽象基类<code>ABC</code>、装饰器<code>abstractmethod</code>，以及类<code>CreateTaskUseCase</code>中的<code>assert</code>一起模拟类似Java中的<code>interface</code>的效果；</li>
-<li>用方法而不是成员变量来获取不同的输入参数：<ul>
-<li><code>get_brief</code>获取任务的简述；</li>
-<li><code>get_keywords</code>获取关键字列表；</li>
-<li><code>get_user_id</code>获取创建该任务的用户的ID。</li>
-</ul>
-</li>
-</ul>
-<p>聪明的盲生已经发现了华点：明明只需要在类<code>CreateTaskUseCase</code>的构造方法中定义<code>brief</code>、<code>keywords</code>，以及<code>user_id</code>三个参数即可，为什么要用方法这么麻烦呢？答案是因为方法更灵活。</p>
-<p>当你采用构造方法参数的方案时，本质上是立了一个假设：</p>
-<ol>
-<li><del>在所有惯性系中，物理定律有相同的表达形式</del>先完成所有参数的获取；</li>
-<li>再执行用例中的业务逻辑。</li>
-</ol>
-<p>如果是一个基于HTTP协议的API，那么这个假设是成立的——用户在客户端发送的HTTP请求到达服务端后，便无法再补充参数了。但有一种场景，用户能够在用例执行业务逻辑的过程中，持续地与应用交互，那便是命令行程序。</p>
-<p>我在<code>fledgling</code>项目中给了一个用户在用例执行过程中，交互式地输入的例子。在文件<code>fledgling/app/use_case/delete_task.py</code>中，实现了删除指定任务的用例。它要求输入两个参数</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IParams</span><span class="params">(ABC)</span>:</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_confirmation</span><span class="params">(self)</span> -&gt; bool:</span></span><br><span class="line">        <span class="string">"""获取用户是否要删除该任务的确认。"""</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_task_id</span><span class="params">(self)</span> -&gt; int:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></tbody></table></figure>
-<p>在文件<code>fledgling/cli/command/delete_task.py</code>中实现了<code>IParams</code>类的命令行形态。当没有从命令行参数中获取到任务的ID时，便会使用第三方库<code>PyInquirer</code>询问用户输入任务ID，并进一步确认</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Params</span><span class="params">(IParams)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *, task_id: Optional[int])</span>:</span></span><br><span class="line">        self.task_id = task_id</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_confirmation</span><span class="params">(self)</span> -&gt; bool:</span></span><br><span class="line">        <span class="keyword">if</span> self.task_id:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">        questions = [</span><br><span class="line">            {</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'确定删除该任务'</span>,</span><br><span class="line">                <span class="string">'name'</span>: <span class="string">'confirmation'</span>,</span><br><span class="line">                <span class="string">'type'</span>: <span class="string">'confirm'</span>,</span><br><span class="line">            }</span><br><span class="line">        ]</span><br><span class="line">        answers = prompt(questions)</span><br><span class="line">        <span class="keyword">return</span> answers[<span class="string">'confirmation'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_task_id</span><span class="params">(self)</span> -&gt; int:</span></span><br><span class="line">        <span class="keyword">if</span> self.task_id:</span><br><span class="line">            <span class="keyword">return</span> self.task_id</span><br><span class="line">        questions = [</span><br><span class="line">            {</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'输入要删除的任务的ID'</span>,</span><br><span class="line">                <span class="string">'name'</span>: <span class="string">'task_id'</span>,</span><br><span class="line">                <span class="string">'type'</span>: <span class="string">'input'</span>,</span><br><span class="line">            }</span><br><span class="line">        ]</span><br><span class="line">        answers = prompt(questions)</span><br><span class="line">        <span class="keyword">return</span> answers[<span class="string">'task_id'</span>]</span><br></pre></td></tr></tbody></table></figure>
-<p>而这一切<del>煮不在乎</del><code>DeleteTaskUseCase</code>并不会感知到，它独立于用户界面。</p>
-<h3 id="在哪一层维护业务规则"><a href="#在哪一层维护业务规则" class="headerlink" title="在哪一层维护业务规则"></a>在哪一层维护业务规则</h3><p>在《架构整洁之道》第20章中，鲍勃大叔给出了业务规则的定义</p>
-<blockquote>
-<p>Strictly speaking, business rules are rules or procedures that make or save<br>the business money. Very strictly speaking, these rules would make or save the business money, irrespective of whether they were implemented on a computer. They would make or save money even if they were executed manually.</p>
-</blockquote>
-<p>业务规则往往不是独立存在的，它们需要作用在一些数据上</p>
-<blockquote>
-<p>Critical Business Rules usually require some data to work with. For example, our loan requires a loan balance, an interest rate, and a payment schedule.</p>
-</blockquote>
-<p>而整洁架构中的实体就是包含了一部分业务规则及其操作的数据的对象。以<code>nest</code>中的计划实体为例，在类<code>Plan</code>中包含了几种业务规则——尽管这些规则不能为我赚钱或者省钱：</p>
-<ul>
-<li>一个计划的持续时长（如果有的话）不会是负的秒数——由<code>duration</code>的setter保障；</li>
-<li>周期性计划必须指定周期——由<code>new</code>方法维护；</li>
-<li>一个计划是重复的，当且仅当它有指定重复类型——由<code>is_repeated</code>方法维护；</li>
-<li>一个计划是可见的，当且仅当它：<ul>
-<li>要么没有指定可见的小时，要么当且时间处于指定的小时中，并且；</li>
-<li>要么没有指定星期几可见，要么今天是指定的<code>weekday</code>——由<code>is_visible</code>方法维护。</li>
-</ul>
-</li>
-</ul>
-<p>但在整洁架构的示意图中，<code>Use Cases</code>层也是有维护规则的，它维护的是应用的业务规则（<code>Application Business Rules</code>）。与<code>Entities</code>层所维护的业务规则不同，<code>Use Cases</code>层的业务规则取决于应用提供的功能。例如，在<code>nest</code>项目修改一个计划的用例<code>ChangePlanUseCase</code>类的方法<code>run</code>中，会：</p>
-<ol>
-<li>检查指定的计划是否存在——显然，实体没法检查自己是否存在；</li>
-<li>检查计划是否能被修改；</li>
-<li>检查新的地点的ID是否指向真实存在的地点对象——显然，<code>Plan</code>对象不会去检查<code>Location</code>存在与否；</li>
-</ol>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 文件nest/app/use_case/change_plan.py</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChangePlanUseCase</span>:</span></span><br><span class="line">    <span class="comment"># 省略__init__的定义</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 省略一些无关要紧的代码</span></span><br><span class="line">        params = self.params</span><br><span class="line">        plan_id = params.get_plan_id()</span><br><span class="line">        plan = self.plan_repository.find_by_id(plan_id)</span><br><span class="line">        <span class="keyword">if</span> plan <span class="keyword">is</span> <span class="keyword">None</span>:  <span class="comment"># 上面第1点</span></span><br><span class="line">            <span class="keyword">raise</span> PlanNotFoundError(plan_id=plan_id)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> plan.is_changeable():  <span class="comment"># 上面第2点</span></span><br><span class="line">            <span class="keyword">raise</span> UnchangeableError()</span><br><span class="line"></span><br><span class="line">        found, location_id = params.get_location_id()</span><br><span class="line">        <span class="keyword">if</span> found:</span><br><span class="line">            <span class="keyword">if</span> location_id:</span><br><span class="line">                location = self.location_repository.get(id_=location_id)</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> location:  <span class="comment"># 上面第3点</span></span><br><span class="line">                    <span class="keyword">raise</span> LocationNotFoundError(location_id=location_id)</span><br><span class="line">            plan.location_id = location_id</span><br></pre></td></tr></tbody></table></figure>
-<p>聪明的你一定发现了：<code>is_changeable</code>为什么不作为<code>Enterpries Business Rules</code>，在<code>Plan</code>对象内自行检查呢？答案是因为这样写更简单。</p>
-<p>试想一下，如果要让<code>Plan</code>自己禁止在<code>is_changeable</code>为<code>False</code>时被修改，那么必须：</p>
-<ul>
-<li>先为所有可修改的属性设置setter；</li>
-<li>在每一个setter中都调用<code>is_changeable</code>进行检查。</li>
-</ul>
-<p>之所以要这么做，是因为一个实体对象（在这里是指<code>Plan</code>的实例对象）是外部的时间流动是无感知的。它不知道外层（此处是<code>Use Cases</code>层）会<strong>先</strong>调用哪一个方法，<strong>后</strong>调用哪一个方法。因此，要想保持“终止状态的计划不能修改”，就必须在每一处setter都检查。</p>
-<p>与之相反，在用例中有编排，因此它可以感知时间的流动。用例可以让<code>Plan</code>的<code>is_changeable</code>方法在其它任何方法之前被调用，因此免除了繁琐地在每一个setter中检查<code>is_changeable</code>的必要。</p>
-<h3 id="如何获取Use-Cases层的处理结果"><a href="#如何获取Use-Cases层的处理结果" class="headerlink" title="如何获取Use Cases层的处理结果"></a>如何获取<code>Use Cases</code>层的处理结果</h3><p>正如往<code>Use Cases</code>层中输入参数可以采用：</p>
-<ol>
-<li>直接在<code>__init__</code>中传入对应类型的参数，或；</li>
-<li>在<code>__init__</code>中传入一个能根据方法提取参数的对象。</li>
-</ol>
-<p>两种方案一样，获取<code>Use Cases</code>层的计算结果同样有两种方案：</p>
-<ol>
-<li>获取<code>run</code>方法的返回值，捕捉它的异常，或；</li>
-<li>在<code>__init__</code>中传入一个能够接受不同结果并处理的对象。</li>
-</ol>
-<p>在<code>nest</code>这样的仅仅提供HTTP API的应用中，第1种方案便已经足够了。例如，在文件<code>nest/web/controller/create_plan.py</code>中，类<code>CreatePlanUseCase</code>的<code>run</code>方法的返回值为创建的计划对象，如果<code>run</code>调用成功，这个controller会借助于<code>PlanPresenter</code>，将计划对象转换为JSON对象格式的字符串，返回给调用方；如果调用失败，那么controller中也会捕捉异常（如<code>InvalidRepeatTypeError</code>）并以另一种格式返回给调用方。</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_plan</span><span class="params">(certificate_repository, repository_factory)</span>:</span></span><br><span class="line">    <span class="comment"># 省略了不必要的代码</span></span><br><span class="line">    params = HTTPParams()</span><br><span class="line">    use_case = CreatePlanUseCase(</span><br><span class="line">        location_repository=repository_factory.location(),</span><br><span class="line">        params=params,</span><br><span class="line">        plan_repository=repository_factory.plan(),</span><br><span class="line">        task_repository=repository_factory.task(),</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        plan = use_case.run()</span><br><span class="line">        presenter = PlanPresenter(plan=plan)</span><br><span class="line">        <span class="keyword">return</span> {  <span class="comment"># 成功的情形</span></span><br><span class="line">            <span class="string">'error'</span>: <span class="keyword">None</span>,</span><br><span class="line">            <span class="string">'result'</span>: presenter.format(),</span><br><span class="line">            <span class="string">'status'</span>: <span class="string">'success'</span>,</span><br><span class="line">        }, <span class="number">201</span></span><br><span class="line">    <span class="keyword">except</span> InvalidRepeatTypeError <span class="keyword">as</span> e:  <span class="comment"># 失败的情形</span></span><br><span class="line">        <span class="keyword">return</span> {</span><br><span class="line">            <span class="string">'error'</span>: {</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'不支持的重复类型：{}'</span>.format(e.repeat_type),</span><br><span class="line">            },</span><br><span class="line">            <span class="string">'result'</span>: <span class="keyword">None</span>,</span><br><span class="line">            <span class="string">'status'</span>: <span class="string">'failure'</span>,</span><br><span class="line">        }, <span class="number">422</span></span><br></pre></td></tr></tbody></table></figure>
-<p>如果想要更高的灵活性并且也有施展的空间，那么可以考虑第2种方案。例如<code>fledgling</code>项目中文件<code>fledgling/app/use_case/list_plan.py</code>中，就定义了一个接口<code>IPresenter</code></p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IPresenter</span><span class="params">(ABC)</span>:</span></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_find_location</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_find_task</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_invalid_location</span><span class="params">(self, *, error: InvalidLocationError)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show_plans</span><span class="params">(self, *, count: int, plans: List[Plan])</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></tbody></table></figure>
-<p>并且在用例的执行过程中，会多次向<code>self.presenter</code>传递数据</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ListPlanUseCase</span>:</span></span><br><span class="line">    <span class="comment"># 省略__init__方法</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        location_id = <span class="keyword">None</span></span><br><span class="line">        location_name = self.params.get_location_name()</span><br><span class="line">        no_location = self.params.get_no_location()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> no_location <span class="keyword">and</span> location_name <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            locations = self.location_repository.find(name=location_name)</span><br><span class="line">            <span class="keyword">if</span> len(locations) == <span class="number">0</span>:</span><br><span class="line">                self.presenter.on_invalid_location(error=InvalidLocationError(name=location_name))  <span class="comment"># 第1次，触发无效地点的错误</span></span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">            location_id = locations[<span class="number">0</span>].id</span><br><span class="line"></span><br><span class="line">        page = self.params.get_page()</span><br><span class="line">        per_page = self.params.get_per_page()</span><br><span class="line">        criteria = {</span><br><span class="line">            <span class="string">'page'</span>: page,</span><br><span class="line">            <span class="string">'per_page'</span>: per_page,</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> location_id <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            criteria[<span class="string">'location_id'</span>] = location_id</span><br><span class="line">        plans, count = self.plan_repository.list(**criteria)</span><br><span class="line">        location_ids = [plan.location_id <span class="keyword">for</span> plan <span class="keyword">in</span> plans]</span><br><span class="line">        self.presenter.on_find_location()  <span class="comment"># 第2次交互，通知presenter开始查找地点的事件</span></span><br><span class="line">        locations = self.location_repository.find(</span><br><span class="line">            ids=location_ids,</span><br><span class="line">            page=<span class="number">1</span>,</span><br><span class="line">            per_page=len(location_ids),</span><br><span class="line">        )</span><br><span class="line">        task_ids = [plan.task_id <span class="keyword">for</span> plan <span class="keyword">in</span> plans]</span><br><span class="line">        self.presenter.on_find_task()  <span class="comment"># 第3次交互，通知presenter开始查找任务的事件</span></span><br><span class="line">        tasks = self.task_repository.list(</span><br><span class="line">            page=<span class="number">1</span>,</span><br><span class="line">            per_page=len(task_ids),</span><br><span class="line">            task_ids=task_ids,</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">for</span> plan <span class="keyword">in</span> plans:</span><br><span class="line">            location_id = plan.location_id</span><br><span class="line">            location = [location <span class="keyword">for</span> location <span class="keyword">in</span> locations <span class="keyword">if</span> location.id == location_id][<span class="number">0</span>]</span><br><span class="line">            plan.location = location</span><br><span class="line">            task_id = plan.task_id</span><br><span class="line">            task = [task <span class="keyword">for</span> task <span class="keyword">in</span> tasks <span class="keyword">if</span> task.id == task_id][<span class="number">0</span>]</span><br><span class="line">            plan.task = task</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 第4次，也是最后一次，传入用例的处理结果</span></span><br><span class="line">        self.presenter.show_plans(</span><br><span class="line">            count=count,</span><br><span class="line">            plans=plans,</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span></span><br></pre></td></tr></tbody></table></figure>
-<p>在构造方法中注入<code>presenter</code>的缺点在于用例的<code>run</code>方法中需要显式地<code>return</code>，否则用例会继续执行下去。</p>
-<h3 id="Python语言特性的运用"><a href="#Python语言特性的运用" class="headerlink" title="Python语言特性的运用"></a>Python语言特性的运用</h3><h4 id="模拟接口——abstractmethodv-s-NotImplementedError"><a href="#模拟接口——abstractmethodv-s-NotImplementedError" class="headerlink" title="模拟接口——abstractmethodv.s.NotImplementedError"></a>模拟接口——<code>abstractmethod</code>v.s.<code>NotImplementedError</code></h4><p>整洁架构的每一层都只会依赖于内层，而内层又对外层一无所知，负责解耦两者的便是编程语言的接口特性。但Python并不像Java那般有<code>interface</code>关键字，因此我利用它的其它一系列特性来模拟出接口：</p>
-<ul>
-<li>用<code>class</code>代替<code>interface</code>，这些类继承自内置模块<code>abc</code>的抽象基类<code>ABC</code>；</li>
-<li>除此之外，这些类中的方法还用同一模块中的<code>abstractmethod</code>装饰，使它们必须由该类的子类全部定义；</li>
-<li>在使用这个接口的位置（例如<code>Use Cases</code>层）用断言<code>assert</code>约束输入参数的类型。</li>
-</ul>
-<p><code>nest</code>中的大部分需要接口的位置我都是用这种手法来做的，但这种方式会给编写单元测试用例带来一些不便：</p>
-<ol>
-<li>因为代码中用<code>assert</code>来检查参数类型，导致传入的参数只能是这个接口或其子类的实例；</li>
-<li>因为接口类继承自<code>ABC</code>，所以必须定义所有被<code>abstractmethod</code>装饰的方法，否则在实例化时就会抛出异常。</li>
-</ol>
-<p>例如，在<code>nest</code>项目的文件<code>tests/use_case/task/test_list.py</code>中，作为白盒测试的人员，我确切地知道类<code>ListTaskUseCase</code>的<code>run</code>方法只会调用它的<code>task_repository</code>的<code>find</code>方法，但在类<code>MockTaskRepository</code>中依然不得不定义基类的每一个方法——尽管它们只有一行<code>pass</code>语句。</p>
-<p>如果愿意放弃一点点的严谨性，那么可以弱化一下上面的接口方案：</p>
-<ol>
-<li>不使用<code>abstractmethod</code>，而是在本应为抽象方法的方法中只留下一句<code>raise NotImplementedError</code>；</li>
-<li>不使用<code>assert</code>检查类型，而是在参数中写上type hint。</li>
-</ol>
-<p>有了第1点，那么在测试用例中就不需要为测试路径上不会调用的方法写多余的定义了。而有了第2点，也就不需要为测试路径上不会引用的属性创建对象了，大可直接传入一个<code>None</code>。选择哪一种都无妨，取决于开发者或团队的口味。</p>
-<h2 id="金坷垃整洁架构的好处都有啥"><a href="#金坷垃整洁架构的好处都有啥" class="headerlink" title="金坷垃整洁架构的好处都有啥"></a><del>金坷垃</del>整洁架构的好处都有啥</h2><p>在《架构整洁之道》的第20章，作者给出了整洁架构的五种优秀特性：</p>
-<ul>
-<li>独立于框架。例如，我可以花不是很大的力气，将<code>nest</code>从<a href="https://flask.palletsprojects.com/en/2.0.x/" target="_blank" rel="noopener">Flask</a>迁移到<a href="http://bottlepy.org/docs/dev/" target="_blank" rel="noopener">Bottle</a>上，尽管并不会无缘无故或频繁地这么做；</li>
-<li>容易测试。例如，在<code>nest</code>项目的目录<code>tests/use_case</code>下的测试用例不需要有任何外部系统的依赖就可以编写并运行；</li>
-<li>独立于用户界面。例如，在<code>nest</code>项目中同一个用例<code>RegistrationUseCase</code>就有HTTP API和命令行两种用户界面：<ul>
-<li>在文件<code>nest/web/controller/registration.py</code>中是HTTP API形态；</li>
-<li>在文件<code>nest/cli/command/register.py</code>中则是命令行形态。</li>
-</ul>
-</li>
-<li>独立于数据库。例如，就像更换Web框架一样，我也可以从MySQL迁移到PostgreSQL中，这对于<code>Entities</code>和<code>Use Cases</code>层的代码而言别无二致；</li>
-<li>独立于外部系统。例如，在<code>fledgling</code>项目中，尽管也定义了一个接口<code>ITaskRepository</code>，但不同于<code>nest</code>中基于数据库的实现子类<code>DatabaseTaskRepository</code>，在<code>fledgling</code>中实现的是基于网络传输的类<code>TaskRepository</code>。但究竟是基于单机数据库，还是身处一个分布式系统（C/S模型）中，<code>Entities</code>和<code>Use Cases</code>层对此是无感知的。</li>
-</ul>
-<h2 id="甘瓜苦蒂——整洁架构的不足"><a href="#甘瓜苦蒂——整洁架构的不足" class="headerlink" title="甘瓜苦蒂——整洁架构的不足"></a>甘瓜苦蒂——整洁架构的不足</h2><h3 id="渗入内层的I-O"><a href="#渗入内层的I-O" class="headerlink" title="渗入内层的I/O"></a>渗入内层的I/O</h3><!-- 无法隐藏的I/O -->
-<!-- 在整洁架构中，为了不在entity层面感知到数据库，但又为了可以最终利用到数据库的事务能力，发明了基于start_transaction/commit/rollback的抽象方法。其中，当需要多个repository联合使用事务时，可以将多个repository传入到start_transaction的参数中。 -->
-<!-- 设计模式的运用 -->
-<!-- Python的module v.s. 单例模式 -->
-<!-- repository.py中的工厂方法模式 -->
-<!-- SOLID原则的体现 -->
-<!-- 书中是如何理解SOLID原则的，给出每一个对应章节的解释。 -->
-<!-- 不同编程语言实践整洁架构的体会 -->
-<!-- Python如何 -->
-<!-- CL如何 -->
-<!-- go如何 -->
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1005,7 +834,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">98</span>
+          <span class="site-state-item-count">99</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1104,7 +933,7 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
