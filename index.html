@@ -200,6 +200,108 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2022/08/21/如何在CommonLisp中解析命令行参数/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/08/21/如何在CommonLisp中解析命令行参数/" class="post-title-link" itemprop="url">如何在CommonLisp中解析命令行参数</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-08-21 15:27:55 / 修改时间：15:39:48" itemprop="dateCreated datePublished" datetime="2022-08-21T15:27:55+08:00">2022-08-21</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2022/08/21/如何在CommonLisp中解析命令行参数/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/08/21/如何在CommonLisp中解析命令行参数/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="clingon"><a href="#clingon" class="headerlink" title="clingon"></a>clingon</h1><p>clingon 是一个 Common Lisp 的命令行选项的解析器，它可以轻松地解析具有复杂格式的命令行选项。例如，下面的代码可以打印给定次数的打招呼信息</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">#|-*- mode:lisp -*-|#</span><br><span class="line">#|</span><br><span class="line">exec ros -Q -- $0 "$@"</span><br><span class="line">|#</span><br><span class="line">(<span class="name">progn</span> <span class="comment">;;init forms</span></span><br><span class="line">  (<span class="name">ros</span><span class="symbol">:ensure-asdf</span>)</span><br><span class="line">  #+quicklisp(<span class="name">ql</span><span class="symbol">:quickload</span> '(clingon) <span class="symbol">:silent</span> <span class="literal">t</span>)</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">(<span class="name">defpackage</span> <span class="symbol">:ros</span>.script.hello.<span class="number">3868869124</span></span><br><span class="line">  (<span class="symbol">:use</span> <span class="symbol">:cl</span></span><br><span class="line">        <span class="symbol">:clingon</span>))</span><br><span class="line">(<span class="name">in-package</span> <span class="symbol">:ros</span>.script.hello.<span class="number">3868869124</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">check-type</span> cmd clingon<span class="symbol">:command</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">count</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:count</span>))</span><br><span class="line">        (<span class="name">name</span> (<span class="name">first</span> (<span class="name">clingon</span><span class="symbol">:command-arguments</span> cmd))))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">_</span> count)</span><br><span class="line">      (<span class="name">declare</span> (<span class="name">ignorable</span> _))</span><br><span class="line">      (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Hello ~A!~%"</span> name))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"hello"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:integer</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"number of greetings"</span></span><br><span class="line">                         <span class="symbol">:initial-value</span> <span class="number">1</span></span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:count</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"count"</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br><span class="line"><span class="comment">;;; vim: set ft=lisp lisp:</span></span><br></pre></td></tr></tbody></table></figure>
+<p>稍微做一些解释。首先执行命令<code>ros init hello</code>生成上面的代码的雏形——加载依赖、包定义，以及空的函数<code>main</code>。为了加载 clingon，将其作为函数<code>ql:quickload</code>的参数。然后分别定义一个<code>command</code>、<code>handler</code>，以及<code>option</code>。</p>
+<p>在 clingon 中，类<code>clingon:command</code>的实例对象表示一个可以在 shell 中被触发的命令，它们由函数<code>clingon:make-command</code>创建。每一个命令起码要有三个要素：</p>
+<ol>
+<li><code>:handler</code>，负责使用命令行选项、实现业务逻辑的函数；</li>
+<li><code>:name</code>，命令的名字，一般会被展示在命令的用法说明中；</li>
+<li><code>:options</code>，该命令所接受的选项。</li>
+</ol>
+<p>此处的<code>:handler</code>就是函数<code>top-level/handler</code>，它会被函数<code>clingon:run</code>调用（依赖注入的味道），并将一个合适的<code>clingon:command</code>对象传入。<code>:options</code>目前只承载了一个选项的定义，即</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line"> <span class="symbol">:integer</span></span><br><span class="line"> <span class="symbol">:description</span> <span class="string">"number of greetings"</span></span><br><span class="line"> <span class="symbol">:initial-value</span> <span class="number">1</span></span><br><span class="line"> <span class="symbol">:key</span> <span class="symbol">:count</span></span><br><span class="line"> <span class="symbol">:long-name</span> <span class="string">"count"</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>它定义了一个值为整数的选项，在命令行中通过<code>--count</code>指定。如果没有传入该选项，那么在使用函数<code>clingon:getopt</code>取值时，会获得默认值 1。如果要从一个命令对象中取出这个选项的值，需要以它的<code>:key</code>参数的值作为参数来调用函数<code>clingon:getopt</code>，正如上面的函数<code>top-level/handler</code>所示。</p>
+<h2 id="子命令"><a href="#子命令" class="headerlink" title="子命令"></a>子命令</h2><p>clingon 也可以实现诸如<code>git add</code>、<code>git branch</code>这样的子命令特性。像<code>add</code>、<code>branch</code>这样的子命令，对于 clingon 而言仍然是类<code>clingon:command</code>的实例对象，只不过它们不会传递给函数<code>clingon:run</code>调度，而是传递给函数<code>clingon:make-command</code>的参数<code>:sub-command</code>，如下列代码所示</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> cmd)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"cli"</span></span><br><span class="line">              <span class="symbol">:sub-commands</span> (<span class="name">list</span></span><br><span class="line">                             (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">                              <span class="symbol">:handler</span> #'(lambda (cmd)</span><br><span class="line">                                           (declare (ignorable cmd))</span><br><span class="line">                                           (format <span class="literal">t</span> <span class="string">"Dropped the database~%"</span>))</span><br><span class="line">                              <span class="symbol">:name</span> <span class="string">"dropdb"</span>)</span><br><span class="line">                             (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">                              <span class="symbol">:handler</span> #'(lambda (cmd)</span><br><span class="line">                                           (declare (ignorable cmd))</span><br><span class="line">                                           (format <span class="literal">t</span> <span class="string">"Initialized the database~%"</span>))</span><br><span class="line">                              <span class="symbol">:name</span> <span class="string">"initdb"</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="选项与参数"><a href="#选项与参数" class="headerlink" title="选项与参数"></a>选项与参数</h2><p>在 clingon 中通过命令行传递给进程的信息分为选项和参数两种形态，选项是通过名字来引用，而参数则通过它们的下标来引用。例如在第一个例子中，就定义了一个名为<code>--count</code>的选项，它在解析结果中被赋予了<code>:count</code>这个关键字，可以通过函数<code>clingon:getopt</code>来引用它的值；与之相反，变量<code>name</code>是从命令行中解析了选项后、剩余的参数中的<strong>第一个</strong>，它是以位置来标识的。clingon 通过函数<code>clingon:make-option</code>来定义选项，它提供了丰富的控制能力。</p>
+<h2 id="选项名称"><a href="#选项名称" class="headerlink" title="选项名称"></a>选项名称</h2><p>选项有好几种名字，一种叫做<code>:key</code>，是在程序内部使用的名字，用作函数<code>clingon:getopt</code>的参数之一；一种叫做<code>:long-name</code>，一般为多于一个字符的字符串，如<code>"count"</code>，在命令行该名称需要带上两个连字符的前缀来使用，如<code>--count 3</code>；最后一种叫做<code>:short-name</code>，为一个单独的字符，如<code>#\v</code>，在命令行中带上一个连字符前缀来使用，如<code>-v</code>。</p>
+<h2 id="必要性与默认值"><a href="#必要性与默认值" class="headerlink" title="必要性与默认值"></a>必要性与默认值</h2><p>通过传入参数<code>:required t</code>给函数<code>clingon:make-option</code>，可以要求一个选项为必传的。例如下面的命令的选项<code>--n</code>就是必传的</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:n</span>))</span><br><span class="line">    (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"."</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"dots"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:integer</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"打印的英文句号的数量"</span></span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:n</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"n"</span></span><br><span class="line">                         <span class="symbol">:required</span> <span class="literal">t</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
+<p>如果不希望在一些最简单的情况下也要繁琐地编写<code>--n 1</code>这样的命令行参数，可以用<code>:initial-value 1</code>来指定。除此之外，也可以让选项默认读取指定的环境变量中的值，使用<code>:env-vars</code>指定环境变量名即可</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Hello ~A~%"</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:username</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"greet"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:string</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"用户名"</span></span><br><span class="line">                         <span class="symbol">:env-vars</span> '(<span class="string">"GREETER_USERNAME"</span>)</span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:username</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"username"</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="可多次使用的选项"><a href="#可多次使用的选项" class="headerlink" title="可多次使用的选项"></a>可多次使用的选项</h2><p>像<code>curl</code>中的选项<code>-H</code>就是可以多次使用的，每指定一次就可以在请求中添加一个 HTTP 头部，如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20220821/curl多次传入-H的效果.jpg" alt="curl多次传入-H的效果"></p>
+<p>在 clingon 中可以通过往函数<code>clingon:make-option</code>传入<code>:list</code>来实现。当用<code>clingon:getopt</code>取出类型为<code>:list</code>的选项的值时，得到的是一个列表，其中依次存放着输入的值的字符串。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">messages</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:message</span>)))</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~{~A~^~%~}"</span> messages)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"commit"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:list</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"提交的消息"</span></span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:message</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"message"</span></span><br><span class="line">                         <span class="symbol">:short-name</span> #\m)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
+<p>另一种情况是尽管没有值，但仍然多次使用同一个选项。例如命令<code>ssh</code>的选项<code>-v</code>，使用的次数越多（最多为 3 次），则<code>ssh</code>打印的调试信息也就越详细。这种类型的选项在 clingon 中称为<code>:counter</code>。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Verbosity: ~D~%"</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:verbose</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"log"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:counter</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"啰嗦程度"</span></span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:verbose</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"verbose"</span></span><br><span class="line">                         <span class="symbol">:short-name</span> #\v)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="信号选项"><a href="#信号选项" class="headerlink" title="信号选项"></a>信号选项</h2><p>有一些选项只需要区分【有】和【没有】两种情况就可以了，而不需要在意这个选项的值——或者这类选项本身就不允许有值，例如<code>docker run</code>命令的选项<code>-d</code>和<code>--detach</code>。这种选项的类型为<code>:boolean/true</code>，如果指定了这个选项，那么取出来的值始终为<code>t</code>。与之相反，类型<code>:boolean/false</code>取出来的值始终为<code>nil</code>。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">rv</span> (<span class="name">software-type</span>)))</span><br><span class="line">    (<span class="name">when</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:shout</span>)</span><br><span class="line">      (<span class="name">setf</span> rv (<span class="name">concatenate</span> 'string (<span class="name">string-upcase</span> rv) <span class="string">"!!!!111"</span>)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~A~%"</span> rv)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"info"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:boolean/true</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"大喊"</span></span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:shout</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"shout"</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="选择型选项"><a href="#选择型选项" class="headerlink" title="选择型选项"></a>选择型选项</h2><p>如果一个选项尽管接受的是字符串，但并非所有输入都是有意义的，例如命令<code>dot</code>的选项<code>-T</code>。从<code>dot</code>的 man 文档可以看到，它所支持的图片类型是有限的，如<code>ps</code>、<code>pdf</code>、<code>png</code>等。比起声明一个<code>:string</code>类型的选项，让 clingon 代劳输入值的有效性检查来得更轻松，这里可以使用<code>:choice</code>类型</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~A~%"</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:hash-type</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"digest"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:choice</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"哈希类型"</span></span><br><span class="line">                         <span class="symbol">:items</span> '(<span class="string">"MD5"</span> <span class="string">"SHA1"</span>)</span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:hash-type</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"hash-type"</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2022/05/02/自己动手打印整数/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -643,126 +745,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/08/12/这方面Python还是比Lisp略逊一筹/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/12/这方面Python还是比Lisp略逊一筹/" class="post-title-link" itemprop="url">这方面Python还是比Lisp略逊一筹</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-12 23:08:37" itemprop="dateCreated datePublished" datetime="2021-08-12T23:08:37+08:00">2021-08-12</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2021/08/12/这方面Python还是比Lisp略逊一筹/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/08/12/这方面Python还是比Lisp略逊一筹/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>众所周知，Python 支持向函数传递关键字参数。比如 Python 的内置函数<code>max</code>就接受名为<code>key</code>的关键字参数，以决定如何获取比较两个参数时的依据</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max({<span class="string">'v'</span>: <span class="number">1</span>}, {<span class="string">'v'</span>: <span class="number">3</span>}, {<span class="string">'v'</span>: <span class="number">2</span>}, key=<span class="keyword">lambda</span> o: o[<span class="string">'v'</span>])  <span class="comment"># 返回值为{'v': 3}</span></span><br></pre></td></tr></tbody></table></figure>
-<p>自定义一个运用了关键字参数特性的函数当然也不在话下。例如模仿一下 Common Lisp 中的函数<code>string-equal</code></p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">string_equal</span><span class="params">(string1, string2, *, start1=None, end1=None, start2=None, end2=None)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> start1:</span><br><span class="line">        start1 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> end1:</span><br><span class="line">        end1 = len(string1) - <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> start2:</span><br><span class="line">        start2 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> end2:</span><br><span class="line">        end2 = len(string2) - <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> string1[start1:end1 + <span class="number">1</span>] == string2[start2:end2 + <span class="number">1</span>]</span><br></pre></td></tr></tbody></table></figure>
-<p>再以关键字参数的形式向它传参</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string_equal(<span class="string">"Hello, world!"</span>, <span class="string">"ello"</span>, start1=<span class="number">1</span>, end1=<span class="number">4</span>)  <span class="comment"># 返回值为True</span></span><br></pre></td></tr></tbody></table></figure>
-<p><del>秉承 Python 之禅中的<code>There should be one-- and preferably only one --obvious way to do it.</code>理念，</del> 我甚至可以花里胡哨地、用关键字参数的语法向<code>string1</code>和<code>string2</code>传参</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string_equal(string1=<span class="string">'Goodbye, world!'</span>, string2=<span class="string">'ello'</span>)  <span class="comment"># 返回值为False</span></span><br></pre></td></tr></tbody></table></figure>
-<p>但瑜不掩瑕，Python 的关键字参数也有其不足。</p>
-<h1 id="Python-的不足"><a href="#Python-的不足" class="headerlink" title="Python 的不足"></a>Python 的不足</h1><p>Python 的关键字参数特性的缺点在于，同一个参数无法同时以：</p>
-<ol>
-<li>具有自身的参数名，以及；</li>
-<li>可以从<code>**kwargs</code>中取得，</li>
-</ol>
-<p>两种形态存在于参数列表中。</p>
-<p>举个例子，我们都知道 Python 有一个知名的第三方库叫做 requests，提供了<del>用于开发爬虫牢底坐穿的</del>发起 HTTP 请求的功能。它的类<code>requests.Session</code>的实例方法<code>request</code>有着让人忍不住运用 Long Parameter List 对其重构的、长达 16 个参数的参数列表。（你可以移步<a href="https://docs.python-requests.org/en/latest/api/#requests.Session.request" target="_blank" rel="noopener"><code>request</code>方法的文档</a>观摩）</p>
-<p>为了便于使用，requests 的作者贴心地提供了<code>requests.request</code>，这样只需要一次简单的函数调用即可</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requests.request(<span class="string">'GET'</span>, <span class="string">'http://example.com'</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p><code>requests.request</code>函数支持与<code>requests.Session#request</code>（请允许我借用 Ruby 对于实例方法的写法）相同的参数列表，这一切都是通过在参数列表中声明<code>**kwargs</code>变量，并在函数体中用相同的语法向后者传参来实现的。（你可以移步<a href="https://docs.python-requests.org/en/latest/_modules/requests/api/#request" target="_blank" rel="noopener">request 函数的源代码</a>观摩）</p>
-<p>这样的缺陷在于，<code>requests.request</code>函数的参数列表丢失了大量的信息。要想知道使用者能往<code>kwargs</code>中传入什么参数，必须：</p>
-<ol>
-<li>先知道<code>requests.request</code>是如何往<code>requests.Session#request</code>中传参的——将<code>kwargs</code>完全展开传入是最简单的情况；</li>
-<li>再查看<code>requests.Session#request</code>的参数列表中排除掉<code>method</code>和<code>url</code>的部分剩下哪些参数。</li>
-</ol>
-<p>如果想在<code>requests.request</code>的参数列表中使用参数自身的名字（例如<code>params</code>、<code>data</code>、<code>json</code>等），那么调用<code>requests.Session#request</code>则变得繁琐起来，不得不写成</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> sessions.Session() <span class="keyword">as</span> session:</span><br><span class="line">    <span class="keyword">return</span> session.request(method=method, url=url, params=params, data=data, json=data, **kwargs)</span><br></pre></td></tr></tbody></table></figure>
-<p>的形式——果然人类的本质是复读机。</p>
-<p>一个优雅的解决方案，可以参考隔壁的 Common Lisp。</p>
-<h1 id="Common-Lisp-的优越性"><a href="#Common-Lisp-的优越性" class="headerlink" title="Common Lisp 的优越性"></a>Common Lisp 的优越性</h1><p>Common Lisp 第一次面世是在1984年，比 Python 的1991年要足足早了7年。但据悉，Python 的关键字参数特性借鉴自 Modula-3，而不是<del>万物起源的</del> Lisp。Common Lisp 中的关键字参数特性与 Python 有诸多不同。例如，根据 Python 官方手册中的说法，<code>**kwargs</code>中只有多出来的关键字参数</p>
-<blockquote>
-<p>If the form “**identifier” is present, it is initialized to a new ordered mapping receiving any excess keyword arguments</p>
-</blockquote>
-<p>而在 Common Lisp 中，与<code>**kwargs</code>对应的是<code>&amp;rest args</code>，它必须放置在关键字参数之前（即左边），并且根据 CLHS 中<a href="http://www.lispworks.com/documentation/lw51/CLHS/Body/03_dac.htm" target="_blank" rel="noopener">《A specifier for a rest parameter》</a>的说法，<code>args</code>中含有所有未经处理的参数——也包含了位于其后的关键字参数</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar (<span class="name">&amp;rest</span> args <span class="symbol">&amp;key</span> k1 k2)</span><br><span class="line">  (<span class="name">list</span> args k1 k2))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobar</span> <span class="symbol">:k1</span> <span class="number">1</span> <span class="symbol">:k2</span> <span class="number">3</span>)  <span class="comment">;; 返回值为((:K1 1 :K2 3) 1 3)</span></span><br></pre></td></tr></tbody></table></figure>
-<p>如果我还有另一个函数与<code>foobar</code>有着相似的参数列表，那么也可以轻松将所有参数传递给它</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz (<span class="name">a</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> k1 k2)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> k1 k2))</span><br><span class="line">  (<span class="name">cons</span> a</span><br><span class="line">        (<span class="name">apply</span> #'foobar args)))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobaz</span> <span class="number">1</span> <span class="symbol">:k1</span> <span class="number">2</span> <span class="symbol">:k2</span> <span class="number">3</span>)  <span class="comment">;; 返回值为(1 (:K1 2 :K2 3) 2 3)</span></span><br></pre></td></tr></tbody></table></figure>
-<p>甚至于，即使在<code>foobaz</code>中支持的关键字参数比<code>foobar</code>要多，也能轻松地处理，因为 Common Lisp 支持向被调用的函数传入一个特殊的关键字参数<code>:allow-other-keys</code>即可</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz (<span class="name">a</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> k1 k2 my-key)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> k1 k2))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"my-key is ~S~%"</span> my-key)</span><br><span class="line">  (<span class="name">cons</span> a</span><br><span class="line">        (<span class="name">apply</span> #'foobar <span class="symbol">:allow-other-keys</span> <span class="literal">t</span> args)))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobaz</span> <span class="number">1</span> <span class="symbol">:k1</span> <span class="number">2</span> <span class="symbol">:k2</span> <span class="number">3</span> <span class="symbol">:my-key</span> <span class="number">4</span>)  <span class="comment">;; 打印my-key is 4，并返回(1 (:ALLOW-OTHER-KEYS T :K1 2 :K2 3 :MY-KEY 4) 2 3)</span></span><br></pre></td></tr></tbody></table></figure>
-<p>回到 HTTP 客户端的例子。在 Common Lisp 中我一般用<a href="https://edicl.github.io/drakma/" target="_blank" rel="noopener">drakma</a>这个第三方库来发起 HTTP 请求，它导出了一个<code>http-request</code>函数，用法与<code>requests.request</code>差不多</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">drakma</span><span class="symbol">:http-request</span> <span class="string">"http://example.com"</span> <span class="symbol">:method</span> <span class="symbol">:get</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>如果我想要基于它来封装一个便捷地发出 GET 请求的函数<code>http-get</code>的话，可以这样写</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> http-get (<span class="name">uri</span> <span class="symbol">&amp;rest</span> args)</span><br><span class="line">  (<span class="name">apply</span> #'drakma<span class="symbol">:http-request</span> uri <span class="symbol">:method</span> <span class="symbol">:get</span> args))</span><br></pre></td></tr></tbody></table></figure>
-<p>如果我希望在<code>http-get</code>的参数列表中直接暴露出一部分<code>http-request</code>支持的关键字参数的话，可以这样写</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> http-get (<span class="name">uri</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> content)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> content))</span><br><span class="line">  (<span class="name">apply</span> #'drakma<span class="symbol">:http-request</span> uri <span class="symbol">:method</span> <span class="symbol">:get</span> args))</span><br></pre></td></tr></tbody></table></figure>
-<p>更进一步，如果我想在<code>http-get</code>中支持解析<code>Content-Type</code>为<code>application/json</code>的响应结果的话，还可以这样写</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">ql</span><span class="symbol">:quickload</span> 'jonathan)</span><br><span class="line">(<span class="name">ql</span><span class="symbol">:quickload</span> 'str)</span><br><span class="line">(<span class="name">defun</span> http-get (<span class="name">uri</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> content (<span class="name">decode-json</span> <span class="literal">t</span>))</span><br><span class="line">  <span class="comment">;; http-request并不支持decode-json这个参数，但依然可以将整个args传给它。</span></span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> content))</span><br><span class="line">  (<span class="name">multiple-value-bind</span> (<span class="name">bytes</span> code headers)</span><br><span class="line">      (<span class="name">apply</span> #'drakma<span class="symbol">:http-request</span> uri</span><br><span class="line">             <span class="symbol">:allow-other-keys</span> <span class="literal">t</span></span><br><span class="line">             <span class="symbol">:method</span> <span class="symbol">:get</span></span><br><span class="line">             args)</span><br><span class="line">    (<span class="name">declare</span> (<span class="name">ignorable</span> code))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">content-type</span> (<span class="name">cdr</span> (<span class="name">assoc</span> <span class="symbol">:content-type</span> headers)))</span><br><span class="line">          (<span class="name">text</span> (<span class="name">flexi-streams</span><span class="symbol">:octets-to-string</span> bytes)))</span><br><span class="line">      (<span class="name">if</span> (<span class="name">and</span> decode-json</span><br><span class="line">               (<span class="name">str</span><span class="symbol">:starts-with-p</span> <span class="string">"application/json"</span> content-type))</span><br><span class="line">          (<span class="name">jonathan</span><span class="symbol">:parse</span> text)</span><br><span class="line">          text))))</span><br></pre></td></tr></tbody></table></figure>
-<p>不愧是<del>Dio</del> Common Lisp，轻易就做到了我们做不到的事情。</p>
-<h2 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h2><p>曾几何时，Python 程序员还会津津乐道于 Python 之禅中的<code>There should be one-- and preferably only one --obvious way to do it.</code>，但其实 Python 光是在定义一个函数的参数方面就有五花八门的写法了。甚至在写这篇文章的过程中，我才知道原来 Python 的参数列表中可以通过写上<code>/</code>来使其左侧的参数都成为 positional-only 的参数。</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo1</span><span class="params">(a, b)</span>:</span> <span class="keyword">pass</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo2</span><span class="params">(a, /, b)</span>:</span> <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">foo1(a=<span class="number">1</span>, b=<span class="number">2</span>)</span><br><span class="line">foo2(a=<span class="number">1</span>, b=<span class="number">2</span>)  <span class="comment"># 会抛出异常，因为a只能按位置来传参。</span></span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -834,7 +816,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-count">100</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -847,7 +829,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-count">114</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

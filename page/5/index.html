@@ -200,6 +200,112 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/09/28/手指疼，写点代码缓解一下/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/09/28/手指疼，写点代码缓解一下/" class="post-title-link" itemprop="url">手指疼，写点代码缓解一下</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-28 22:29:09 / 修改时间：22:39:01" itemprop="dateCreated datePublished" datetime="2020-09-28T22:29:09+08:00">2020-09-28</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/09/28/手指疼，写点代码缓解一下/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/28/手指疼，写点代码缓解一下/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我经常使用Emacs来干写字的活——有时候是写代码、有时候是用org-mode管理待办事项、有时候是用restclient-mode来测试HTTP API。Emacs丰富的快捷键让我可以双手不离主键盘区就做到很多事情，不过这也带来了别样的烦恼：快捷键按多了，手容易累。</p>
+<p>导致手累的第一个因素，是Emacs的不少快捷键需要按住<code>ctrl</code>来使用，而<code>ctrl</code>常常不容易按到。以我的键盘为例，<code>ctrl</code>键分布在主键盘区的最外侧</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/我所用的美式键盘举例.jpeg" alt=""></p>
+<p>为了便于尾指按到两侧的<code>ctrl</code>键，我在macOS中交换了<code>command</code>和<code>control</code>键的效果</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/交换了command和control.jpg" alt=""></p>
+<p>当需要按住两边的<code>ctrl</code>键（实际按下的是上面照片中的Windows图标键）时，手腕需要往外拐过去。这个问题在使用VSCode时同样存在，因为我在VSCode中用的也是Emacs的键映射。</p>
+<p>第二个因素是Emacs的一些快捷键太繁琐，导致使用时双手像在键盘上起舞一般到处按来按去，敲击次数过多。例如，让光标上下左右移动的快捷键分别是<code>ctrl-p</code>、<code>ctrl-n</code>、<code>ctrl-b</code>，以及<code>ctrl-f</code>，这比直接用键盘上的方向键麻烦得多。有一些功能甚至要按三组快捷键，比如<code>org-clock-out</code>要先按<code>ctrl-c</code>，再按<code>ctrl-x</code>，最后按<code>ctrl-o</code>。</p>
+<p>有没有办法既可以保留快捷键的高效，又尽量地减少击键导致的手腕和手指的疲劳呢？</p>
+<p>当然有。</p>
+<h1 id="在Emacs中改用Vim的快捷键"><a href="#在Emacs中改用Vim的快捷键" class="headerlink" title="在Emacs中改用Vim的快捷键"></a>在Emacs中改用Vim的快捷键</h1><p>既然Emacs默认的快捷键不容易按，那么不妨换成Vim风格的快捷键。同样是上下左右移动光标，在Vim中只需要单击<code>k/j/h/l</code>这四个按键即可，不仅能够单手操作，而且这四个键正好是右手”触手可及“的位置。其它的功能，例如在文件内搜索、保存文件等，也只需要按<code>/</code>和<code>:w</code>即可，比起Emacs真是”finger-friendly“得多了。</p>
+<p>那么如何才能在Emacs中用上Vim的快捷键呢？答案是用<code>evil</code>插件。先用包管理器安装它</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M-x package-install RET evil RET</span><br></pre></td></tr></tbody></table></figure>
+<p>然后在Emacs的启动配置文件中添加启用<code>evil-mode</code>的代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">require</span> 'evil)</span><br><span class="line">(<span class="name">evil-mode</span> <span class="number">1</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>现在便可以在Emacs中使用Vim风格的快捷键了</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/在Emacs中用Vim快捷键.gif" alt=""></p>
+<h1 id="定制evil-mode"><a href="#定制evil-mode" class="headerlink" title="定制evil-mode"></a>定制<code>evil-mode</code></h1><p>只是简单地启用<code>evil-mode</code>还不足以将双手从频繁的按<code>ctrl</code>中解放出来，因为在Emacs中还有不少其它的高频快捷键依赖于<code>ctrl</code>，例如用<code>ctrl-x b</code>来切换到其它的buffer中、用<code>ctrl-x ctrl-f</code>来打开或新建一个文件，甚至是用<code>ctrl-c ctrl-x ctrl-o</code>来停止一个任务的计时器。</p>
+<p>就像在数据压缩中，用较短的串来代替出现频率较高的原始字符串一样，对于高频使用且快捷键较长的功能，可以为它们绑定较短的快捷键。在<code>evil-mode</code>中，<code>g</code>是一个前缀键并且也很好按，所以我把一些重度使用的功能都绑定了在了以它为前缀的快捷键上</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; evil-mode相关的键绑定</span></span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g b"</span>) 'ido-switch-buffer)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g f"</span>) 'ido-find-file)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g o"</span>) 'org-clock-out)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g s"</span>) 'cuckoo-org-schedule)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g t"</span>) 'org-todo)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"s"</span>) 'save-buffer)</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="在VSCode中改用Vim的快捷键"><a href="#在VSCode中改用Vim的快捷键" class="headerlink" title="在VSCode中改用Vim的快捷键"></a>在VSCode中改用Vim的快捷键</h1><p>搬砖的工具是VSCode，用来写Node.js的项目，主要是因VSCode在写Node.js代码这方面确实比Emacs的<code>js-mode</code>、<code>js2-mode</code>，以及<code>tide-mode</code>之流要好用那么一点。在VSCode中我也改用了Vim的键映射，只需要在插件市场中点击安装即可</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/VSCode自带的键映射.jpg" alt=""></p>
+<p>VSCode的Vim键映射实际上是一个独立的插件<a href="https://github.com/VSCodeVim/Vim" target="_blank" rel="noopener">Vim</a>，它也支持进一步地自定义快捷键。出于个人喜好，我把<code>s</code>绑定为保存文件的功能</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// VSCode的配置文件setting.json</span></span><br><span class="line"><span class="string">"vim.normalModeKeyBindings"</span>: [</span><br><span class="line">  {</span><br><span class="line">    <span class="string">"before"</span>: [<span class="string">"s"</span>],</span><br><span class="line">    <span class="string">"commands"</span>: [</span><br><span class="line">      <span class="string">"workbench.action.files.save"</span></span><br><span class="line">    ]</span><br><span class="line">  }</span><br><span class="line">],</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="用BetterTouchTools补充evil-mode的不足"><a href="#用BetterTouchTools补充evil-mode的不足" class="headerlink" title="用BetterTouchTools补充evil-mode的不足"></a>用BetterTouchTools补充evil-mode的不足</h1><p>尽管在Emacs中可以将常用的功能绑定到一系列的、以<code>g</code>开头的较短的快捷键上，但这一招并不能用来处理所有的快捷键，因为太多的自定义快捷键也会带来记忆上的负担。但我不会就此止步。</p>
+<p>仔细观察就会发现，多数较长的快捷键是以<code>ctrl-c</code>或<code>ctrl-x</code>作为前缀的。因此，如果能够让<code>ctrl-c</code>和<code>ctrl-x</code>更容易按——比如替换为单个按键，也有利于减少尾指按<code>ctrl</code>键的负担。</p>
+<p>要用单键来代替<code>ctrl-c</code>，光凭Emacs其实也可以做到。比如可以让<code>F10</code>被按下的时候相当于按下<code>ctrl-c</code></p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> simulate-C-c ()</span><br><span class="line">  <span class="string">"模拟输入C-c"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">setq</span> unread-command-events (<span class="name">listify-key-sequence</span> <span class="string">"\C-c"</span>)))</span><br><span class="line">(<span class="name">global-set-key</span> [f10] 'simulate-C-c)</span><br></pre></td></tr></tbody></table></figure>
+<p>问题在于它不可组合。</p>
+<p>例如，先按<code>F10</code>再按<code>ctrl-x</code>，等价于按下<code>ctrl-c ctrl-x</code>。但如果先按<code>ctrl-x</code>再按<code>F10</code>，则Emacs不会再将<code>F10</code>转换为<code>ctrl-c</code>，它只会认为我按下的是<code>ctrl-x F10</code>的键序列。</p>
+<p>既要用<code>F10</code>代替<code>ctrl-c</code>，又要具备可组合性，怎么办？我的答案是使用<a href="https://folivora.ai/" target="_blank" rel="noopener">BetterTouchTool</a>。我用BTT将<code>F9</code>到<code>F12</code>都重定义了一遍</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/用BTT重定义Fn键.jpg" alt=""></p>
+<p>如此一来，当我需要输入复杂的、含有<code>ctrl-c</code>或<code>ctrl-x</code>的快捷键的时候，只需要单击一次<code>F10</code>或<code>F11</code>就足够了，轻而易举！</p>
+<p>遗憾的是，BTT是一款macOS only的软件。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>或许脑机接口才是缓解手指劳损的终极解决方案吧。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/09/09/那么，Prolog，告诉我怎么走/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -608,118 +714,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/07/03/如何写一个命令行的秒表/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/03/如何写一个命令行的秒表/" class="post-title-link" itemprop="url">如何写一个命令行的秒表</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-03 20:47:06 / 修改时间：21:26:51" itemprop="dateCreated datePublished" datetime="2020-07-03T20:47:06+08:00">2020-07-03</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/07/03/如何写一个命令行的秒表/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/07/03/如何写一个命令行的秒表/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>相信各位读者对秒表都不陌生，智能手机上通常都有这样一款软件</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200703/数字秒表.jpg" alt="来自我的小米手机的截图"></p>
-<p>有一天心血来潮，便想要“复刻”一个命令行版本的秒表程序——主要是想尝试一下新学会的、“原地更新”的技能，而不是一行接一行地输出。程序的运行效果如下</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200703/stopwatch的演示效果.gif" alt=""></p>
-<p>那么这是怎么做的呢？</p>
-<h1 id="实现思路及代码"><a href="#实现思路及代码" class="headerlink" title="实现思路及代码"></a>实现思路及代码</h1><h2 id="如何获取流逝的时间长度？"><a href="#如何获取流逝的时间长度？" class="headerlink" title="如何获取流逝的时间长度？"></a>如何获取流逝的时间长度？</h2><p>要实现一个秒表，首先要知道从开始计时至今过了多久。在*nix系统中，表示时刻的事实标准是<a href="https://en.wikipedia.org/wiki/Unix_time" target="_blank" rel="noopener">Epoch Time</a>，在<code>shell</code>脚本中要获取Epoch Time可以用<code>date</code>命令。再用首尾时刻相减便得到了期间流逝的秒数了，示例代码如下</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">begin_at=$(date '+%s')</span><br><span class="line"><span class="meta">#</span><span class="bash"> 睡个觉</span></span><br><span class="line">end_at=$(date '+%s')</span><br><span class="line">((interval=${end_at} - ${begin_at}))</span><br></pre></td></tr></tbody></table></figure>
-<p>双圆括号是一种在<code>shell</code>脚本中执行算术运算的语法，其它语法可以参见<a href="http://faculty.salina.k-state.edu/tim/unix_sg/bash/math.html" target="_blank" rel="noopener">Math in Shell Scripts</a>。</p>
-<h2 id="如何换算为时分秒？"><a href="#如何换算为时分秒？" class="headerlink" title="如何换算为时分秒？"></a>如何换算为时分秒？</h2><p>有了<code>interval</code>中存储的总秒数后，换算成时分秒便是轻而易举的事情，示例代码如下</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">((hours=${interval} / 3600))</span><br><span class="line">((minutes=(${interval} % 3600) / 60))</span><br><span class="line">((seconds=(${interval} % 3600) % 60))</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="如何输出形如hh-mm-ss的格式？"><a href="#如何输出形如hh-mm-ss的格式？" class="headerlink" title="如何输出形如hh:mm:ss的格式？"></a>如何输出形如<code>hh:mm:ss</code>的格式？</h2><p><code>hh:mm:ss</code>的意思是分别用两个十进制数字显示时分秒，并以冒号分隔它们。如果有任何一个单位的数值小于10，便用字符<code>0</code>填充左侧的空白。按这个格式，凌晨1点2分3秒便会显示为<code>01:02:03</code>。</p>
-<p>要在命令行中打印字符串，最容易想到的便是<code>echo</code>命令，只可惜它不能方便地实现填充字符<code>0</code>的需求。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200703/强人锁男.jpg" alt=""></p>
-<p>强人所难也不是不行，示例代码如下</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">hours=1</span><br><span class="line">minutes=2</span><br><span class="line">seconds=3</span><br><span class="line"></span><br><span class="line">if [ "${hours}" -lt '10' ];</span><br><span class="line">then</span><br><span class="line">   echo -n "0${hours}"</span><br><span class="line">else</span><br><span class="line">   echo -n "${hours}"</span><br><span class="line">fi</span><br><span class="line">echo -n ':'</span><br><span class="line">if [ "${minutes}" -lt '10' ];</span><br><span class="line">then</span><br><span class="line">   echo -n "0${minutes}"</span><br><span class="line">else</span><br><span class="line">   echo -n "${minutes}"</span><br><span class="line">fi</span><br><span class="line">echo -n ':'</span><br><span class="line">if [ "${seconds}" -lt '10' ];</span><br><span class="line">then</span><br><span class="line">   echo -n "0${seconds}"</span><br><span class="line">else</span><br><span class="line">   echo -n "${seconds}"</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
-<p>更优雅的方法是用<code>printf</code>命令来自动填充左侧的字符<code>0</code></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">printf "%02d:%02d:%02d" ${hours} ${minutes} ${seconds}</span><br></pre></td></tr></tbody></table></figure>
-<p><code>printf</code>命令类似于C语言中的<code>printf</code>函数——它也支持打印转义的字符，下文会提到。</p>
-<h2 id="如何覆盖已经打印的内容？"><a href="#如何覆盖已经打印的内容？" class="headerlink" title="如何覆盖已经打印的内容？"></a>如何覆盖已经打印的内容？</h2><p>今年以来我在断断续续地看<a href="https://viewsourcecode.org/snaptoken/kilo/index.html" target="_blank" rel="noopener">Build Your Own Text Editor</a>，学习如何开发文本编辑器。在这本小册子的<a href="https://viewsourcecode.org/snaptoken/kilo/03.rawInputAndOutput.html#clear-the-screen" target="_blank" rel="noopener">第三章</a>中，作者讲述了如何使用终端的转义序列（<code>escape sequence</code>）来控制屏幕上显示的东西——这正是秒表程序所需要的。</p>
-<p>例如，在终端输出转义序列<code>\x1b[2J</code>可以清空屏幕，效果如下</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200703/演示用转义序列清空屏幕.gif" alt=""></p>
-<p>为了覆盖已经打印出来的时分秒，需要：</p>
-<ol>
-<li>先将光标移动到行首；</li>
-<li>再清除从光标开始到行末的内容。</li>
-</ol>
-<p>查阅<a href="https://vt100.net/docs/vt100-ug/chapter3.html" target="_blank" rel="noopener">《VT100 User Guide》第三章</a>可以知道</p>
-<ol>
-<li>要把光标移动到行首可以用转义序列<code>\x1b[8D</code>。之所以是8，是因为按照<code>hh:mm:ss</code>输出时分秒后光标距离行首8个身位；</li>
-<li>要清除光标到行末内容可以用转义序列<code>\x1b[0K</code>（实际上，将光标移到行首只需要使用回车（<code>carriage return</code>）即可，但它被解释为开启新的一行了）。</li>
-</ol>
-<p>更优雅的方法甚至连转义序列也不需要，只要用<code>tput</code>命令即可，示例代码如下</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo -n '11:22:33'</span><br><span class="line">tput cr</span><br><span class="line">tput el</span><br><span class="line">echo '44:55:66'</span><br></pre></td></tr></tbody></table></figure>
-<p>关于<code>cr</code>和<code>el</code>，以及更多可以传给<code>tput</code>命令的参数，可以参见<code>terminfo</code>的<code>man</code>文档。</p>
-<h2 id="如何每隔一秒钟输出一次？"><a href="#如何每隔一秒钟输出一次？" class="headerlink" title="如何每隔一秒钟输出一次？"></a>如何每隔一秒钟输出一次？</h2><p>这大概是整个程序中最简单的需求了</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">while [ 1 -eq 1 ]</span><br><span class="line">do</span><br><span class="line">    # 此处可以为所欲为</span><br><span class="line">    sleep 0.5</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="完整的秒表实现"><a href="#完整的秒表实现" class="headerlink" title="完整的秒表实现"></a>完整的秒表实现</h2><p>至此，完整的秒表程序就可以实现出来了</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 秒表，以hh:mm:ss的格式展示数据</span></span><br><span class="line"></span><br><span class="line">begin_at=$(date '+%s')</span><br><span class="line"></span><br><span class="line">while [ 1 -eq 1 ]</span><br><span class="line">do</span><br><span class="line">    end_at=$(date '+%s')</span><br><span class="line">    # 算术运算：http://faculty.salina.k-state.edu/tim/unix_sg/bash/math.html</span><br><span class="line">    ((interval=${end_at} - ${begin_at}))</span><br><span class="line">    ((hours=${interval} / 3600))</span><br><span class="line">    ((minutes=(${interval} % 3600) / 60))</span><br><span class="line">    ((seconds=(${interval} % 3600) % 60))</span><br><span class="line">    tput cr</span><br><span class="line">    tput el</span><br><span class="line">    printf "%02d:%02d:%02d" ${hours} ${minutes} ${seconds}</span><br><span class="line">    sleep 0.5</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
-<p>运行后的效果正如本文开头的GIF所示。</p>
-<p>全文完。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -791,7 +785,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-count">100</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -804,7 +798,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-count">114</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

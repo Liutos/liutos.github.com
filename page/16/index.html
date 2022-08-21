@@ -200,6 +200,124 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/12/14/用过的一些Markdown编辑器/" class="post-title-link" itemprop="url">用过的一些Markdown编辑器</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-12-14 23:43:50" itemprop="dateCreated datePublished" datetime="2018-12-14T23:43:50+08:00">2018-12-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-01-09 23:20:58" itemprop="dateModified" datetime="2019-01-09T23:20:58+08:00">2019-01-09</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2018/12/14/用过的一些Markdown编辑器/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/14/用过的一些Markdown编辑器/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h2><p>买了MacBook Pro之后的一段时间里，为了打造适合自己的知识管理体系，折腾起了笔记类软件（题外话，我还挺喜欢尝试新软件的，尤其在接触macOS后发现许多软件都长得很漂亮）。其实在入手Mac之前，我已经试用过不少笔记类软件和服务了，包括Evernote（还有印象笔记）、有道云笔记、为知笔记，等等。再后来，改用Emacs的<a href="https://orgmode.org/" target="_blank" rel="noopener">org-mode</a>来写笔记——主要是将一些常常搜索的内容或经验记录在了多个.org文件中，算是一份自己的FAQ。后来想看看在macOS的世界中有没有更好的工具，同时渐渐觉得Markdown是一个更好的笔记内容载体，便尝试了一些知名的笔记类软件暨Markdown编辑器。</p>
+<p>大致上尝试了下列这些：</p>
+<ul>
+<li>Emacs</li>
+<li>Boostnote</li>
+<li>Quiver</li>
+<li>Typora</li>
+<li>Visual Studio Code</li>
+<li>Yu Writer</li>
+</ul>
+<p>本文并不是一篇完整的、专业的软件评测报告，只是我兴趣使然的对各个软件的吐槽和赞美，各位权当打发时间吧。下面我按顺序说一下上面提及的各款软件。</p>
+<h2 id="Emacs"><a href="#Emacs" class="headerlink" title="Emacs"></a>Emacs</h2><p><a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">Emacs</a>并不仅仅是一款Markdown编辑器，我用得最多的是用它来做计划（之前还用来写Node.js代码，不过现在交给VSCode了）。用Emacs来写Markdown，坏处是没有live preview的功能。在Emacs中打开了一个.md文件，只会原原本本地显示着井号、星号，三个反引号等Markdown语法的关键字——并且还是白底黑字的模样，而不带有丝毫不同的样式。为了让它们好看点，你还需要安装一个叫做<code>markdown-mode</code>的Emacs扩展。但几遍安装了<code>markdown-mode</code>，也无法实时预览。<code>markdown-mode</code>的菜单栏中有一个叫做“Preview”的功能，它依赖一个名为<code>markdown</code>的命令行工具（用<code>brew install markdown</code>可以安装）。当一切安装完毕点击“Preview”菜单项时，才发现是在网页浏览器中查看的方式——虽然有preview了，但并不live。</p>
+<p>Emacs在写Markdown方面也并非一无是处。对程序员而言，在一篇Markdown写就的文章中插入代码是再正常不过的事情了。在Emacs中将光标定位到Markdown语法的代码块内，按下<code>control</code>和<code>c</code>的组合键，再敲一下单引号键，Emacs便会另起一个相应模式的buffer，并将代码块中的内容复制到新buffer中供继续编辑。如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs_%E7%BC%96%E8%BE%91Markdown%E4%BB%A3%E7%A0%81%E5%9D%97.gif" alt="Emacs_编辑Markdown代码块.gif"></p>
+<p>在上面的GIF中，代码块以GitHub Flavored Markdown的语法在开头的三个反引号后附上了模式的名字，即lisp，Emacs便会打开<code>lisp-mode</code>的buffer。在这个buffer中可以继续使用Emacs的完整功能编辑对代码，包括语法高亮、自动补全，等等——如果启动了<a href="https://common-lisp.net/project/slime/" target="_blank" rel="noopener">SLIME</a>，甚至可以运行里面的Common Lisp代码。</p>
+<p>Emacs和VSCode用于在编写代码的同时写写项目的README.md文件应当是绰绰有余的了。</p>
+<h2 id="Boostnote"><a href="#Boostnote" class="headerlink" title="Boostnote"></a>Boostnote</h2><p><a href="https://boostnote.io/" target="_blank" rel="noopener">Boostnote</a>自诩为“程序员的笔记本”，它并不是我在Emacs之外寻找的第一款笔记软件，在它之前，我还尝试了<a href="https://www.notion.so/" target="_blank" rel="noopener">Notion</a>、<a href="http://happenapps.com/" target="_blank" rel="noopener">Quiver</a>来着。上手后发现，Boostnote简直就是Quiver的开源免费版本，相当的喜爱。</p>
+<p>Boostnote当然让我格外喜欢的有几点：首先，Boostnote可以实时预览键入的Markdown源文档。会有一列跟编辑区域差不多宽的区域被用来展示Markdown渲染后的效果。（刚刚发现，原来这个区域的宽度是可以拖动调节的）</p>
+<p>其次，它不仅支持Markdown、带语法高亮的代码块，甚至还支持表格和流程图的绘制！当然我以为，用竖线和连字符绘制表格的功能仅在Emacs的org-mode中存在（孤陋寡闻了汗颜），刚开始用Boostnote制作表格的时候可是相当兴奋。而text-based的绘制流程图的方式也是让我大开眼界（后来才知道原来有<a href="http://flowchart.js.org/" target="_blank" rel="noopener">flowchart.js</a>这样的工具）——尽管后来我渐渐发现，绘制流程图其实挺少用。</p>
+<p>然后Boostnote具备在多份笔记中搜索的功能，这对于一款笔记软件而言倒是真的非常重要，因为有时候只能想到一些只言片语，而并不能确定所要查阅的内容究竟在哪一份笔记中。</p>
+<p>但Boostnote也有一些缺点。首先，Boostnote是用自有的文件格式（而不是纯文本的.md文件）来存储输入的内容的——打开<code>~/Boostnote/notes/</code>可以看到这些后缀为<code>.cson</code>的文件。这样一来，假设我日后发现了一款更优秀的Markdown编辑器，那就不能无痛迁移了，还得先从Boostnote中将这些笔记逐一导出成.md文件才行。</p>
+<p>其次，Boostnote只支持三层的组织结构——最外层是storage，然后是folder，最后就是笔记本身。当初有道云笔记特别让我喜欢的，就是它支持非常多层级的目录结构。尽管目录不是越多越好，但有这种灵活性总是更好的。否则，笔记的使用者就只能在命名和标签上下功夫了</p>
+<p>最后一点，就是Boostnote在我的系统上非常容易崩溃。有时候一翻起盖子，看到的就是Boostnote崩溃的提示。</p>
+<p>不过Boostnote支持往其中粘贴图片，当我需要快速记录一些图文内容时，我还是很喜欢用它的。</p>
+<h2 id="Yu-Writer"><a href="#Yu-Writer" class="headerlink" title="Yu Writer"></a>Yu Writer</h2><p>某一天偶然遇到了<a href="https://ivarptr.github.io/yu-writer.site/" target="_blank" rel="noopener">Yu Writer</a>，它官网上的截图看着很吸引人，于是我便试用了一下。第一印象是，Yu Writer is awesome！首先它很人性化。它的预览区域是一个minimap——就是Sublime Text最右侧的那一列。在做到实时预览的时候，也不会占用太多的横向空间。其次，它支持大纲视图</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Yu%20Writer%E7%9A%84%E5%A4%A7%E7%BA%B2%E8%A7%86%E5%9B%BE.png" alt="Yu Writer的大纲视图"></p>
+<p>即上图左侧的目录。恰逢当时我在用Boostnote写一篇比较长的设计文档，深刻地体验到了一个大纲视图的重要意义——对在长文档内的多个标题间跳转非常有帮助。再次，Yu Writer还准备了工具栏，方便不懂得Markdown语法的用户；支持标签页，便于在多个文档间切换；甚至可以把一个Markdown文档作为幻灯片来播放。</p>
+<p>但Yu Writer也有它自己的劣势。第一，在Yu Writer内，原本在macOS系统中全局可用的Emacs风格快捷键——即<code>control+b</code>往左移动光标、<code>control+f</code>往右移动光标——居然不生效！这些快捷键对我个人还是非常重要的。</p>
+<p>第二，在Yu Writer中，不能直接插入磁盘上的图片文件的绝对地址，既没有在预览区域显示出来，也没有在文档列表显示成功。</p>
+<p>据说Yu Writer的作者的主业是厨师，感觉好强</p>
+<h2 id="Typora"><a href="#Typora" class="headerlink" title="Typora"></a>Typora</h2><p><a href="https://typora.io/" target="_blank" rel="noopener">Typora</a> is best。不同于前面提到的几款Markdown编辑器，Typora是“所见即所得”的编辑器。你敲入两个井号，加一个空格，再敲入你的标题内容，最后回车，那么标题内容就会被渲染为二级标题的形式，如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora_%E8%BE%93%E5%85%A5%E4%BA%8C%E7%BA%A7%E6%A0%87%E9%A2%98.gif" alt="Typora_输入二级标题"></p>
+<p>这么一来，屏幕上的空间基本都可以被用来写作，不需要担心被预览用的列给占据了。</p>
+<p>然后，Typora没有自定义它的存储结构，它直接打开磁盘上的.md文件进行编辑，这些Markdown源文件可以随心所欲地放在任何喜欢的目录下，只要能打开就行。再加上它文件树视图，就实现了不受限制的笔记组织方式了，如下图</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora_%E6%96%87%E4%BB%B6%E6%A0%91%E8%A7%86%E5%9B%BE.png" alt="Typora_文件树视图"></p>
+<p>不过一个可以想到的缺点，就是Typora不支持在所有的Markdown文件上搜索关键字——毕竟它也不知道要去哪个目录下寻找这些待搜索的源文件。</p>
+<p>尽管Typora外观很简洁，但Boostnote有的功能它一个也没有落下，就像它的官网所说的那样</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora%E7%9A%84%E5%AE%98%E7%BD%91%E5%AE%A3%E4%BC%A0.png" alt="Typora的官网宣传"></p>
+<p>现在我的博客的文章基本都是用Typora来写的，冥冥中感受到了一股乐趣。但Typora毕竟没有搜索功能，所以我又开始摸索额外的搜索笔记的方式了（比如把记录在.org文件中的FAQ导入到ElasticSearch中再借助全文搜索的力量来找到自己要的内容）。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>没有最好的，只有最适合的，祝各位都能找到最适合自己的Markdown编辑器。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/12/07/把GitHub作为图床/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -583,101 +701,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/09/18/flexi-streams用法简介/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/09/18/flexi-streams用法简介/" class="post-title-link" itemprop="url">flexi-streams用法简介</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-09-18 23:14:50" itemprop="dateCreated datePublished" datetime="2018-09-18T23:14:50+08:00">2018-09-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-12-02 21:29:44" itemprop="dateModified" datetime="2018-12-02T21:29:44+08:00">2018-12-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2018/09/18/flexi-streams用法简介/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/18/flexi-streams用法简介/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>每过一段时间总会燃起一种用Common Lisp（下文简称CL）来写Web应用的冲动，继而就会开始感慨在CL的生态圈中居然没有一款好用的Web框架。尽管放狗搜索“common lisp web framework”可以找到一些——例如Caveman2，以及在Cliki中记录的一些其它框架。然后使用过其中一部分的人就会知道，大部分用起来的体验都不咋地。</p>
-<p>在业界摸爬打滚了一小段时光（从业几年姑且可以这么说吧）后，感觉制作一款专门用于编写JSON-in-JSON-out的Web应用的Web框架应该是一个不错的点子——反正大家都是发出application/json的请求期望application/json的响应，于是乎就撸起袖子自己干了。不过完全从零开始编写起是不现实的，于是乎选择了一个“平台”来作为基础。这个平台就是<a href="https://github.com/fukamachi/clack" target="_blank" rel="noopener">Clack</a>啦</p>
-<p>Clack会负责屏蔽下层的Web Server的差异，它只需要我提供一个函数给它作为来访的HTTP请求的“handler”即可，然后在这个handler中我就可以为所欲为啦。Clack在收到HTTP请求后，会把HTTP请求中的一些信息组织为一个列表类型的值传递给这个handler。在这个handler中，我只需要综合运用CAR、CDR之类的奇怪名字的函数就可以拿到自己需要的东西了——当然了，鉴于这个列表是个plist，用CL提供的DESTRUCTURING-BIND就可以很方便地提取啦。</p>
-<p>在这个plist中，就有一个叫做:RAW-BODY的p，它的值是一个“流”——是的，就是那种文件流的流！但它又不是一个路边随处可见的妖艳贱货的流，而是一个来自FLEXI-STREAMS这个包（指CL中的package）的流。<a href="https://edicl.github.io/flexi-streams/" target="_blank" rel="noopener">FLEXI-STREAMS</a>是一个提供流操作的库，鉴于我没有看过<a href="http://www.nhplace.com/kent/CL/Issues/stream-definition-by-user.html" target="_blank" rel="noopener">Gray streams</a>相关的内容，就不在这里瞎逼逼误导读者了。总而言之，我必须找到一个办法可以从一个FLEXI-STREAMS提供的输入流类型的值中读出一些东西来。</p>
-<p>其实这个办法很简单，就是用CL原生提供的读取流的函数即可——比如READ-SEQUENCE这样的函数。不过我得验证一下不是，为此，我需要有办法可以构造出一个FLEXI-STREAMS流类型的值出来。FLEXI-STREAMS提供了一个叫做MAKE-FLEXI-STREAM的函数，显然这个就是我所需要调用的最后一个函数了。从它的描述来看，它需要一个CL中的原生流来作为第一个参数才行。为此，我试了一下下面的代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">text</span> <span class="string">"Hello, world!"</span>))</span><br><span class="line">  (<span class="name">with-input-from-string</span> (<span class="name">s</span> text)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">buffer</span> (<span class="name">make-array</span> (<span class="name">length</span> text)))</span><br><span class="line">          (<span class="name">fs</span> (<span class="name">flexi-streams</span><span class="symbol">:make-flexi-stream</span> s)))</span><br><span class="line">      (<span class="name">read-sequence</span> buffer fs))))</span><br></pre></td></tr></tbody></table></figure>
-<p>遗憾的是，运行上面的代码会报错</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">The value</span><br><span class="line">  #\H</span><br><span class="line">is not of type</span><br><span class="line">  (UNSIGNED-BYTE 8)</span><br><span class="line">when setting an element of (ARRAY (UNSIGNED-BYTE 8))</span><br><span class="line">   [Condition of type TYPE-ERROR]</span><br><span class="line"></span><br><span class="line">Restarts:</span><br><span class="line"> 0: [RETRY] Retry SLIME interactive evaluation request.</span><br><span class="line"> 1: [*ABORT] Return to SLIME's top level.</span><br><span class="line"> 2: [ABORT] abort thread (#&lt;THREAD "worker" RUNNING {1007766D53}&gt;)</span><br><span class="line"></span><br><span class="line">Backtrace:</span><br><span class="line">  0: ((SB-VM::OPTIMIZED-DATA-VECTOR-SET (UNSIGNED-BYTE 8)) #&lt;unavailable argument&gt; #&lt;unavailable argument&gt; #&lt;unavailable argument&gt;)</span><br><span class="line">  1: (SB-IMPL:ANSI-STREAM-READ-SEQUENCE #(0 0 0 0 0 0 ...) #&lt;SB-IMPL::STRING-INPUT-STREAM {1007975973}&gt; 0 13)</span><br><span class="line">  2: (READ-SEQUENCE #(0 0 0 0 0 0 ...) #&lt;SB-IMPL::STRING-INPUT-STREAM {1007975973}&gt; :START 0 :END 13)</span><br><span class="line">  3: ((FLET FLEXI-STREAMS::FILL-BUFFER :IN FLEXI-STREAMS::READ-SEQUENCE*) 13)</span><br><span class="line">  4: ((:METHOD FLEXI-STREAMS::READ-SEQUENCE* (FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT T T T T)) #&lt;FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT (:ISO-8859-1 :EOL-STYLE :LF) {1007975B43}&gt; #&lt;FLEXI-STREAMS:FLEXI-INPUT-STRE..</span><br><span class="line">  5: ((:METHOD STREAM-READ-SEQUENCE (TRIVIAL-GRAY-STREAMS:FUNDAMENTAL-INPUT-STREAM T)) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM {1007975C73}&gt; #(0 0 0 0 0 0 ...) 0 NIL) [fast-method]</span><br><span class="line">  6: (READ-SEQUENCE #(0 0 0 0 0 0 ...) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM {1007975C73}&gt; :START 0 :END NIL)</span><br><span class="line">  7: ((LAMBDA ()))</span><br><span class="line">  8: (SB-INT:SIMPLE-EVAL-IN-LEXENV (LET ((TEXT "Hello, world!")) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))) #&lt;NULL-LEXENV&gt;)</span><br><span class="line">  9: (EVAL (LET ((TEXT "Hello, world!")) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))))</span><br><span class="line"> 10: ((LAMBDA NIL :IN SWANK:INTERACTIVE-EVAL))</span><br><span class="line"> --more--</span><br></pre></td></tr></tbody></table></figure>
-<p>既然在调用READ-SEQUENCE的时候出状况了，不妨试试下面的代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">text</span> <span class="string">"Hello, world!"</span>))</span><br><span class="line">  (<span class="name">with-input-from-string</span> (<span class="name">s</span> text)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">fs</span> (<span class="name">flexi-streams</span><span class="symbol">:make-flexi-stream</span> s)))</span><br><span class="line">      (<span class="name">read-char</span> fs))))</span><br></pre></td></tr></tbody></table></figure>
-<p>再次令人遗憾的，它会抛出另一个状况（CL中的condition啦）</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#&lt;SB-IMPL::STRING-INPUT-STREAM {10020A7243}&gt; is not a binary input stream.</span><br><span class="line">   [Condition of type SIMPLE-TYPE-ERROR]</span><br><span class="line"></span><br><span class="line">Restarts:</span><br><span class="line"> 0: [RETRY] Retry SLIME interactive evaluation request.</span><br><span class="line"> 1: [*ABORT] Return to SLIME's top level.</span><br><span class="line"> 2: [ABORT] abort thread (#&lt;THREAD "worker" RUNNING {1001F6E813}&gt;)</span><br><span class="line"></span><br><span class="line">Backtrace:</span><br><span class="line">  0: (SB-KERNEL:ILL-BIN #&lt;SB-IMPL::STRING-INPUT-STREAM {10020A7243}&gt;)</span><br><span class="line">  1: (READ-BYTE #&lt;SB-IMPL::STRING-INPUT-STREAM {10020A7243}&gt; NIL NIL)</span><br><span class="line">  2: ((:METHOD FLEXI-STREAMS::READ-BYTE* (FLEXI-STREAMS:FLEXI-INPUT-STREAM)) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM {10020A74C3}&gt;) [fast-method]</span><br><span class="line">  3: ((:METHOD FLEXI-STREAMS::OCTETS-TO-CHAR-CODE (FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT T)) #&lt;FLEXI-STREAMS::FLEXI-LATIN-1-FORMAT (:ISO-8859-1 :EOL-STYLE :LF) {10020A7393}&gt; #&lt;unavailable argument&gt;) [fast-me..</span><br><span class="line">  4: ((:METHOD STREAM-READ-CHAR (FLEXI-STREAMS:FLEXI-INPUT-STREAM)) #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM {10020A74C3}&gt;) [fast-method]</span><br><span class="line">  5: (READ-CHAR #&lt;FLEXI-STREAMS:FLEXI-INPUT-STREAM {10020A74C3}&gt; T NIL #&lt;unused argument&gt;)</span><br><span class="line">  6: ((LAMBDA ()))</span><br><span class="line">  7: (SB-INT:SIMPLE-EVAL-IN-LEXENV (LET ((TEXT "Hello, world!")) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))) #&lt;NULL-LEXENV&gt;)</span><br><span class="line">  8: (EVAL (LET ((TEXT "Hello, world!")) (WITH-INPUT-FROM-STRING (S TEXT) (LET # #))))</span><br><span class="line">  9: ((LAMBDA NIL :IN SWANK:INTERACTIVE-EVAL))</span><br><span class="line"> --more--</span><br></pre></td></tr></tbody></table></figure>
-<p>看来从一开始提供给MAKE-FLEXI-STREAM函数的参数就应当是一个“二进制”的流才对。为此，我需要借助FLEXI-STREAMS自身的力量——调用它的STRING-TO-OCTETS函数。使用这个函数，可以将一个字符串转换为某种编码下的字节数组，例如下面的代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">flexi-streams</span><span class="symbol">:string-to-octets</span> <span class="string">"Hello"</span>) <span class="comment">;#(72 101 108 108 111)</span></span><br></pre></td></tr></tbody></table></figure>
-<p>得到一串“octet”后，还需要将其转换为“流”才行。再次借助FLEXI-STREAMS的力量，调用它的MAKE-IN-MEMORY-INPUT-STREAM函数，然后将这个函数调用的返回值作为MAKE-FLEXI-STREAM的第一个参数即可，最终的代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">text</span> <span class="string">"Hello, world!"</span>)           <span class="comment">; 原始文本</span></span><br><span class="line">       (<span class="name">octets</span> (<span class="name">flexi-streams</span><span class="symbol">:string-to-octets</span> text)) <span class="comment">; 使用flexi-streams转换为字节数组，因为下一个函数只接受这种类型的参数</span></span><br><span class="line">       (<span class="name">memory-input</span> (<span class="name">flexi-streams</span><span class="symbol">:make-in-memory-input-stream</span> octets)) <span class="comment">; 同样先转换为内存中的流，因为下一个函数只接受这种类型的参数</span></span><br><span class="line">       (<span class="name">flexi-stream</span> (<span class="name">flexi-streams</span><span class="symbol">:make-flexi-stream</span> memory-input)) <span class="comment">; 终于可以得到一个真正的flexi-stream了</span></span><br><span class="line">       (<span class="name">buffer</span> (<span class="name">make-array</span> (<span class="name">flexi-streams</span><span class="symbol">:octet-length</span> text)))) <span class="comment">; 这里其实用字节的长度还是用字符的长度（flexi-streams:char-length）都没差</span></span><br><span class="line">  (<span class="name">read-sequence</span> buffer flexi-stream)   <span class="comment">; 可以像处理CL中的流那样处理flexi-stream</span></span><br><span class="line">  (<span class="name">print</span> (<span class="name">coerce</span> buffer 'string)))      <span class="comment">; 把字节数组拼成字符串再输出比较好看</span></span><br></pre></td></tr></tbody></table></figure>
-<p>全文完</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -749,7 +772,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-count">100</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -762,7 +785,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-count">114</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

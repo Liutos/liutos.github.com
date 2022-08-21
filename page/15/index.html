@@ -200,6 +200,95 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/28/Project-Euler第69题/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/01/28/Project-Euler第69题/" class="post-title-link" itemprop="url">Project-Euler第69题</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-01-28 23:21:22 / 修改时间：23:26:03" itemprop="dateCreated datePublished" datetime="2019-01-28T23:21:22+08:00">2019-01-28</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/01/28/Project-Euler第69题/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/28/Project-Euler第69题/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>大学的时候挺喜欢解<a href="https://projecteuler.net/" target="_blank" rel="noopener">Project Euler</a>上的题目的，尤其是它不在乎答题者使用哪一门编程语言，甚至还有很多参与者是使用pen&amp;paper来解题的。去年开始重新开始做Project Euler上的题目，而<a href="https://projecteuler.net/problem=69" target="_blank" rel="noopener">第69题</a>则是最近刚刚解决的一题。惭愧的是，因为不晓得欧拉函数的计算公式（甚至都没有想过欧拉函数有没有可以用来计算的公式），所以这一题我是用暴力计算的方法来解决的。尽管花了40分钟左右才找出了问题的答案，但欧拉函数的计算方法本身还是让我觉得挺有意思的，下面我就来讲讲我在计算欧拉函数方面做的一些尝试。</p>
+<p>69题本身很容易读懂，就是要找到一个不大于一百万的正整数<code>n</code>，这个<code>n</code>与以它为参的欧拉函数值的比值能够达到最大。欧拉函数的介绍可以看<a href="https://zh.wikipedia.org/wiki/%E6%AC%A7%E6%8B%89%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">维基百科</a>，简而言之，就是在不大于<code>n</code>的正整数中与<code>n</code>互质的数的个数，具体的例子可以参见69题描述中给出的表格。</p>
+<p>网上可以找到别人的<a href="https://www.jianshu.com/p/d0fad6213433" target="_blank" rel="noopener">解法</a>，基本的思路是：按从小到大的顺序，对于一百万以内的每个素数，都计算出它们的倍数的欧拉函数值的一部分——即对于素数<code>p</code>计算出<code>1-1/p</code>并与这个位置上原来的值相乘。当遍历完一百万以内的所有素数后，也就计算出每一个位置上的欧拉函数值，再遍历一次就可以计算出比值最大的数字了。</p>
+<p>但我今天要讲的是笨方法。</p>
+<p>笨方法的关键就是乖巧地计算出每一个数字的欧拉函数值。而其中最笨的，当属挑出每一个不大于<code>n</code>的因数，计算它们与<code>n</code>的最大公约数，并根据这个最大公约数是否为1，来决定是否给某一个计数器加一。示例代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">count</span> <span class="number">0</span>))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">i</span> n count)</span><br><span class="line">      (<span class="name">when</span> (<span class="name">=</span> (<span class="name">gcd</span> (<span class="number">1</span>+ i) n) <span class="number">1</span>)</span><br><span class="line">        (<span class="name">incf</span> count)))))</span><br></pre></td></tr></tbody></table></figure>
+<p>这个<code>phi</code>可以稍微改进一下。例如，如果一个数a与<code>n</code>不是互质的，那么<code>a</code>的倍数（小于<code>n</code>的那一些）也一定不会与<code>n</code>互质。因此，每当遇到这么一个因数<code>a</code>，就知道后续的<code>2a</code>、<code>3a</code>等等，都不再需要计算其与<code>n</code>的最大公约数了。改进后的算法代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi (<span class="name">n</span>)</span><br><span class="line">  <span class="string">"通过将不互质的比特设置为1并计算为0的比特的个数来计算phi函数"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">bits</span> (<span class="name">make-array</span> n <span class="symbol">:element-type</span> 'bit <span class="symbol">:initial-element</span> <span class="number">0</span>))</span><br><span class="line">        (<span class="name">count</span> <span class="number">0</span>))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">i</span> n)</span><br><span class="line">      (<span class="name">cond</span> ((<span class="name">=</span> (<span class="name">bit</span> bits i) <span class="number">1</span>)</span><br><span class="line">             <span class="comment">;; 该比特已经为1，说明已经在比它小的倍数被处理时一并被标记了</span></span><br><span class="line">             )</span><br><span class="line">            ((<span class="name">=</span> i (<span class="number">1</span>- n))</span><br><span class="line">             <span class="comment">;; 只处理比上界要小的数字</span></span><br><span class="line">             )</span><br><span class="line">            ((<span class="name">/=</span> (<span class="name">gcd</span> (<span class="number">1</span>+ i) n) <span class="number">1</span>)</span><br><span class="line">             <span class="comment">;; 除了当前这个不互质的数字之外，还需要将这个数字的倍数也一并处理</span></span><br><span class="line">             (<span class="name">dotimes</span> (<span class="name">j</span> (<span class="name">floor</span> n (<span class="number">1</span>+ i)))</span><br><span class="line">               (<span class="name">let*</span> ((<span class="name">j</span> (<span class="number">1</span>+ j))</span><br><span class="line">                      (<span class="name">m</span> (<span class="name">*</span> (<span class="number">1</span>+ i) j)))</span><br><span class="line">                 (<span class="name">setf</span> (<span class="name">bit</span> bits (<span class="number">1</span>- m)) <span class="number">1</span>))))</span><br><span class="line">            (<span class="name">t</span> (<span class="name">incf</span> count))))</span><br><span class="line">    count))</span><br></pre></td></tr></tbody></table></figure>
+<p>为了节省内存空间，这里用了一个bitmap来标记小于<code>n</code>的每一个数字是否与<code>n</code>互质——1表示不互质，0表示互质。</p>
+<p>其实并不需要遍历所有比<code>n</code>小的数字，只要遍历所有<code>n</code>的素因子即可。比如，将8分解为素因子，就是3个2，那么对于小于8的所有2的倍数（4和6）都是与8不互质的。基于这个方法，将所有的素因子的倍数所对应的位置为1，再数一下总共有多少个0比特即可。</p>
+<p>对每个<code>n</code>都进行质因数分解效率不高，先生成一个一百万以内的素数表吧</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> primep (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">&lt;</span> n <span class="number">2</span>) <span class="literal">nil</span>)</span><br><span class="line">	((<span class="name">=</span> <span class="number">2</span> n) <span class="literal">t</span>)</span><br><span class="line">	(<span class="name">t</span></span><br><span class="line">	 (<span class="name">let</span> ((<span class="name">bnd</span> (<span class="name">truncate</span> (<span class="name">sqrt</span> n))))</span><br><span class="line">	   (<span class="name">labels</span> ((<span class="name">rec</span> (<span class="name">test</span>)</span><br><span class="line">		      (<span class="name">cond</span> ((<span class="name">&gt;</span> test bnd) <span class="literal">t</span>)</span><br><span class="line">			    ((<span class="name">=</span> <span class="number">0</span> (<span class="name">rem</span> n test)) <span class="literal">nil</span>)</span><br><span class="line">			    (<span class="name">t</span> (<span class="name">rec</span> (<span class="number">1</span>+ test))))))</span><br><span class="line">	     (<span class="name">rec</span> <span class="number">2</span>))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defvar</span> *primes-in-1000000* <span class="literal">nil</span>)</span><br><span class="line">(<span class="name">defun</span> generate-primes-in-1000000 ()</span><br><span class="line">  (<span class="name">dotimes</span> (<span class="name">i</span> <span class="number">1000000</span>)</span><br><span class="line">    (<span class="name">when</span> (<span class="name">primep</span> (<span class="number">1</span>+ i))</span><br><span class="line">      (<span class="name">push</span> (<span class="number">1</span>+ i) *primes-in-1000000*)))</span><br><span class="line">  (<span class="name">setf</span> *primes-in-1000000* (<span class="name">nreverse</span> *primes-in-1000000*)))</span><br></pre></td></tr></tbody></table></figure>
+<p>然后对于一个给定的<code>n</code>，遍历所有小于它的素数并对相应的倍数所在的比特置一就可以了，示例代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi3 (<span class="name">n</span>)</span><br><span class="line">  <span class="string">"直接用素数表来做筛法"</span></span><br><span class="line">  (<span class="name">prog</span></span><br><span class="line">      ((<span class="name">bits</span> (<span class="name">make-array</span> n <span class="symbol">:element-type</span> 'bit <span class="symbol">:initial-element</span> <span class="number">0</span>)))</span><br><span class="line">     (<span class="name">dolist</span> (<span class="name">num</span> *primes-in-1000000*)</span><br><span class="line">       (<span class="name">cond</span> ((<span class="name">&gt;</span> num n)</span><br><span class="line">              (<span class="name">go</span> <span class="symbol">:return</span>))</span><br><span class="line">             ((<span class="name">zerop</span> (<span class="name">mod</span> n num))</span><br><span class="line">              (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">i</span>)</span><br><span class="line">                         (<span class="name">when</span> (<span class="name">&lt;</span> i n)</span><br><span class="line">                           (<span class="name">setf</span> (<span class="name">bit</span> bits i) <span class="number">1</span>)</span><br><span class="line">                           (<span class="name">aux</span> (<span class="name">+</span> i num)))))</span><br><span class="line">                (<span class="name">aux</span> (<span class="number">1</span>- num))))))</span><br><span class="line">     <span class="symbol">:return</span></span><br><span class="line">     (<span class="name">return-from</span> phi3</span><br><span class="line">       (<span class="name">count-if</span> (<span class="name">lambda</span> (<span class="name">bit</span>) (<span class="name">zerop</span> bit)) bits))))</span><br></pre></td></tr></tbody></table></figure>
+<p>PS：写这个<code>phi3</code>的时候发现Common Lisp提供了一个<a href="http://clhs.lisp.se/Body/m_prog_.htm" target="_blank" rel="noopener"><code>prog</code></a>宏，这个宏倒是真的挺好用。</p>
+<p>改进了两轮，其实这仍然是笨方法。即便是用<code>phi3</code>，用来计算题目的答案也花了40多分钟。</p>
+<p>全文完</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/11/一些在Emacs中搜索文本的方法/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -554,124 +643,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/12/14/用过的一些Markdown编辑器/" class="post-title-link" itemprop="url">用过的一些Markdown编辑器</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-12-14 23:43:50" itemprop="dateCreated datePublished" datetime="2018-12-14T23:43:50+08:00">2018-12-14</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-01-09 23:20:58" itemprop="dateModified" datetime="2019-01-09T23:20:58+08:00">2019-01-09</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2018/12/14/用过的一些Markdown编辑器/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/14/用过的一些Markdown编辑器/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h2><p>买了MacBook Pro之后的一段时间里，为了打造适合自己的知识管理体系，折腾起了笔记类软件（题外话，我还挺喜欢尝试新软件的，尤其在接触macOS后发现许多软件都长得很漂亮）。其实在入手Mac之前，我已经试用过不少笔记类软件和服务了，包括Evernote（还有印象笔记）、有道云笔记、为知笔记，等等。再后来，改用Emacs的<a href="https://orgmode.org/" target="_blank" rel="noopener">org-mode</a>来写笔记——主要是将一些常常搜索的内容或经验记录在了多个.org文件中，算是一份自己的FAQ。后来想看看在macOS的世界中有没有更好的工具，同时渐渐觉得Markdown是一个更好的笔记内容载体，便尝试了一些知名的笔记类软件暨Markdown编辑器。</p>
-<p>大致上尝试了下列这些：</p>
-<ul>
-<li>Emacs</li>
-<li>Boostnote</li>
-<li>Quiver</li>
-<li>Typora</li>
-<li>Visual Studio Code</li>
-<li>Yu Writer</li>
-</ul>
-<p>本文并不是一篇完整的、专业的软件评测报告，只是我兴趣使然的对各个软件的吐槽和赞美，各位权当打发时间吧。下面我按顺序说一下上面提及的各款软件。</p>
-<h2 id="Emacs"><a href="#Emacs" class="headerlink" title="Emacs"></a>Emacs</h2><p><a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">Emacs</a>并不仅仅是一款Markdown编辑器，我用得最多的是用它来做计划（之前还用来写Node.js代码，不过现在交给VSCode了）。用Emacs来写Markdown，坏处是没有live preview的功能。在Emacs中打开了一个.md文件，只会原原本本地显示着井号、星号，三个反引号等Markdown语法的关键字——并且还是白底黑字的模样，而不带有丝毫不同的样式。为了让它们好看点，你还需要安装一个叫做<code>markdown-mode</code>的Emacs扩展。但几遍安装了<code>markdown-mode</code>，也无法实时预览。<code>markdown-mode</code>的菜单栏中有一个叫做“Preview”的功能，它依赖一个名为<code>markdown</code>的命令行工具（用<code>brew install markdown</code>可以安装）。当一切安装完毕点击“Preview”菜单项时，才发现是在网页浏览器中查看的方式——虽然有preview了，但并不live。</p>
-<p>Emacs在写Markdown方面也并非一无是处。对程序员而言，在一篇Markdown写就的文章中插入代码是再正常不过的事情了。在Emacs中将光标定位到Markdown语法的代码块内，按下<code>control</code>和<code>c</code>的组合键，再敲一下单引号键，Emacs便会另起一个相应模式的buffer，并将代码块中的内容复制到新buffer中供继续编辑。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs_%E7%BC%96%E8%BE%91Markdown%E4%BB%A3%E7%A0%81%E5%9D%97.gif" alt="Emacs_编辑Markdown代码块.gif"></p>
-<p>在上面的GIF中，代码块以GitHub Flavored Markdown的语法在开头的三个反引号后附上了模式的名字，即lisp，Emacs便会打开<code>lisp-mode</code>的buffer。在这个buffer中可以继续使用Emacs的完整功能编辑对代码，包括语法高亮、自动补全，等等——如果启动了<a href="https://common-lisp.net/project/slime/" target="_blank" rel="noopener">SLIME</a>，甚至可以运行里面的Common Lisp代码。</p>
-<p>Emacs和VSCode用于在编写代码的同时写写项目的README.md文件应当是绰绰有余的了。</p>
-<h2 id="Boostnote"><a href="#Boostnote" class="headerlink" title="Boostnote"></a>Boostnote</h2><p><a href="https://boostnote.io/" target="_blank" rel="noopener">Boostnote</a>自诩为“程序员的笔记本”，它并不是我在Emacs之外寻找的第一款笔记软件，在它之前，我还尝试了<a href="https://www.notion.so/" target="_blank" rel="noopener">Notion</a>、<a href="http://happenapps.com/" target="_blank" rel="noopener">Quiver</a>来着。上手后发现，Boostnote简直就是Quiver的开源免费版本，相当的喜爱。</p>
-<p>Boostnote当然让我格外喜欢的有几点：首先，Boostnote可以实时预览键入的Markdown源文档。会有一列跟编辑区域差不多宽的区域被用来展示Markdown渲染后的效果。（刚刚发现，原来这个区域的宽度是可以拖动调节的）</p>
-<p>其次，它不仅支持Markdown、带语法高亮的代码块，甚至还支持表格和流程图的绘制！当然我以为，用竖线和连字符绘制表格的功能仅在Emacs的org-mode中存在（孤陋寡闻了汗颜），刚开始用Boostnote制作表格的时候可是相当兴奋。而text-based的绘制流程图的方式也是让我大开眼界（后来才知道原来有<a href="http://flowchart.js.org/" target="_blank" rel="noopener">flowchart.js</a>这样的工具）——尽管后来我渐渐发现，绘制流程图其实挺少用。</p>
-<p>然后Boostnote具备在多份笔记中搜索的功能，这对于一款笔记软件而言倒是真的非常重要，因为有时候只能想到一些只言片语，而并不能确定所要查阅的内容究竟在哪一份笔记中。</p>
-<p>但Boostnote也有一些缺点。首先，Boostnote是用自有的文件格式（而不是纯文本的.md文件）来存储输入的内容的——打开<code>~/Boostnote/notes/</code>可以看到这些后缀为<code>.cson</code>的文件。这样一来，假设我日后发现了一款更优秀的Markdown编辑器，那就不能无痛迁移了，还得先从Boostnote中将这些笔记逐一导出成.md文件才行。</p>
-<p>其次，Boostnote只支持三层的组织结构——最外层是storage，然后是folder，最后就是笔记本身。当初有道云笔记特别让我喜欢的，就是它支持非常多层级的目录结构。尽管目录不是越多越好，但有这种灵活性总是更好的。否则，笔记的使用者就只能在命名和标签上下功夫了</p>
-<p>最后一点，就是Boostnote在我的系统上非常容易崩溃。有时候一翻起盖子，看到的就是Boostnote崩溃的提示。</p>
-<p>不过Boostnote支持往其中粘贴图片，当我需要快速记录一些图文内容时，我还是很喜欢用它的。</p>
-<h2 id="Yu-Writer"><a href="#Yu-Writer" class="headerlink" title="Yu Writer"></a>Yu Writer</h2><p>某一天偶然遇到了<a href="https://ivarptr.github.io/yu-writer.site/" target="_blank" rel="noopener">Yu Writer</a>，它官网上的截图看着很吸引人，于是我便试用了一下。第一印象是，Yu Writer is awesome！首先它很人性化。它的预览区域是一个minimap——就是Sublime Text最右侧的那一列。在做到实时预览的时候，也不会占用太多的横向空间。其次，它支持大纲视图</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Yu%20Writer%E7%9A%84%E5%A4%A7%E7%BA%B2%E8%A7%86%E5%9B%BE.png" alt="Yu Writer的大纲视图"></p>
-<p>即上图左侧的目录。恰逢当时我在用Boostnote写一篇比较长的设计文档，深刻地体验到了一个大纲视图的重要意义——对在长文档内的多个标题间跳转非常有帮助。再次，Yu Writer还准备了工具栏，方便不懂得Markdown语法的用户；支持标签页，便于在多个文档间切换；甚至可以把一个Markdown文档作为幻灯片来播放。</p>
-<p>但Yu Writer也有它自己的劣势。第一，在Yu Writer内，原本在macOS系统中全局可用的Emacs风格快捷键——即<code>control+b</code>往左移动光标、<code>control+f</code>往右移动光标——居然不生效！这些快捷键对我个人还是非常重要的。</p>
-<p>第二，在Yu Writer中，不能直接插入磁盘上的图片文件的绝对地址，既没有在预览区域显示出来，也没有在文档列表显示成功。</p>
-<p>据说Yu Writer的作者的主业是厨师，感觉好强</p>
-<h2 id="Typora"><a href="#Typora" class="headerlink" title="Typora"></a>Typora</h2><p><a href="https://typora.io/" target="_blank" rel="noopener">Typora</a> is best。不同于前面提到的几款Markdown编辑器，Typora是“所见即所得”的编辑器。你敲入两个井号，加一个空格，再敲入你的标题内容，最后回车，那么标题内容就会被渲染为二级标题的形式，如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora_%E8%BE%93%E5%85%A5%E4%BA%8C%E7%BA%A7%E6%A0%87%E9%A2%98.gif" alt="Typora_输入二级标题"></p>
-<p>这么一来，屏幕上的空间基本都可以被用来写作，不需要担心被预览用的列给占据了。</p>
-<p>然后，Typora没有自定义它的存储结构，它直接打开磁盘上的.md文件进行编辑，这些Markdown源文件可以随心所欲地放在任何喜欢的目录下，只要能打开就行。再加上它文件树视图，就实现了不受限制的笔记组织方式了，如下图</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora_%E6%96%87%E4%BB%B6%E6%A0%91%E8%A7%86%E5%9B%BE.png" alt="Typora_文件树视图"></p>
-<p>不过一个可以想到的缺点，就是Typora不支持在所有的Markdown文件上搜索关键字——毕竟它也不知道要去哪个目录下寻找这些待搜索的源文件。</p>
-<p>尽管Typora外观很简洁，但Boostnote有的功能它一个也没有落下，就像它的官网所说的那样</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora%E7%9A%84%E5%AE%98%E7%BD%91%E5%AE%A3%E4%BC%A0.png" alt="Typora的官网宣传"></p>
-<p>现在我的博客的文章基本都是用Typora来写的，冥冥中感受到了一股乐趣。但Typora毕竟没有搜索功能，所以我又开始摸索额外的搜索笔记的方式了（比如把记录在.org文件中的FAQ导入到ElasticSearch中再借助全文搜索的力量来找到自己要的内容）。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>没有最好的，只有最适合的，祝各位都能找到最适合自己的Markdown编辑器。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -743,7 +714,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-count">100</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -756,7 +727,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-count">114</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

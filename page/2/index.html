@@ -200,6 +200,126 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/08/12/这方面Python还是比Lisp略逊一筹/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/12/这方面Python还是比Lisp略逊一筹/" class="post-title-link" itemprop="url">这方面Python还是比Lisp略逊一筹</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-12 23:08:37" itemprop="dateCreated datePublished" datetime="2021-08-12T23:08:37+08:00">2021-08-12</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/08/12/这方面Python还是比Lisp略逊一筹/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/08/12/这方面Python还是比Lisp略逊一筹/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>众所周知，Python 支持向函数传递关键字参数。比如 Python 的内置函数<code>max</code>就接受名为<code>key</code>的关键字参数，以决定如何获取比较两个参数时的依据</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max({<span class="string">'v'</span>: <span class="number">1</span>}, {<span class="string">'v'</span>: <span class="number">3</span>}, {<span class="string">'v'</span>: <span class="number">2</span>}, key=<span class="keyword">lambda</span> o: o[<span class="string">'v'</span>])  <span class="comment"># 返回值为{'v': 3}</span></span><br></pre></td></tr></tbody></table></figure>
+<p>自定义一个运用了关键字参数特性的函数当然也不在话下。例如模仿一下 Common Lisp 中的函数<code>string-equal</code></p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">string_equal</span><span class="params">(string1, string2, *, start1=None, end1=None, start2=None, end2=None)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> start1:</span><br><span class="line">        start1 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> end1:</span><br><span class="line">        end1 = len(string1) - <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> start2:</span><br><span class="line">        start2 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> end2:</span><br><span class="line">        end2 = len(string2) - <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> string1[start1:end1 + <span class="number">1</span>] == string2[start2:end2 + <span class="number">1</span>]</span><br></pre></td></tr></tbody></table></figure>
+<p>再以关键字参数的形式向它传参</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string_equal(<span class="string">"Hello, world!"</span>, <span class="string">"ello"</span>, start1=<span class="number">1</span>, end1=<span class="number">4</span>)  <span class="comment"># 返回值为True</span></span><br></pre></td></tr></tbody></table></figure>
+<p><del>秉承 Python 之禅中的<code>There should be one-- and preferably only one --obvious way to do it.</code>理念，</del> 我甚至可以花里胡哨地、用关键字参数的语法向<code>string1</code>和<code>string2</code>传参</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string_equal(string1=<span class="string">'Goodbye, world!'</span>, string2=<span class="string">'ello'</span>)  <span class="comment"># 返回值为False</span></span><br></pre></td></tr></tbody></table></figure>
+<p>但瑜不掩瑕，Python 的关键字参数也有其不足。</p>
+<h1 id="Python-的不足"><a href="#Python-的不足" class="headerlink" title="Python 的不足"></a>Python 的不足</h1><p>Python 的关键字参数特性的缺点在于，同一个参数无法同时以：</p>
+<ol>
+<li>具有自身的参数名，以及；</li>
+<li>可以从<code>**kwargs</code>中取得，</li>
+</ol>
+<p>两种形态存在于参数列表中。</p>
+<p>举个例子，我们都知道 Python 有一个知名的第三方库叫做 requests，提供了<del>用于开发爬虫牢底坐穿的</del>发起 HTTP 请求的功能。它的类<code>requests.Session</code>的实例方法<code>request</code>有着让人忍不住运用 Long Parameter List 对其重构的、长达 16 个参数的参数列表。（你可以移步<a href="https://docs.python-requests.org/en/latest/api/#requests.Session.request" target="_blank" rel="noopener"><code>request</code>方法的文档</a>观摩）</p>
+<p>为了便于使用，requests 的作者贴心地提供了<code>requests.request</code>，这样只需要一次简单的函数调用即可</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requests.request(<span class="string">'GET'</span>, <span class="string">'http://example.com'</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p><code>requests.request</code>函数支持与<code>requests.Session#request</code>（请允许我借用 Ruby 对于实例方法的写法）相同的参数列表，这一切都是通过在参数列表中声明<code>**kwargs</code>变量，并在函数体中用相同的语法向后者传参来实现的。（你可以移步<a href="https://docs.python-requests.org/en/latest/_modules/requests/api/#request" target="_blank" rel="noopener">request 函数的源代码</a>观摩）</p>
+<p>这样的缺陷在于，<code>requests.request</code>函数的参数列表丢失了大量的信息。要想知道使用者能往<code>kwargs</code>中传入什么参数，必须：</p>
+<ol>
+<li>先知道<code>requests.request</code>是如何往<code>requests.Session#request</code>中传参的——将<code>kwargs</code>完全展开传入是最简单的情况；</li>
+<li>再查看<code>requests.Session#request</code>的参数列表中排除掉<code>method</code>和<code>url</code>的部分剩下哪些参数。</li>
+</ol>
+<p>如果想在<code>requests.request</code>的参数列表中使用参数自身的名字（例如<code>params</code>、<code>data</code>、<code>json</code>等），那么调用<code>requests.Session#request</code>则变得繁琐起来，不得不写成</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> sessions.Session() <span class="keyword">as</span> session:</span><br><span class="line">    <span class="keyword">return</span> session.request(method=method, url=url, params=params, data=data, json=data, **kwargs)</span><br></pre></td></tr></tbody></table></figure>
+<p>的形式——果然人类的本质是复读机。</p>
+<p>一个优雅的解决方案，可以参考隔壁的 Common Lisp。</p>
+<h1 id="Common-Lisp-的优越性"><a href="#Common-Lisp-的优越性" class="headerlink" title="Common Lisp 的优越性"></a>Common Lisp 的优越性</h1><p>Common Lisp 第一次面世是在1984年，比 Python 的1991年要足足早了7年。但据悉，Python 的关键字参数特性借鉴自 Modula-3，而不是<del>万物起源的</del> Lisp。Common Lisp 中的关键字参数特性与 Python 有诸多不同。例如，根据 Python 官方手册中的说法，<code>**kwargs</code>中只有多出来的关键字参数</p>
+<blockquote>
+<p>If the form “**identifier” is present, it is initialized to a new ordered mapping receiving any excess keyword arguments</p>
+</blockquote>
+<p>而在 Common Lisp 中，与<code>**kwargs</code>对应的是<code>&amp;rest args</code>，它必须放置在关键字参数之前（即左边），并且根据 CLHS 中<a href="http://www.lispworks.com/documentation/lw51/CLHS/Body/03_dac.htm" target="_blank" rel="noopener">《A specifier for a rest parameter》</a>的说法，<code>args</code>中含有所有未经处理的参数——也包含了位于其后的关键字参数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar (<span class="name">&amp;rest</span> args <span class="symbol">&amp;key</span> k1 k2)</span><br><span class="line">  (<span class="name">list</span> args k1 k2))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobar</span> <span class="symbol">:k1</span> <span class="number">1</span> <span class="symbol">:k2</span> <span class="number">3</span>)  <span class="comment">;; 返回值为((:K1 1 :K2 3) 1 3)</span></span><br></pre></td></tr></tbody></table></figure>
+<p>如果我还有另一个函数与<code>foobar</code>有着相似的参数列表，那么也可以轻松将所有参数传递给它</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz (<span class="name">a</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> k1 k2)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> k1 k2))</span><br><span class="line">  (<span class="name">cons</span> a</span><br><span class="line">        (<span class="name">apply</span> #'foobar args)))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobaz</span> <span class="number">1</span> <span class="symbol">:k1</span> <span class="number">2</span> <span class="symbol">:k2</span> <span class="number">3</span>)  <span class="comment">;; 返回值为(1 (:K1 2 :K2 3) 2 3)</span></span><br></pre></td></tr></tbody></table></figure>
+<p>甚至于，即使在<code>foobaz</code>中支持的关键字参数比<code>foobar</code>要多，也能轻松地处理，因为 Common Lisp 支持向被调用的函数传入一个特殊的关键字参数<code>:allow-other-keys</code>即可</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz (<span class="name">a</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> k1 k2 my-key)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> k1 k2))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"my-key is ~S~%"</span> my-key)</span><br><span class="line">  (<span class="name">cons</span> a</span><br><span class="line">        (<span class="name">apply</span> #'foobar <span class="symbol">:allow-other-keys</span> <span class="literal">t</span> args)))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobaz</span> <span class="number">1</span> <span class="symbol">:k1</span> <span class="number">2</span> <span class="symbol">:k2</span> <span class="number">3</span> <span class="symbol">:my-key</span> <span class="number">4</span>)  <span class="comment">;; 打印my-key is 4，并返回(1 (:ALLOW-OTHER-KEYS T :K1 2 :K2 3 :MY-KEY 4) 2 3)</span></span><br></pre></td></tr></tbody></table></figure>
+<p>回到 HTTP 客户端的例子。在 Common Lisp 中我一般用<a href="https://edicl.github.io/drakma/" target="_blank" rel="noopener">drakma</a>这个第三方库来发起 HTTP 请求，它导出了一个<code>http-request</code>函数，用法与<code>requests.request</code>差不多</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">drakma</span><span class="symbol">:http-request</span> <span class="string">"http://example.com"</span> <span class="symbol">:method</span> <span class="symbol">:get</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>如果我想要基于它来封装一个便捷地发出 GET 请求的函数<code>http-get</code>的话，可以这样写</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> http-get (<span class="name">uri</span> <span class="symbol">&amp;rest</span> args)</span><br><span class="line">  (<span class="name">apply</span> #'drakma<span class="symbol">:http-request</span> uri <span class="symbol">:method</span> <span class="symbol">:get</span> args))</span><br></pre></td></tr></tbody></table></figure>
+<p>如果我希望在<code>http-get</code>的参数列表中直接暴露出一部分<code>http-request</code>支持的关键字参数的话，可以这样写</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> http-get (<span class="name">uri</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> content)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> content))</span><br><span class="line">  (<span class="name">apply</span> #'drakma<span class="symbol">:http-request</span> uri <span class="symbol">:method</span> <span class="symbol">:get</span> args))</span><br></pre></td></tr></tbody></table></figure>
+<p>更进一步，如果我想在<code>http-get</code>中支持解析<code>Content-Type</code>为<code>application/json</code>的响应结果的话，还可以这样写</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">ql</span><span class="symbol">:quickload</span> 'jonathan)</span><br><span class="line">(<span class="name">ql</span><span class="symbol">:quickload</span> 'str)</span><br><span class="line">(<span class="name">defun</span> http-get (<span class="name">uri</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> content (<span class="name">decode-json</span> <span class="literal">t</span>))</span><br><span class="line">  <span class="comment">;; http-request并不支持decode-json这个参数，但依然可以将整个args传给它。</span></span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> content))</span><br><span class="line">  (<span class="name">multiple-value-bind</span> (<span class="name">bytes</span> code headers)</span><br><span class="line">      (<span class="name">apply</span> #'drakma<span class="symbol">:http-request</span> uri</span><br><span class="line">             <span class="symbol">:allow-other-keys</span> <span class="literal">t</span></span><br><span class="line">             <span class="symbol">:method</span> <span class="symbol">:get</span></span><br><span class="line">             args)</span><br><span class="line">    (<span class="name">declare</span> (<span class="name">ignorable</span> code))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">content-type</span> (<span class="name">cdr</span> (<span class="name">assoc</span> <span class="symbol">:content-type</span> headers)))</span><br><span class="line">          (<span class="name">text</span> (<span class="name">flexi-streams</span><span class="symbol">:octets-to-string</span> bytes)))</span><br><span class="line">      (<span class="name">if</span> (<span class="name">and</span> decode-json</span><br><span class="line">               (<span class="name">str</span><span class="symbol">:starts-with-p</span> <span class="string">"application/json"</span> content-type))</span><br><span class="line">          (<span class="name">jonathan</span><span class="symbol">:parse</span> text)</span><br><span class="line">          text))))</span><br></pre></td></tr></tbody></table></figure>
+<p>不愧是<del>Dio</del> Common Lisp，轻易就做到了我们做不到的事情。</p>
+<h2 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h2><p>曾几何时，Python 程序员还会津津乐道于 Python 之禅中的<code>There should be one-- and preferably only one --obvious way to do it.</code>，但其实 Python 光是在定义一个函数的参数方面就有五花八门的写法了。甚至在写这篇文章的过程中，我才知道原来 Python 的参数列表中可以通过写上<code>/</code>来使其左侧的参数都成为 positional-only 的参数。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo1</span><span class="params">(a, b)</span>:</span> <span class="keyword">pass</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo2</span><span class="params">(a, /, b)</span>:</span> <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">foo1(a=<span class="number">1</span>, b=<span class="number">2</span>)</span><br><span class="line">foo2(a=<span class="number">1</span>, b=<span class="number">2</span>)  <span class="comment"># 会抛出异常，因为a只能按位置来传参。</span></span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/08/02/屠龙术——如何运用整洁架构/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -795,7 +915,7 @@
 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iterative_preorder_traversal</span><span class="params">(tree, func)</span>:</span></span><br><span class="line">    nodes = [tree]</span><br><span class="line">    <span class="keyword">while</span> len(nodes) &gt; <span class="number">0</span>:</span><br><span class="line">        node = nodes.pop()</span><br><span class="line">        func(node)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            nodes.append(node.right)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            nodes.append(node.left)</span><br></pre></td></tr></tbody></table></figure>
 <p>一直以来，我觉得这种用一个显式的栈来代替递归过程中隐式的栈的做法就是镜花水月。但最近却找到了它的一个用武之地——用于实现<code>iterator</code>。</p>
 <h1 id="iterator是个啥？"><a href="#iterator是个啥？" class="headerlink" title="iterator是个啥？"></a><code>iterator</code>是个啥？</h1><p>这年头，<code>iterator</code>已经不是什么新鲜事物了，许多语言中都有支持，维基百科上有一份<a href="https://en.wikipedia.org/wiki/Iterator#In_different_programming_languages" target="_blank" rel="noopener">清单</a>列出了比较知名的语言的<code>iterator</code>特性。按照Python官方的术语表中的<a href="https://docs.python.org/3/glossary.html#term-iterator" target="_blank" rel="noopener">定义</a>，<code>iterator</code>表示一个数据流，反复调用其<code>__next__</code>方法可以一个接一个地返回流中的下一项数据。将内置函数<code>iter</code>作用于<code>list</code>、<code>str</code>、<code>tuple</code>类型的对象，可以获得相应的迭代器</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span> cat get_iter.py</span><br><span class="line"><span class="meta">#</span> -*- coding: utf8 -*-</span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    values = [</span><br><span class="line">        [1, 2, 3],</span><br><span class="line">        'Hello, world!',</span><br><span class="line">        (True, None),</span><br><span class="line">    ]</span><br><span class="line">    for v in values:</span><br><span class="line">        print('type of iter({}) is {}'.format(v, type(iter(v))))</span><br><span class="line"><span class="meta">$</span> python get_iter.py</span><br><span class="line">type of iter([1, 2, 3]) is &lt;class 'list_iterator'&gt;</span><br><span class="line">type of iter(Hello, world!) is &lt;class 'str_iterator'&gt;</span><br><span class="line">type of iter((True, None)) is &lt;class 'tuple_iterator'&gt;</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat get_iter.py</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -*- coding: utf8 -*-</span></span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    values = [</span><br><span class="line">        [1, 2, 3],</span><br><span class="line">        'Hello, world!',</span><br><span class="line">        (True, None),</span><br><span class="line">    ]</span><br><span class="line">    for v in values:</span><br><span class="line">        print('type of iter({}) is {}'.format(v, type(iter(v))))</span><br><span class="line"><span class="meta">$</span><span class="bash"> python get_iter.py</span></span><br><span class="line">type of iter([1, 2, 3]) is &lt;class 'list_iterator'&gt;</span><br><span class="line">type of iter(Hello, world!) is &lt;class 'str_iterator'&gt;</span><br><span class="line">type of iter((True, None)) is &lt;class 'tuple_iterator'&gt;</span><br></pre></td></tr></tbody></table></figure>
 <h1 id="写一个前序遍历的iterator"><a href="#写一个前序遍历的iterator" class="headerlink" title="写一个前序遍历的iterator"></a>写一个前序遍历的<code>iterator</code></h1><p>一个<code>iterator</code>对象必须要实现<code>__iter__</code>和<code>__next__</code>方法：</p>
 <ul>
 <li><code>__iter__</code>只需要返回<code>iterator</code>对象自身即可；</li>
@@ -819,126 +939,6 @@
 <p>但是，很多语言并不支持<code>generator</code>。与之相比，<code>iterator</code>要亲民得多，更容易移植。例如，即使是Common Lisp这种一穷二白的语言，也可以实现和Python的<code>iterator</code>以及<code>for</code>类似的效果</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">in-package</span> #<span class="symbol">:cl-user</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defpackage</span> #<span class="symbol">:com</span>.liutos.binary-tree</span><br><span class="line">  (<span class="symbol">:use</span> #<span class="symbol">:cl</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">in-package</span> #<span class="symbol">:com</span>.liutos.binary-tree)</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> preorder-iterator ()</span><br><span class="line">  ((<span class="name">nodes</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="literal">nil</span>)</span><br><span class="line">   (<span class="name">tree</span></span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:tree</span>))</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"前序遍历二叉树的迭代器"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> initialize-instance <span class="symbol">:after</span> ((<span class="name">instance</span> preorder-iterator) <span class="symbol">&amp;key</span>)</span><br><span class="line">  (<span class="name">with-slots</span> (<span class="name">nodes</span> tree)</span><br><span class="line">      instance</span><br><span class="line">    (<span class="name">when</span> tree</span><br><span class="line">      (<span class="name">push</span> tree nodes))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defgeneric</span> next (<span class="name">iterator</span>)</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"返回迭代器的下一个值。"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">define-condition</span> stop-iteration (<span class="name">error</span>)</span><br><span class="line">  ()</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"Python中StopIteration异常的等价物。"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> next ((<span class="name">iterator</span> preorder-iterator))</span><br><span class="line">  (<span class="name">with-slots</span> (<span class="name">nodes</span>) iterator</span><br><span class="line">    (<span class="name">when</span> (<span class="name">null</span> nodes)</span><br><span class="line">      (<span class="name">error</span> 'stop-iteration))</span><br><span class="line"></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">node</span> (<span class="name">pop</span> nodes)))</span><br><span class="line">      <span class="comment">;; 一个节点的结构为：(值 左子树 右子树)</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">third</span> node)</span><br><span class="line">        (<span class="name">push</span> (<span class="name">third</span> node) nodes))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">second</span> node)</span><br><span class="line">        (<span class="name">push</span> (<span class="name">second</span> node) nodes))</span><br><span class="line">      (<span class="name">first</span> node))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmacro</span> for-in (<span class="name">var</span> iterator <span class="symbol">&amp;body</span> forms)</span><br><span class="line">  <span class="string">"将iterator中的值逐个绑定到变量var上，并执行forms中的表达式。"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">iter</span> (<span class="name">gensym</span>)))</span><br><span class="line">    `(let ((,iter ,iterator))</span><br><span class="line">       (handler-case</span><br><span class="line">           (loop</span><br><span class="line">              (let ((,var (next ,iter)))</span><br><span class="line">                ,@forms))</span><br><span class="line">         (stop-iteration (c)</span><br><span class="line">           (declare (ignorable c)))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defparameter</span> *tree*</span><br><span class="line">  '(<span class="number">4</span> (<span class="number">2</span> (<span class="number">1</span> <span class="literal">nil</span> <span class="literal">nil</span>) (<span class="number">3</span> <span class="literal">nil</span> <span class="literal">nil</span>)) (<span class="number">6</span> (<span class="number">5</span> <span class="literal">nil</span> <span class="literal">nil</span>) (<span class="number">7</span> <span class="literal">nil</span> <span class="literal">nil</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> test-preorder-iterator ()</span><br><span class="line">  <span class="string">"测试前序遍历迭代器。"</span></span><br><span class="line">  (<span class="name">for-in</span> n (<span class="name">make-instance</span> 'preorder-iterator</span><br><span class="line">                           <span class="symbol">:tree</span> *tree*)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~C"</span> n #\Tab)))</span><br></pre></td></tr></tbody></table></figure>
 <h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>中序遍历和后序遍历也可以写成迭代器，证明略。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/04/17/当你SET的时候，Redis到底在SET些什么/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/17/当你SET的时候，Redis到底在SET些什么/" class="post-title-link" itemprop="url">当你SET的时候，Redis到底在SET些什么</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-04-17 15:09:24 / 修改时间：15:14:19" itemprop="dateCreated datePublished" datetime="2021-04-17T15:09:24+08:00">2021-04-17</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2021/04/17/当你SET的时候，Redis到底在SET些什么/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/17/当你SET的时候，Redis到底在SET些什么/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>准备过互联网公司的服务端岗位面试的人，对Redis中的5种数据类型想必是如数家珍。而网上很多面试题里也会出现这道题目</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/面试题例子1.jpg" alt="来自https://blog.csdn.net/ThinkWon/article/details/103522351"></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/面试题例子2.jpg" alt="来自https://juejin.cn/post/6844903982066827277"></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/面试题例子3.jpg" alt="来自https://mikechen.cc/3313.html"></p>
-<p>随着行业曲率的增大，光是知道有这些数据类型已经不够了，还得知道同一个类型也有不同的底层数据结构。例如同样是<code>string</code>类型，不同内容或不同长度会采用不同的编码方式：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SET key1 "1"</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; SET key2 "value"</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; SET key3 "Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp."</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; TYPE key1</span><br><span class="line">string</span><br><span class="line">127.0.0.1:6379&gt; TYPE key2</span><br><span class="line">string</span><br><span class="line">127.0.0.1:6379&gt; TYPE key3</span><br><span class="line">string</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING key1</span><br><span class="line">"int"</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING key2</span><br><span class="line">"embstr"</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING key3</span><br><span class="line">"raw"</span><br></pre></td></tr></tbody></table></figure>
-<p>而<code>hash</code>类型也有两种底层实现</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt;  HSET myhash field1 "Hello"</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt;  HSET myhash2 field1 "Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp."</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING myhash</span><br><span class="line">"ziplist"</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING myhash2</span><br><span class="line">"hashtable"</span><br></pre></td></tr></tbody></table></figure>
-<p>不知道你是否曾经好奇过，上文中的<code>key1</code>、<code>key2</code>、<code>key3</code>、<code>myhash</code>，以及<code>myhash2</code>这些键，与它们各自的值（前三个为<code>string</code>，后两个为<code>hash</code>）之间的关系又是存储在什么数据结构中的呢？</p>
-<p>答案在意料之外，情理之中：键与值的关系，也是存储在一张哈希表中的，并且正是上文中的<code>hashtable</code>。</p>
-<p>求证的办法当然是阅读Redis的源代码。</p>
-<h1 id="Redis命令的派发逻辑"><a href="#Redis命令的派发逻辑" class="headerlink" title="Redis命令的派发逻辑"></a>Redis命令的派发逻辑</h1><p>阅读Redis的源码是比较轻松愉快的，一是因为其源码由简单易懂的C语言编写，二是因为源码仓库的<code>README.md</code>中对内部实现做了一番高屋建瓴的介绍。在<code>README.md</code>的<a href="https://github.com/redis/redis#serverc" target="_blank" rel="noopener">server.c</a>一节中，道出了有关命令派发的两个关键点</p>
-<blockquote>
-<p><code>call()</code> is used in order to call a given command in the context of a given client.</p>
-</blockquote>
-<blockquote>
-<p>The global variable <code>redisCommandTable</code> defines all the Redis commands, specifying the name of the command, the function implementing the command, the number of arguments required, and other properties of  each command.</p>
-</blockquote>
-<p>位于文件<code>src/server.c</code>中的变量<code>redisCommandTable</code>定义了所有可以在Redis中使用的命令——为什么一个C语言项目里要用<code>camelCase</code>这种格格不入的命名风格呢——它的元素的类型为<code>struct redisCommand</code>，其中：</p>
-<ul>
-<li><code>name</code>存放命令的名字；</li>
-<li><code>proc</code>存放实现命令的C函数的指针；</li>
-</ul>
-<p>比如高频使用的<code>GET</code>命令在<code>redisCommandTable</code>中就是这样定义的</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">{<span class="string">"get"</span>,getCommand,<span class="number">2</span>,</span><br><span class="line"> <span class="string">"read-only fast @string"</span>,</span><br><span class="line"> <span class="number">0</span>,<span class="literal">NULL</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>},</span><br></pre></td></tr></tbody></table></figure>
-<p>身为一名老解释器爱好者，对这种套路的代码当然是不会陌生的。我也曾在写过的、跑不起来的玩具解释器上用过类似的手法</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/liutscm中的类似代码.jpg" alt=""></p>
-<p>Redis收到一道需要执行的命令后，根据命令的名字用<code>lookupCommand</code>找到一个命令（是个<code>struct redisCommand</code>类型的结构体），然后<code>call</code>函数做的事情就是调用它的<code>proc</code>成员所指向的函数而已</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c-&gt;cmd-&gt;proc(c);</span><br></pre></td></tr></tbody></table></figure>
-<p>那么接下来，就要看看<code>SET</code>命令对应的C函数究竟做了些什么了。</p>
-<h1 id="SET命令的实现"><a href="#SET命令的实现" class="headerlink" title="SET命令的实现"></a><code>SET</code>命令的实现</h1><p><code>redisCommonTable</code>中下标为2的元素正是<code>SET</code>命令的定义</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Note that we can't flag set as fast, since it may perform an</span></span><br><span class="line"><span class="comment"> * implicit DEL of a large key. */</span></span><br><span class="line">{<span class="string">"set"</span>,setCommand,<span class="number">-3</span>,</span><br><span class="line"> <span class="string">"write use-memory @string"</span>,</span><br><span class="line"> <span class="number">0</span>,<span class="literal">NULL</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>},</span><br></pre></td></tr></tbody></table></figure>
-<p>其中函数<code>setCommand</code>定义在文件<code>t_string.c</code>中，它根据参数中是否有传入<code>NX</code>、<code>XX</code>、<code>EX</code>等选项计算出一个<code>flags</code>后，便调用<code>setGenericCommand</code>——顾名思义，这是一个通用的<code>SET</code>命令，它同时被<code>SET</code>、<code>SETNX</code>、<code>SETEX</code>，以及<code>PSETEX</code>四个Redis命令的实现函数所共用。</p>
-<p><code>setGenericCommand</code>调用了<code>genericSetKey</code>，后者定义在文件<code>db.c</code>中。尽管该函数上方的注释写着</p>
-<blockquote>
-<p>All the new keys in the database should be created via this interface.</p>
-</blockquote>
-<p>但<del>人生不如意事十之八九</del>事实并非如此。例如在命令<code>RPUSH</code>的实现函数<code>rpushCommand</code>中，调用了<code>pushGenericCommand</code>，后者直接调用了<code>dbAdd</code>往Redis中存入键和列表对象的关系。</p>
-<p>言归正传。根据键存在与否，<code>genericSetKey</code>会调用<code>dbAdd</code>或<code>dbOverwrite</code>。而在<code>dbAdd</code>中，最终调用了<code>dictAdd</code>将键与值存入数据库中。</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Add an element to the target hash table */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dictAdd</span><span class="params">(dict *d, <span class="keyword">void</span> *key, <span class="keyword">void</span> *val)</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    dictEntry *entry = dictAddRaw(d,key,<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!entry) <span class="keyword">return</span> DICT_ERR;</span><br><span class="line">    dictSetVal(d, entry, val);</span><br><span class="line">    <span class="keyword">return</span> DICT_OK;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>现在我们知道了，使用<code>SET</code>命令时传入的<code>key</code>和<code>value</code>，是存储在一个<code>dict</code>类型的数据结构中。</p>
-<h1 id="HSET命令的实现"><a href="#HSET命令的实现" class="headerlink" title="HSET命令的实现"></a><code>HSET</code>命令的实现</h1><p>依葫芦画瓢，Redis的<code>HSET</code>命令由位于文件<code>t_hash.c</code>中的函数<code>hsetCommand</code>实现，它会尝试转换要操作的<code>hash</code>值的编码方式。</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashTypeTryConversion(o,c-&gt;argv,<span class="number">2</span>,c-&gt;argc<span class="number">-1</span>);</span><br></pre></td></tr></tbody></table></figure>
-<p>如果<code>hashTypeTryConversion</code>发现要写入哈希表的任何一个键或者值的长度超过了<code>server.hash_max_ziplist_value</code>所规定的值，就会将<code>hash</code>类型的编码从<code>ziplist</code>转换为<code>hashtable</code>。<code>server.hash_max_ziplist_value</code>的值在文件<code>config.c</code>中通过宏设置，默认值为64——这正是上文中<code>myhash2</code>所对应的值的编码为<code>hashtable</code>的原因。</p>
-<p>将思绪拉回到函数<code>hsetCommand</code>中。做完编码的转换后，它调用函数<code>hashTypeSet</code>，在编码为<code>hashtable</code>的世界线中，同样调用了<code>dictAdd</code>实现往哈希表中写入键值对。</p>
-<p>殊途同归</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/path_to_dbAdd.png" alt=""></p>
-<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>因此，在Redis中用以维持每一个键与其对应的值——这些值也许是<code>string</code>，也许是<code>list</code>，也许是<code>hash</code>——的关系的数据结构，与Redis中的一系列操作哈希表的命令——也许是<code>HSET</code>、也许<code>HGET</code>，也许是<code>HDEL</code>——所用的数据结构，不能说是毫不相关，起码是一模一样。</p>
 
       
     </div>
@@ -1025,7 +1025,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-count">100</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1038,7 +1038,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-count">114</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
