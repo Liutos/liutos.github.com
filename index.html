@@ -200,6 +200,99 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2023/05/07/impl-dotimes-by-callcc/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/05/07/impl-dotimes-by-callcc/" class="post-title-link" itemprop="url">使用 call/cc 实现计数循环</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-05-07 16:52:26 / 修改时间：16:58:39" itemprop="dateCreated datePublished" datetime="2023-05-07T16:52:26+08:00">2023-05-07</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/05/07/impl-dotimes-by-callcc/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/05/07/impl-dotimes-by-callcc/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="使用-call-cc-实现计数循环"><a href="#使用-call-cc-实现计数循环" class="headerlink" title="使用 call/cc 实现计数循环"></a>使用 call/cc 实现计数循环</h1><h2 id="什么是计数循环"><a href="#什么是计数循环" class="headerlink" title="什么是计数循环"></a>什么是计数循环</h2><p>计数循环就是从一个数字$i$开始一直遍历到另一个数字$j$为止的循环过程。例如，下面的 Python 代码就会遍历从 0 到 9 这 10 个整数并逐个打印它们</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">    print(i)</span><br></pre></td></tr></tbody></table></figure>
+<p>如果是在 C 语言中实现同样的功能，代码会更显著一些</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>在 C 语言的例子中，显式地指定了计数器变量<code>i</code>从 0 开始并且在等于 10 的时候结束循环，比之 Python 版本更有循环的味道。</p>
+<h2 id="拆开循环计数的语法糖"><a href="#拆开循环计数的语法糖" class="headerlink" title="拆开循环计数的语法糖"></a>拆开循环计数的语法糖</h2><p>使用 C 语言的<code>while</code>语句同样可以实现计数循环，示例代码如下</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">  <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">    i++;</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>如果将<code>while</code>也视为<code>if</code>和<code>goto</code>的语法糖的话，可以进一步将计数循环写成更原始的形式</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">  <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">label0:</span><br><span class="line">  <span class="keyword">if</span> (i &gt;= <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">goto</span> label1;</span><br><span class="line">  }</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">  i++;</span><br><span class="line">  <span class="keyword">goto</span> label0;</span><br><span class="line">label1:</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="Common-Lisp-中的-go-与续延"><a href="#Common-Lisp-中的-go-与续延" class="headerlink" title="Common Lisp 中的 go 与续延"></a>Common Lisp 中的 go 与续延</h2><p>在 Common Lisp 中也有与 C 语言的<code>goto</code>特性相近的 special form，那就是<a href="http://clhs.lisp.se/Body/s_tagbod.htm" target="_blank" rel="noopener"><code>tagbody</code></a>和<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/s_go.htm" target="_blank" rel="noopener"><code>go</code></a>。使用它们可以将 C 代码直白地翻译为对应的 Common Lisp 版本</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">i</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   label0</span><br><span class="line">     (<span class="name">when</span> (<span class="name">&gt;=</span> i <span class="number">10</span>)</span><br><span class="line">       (<span class="name">go</span> label1))</span><br><span class="line"></span><br><span class="line">     (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~%"</span> i)</span><br><span class="line">     (<span class="name">incf</span> i)</span><br><span class="line">     (<span class="name">go</span> label0)</span><br><span class="line">   label1))</span><br></pre></td></tr></tbody></table></figure>
+<p>聪明的你一定已经发现了，此处的第二个符号<code>label1</code>其实是丝毫不必要的，只要写成下面的形式即可</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">i</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   label0</span><br><span class="line">     (<span class="name">when</span> (<span class="name">&lt;</span> i <span class="number">10</span>)</span><br><span class="line">       (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~%"</span> i)</span><br><span class="line">       (<span class="name">incf</span> i)</span><br><span class="line">       (<span class="name">go</span> label0))))</span><br></pre></td></tr></tbody></table></figure>
+<p>这个形式不仅仅是更简单了，而且它暴露出了一个事实：<code>label0</code>所表示的，其实就是在将变量<code>i</code>绑定为 0<strong>之后</strong>要执行的代码的位置。换句话说，它标识了一个续延（continuation）。</p>
+<h2 id="用-call-cc-重新实现计数循环"><a href="#用-call-cc-重新实现计数循环" class="headerlink" title="用 call/cc 重新实现计数循环"></a>用 call/cc 重新实现计数循环</h2><p>如果你用的语言中支持 first-class 的续延，那么便可以用来实现计数循环，例如<a href="https://github.com/Liutos/LiutCL" target="_blank" rel="noopener">233-lisp</a>。在 233-lisp 中，提供了特殊操作符<code>call/cc</code>来捕捉当前续延对象，这个名字借鉴自 Scheme。借助这个操作符，即便没有<code>tagbody</code>和<code>go</code>，也可以实现计数循环。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20230507/用callcc模拟计数循环.jpg" alt="用callcc模拟计数循环"></p>
+<p>在上面的代码中，<code>call/cc</code>捕捉到的续延就是“赋值给局部变量<code>i</code>”。在将这个续延<code>k</code>保存到变量<code>next</code>之后，用 0 初始化变量<code>i</code>。之后只要<code>i</code>还小于 10，就将它打印到标准输出，并启动保存在了变量<code>next</code>中的续延，回到给变量<code>i</code>赋值的地方。此时传递给续延的参数为<code>(+ i 1)</code>，就实现了变量<code>i</code>的自增操作。当<code>(&lt; i 10)</code>不再成立时，也就不会启动续延“回到过去”了，至此，进程结束。</p>
+<p>在 233-lisp 中，将<code>dotimes</code>作为一个内置的宏用<code>call/cc</code>实现了一遍，参见<a href="https://github.com/Liutos/LiutCL/blob/6342693cb682b6d2f47067c3d3c9c6ce46eb891c/src/interpreter.lisp#L568" target="_blank" rel="noopener">这里</a>，其代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> expand-dotimes-to-call/cc (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"将 DOTIMES 语句 EXPR 编译为等价的 CALL/CC 语句。"</span></span><br><span class="line">  (<span class="name">assert</span> (<span class="name">eq</span> (<span class="name">first</span> expr) 'dotimes))</span><br><span class="line">  (<span class="name">destructuring-bind</span> ((<span class="name">var</span> count-form) <span class="symbol">&amp;rest</span> statements)</span><br><span class="line">      (<span class="name">rest</span> expr)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">a</span> (<span class="name">gensym</span>))</span><br><span class="line">          (<span class="name">count-form-result</span> (<span class="name">gensym</span>))</span><br><span class="line">          (<span class="name">next</span> (<span class="name">gensym</span>)))</span><br><span class="line">      `(let ((,count-form-result ,count-form)) ; 由于目前 LET 只支持一个绑定，因此这里要写多个 LET。</span><br><span class="line">         (let ((,next <span class="number">0</span>))               ; 由于 <span class="number">233</span>-lisp 中尚未支持 NIL，因此这里填个 <span class="number">0</span>。</span><br><span class="line">           (let ((,var (call/cc (k)</span><br><span class="line">                                (progn</span><br><span class="line">                                  (setf ,next k)</span><br><span class="line">                                  <span class="number">0</span>))))     ; 计数循环从 <span class="number">0</span> 开始。</span><br><span class="line">             (if (&lt; ,var ,count-form-result)</span><br><span class="line">                 (progn</span><br><span class="line">                   ,@statements</span><br><span class="line">                   (,next (+ ,var <span class="number">1</span>)))</span><br><span class="line">                 <span class="number">0</span>)))))))                  <span class="comment">; 由于目前没有 NIL，因此返回一个数字 0 来代替。</span></span><br></pre></td></tr></tbody></table></figure>
+<p>变量<code>count-form-result</code>和<code>next</code>分别表示在宏展开后的代码中的计数上限和被捕捉的续延。之所以让它们以<code>(gensym)</code>的方式来命名，是为了避免多次求值<code>count-form</code>表达式，以及避免存储续延的变量名恰好出乎意料地与<code>statements</code>中的变量名冲突了，这也算是编写 Common Lisp 的宏时的最佳实践了。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>直接用<code>call/cc</code>来一个个实现 Common Lisp 中的各种控制流还是太繁琐了，更好的方案是用<code>call/cc</code>先实现<code>tagbody</code>和<code>go</code>，然后再用后两者继续实现<code>do</code>，最后用<code>do</code>分别实现<code>dolist</code>和<code>dotimes</code>。当然了，这些都是后话了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2022/08/21/如何在CommonLisp中解析命令行参数/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -617,139 +710,11 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/09/04/git-log很好，你也可以写一个/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/09/04/git-log很好，你也可以写一个/" class="post-title-link" itemprop="url">git-log很好，你也可以写一个</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-09-04 17:29:17" itemprop="dateCreated datePublished" datetime="2021-09-04T17:29:17+08:00">2021-09-04</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2021/09/04/git-log很好，你也可以写一个/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/09/04/git-log很好，你也可以写一个/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>作为一个天天都在用的工具，各位同行想必都非常熟悉 Git 的基本用法，例如：</p>
-<ul>
-<li>用<code>git-blame</code>找出某一行 bug 是哪一位同事引入的，由他背锅；</li>
-<li>用<code>git-merge</code>把别人的代码合进自己完美无瑕的分支中，然后发现单元测试无法跑通；</li>
-<li>用<code>git-push -f</code>把团队里其他人的提交通通覆盖掉。</li>
-</ul>
-<p>除此之外，Git 其实还是一个带版本功能的键值数据库：</p>
-<ul>
-<li>所有提交的内容都存储在目录<code>.git/objects/</code>下；</li>
-<li>有存储文件内容的<code>blob</code>对象、存储文件元数据的<code>tree</code>对象，还有存储提交记录的<code>commit</code>对象等；</li>
-<li>Git 提供了键值风格的读写命令<code>git-cat-file</code>和<code>git-hash-object</code>。</li>
-</ul>
-<p>读过我以前的文章<a href="https://liutos.github.io/2019/12/21/%E5%BD%93%E6%88%91%E4%BB%ACgit-merge%E7%9A%84%E6%97%B6%E5%80%99%E5%88%B0%E5%BA%95%E5%9C%A8merge%E4%BB%80%E4%B9%88/">《当我们git merge的时候到底在merge什么》</a>的朋友们应该都知道，如果一次合并不是<code>fast-forward</code>的，那么会产生一个新的<code>commit</code>类型的对象，并且它有两个父级<code>commit</code>对象。以知名的 Go 语言 Web 框架<code>gin</code>的仓库为例，它的哈希值为<code>e38955615a14e567811e390c87afe705df957f3a</code>的提交是一次合并产生的，这个提交的内容中有两行<code>parent</code></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">➜  gin git:(master) git cat-file -p 'e38955615a14e567811e390c87afe705df957f3a'</span><br><span class="line">tree 93e5046e502847a6355ed26223a902b4de2de7c7</span><br><span class="line">parent ad087650e9881c93a19fd8db75a86968aa998cac</span><br><span class="line">parent ce26751a5a3ed13e9a6aa010d9a7fa767de91b8c</span><br><span class="line">author Javier Provecho Fernandez &lt;javiertitan@gmail.com&gt; 1499534953 +0200</span><br><span class="line">committer Javier Provecho Fernandez &lt;javiertitan@gmail.com&gt; 1499535020 +0200</span><br><span class="line"></span><br><span class="line">Merge pull request #520 from 178inaba/travis-import_path</span><br></pre></td></tr></tbody></table></figure>
-<p>通过一个提交的<code>parent</code>属性，所有的提交对象组成了一个有向无环图。但聪明的你应该发现了，<code>git-log</code>的输出结果是线性的，所以 Git 用到了某种图的遍历算法。</p>
-<p>查阅<code>man git-log</code>，可以在<code>Commit Ordering</code>一节中看到</p>
-<blockquote>
-<p>By default, the commits are shown in reverse chronological order.</p>
-</blockquote>
-<p>聪明的你想必已经知道该如何实现这个图的遍历算法了。</p>
-<h1 id="自己动手写一个git-log"><a href="#自己动手写一个git-log" class="headerlink" title="自己动手写一个git-log"></a>自己动手写一个<code>git-log</code></h1><h2 id="解析commit对象"><a href="#解析commit对象" class="headerlink" title="解析commit对象"></a>解析<code>commit</code>对象</h2><p>要想以正确的顺序打印<code>commit</code>对象的信息，得先解析它。我们不需要从零开始自己打开文件、读取字节流，以及解压文件内容，只需要像上文那样调用<code>git-cat-file</code>即可。<code>git-cat-file</code>打印的内容中，有一些是需要提取备用的：</p>
-<ul>
-<li>以<code>parent</code>开头的行。这一行的哈希值要用于定位到有向无环图中的一个节点；</li>
-<li>以<code>committer</code>开头的行。这一行的 UNIX 时间戳将会作为决定谁是“下一个节点”的排序依据。</li>
-</ul>
-<p>可以随手写一个 Python 中的类来解析一个<code>commit</code>对象</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CommitObject</span>:</span></span><br><span class="line">    <span class="string">"""一个Git中的commit类型的对象解析后的结果。"""</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *, commit_id: str)</span> -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">        self.commit_id = commit_id</span><br><span class="line"></span><br><span class="line">        file_content = self._cat_file(commit_id)</span><br><span class="line">        self.parents = self._parse_parents(file_content)</span><br><span class="line">        self.timestamp = self._parse_commit_timestamp(file_content)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_cat_file</span><span class="params">(self, commit_id: str)</span> -&gt; str:</span></span><br><span class="line">        cmd = [<span class="string">'git'</span>, <span class="string">'cat-file'</span>, <span class="string">'-p'</span>, commit_id]</span><br><span class="line">        <span class="keyword">return</span> subprocess.check_output(cmd).decode(<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_parse_commit_timestamp</span><span class="params">(self, file_content: str)</span> -&gt; int:</span></span><br><span class="line">        <span class="string">"""解析出提交的UNIX时间戳。"""</span></span><br><span class="line">        lines = file_content.split(<span class="string">'\n'</span>)</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">            <span class="keyword">if</span> line.startswith(<span class="string">'committer '</span>):</span><br><span class="line">                m = re.search(<span class="string">'committer .+ &lt;[^ ]+&gt; ([0-9]+)'</span>, line.strip())</span><br><span class="line">                <span class="keyword">return</span> int(m.group(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_parse_parents</span><span class="params">(self, file_content: str)</span> -&gt; List[str]:</span></span><br><span class="line">        lines = file_content.split(<span class="string">'\n'</span>)</span><br><span class="line">        parents: List[str] = []</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">            <span class="keyword">if</span> line.startswith(<span class="string">'parent '</span>):</span><br><span class="line">                m = re.search(<span class="string">'parent (.*)'</span>, line.strip())</span><br><span class="line">                parent_id = m.group(<span class="number">1</span>)</span><br><span class="line">                parents.append(parent_id)</span><br><span class="line">        <span class="keyword">return</span> parents</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="遍历commit组成的有向无环图——大根堆"><a href="#遍历commit组成的有向无环图——大根堆" class="headerlink" title="遍历commit组成的有向无环图——大根堆"></a>遍历<code>commit</code>组成的有向无环图——大根堆</h2><p>恭喜你，你学过的数据结构可以派上用场了。</p>
-<p>假设用上面的类<code>CommitObject</code>解析了<code>gin</code>中哈希值为<code>e38955615a14e567811e390c87afe705df957f3a</code>的提交，那么它的<code>parents</code>属性中会有两个字符串：</p>
-<ul>
-<li><code>ad087650e9881c93a19fd8db75a86968aa998cac</code>；</li>
-<li><code>ce26751a5a3ed13e9a6aa010d9a7fa767de91b8c</code>。</li>
-</ul>
-<p>其中：</p>
-<ul>
-<li>哈希值为<code>ad087650e9881c93a19fd8db75a86968aa998cac</code>的提交的时间为<code>Sat Jul 8 12:31:44</code>；</li>
-<li>哈希值为<code>ce26751a5a3ed13e9a6aa010d9a7fa767de91b8c</code>的提交时间为<code>Jan 28 02:32:44</code>。</li>
-</ul>
-<p>显然，按照反转的时间先后顺序（<code>reverse chronological</code>）打印日志的话，下一个打印的节点应当是是<code>ad087650e9881c93a19fd8db75a86968aa998cac</code>——用<code>git-log</code>命令可以确认这一点。</p>
-<p>打印完<code>ad087650e9881c93a19fd8db75a86968aa998cac</code>之后，又要从它的父级提交和<code>ce26751a5a3ed13e9a6aa010d9a7fa767de91b8c</code>中，挑选出下一个要打印的提交对象。显然，这是一个循环往复的过程：</p>
-<ol>
-<li>从待打印的<code>commit</code>对象中，找出提交时间戳最大的一个；</li>
-<li>打印它的消息；</li>
-<li>将<code>commit</code>的所有父级提交加入到待打印的对象池中，回到第1个步骤；</li>
-</ol>
-<p>这个过程一直持续到没有待打印的<code>commit</code>对象为止，而所有待打印的<code>commit</code>对象组成了一个优先级队列——可以用一个大根堆来实现。</p>
-<p>然而，我并不打算在这短短的演示当中真的去实现一个堆数据结构——我用插入排序来代替它。</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyGitLogPrinter</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *, commit_id: str, n: int)</span> -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">        self.commits: List[CommitObject] = []</span><br><span class="line">        self.times = n</span><br><span class="line"></span><br><span class="line">        commit = CommitObject(commit_id=commit_id)</span><br><span class="line">        self._enqueue(commit)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> len(self.commits) &gt; <span class="number">0</span> <span class="keyword">and</span> i &lt; self.times:</span><br><span class="line">            commit = self.commits.pop(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> parent_id <span class="keyword">in</span> commit.parents:</span><br><span class="line">                parent = CommitObject(commit_id=parent_id)</span><br><span class="line">                self._enqueue(parent)</span><br><span class="line"></span><br><span class="line">            print(<span class="string">'{} {}'</span>.format(commit.commit_id, commit.timestamp))</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_enqueue</span><span class="params">(self, commit: CommitObject)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> comm <span class="keyword">in</span> self.commits:</span><br><span class="line">            <span class="keyword">if</span> commit.commit_id == comm.commit_id:</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">        <span class="comment"># 插入排序，先找到一个待插入的下标，然后将从i到最后一个元素都往尾部移动，再将新节点插入下标i的位置。</span></span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; len(self.commits):</span><br><span class="line">            <span class="keyword">if</span> commit.timestamp &gt; self.commits[i].timestamp:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        self.commits = self.commits[<span class="number">0</span>:i] + [commit] + self.commits[i:]</span><br></pre></td></tr></tbody></table></figure>
-<p>最后再提供一个启动函数就可以体验一番了</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@click.command()</span></span><br><span class="line"><span class="meta">@click.option('--commit-id', required=True)</span></span><br><span class="line"><span class="meta">@click.option('-n', default=20)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cli</span><span class="params">(commit_id: str, n: int)</span>:</span></span><br><span class="line">    MyGitLogPrinter(commit_id=commit_id, n=n).run()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cli()</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="真假美猴王对比"><a href="#真假美猴王对比" class="headerlink" title="真假美猴王对比"></a>真假美猴王对比</h2><p>为了看看上面的代码所打印出来的<code>commit</code>对象的顺序是否正确，我先将它的输出内容重定向到一个文件中</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  gin git:(master) python3 ~/SourceCode/python/my_git_log/my_git_log.py --commit-id 'e38955615a14e567811e390c87afe705df957f3a' -n 20 &gt; /tmp/my_git_log.txt</span><br></pre></td></tr></tbody></table></figure>
-<p>再用<code>git-log</code>以同样的格式打印出来</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  gin git:(master) git log --pretty='format:%H %ct' 'e38955615a14e567811e390c87afe705df957f3a' -n 20 &gt; /tmp/git_log.txt</span><br></pre></td></tr></tbody></table></figure>
-<p>最后让<code>diff</code>命令告诉我们这两个文件是否有差异</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  gin git:(master) diff /tmp/git_log.txt /tmp/my_git_log.txt</span><br><span class="line">20c20</span><br><span class="line">&lt; 2521d8246d9813d65700650b29e278a08823e3ae 1499266911</span><br><span class="line">\ No newline at end of file</span><br><span class="line">---</span><br><span class="line"><span class="meta">&gt;</span> 2521d8246d9813d65700650b29e278a08823e3ae 1499266911</span><br></pre></td></tr></tbody></table></figure>
-<p>可以说是一模一样了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">…</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">…</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -816,7 +781,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">100</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -915,7 +880,7 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

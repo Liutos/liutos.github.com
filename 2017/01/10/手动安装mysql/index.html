@@ -46,7 +46,7 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="在战舰少女贴吧里，偶尔能看到的一个说法叫做“这活动我用脚打都能过”，意思是活动关卡很容易（实际上有时候并非真的那么简单，仅仅是调侃）。在安装mysql这件事情上，也有用脚安装和用手安装两种。 典型的用脚安装就是使用系统的包管理器。例如在我的LinuxMint系统中，在shell中键入下列命令就可以装上mysql 1sudo apt-get install mysql-server 遗憾的是，包管理">
-<meta name="keywords" content="mysql,安装,教程,tutorial,install">
+<meta name="keywords" content="mysql,教程,安装,tutorial,install">
 <meta property="og:type" content="article">
 <meta property="og:title" content="手动安装mysql">
 <meta property="og:url" content="https://liutos.github.io/2017/01/10/手动安装mysql/index.html">
@@ -337,8 +337,8 @@
           
           <div class="post-tags">
               <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i> mysql</a>
-              <a href="/tags/安装/" rel="tag"><i class="fa fa-tag"></i> 安装</a>
               <a href="/tags/教程/" rel="tag"><i class="fa fa-tag"></i> 教程</a>
+              <a href="/tags/安装/" rel="tag"><i class="fa fa-tag"></i> 安装</a>
               <a href="/tags/tutorial/" rel="tag"><i class="fa fa-tag"></i> tutorial</a>
               <a href="/tags/install/" rel="tag"><i class="fa fa-tag"></i> install</a>
           </div>
@@ -371,10 +371,13 @@
           
       <div class="tabs tabs-comment">
         <ul class="nav-tabs">
-            <li class="tab"><a href="#comment-disqus">disqus</a></li>
             <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-disqus">disqus</a></li>
         </ul>
         <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
             <div class="tab-pane disqus" id="comment-disqus">
               
   <div class="comments">
@@ -383,9 +386,6 @@
     </div>
   </div>
   
-            </div>
-            <div class="tab-pane gitalk" id="comment-gitalk">
-              <div class="comments" id="gitalk-container"></div>
             </div>
         </div>
       </div>
@@ -450,7 +450,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">100</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -549,7 +549,7 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -614,6 +614,23 @@
 
 
 <script src="/bundle.js"></script><script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'b3dc0ec32cfae81fbffd',
+      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
+      repo: 'gitalk',
+      owner: 'Liutos',
+      admin: ['Liutos'],
+      id: 'e795aa8089458ed10403423f7f67d76a',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+;
+
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -642,22 +659,5 @@
       (d.head || d.body).appendChild(s);
     }
   });
-;
-
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID: 'b3dc0ec32cfae81fbffd',
-      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
-      repo: 'gitalk',
-      owner: 'Liutos',
-      admin: ['Liutos'],
-      id: 'e795aa8089458ed10403423f7f67d76a',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
 ;
 !function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

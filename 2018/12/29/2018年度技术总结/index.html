@@ -46,7 +46,7 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="转眼间2018年只剩下最后的几天了，赶紧趁热写篇年度总结，毕竟据说元旦会变冷。 入手Mac参加工作的第五个年头，终于买了一台自己的MacBook Pro。其实我从高中时起，就对Mac有一种憧憬。那时候每到周末，就常常往苹果的实体店跑，就为了去看看那些精致的笔记本，试着在触控板上滑动一下手指，点开几个自己只在苹果官网上看过icon的陌生应用。 依稀记得下决心买这台电脑的那天晚上，回到家掏出之前的联○">
-<meta name="keywords" content="总结,2018">
+<meta name="keywords" content="2018,总结">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2018年度技术总结">
 <meta property="og:url" content="https://liutos.github.io/2018/12/29/2018年度技术总结/index.html">
@@ -331,8 +331,8 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/总结/" rel="tag"><i class="fa fa-tag"></i> 总结</a>
               <a href="/tags/2018/" rel="tag"><i class="fa fa-tag"></i> 2018</a>
+              <a href="/tags/总结/" rel="tag"><i class="fa fa-tag"></i> 总结</a>
           </div>
 
         
@@ -363,10 +363,13 @@
           
       <div class="tabs tabs-comment">
         <ul class="nav-tabs">
-            <li class="tab"><a href="#comment-disqus">disqus</a></li>
             <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-disqus">disqus</a></li>
         </ul>
         <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
             <div class="tab-pane disqus" id="comment-disqus">
               
   <div class="comments">
@@ -375,9 +378,6 @@
     </div>
   </div>
   
-            </div>
-            <div class="tab-pane gitalk" id="comment-gitalk">
-              <div class="comments" id="gitalk-container"></div>
             </div>
         </div>
       </div>
@@ -442,7 +442,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">100</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -541,7 +541,7 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -606,6 +606,23 @@
 
 
 <script src="/bundle.js"></script><script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'b3dc0ec32cfae81fbffd',
+      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
+      repo: 'gitalk',
+      owner: 'Liutos',
+      admin: ['Liutos'],
+      id: '112c765a1f5dfba2b50664371f60ff9b',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+;
+
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -634,22 +651,5 @@
       (d.head || d.body).appendChild(s);
     }
   });
-;
-
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID: 'b3dc0ec32cfae81fbffd',
-      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
-      repo: 'gitalk',
-      owner: 'Liutos',
-      admin: ['Liutos'],
-      id: '112c765a1f5dfba2b50664371f60ff9b',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
 ;
 !function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

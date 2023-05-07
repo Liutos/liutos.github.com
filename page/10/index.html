@@ -200,6 +200,143 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/01/02/2019年总结/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/01/02/2019年总结/" class="post-title-link" itemprop="url">2019年总结</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-01-02 22:06:19 / 修改时间：22:17:07" itemprop="dateCreated datePublished" datetime="2020-01-02T22:06:19+08:00">2020-01-02</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/01/02/2019年总结/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/01/02/2019年总结/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>9102年都已经过去好几天了，现在才来产出年终总结。</p>
+<h1 id="个人项目"><a href="#个人项目" class="headerlink" title="个人项目"></a>个人项目</h1><h2 id="cuckoo——定时提醒工具"><a href="#cuckoo——定时提醒工具" class="headerlink" title="cuckoo——定时提醒工具"></a>cuckoo——定时提醒工具</h2><p>在<a href="https://liutos.github.io/2018/12/29/2018%E5%B9%B4%E5%BA%A6%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/">18年的总结</a>中，我提到自己开发了一个名为<code>cuckoo</code>的工具，用来代替macOS的提醒事项、日历，以及由crontab调用的shell脚本。这个目标在19年得以实现，<code>cuckoo</code>已经完全取代了它们。</p>
+<p><code>cuckoo</code>实现了以下功能：</p>
+<ol>
+<li>创建一次性和周期性的提醒。<code>cuckoo</code>甚至可以在正确的二月最后一天弹出提醒——不管是平年还是闰年；</li>
+<li>利用<a href="https://github.com/vjeantet/alerter" target="_blank" rel="noopener"><code>alerter</code></a>，<code>cuckoo</code>可以在提醒弹出后推迟它（5分钟、10分钟），或推迟到指定的时刻；</li>
+<li>利用<a href="http://sc.ftqq.com/3.version" target="_blank" rel="noopener">Server酱</a>，<code>cuckoo</code>可以把提醒以微信消息推给手机；</li>
+<li>利用<a href="https://www.controlplaneapp.com/" target="_blank" rel="noopener"><code>ControlPlane</code></a>，实现按场景提醒——比如10点钟若在公司就提醒自己开晨会，若在家则绝不弹出。</li>
+</ol>
+<p>我还提供了给Emacs用的minor mode和Alfred Workflow，以提高易用性：</p>
+<ol>
+<li>在Emacs的org-mode中启用这个minor mode后，只需要按下<code>C-c r</code>便可为光标所在的条目创建提醒；</li>
+<li>一个条目切换至<code>DONE</code>或<code>CANCELLED</code>状态时，也会自动更改<code>cuckoo</code>中任务的状态（感兴趣的读者可以移步<a href="http://liutos.github.io/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/">之前的文章</a>）；</li>
+<li>Alfred Workflow便于创建一次性提醒——比如提醒自己在25分钟后打开支付宝的蚂蚁庄园看看有没有鸡贼。</li>
+</ol>
+<h2 id="wa——Alfred-Workflow脚本"><a href="#wa——Alfred-Workflow脚本" class="headerlink" title="wa——Alfred Workflow脚本"></a>wa——Alfred Workflow脚本</h2><p>在18年入手MBP后不久，我便入手了<a href="https://www.alfredapp.com/" target="_blank" rel="noopener">Alfred</a>，并购买了<a href="https://www.alfredapp.com/powerpack/" target="_blank" rel="noopener">Powerpack</a>。平均每天使用Alfred 110次，大多是Snippets（auto expansion真香）、Clipboard（临时存储文字和图片的绝佳位置）、Workflow。常用的Workflow都是我自己开发的：</p>
+<ol>
+<li><code>unit</code>用于快速输入不同时间长度的秒数的，例如输入6天的秒数<code>6 * 24 * 60 * 60 * 1000</code>；</li>
+<li><code>upload</code>用于上传图片到GitHub，把GitHub当图床用（感兴趣的读者可以移步这篇<a href="https://liutos.github.io/2018/12/07/%E6%8A%8AGitHub%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A/">文章</a>）；</li>
+<li><code>gt</code>用于获取指定日期的UNIX时间戳、<code>int</code>用于获取一些预设的时间戳（例如“昨天0点”）；</li>
+<li><code>yl</code>用于精确设定macOS的音量；</li>
+<li><code>bqb</code>用于斗图（感兴趣的读者可以移步<a href="https://liutos.github.io/2019/12/16/%E8%AE%A9%E6%96%97%E5%9B%BE%E8%B5%A2%E5%9C%A8%E8%B5%B7%E8%B7%91%E7%BA%BF%E4%B8%8A/">这里</a>）。</li>
+</ol>
+<p>这些脚本都收集在名为wa的私有仓库中。由于需求比较稳定，这个仓库的迭代不多。</p>
+<h2 id="jjcc——将LISP语言编译为x64汇编"><a href="#jjcc——将LISP语言编译为x64汇编" class="headerlink" title="jjcc——将LISP语言编译为x64汇编"></a>jjcc——将LISP语言编译为x64汇编</h2><p>不害臊地说，<code>jjcc</code>是一个用Common Lisp写就的编译器，运行在<a href="https://common-lisp.net/project/slime/" target="_blank" rel="noopener">SLIME</a>中，如果投喂它某种LISP方言代码，就可以编译出跑在macOS上的x64汇编代码。这是我的第一款生成汇编指令的编译器，为此还恶补了不少汇编语言知识，尤其是x64的calling convention。这款编译器的开发过程写成了文章发表在博客和知乎上，感兴趣的读者可以移步这个<a href="https://zhuanlan.zhihu.com/lessmore" target="_blank" rel="noopener">专栏</a>。</p>
+<p>在完成了蹩脚的自定义函数特性后，我读了《An Incremental Approach to Compiler Construction》这篇论文，它循序渐进地开发一个Scheme语言到x86汇编的编译器，并且阶段划分得更好，后来我也按照论文的思路重新实现了一遍。</p>
+<h2 id="savemoney——未完待续的RescueTime代替品"><a href="#savemoney——未完待续的RescueTime代替品" class="headerlink" title="savemoney——未完待续的RescueTime代替品"></a>savemoney——未完待续的RescueTime代替品</h2><p>19年10月份时RescueTime Premium到期，由于太鸡肋了便不再续费。我仍然有time-tracking的需求，于是打算自己动手写一个代替品。皇天不负有心人，我找到了<a href="https://www.npmjs.com/package/active-win" target="_blank" rel="noopener"><code>active-win</code></a>这个库，它可以获取当前有焦点的窗口的元信息。基于这个库我写了两个脚本：</p>
+<ol>
+<li><code>savemoney.js</code>，每隔一秒调用<code>active-win</code>获取当前激活窗口的元信息，然后写入到Redis中；</li>
+<li><code>accounting.js</code>，不停地从Redis中取出数据，运算后写入到MySQL中。</li>
+</ol>
+<p>目前仅仅是将数据记录在了MySQL中，没有做报表和统计。这两个脚本通过Launchd在每次登录后自动运行。</p>
+<h1 id="写作"><a href="#写作" class="headerlink" title="写作"></a>写作</h1><p>19年在GitHub博客一共发表了28篇博文，数量差强人意，质量亟待提高。在读了<a href="https://maxoxo.me/pyramid-theory/" target="_blank" rel="noopener">利用金字塔原理写出好文章</a>后，我逐渐改进自己的写作方法，以期写得更有条理。</p>
+<p>除了GitHub博客和SegmentFault，我还在知乎上发表了一些文章，大多是关于jjcc编译器的。刚才我说文章的质量亟待提高，如果你看过jjcc编译器系列的文章的话，一定会很同意我的观点。</p>
+<p>博客和SegmentFault的受众很小，于是我又开通了微信订阅号，希望可以在技术圈子里更多的展示自己——有没有值得展示的内容另说。在订阅号上发表文章多了一种无形的压力，毕竟这些内容更容易被同学、同事、同行看到（前提是人家乐意看）。万一写的很糟糕，可就糗大了。目前订阅号关注者寥寥，有兴趣的可以微信搜索“小打小闹写点bug”关注。</p>
+<h1 id="学习、进修"><a href="#学习、进修" class="headerlink" title="学习、进修"></a>学习、进修</h1><p>19年读完的书不多：</p>
+<ol>
+<li>《MongoDB in Action》，没什么太大的收获；</li>
+<li>《High Performance MySQL》，看过后确实有些帮助，切实根据书中的指导调优过生产环境的MySQL；</li>
+<li>《Algorithms》，光看没练手；</li>
+<li>《Linux Shell Scripting Cookbook》，看着看着幡然醒悟这东西只要用到的时候查阅就足够了，遂弃之。</li>
+</ol>
+<p>还有许多在读经典书籍，如《Clean Architecture》、《重构》。刚开始我会在上下班搭地铁时读这些书，后来将看书时间固定在了每天下午一点至一点半。这些在读的书像一条队列，我每天会读队头的书，然后放到队尾。这样一来，每天都在涉猎不同领域的内容。</p>
+<p>在18年9月，我闭门造车地整理了一份Web后端软件工程师的技能树，再据此来寻找要读的书。例如，上述的《MongoDB in Action》是依据“后端知识/文档数据库/MongoDB”找的，《Linux Shell Scripting Cookbook》是依据“后端知识/命令行操作”找的。技能树整理得好不好暂且按下不表，但渐渐地我忘记了看书的初衷，成了“为看而看”。看似每天中午都在学习，实际上由于目的性不强，收获不大。由于每天读不同类型的书，同一个主题的学习过程也变得支离破碎。这个学习方法已经到了迫切需要优化的地步。</p>
+<h1 id="macOS更新换代——AppleScript来袭、Chrome上位"><a href="#macOS更新换代——AppleScript来袭、Chrome上位" class="headerlink" title="macOS更新换代——AppleScript来袭、Chrome上位"></a>macOS更新换代——AppleScript来袭、Chrome上位</h1><p>19年10月升级到macOS Catalina，然后问题便接踵而至。首当其冲的是<code>alerter</code>和<code>terminal-notifier</code>没法用了，无法在右上角弹出提醒。一番折腾后不见起色，只好先用AppleScript代替，让<code>cuckoo</code>可以弹出提醒。AppleScript的<code>display notification</code>功能远不及<code>alerter</code>那么丰富，聊胜于无吧。</p>
+<p>Firefox也开始闹别扭。只要打开Firefox稍微用两下，就会有一个名为FirefoxWebCP Extension的进程疯狂地使用CPU，Firefox内的各标签页也纷纷失灵转圈，几天下来都是如此。没办法，只好起用Chrome。稍微磨合后发现Chrome其实挺不错，各方面都今非昔比。以前之所以一直坚守在Firefox的阵营，主要是因为：</p>
+<ol>
+<li>Firefox的Pocket插件更好用——早年间不需要打开Pocket的网站即可查看自己的列表，不过自从Firefox集成Pocket后，这个优势已经荡然无存；</li>
+<li>Firefox的Vimperator更好用——这也一样，Vimperator逝者已逝，继承者Vim vixen和Chrome的Vimium大同小异；</li>
+<li>Firefox的地址栏搜索浏览历史更好用，这一点迄今未被Chrome超越——Chrome的地址栏要么搜不到，要么必须输入更多关键词，然后还是搜不到。</li>
+</ol>
+<p>希望Mozilla在2020年可以修复这个问题，让我重回Firefox的怀抱。</p>
+<h1 id="CL虐我千万遍，我待CL如初见"><a href="#CL虐我千万遍，我待CL如初见" class="headerlink" title="CL虐我千万遍，我待CL如初见"></a>CL虐我千万遍，我待CL如初见</h1><p>2019年的Common Lisp依然让人哀其不幸怒其不争，我也依然痴迷于这门古怪的语言。但痴迷不能当饭吃，要将CL投入到实际应用实在太难。且不说<a href="https://www.quicklisp.org/beta/" target="_blank" rel="noopener">Quicklisp</a>上库的数量远不及PyPI和NPM，质量也令人抓狂。这不，都9102年了，访问一个返回JSON数据的HTTP接口，还得先用<a href="https://edicl.github.io/drakma/" target="_blank" rel="noopener"><code>drakma</code></a>发出请求（也许不支持HTTP/2），再用<code>flexi-streams</code>将字节数组转换为UTF-8编码的字符串，再用<code>cl-json</code>解析一番。拿到一个列表对象后，再用<code>car</code>、<code>cdr</code>、<code>assoc</code>一顿操作猛如虎，才能拿到需要的数据。</p>
+<p>2020年，MAKE CL GREAT AGAIN！</p>
+<h1 id="记账"><a href="#记账" class="headerlink" title="记账"></a>记账</h1><p>在年中的时候，萌生了换记账软件的想法，因为挖财用起来越来越不爽了，而且整天记流水账也没什么收获。一番摸索后，我决定尝试一下复式记账法，并选择了GNU Cash——早年间用过一次，但没看入门手册就开始用，根本玩不转。这一次倒是读了<a href="https://www.gnucash.org/viewdoc.phtml?rev=3&amp;lang=C&amp;doc=guide" target="_blank" rel="noopener">手册</a>，但GNU Cash的UI和操作方式还是无法让我心动；之后知道了<a href="http://furius.ca/beancount/" target="_blank" rel="noopener">beancount</a>，却无法在我的系统中顺利运行；最终我选择了<a href="https://www.ledger-cli.org/" target="_blank" rel="noopener">ledger</a>，它是一个命令行程序，不负责记录，只负责读取手打显诚意的交易明细，然后产出报表。Emacs有一个<a href="https://github.com/ledger/ledger-mode" target="_blank" rel="noopener">ledger-mode</a>插件，两者配合用来记账超痛快。</p>
+<h1 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h1><p>在2020年我希望至少能完成：</p>
+<ol>
+<li>发布<code>cuckoo</code>；</li>
+<li>发布<code>wa</code>；</li>
+<li>开发一个<code>alerter</code>的代替品；</li>
+<li>写更多的博文，让微信订阅号的粉丝涨到130；</li>
+<li>给CL写一些库解决一些常见的需求</li>
+</ol>
+<p>最后</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2020%E5%B9%B4%E4%BC%9A%E5%92%8C2019%E5%B9%B4%E4%B8%80%E6%A0%B7%E7%83%82.jpeg" alt=""></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/12/21/当我们git-merge的时候到底在merge什么/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -777,135 +914,11 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/10/29/将二叉树写到磁盘上/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/29/将二叉树写到磁盘上/" class="post-title-link" itemprop="url">将二叉树写到磁盘上</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-29 22:51:29" itemprop="dateCreated datePublished" datetime="2019-10-29T22:51:29+08:00">2019-10-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-02 11:19:36" itemprop="dateModified" datetime="2022-05-02T11:19:36+08:00">2022-05-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/10/29/将二叉树写到磁盘上/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/29/将二叉树写到磁盘上/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>有一阵子很好奇一个问题：MySQL到底是如何将内存中的B+树写入到磁盘文件中的。明明是一棵树，要怎样才能存储成线性的字节流呢？干脆自己动手，试着实现一个简单的版本，来帮助自己摸点门道。虽然想法很不错，不过一上来就面对噩梦级别的B+树也太为难人了，因此就先从简单的二叉树入手吧。</p>
-<h2 id="出来吧，二叉搜索树"><a href="#出来吧，二叉搜索树" class="headerlink" title="出来吧，二叉搜索树"></a>出来吧，二叉搜索树</h2><p>本文使用Common Lisp进行开发。</p>
-<p>首先定义这棵二叉搜索树的节点的类型</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defclass</span> &lt;node&gt; ()</span><br><span class="line">  ((<span class="name">data</span></span><br><span class="line">    <span class="symbol">:accessor</span> node-data</span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:data</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"节点中的数据"</span>)</span><br><span class="line">   (<span class="name">left</span></span><br><span class="line">    <span class="symbol">:accessor</span> node-left</span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:left</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"左子树"</span>)</span><br><span class="line">   (<span class="name">right</span></span><br><span class="line">    <span class="symbol">:accessor</span> node-right</span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:right</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"右子树"</span>))</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"二叉搜索树的节点"</span>))</span><br></pre></td></tr></tbody></table></figure>
-<p>基于节点进一步定义二叉树的类型</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">deftype</span> &lt;bst&gt; () '(or &lt;node&gt; null))</span><br></pre></td></tr></tbody></table></figure>
-<p>如此一来，要创建节点和空树都是浑然天成的事情了</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> make-node (<span class="name">data</span> left right)</span><br><span class="line">  <span class="string">"创建一个二叉搜索树的节点"</span></span><br><span class="line">  (<span class="name">check-type</span> data integer)</span><br><span class="line">  (<span class="name">check-type</span> left &lt;bst&gt;)</span><br><span class="line">  (<span class="name">check-type</span> right &lt;bst&gt;)</span><br><span class="line">  (<span class="name">make-instance</span> '&lt;node&gt;</span><br><span class="line">                 <span class="symbol">:data</span> data</span><br><span class="line">                 <span class="symbol">:left</span> left</span><br><span class="line">                 <span class="symbol">:right</span> right))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> make-empty-bst ()</span><br><span class="line">  <span class="string">"创建一颗空树"</span></span><br><span class="line">  <span class="literal">nil</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>要判断一颗二叉树是否为空树只需要简单包装一下<code>cl:null</code>函数即可</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> empty-bst-p (<span class="name">bst</span>)</span><br><span class="line">  <span class="string">"检查BST是否为一个空的二叉搜索树"</span></span><br><span class="line">  (<span class="name">null</span> bst))</span><br></pre></td></tr></tbody></table></figure>
-<p>为了生成必要的测试数据，需要提供一个往二叉树中添加数据的功能</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> insert-node (<span class="name">bst</span> data)</span><br><span class="line">  <span class="string">"往一颗现有的二叉搜索树BST中加入一个数据，并返回这颗新的二叉搜索树"</span></span><br><span class="line">  (<span class="name">check-type</span> bst &lt;bst&gt;)</span><br><span class="line">  (<span class="name">check-type</span> data integer)</span><br><span class="line">  (<span class="name">when</span> (<span class="name">empty-bst-p</span> bst)</span><br><span class="line">    (<span class="name">return-from</span> insert-node</span><br><span class="line">      (<span class="name">make-node</span> data</span><br><span class="line">                 (<span class="name">make-empty-bst</span>)</span><br><span class="line">                 (<span class="name">make-empty-bst</span>))))</span><br><span class="line"></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">&lt;</span> data (<span class="name">node-data</span> bst))</span><br><span class="line">         (<span class="name">setf</span> (<span class="name">node-left</span> bst)</span><br><span class="line">               (<span class="name">insert-node</span> (<span class="name">node-left</span> bst) data))</span><br><span class="line">         bst)</span><br><span class="line">        (<span class="name">t</span></span><br><span class="line">         (<span class="name">setf</span> (<span class="name">node-right</span> bst)</span><br><span class="line">               (<span class="name">insert-node</span> (<span class="name">node-right</span> bst) data))</span><br><span class="line">         bst)))</span><br></pre></td></tr></tbody></table></figure>
-<p>有了<code>insert-node</code>便可以从空树开始构筑起一棵二叉搜索树</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> create-bst (<span class="name">numbers</span>)</span><br><span class="line">  <span class="string">"根据NUMBERS中的数值构造一棵二叉搜索树。相当于NUMBERS中的数字从左往右地插入到一棵空的二叉搜索树中"</span></span><br><span class="line">  (<span class="name">check-type</span> numbers list)</span><br><span class="line">  (<span class="name">reduce</span> #'(lambda (bst data)</span><br><span class="line">              (insert-node bst data))</span><br><span class="line">          numbers</span><br><span class="line">          <span class="symbol">:initial-value</span> (<span class="name">make-empty-bst</span>)))</span><br></pre></td></tr></tbody></table></figure>
-<p>现在来生成稍后测试用的二叉树</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defvar</span> *bst* (<span class="name">create-bst</span> '(<span class="number">2</span> <span class="number">1</span> <span class="number">3</span>)))</span><br></pre></td></tr></tbody></table></figure>
-<p>模仿命令行工具<code>tree</code>的格式，提供一个打印二叉树的功能</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> print-spaces (<span class="name">n</span>)</span><br><span class="line">  <span class="string">"打印N个空格"</span></span><br><span class="line">  (<span class="name">dotimes</span> (<span class="name">i</span> n)</span><br><span class="line">    (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">" "</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> print-bst (<span class="name">bst</span>)</span><br><span class="line">  <span class="string">"打印二叉树BST到标准输出"</span></span><br><span class="line">  (<span class="name">check-type</span> bst &lt;bst&gt;)</span><br><span class="line">  (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">bst</span> depth)</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">empty-bst-p</span> bst)</span><br><span class="line">                    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"^~%"</span>))</span><br><span class="line">                   (<span class="name">t</span></span><br><span class="line">                    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~%"</span> (<span class="name">node-data</span> bst))</span><br><span class="line">                    (<span class="name">print-spaces</span> (<span class="name">*</span> <span class="number">2</span> depth))</span><br><span class="line">                    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"|-"</span>)</span><br><span class="line">                    (<span class="name">aux</span> (<span class="name">node-left</span> bst) (<span class="number">1</span>+ depth))</span><br><span class="line">                    (<span class="name">print-spaces</span> (<span class="name">*</span> <span class="number">2</span> depth))</span><br><span class="line">                    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"`-"</span>)</span><br><span class="line">                    (<span class="name">aux</span> (<span class="name">node-right</span> bst) (<span class="number">1</span>+ depth))))))</span><br><span class="line">    (<span class="name">aux</span> bst <span class="number">0</span>)))</span><br></pre></td></tr></tbody></table></figure>
-<p>二叉树<code>*bst*</code>的打印结果如下</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">|-1</span><br><span class="line">  |-^</span><br><span class="line">  `-^</span><br><span class="line">`-3</span><br><span class="line">  |-^</span><br><span class="line">  `-^</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="接下来终于要写盘了"><a href="#接下来终于要写盘了" class="headerlink" title="接下来终于要写盘了"></a>接下来终于要写盘了</h2><p>总算要开始实现将二叉树写入磁盘文件的功能了。将内存中的二叉树写入到文件中，相当于将树形的数据结构转换为线性的存储结构——毕竟磁盘上的文件可以认为就是线性的字节流。在这块字节流中，除了要保存每一个节点的数据之外，同样重要的还有节点间的父子关系。</p>
-<p>有很多种写盘的方法。比如说，可以模仿<a href="https://www.jianshu.com/p/934d95a80e6d" target="_blank" rel="noopener">树的顺序存储结构</a>将二叉树序列化到磁盘上。以上面的二叉树<code>*bst*</code>为例，它是一棵满二叉树，如果采用顺序存储，那么首先分配一个长度为3的数组，在下标为0的位置存储根节点的数字2，在下标为1的位置存储左孩子的数字1，在下标为2的位置存储右孩子的数字3，如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/bst.png" alt=""></p>
-<p>推广到高度为<code>h</code>的二叉树，则需要长度为$2^h-1$的数组来存储所有节点的数据。假设每一个节点的数据都是32位整数类型，那么一棵高度为<code>h</code>的二叉树在磁盘上便需要占据$4·(2^h-1)$个字节。这个做法虽然可行，但比较浪费存储空间。它将节点间的父子关系用隐式的下标关系来代替，节省了存储左右子树的“指针”所需的空间，比较适合存储满二叉树或接近满的二叉树。</p>
-<p>对于稀疏的二叉树，如果在序列化后的字节流中显式地记录节点间的父子关系，便可以节省很多不存在的节点所占据的存储空间。比如说，对于每一个节点，都序列化为磁盘上的12个字节：</p>
-<ol>
-<li>下标为0到3的4个字节，存储的是节点中的数据；</li>
-<li>下标为4到7的4个字节，存储的是节点的左子树在文件中的偏移；</li>
-<li>下标为8到11的4个字节，存储的是节点的右子树在文件中的偏移</li>
-</ol>
-<p>如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/bst2.png" alt=""></p>
-<p>上面的数组表示磁盘上的一个文件，每一个方格为一个字节，每个方格在文件内的偏移从左往右依次增大。由于采用后序遍历的方式依次序列化二叉树中的节点数据和指针，因此左孩子首先被写入文件，然后是右孩子，最后才是根节点。推广到所有的二叉树，便是先将左右子树追加写入磁盘文件，再将根节点的数据、左子树根节点在文件内的偏移，以及右子树根节点在文件内的偏移追加到文件末尾；如果左右子树是空的，那么以偏移0表示。</p>
-<p>这是一个递归的过程，而每一次递归调用应当返回两个值：</p>
-<ol>
-<li>写入的总字节数<code>bytes</code></li>
-<li>根节点所占据的字节数<code>root-bytes</code></li>
-</ol>
-<p><code>bytes</code>便是右子树开始写入时的文件偏移，必须依靠这个信息确定右子树的每一个节点在文件内的偏移；使用<code>bytes</code>减去<code>root-bytes</code>，再加上左子树开始写入时的偏移量，便可以得知左子树的根节点在文件内的位置。最终实现写盘功能的代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; 定义序列化二叉树的函数</span></span><br><span class="line">(<span class="name">defun</span> write-fixnum/32 (<span class="name">n</span> stream)</span><br><span class="line">  <span class="string">"将定长数字N输出为32位的比特流"</span></span><br><span class="line">  (<span class="name">check-type</span> n fixnum)</span><br><span class="line">  (<span class="name">check-type</span> stream stream)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">octets</span> (<span class="name">bit-smasher</span><span class="symbol">:octets&lt;-</span> n)))</span><br><span class="line">    (<span class="name">setf</span> octets (<span class="name">coerce</span> octets 'list))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> <span class="number">4</span> (<span class="name">length</span> octets)))</span><br><span class="line">      (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">      (<span class="name">push</span> <span class="number">0</span> octets))</span><br><span class="line">    (<span class="name">dolist</span> (<span class="name">n</span> octets)</span><br><span class="line">      (<span class="name">write-byte</span> n stream))))</span><br><span class="line"></span><br><span class="line"><span class="comment">;;; 这是一个递归的函数，写入一棵二叉树的逻辑，就是先写入左子树，再写入右子树，最后写入根节点，也就是后序遍历</span></span><br><span class="line"><span class="comment">;;; 由于要序列化为字节流，因此需要用字节流中的偏移的形式代替内存中的指针，实现从根节点指向左右子树</span></span><br><span class="line"><span class="comment">;;; offset是开始序列化bst的时候，在字节流中所处的偏移，同时也是这颗树第一个被写入的节点在字节流中的偏移</span></span><br><span class="line"><span class="comment">;;; 每次调用write-bst-bytes后的返回值有两个，分别为二叉树一共写入的字节数，以及根节点所占的字节数</span></span><br><span class="line">(<span class="name">defun</span> write-bst-bytes (<span class="name">bst</span> stream offset)</span><br><span class="line">  <span class="string">"将二叉树BST序列化为字节写入到流STREAM中。OFFSET表示BST的第一个字节距离文件头的偏移"</span></span><br><span class="line">  (<span class="name">check-type</span> bst &lt;bst&gt;)</span><br><span class="line">  (<span class="name">check-type</span> stream stream)</span><br><span class="line">  (<span class="name">check-type</span> offset integer)</span><br><span class="line">  (<span class="name">when</span> (<span class="name">empty-bst-p</span> bst)</span><br><span class="line">    (<span class="name">return-from</span> write-bst-bytes</span><br><span class="line">      (<span class="name">values</span> <span class="number">0</span> <span class="number">0</span>)))</span><br><span class="line"></span><br><span class="line">  <span class="comment">;; 以后序遍历的方式处理整棵二叉树</span></span><br><span class="line">  (<span class="name">multiple-value-bind</span> (<span class="name">left-bytes</span> left-root-bytes)</span><br><span class="line">      (<span class="name">write-bst-bytes</span> (<span class="name">node-left</span> bst) stream offset)</span><br><span class="line"></span><br><span class="line">    (<span class="name">multiple-value-bind</span> (<span class="name">right-bytes</span> right-root-bytes)</span><br><span class="line">        (<span class="name">write-bst-bytes</span> (<span class="name">node-right</span> bst) stream (<span class="name">+</span> offset left-bytes))</span><br><span class="line"></span><br><span class="line">      (<span class="name">write-fixnum/32</span> (<span class="name">node-data</span> bst) stream)</span><br><span class="line">      (<span class="name">if</span> (<span class="name">zerop</span> left-bytes)</span><br><span class="line">          (<span class="name">write-fixnum/32</span> <span class="number">0</span> stream)</span><br><span class="line">          (<span class="name">write-fixnum/32</span> (<span class="name">-</span> (<span class="name">+</span> offset left-bytes) left-root-bytes) stream))</span><br><span class="line">      (<span class="name">if</span> (<span class="name">zerop</span> right-bytes)</span><br><span class="line">          (<span class="name">write-fixnum/32</span> <span class="number">0</span> stream)</span><br><span class="line">          (<span class="name">write-fixnum/32</span> (<span class="name">-</span> (<span class="name">+</span> offset left-bytes right-bytes) right-root-bytes) stream))</span><br><span class="line">      <span class="comment">;; 之所以要加上12个字节，是因为在写完了左右子树之后，就紧邻着写根节点了。因此，根节点就是在从right-node-offset的位置，接着写完右子树的根节点后的位置，而右子树的根节点占12个字节</span></span><br><span class="line">      (<span class="name">let</span> ((<span class="name">root-bytes</span> (<span class="name">*</span> <span class="number">3</span> <span class="number">4</span>)))</span><br><span class="line">        (<span class="name">values</span> (<span class="name">+</span> left-bytes right-bytes root-bytes)</span><br><span class="line">                root-bytes)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> write-bst-to-file (<span class="name">bst</span> filespec)</span><br><span class="line">  <span class="string">"将二叉树BST序列化为字节流并写入到文件中"</span></span><br><span class="line">  (<span class="name">check-type</span> bst &lt;bst&gt;)</span><br><span class="line">  (<span class="name">with-open-file</span> (<span class="name">stream</span> filespec</span><br><span class="line">                          <span class="symbol">:direction</span> <span class="symbol">:output</span></span><br><span class="line">                          <span class="symbol">:element-type</span> '(unsigned-byte <span class="number">8</span>)</span><br><span class="line">                          <span class="symbol">:if-exists</span> <span class="symbol">:supersede</span>)</span><br><span class="line">    (<span class="name">write-fixnum/32</span> (<span class="name">char-code</span> #\m) stream)</span><br><span class="line">    (<span class="name">write-fixnum/32</span> (<span class="name">char-code</span> #\y) stream)</span><br><span class="line">    (<span class="name">write-fixnum/32</span> (<span class="name">char-code</span> #\b) stream)</span><br><span class="line">    (<span class="name">write-fixnum/32</span> (<span class="name">char-code</span> #\s) stream)</span><br><span class="line">    (<span class="name">write-fixnum/32</span> (<span class="name">char-code</span> #\<span class="literal">t</span>) stream)</span><br><span class="line">    (<span class="name">write-bst-bytes</span> bst stream (<span class="name">*</span> <span class="number">5</span> <span class="number">4</span>))))</span><br></pre></td></tr></tbody></table></figure>
-<p>现在可以将<code>*bst*</code>写入文件了</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">write-bst-to-file</span> *bst* <span class="string">"/tmp/bst.dat"</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>使用<code>hexdump</code>验证写入的效果</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%BB%93%E6%9E%84.png" alt=""></p>
-<p>文件最开始的五个字节依次存储着字符串<code>"mybst"</code>的ASCII码，为的就是让最早被写入文件中的根节点——也就是二叉树最左下角的节点——的偏移不为0，以免在后续反序列化的时候，从该节点的父节点中读到左子树的偏移为0——这样会被误认为是一棵空树的。</p>
-<p>有哪里写得不好的还请各位读者不吝赐教。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">…</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">…</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -972,7 +985,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">100</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1071,7 +1084,7 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

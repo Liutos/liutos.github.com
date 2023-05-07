@@ -46,7 +46,7 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="Common Lisp中的setq类似于其它语言中的赋值语句，它可以给一个符号对象设定一个值，类似于将一个值赋值给一个变量一样。简单起见，在jjcc2中，我会将所有的符号都作为全局的一个label来实现。也就是说，如果代码中出现了 1(setq a 1) 这样的代码，那么在最后生成的代码中，就会相应的在.data段中有一个同名的label，其中存放着数值1。 既然都是全局变量，那么只需要准备一个容">
-<meta name="keywords" content="common lisp,assembly,compiler,lisp,setq,x64,汇编,编译器">
+<meta name="keywords" content="common lisp,assembly,compiler,lisp,x64,汇编,编译器,setq">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何编译setq？">
 <meta property="og:url" content="https://liutos.github.io/2019/06/01/如何编译setq？/index.html">
@@ -325,10 +325,10 @@
               <a href="/tags/assembly/" rel="tag"><i class="fa fa-tag"></i> assembly</a>
               <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
               <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
-              <a href="/tags/setq/" rel="tag"><i class="fa fa-tag"></i> setq</a>
               <a href="/tags/x64/" rel="tag"><i class="fa fa-tag"></i> x64</a>
               <a href="/tags/汇编/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
               <a href="/tags/编译器/" rel="tag"><i class="fa fa-tag"></i> 编译器</a>
+              <a href="/tags/setq/" rel="tag"><i class="fa fa-tag"></i> setq</a>
           </div>
 
         
@@ -359,10 +359,13 @@
           
       <div class="tabs tabs-comment">
         <ul class="nav-tabs">
-            <li class="tab"><a href="#comment-disqus">disqus</a></li>
             <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-disqus">disqus</a></li>
         </ul>
         <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
             <div class="tab-pane disqus" id="comment-disqus">
               
   <div class="comments">
@@ -371,9 +374,6 @@
     </div>
   </div>
   
-            </div>
-            <div class="tab-pane gitalk" id="comment-gitalk">
-              <div class="comments" id="gitalk-container"></div>
             </div>
         </div>
       </div>
@@ -437,7 +437,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">100</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -536,7 +536,7 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -601,6 +601,23 @@
 
 
 <script src="/bundle.js"></script><script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'b3dc0ec32cfae81fbffd',
+      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
+      repo: 'gitalk',
+      owner: 'Liutos',
+      admin: ['Liutos'],
+      id: '9011badc5b40a98c795c0ed9c34f38cb',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+;
+
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -629,22 +646,5 @@
       (d.head || d.body).appendChild(s);
     }
   });
-;
-
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID: 'b3dc0ec32cfae81fbffd',
-      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
-      repo: 'gitalk',
-      owner: 'Liutos',
-      admin: ['Liutos'],
-      id: '9011badc5b40a98c795c0ed9c34f38cb',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
 ;
 !function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

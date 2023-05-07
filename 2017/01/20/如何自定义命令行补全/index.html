@@ -268,11 +268,11 @@
 <p>有了这个辅助工具后，要切换到项目A和B中就简单多了，只需要输入</p>
 <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">she A <span class="comment"># 或者</span></span><br><span class="line">she B</span><br></pre></td></tr></tbody></table></figure>
 <p>即可。但一使用起来就会发现，原本直接使用cd命令时所能享用的目录名补全功能没有了！绝大多数情况下补全功能是非常有用的，为此打算动手为she函数配备一个目录名的补全功能。显然自定义命令行补全的想法已经有前人实践过了，略加搜索就可以找到这么一篇<a href="http://www.shareditor.com/blogshow/?blogId=22" target="_blank" rel="noopener">指南</a>。模仿文章中的方法，我先是写了下面的代码骨架</p>
-<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">}</span><br><span class="line">complete -F _she she</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">_she</span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">}</span><br><span class="line">complete -F _she she</span><br></pre></td></tr></tbody></table></figure>
 <p>我的想法是只要当前的输入能够作为work下的一个目录名字的前缀，那么就认为这个子目录是本次补全的目标。为此，我需要先获取到work目录下的所有子目录的名称。利用ls命令可以做到这一点，同时为了便于处理，在这里将ls返回的文件名列表作为数组保存起来。修改后的_she函数的代码如下</p>
-<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(ls ~/src/work/))</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">_she</span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(ls ~/src/work/))</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>现在，只要遍历<code>${dirs}</code>并找出第一个以用户输入的<code>${cur}</code>为名字前缀的目录即可。最终_she函数的定义如下</p>
-<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(ls ~/src/work/))</span><br><span class="line">    <span class="keyword">for</span> dir <span class="keyword">in</span> <span class="variable">${dirs[@]}</span></span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">case</span> <span class="variable">${dir}</span> <span class="keyword">in</span></span><br><span class="line">            <span class="variable">${cur}</span>*)</span><br><span class="line">                COMPREPLY=<span class="string">"<span class="variable">${dir}</span>"</span></span><br><span class="line">                <span class="built_in">return</span> 0</span><br><span class="line">                ;;</span><br><span class="line">        <span class="keyword">esac</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">_she</span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(ls ~/src/work/))</span><br><span class="line">    <span class="keyword">for</span> dir <span class="keyword">in</span> <span class="variable">${dirs[@]}</span></span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">case</span> <span class="variable">${dir}</span> <span class="keyword">in</span></span><br><span class="line">            <span class="variable">${cur}</span>*)</span><br><span class="line">                COMPREPLY=<span class="string">"<span class="variable">${dir}</span>"</span></span><br><span class="line">                <span class="built_in">return</span> 0</span><br><span class="line">                ;;</span><br><span class="line">        <span class="keyword">esac</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
     </div>
 
@@ -354,10 +354,13 @@
           
       <div class="tabs tabs-comment">
         <ul class="nav-tabs">
-            <li class="tab"><a href="#comment-disqus">disqus</a></li>
             <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-disqus">disqus</a></li>
         </ul>
         <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
             <div class="tab-pane disqus" id="comment-disqus">
               
   <div class="comments">
@@ -366,9 +369,6 @@
     </div>
   </div>
   
-            </div>
-            <div class="tab-pane gitalk" id="comment-gitalk">
-              <div class="comments" id="gitalk-container"></div>
             </div>
         </div>
       </div>
@@ -432,7 +432,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">100</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -531,7 +531,7 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -596,6 +596,23 @@
 
 
 <script src="/bundle.js"></script><script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'b3dc0ec32cfae81fbffd',
+      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
+      repo: 'gitalk',
+      owner: 'Liutos',
+      admin: ['Liutos'],
+      id: '27711448931c06f1d964993658b358bb',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+;
+
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -624,22 +641,5 @@
       (d.head || d.body).appendChild(s);
     }
   });
-;
-
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID: 'b3dc0ec32cfae81fbffd',
-      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
-      repo: 'gitalk',
-      owner: 'Liutos',
-      admin: ['Liutos'],
-      id: '27711448931c06f1d964993658b358bb',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
 ;
 !function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
