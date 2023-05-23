@@ -200,6 +200,87 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/08/15/如何编译通用的函数调用表达式/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/15/如何编译通用的函数调用表达式/" class="post-title-link" itemprop="url">输出HELLO WORLD——如何编译通用的函数调用表达式</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-08-15 22:15:57 / 修改时间：22:23:29" itemprop="dateCreated datePublished" datetime="2019-08-15T22:15:57+08:00">2019-08-15</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/08/15/如何编译通用的函数调用表达式/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/15/如何编译通用的函数调用表达式/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>这篇的东西比较多。</p>
+<p>首先要处理一下<code>inside-out/aux</code>和<code>inside-out</code>这两个函数。之前的<code>inside-out/aux</code>其实一直不支持对<code>progn</code>的处理，需要先补充；而<code>inside-out</code>则可以优化一下，避免在只有一个表达式的情况下，也用<code>progn</code>将其包裹起来。修改后的<code>inside-out/aux</code>和<code>inside-out</code>分别如下</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/08/15/如何编译通用的函数调用表达式/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/08/11/一个有用的org-agenda-custom-commands的例子/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -537,93 +618,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/06/18/时序图绘制工具走马观花/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/06/18/时序图绘制工具走马观花/" class="post-title-link" itemprop="url">时序图绘制工具走马观花</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-06-18 22:01:00 / 修改时间：22:10:33" itemprop="dateCreated datePublished" datetime="2019-06-18T22:01:00+08:00">2019-06-18</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/06/18/时序图绘制工具走马观花/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/18/时序图绘制工具走马观花/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="为什么我会需要绘制时序图"><a href="#为什么我会需要绘制时序图" class="headerlink" title="为什么我会需要绘制时序图"></a>为什么我会需要绘制时序图</h2><p>我司在做一些咋看之下比较复杂的需求的时候，都需要先写设计文档，不过我猜想这种规矩应该在很多公司都有才对，我并没有其它公司没有这种规矩的言外之意。然后呢，我个人比较习惯按照“从外到内”的方式来写设计文档，因此，在文档的开篇我总是会描述一下一个需求的全局视图，一般来说，就是用绘图的方式。对于一些复杂的活动需求里的流程，咋一看觉得会涉及到多个系统间的调用的时候，我就会选择画一幅时序图了。</p>
-<p>需要事先说明的是，我没有正儿八经地系统学习过UML方面的内容，所以我画出来的图都只是一些不算很规范的野鸡时序图，当然了，我也不知道这世界上到底有没有规范的时序图画法。</p>
-<p>为了画时序图，用过几款工具。它们的共同点，就是都是“语绘”的，也就是通过写代码的方式来描述所想要的图，然后让这些工具帮你把这张图给“画出来”。我个人更喜欢这种方式，而不是拖拖拉拉，不过这纯粹是个人喜好的问题而已。</p>
-<h2 id="走马观花"><a href="#走马观花" class="headerlink" title="走马观花"></a>走马观花</h2><p><a href="http://www.websequencediagrams.com是我接触到的第一个“语绘”时序图的工具。打开它之后，就会看到它的实例代码和效果图了，截图如下" target="_blank" rel="noopener">www.websequencediagrams.com是我接触到的第一个“语绘”时序图的工具。打开它之后，就会看到它的实例代码和效果图了，截图如下</a></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/websequencediagrams%E9%A6%96%E9%A1%B5.png" alt=""></p>
-<p>用这个网站的工具画出来的时序图会有一种【手绘】的感觉</p>
-<p><a href="http://sdedit.sourceforge.net/index.html" target="_blank" rel="noopener"><code>sdedit</code></a>是我第二款使用的绘图工具，是一款用Java开发的本地工具，只需要编写好一个<code>.sd</code>文件，然后用下列的命令处理即可</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sdedit -t png -o a.png a.sd</span><br></pre></td></tr></tbody></table></figure>
-<p><code>sdedit</code>绘制时序图的代码的语法跟WebSequenceDiagrams不同，在Emacs中似乎也没有找到别人写好的适合编辑<code>.sd</code>文件的主模式，后来我自己定义了一个简陋的主模式来用，如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> sdedit-highlights</span><br><span class="line">      '((<span class="string">"Actor\\|Node"</span> . font-lock-function-name-face)))</span><br><span class="line"></span><br><span class="line">(<span class="name">define-derived-mode</span> sdedit-mode fundamental-mode <span class="string">"sdedit"</span></span><br><span class="line">  <span class="string">"编辑.sd文件的主模式"</span></span><br><span class="line">  (<span class="name">setq</span> font-lock-defaults '(sdedit-highlights)))</span><br><span class="line"></span><br><span class="line"><span class="comment">;;; 代码是从下面这个网页给的例子改动来的</span></span><br><span class="line"><span class="comment">;;; https://www.emacswiki.org/emacs/CompileCommand</span></span><br><span class="line">(<span class="name">add-hook</span> 'sdedit-mode-hook</span><br><span class="line">          (<span class="name">lambda</span> ()</span><br><span class="line">            (<span class="name">unless</span> (<span class="name">file-exists-p</span> <span class="string">"Makefile"</span>)</span><br><span class="line">              (<span class="name">set</span> (<span class="name">make-local-variable</span> 'compile-command)</span><br><span class="line">                   (<span class="name">let*</span> ((<span class="name">buffer-name</span> (<span class="name">buffer-name</span>))</span><br><span class="line">                          (<span class="name">base-name</span> (<span class="name">car</span> (<span class="name">split-string</span> buffer-name <span class="string">"\\."</span>))))</span><br><span class="line">                     (<span class="name">format</span> <span class="string">"/usr/local/bin/sdedit -t png -o %s.png %s.sd"</span> base-name base-name))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">add-to-list</span> 'auto-mode-alist</span><br><span class="line">             '(<span class="string">"\\.sd$"</span> . sdedit-mode))</span><br></pre></td></tr></tbody></table></figure>
-<p>勉勉强强可以接受</p>
-<p>sequencediagram.org则是最近刚发掘到的一个不错的绘制时序图的在线工具。它的绘制语法跟WebSequenceDiagrams是一样的，并且它还有一个不错的教程。打开它的网站后，点击左侧的这个图标</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/sequencediagram.org%E7%9A%84%E6%95%99%E7%A8%8B%E5%85%A5%E5%8F%A3.png" alt=""></p>
-<p>便可以看到详尽的语法教程。</p>
-<p>sequencediagram.org绘制出来的时序图是这三个工具中最符合我的审美的，今后应当会成为我绘制时序图的主力工具。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -695,7 +689,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

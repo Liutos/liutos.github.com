@@ -46,7 +46,7 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="在上一篇文章中，实现了对大于号（&amp;gt;）的处理，那么对if表达式的编译也就是信手拈来的事了，不解释太多。在本篇中，将会讲述一下如何产生可以调用来自于C语言标准库的exit(3)函数的汇编代码。 在Common Lisp中并没有一个叫做EXIT的内置函数，所以如同之前实现的_exit一样，我会新增一种需要识别的(first expr)，即符号exit。为了可以调用C语言标准库中的exit函数，需要">
-<meta name="keywords" content="common lisp,assembly,compiler,lisp,x64,汇编,编译器,setq">
+<meta name="keywords" content="common lisp,lisp,assembly,compiler,setq,x64,汇编,编译器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="调用C标准库的exit函数">
 <meta property="og:url" content="https://liutos.github.io/2019/07/10/调用C标准库的exit函数/index.html">
@@ -319,13 +319,13 @@
           
           <div class="post-tags">
               <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
               <a href="/tags/assembly/" rel="tag"><i class="fa fa-tag"></i> assembly</a>
               <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
-              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+              <a href="/tags/setq/" rel="tag"><i class="fa fa-tag"></i> setq</a>
               <a href="/tags/x64/" rel="tag"><i class="fa fa-tag"></i> x64</a>
               <a href="/tags/汇编/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
               <a href="/tags/编译器/" rel="tag"><i class="fa fa-tag"></i> 编译器</a>
-              <a href="/tags/setq/" rel="tag"><i class="fa fa-tag"></i> setq</a>
           </div>
 
         
@@ -356,13 +356,10 @@
           
       <div class="tabs tabs-comment">
         <ul class="nav-tabs">
-            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
             <li class="tab"><a href="#comment-disqus">disqus</a></li>
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane gitalk" id="comment-gitalk">
-              <div class="comments" id="gitalk-container"></div>
-            </div>
             <div class="tab-pane disqus" id="comment-disqus">
               
   <div class="comments">
@@ -371,6 +368,9 @@
     </div>
   </div>
   
+            </div>
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
             </div>
         </div>
       </div>
@@ -434,7 +434,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -598,23 +598,6 @@
 
 
 <script src="/bundle.js"></script><script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID: 'b3dc0ec32cfae81fbffd',
-      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
-      repo: 'gitalk',
-      owner: 'Liutos',
-      admin: ['Liutos'],
-      id: 'ea23ac17cd9db665ecdf4a44a758c9a7',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
-;
-
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -643,5 +626,22 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       (d.head || d.body).appendChild(s);
     }
   });
+;
+
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'b3dc0ec32cfae81fbffd',
+      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
+      repo: 'gitalk',
+      owner: 'Liutos',
+      admin: ['Liutos'],
+      id: 'ea23ac17cd9db665ecdf4a44a758c9a7',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
 ;
 !function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

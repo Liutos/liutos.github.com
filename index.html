@@ -200,6 +200,103 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/05/23/在CommonLisp中支持JSON语法/" class="post-title-link" itemprop="url">在CommonLisp中支持JSON语法</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-05-23 23:47:22 / 修改时间：23:49:42" itemprop="dateCreated datePublished" datetime="2023-05-23T23:47:22+08:00">2023-05-23</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/05/23/在CommonLisp中支持JSON语法/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/05/23/在CommonLisp中支持JSON语法/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="在-Lisp-中使用-reader-macro-支持-JSON-语法"><a href="#在-Lisp-中使用-reader-macro-支持-JSON-语法" class="headerlink" title="在 Lisp 中使用 reader macro 支持 JSON 语法"></a>在 Lisp 中使用 reader macro 支持 JSON 语法</h1><h2 id="什么是-reader-macro？"><a href="#什么是-reader-macro？" class="headerlink" title="什么是 reader macro？"></a>什么是 reader macro？</h2><p>Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为 reader macro function。举个例子，单引号<code>'</code>就是一个 macro character，可以用函数<code>get-macro-character</code>来获取它对应的 reader macro function。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">get-macro-character</span> #\')</span><br><span class="line">#&lt;FUNCTION SB-IMPL::READ-QUOTE&gt;</span><br><span class="line">NIL</span><br></pre></td></tr></tbody></table></figure>
+<p>借助单引号，可以简化一些代码的写法，例如表达一个符号<code>HELLO</code>本身可以写成这样。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; 'hello</span><br><span class="line">HELLO</span><br></pre></td></tr></tbody></table></figure>
+<p>而不是下面这种等价但更繁琐的形式。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">quote</span> hello)</span><br><span class="line">HELLO</span><br></pre></td></tr></tbody></table></figure>
+<p>Common Lisp 中还定义了由两个字符构成的 reader macro，例如用于书写<code>simple-vector</code>字面量的<code>#(</code>。借助它，如果想要表达一个依次由数字 1、2、3 构成的<code>simple-vector</code>类型的对象，不需要显式地调用函数<code>vector</code>并传给它 1、2、3，而是可以写成<code>#(1 2 3)</code>。</p>
+<h2 id="支持-JSON-语法后有什么效果？"><a href="#支持-JSON-语法后有什么效果？" class="headerlink" title="支持 JSON 语法后有什么效果？"></a>支持 JSON 语法后有什么效果？</h2><p>合法的 JSON 文本不一定是合法的 Common Lisp 源代码。例如，<code>[1, 2, 3]</code>在 JSON 标准看来是一个由数字 1、2、3 组成的数组，但在 Common Lisp 中，这段代码会触发 condition。（condition 就是 Common Lisp 中的“异常”、“出状况”了）</p>
+<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">eof-value</span> (<span class="name">gensym</span>)))</span><br><span class="line">  (<span class="name">with-input-from-string</span> (<span class="name">stream</span> <span class="string">"[1, 2, 3]"</span>)</span><br><span class="line">    (<span class="name">block</span> <span class="literal">nil</span></span><br><span class="line">      (<span class="name">loop</span></span><br><span class="line">        (<span class="name">let</span> ((<span class="name">expr</span> (<span class="name">read</span> stream <span class="literal">nil</span> eof-value)))</span><br><span class="line">          (<span class="name">when</span> (<span class="name">eq</span> expr eof-value)</span><br><span class="line">            (<span class="name">return</span>))</span><br><span class="line"></span><br><span class="line">          (<span class="name">print</span> expr))))))</span><br><span class="line"></span><br><span class="line">[1 ; Evaluation aborted on #&lt;SB-INT:SIMPLE-READER-ERROR "Comma not inside a backquote." {1003AAD863}&gt;.</span><br></pre></td></tr></tbody></table></figure>
+<p>这是因为按照 Common Lisp 的<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/02_b.htm" target="_blank" rel="noopener">读取算法</a>，左方括号<code>[</code>和数字 1 都是标准中所指的 constituent character，它们可以组成一个 token，并且最终被解析为一个符号类型的对象。而紧接着的字符是逗号<code>,</code>，<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/02_ad.htm" target="_blank" rel="noopener">它是一个 terminating macro char</a>，按照<a href="http://www.lispworks.com/documentation/lw60/CLHS/Body/02_dg.htm" target="_blank" rel="noopener">标准</a>，如果不是在一个反引号表达式中使用它将会是无效的，因此触发了 condition。</p>
+<p>假如存在一个由两个字符<code>#J</code>定义的 reader macro、允许开发者使用 JSON 语法来描述紧接着的对象的话，那么就可以写出下面这样的代码。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">progn</span></span><br><span class="line">           (<span class="name">print</span> #jfalse)</span><br><span class="line">           (<span class="name">print</span> #jtrue)</span><br><span class="line">           (<span class="name">print</span> #j233.<span class="number">666</span>)</span><br><span class="line">           (<span class="name">print</span> #jnull)</span><br><span class="line">           (<span class="name">print</span> #j[<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line">           (<span class="name">print</span> #j{<span class="string">"a"</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]})</span><br><span class="line">           (<span class="name">print</span> (<span class="name">gethash</span> <span class="string">"a"</span> #j{<span class="string">"a"</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]})))</span><br><span class="line"></span><br><span class="line">YASON:FALSE </span><br><span class="line">YASON:TRUE </span><br><span class="line"><span class="number">233.666d0</span> </span><br><span class="line">:NULL </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> #(<span class="number">3</span>) #(<span class="number">4</span> <span class="number">5</span>)) </span><br><span class="line">#&lt;HASH-TABLE :TEST EQUAL :COUNT 1 {1003889963}&gt; </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>显然，用上述语法表示一个哈希表，要比下面这样的代码简单得多</p>
+<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">obj</span> (<span class="name">make-hash-table</span> <span class="symbol">:test</span> #'equal)))</span><br><span class="line">           (<span class="name">setf</span> (<span class="name">gethash</span> <span class="string">"a"</span> obj) #(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">           obj)</span><br><span class="line"></span><br><span class="line">#&lt;HASH-TABLE :TEST EQUAL :COUNT 1 {1003CB7643}&gt;</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="如何用-reader-macro-解析-JSON？"><a href="#如何用-reader-macro-解析-JSON？" class="headerlink" title="如何用 reader macro 解析 JSON？"></a>如何用 reader macro 解析 JSON？</h2><p>Common Lisp 并没有预置<code>#J</code>这个 reader macro，但这门语言允许使用者定义自己的 macro character，因此前面的示例代码是可以实现的。要自定义出<code>#J</code>这个读取器宏，需要使用函数<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/f_set__1.htm#set-dispatch-macro-character" target="_blank" rel="noopener"><code>set-dispatch-macro-character</code></a>。它的前两个参数分别为构成 macro character 的前两个字符，即<code>#</code>和<code>J</code>——其中<code>J</code>即便是写成了小写，也会被转换为大写后再使用。第三个参数则是 Lisp 的词法解析器在遇到了<code>#J</code>时将会调用的参数。<code>set-dispatch-macro-character</code>会传给这个函数三个参数：</p>
+<ol>
+<li>用于读取源代码的字符输入流；</li>
+<li>构成 macro character 的第二个字符（即<code>J</code>）；</li>
+<li>非必传的、夹在<code>#</code>和<code>J</code>之间的数字。</li>
+</ol>
+<p>百闻不如一见，一段能够实现上一个章节中的示例代码的<code>set-dispatch-macro-character</code>用法如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">set-dispatch-macro-character</span></span><br><span class="line"> #\#</span><br><span class="line"> #\j</span><br><span class="line"> (<span class="name">lambda</span> (<span class="name">stream</span> char p)</span><br><span class="line">   (<span class="name">declare</span> (<span class="name">ignorable</span> char p))</span><br><span class="line">   (<span class="name">let</span> ((<span class="name">parsed</span> (<span class="name">yason</span><span class="symbol">:parse</span> stream</span><br><span class="line">                              <span class="symbol">:json-arrays-as-vectors</span> <span class="literal">t</span></span><br><span class="line">                              <span class="symbol">:json-booleans-as-symbols</span> <span class="literal">t</span></span><br><span class="line">                              <span class="symbol">:json-nulls-as-keyword</span> <span class="literal">t</span>)))</span><br><span class="line">     (<span class="name">if</span> (<span class="name">or</span> (<span class="name">symbolp</span> parsed)</span><br><span class="line">             (<span class="name">consp</span> parsed))</span><br><span class="line">         (<span class="name">list</span> 'quote parsed)</span><br><span class="line">         parsed))))</span><br></pre></td></tr></tbody></table></figure>
+<p>在<code>set-dispatch-macro-character</code>的回调函数中，我是用了开源的第三方库<code>yason</code>提供的函数<code>parse</code>，从输入流<code>stream</code>中按照 JSON 语法解析出一个值。函数<code>parse</code>的三个关键字参数的含义参见<a href="https://xh4.github.io/yason/#mapping" target="_blank" rel="noopener">这里</a>，此处不再赘述。由于 reader macro 的结果会被用于构造源代码的表达式，因此如果函数<code>parse</code>返回了符号或者<code>cons</code>类型，为了避免被编译器求值，需要将它们“引用”起来，因此将它们放到第一元素为<code>quote</code>的列表中。其它情况下，直接返回<code>parse</code>的返回值即可，因此它们是“自求值”的，求值结果是它们自身。</p>
+<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>本文我借助了现成的库<code>yason</code>来解析 JSON 格式的字符串，如果你对如何从零开始实现这样的 reader macro 感兴趣的话，可以参考<a href="https://gist.github.com/chaitanyagupta/9324402" target="_blank" rel="noopener">这篇文章</a>。</p>
+<p>全文完。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2023/05/07/impl-dotimes-by-callcc/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -579,137 +676,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/10/06/直观地了解自己每天在吃上面的开销/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/06/直观地了解自己每天在吃上面的开销/" class="post-title-link" itemprop="url">直观地了解自己每天在吃上面的开销</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-10-06 22:45:06" itemprop="dateCreated datePublished" datetime="2021-10-06T22:45:06+08:00">2021-10-06</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2021/10/06/直观地了解自己每天在吃上面的开销/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/10/06/直观地了解自己每天在吃上面的开销/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><del>众所周知，</del>我用<code>Emacs</code>的<code>ledger-mode</code>来记账（参见以前的文章<a href="https://liutos.github.io/2020/03/19/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%AE%B0%E8%B4%A6%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94ledger%E4%B8%8Eledger-mode/">《程序员的记账工具——ledger与ledger-mode》</a>）。作为一个出色的命令行报表工具，<code>ledger</code>的命令<code>balance</code>和<code>register</code>足以涵盖大部分的使用场景：</p>
-<ul>
-<li><code>balance</code>可以生成所有帐号的余额的报表，用于每天与各个账户中的真实余额进行比较；</li>
-<li><code>register</code>可以生成给定帐号的交易明细，用于在余额不一致时与真实账户的流水一条条核对；</li>
-</ul>
-<p>美中不足的是，<code>ledger</code>的报表不够直观，因为它们是冷冰冰的文字信息，而不是振奋人心的统计图形。好在，正如<code>ledger</code>不存储数据，而只是一份份<code>.ledger</code>文件中的交易记录的搬运工一样，<code>gnuplot</code>也是这样的工具——它不存储数据，它只负责将存储在文本文件的数据以图形的形态呈现出来。</p>
-<h1 id="如何运用gnuplot"><a href="#如何运用gnuplot" class="headerlink" title="如何运用gnuplot"></a>如何运用<code>gnuplot</code></h1><p><code>gnuplot</code>是很容易使用的。以最简单的情况为例，首先将如下内容保存到文件<code>/tmp/data.csv</code>中</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-1 -1</span><br><span class="line">0 0</span><br><span class="line">1 1</span><br></pre></td></tr></tbody></table></figure>
-<p>然后在命令行中启动<code>gnuplot</code>，进入它的 REPL 中，并执行如下命令</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot "/tmp/data.csv"</span><br></pre></td></tr></tbody></table></figure>
-<p>即可得到这三组数据的展示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/gnuplot绘图效果初识.jpg" alt=""></p>
-<p>三组数据分别是坐标为<code>(-1, -1)</code>、<code>(0, 0)</code>，以及<code>(1, 1)</code>的点。</p>
-<p>因此要让<code>gnuplot</code>绘制开销的图形，首先就是从账本中提取出要绘制的数据，再决定如何用<code>gnuplot</code>绘制即可。</p>
-<h2 id="用ledger提取开销记录"><a href="#用ledger提取开销记录" class="headerlink" title="用ledger提取开销记录"></a>用<code>ledger</code>提取开销记录</h2><p>尽管<code>ledger</code>的子命令<code>register</code>可以打印出给定帐号的交易明细，但此处更适合使用<code>csv</code>子命令。例如，下列的命令可以将最早的10条、吃的方面的支出记录，都以 CSV 格式打印出来</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food'</span><br><span class="line">"2019/09/10","","32034acc","efe2a5b9:c720f278:58a3cd91:0dc07b7b","A","20","",""</span><br><span class="line">"2019/09/11","","a61b6164","5d45e249:fe84ca06:778d1855:daf61ede","A","5","",""</span><br><span class="line">"2019/09/11","","674ec19f","5d018df1:ebf020db:29d43aba:d0c84127","A","15","",""</span><br><span class="line">"2019/09/11","","e55ff018","370ca545:7d3aa2d0:86f5f330:1379261b","A","20","",""</span><br><span class="line">"2019/09/12","","f6aa675c","08315491:4c8f1ee7:5eeaddf3:f879914e","A","10.5","",""</span><br><span class="line">"2019/09/12","","139b790f","a137e4ee:9bc8ee49:7d7ccd8b:472d6007","A","23.9","",""</span><br><span class="line">"2019/09/12","","b24b716d","de348971:5364622c:b2144d94:01e74ff3","A","148","",""</span><br><span class="line">"2019/09/13","","e7c066fa","b418a3b2:a3e21e87:a32ee8ac:8716a847","A","3","",""</span><br><span class="line">"2019/09/13","","9eb044fe","702a13e9:3de7f1bd:9b20a278:1d20668d","A","24","",""</span><br><span class="line">"2019/09/13","","ba301270","d2b7eeb3:381f9473:54f86a33:391a8662","A","36","",""</span><br></pre></td></tr></tbody></table></figure>
-<p><code>--anon</code>选项可以将交易明细中的敏感信息（如收款方、帐号）等匿名处理。</p>
-<p>尽管<code>ledger</code>打印出的内容有很多列，但只有第一列的日期，以及第六列的金额是我所需要的。同时，由于一天中可能会有多次吃的方面的开销，因此同一天的交易也会有多笔，在绘图之前，需要将同一天之中的开销累加起来，只留下一个数字。这两个需求，都可以用<code>csvsql</code>来满足。</p>
-<h2 id="用csvsql聚合数据"><a href="#用csvsql聚合数据" class="headerlink" title="用csvsql聚合数据"></a>用<code>csvsql</code>聚合数据</h2><p>以前文中的10条记录为例，用如下的命令可以将它们按天聚合在一起</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT `a`, SUM(`f`) FROM `expense` GROUP BY `a` ORDER BY `a` ASC' --tables 'expense'</span><br></pre></td></tr></tbody></table></figure>
-<p>其中：</p>
-<ul>
-<li>选项<code>-H</code>让<code>csvsql</code>知道从管道中输入的数据没有标题行。后续处理时，<code>csvsql</code>会默认使用<code>a</code>、<code>b</code>、<code>c</code>等作为列名；</li>
-<li>选项<code>--query</code>用于提交要执行的 SQL 语句；</li>
-<li>选项<code>--tables</code>用于指定表的名字，这样在<code>--query</code>中才能用 SQL 对其进行处理；</li>
-</ul>
-<p>结果如下</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT `a`, SUM(`f`) FROM `expense` GROUP BY `a` ORDER BY `a` ASC' --tables 'expense'</span><br><span class="line">a,SUM(`f`)</span><br><span class="line">2019-09-10,20</span><br><span class="line">2019-09-11,40</span><br><span class="line">2019-09-12,182.4</span><br><span class="line">2019-09-13,63</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="用gnuplot读取数据并绘图"><a href="#用gnuplot读取数据并绘图" class="headerlink" title="用gnuplot读取数据并绘图"></a>用<code>gnuplot</code>读取数据并绘图</h2><p>用重定向将<code>csvsql</code>的输出结果保存到文件<code>/tmp/data.csv</code>中，然后就可以用<code>gnuplot</code>将它们画出来</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT `a`, SUM(`f`) FROM `expense` GROUP BY `a` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/data.csv</span><br><span class="line">➜  Accounting cat /tmp/plot_expense.gplot</span><br><span class="line">set format x '%y-%m-%d'</span><br><span class="line">set style data boxes</span><br><span class="line">set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</span><br><span class="line">set title '吃的开销'</span><br><span class="line">set output '/tmp/xyz.png'</span><br><span class="line">set timefmt '%Y-%m-%d'</span><br><span class="line">set xdata time</span><br><span class="line">set xlabel '日期'</span><br><span class="line">set xrange ['2019-09-10':'2019-09-13']</span><br><span class="line">set ylabel '金额(¥)'</span><br><span class="line">set yrange [0:200]</span><br><span class="line">set datafile separator comma</span><br><span class="line">plot '/tmp/data.csv' using 1:2</span><br><span class="line">➜  Accounting gnuplot /tmp/plot_expense.gplot</span><br></pre></td></tr></tbody></table></figure>
-<p>生成的图片文件<code>/tmp/xyz.png</code>如下</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz_bak.png" alt=""></p>
-<p>在脚本文件<code>/tmp/plot_expense.gplot</code>中用到的命令都可以通过<code>gnuplot</code>的<a href="http://www.gnuplot.info/docs_5.4/Gnuplot_5_4.pdf" target="_blank" rel="noopener">在线手册</a>查阅到：</p>
-<ul>
-<li><code>set format</code>命令用于设置坐标轴的刻度的格式。<code>set format x "%y-%m-%d"</code>意味着设置 X 轴的刻度为形如<code>19-09-10</code>的格式；</li>
-<li><code>set style data</code>命令设置数据的绘制风格。<code>set style data box</code>表示采用空心柱状图；</li>
-<li><code>set terminal</code>命令用于告诉<code>gnuplot</code>该生成什么样的输出。<code>set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</code>表示输出结果为 PNG 格式的图片，并且采用给定的字体；</li>
-<li><code>set title</code>命令控制输出结果顶部中间位置的标题文案；</li>
-<li><code>set output</code>命令用于将原本输出到屏幕上的内容重定向到文件中；</li>
-<li><code>set timefmt</code>命令用于指定输入的日期时间数据的格式。<code>set timefmt '%Y-%m-%d'</code>意味着输入的日期时间数据的为形如<code>2019-09-10</code>的格式；</li>
-<li><code>set xdata</code>命令控制<code>gnuplot</code>如何理解属于 X 轴的数据。<code>set xdata time</code>表示 X 轴上的均为时间型数据；</li>
-<li><code>set xlabel</code>命令控制 X 轴的含义的文案。<code>set ylabel</code>与其类似，只是作用在 Y 轴上；</li>
-<li><code>set xrange</code>命令控制<code>gnuplot</code>所绘制的图形中 X 轴上的展示范围；</li>
-<li><code>set datafile separator</code>命令控制<code>gnuplot</code>读取数据文件时各列间的分隔符，<code>comma</code>表示分隔符为逗号。</li>
-</ul>
-<h2 id="想要按周统计怎么办"><a href="#想要按周统计怎么办" class="headerlink" title="想要按周统计怎么办"></a>想要按周统计怎么办</h2><p>假设我要查看的是2021年每一周在吃的方面的总开支，那么需要在<code>csvsql</code>中将数据按所处的是第几周进行聚合</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger -b '2021-01-01' -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT strftime("%W", `a`) AS `week`, SUM(`f`) FROM `expense` GROUP BY `week` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/expense_dow.csv</span><br><span class="line">➜  Accounting head /tmp/expense_dow.csv</span><br><span class="line">00,633.6</span><br><span class="line">01,437.3</span><br><span class="line">02,337.5</span><br><span class="line">03,428.4</span><br><span class="line">04,191.5</span><br><span class="line">05,330.4</span><br><span class="line">06,154.6</span><br><span class="line">07,621.4</span><br><span class="line">08,485.6</span><br><span class="line">09,375.73</span><br></pre></td></tr></tbody></table></figure>
-<p>同时也需要调整<code>gnuplot</code>的脚本</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</span><br><span class="line">set title '吃的开销'</span><br><span class="line">set output '/tmp/xyz2.png'</span><br><span class="line">set xlabel '第几周'</span><br><span class="line">set xrange [0:54]</span><br><span class="line">set ylabel '金额(¥)'</span><br><span class="line">set yrange [0:1000]</span><br><span class="line">set datafile separator comma</span><br><span class="line">plot '/tmp/expense_dow.csv' using 1:2 with lines</span><br></pre></td></tr></tbody></table></figure>
-<p>结果如下</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz2.png" alt=""></p>
-<h2 id="想要同时查看两年的图形怎么办"><a href="#想要同时查看两年的图形怎么办" class="headerlink" title="想要同时查看两年的图形怎么办"></a>想要同时查看两年的图形怎么办</h2><p><code>gnuplot</code>支持同时绘制多条曲线，只要使用数据文件中不同的列作为纵坐标即可。假设我要对比的是2020年和2021年，那么先分别统计两年的开支到不同的文件中</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger -b '2020-01-01' -e '2021-01-01' -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT strftime("%W", `a`) AS `week`, SUM(`f`) FROM `expense` GROUP BY `week` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/expense_2020.csv</span><br><span class="line">➜  Accounting ledger -b '2021-01-01' -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT strftime("%W", `a`) AS `week`, SUM(`f`) FROM `expense` GROUP BY `week` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/expense_2021.csv</span><br></pre></td></tr></tbody></table></figure>
-<p>再将处于同一周的数据合并在一起</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting csvjoin -H -c a /tmp/expense_2020.csv /tmp/expense_2021.csv | tail -n '+2' &gt; /tmp/expense_2years.csv</span><br></pre></td></tr></tbody></table></figure>
-<p>最后，再让<code>gnuplot</code>一次性绘制两条折线</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</span><br><span class="line">set title '吃的开销'</span><br><span class="line">set output '/tmp/xyz2years.png'</span><br><span class="line">set xlabel '第几周'</span><br><span class="line">set xrange [0:54]</span><br><span class="line">set ylabel '金额(¥)'</span><br><span class="line">set yrange [0:1000]</span><br><span class="line">set datafile separator comma</span><br><span class="line">plot '/tmp/expense_2years.csv' using 1:2 with lines title "2020", '/tmp/expense_2years.csv' using 1:3 with lines title "2021"</span><br></pre></td></tr></tbody></table></figure>
-<p>结果如下</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz2years.png" alt=""></p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>其实仍然是非常不直观的，因为最终生成的是一张静态的图片，并不能做到将鼠标挪到曲线上时就给出所在位置的纵坐标的效果。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -781,7 +747,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

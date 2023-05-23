@@ -200,6 +200,151 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/06/14/从AOP到method-combination/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/06/14/从AOP到method-combination/" class="post-title-link" itemprop="url">从AOP到method-combination</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-06-14 20:28:28 / 修改时间：20:30:36" itemprop="dateCreated datePublished" datetime="2021-06-14T20:28:28+08:00">2021-06-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/实战Elisp/" itemprop="url" rel="index">
+                    <span itemprop="name">实战Elisp</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/06/14/从AOP到method-combination/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/06/14/从AOP到method-combination/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。</p>
+</blockquote>
+<p>Emacs的org-mode用的是一门叫Org的标记语言，正如大部分的标记语言那样，它也支持无序列表和检查清单——前者以<code>-</code>（一个连字符、一个空格）为前缀，后者以<code>- [ ]</code>或<code>- [x]</code>为前缀（比无序列表多了一对方括号及中间的字母<code>x</code>）</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/org模式中checkbox的语法.jpg" alt=""></p>
+<p>此外，org-mode还为编辑这两种列表提供了快速插入新一行的快捷键<code>M-RET</code>（即按住<code>alt</code>键并按下回车键）。如果光标位于无序列表中，那么新的一行将会自动插入<code>-</code>前缀。遗憾的是，如果光标位于检查清单中，那么新一行并没有自动插入一对方括号</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/在Emacs中用alt回车添加一行.gif" alt=""></p>
+<p>每次都要手动敲入<code>[ ]</code>还挺繁琐的。好在这是Emacs，它是可扩展的、可定制的。只需敲几行代码，就可以让Emacs代劳输入方括号了。</p>
+<h1 id="Emacs的AOP特性——advice-add"><a href="#Emacs的AOP特性——advice-add" class="headerlink" title="Emacs的AOP特性——advice-add"></a>Emacs的AOP特性——<code>advice-add</code></h1><p>借助Emacs的<code>describe-key</code>功能，可以知道在一个<code>org-mode</code>的文件中按下<code>M-RET</code>时，Emacs会调用到函数<code>org-insert-item</code>上。要想让<code>M-RET</code>实现自动追加方括号的效果，马上可以想到简单粗暴的办法：</p>
+<ul>
+<li>定义一个新的函数，并将<code>M-RET</code>绑定到它身上；</li>
+<li>重新定义<code>org-insert-item</code>函数，使其追加方括号；</li>
+</ul>
+<p>但不管是上述的哪一种，都需要连带着重新实现插入连字符、空格前缀的已有功能。有一种更温和的办法可以在现有的<code>org-insert-item</code>的基础上扩展它的行为，那就是Emacs的<code>advice</code>特性。</p>
+<p><code>advice</code>是面向切面编程范式的一种，使用Emacs的<code>advice-add</code>函数，可以在一个普通的函数被调用前或被调用后捎带做一些事情——比如追加一对方括号。对于这两个时机，分别可以直接用<code>advice-add</code>的<code>:before</code>和<code>:after</code>来实现，但用在这里都不合适，因为：</p>
+<ul>
+<li>检测是否位于检查清单中，需要在调用<code>org-insert-item</code>前做；</li>
+<li>追加一对方括号，则需要在<code>org-insert-item</code>之后做。</li>
+</ul>
+<p>因此，正确的做法是使用<code>:around</code>来修饰原始的<code>org-insert-item</code>函数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-defun</span> lt-around-org-insert-item (<span class="name">oldfunction</span> <span class="symbol">&amp;rest</span> args)</span><br><span class="line">  <span class="string">"在调用了org-insert-item后识时务地追加 [ ]这样的内容。"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">is-checkbox</span> <span class="literal">nil</span>)</span><br><span class="line">        (<span class="name">line</span> (<span class="name">buffer-substring-no-properties</span> (<span class="name">line-beginning-position</span>) (<span class="name">line-end-position</span>))))</span><br><span class="line">    <span class="comment">;; 检查当前行是否为checkbox</span></span><br><span class="line">    (<span class="name">when</span> (<span class="name">string-match-p</span> <span class="string">"- \\[.\\]"</span> line)</span><br><span class="line">      (<span class="name">setf</span> is-checkbox <span class="literal">t</span>))</span><br><span class="line">    <span class="comment">;; 继续使用原来的org-insert-item插入文本</span></span><br><span class="line">    (<span class="name">apply</span> oldfunction args)</span><br><span class="line">    <span class="comment">;; 决定要不要追加“ [ ]”字符串</span></span><br><span class="line">    (<span class="name">when</span> is-checkbox</span><br><span class="line">      (<span class="name">insert</span> <span class="string">"[ ] "</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">advice-add</span> 'org-insert-item <span class="symbol">:around</span> #'lt-around-org-insert-item)</span><br></pre></td></tr></tbody></table></figure>
+<p>这下子，<code>M-RET</code>对检查清单也一视同仁了</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/advice后的效果.gif" alt=""></p>
+<h1 id="Common-Lisp的method-combination"><a href="#Common-Lisp的method-combination" class="headerlink" title="Common Lisp的method combination"></a>Common Lisp的<code>method combination</code></h1><p><code>advice-add</code>的<code>:after</code>、<code>:around</code>，以及<code>:before</code>在Common Lisp中有着完全同名的等价物，只不过不是用一个叫<code>advice-add</code>的函数，而是喂给一个叫<code>defmethod</code>的宏。举个例子，用<code>defmethod</code>可以定义出一个多态的<code>len</code>函数，对不同类型的入参执行不同的逻辑</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defgeneric</span> len (<span class="name">x</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">length</span> x))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len ((<span class="name">x</span> hash-table))</span><br><span class="line">  (<span class="name">hash-table-count</span> x))</span><br></pre></td></tr></tbody></table></figure>
+<p>然后为其中参数类型为字符串的特化版本定义对应的<code>:after</code>、<code>:around</code>，以及<code>:before</code>修饰过的方法</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmethod</span> len <span class="symbol">:after</span> ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"after len~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len <span class="symbol">:around</span> ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"around中调用len前~%"</span>)</span><br><span class="line">  (<span class="name">prog1</span></span><br><span class="line">      (<span class="name">call-next-method</span>)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"around中调用len后~%"</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len <span class="symbol">:before</span> ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"before len~%"</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>这一系列方法的调用规则为：</p>
+<ol>
+<li>先调用<code>:around</code>修饰的方法；</li>
+<li>由于上述方法中调用了<code>call-next-method</code>，因此再调用<code>:before</code>修饰的方法；</li>
+<li>调用不加修饰的方法（在CL中这称为<code>primary</code>方法）；</li>
+<li>再调用<code>:after</code>修饰的方法；</li>
+<li>最后，又回到了<code>:around</code>中调用<code>call-next-method</code>的位置。</li>
+</ol>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/实际效果.jpg" alt=""></p>
+<p>咋看之下，Emacs的<code>advice-add</code>支持的修饰符要多得多，实则不然。在CL中，<code>:after</code>、<code>:around</code>，以及<code>:before</code>同属于一个名为<code>standard</code>的<code>method combination</code>，而CL还内置了其它的<code>method combination</code>。在<a href="https://lispcookbook.github.io/cl-cookbook/clos.html#method-qualifiers-before-after-around" target="_blank" rel="noopener">《Other method combinations》</a>一节中，作者演示了<code>progn</code>和<code>list</code>的例子。</p>
+<p>如果想要模拟Emacs的<code>advice-add</code>所支持的其它修饰符，那么就必须定义新的<code>method combination</code>了。</p>
+<h1 id="可编程的编程语言——define-method-combination"><a href="#可编程的编程语言——define-method-combination" class="headerlink" title="可编程的编程语言——define-method-combination"></a>可编程的编程语言——<code>define-method-combination</code></h1><p>曾经我以为，<code>defmethod</code>只能接受<code>:after</code>、<code>:around</code>，以及<code>:before</code>，认为这三个修饰符是必须在语言一级支持的特性。直到有一天我闯入了LispWorks的<a href="http://www.lispworks.com/documentation/HyperSpec/Body/m_defi_4.htm" target="_blank" rel="noopener">define-method-combination</a>词条中，才发现它们也是三个平凡的修饰符而已。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define-method-combination</span> standard ()</span><br><span class="line">  ((<span class="name">around</span> (<span class="symbol">:around</span>))</span><br><span class="line">   (<span class="name">before</span> (<span class="symbol">:before</span>))</span><br><span class="line">   (<span class="name">primary</span> () <span class="symbol">:required</span> <span class="literal">t</span>)</span><br><span class="line">   (<span class="name">after</span> (<span class="symbol">:after</span>)))</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">call-methods</span> (<span class="name">methods</span>)</span><br><span class="line">           (<span class="name">mapcar</span> #'(lambda (method)</span><br><span class="line">                       `(call-method ,method))</span><br><span class="line">                   methods)))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">form</span> (<span class="name">if</span> (<span class="name">or</span> before after (<span class="name">rest</span> primary))</span><br><span class="line">                    `(multiple-value-prog1</span><br><span class="line">                         (progn ,@(call-methods before)</span><br><span class="line">                                (call-method ,(first primary)</span><br><span class="line">                                             ,(rest primary)))</span><br><span class="line">                       ,@(call-methods (reverse after)))</span><br><span class="line">                    `(call-method ,(first primary)))))</span><br><span class="line">      (<span class="name">if</span> around</span><br><span class="line">          `(call-method ,(first around)</span><br><span class="line">                        (,@(rest around)</span><br><span class="line">                           (make-method ,form)))</span><br><span class="line">          form))))</span><br></pre></td></tr></tbody></table></figure>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/DIO就是厉害梗图.jpg" alt=""></p>
+<p>秉持“柿子要挑软的捏”的原则，让我来尝试模拟出<code>advice-add</code>的<code>:after-while</code>和<code>:before-while</code>的效果吧。</p>
+<p><code>:after-while</code>和<code>:before-while</code>的效果还是很容易理解的</p>
+<blockquote>
+<p>Call function after the old function and only if the old function returned non-<code>nil</code>.</p>
+<p>Call function before the old function and don’t call the old function if function returns <code>nil</code>.</p>
+</blockquote>
+<p>因此，由<code>define-method-combination</code>生成的<code>form</code>中（犹记得伞哥在《PCL》中将它翻译为形式），势必要：</p>
+<ul>
+<li>检查是否有被<code>:before-while</code>修饰的方法；</li>
+<li>如果有，检查调用了被<code>:before-while</code>修饰的方法后的返回值是否为<code>NIL</code>；</li>
+<li>如果没有，或者被<code>:before-while</code>修饰的方法的返回值为非<code>NIL</code>，便调用<code>primary</code>方法；</li>
+<li>如果有被<code>:after-while</code>修饰的方法，并且<code>primary</code>方法的返回值不为<code>NIL</code>，就调用这些方法；</li>
+<li>返回<code>primary</code>方法的返回值。</li>
+</ul>
+<p>为了简单起见，尽管<code>after-while</code>和<code>before-while</code>变量指向的是多个“可调用”的方法，但这里只调用“最具体”的一个。</p>
+<p>给这个新的<code>method combination</code>取名为<code>emacs-advice</code>，其具体实现已是水到渠成</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define-method-combination</span> emacs-advice ()</span><br><span class="line">  ((<span class="name">after-while</span> (<span class="symbol">:after-while</span>))</span><br><span class="line">   (<span class="name">before-while</span> (<span class="symbol">:before-while</span>))</span><br><span class="line">   (<span class="name">primary</span> () <span class="symbol">:required</span> <span class="literal">t</span>))</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">after-while-fn</span> (<span class="name">first</span> after-while))</span><br><span class="line">        (<span class="name">before-while-fn</span> (<span class="name">first</span> before-while))</span><br><span class="line">        (<span class="name">result</span> (<span class="name">gensym</span>)))</span><br><span class="line">    `(let ((,result (when ,before-while-fn</span><br><span class="line">                      (call-method ,before-while-fn))))</span><br><span class="line">       (when (or (null ,before-while-fn)</span><br><span class="line">                 ,result)</span><br><span class="line">         (let ((,result (call-method ,(first primary))))</span><br><span class="line">           (when (and ,result ,after-while-fn)</span><br><span class="line">             (call-method ,after-while-fn))</span><br><span class="line">           ,result)))))</span><br></pre></td></tr></tbody></table></figure>
+<p><code>call-method</code>（以及它的搭档<code>make-method</code>）是专门用于在<code>define-method-combination</code>中调用传入的方法的宏。</p>
+<p>用一系列<code>foobar</code>方法来验证一番</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defgeneric</span> foobar (<span class="name">x</span>)</span><br><span class="line">  (<span class="symbol">:method-combination</span> emacs-advice))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> foobar (<span class="name">x</span>)</span><br><span class="line">  'hello)</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> foobar <span class="symbol">:after-while</span> (<span class="name">x</span>)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> x))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"for side effect~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> foobar <span class="symbol">:before-while</span> (<span class="name">x</span>)</span><br><span class="line">  (<span class="name">evenp</span> x))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobar</span> <span class="number">1</span>) <span class="comment">;; 返回NIL</span></span><br><span class="line">(<span class="name">foobar</span> <span class="number">2</span>) <span class="comment">;; 打印“fo side effect”，并返回HELLO</span></span><br></pre></td></tr></tbody></table></figure>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>尽管我对CL赏识有加，但越是琢磨<code>define-method-combination</code>，就越会发现编程语言的能力是有极限的<del>，除非超越编程语言</del>。比如Emacs的<code>advice-add</code>所支持的<code>:filter-args</code>和<code>:filter-return</code>就无法用<code>define-method-combination</code>优雅地实现出来——并不是完全不行，只不过需要将它们合并在由<code>:around</code>修饰的方法之中。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/05/03/非递归遍历二叉树到底有什么用/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -642,124 +787,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/02/11/此数绵绵无绝期——欧拉计划第66题/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/11/此数绵绵无绝期——欧拉计划第66题/" class="post-title-link" itemprop="url">此数绵绵无绝期——欧拉计划第66题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-11 15:21:32" itemprop="dateCreated datePublished" datetime="2021-02-11T15:21:32+08:00">2021-02-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-02 11:18:57" itemprop="dateModified" datetime="2022-05-02T11:18:57+08:00">2022-05-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2021/02/11/此数绵绵无绝期——欧拉计划第66题/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/11/此数绵绵无绝期——欧拉计划第66题/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>仅以此文膜拜八年前的自己</p>
-</blockquote>
-<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p><a href="https://projecteuler.net/about" target="_blank" rel="noopener">欧拉计划</a>（Project Euler）就像LeetCode，是一个编程答题的网站。不同于LeetCode的是，欧拉计划只要求用户提交最终答案即可（一般是一个数字），而不需要完整代码。因此，可以尽情地使用自己喜欢的编程语言——不少题目甚至光靠笔和纸便能解决。</p>
-<p>欧拉计划的<a href="https://projecteuler.net/problem=66" target="_blank" rel="noopener">第66题</a>非常有意思，它的题目很简单，就是要求找出在不大于1000的整数中，以哪一个数字为丢番图方程的系数，可以得到所有最小解中的最大值。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/第66题的描述.jpeg" alt=""></p>
-<p>可以很容易地看出方程有一个直观的暴力算法：让y从1开始递增，对于每一个y，计算公式<code>Dy^2+1</code>的值。如果该值为平方数，那么它的平方根就是最小的x解。再依照这个算法求解所有D不大于1000的方程，便可以求出题目的答案。很容易用Python写出这个算法</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_square</span><span class="params">(num: int)</span> -&gt; bool:</span></span><br><span class="line">    <span class="keyword">return</span> math.isqrt(num) ** <span class="number">2</span> == num</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_x</span><span class="params">(D: int)</span> -&gt; int:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    求出给定D时，满足题目所给的丢番图方程的最小的x。</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="keyword">not</span> is_square(D)</span><br><span class="line">    y = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        candidate = D * y * y + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> is_square(candidate):</span><br><span class="line">            <span class="keyword">return</span> math.isqrt(candidate)</span><br><span class="line">        y += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">solve_66</span><span class="params">(limit)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    找出不大于limi的D中，使find_x的返回值最大的那一个数字。</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    max_D = <span class="keyword">None</span></span><br><span class="line">    max_x = <span class="keyword">None</span></span><br><span class="line">    D = <span class="number">2</span></span><br><span class="line">    <span class="keyword">while</span> D &lt;= limit:</span><br><span class="line">        <span class="keyword">if</span> is_square(D):</span><br><span class="line">            D += <span class="number">1</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        x = find_x(D)</span><br><span class="line">        <span class="keyword">if</span> max_x <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> x &gt; max_x:</span><br><span class="line">            max_D = D</span><br><span class="line">            max_x = x</span><br><span class="line">        D += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> max_D, max_x</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    D, x = solve_66(<span class="number">7</span>)</span><br><span class="line">    print(<span class="string">'D is {} and x is {}'</span>.format(D, x))</span><br></pre></td></tr></tbody></table></figure>
-<p>但如果将上限<code>limit</code>提升为1000，这个算法在有生之年是算不出结果的。</p>
-<p>要想解决这一题，需要借助数学的力量。</p>
-<h1 id="佩尔方程"><a href="#佩尔方程" class="headerlink" title="佩尔方程"></a>佩尔方程</h1><p>八年前第一次做这一题的时候，经过一番搜索，我从<a href="https://eli.thegreenplace.net/2009/06/19/project-euler-problem-66-and-continued-fractions/" target="_blank" rel="noopener">这篇文章</a>中知道了题目中的方程叫做<a href="https://zh.wikipedia.org/wiki/%E4%BD%A9%E5%B0%94%E6%96%B9%E7%A8%8B" target="_blank" rel="noopener">佩尔方程。</a>它有标准的解法，但需要用到连分数。那么什么是连分数呢？</p>
-<p>连分数不是一种新的数系，只是小数的另一种写法。例如可以把分数45除以16写成下面的形式</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/一个连分数的例子.jpg" alt=""></p>
-<p>就像定义递归的数据结构一样，可以给连分数一个递归的定义。连分数要么是一个整数，要么是一个整数加上另一个连分数的倒数。除了上面的形式，连分数也可以写成更节省篇幅的样子。比如把45除以16写成<code>[2;1,4,3]</code>，即把原本的式子中所有的整数部分按顺序写在一对方括号之间。这种记法，看起来就像是编程语言中的数组一般。</p>
-<p>如果用数组<code>[2;1,4,3]</code>的不同前缀来构造分式，那么结果依次为<code>2/1</code>、<code>3/1</code>、<code>14/5</code>。它们是这个连分数的渐进连分数，而佩尔方程的一组解，就来自于渐进连分数的分子和分母。</p>
-<p>以系数为7的佩尔方程为例，先计算出根号7的连分数，然后依次尝试它的渐进连分数。前三个分别为<code>2/1</code>、<code>3/1</code>、<code>5/2</code>，都不是方程的解。第四个渐进连分数<code>8/3</code>才是方程的解。如果继续提高连分数的精度，还会找到第二个解<code>127/48</code>。继续找，还有更多，而8则是其中最小的x。</p>
-<p>所以，想要快速算出佩尔方程的解，最重要的是找到计算一个数的平方根的连分数的算法。</p>
-<h1 id="计算平方根的连分数的错误方法"><a href="#计算平方根的连分数的错误方法" class="headerlink" title="计算平方根的连分数的错误方法"></a>计算平方根的连分数的错误方法</h1><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/连分数的通用形式.jpg" alt=""></p>
-<p>要计算一个数字的连分数，最重要的便是要算出所有的整数部分（<code>a0</code>、<code>a2</code>、<code>a2</code>等）。它们都可以依据定义直接计算</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/整数部分的计算方法.png" alt=""></p>
-<p>推广到一半情况，如果用变量<code>n</code>存储开平方的数字，用<code>numbers</code>存储所有已知的整数，那么用Python可以写出下面的算法来计算出下一个整数</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算连分数数列的下一个数字</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_next_integer_part</span><span class="params">(n, numbers)</span>:</span></span><br><span class="line">    v = math.sqrt(n)</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> numbers:</span><br><span class="line">        v = <span class="number">1</span> / (v - a)</span><br><span class="line">    <span class="keyword">return</span> int(v)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    n = <span class="number">14</span></span><br><span class="line">    numbers = [<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line">    v = compute_next_integer_part(n, numbers)</span><br><span class="line">    print(<span class="string">'下一个数字为{}'</span>.format(v))</span><br></pre></td></tr></tbody></table></figure>
-<p>遗憾的是，这个算法算出来的数字会因为计算上的精度误差而导致失之毫厘谬以千里。</p>
-<h1 id="计算平方根的连分数的正确方法"><a href="#计算平方根的连分数的正确方法" class="headerlink" title="计算平方根的连分数的正确方法"></a>计算平方根的连分数的正确方法</h1><p>要想计算出正确的结果，就需要尽可能地消除在计算<code>1 / (v - a)</code>的时候引入的误差，因此必须把浮点数从分母中除去。</p>
-<p>在<a href="http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/cfINTRO.html#section6.2.2" target="_blank" rel="noopener">这个网站</a>中，作者以计算根号14的连分数为例，列出了一个表格</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/计算根号14连分数的过程.jpeg" alt=""></p>
-<p>可以看到<code>x1</code>、<code>x2</code>，以及<code>x3</code>都是形如<code>(sqrt(n)+a)/b</code>这样的格式，这样的式子更利于控制误差。那么是否每一个待计算的<code>x</code>都符合这种格式呢？答案是肯定的，可以用数学归纳法予以证明（为了方便写公式，用LaTeX写好后截了图）</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/数学归纳法过程.jpg" alt=""></p>
-<p>在这个证明过程中，还得到了分子中的<code>a</code>以及分母中的<code>b</code>的递推公式，现在可以写出正确的计算连分数整数部分的代码了。</p>
-<h1 id="用Common-Lisp实现上述算法"><a href="#用Common-Lisp实现上述算法" class="headerlink" title="用Common Lisp实现上述算法"></a>用Common Lisp实现上述算法</h1><p>为了在实现这个算法的同时还要写出优雅的代码，我会用上Common Lisp的面向对象特性。首先是定义一个类来表示一个可以不断提高精度的连分数</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defpackage</span> #<span class="symbol">:com</span>.liutos.cf</span><br><span class="line">  (<span class="symbol">:use</span> #<span class="symbol">:cl</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">in-package</span> #<span class="symbol">:com</span>.liutos.cf)</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> &lt;cf&gt; ()</span><br><span class="line">  ((<span class="name">a</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"数学归纳法中、分子中与平方根相加的数"</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="number">0</span>)</span><br><span class="line">   (<span class="name">b</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"数学归纳法中的分母"</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="number">1</span>)</span><br><span class="line">   (<span class="name">numbers</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"连分数中的整数部分依次组成的数组。"</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="literal">nil</span>)</span><br><span class="line">   (<span class="name">origin</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"被开平方的数字"</span></span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:origin</span>))</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"表示整数ORIGIN的平方根的连分数。"</span>))</span><br></pre></td></tr></tbody></table></figure>
-<p>接着再定义这个类需要实现的“接口”</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defgeneric</span> advance (<span class="name">cf</span>)</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"让连分数CF提高到下一个精度。"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defgeneric</span> into-rational (<span class="name">cf</span>)</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"将连分数CF转换为有理数类型的值。"</span>))</span><br></pre></td></tr></tbody></table></figure>
-<p>最后来实现上述两个接口</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmethod</span> advance ((<span class="name">cf</span> &lt;cf&gt;))</span><br><span class="line">  <span class="string">"根据递推公式计算出下一批a、b，以及连分数的整数部分。"</span></span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">slot-value</span> cf 'a))</span><br><span class="line">         (<span class="name">b</span> (<span class="name">slot-value</span> cf 'b))</span><br><span class="line">         (<span class="name">n</span> (<span class="name">slot-value</span> cf 'origin))</span><br><span class="line">         (<span class="name">m</span> (<span class="name">truncate</span> (<span class="name">+</span> (<span class="name">sqrt</span> n) a) b)))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">a</span> (<span class="name">-</span> (<span class="name">*</span> b m) a))</span><br><span class="line">          (<span class="name">b</span> (<span class="name">/</span> (<span class="name">-</span> n (<span class="name">expt</span> (<span class="name">-</span> a (<span class="name">*</span> b m)) <span class="number">2</span>)) b)))</span><br><span class="line">      (<span class="name">setf</span> (<span class="name">slot-value</span> cf 'a) a</span><br><span class="line">            (<span class="name">slot-value</span> cf 'b) b</span><br><span class="line">            (<span class="name">slot-value</span> cf 'numbers) (<span class="name">append</span> (<span class="name">slot-value</span> cf 'numbers) (<span class="name">list</span> m))))</span><br><span class="line">    (<span class="name">values</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> into-rational ((<span class="name">cf</span> &lt;cf&gt;))</span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">numbers</span> (<span class="name">reverse</span> (<span class="name">slot-value</span> cf 'numbers)))</span><br><span class="line">         (<span class="name">v</span> (<span class="name">first</span> numbers)))</span><br><span class="line">    (<span class="name">dolist</span> (<span class="name">n</span> (<span class="name">rest</span> numbers))</span><br><span class="line">      (<span class="name">setf</span> v</span><br><span class="line">            (<span class="name">+</span> n (<span class="name">/</span> <span class="number">1</span> v))))</span><br><span class="line">    v))</span><br></pre></td></tr></tbody></table></figure>
-<p>在实现<code>into-rational</code>方法上，Common Lisp的有理数数值类型给我带来了极大的便利，它使我不必担心计算<code>(/ 1 v)</code>的时候会引入误差，代码写起来简单直白。</p>
-<h1 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h1><p>乘胜追击，用Common Lisp解答第66题</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> find-min-x (<span class="name">D</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">cf</span> (<span class="name">make-instance</span> '&lt;cf&gt; <span class="symbol">:origin</span> D)))</span><br><span class="line">    (<span class="name">loop</span></span><br><span class="line">       (<span class="name">advance</span> cf)</span><br><span class="line">       (<span class="name">let*</span> ((<span class="name">ratio</span> (<span class="name">into-rational</span> cf))</span><br><span class="line">              (<span class="name">x</span> (<span class="name">numerator</span> ratio))</span><br><span class="line">              (<span class="name">y</span> (<span class="name">denominator</span> ratio)))</span><br><span class="line">         (<span class="name">when</span> (<span class="name">=</span> (<span class="name">-</span> (<span class="name">*</span> x x) (<span class="name">*</span> D y y)) <span class="number">1</span>)</span><br><span class="line">           (<span class="name">return-from</span> find-min-x x))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> square-p (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">rt</span> (<span class="name">sqrt</span> n)))</span><br><span class="line">    (<span class="name">=</span> rt (<span class="name">truncate</span> rt))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> pro66 (<span class="name">&amp;optional</span> (<span class="name">bnd</span> <span class="number">1000</span>))</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">target-d</span>)</span><br><span class="line">	(<span class="name">max-x</span> <span class="number">0</span>))</span><br><span class="line">    (<span class="name">loop</span> <span class="symbol">:for</span> i <span class="symbol">:from</span> <span class="number">2</span> <span class="symbol">:to</span> bnd</span><br><span class="line">       <span class="symbol">:when</span> (<span class="name">not</span> (<span class="name">square-p</span> i))</span><br><span class="line">       <span class="symbol">:do</span> (<span class="name">let</span> ((<span class="name">x</span> (<span class="name">find-min-x</span> i)))</span><br><span class="line">	     (<span class="name">if</span> (<span class="name">&gt;</span> x max-x)</span><br><span class="line">		 (<span class="name">setf</span> target-d i</span><br><span class="line">		       max-x x))))</span><br><span class="line">    (<span class="name">values</span> target-d max-x)))</span><br></pre></td></tr></tbody></table></figure>
-<p>答案的D是多少就不说了，不过作为答案的x是16421658242965910275055840472270471049。有兴趣的读者可以试一下暴力解法要花多久才能算到这个数字。</p>
-<p>全文完。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -831,7 +858,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

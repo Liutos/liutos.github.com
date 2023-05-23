@@ -46,7 +46,7 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="序言我已经记不清写过多少个lisp-like语言的解释器，以及编译成自制字节码的编译器了，但我想这一次依然不会是最后一个。我还记得之所以入坑写第一个解释器，是因为当时正好学了一点Common Lisp，数据结构的课本中又正好提到一种叫做广义表的数据结构，顿时觉得：“这个广义表不是正好可以表达CL中的atom和cons吗？”于是便尝试写一段程序解析输入、创建广义表，并打印成S表达式。在此基础上，又尝">
-<meta name="keywords" content="common lisp,assembly,compiler,lisp,x64,汇编,编译器">
+<meta name="keywords" content="common lisp,lisp,assembly,compiler,x64,汇编,编译器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="开发一个trivial的lisp编译器（一）">
 <meta property="og:url" content="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/index.html">
@@ -326,9 +326,9 @@
           
           <div class="post-tags">
               <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
               <a href="/tags/assembly/" rel="tag"><i class="fa fa-tag"></i> assembly</a>
               <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
-              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
               <a href="/tags/x64/" rel="tag"><i class="fa fa-tag"></i> x64</a>
               <a href="/tags/汇编/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
               <a href="/tags/编译器/" rel="tag"><i class="fa fa-tag"></i> 编译器</a>
@@ -362,13 +362,10 @@
           
       <div class="tabs tabs-comment">
         <ul class="nav-tabs">
-            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
             <li class="tab"><a href="#comment-disqus">disqus</a></li>
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane gitalk" id="comment-gitalk">
-              <div class="comments" id="gitalk-container"></div>
-            </div>
             <div class="tab-pane disqus" id="comment-disqus">
               
   <div class="comments">
@@ -377,6 +374,9 @@
     </div>
   </div>
   
+            </div>
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
             </div>
         </div>
       </div>
@@ -441,7 +441,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -605,23 +605,6 @@
 
 
 <script src="/bundle.js"></script><script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID: 'b3dc0ec32cfae81fbffd',
-      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
-      repo: 'gitalk',
-      owner: 'Liutos',
-      admin: ['Liutos'],
-      id: '2900dd6e5fca5beb1740c2ece4ee9640',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
-;
-
   function loadCount() {
     var d = document, s = d.createElement('script');
     s.src = 'https://Liutos.disqus.com/count.js';
@@ -650,5 +633,22 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       (d.head || d.body).appendChild(s);
     }
   });
+;
+
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: 'b3dc0ec32cfae81fbffd',
+      clientSecret: 'b328ab030fc2e2c02adeedcdcb6d6c396e0ab880',
+      repo: 'gitalk',
+      owner: 'Liutos',
+      admin: ['Liutos'],
+      id: '2900dd6e5fca5beb1740c2ece4ee9640',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
 ;
 !function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>

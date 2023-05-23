@@ -200,6 +200,137 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/10/06/直观地了解自己每天在吃上面的开销/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/10/06/直观地了解自己每天在吃上面的开销/" class="post-title-link" itemprop="url">直观地了解自己每天在吃上面的开销</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-10-06 22:45:06" itemprop="dateCreated datePublished" datetime="2021-10-06T22:45:06+08:00">2021-10-06</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021/10/06/直观地了解自己每天在吃上面的开销/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/10/06/直观地了解自己每天在吃上面的开销/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><del>众所周知，</del>我用<code>Emacs</code>的<code>ledger-mode</code>来记账（参见以前的文章<a href="https://liutos.github.io/2020/03/19/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%AE%B0%E8%B4%A6%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94ledger%E4%B8%8Eledger-mode/">《程序员的记账工具——ledger与ledger-mode》</a>）。作为一个出色的命令行报表工具，<code>ledger</code>的命令<code>balance</code>和<code>register</code>足以涵盖大部分的使用场景：</p>
+<ul>
+<li><code>balance</code>可以生成所有帐号的余额的报表，用于每天与各个账户中的真实余额进行比较；</li>
+<li><code>register</code>可以生成给定帐号的交易明细，用于在余额不一致时与真实账户的流水一条条核对；</li>
+</ul>
+<p>美中不足的是，<code>ledger</code>的报表不够直观，因为它们是冷冰冰的文字信息，而不是振奋人心的统计图形。好在，正如<code>ledger</code>不存储数据，而只是一份份<code>.ledger</code>文件中的交易记录的搬运工一样，<code>gnuplot</code>也是这样的工具——它不存储数据，它只负责将存储在文本文件的数据以图形的形态呈现出来。</p>
+<h1 id="如何运用gnuplot"><a href="#如何运用gnuplot" class="headerlink" title="如何运用gnuplot"></a>如何运用<code>gnuplot</code></h1><p><code>gnuplot</code>是很容易使用的。以最简单的情况为例，首先将如下内容保存到文件<code>/tmp/data.csv</code>中</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-1 -1</span><br><span class="line">0 0</span><br><span class="line">1 1</span><br></pre></td></tr></tbody></table></figure>
+<p>然后在命令行中启动<code>gnuplot</code>，进入它的 REPL 中，并执行如下命令</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot "/tmp/data.csv"</span><br></pre></td></tr></tbody></table></figure>
+<p>即可得到这三组数据的展示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/gnuplot绘图效果初识.jpg" alt=""></p>
+<p>三组数据分别是坐标为<code>(-1, -1)</code>、<code>(0, 0)</code>，以及<code>(1, 1)</code>的点。</p>
+<p>因此要让<code>gnuplot</code>绘制开销的图形，首先就是从账本中提取出要绘制的数据，再决定如何用<code>gnuplot</code>绘制即可。</p>
+<h2 id="用ledger提取开销记录"><a href="#用ledger提取开销记录" class="headerlink" title="用ledger提取开销记录"></a>用<code>ledger</code>提取开销记录</h2><p>尽管<code>ledger</code>的子命令<code>register</code>可以打印出给定帐号的交易明细，但此处更适合使用<code>csv</code>子命令。例如，下列的命令可以将最早的10条、吃的方面的支出记录，都以 CSV 格式打印出来</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food'</span><br><span class="line">"2019/09/10","","32034acc","efe2a5b9:c720f278:58a3cd91:0dc07b7b","A","20","",""</span><br><span class="line">"2019/09/11","","a61b6164","5d45e249:fe84ca06:778d1855:daf61ede","A","5","",""</span><br><span class="line">"2019/09/11","","674ec19f","5d018df1:ebf020db:29d43aba:d0c84127","A","15","",""</span><br><span class="line">"2019/09/11","","e55ff018","370ca545:7d3aa2d0:86f5f330:1379261b","A","20","",""</span><br><span class="line">"2019/09/12","","f6aa675c","08315491:4c8f1ee7:5eeaddf3:f879914e","A","10.5","",""</span><br><span class="line">"2019/09/12","","139b790f","a137e4ee:9bc8ee49:7d7ccd8b:472d6007","A","23.9","",""</span><br><span class="line">"2019/09/12","","b24b716d","de348971:5364622c:b2144d94:01e74ff3","A","148","",""</span><br><span class="line">"2019/09/13","","e7c066fa","b418a3b2:a3e21e87:a32ee8ac:8716a847","A","3","",""</span><br><span class="line">"2019/09/13","","9eb044fe","702a13e9:3de7f1bd:9b20a278:1d20668d","A","24","",""</span><br><span class="line">"2019/09/13","","ba301270","d2b7eeb3:381f9473:54f86a33:391a8662","A","36","",""</span><br></pre></td></tr></tbody></table></figure>
+<p><code>--anon</code>选项可以将交易明细中的敏感信息（如收款方、帐号）等匿名处理。</p>
+<p>尽管<code>ledger</code>打印出的内容有很多列，但只有第一列的日期，以及第六列的金额是我所需要的。同时，由于一天中可能会有多次吃的方面的开销，因此同一天的交易也会有多笔，在绘图之前，需要将同一天之中的开销累加起来，只留下一个数字。这两个需求，都可以用<code>csvsql</code>来满足。</p>
+<h2 id="用csvsql聚合数据"><a href="#用csvsql聚合数据" class="headerlink" title="用csvsql聚合数据"></a>用<code>csvsql</code>聚合数据</h2><p>以前文中的10条记录为例，用如下的命令可以将它们按天聚合在一起</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT `a`, SUM(`f`) FROM `expense` GROUP BY `a` ORDER BY `a` ASC' --tables 'expense'</span><br></pre></td></tr></tbody></table></figure>
+<p>其中：</p>
+<ul>
+<li>选项<code>-H</code>让<code>csvsql</code>知道从管道中输入的数据没有标题行。后续处理时，<code>csvsql</code>会默认使用<code>a</code>、<code>b</code>、<code>c</code>等作为列名；</li>
+<li>选项<code>--query</code>用于提交要执行的 SQL 语句；</li>
+<li>选项<code>--tables</code>用于指定表的名字，这样在<code>--query</code>中才能用 SQL 对其进行处理；</li>
+</ul>
+<p>结果如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT `a`, SUM(`f`) FROM `expense` GROUP BY `a` ORDER BY `a` ASC' --tables 'expense'</span><br><span class="line">a,SUM(`f`)</span><br><span class="line">2019-09-10,20</span><br><span class="line">2019-09-11,40</span><br><span class="line">2019-09-12,182.4</span><br><span class="line">2019-09-13,63</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="用gnuplot读取数据并绘图"><a href="#用gnuplot读取数据并绘图" class="headerlink" title="用gnuplot读取数据并绘图"></a>用<code>gnuplot</code>读取数据并绘图</h2><p>用重定向将<code>csvsql</code>的输出结果保存到文件<code>/tmp/data.csv</code>中，然后就可以用<code>gnuplot</code>将它们画出来</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT `a`, SUM(`f`) FROM `expense` GROUP BY `a` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/data.csv</span><br><span class="line">➜  Accounting cat /tmp/plot_expense.gplot</span><br><span class="line">set format x '%y-%m-%d'</span><br><span class="line">set style data boxes</span><br><span class="line">set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</span><br><span class="line">set title '吃的开销'</span><br><span class="line">set output '/tmp/xyz.png'</span><br><span class="line">set timefmt '%Y-%m-%d'</span><br><span class="line">set xdata time</span><br><span class="line">set xlabel '日期'</span><br><span class="line">set xrange ['2019-09-10':'2019-09-13']</span><br><span class="line">set ylabel '金额(¥)'</span><br><span class="line">set yrange [0:200]</span><br><span class="line">set datafile separator comma</span><br><span class="line">plot '/tmp/data.csv' using 1:2</span><br><span class="line">➜  Accounting gnuplot /tmp/plot_expense.gplot</span><br></pre></td></tr></tbody></table></figure>
+<p>生成的图片文件<code>/tmp/xyz.png</code>如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz_bak.png" alt=""></p>
+<p>在脚本文件<code>/tmp/plot_expense.gplot</code>中用到的命令都可以通过<code>gnuplot</code>的<a href="http://www.gnuplot.info/docs_5.4/Gnuplot_5_4.pdf" target="_blank" rel="noopener">在线手册</a>查阅到：</p>
+<ul>
+<li><code>set format</code>命令用于设置坐标轴的刻度的格式。<code>set format x "%y-%m-%d"</code>意味着设置 X 轴的刻度为形如<code>19-09-10</code>的格式；</li>
+<li><code>set style data</code>命令设置数据的绘制风格。<code>set style data box</code>表示采用空心柱状图；</li>
+<li><code>set terminal</code>命令用于告诉<code>gnuplot</code>该生成什么样的输出。<code>set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</code>表示输出结果为 PNG 格式的图片，并且采用给定的字体；</li>
+<li><code>set title</code>命令控制输出结果顶部中间位置的标题文案；</li>
+<li><code>set output</code>命令用于将原本输出到屏幕上的内容重定向到文件中；</li>
+<li><code>set timefmt</code>命令用于指定输入的日期时间数据的格式。<code>set timefmt '%Y-%m-%d'</code>意味着输入的日期时间数据的为形如<code>2019-09-10</code>的格式；</li>
+<li><code>set xdata</code>命令控制<code>gnuplot</code>如何理解属于 X 轴的数据。<code>set xdata time</code>表示 X 轴上的均为时间型数据；</li>
+<li><code>set xlabel</code>命令控制 X 轴的含义的文案。<code>set ylabel</code>与其类似，只是作用在 Y 轴上；</li>
+<li><code>set xrange</code>命令控制<code>gnuplot</code>所绘制的图形中 X 轴上的展示范围；</li>
+<li><code>set datafile separator</code>命令控制<code>gnuplot</code>读取数据文件时各列间的分隔符，<code>comma</code>表示分隔符为逗号。</li>
+</ul>
+<h2 id="想要按周统计怎么办"><a href="#想要按周统计怎么办" class="headerlink" title="想要按周统计怎么办"></a>想要按周统计怎么办</h2><p>假设我要查看的是2021年每一周在吃的方面的总开支，那么需要在<code>csvsql</code>中将数据按所处的是第几周进行聚合</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger -b '2021-01-01' -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT strftime("%W", `a`) AS `week`, SUM(`f`) FROM `expense` GROUP BY `week` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/expense_dow.csv</span><br><span class="line">➜  Accounting head /tmp/expense_dow.csv</span><br><span class="line">00,633.6</span><br><span class="line">01,437.3</span><br><span class="line">02,337.5</span><br><span class="line">03,428.4</span><br><span class="line">04,191.5</span><br><span class="line">05,330.4</span><br><span class="line">06,154.6</span><br><span class="line">07,621.4</span><br><span class="line">08,485.6</span><br><span class="line">09,375.73</span><br></pre></td></tr></tbody></table></figure>
+<p>同时也需要调整<code>gnuplot</code>的脚本</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</span><br><span class="line">set title '吃的开销'</span><br><span class="line">set output '/tmp/xyz2.png'</span><br><span class="line">set xlabel '第几周'</span><br><span class="line">set xrange [0:54]</span><br><span class="line">set ylabel '金额(¥)'</span><br><span class="line">set yrange [0:1000]</span><br><span class="line">set datafile separator comma</span><br><span class="line">plot '/tmp/expense_dow.csv' using 1:2 with lines</span><br></pre></td></tr></tbody></table></figure>
+<p>结果如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz2.png" alt=""></p>
+<h2 id="想要同时查看两年的图形怎么办"><a href="#想要同时查看两年的图形怎么办" class="headerlink" title="想要同时查看两年的图形怎么办"></a>想要同时查看两年的图形怎么办</h2><p><code>gnuplot</code>支持同时绘制多条曲线，只要使用数据文件中不同的列作为纵坐标即可。假设我要对比的是2020年和2021年，那么先分别统计两年的开支到不同的文件中</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger -b '2020-01-01' -e '2021-01-01' -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT strftime("%W", `a`) AS `week`, SUM(`f`) FROM `expense` GROUP BY `week` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/expense_2020.csv</span><br><span class="line">➜  Accounting ledger -b '2021-01-01' -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT strftime("%W", `a`) AS `week`, SUM(`f`) FROM `expense` GROUP BY `week` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/expense_2021.csv</span><br></pre></td></tr></tbody></table></figure>
+<p>再将处于同一周的数据合并在一起</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting csvjoin -H -c a /tmp/expense_2020.csv /tmp/expense_2021.csv | tail -n '+2' &gt; /tmp/expense_2years.csv</span><br></pre></td></tr></tbody></table></figure>
+<p>最后，再让<code>gnuplot</code>一次性绘制两条折线</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</span><br><span class="line">set title '吃的开销'</span><br><span class="line">set output '/tmp/xyz2years.png'</span><br><span class="line">set xlabel '第几周'</span><br><span class="line">set xrange [0:54]</span><br><span class="line">set ylabel '金额(¥)'</span><br><span class="line">set yrange [0:1000]</span><br><span class="line">set datafile separator comma</span><br><span class="line">plot '/tmp/expense_2years.csv' using 1:2 with lines title "2020", '/tmp/expense_2years.csv' using 1:3 with lines title "2021"</span><br></pre></td></tr></tbody></table></figure>
+<p>结果如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz2years.png" alt=""></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>其实仍然是非常不直观的，因为最终生成的是一张静态的图片，并不能做到将鼠标挪到曲线上时就给出所在位置的纵坐标的效果。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/09/04/git-log很好，你也可以写一个/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -827,151 +958,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/06/14/从AOP到method-combination/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/06/14/从AOP到method-combination/" class="post-title-link" itemprop="url">从AOP到method-combination</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-06-14 20:28:28 / 修改时间：20:30:36" itemprop="dateCreated datePublished" datetime="2021-06-14T20:28:28+08:00">2021-06-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/实战Elisp/" itemprop="url" rel="index">
-                    <span itemprop="name">实战Elisp</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2021/06/14/从AOP到method-combination/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/06/14/从AOP到method-combination/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。</p>
-</blockquote>
-<p>Emacs的org-mode用的是一门叫Org的标记语言，正如大部分的标记语言那样，它也支持无序列表和检查清单——前者以<code>-</code>（一个连字符、一个空格）为前缀，后者以<code>- [ ]</code>或<code>- [x]</code>为前缀（比无序列表多了一对方括号及中间的字母<code>x</code>）</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/org模式中checkbox的语法.jpg" alt=""></p>
-<p>此外，org-mode还为编辑这两种列表提供了快速插入新一行的快捷键<code>M-RET</code>（即按住<code>alt</code>键并按下回车键）。如果光标位于无序列表中，那么新的一行将会自动插入<code>-</code>前缀。遗憾的是，如果光标位于检查清单中，那么新一行并没有自动插入一对方括号</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/在Emacs中用alt回车添加一行.gif" alt=""></p>
-<p>每次都要手动敲入<code>[ ]</code>还挺繁琐的。好在这是Emacs，它是可扩展的、可定制的。只需敲几行代码，就可以让Emacs代劳输入方括号了。</p>
-<h1 id="Emacs的AOP特性——advice-add"><a href="#Emacs的AOP特性——advice-add" class="headerlink" title="Emacs的AOP特性——advice-add"></a>Emacs的AOP特性——<code>advice-add</code></h1><p>借助Emacs的<code>describe-key</code>功能，可以知道在一个<code>org-mode</code>的文件中按下<code>M-RET</code>时，Emacs会调用到函数<code>org-insert-item</code>上。要想让<code>M-RET</code>实现自动追加方括号的效果，马上可以想到简单粗暴的办法：</p>
-<ul>
-<li>定义一个新的函数，并将<code>M-RET</code>绑定到它身上；</li>
-<li>重新定义<code>org-insert-item</code>函数，使其追加方括号；</li>
-</ul>
-<p>但不管是上述的哪一种，都需要连带着重新实现插入连字符、空格前缀的已有功能。有一种更温和的办法可以在现有的<code>org-insert-item</code>的基础上扩展它的行为，那就是Emacs的<code>advice</code>特性。</p>
-<p><code>advice</code>是面向切面编程范式的一种，使用Emacs的<code>advice-add</code>函数，可以在一个普通的函数被调用前或被调用后捎带做一些事情——比如追加一对方括号。对于这两个时机，分别可以直接用<code>advice-add</code>的<code>:before</code>和<code>:after</code>来实现，但用在这里都不合适，因为：</p>
-<ul>
-<li>检测是否位于检查清单中，需要在调用<code>org-insert-item</code>前做；</li>
-<li>追加一对方括号，则需要在<code>org-insert-item</code>之后做。</li>
-</ul>
-<p>因此，正确的做法是使用<code>:around</code>来修饰原始的<code>org-insert-item</code>函数</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-defun</span> lt-around-org-insert-item (<span class="name">oldfunction</span> <span class="symbol">&amp;rest</span> args)</span><br><span class="line">  <span class="string">"在调用了org-insert-item后识时务地追加 [ ]这样的内容。"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">is-checkbox</span> <span class="literal">nil</span>)</span><br><span class="line">        (<span class="name">line</span> (<span class="name">buffer-substring-no-properties</span> (<span class="name">line-beginning-position</span>) (<span class="name">line-end-position</span>))))</span><br><span class="line">    <span class="comment">;; 检查当前行是否为checkbox</span></span><br><span class="line">    (<span class="name">when</span> (<span class="name">string-match-p</span> <span class="string">"- \\[.\\]"</span> line)</span><br><span class="line">      (<span class="name">setf</span> is-checkbox <span class="literal">t</span>))</span><br><span class="line">    <span class="comment">;; 继续使用原来的org-insert-item插入文本</span></span><br><span class="line">    (<span class="name">apply</span> oldfunction args)</span><br><span class="line">    <span class="comment">;; 决定要不要追加“ [ ]”字符串</span></span><br><span class="line">    (<span class="name">when</span> is-checkbox</span><br><span class="line">      (<span class="name">insert</span> <span class="string">"[ ] "</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">advice-add</span> 'org-insert-item <span class="symbol">:around</span> #'lt-around-org-insert-item)</span><br></pre></td></tr></tbody></table></figure>
-<p>这下子，<code>M-RET</code>对检查清单也一视同仁了</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/advice后的效果.gif" alt=""></p>
-<h1 id="Common-Lisp的method-combination"><a href="#Common-Lisp的method-combination" class="headerlink" title="Common Lisp的method combination"></a>Common Lisp的<code>method combination</code></h1><p><code>advice-add</code>的<code>:after</code>、<code>:around</code>，以及<code>:before</code>在Common Lisp中有着完全同名的等价物，只不过不是用一个叫<code>advice-add</code>的函数，而是喂给一个叫<code>defmethod</code>的宏。举个例子，用<code>defmethod</code>可以定义出一个多态的<code>len</code>函数，对不同类型的入参执行不同的逻辑</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defgeneric</span> len (<span class="name">x</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">length</span> x))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len ((<span class="name">x</span> hash-table))</span><br><span class="line">  (<span class="name">hash-table-count</span> x))</span><br></pre></td></tr></tbody></table></figure>
-<p>然后为其中参数类型为字符串的特化版本定义对应的<code>:after</code>、<code>:around</code>，以及<code>:before</code>修饰过的方法</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmethod</span> len <span class="symbol">:after</span> ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"after len~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len <span class="symbol">:around</span> ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"around中调用len前~%"</span>)</span><br><span class="line">  (<span class="name">prog1</span></span><br><span class="line">      (<span class="name">call-next-method</span>)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"around中调用len后~%"</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len <span class="symbol">:before</span> ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"before len~%"</span>))</span><br></pre></td></tr></tbody></table></figure>
-<p>这一系列方法的调用规则为：</p>
-<ol>
-<li>先调用<code>:around</code>修饰的方法；</li>
-<li>由于上述方法中调用了<code>call-next-method</code>，因此再调用<code>:before</code>修饰的方法；</li>
-<li>调用不加修饰的方法（在CL中这称为<code>primary</code>方法）；</li>
-<li>再调用<code>:after</code>修饰的方法；</li>
-<li>最后，又回到了<code>:around</code>中调用<code>call-next-method</code>的位置。</li>
-</ol>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/实际效果.jpg" alt=""></p>
-<p>咋看之下，Emacs的<code>advice-add</code>支持的修饰符要多得多，实则不然。在CL中，<code>:after</code>、<code>:around</code>，以及<code>:before</code>同属于一个名为<code>standard</code>的<code>method combination</code>，而CL还内置了其它的<code>method combination</code>。在<a href="https://lispcookbook.github.io/cl-cookbook/clos.html#method-qualifiers-before-after-around" target="_blank" rel="noopener">《Other method combinations》</a>一节中，作者演示了<code>progn</code>和<code>list</code>的例子。</p>
-<p>如果想要模拟Emacs的<code>advice-add</code>所支持的其它修饰符，那么就必须定义新的<code>method combination</code>了。</p>
-<h1 id="可编程的编程语言——define-method-combination"><a href="#可编程的编程语言——define-method-combination" class="headerlink" title="可编程的编程语言——define-method-combination"></a>可编程的编程语言——<code>define-method-combination</code></h1><p>曾经我以为，<code>defmethod</code>只能接受<code>:after</code>、<code>:around</code>，以及<code>:before</code>，认为这三个修饰符是必须在语言一级支持的特性。直到有一天我闯入了LispWorks的<a href="http://www.lispworks.com/documentation/HyperSpec/Body/m_defi_4.htm" target="_blank" rel="noopener">define-method-combination</a>词条中，才发现它们也是三个平凡的修饰符而已。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define-method-combination</span> standard ()</span><br><span class="line">  ((<span class="name">around</span> (<span class="symbol">:around</span>))</span><br><span class="line">   (<span class="name">before</span> (<span class="symbol">:before</span>))</span><br><span class="line">   (<span class="name">primary</span> () <span class="symbol">:required</span> <span class="literal">t</span>)</span><br><span class="line">   (<span class="name">after</span> (<span class="symbol">:after</span>)))</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">call-methods</span> (<span class="name">methods</span>)</span><br><span class="line">           (<span class="name">mapcar</span> #'(lambda (method)</span><br><span class="line">                       `(call-method ,method))</span><br><span class="line">                   methods)))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">form</span> (<span class="name">if</span> (<span class="name">or</span> before after (<span class="name">rest</span> primary))</span><br><span class="line">                    `(multiple-value-prog1</span><br><span class="line">                         (progn ,@(call-methods before)</span><br><span class="line">                                (call-method ,(first primary)</span><br><span class="line">                                             ,(rest primary)))</span><br><span class="line">                       ,@(call-methods (reverse after)))</span><br><span class="line">                    `(call-method ,(first primary)))))</span><br><span class="line">      (<span class="name">if</span> around</span><br><span class="line">          `(call-method ,(first around)</span><br><span class="line">                        (,@(rest around)</span><br><span class="line">                           (make-method ,form)))</span><br><span class="line">          form))))</span><br></pre></td></tr></tbody></table></figure>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/DIO就是厉害梗图.jpg" alt=""></p>
-<p>秉持“柿子要挑软的捏”的原则，让我来尝试模拟出<code>advice-add</code>的<code>:after-while</code>和<code>:before-while</code>的效果吧。</p>
-<p><code>:after-while</code>和<code>:before-while</code>的效果还是很容易理解的</p>
-<blockquote>
-<p>Call function after the old function and only if the old function returned non-<code>nil</code>.</p>
-<p>Call function before the old function and don’t call the old function if function returns <code>nil</code>.</p>
-</blockquote>
-<p>因此，由<code>define-method-combination</code>生成的<code>form</code>中（犹记得伞哥在《PCL》中将它翻译为形式），势必要：</p>
-<ul>
-<li>检查是否有被<code>:before-while</code>修饰的方法；</li>
-<li>如果有，检查调用了被<code>:before-while</code>修饰的方法后的返回值是否为<code>NIL</code>；</li>
-<li>如果没有，或者被<code>:before-while</code>修饰的方法的返回值为非<code>NIL</code>，便调用<code>primary</code>方法；</li>
-<li>如果有被<code>:after-while</code>修饰的方法，并且<code>primary</code>方法的返回值不为<code>NIL</code>，就调用这些方法；</li>
-<li>返回<code>primary</code>方法的返回值。</li>
-</ul>
-<p>为了简单起见，尽管<code>after-while</code>和<code>before-while</code>变量指向的是多个“可调用”的方法，但这里只调用“最具体”的一个。</p>
-<p>给这个新的<code>method combination</code>取名为<code>emacs-advice</code>，其具体实现已是水到渠成</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define-method-combination</span> emacs-advice ()</span><br><span class="line">  ((<span class="name">after-while</span> (<span class="symbol">:after-while</span>))</span><br><span class="line">   (<span class="name">before-while</span> (<span class="symbol">:before-while</span>))</span><br><span class="line">   (<span class="name">primary</span> () <span class="symbol">:required</span> <span class="literal">t</span>))</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">after-while-fn</span> (<span class="name">first</span> after-while))</span><br><span class="line">        (<span class="name">before-while-fn</span> (<span class="name">first</span> before-while))</span><br><span class="line">        (<span class="name">result</span> (<span class="name">gensym</span>)))</span><br><span class="line">    `(let ((,result (when ,before-while-fn</span><br><span class="line">                      (call-method ,before-while-fn))))</span><br><span class="line">       (when (or (null ,before-while-fn)</span><br><span class="line">                 ,result)</span><br><span class="line">         (let ((,result (call-method ,(first primary))))</span><br><span class="line">           (when (and ,result ,after-while-fn)</span><br><span class="line">             (call-method ,after-while-fn))</span><br><span class="line">           ,result)))))</span><br></pre></td></tr></tbody></table></figure>
-<p><code>call-method</code>（以及它的搭档<code>make-method</code>）是专门用于在<code>define-method-combination</code>中调用传入的方法的宏。</p>
-<p>用一系列<code>foobar</code>方法来验证一番</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defgeneric</span> foobar (<span class="name">x</span>)</span><br><span class="line">  (<span class="symbol">:method-combination</span> emacs-advice))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> foobar (<span class="name">x</span>)</span><br><span class="line">  'hello)</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> foobar <span class="symbol">:after-while</span> (<span class="name">x</span>)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> x))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"for side effect~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> foobar <span class="symbol">:before-while</span> (<span class="name">x</span>)</span><br><span class="line">  (<span class="name">evenp</span> x))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobar</span> <span class="number">1</span>) <span class="comment">;; 返回NIL</span></span><br><span class="line">(<span class="name">foobar</span> <span class="number">2</span>) <span class="comment">;; 打印“fo side effect”，并返回HELLO</span></span><br></pre></td></tr></tbody></table></figure>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>尽管我对CL赏识有加，但越是琢磨<code>define-method-combination</code>，就越会发现编程语言的能力是有极限的<del>，除非超越编程语言</del>。比如Emacs的<code>advice-add</code>所支持的<code>:filter-args</code>和<code>:filter-return</code>就无法用<code>define-method-combination</code>优雅地实现出来——并不是完全不行，只不过需要将它们合并在由<code>:around</code>修饰的方法之中。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1043,7 +1029,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

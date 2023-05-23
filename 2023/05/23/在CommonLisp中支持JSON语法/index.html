@@ -45,26 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="开篇买了MacBook Pro之后的一段时间里，为了打造适合自己的知识管理体系，折腾起了笔记类软件（题外话，我还挺喜欢尝试新软件的，尤其在接触macOS后发现许多软件都长得很漂亮）。其实在入手Mac之前，我已经试用过不少笔记类软件和服务了，包括Evernote（还有印象笔记）、有道云笔记、为知笔记，等等。再后来，改用Emacs的org-mode来写笔记——主要是将一些常常搜索的内容或经验记录在了多">
-<meta name="keywords" content="boostnote,editor,markdown,note taking,typora,yu writer,笔记类软件,编辑器,emacs">
+  <meta name="description" content="在 Lisp 中使用 reader macro 支持 JSON 语法什么是 reader macro？Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为">
+<meta name="keywords" content="common lisp,lisp,编程语言">
 <meta property="og:type" content="article">
-<meta property="og:title" content="用过的一些Markdown编辑器">
-<meta property="og:url" content="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/index.html">
+<meta property="og:title" content="在CommonLisp中支持JSON语法">
+<meta property="og:url" content="https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="开篇买了MacBook Pro之后的一段时间里，为了打造适合自己的知识管理体系，折腾起了笔记类软件（题外话，我还挺喜欢尝试新软件的，尤其在接触macOS后发现许多软件都长得很漂亮）。其实在入手Mac之前，我已经试用过不少笔记类软件和服务了，包括Evernote（还有印象笔记）、有道云笔记、为知笔记，等等。再后来，改用Emacs的org-mode来写笔记——主要是将一些常常搜索的内容或经验记录在了多">
+<meta property="og:description" content="在 Lisp 中使用 reader macro 支持 JSON 语法什么是 reader macro？Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2019-01-09T15:20:58.000Z">
+<meta property="og:updated_time" content="2023-05-23T15:49:42.238Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="用过的一些Markdown编辑器">
-<meta name="twitter:description" content="开篇买了MacBook Pro之后的一段时间里，为了打造适合自己的知识管理体系，折腾起了笔记类软件（题外话，我还挺喜欢尝试新软件的，尤其在接触macOS后发现许多软件都长得很漂亮）。其实在入手Mac之前，我已经试用过不少笔记类软件和服务了，包括Evernote（还有印象笔记）、有道云笔记、为知笔记，等等。再后来，改用Emacs的org-mode来写笔记——主要是将一些常常搜索的内容或经验记录在了多">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
+<meta name="twitter:title" content="在CommonLisp中支持JSON语法">
+<meta name="twitter:description" content="在 Lisp 中使用 reader macro 支持 JSON 语法什么是 reader macro？Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为">
 
-<link rel="canonical" href="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/">
+<link rel="canonical" href="https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/">
 
 
 <script id="page-configurations">
@@ -76,7 +70,7 @@
   };
 </script>
 
-  <title>用过的一些Markdown编辑器 | 小打小闹写点bug</title>
+  <title>在CommonLisp中支持JSON语法 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -207,7 +201,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/微信.jpg">
@@ -220,7 +214,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          用过的一些Markdown编辑器
+          在CommonLisp中支持JSON语法
         </h1>
 
         <div class="post-meta">
@@ -229,16 +223,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2018-12-14 23:43:50" itemprop="dateCreated datePublished" datetime="2018-12-14T23:43:50+08:00">2018-12-14</time>
+              <time title="创建时间：2023-05-23 23:47:22 / 修改时间：23:49:42" itemprop="dateCreated datePublished" datetime="2023-05-23T23:47:22+08:00">2023-05-23</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-01-09 23:20:58" itemprop="dateModified" datetime="2019-01-09T23:20:58+08:00">2019-01-09</time>
-              </span>
 
           
   
@@ -249,8 +237,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2018/12/14/用过的一些Markdown编辑器/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/14/用过的一些Markdown编辑器/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2023/05/23/在CommonLisp中支持JSON语法/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/05/23/在CommonLisp中支持JSON语法/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -265,46 +253,31 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h2><p>买了MacBook Pro之后的一段时间里，为了打造适合自己的知识管理体系，折腾起了笔记类软件（题外话，我还挺喜欢尝试新软件的，尤其在接触macOS后发现许多软件都长得很漂亮）。其实在入手Mac之前，我已经试用过不少笔记类软件和服务了，包括Evernote（还有印象笔记）、有道云笔记、为知笔记，等等。再后来，改用Emacs的<a href="https://orgmode.org/" target="_blank" rel="noopener">org-mode</a>来写笔记——主要是将一些常常搜索的内容或经验记录在了多个.org文件中，算是一份自己的FAQ。后来想看看在macOS的世界中有没有更好的工具，同时渐渐觉得Markdown是一个更好的笔记内容载体，便尝试了一些知名的笔记类软件暨Markdown编辑器。</p>
-<p>大致上尝试了下列这些：</p>
-<ul>
-<li>Emacs</li>
-<li>Boostnote</li>
-<li>Quiver</li>
-<li>Typora</li>
-<li>Visual Studio Code</li>
-<li>Yu Writer</li>
-</ul>
-<p>本文并不是一篇完整的、专业的软件评测报告，只是我兴趣使然的对各个软件的吐槽和赞美，各位权当打发时间吧。下面我按顺序说一下上面提及的各款软件。</p>
-<h2 id="Emacs"><a href="#Emacs" class="headerlink" title="Emacs"></a>Emacs</h2><p><a href="https://www.gnu.org/software/emacs/index.html" target="_blank" rel="noopener">Emacs</a>并不仅仅是一款Markdown编辑器，我用得最多的是用它来做计划（之前还用来写Node.js代码，不过现在交给VSCode了）。用Emacs来写Markdown，坏处是没有live preview的功能。在Emacs中打开了一个.md文件，只会原原本本地显示着井号、星号，三个反引号等Markdown语法的关键字——并且还是白底黑字的模样，而不带有丝毫不同的样式。为了让它们好看点，你还需要安装一个叫做<code>markdown-mode</code>的Emacs扩展。但几遍安装了<code>markdown-mode</code>，也无法实时预览。<code>markdown-mode</code>的菜单栏中有一个叫做“Preview”的功能，它依赖一个名为<code>markdown</code>的命令行工具（用<code>brew install markdown</code>可以安装）。当一切安装完毕点击“Preview”菜单项时，才发现是在网页浏览器中查看的方式——虽然有preview了，但并不live。</p>
-<p>Emacs在写Markdown方面也并非一无是处。对程序员而言，在一篇Markdown写就的文章中插入代码是再正常不过的事情了。在Emacs中将光标定位到Markdown语法的代码块内，按下<code>control</code>和<code>c</code>的组合键，再敲一下单引号键，Emacs便会另起一个相应模式的buffer，并将代码块中的内容复制到新buffer中供继续编辑。如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs_%E7%BC%96%E8%BE%91Markdown%E4%BB%A3%E7%A0%81%E5%9D%97.gif" alt="Emacs_编辑Markdown代码块.gif"></p>
-<p>在上面的GIF中，代码块以GitHub Flavored Markdown的语法在开头的三个反引号后附上了模式的名字，即lisp，Emacs便会打开<code>lisp-mode</code>的buffer。在这个buffer中可以继续使用Emacs的完整功能编辑对代码，包括语法高亮、自动补全，等等——如果启动了<a href="https://common-lisp.net/project/slime/" target="_blank" rel="noopener">SLIME</a>，甚至可以运行里面的Common Lisp代码。</p>
-<p>Emacs和VSCode用于在编写代码的同时写写项目的README.md文件应当是绰绰有余的了。</p>
-<h2 id="Boostnote"><a href="#Boostnote" class="headerlink" title="Boostnote"></a>Boostnote</h2><p><a href="https://boostnote.io/" target="_blank" rel="noopener">Boostnote</a>自诩为“程序员的笔记本”，它并不是我在Emacs之外寻找的第一款笔记软件，在它之前，我还尝试了<a href="https://www.notion.so/" target="_blank" rel="noopener">Notion</a>、<a href="http://happenapps.com/" target="_blank" rel="noopener">Quiver</a>来着。上手后发现，Boostnote简直就是Quiver的开源免费版本，相当的喜爱。</p>
-<p>Boostnote当然让我格外喜欢的有几点：首先，Boostnote可以实时预览键入的Markdown源文档。会有一列跟编辑区域差不多宽的区域被用来展示Markdown渲染后的效果。（刚刚发现，原来这个区域的宽度是可以拖动调节的）</p>
-<p>其次，它不仅支持Markdown、带语法高亮的代码块，甚至还支持表格和流程图的绘制！当然我以为，用竖线和连字符绘制表格的功能仅在Emacs的org-mode中存在（孤陋寡闻了汗颜），刚开始用Boostnote制作表格的时候可是相当兴奋。而text-based的绘制流程图的方式也是让我大开眼界（后来才知道原来有<a href="http://flowchart.js.org/" target="_blank" rel="noopener">flowchart.js</a>这样的工具）——尽管后来我渐渐发现，绘制流程图其实挺少用。</p>
-<p>然后Boostnote具备在多份笔记中搜索的功能，这对于一款笔记软件而言倒是真的非常重要，因为有时候只能想到一些只言片语，而并不能确定所要查阅的内容究竟在哪一份笔记中。</p>
-<p>但Boostnote也有一些缺点。首先，Boostnote是用自有的文件格式（而不是纯文本的.md文件）来存储输入的内容的——打开<code>~/Boostnote/notes/</code>可以看到这些后缀为<code>.cson</code>的文件。这样一来，假设我日后发现了一款更优秀的Markdown编辑器，那就不能无痛迁移了，还得先从Boostnote中将这些笔记逐一导出成.md文件才行。</p>
-<p>其次，Boostnote只支持三层的组织结构——最外层是storage，然后是folder，最后就是笔记本身。当初有道云笔记特别让我喜欢的，就是它支持非常多层级的目录结构。尽管目录不是越多越好，但有这种灵活性总是更好的。否则，笔记的使用者就只能在命名和标签上下功夫了</p>
-<p>最后一点，就是Boostnote在我的系统上非常容易崩溃。有时候一翻起盖子，看到的就是Boostnote崩溃的提示。</p>
-<p>不过Boostnote支持往其中粘贴图片，当我需要快速记录一些图文内容时，我还是很喜欢用它的。</p>
-<h2 id="Yu-Writer"><a href="#Yu-Writer" class="headerlink" title="Yu Writer"></a>Yu Writer</h2><p>某一天偶然遇到了<a href="https://ivarptr.github.io/yu-writer.site/" target="_blank" rel="noopener">Yu Writer</a>，它官网上的截图看着很吸引人，于是我便试用了一下。第一印象是，Yu Writer is awesome！首先它很人性化。它的预览区域是一个minimap——就是Sublime Text最右侧的那一列。在做到实时预览的时候，也不会占用太多的横向空间。其次，它支持大纲视图</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Yu%20Writer%E7%9A%84%E5%A4%A7%E7%BA%B2%E8%A7%86%E5%9B%BE.png" alt="Yu Writer的大纲视图"></p>
-<p>即上图左侧的目录。恰逢当时我在用Boostnote写一篇比较长的设计文档，深刻地体验到了一个大纲视图的重要意义——对在长文档内的多个标题间跳转非常有帮助。再次，Yu Writer还准备了工具栏，方便不懂得Markdown语法的用户；支持标签页，便于在多个文档间切换；甚至可以把一个Markdown文档作为幻灯片来播放。</p>
-<p>但Yu Writer也有它自己的劣势。第一，在Yu Writer内，原本在macOS系统中全局可用的Emacs风格快捷键——即<code>control+b</code>往左移动光标、<code>control+f</code>往右移动光标——居然不生效！这些快捷键对我个人还是非常重要的。</p>
-<p>第二，在Yu Writer中，不能直接插入磁盘上的图片文件的绝对地址，既没有在预览区域显示出来，也没有在文档列表显示成功。</p>
-<p>据说Yu Writer的作者的主业是厨师，感觉好强</p>
-<h2 id="Typora"><a href="#Typora" class="headerlink" title="Typora"></a>Typora</h2><p><a href="https://typora.io/" target="_blank" rel="noopener">Typora</a> is best。不同于前面提到的几款Markdown编辑器，Typora是“所见即所得”的编辑器。你敲入两个井号，加一个空格，再敲入你的标题内容，最后回车，那么标题内容就会被渲染为二级标题的形式，如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora_%E8%BE%93%E5%85%A5%E4%BA%8C%E7%BA%A7%E6%A0%87%E9%A2%98.gif" alt="Typora_输入二级标题"></p>
-<p>这么一来，屏幕上的空间基本都可以被用来写作，不需要担心被预览用的列给占据了。</p>
-<p>然后，Typora没有自定义它的存储结构，它直接打开磁盘上的.md文件进行编辑，这些Markdown源文件可以随心所欲地放在任何喜欢的目录下，只要能打开就行。再加上它文件树视图，就实现了不受限制的笔记组织方式了，如下图</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora_%E6%96%87%E4%BB%B6%E6%A0%91%E8%A7%86%E5%9B%BE.png" alt="Typora_文件树视图"></p>
-<p>不过一个可以想到的缺点，就是Typora不支持在所有的Markdown文件上搜索关键字——毕竟它也不知道要去哪个目录下寻找这些待搜索的源文件。</p>
-<p>尽管Typora外观很简洁，但Boostnote有的功能它一个也没有落下，就像它的官网所说的那样</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora%E7%9A%84%E5%AE%98%E7%BD%91%E5%AE%A3%E4%BC%A0.png" alt="Typora的官网宣传"></p>
-<p>现在我的博客的文章基本都是用Typora来写的，冥冥中感受到了一股乐趣。但Typora毕竟没有搜索功能，所以我又开始摸索额外的搜索笔记的方式了（比如把记录在.org文件中的FAQ导入到ElasticSearch中再借助全文搜索的力量来找到自己要的内容）。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>没有最好的，只有最适合的，祝各位都能找到最适合自己的Markdown编辑器。</p>
+        <h1 id="在-Lisp-中使用-reader-macro-支持-JSON-语法"><a href="#在-Lisp-中使用-reader-macro-支持-JSON-语法" class="headerlink" title="在 Lisp 中使用 reader macro 支持 JSON 语法"></a>在 Lisp 中使用 reader macro 支持 JSON 语法</h1><h2 id="什么是-reader-macro？"><a href="#什么是-reader-macro？" class="headerlink" title="什么是 reader macro？"></a>什么是 reader macro？</h2><p>Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为 reader macro function。举个例子，单引号<code>'</code>就是一个 macro character，可以用函数<code>get-macro-character</code>来获取它对应的 reader macro function。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">get-macro-character</span> #\')</span><br><span class="line">#&lt;FUNCTION SB-IMPL::READ-QUOTE&gt;</span><br><span class="line">NIL</span><br></pre></td></tr></tbody></table></figure>
+<p>借助单引号，可以简化一些代码的写法，例如表达一个符号<code>HELLO</code>本身可以写成这样。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; 'hello</span><br><span class="line">HELLO</span><br></pre></td></tr></tbody></table></figure>
+<p>而不是下面这种等价但更繁琐的形式。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">quote</span> hello)</span><br><span class="line">HELLO</span><br></pre></td></tr></tbody></table></figure>
+<p>Common Lisp 中还定义了由两个字符构成的 reader macro，例如用于书写<code>simple-vector</code>字面量的<code>#(</code>。借助它，如果想要表达一个依次由数字 1、2、3 构成的<code>simple-vector</code>类型的对象，不需要显式地调用函数<code>vector</code>并传给它 1、2、3，而是可以写成<code>#(1 2 3)</code>。</p>
+<h2 id="支持-JSON-语法后有什么效果？"><a href="#支持-JSON-语法后有什么效果？" class="headerlink" title="支持 JSON 语法后有什么效果？"></a>支持 JSON 语法后有什么效果？</h2><p>合法的 JSON 文本不一定是合法的 Common Lisp 源代码。例如，<code>[1, 2, 3]</code>在 JSON 标准看来是一个由数字 1、2、3 组成的数组，但在 Common Lisp 中，这段代码会触发 condition。（condition 就是 Common Lisp 中的“异常”、“出状况”了）</p>
+<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">eof-value</span> (<span class="name">gensym</span>)))</span><br><span class="line">  (<span class="name">with-input-from-string</span> (<span class="name">stream</span> <span class="string">"[1, 2, 3]"</span>)</span><br><span class="line">    (<span class="name">block</span> <span class="literal">nil</span></span><br><span class="line">      (<span class="name">loop</span></span><br><span class="line">        (<span class="name">let</span> ((<span class="name">expr</span> (<span class="name">read</span> stream <span class="literal">nil</span> eof-value)))</span><br><span class="line">          (<span class="name">when</span> (<span class="name">eq</span> expr eof-value)</span><br><span class="line">            (<span class="name">return</span>))</span><br><span class="line"></span><br><span class="line">          (<span class="name">print</span> expr))))))</span><br><span class="line"></span><br><span class="line">[1 ; Evaluation aborted on #&lt;SB-INT:SIMPLE-READER-ERROR "Comma not inside a backquote." {1003AAD863}&gt;.</span><br></pre></td></tr></tbody></table></figure>
+<p>这是因为按照 Common Lisp 的<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/02_b.htm" target="_blank" rel="noopener">读取算法</a>，左方括号<code>[</code>和数字 1 都是标准中所指的 constituent character，它们可以组成一个 token，并且最终被解析为一个符号类型的对象。而紧接着的字符是逗号<code>,</code>，<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/02_ad.htm" target="_blank" rel="noopener">它是一个 terminating macro char</a>，按照<a href="http://www.lispworks.com/documentation/lw60/CLHS/Body/02_dg.htm" target="_blank" rel="noopener">标准</a>，如果不是在一个反引号表达式中使用它将会是无效的，因此触发了 condition。</p>
+<p>假如存在一个由两个字符<code>#J</code>定义的 reader macro、允许开发者使用 JSON 语法来描述紧接着的对象的话，那么就可以写出下面这样的代码。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">progn</span></span><br><span class="line">           (<span class="name">print</span> #jfalse)</span><br><span class="line">           (<span class="name">print</span> #jtrue)</span><br><span class="line">           (<span class="name">print</span> #j233.<span class="number">666</span>)</span><br><span class="line">           (<span class="name">print</span> #jnull)</span><br><span class="line">           (<span class="name">print</span> #j[<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line">           (<span class="name">print</span> #j{<span class="string">"a"</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]})</span><br><span class="line">           (<span class="name">print</span> (<span class="name">gethash</span> <span class="string">"a"</span> #j{<span class="string">"a"</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]})))</span><br><span class="line"></span><br><span class="line">YASON:FALSE </span><br><span class="line">YASON:TRUE </span><br><span class="line"><span class="number">233.666d0</span> </span><br><span class="line">:NULL </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> #(<span class="number">3</span>) #(<span class="number">4</span> <span class="number">5</span>)) </span><br><span class="line">#&lt;HASH-TABLE :TEST EQUAL :COUNT 1 {1003889963}&gt; </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>显然，用上述语法表示一个哈希表，要比下面这样的代码简单得多</p>
+<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">obj</span> (<span class="name">make-hash-table</span> <span class="symbol">:test</span> #'equal)))</span><br><span class="line">           (<span class="name">setf</span> (<span class="name">gethash</span> <span class="string">"a"</span> obj) #(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">           obj)</span><br><span class="line"></span><br><span class="line">#&lt;HASH-TABLE :TEST EQUAL :COUNT 1 {1003CB7643}&gt;</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="如何用-reader-macro-解析-JSON？"><a href="#如何用-reader-macro-解析-JSON？" class="headerlink" title="如何用 reader macro 解析 JSON？"></a>如何用 reader macro 解析 JSON？</h2><p>Common Lisp 并没有预置<code>#J</code>这个 reader macro，但这门语言允许使用者定义自己的 macro character，因此前面的示例代码是可以实现的。要自定义出<code>#J</code>这个读取器宏，需要使用函数<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/f_set__1.htm#set-dispatch-macro-character" target="_blank" rel="noopener"><code>set-dispatch-macro-character</code></a>。它的前两个参数分别为构成 macro character 的前两个字符，即<code>#</code>和<code>J</code>——其中<code>J</code>即便是写成了小写，也会被转换为大写后再使用。第三个参数则是 Lisp 的词法解析器在遇到了<code>#J</code>时将会调用的参数。<code>set-dispatch-macro-character</code>会传给这个函数三个参数：</p>
+<ol>
+<li>用于读取源代码的字符输入流；</li>
+<li>构成 macro character 的第二个字符（即<code>J</code>）；</li>
+<li>非必传的、夹在<code>#</code>和<code>J</code>之间的数字。</li>
+</ol>
+<p>百闻不如一见，一段能够实现上一个章节中的示例代码的<code>set-dispatch-macro-character</code>用法如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">set-dispatch-macro-character</span></span><br><span class="line"> #\#</span><br><span class="line"> #\j</span><br><span class="line"> (<span class="name">lambda</span> (<span class="name">stream</span> char p)</span><br><span class="line">   (<span class="name">declare</span> (<span class="name">ignorable</span> char p))</span><br><span class="line">   (<span class="name">let</span> ((<span class="name">parsed</span> (<span class="name">yason</span><span class="symbol">:parse</span> stream</span><br><span class="line">                              <span class="symbol">:json-arrays-as-vectors</span> <span class="literal">t</span></span><br><span class="line">                              <span class="symbol">:json-booleans-as-symbols</span> <span class="literal">t</span></span><br><span class="line">                              <span class="symbol">:json-nulls-as-keyword</span> <span class="literal">t</span>)))</span><br><span class="line">     (<span class="name">if</span> (<span class="name">or</span> (<span class="name">symbolp</span> parsed)</span><br><span class="line">             (<span class="name">consp</span> parsed))</span><br><span class="line">         (<span class="name">list</span> 'quote parsed)</span><br><span class="line">         parsed))))</span><br></pre></td></tr></tbody></table></figure>
+<p>在<code>set-dispatch-macro-character</code>的回调函数中，我是用了开源的第三方库<code>yason</code>提供的函数<code>parse</code>，从输入流<code>stream</code>中按照 JSON 语法解析出一个值。函数<code>parse</code>的三个关键字参数的含义参见<a href="https://xh4.github.io/yason/#mapping" target="_blank" rel="noopener">这里</a>，此处不再赘述。由于 reader macro 的结果会被用于构造源代码的表达式，因此如果函数<code>parse</code>返回了符号或者<code>cons</code>类型，为了避免被编译器求值，需要将它们“引用”起来，因此将它们放到第一元素为<code>quote</code>的列表中。其它情况下，直接返回<code>parse</code>的返回值即可，因此它们是“自求值”的，求值结果是它们自身。</p>
+<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>本文我借助了现成的库<code>yason</code>来解析 JSON 格式的字符串，如果你对如何从零开始实现这样的 reader macro 感兴趣的话，可以参考<a href="https://gist.github.com/chaitanyagupta/9324402" target="_blank" rel="noopener">这篇文章</a>。</p>
+<p>全文完。</p>
 
     </div>
 
@@ -343,7 +316,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/" title="用过的一些Markdown编辑器">https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/</a>
+    <a href="https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/" title="在CommonLisp中支持JSON语法">https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -355,15 +328,9 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/boostnote/" rel="tag"><i class="fa fa-tag"></i> boostnote</a>
-              <a href="/tags/editor/" rel="tag"><i class="fa fa-tag"></i> editor</a>
-              <a href="/tags/markdown/" rel="tag"><i class="fa fa-tag"></i> markdown</a>
-              <a href="/tags/note-taking/" rel="tag"><i class="fa fa-tag"></i> note taking</a>
-              <a href="/tags/typora/" rel="tag"><i class="fa fa-tag"></i> typora</a>
-              <a href="/tags/yu-writer/" rel="tag"><i class="fa fa-tag"></i> yu writer</a>
-              <a href="/tags/笔记类软件/" rel="tag"><i class="fa fa-tag"></i> 笔记类软件</a>
-              <a href="/tags/编辑器/" rel="tag"><i class="fa fa-tag"></i> 编辑器</a>
-              <a href="/tags/emacs/" rel="tag"><i class="fa fa-tag"></i> emacs</a>
+              <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+              <a href="/tags/编程语言/" rel="tag"><i class="fa fa-tag"></i> 编程语言</a>
           </div>
 
         
@@ -372,13 +339,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2018/12/07/把GitHub作为图床/" rel="prev" title="把GitHub作为图床">
-      <i class="fa fa-chevron-left"></i> 把GitHub作为图床
+    <a href="/2023/05/07/impl-dotimes-by-callcc/" rel="prev" title="使用 call/cc 实现计数循环">
+      <i class="fa fa-chevron-left"></i> 使用 call/cc 实现计数循环
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2018/12/15/如何随机挑选要做的任务/" rel="next" title="如何随机挑选要做的任务">
-      如何随机挑选要做的任务 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -458,7 +422,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开篇"><span class="nav-number">1.</span> <span class="nav-text">开篇</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Emacs"><span class="nav-number">2.</span> <span class="nav-text">Emacs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Boostnote"><span class="nav-number">3.</span> <span class="nav-text">Boostnote</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yu-Writer"><span class="nav-number">4.</span> <span class="nav-text">Yu Writer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Typora"><span class="nav-number">5.</span> <span class="nav-text">Typora</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后记"><span class="nav-number">6.</span> <span class="nav-text">后记</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在-Lisp-中使用-reader-macro-支持-JSON-语法"><span class="nav-number">1.</span> <span class="nav-text">在 Lisp 中使用 reader macro 支持 JSON 语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-reader-macro？"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 reader macro？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#支持-JSON-语法后有什么效果？"><span class="nav-number">1.2.</span> <span class="nav-text">支持 JSON 语法后有什么效果？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何用-reader-macro-解析-JSON？"><span class="nav-number">1.3.</span> <span class="nav-text">如何用 reader macro 解析 JSON？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#尾声"><span class="nav-number">1.4.</span> <span class="nav-text">尾声</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -652,9 +616,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2018/12/14/用过的一些Markdown编辑器/",
-            identifier: "2018/12/14/用过的一些Markdown编辑器/",
-            title: "用过的一些Markdown编辑器"
+            url: "https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/",
+            identifier: "2023/05/23/在CommonLisp中支持JSON语法/",
+            title: "在CommonLisp中支持JSON语法"
           }
         }
       });
@@ -675,7 +639,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '451bd089b6895f74964d3baed30a01c7',
+      id: '52674133c334e7c0fc13bdb71e8b09be',
         language: 'zh-CN',
       distractionFreeMode: true
     });

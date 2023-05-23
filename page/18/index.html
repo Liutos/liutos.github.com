@@ -200,6 +200,107 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/06/04/cl-mongo用法入门/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/06/04/cl-mongo用法入门/" class="post-title-link" itemprop="url">cl-mongo用法入门</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-06-04 21:21:20" itemprop="dateCreated datePublished" datetime="2017-06-04T21:21:20+08:00">2017-06-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2018-12-02 21:29:37" itemprop="dateModified" datetime="2018-12-02T21:29:37+08:00">2018-12-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2017/06/04/cl-mongo用法入门/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/06/04/cl-mongo用法入门/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了<a href="https://github.com/fons/cl-mongo" target="_blank" rel="noopener">cl-mongo</a>这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己查阅，也为了方便有相同需求的人了解如何使用cl-mongo，于是写了这篇文章。</p>
+<p>首先使用<code>CL-MONGO:MONGO</code>函数连接MongoDB的服务器程序（mongod）。因为在我的系统上mongod进程监听的是27017这个端口，并且我希望使用的数据库名为test，因此键入如下代码来连接数据库</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:mongo</span> <span class="symbol">:db</span> <span class="string">"test"</span></span><br><span class="line">                <span class="symbol">:host</span> <span class="string">"127.0.0.1"</span></span><br><span class="line">                <span class="symbol">:port</span> <span class="number">27017</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>连接上了数据库后，首先尝试往其中写入一个文档。假设现在要记录的是发出的HTTP请求的信息，那么一个可以写入的基本信息就是请求的目标地址。假设在命令行的mongo shell中输入的内容如下</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.insert({<span class="attr">uri</span>: <span class="string">'http://example.com'</span>});</span><br></pre></td></tr></tbody></table></figure>
+<p>那么使用cl-mongo提供的<code>DB.INSERT</code>函数达到上述效果的代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.insert <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>求值上述代码后返回值为NIL。为了将上述写入的文档重新查询出来，需要使用cl-mongo提供的<code>DB.FIND</code>函数。因为只有一个文档，所以直接查询就可以查看到结果了。在mongo shell中我们可以使用如下代码查询</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.find();</span><br></pre></td></tr></tbody></table></figure>
+<p>使用<code>DB.FIND</code>函数的话编写的代码可能会长得像下面这样</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>在我的系统上求值了上述代码后在REPL中输出的内容如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">((<span class="number">86</span> <span class="number">449</span> <span class="number">0</span> <span class="number">1</span> <span class="number">8</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span> <span class="string">"http_request"</span>)</span><br><span class="line"> (<span class="name">&lt;CL-MONGO</span><span class="symbol">:DOCUMENT&gt;</span> : { </span><br><span class="line">   _id : CL-MONGO:<span class="symbol">:BSON-OID</span> [#(<span class="number">89</span> <span class="number">52</span> <span class="number">26</span> <span class="number">160</span> <span class="number">109</span> <span class="number">156</span> <span class="number">254</span> <span class="number">71</span> <span class="number">184</span> <span class="number">115</span> <span class="number">102</span> <span class="number">30</span>)]</span><br><span class="line">   elements : <span class="number">1</span>}</span><br><span class="line"></span><br><span class="line">))</span><br></pre></td></tr></tbody></table></figure>
+<p>值得注意的是，<code>DB.FIND</code>的返回值不完全是文档组成的数组，而是在这个结果集的数组之外又多了一层列表，并且列表的第一个元素还是一个一看之下不知其所以然的子列表。由于cl-mongo的GitHub上没有提及这个玩意儿的来历，我也没有深入去了解<code>DB.FIND</code>函数的实现代码，因此这个元素就先忽略它吧。如果需要使用<code>DB.FIND</code>查询到的结果，那么开发者需要对<code>DB.FIND</code>的返回值应用一下函数<code>SECOND</code>才行，如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))</span><br></pre></td></tr></tbody></table></figure>
+<p>返回值的列表中的每一个元素都是<code>CL-MONGO:DOCUMENT</code>这个类的实例对象，如果要直接使用还是稍微有点不方便的，因此我写了一个函数用来将<code>DB.FIND</code>函数查询到的<code>CL-MONGO:DOCUMENT</code>的实例对象都转换为较为熟悉，容易操作的数据类型——association list，函数的定义如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> document-to-alist (<span class="name">doc</span>)</span><br><span class="line">  <span class="string">"Convert a DOC of type CL-MONGO:DOCUMENT to a equivalent, serializable alist."</span></span><br><span class="line">  (<span class="name">check-type</span> doc cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">  (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">doc</span>)</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">typep</span> doc 'cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">                    (<span class="name">let</span> ((<span class="name">keys</span> (<span class="name">cl-mongo</span><span class="symbol">:get-keys</span> doc)))</span><br><span class="line">                      (<span class="name">mapcar</span> #'(lambda (key)</span><br><span class="line">                                  (cons key</span><br><span class="line">                                        (aux (cl-mongo:get-element key doc))))</span><br><span class="line">                              keys)))</span><br><span class="line">                   (<span class="name">t</span> doc))))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">id</span> (<span class="name">cl-mongo</span><span class="symbol">:doc-id</span> doc)))</span><br><span class="line">      (<span class="name">append</span> (<span class="name">aux</span> doc) (<span class="name">list</span> (<span class="name">cons</span> <span class="string">"_id"</span> id))))))</span><br></pre></td></tr></tbody></table></figure>
+<p>使用如下代码即可查看方才所写入的文档究竟长什么样子了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">document-to-alist</span> (<span class="name">first</span> (<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))))</span><br></pre></td></tr></tbody></table></figure>
+<p>如果想要修改数据库中的文档，例如增加一个字段，那么可以使用cl-mongo提供的<code>DB.UPDATE</code>函数，用法如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.update <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>)</span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"$set"</span></span><br><span class="line">                                 (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"method"</span> <span class="string">"GET"</span>)))</span><br></pre></td></tr></tbody></table></figure>
+<p>最后如果要删除刚才所写入的这个文档，可以使用cl-mongo的<code>DB.DELETE</code>函数（我很好奇这个函数居然不是叫做DB.REMOVE），用法如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.delete <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/05/18/远程请求Squid/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -583,118 +684,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/02/23/如何用Common-Lisp实现尾递归优化/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2017/02/23/如何用Common-Lisp实现尾递归优化/" class="post-title-link" itemprop="url">如何用Common Lisp实现尾递归优化</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-02-23 22:58:07" itemprop="dateCreated datePublished" datetime="2017-02-23T22:58:07+08:00">2017-02-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2017/02/23/如何用Common-Lisp实现尾递归优化/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/23/如何用Common-Lisp实现尾递归优化/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="什么是尾递归"><a href="#什么是尾递归" class="headerlink" title="什么是尾递归"></a>什么是尾递归</h2><p>如果一个函数在定义时引用了自身，那么这个函数就是一个递归函数。例如我们所熟知的阶乘就可以通过递归函数的形式予以定义</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> fact (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">&lt;=</span> n <span class="number">0</span>)</span><br><span class="line">      <span class="number">1</span></span><br><span class="line">      (<span class="name">*</span> n (<span class="name">fact</span> (<span class="number">1</span>- n)))))</span><br></pre></td></tr></tbody></table></figure>
-<p>在if语句的备选路径上，正在定义的函数<code>fact</code>被自身所调用，因此<code>fact</code>就是一个递归函数了。递归有一类较为特殊的形式，叫做尾递归，它们的特征是递归函数的调用位于被定义函数的最后一个步骤。也就是说，这个递归调用的返回值也就是整个函数调用的返回值，后面不再有其它的计算步骤了。例如实现了辗转相除法的下面这个函数就是尾递归的</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-gcd (<span class="name">a</span> b)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">zerop</span> a) b)</span><br><span class="line">        ((<span class="name">zerop</span> b) a)</span><br><span class="line">        (<span class="name">t</span> (<span class="name">my-gcd</span> b (<span class="name">mod</span> a b)))))</span><br></pre></td></tr></tbody></table></figure>
-<p>此处命名为<code>my-gcd</code>，是因为在Common Lisp中已经预置了一个叫做<code>gcd</code>的函数了</p>
-<h2 id="什么是尾递归优化"><a href="#什么是尾递归优化" class="headerlink" title="什么是尾递归优化"></a>什么是尾递归优化</h2><p>递归调用其实也就是函数调用，每一次调用都需要保存当前的执行上下文（寄存器的值、程序计数器的值等信息）并压入栈中。如果递归调用得非常深，那么很可能将栈空间消耗殆尽导致程序崩溃，因此很多时候都会选择使用循环来实现用递归实现的效果。尾递归形式的一个优势，就在于编译器可以对其进行优化，使得原本需要添加一个栈帧的函数调用操作，直接重用当前的调用中所使用的栈帧即可。这样一来，递归函数的调用就不会无节制地消耗栈空间了。</p>
-<p>另一种对尾递归进行优化的方式，则是将其改写为【赋值】与【跳转】。例如对于上面的<code>my-gcd</code>函数，可以改写为如下形式</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-gcd (<span class="name">a</span> b)</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   rec</span><br><span class="line">     (<span class="name">cond</span> ((<span class="name">zerop</span> a) (<span class="name">return-from</span> my-gcd b))</span><br><span class="line">           ((<span class="name">zerop</span> b) (<span class="name">return-from</span> my-gcd a))</span><br><span class="line">           (<span class="name">t</span> (<span class="name">progn</span></span><br><span class="line">                (<span class="name">psetf</span> a b</span><br><span class="line">                       b (<span class="name">mod</span> a b))</span><br><span class="line">                (<span class="name">go</span> rec))))))</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="如何在Common-Lisp中实现"><a href="#如何在Common-Lisp中实现" class="headerlink" title="如何在Common Lisp中实现"></a>如何在Common Lisp中实现</h2><p>如果要使用递归的形式定义一个计算列表长度的函数，那么很可能会写出这样子的代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span>)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">      <span class="number">0</span></span><br><span class="line">      (<span class="number">1</span>+ (<span class="name">my-length</span> (<span class="name">rest</span> lst)))))</span><br></pre></td></tr></tbody></table></figure>
-<p>采用累加器的思路，可以将上述函数改写为下面的尾递归形式</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">      acc</span><br><span class="line">      (<span class="name">my-length</span> (<span class="name">rest</span> lst) (<span class="number">1</span>+ acc))))</span><br></pre></td></tr></tbody></table></figure>
-<p>对于第二个版本的<code>my-length</code>函数，同样可以手动改写为基于【赋值】和【跳转】的实现形式，结果如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   rec</span><br><span class="line">     (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">         (<span class="name">return-from</span> my-length acc)</span><br><span class="line">         (<span class="name">progn</span></span><br><span class="line">           (<span class="name">psetf</span> lst (<span class="name">rest</span> lst)</span><br><span class="line">                  acc (<span class="number">1</span>+ acc))</span><br><span class="line">           (<span class="name">go</span> rec)))))</span><br></pre></td></tr></tbody></table></figure>
-<p>你可能已经注意到了，<code>my-gcd</code>和<code>my-length</code>函数的改写都是很有规律的，甚至可以通过一个宏来帮助我们自动完成这种变换。这个宏所需要做的事情其实只有三件：</p>
-<ol>
-<li>将原本的定义中的函数体包裹在一个<code>tagbody</code>中</li>
-<li>将原本作为返回值的表达式包裹在一个<code>return-from</code>中</li>
-<li>将递归调用的表达式改为按顺序执行的<code>psetf</code>和<code>go</code>的组合</li>
-</ol>
-<p>为了降低一下实现难度，第二点暂时就不处理了，函数的实现者必须手动编写<code>return-from</code>语句。因此，如果只考虑首尾两个条件，首先，可以考虑实现第三条，将函数体内的递归调用修改为<code>progn</code>、<code>psetf</code>和<code>go</code>的组合。要实现这个变换，可以使用<code>macrolet</code>，如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   rec</span><br><span class="line">     (<span class="name">macrolet</span> ((<span class="name">my-length</span> (<span class="name">&amp;rest</span> args)</span><br><span class="line">                  `(progn</span><br><span class="line">                     (psetf ,@(mapcan #'list '(lst acc) args))</span><br><span class="line">                     (go rec))))</span><br><span class="line">       (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">           (<span class="name">return-from</span> my-length acc)</span><br><span class="line">           (<span class="name">my-length</span> (<span class="name">rest</span> lst) (<span class="number">1</span>+ acc))))))</span><br></pre></td></tr></tbody></table></figure>
-<p>为了自动生成上面的代码，我编写了这样的一个宏</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> define-rec (<span class="name">name</span> lambda-list <span class="symbol">&amp;body</span> body)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">rec</span> (<span class="name">gensym</span>)))</span><br><span class="line">    `(defun ,name ,lambda-list</span><br><span class="line">       (tagbody</span><br><span class="line">          ,rec</span><br><span class="line">          (macrolet ((,name (&amp;rest exprs)</span><br><span class="line">                       ,``(progn</span><br><span class="line">                            (psetf ,@(mapcan #'list ',lambda-list exprs))</span><br><span class="line">                            (go ,',rec))))</span><br><span class="line">            ,@body)))))</span><br></pre></td></tr></tbody></table></figure>
-<p>利用上面这个宏编写一个计算列表长度的尾递归形式的函数，代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define-rec</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">      (<span class="name">return-from</span> my-length acc)</span><br><span class="line">      (<span class="name">my-length</span> (<span class="name">rest</span> lst) (<span class="number">1</span>+ acc))))</span><br></pre></td></tr></tbody></table></figure>
-<p>利用<code>macroexpand-1</code>或者是SLIME提供的展开一次宏的调试功能，在我的及其上得到的代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">DEFUN</span> MY-LENGTH (<span class="name">LST</span> ACC)</span><br><span class="line">  (<span class="name">TAGBODY</span></span><br><span class="line">   #<span class="symbol">:G937</span></span><br><span class="line">    (<span class="name">MACROLET</span> ((<span class="name">MY-LENGTH</span> (<span class="name">&amp;REST</span> EXPRS)</span><br><span class="line">                 `(PROGN</span><br><span class="line">                   (PSETF ,@(MAPCAN #'LIST '(LST ACC) EXPRS))</span><br><span class="line">                   (GO ,'#:G937))))</span><br><span class="line">      (<span class="name">IF</span> (<span class="name">NULL</span> LST)</span><br><span class="line">          (<span class="name">RETURN-FROM</span> MY-LENGTH ACC)</span><br><span class="line">          (<span class="name">MY-LENGTH</span> (<span class="name">REST</span> LST) (<span class="number">1</span>+ ACC))))))</span><br></pre></td></tr></tbody></table></figure>
-<p>跟上面手写的代码没有太大的差别，并且用于计算所得到的列表长度也是正确的。那么如何验证这个函数是采用了【赋值】和【跳转】的机制来完成运算的呢？可以借助Common Lisp提供的<code>trace</code>函数。如果使用的真实执行递归调用的<code>my-length</code>函数的定义，那么执行<code>(trace my-length)</code>后运行<code>(my-length '(1 2 4 5) 0)</code>，在我的机器上会输出如下内容</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">my-length</span> '(<span class="number">1</span> <span class="number">2</span> <span class="number">4</span> <span class="number">5</span>) <span class="number">0</span>)</span><br><span class="line">  0: (MY-LENGTH (1 2 4 5) 0)</span><br><span class="line">    1: (MY-LENGTH (2 4 5) 1)</span><br><span class="line">      2: (MY-LENGTH (4 5) 2)</span><br><span class="line">        3: (MY-LENGTH (5) 3)</span><br><span class="line">          4: (MY-LENGTH NIL 4)</span><br><span class="line">          4: MY-LENGTH returned 4</span><br><span class="line">        3: MY-LENGTH returned 4</span><br><span class="line">      2: MY-LENGTH returned 4</span><br><span class="line">    1: MY-LENGTH returned 4</span><br><span class="line">  0: MY-LENGTH returned 4</span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></tbody></table></figure>
-<p>而如果是使用<code>define-rec</code>宏定义的<code>my-length</code>，求值同样的表达式的输出为</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">my-length</span> '(<span class="number">1</span> <span class="number">2</span> <span class="number">4</span> <span class="number">5</span>) <span class="number">0</span>)</span><br><span class="line">  0: (MY-LENGTH (1 2 4 5) 0)</span><br><span class="line">  0: MY-LENGTH returned 4</span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></tbody></table></figure>
-<p>显然，这当中没有递归的函数调用，<code>my-length</code>确实不需要调用自身。</p>
-<p>全文完</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -766,7 +755,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
