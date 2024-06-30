@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://liutos.github.io/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/</loc>
+    <lastmod>2024-06-30</lastmod>
+  </url>
+  <url>
     <loc>https://liutos.github.io/2024/05/05/getattr-%E5%9C%A8CommonLisp%E4%B8%AD%E7%9A%84%E8%BF%91%E4%BC%BC%E7%89%B9%E6%80%A7/</loc>
     <lastmod>2024-05-05</lastmod>
   </url>

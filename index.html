@@ -200,6 +200,121 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/" class="post-title-link" itemprop="url">单测要用 Redis 集群？教你用 docker 一键部署</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-06-30 09:32:10 / 修改时间：13:03:57" itemprop="dateCreated datePublished" datetime="2024-06-30T09:32:10+08:00">2024-06-30</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2024/06/30/用dockercompose部署Redis集群/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><p>在目前我参与开发的代码仓库中，当需要使用 Redis 时，基本上用的都是 Redis 集群。因此，我在办公电脑上也搭建了一个 Redis 集群，以便让我为这些仓库编写的单元测试能成功运行起来。</p>
+<p>尽管 Redis 官方提供了部署集群的<a href="https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/">指引</a>，但这要求团队内的每位成员都要依次执行如下操作：</p>
+<ol>
+<li>用 Homebrew 安装 Redis；</li>
+<li>创建 6 个目录；</li>
+<li>创建 6 份<code>redis.conf</code>配置文件；</li>
+<li>启动 6 个<code>redis-server</code>进程；</li>
+<li>用<code>redis-cli</code>创建集群。</li>
+</ol>
+<p>为了可以让更多的人愿意执行单元测试，必须要降低部署 Redis 集群的操作难度。因此，本文旨在提供一种基于 Docker 的、一键部署 Redis 集群的办法。</p>
+<h2 id="启动单个-Redis-容器"><a href="#启动单个-Redis-容器" class="headerlink" title="启动单个 Redis 容器"></a>启动单个 Redis 容器</h2><p>Redis 集群需要至少 6 个实例，那么首先要解决的问题便是如何启动单个 Redis 容器。从前文提到的部署集群的指引中可以知道，要启动一个集群模式的 Redis 实例，所需要的配置文件<code>redis.conf</code>的内容如下</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">port 8000</span><br><span class="line">cluster-enabled yes</span><br><span class="line">cluster-config-file nodes.conf</span><br><span class="line">cluster-node-timeout 5000</span><br><span class="line">appendonly yes</span><br></pre></td></tr></tbody></table></figure>
+
+<p>参考官方的 redis 镜像的<a href="https://hub.docker.com/_/redis">文档</a>的方式，让<code>redis-server</code>读取来自于宿主机的配置文件，示例代码如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">选项 --<span class="built_in">rm</span> 使该容器在退出后（例如按下 ctrl-c）可以被删除，毕竟这里只是先做个演示，不需要留下它。</span></span><br><span class="line">sudo docker run --rm -v "`pwd`:/usr/local/etc/redis" redis redis-server "/usr/local/etc/redis/redis.conf"</span><br></pre></td></tr></tbody></table></figure>
+
+<p>效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E5%90%AF%E5%8A%A8%E5%8D%95%E4%B8%AARedis%E5%AE%9E%E4%BE%8B.jpeg" alt="启动单个 Redis 容器"></p>
+<h2 id="启动-6-个-Redis-容器"><a href="#启动-6-个-Redis-容器" class="headerlink" title="启动 6 个 Redis 容器"></a>启动 6 个 Redis 容器</h2><p>接下来以相似的方式启动全部的 6 个 Redis 容器。首先创建 6 个目录</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这里我用 Redis 监听的端口号作为目录名，但这并非强制要求。</span></span><br><span class="line">mkdir 8000 8001 8002 8003 8004 8005</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后在每一个目录中都创建配置文件<code>redis.conf</code></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">for port in 8000 8001 8002 8003 8004 8005 ;</span><br><span class="line">do</span><br><span class="line">    cat &lt;&lt; EOF &gt; "./${port}/redis.conf"</span><br><span class="line">port ${port}</span><br><span class="line">cluster-enabled yes</span><br><span class="line">cluster-config-file nodes.conf</span><br><span class="line">cluster-node-timeout 5000</span><br><span class="line">appendonly yes</span><br><span class="line">EOF</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后启动它们</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建出名为 some-network 的容器间网络。</span></span><br><span class="line">docker network create some-network</span><br><span class="line"></span><br><span class="line">for port in 8000 8001 8002 8003 8004 8005 ;</span><br><span class="line">do</span><br><span class="line">    # --name 选项让这 6 个容器拥有确定的且不同的主机名，以便之后可以在 redis-cli 中指定它们。</span><br><span class="line">    # --network 选项让这 6 个容器处于同一个网络下，以便集群内的节点可以互相通信。</span><br><span class="line">    docker run --name "some-redis-${port}" --network some-network --rm -d -v "`pwd`/${port}:/usr/local/etc/redis" redis redis-server '/usr/local/etc/redis/redis.conf'</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
+
+<p>效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E5%90%AF%E5%8A%A86%E4%B8%AARedis%E5%AE%B9%E5%99%A8.jpeg" alt="启动 6 个 Redis 容器"></p>
+<h2 id="创建集群"><a href="#创建集群" class="headerlink" title="创建集群"></a>创建集群</h2><p>此时 6 个运行中的 Redis 实例还不构成一个集群，还需要执行<code>redis-cli</code>的命令<code>--cluster create</code>才行。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">给 redis-cli 的选项 --cluster-yes 使其默认接受集群内节点的分配情况。这在脚本执行、无法通过标准输出敲入 <span class="built_in">yes</span> 的时候很有用。</span></span><br><span class="line">docker run --network some-network --rm -i -t redis redis-cli --cluster create some-redis-8000:8000 some-redis-8001:8001 some-redis-8002:8002 some-redis-8003:8003 some-redis-8004:8004 some-redis-8005:8005 --cluster-replicas 1 --cluster-yes</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但命令<code>--cluster create</code>并非幂等的，只能在创建集群的时候使用一次。因此，如果希望通过脚本一键搭建、启动集群，则必须在创建前先检查集群是否曾经被创建过。借助<code>redis-cli</code>的命令<code>--cluster check</code>可以实现</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run --network some-network --rm -i -t redis redis-cli --cluster check some-redis-8000:8000 | grep 'All 16384 slots covered.' &gt; /dev/null</span><br><span class="line">if [[ "$?" == '0' ]]; then</span><br><span class="line">    echo "Redis 集群已经创建好了。"</span><br><span class="line">else</span><br><span class="line">    echo "开始创建 Redis 集群。"</span><br><span class="line">    docker run --network some-network --rm -i -t redis redis-cli --cluster create some-redis-8000:8000 some-redis-8001:8001 some-redis-8002:8002 some-redis-8003:8003 some-redis-8004:8004 some-redis-8005:8005 --cluster-replicas 1 --cluster-yes</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
+
+<p>创建成功后，只要新的容器也使用网络<code>some-network</code>，就可以读写集群中的数据了</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --network some-network --rm -i -t redis redis-cli -c -h some-redis-8000 -p 8000</span><br></pre></td></tr></tbody></table></figure>
+
+<p>效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E8%AF%BB%E5%86%99Redis%E9%9B%86%E7%BE%A4.jpeg" alt="读写 Redis 集群"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我将上面的内容集成到了<code>redis_cluster</code>这个 GitHub <a href="https://github.com/Liutos/redis_cluster">仓库</a>中，只需要克隆到本地并执行脚本<code>start.sh</code>即可，效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E4%B8%80%E9%94%AE%E5%90%AF%E5%8A%A8Redis%E9%9B%86%E7%BE%A4.jpeg" alt="一键启动 Redis 集群"></p>
+<p>全文完。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2024/05/05/getattr-%E5%9C%A8CommonLisp%E4%B8%AD%E7%9A%84%E8%BF%91%E4%BC%BC%E7%89%B9%E6%80%A7/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -623,109 +738,6 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2022/05/02/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E6%89%93%E5%8D%B0%E6%95%B4%E6%95%B0/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/02/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E6%89%93%E5%8D%B0%E6%95%B4%E6%95%B0/" class="post-title-link" itemprop="url">自己动手打印整数</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-02 11:14:03 / 修改时间：11:21:16" itemprop="dateCreated datePublished" datetime="2022-05-02T11:14:03+08:00">2022-05-02</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2022/05/02/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E6%89%93%E5%8D%B0%E6%95%B4%E6%95%B0/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/05/02/自己动手打印整数/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在 Common Lisp 中，打印整数一般用函数<code>format</code>。例如，上面的代码会往标准输出中打印出233这个数字：</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D"</span> <span class="number">233</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>除此之外，<code>format</code>还可以控制打印内容的宽度、填充字符、是否打印正负号等方面。例如，要控制打印的内容至少占据6列的话，可以用如下代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~6D"</span> <span class="number">233</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>如果不使用字符串形式的 DSL，而是以关键字参数的方式来实现一个能够达到同样效果的函数<code>format-decimal</code>，代码可能如下：</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         mincol)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。"</span></span><br><span class="line">  <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">           (<span class="name">push</span> <span class="number">0</span> digits))</span><br><span class="line">          (<span class="name">t</span></span><br><span class="line">           (<span class="name">do</span> ((<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">               ((<span class="name">zerop</span> n))</span><br><span class="line">             (<span class="name">push</span> (<span class="name">rem</span> n <span class="number">10</span>) digits))))</span><br><span class="line">    <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">    (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">      (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">        (<span class="name">princ</span> #\Space)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">      (<span class="name">princ</span> (<span class="name">code-char</span> (<span class="name">+</span> digit (<span class="name">char-code</span> #\<span class="number">0</span>)))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">233</span> <span class="symbol">:mincol</span> <span class="number">6</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>如果要求用数字0而不是空格来填充左侧的列，用<code>format</code>的写法如下：</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~6,'0D"</span> <span class="number">233</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p><code>format-decimal</code>想要做到同样的事情，可以这么写：</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space))</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表达式为了填充多余的列时所用的字符。"</span></span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">           (<span class="name">push</span> <span class="number">0</span> digits))</span><br><span class="line">          (<span class="name">t</span></span><br><span class="line">           (<span class="name">do</span> ((<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">               ((<span class="name">zerop</span> n))</span><br><span class="line">             (<span class="name">push</span> (<span class="name">rem</span> n <span class="number">10</span>) digits))))</span><br><span class="line">    <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">    (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">      (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">        (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">      (<span class="name">princ</span> (<span class="name">code-char</span> (<span class="name">+</span> digit (<span class="name">char-code</span> #\<span class="number">0</span>)))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">233</span> <span class="symbol">:mincol</span> <span class="number">6</span> <span class="symbol">:padchar</span> #\<span class="number">0</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p><code>-D</code>默认是不会打印非负整数的符号的，可以用修饰符<code>@</code>来修改这个行为。例如，<code>(format t "~6,'0@D" 233)</code>会打印出<code>00+233</code>。稍微修改一下就可以在<code>format-decimal</code>中实现同样的功能</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space)</span><br><span class="line">                         signed)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表达式为了填充多余的列时所用的字符。"</span></span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">to-digits</span> (<span class="name">n</span>)</span><br><span class="line">           <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">                    (<span class="name">push</span> #\<span class="number">0</span> digits))</span><br><span class="line">                   (<span class="name">t</span></span><br><span class="line">                    (<span class="name">do</span> ((<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">                        ((<span class="name">zerop</span> n))</span><br><span class="line">                      (<span class="name">push</span> (<span class="name">code-char</span> (<span class="name">+</span> (<span class="name">rem</span> n <span class="number">10</span>) (<span class="name">char-code</span> #\<span class="number">0</span>))) digits))))</span><br><span class="line">             digits)))</span><br><span class="line">    <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">digits</span> (<span class="name">to-digits</span> (<span class="name">abs</span> n))))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">or</span> signed (<span class="name">&lt;</span> n <span class="number">0</span>))</span><br><span class="line">        (<span class="name">push</span> (<span class="name">if</span> (<span class="name">&lt;</span> n <span class="number">0</span>) #\- #\+) digits))</span><br><span class="line">      <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">          (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">          (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">      (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">        (<span class="name">princ</span> digit)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">233</span> <span class="symbol">:mincol</span> <span class="number">6</span> <span class="symbol">:padchar</span> #\<span class="number">0</span> <span class="symbol">:signed</span> <span class="literal">t</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>除了<code>@</code>之外，<code>:</code>也是一个<code>~D</code>的修饰符，它可以让<code>format</code>每隔3个数字就打印出一个逗号，方便阅读比较长的数字。例如，下列代码会打印出<code>00+23,333</code>：</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~9,'0@:D"</span> <span class="number">23333</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>为此，给<code>format-decimal</code>新增一个关键字参数<code>comma-separated</code>来控制这一行为。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         comma-separated</span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space)</span><br><span class="line">                         signed)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">COMMA-SEPARATED 如果为 T，则每打印3个字符就打印一个逗号。</span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表示填充多余的列时所用的字符。</span></span><br><span class="line"><span class="string">SIGNED 控制是否显示非负整数的加号。"</span></span><br><span class="line">  (<span class="name">check-type</span> comma-separated boolean)</span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  (<span class="name">check-type</span> signed boolean)</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">to-digits</span> (<span class="name">n</span>)</span><br><span class="line">           <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">                    (<span class="name">push</span> #\<span class="number">0</span> digits))</span><br><span class="line">                   (<span class="name">t</span></span><br><span class="line">                    (<span class="name">do</span> ((<span class="name">count</span> <span class="number">0</span> (<span class="number">1</span>+ count))</span><br><span class="line">                         (<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">                        ((<span class="name">zerop</span> n))</span><br><span class="line">                      (<span class="name">when</span> (<span class="name">and</span> comma-separated (<span class="name">&gt;</span> count <span class="number">0</span>) (<span class="name">zerop</span> (<span class="name">rem</span> count <span class="number">3</span>)))</span><br><span class="line">                        (<span class="name">push</span> #\, digits))</span><br><span class="line">                      (<span class="name">push</span> (<span class="name">code-char</span> (<span class="name">+</span> (<span class="name">rem</span> n <span class="number">10</span>) (<span class="name">char-code</span> #\<span class="number">0</span>))) digits))))</span><br><span class="line">             digits)))</span><br><span class="line">    <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">digits</span> (<span class="name">to-digits</span> (<span class="name">abs</span> n))))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">or</span> signed (<span class="name">&lt;</span> n <span class="number">0</span>))</span><br><span class="line">        (<span class="name">push</span> (<span class="name">if</span> (<span class="name">&lt;</span> n <span class="number">0</span>) #\- #\+) digits))</span><br><span class="line">      <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">          (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">          (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">      (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">        (<span class="name">princ</span> digit)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">-23333</span> <span class="symbol">:comma-separated</span> <span class="literal">t</span> <span class="symbol">:mincol</span> <span class="number">9</span> <span class="symbol">:padchar</span> #\<span class="number">0</span> <span class="symbol">:signed</span> <span class="literal">t</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>事实上，打印分隔符的步长，以及作为分隔符的逗号都是可以定制的。例如，可以改为每隔4个数字打印一个连字符</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~9,'0,'-,4@:D"</span> <span class="number">23333</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>对于<code>format-decimal</code>来说这个修改现在很简单了</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         (<span class="name">commachar</span> #\,)</span><br><span class="line">                         (<span class="name">comma-interval</span> <span class="number">3</span>)</span><br><span class="line">                         comma-separated</span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space)</span><br><span class="line">                         signed)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">COMMACHAR 表示当需要打印分隔符时的分隔符。</span></span><br><span class="line"><span class="string">COMMA-INTERVAL 表示当需要打印分隔符时需要间隔的步长。</span></span><br><span class="line"><span class="string">COMMA-SEPARATED 如果为 T，则每打印3个字符就打印一个逗号。</span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表示填充多余的列时所用的字符。</span></span><br><span class="line"><span class="string">SIGNED 控制是否显示非负整数的加号。"</span></span><br><span class="line">  (<span class="name">check-type</span> commachar character)</span><br><span class="line">  (<span class="name">check-type</span> comma-interval integer)</span><br><span class="line">  (<span class="name">check-type</span> comma-separated boolean)</span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  (<span class="name">check-type</span> signed boolean)</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">to-digits</span> (<span class="name">n</span>)</span><br><span class="line">           <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">                    (<span class="name">push</span> #\<span class="number">0</span> digits))</span><br><span class="line">                   (<span class="name">t</span></span><br><span class="line">                    (<span class="name">do</span> ((<span class="name">count</span> <span class="number">0</span> (<span class="number">1</span>+ count))</span><br><span class="line">                         (<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">                        ((<span class="name">zerop</span> n))</span><br><span class="line">                      (<span class="name">when</span> (<span class="name">and</span> comma-separated (<span class="name">&gt;</span> count <span class="number">0</span>) (<span class="name">zerop</span> (<span class="name">rem</span> count comma-interval)))</span><br><span class="line">                        (<span class="name">push</span> commachar digits))</span><br><span class="line">                      (<span class="name">push</span> (<span class="name">code-char</span> (<span class="name">+</span> (<span class="name">rem</span> n <span class="number">10</span>) (<span class="name">char-code</span> #\<span class="number">0</span>))) digits))))</span><br><span class="line">             digits)))</span><br><span class="line">    <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">digits</span> (<span class="name">to-digits</span> (<span class="name">abs</span> n))))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">or</span> signed (<span class="name">&lt;</span> n <span class="number">0</span>))</span><br><span class="line">        (<span class="name">push</span> (<span class="name">if</span> (<span class="name">&lt;</span> n <span class="number">0</span>) #\- #\+) digits))</span><br><span class="line">      <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">          (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">          (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">      (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">        (<span class="name">princ</span> digit)))))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">-23333</span> <span class="symbol">:commachar</span> #\- <span class="symbol">:comma-interval</span> <span class="number">4</span> <span class="symbol">:comma-separated</span> <span class="literal">t</span> <span class="symbol">:mincol</span> <span class="number">9</span> <span class="symbol">:padchar</span> #\<span class="number">0</span> <span class="symbol">:signed</span> <span class="literal">t</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>全文完。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -797,7 +809,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">103</span>
+          <span class="site-state-item-count">104</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -810,7 +822,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">115</span>
+        <span class="site-state-item-count">117</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
