@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,26 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="准备过互联网公司的服务端岗位面试的人，对Redis中的5种数据类型想必是如数家珍。而网上很多面试题里也会出现这道题目    随着行业曲率的增大，光是知道有这些数据类型已经不够了，还得知道同一个类型也有不同的底层数据结构。例如同样是string类型，不同内容或不同长度会采用不同的编码方式： 123456789101112131415161718127.0.0.1:6379&amp;gt; SET key1">
-<meta name="keywords" content="emacs,lisp,programming">
+  <meta name="description" content="记录编程生涯的大大小小的事情">
 <meta property="og:type" content="article">
-<meta property="og:title" content="当你SET的时候，Redis到底在SET些什么">
-<meta property="og:url" content="https://liutos.github.io/2021/04/17/当你SET的时候，Redis到底在SET些什么/index.html">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/2021/04/17/%E5%BD%93%E4%BD%A0SET%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8CRedis%E5%88%B0%E5%BA%95%E5%9C%A8SET%E4%BA%9B%E4%BB%80%E4%B9%88/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="准备过互联网公司的服务端岗位面试的人，对Redis中的5种数据类型想必是如数家珍。而网上很多面试题里也会出现这道题目    随着行业曲率的增大，光是知道有这些数据类型已经不够了，还得知道同一个类型也有不同的底层数据结构。例如同样是string类型，不同内容或不同长度会采用不同的编码方式： 123456789101112131415161718127.0.0.1:6379&amp;gt; SET key1">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2021-04-17T07:14:19.543Z">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-17T07:14:19.000Z">
+<meta property="article:modified_time" content="2021-04-17T07:14:19.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="当你SET的时候，Redis到底在SET些什么">
-<meta name="twitter:description" content="准备过互联网公司的服务端岗位面试的人，对Redis中的5种数据类型想必是如数家珍。而网上很多面试题里也会出现这道题目    随着行业曲率的增大，光是知道有这些数据类型已经不够了，还得知道同一个类型也有不同的底层数据结构。例如同样是string类型，不同内容或不同长度会采用不同的编码方式： 123456789101112131415161718127.0.0.1:6379&amp;gt; SET key1">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
 
-<link rel="canonical" href="https://liutos.github.io/2021/04/17/当你SET的时候，Redis到底在SET些什么/">
+<link rel="canonical" href="https://liutos.github.io/2021/04/17/%E5%BD%93%E4%BD%A0SET%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8CRedis%E5%88%B0%E5%BA%95%E5%9C%A8SET%E4%BA%9B%E4%BB%80%E4%B9%88/">
 
 
 <script id="page-configurations">
@@ -76,7 +70,7 @@
   };
 </script>
 
-  <title>当你SET的时候，Redis到底在SET些什么 | 小打小闹写点bug</title>
+  <title> | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -116,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -207,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/04/17/当你SET的时候，Redis到底在SET些什么/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/04/17/%E5%BD%93%E4%BD%A0SET%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8CRedis%E5%88%B0%E5%BA%95%E5%9C%A8SET%E4%BA%9B%E4%BB%80%E4%B9%88/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -220,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          当你SET的时候，Redis到底在SET些什么
+          
         </h1>
 
         <div class="post-meta">
@@ -229,9 +224,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-04-17 15:09:24 / 修改时间：15:14:19" itemprop="dateCreated datePublished" datetime="2021-04-17T15:09:24+08:00">2021-04-17</time>
+              <time title="创建时间：2021-04-17 15:14:19" itemprop="dateCreated datePublished" datetime="2021-04-17T15:14:19+08:00">2021-04-17</time>
             </span>
 
           
@@ -243,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/04/17/当你SET的时候，Redis到底在SET些什么/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2021/04/17/%E5%BD%93%E4%BD%A0SET%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8CRedis%E5%88%B0%E5%BA%95%E5%9C%A8SET%E4%BA%9B%E4%BB%80%E4%B9%88/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/17/当你SET的时候，Redis到底在SET些什么/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -259,55 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>准备过互联网公司的服务端岗位面试的人，对Redis中的5种数据类型想必是如数家珍。而网上很多面试题里也会出现这道题目</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/面试题例子1.jpg" alt="来自https://blog.csdn.net/ThinkWon/article/details/103522351"></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/面试题例子2.jpg" alt="来自https://juejin.cn/post/6844903982066827277"></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/面试题例子3.jpg" alt="来自https://mikechen.cc/3313.html"></p>
-<p>随着行业曲率的增大，光是知道有这些数据类型已经不够了，还得知道同一个类型也有不同的底层数据结构。例如同样是<code>string</code>类型，不同内容或不同长度会采用不同的编码方式：</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SET key1 "1"</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; SET key2 "value"</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; SET key3 "Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp."</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; TYPE key1</span><br><span class="line">string</span><br><span class="line">127.0.0.1:6379&gt; TYPE key2</span><br><span class="line">string</span><br><span class="line">127.0.0.1:6379&gt; TYPE key3</span><br><span class="line">string</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING key1</span><br><span class="line">"int"</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING key2</span><br><span class="line">"embstr"</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING key3</span><br><span class="line">"raw"</span><br></pre></td></tr></tbody></table></figure>
-<p>而<code>hash</code>类型也有两种底层实现</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt;  HSET myhash field1 "Hello"</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt;  HSET myhash2 field1 "Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp."</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING myhash</span><br><span class="line">"ziplist"</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING myhash2</span><br><span class="line">"hashtable"</span><br></pre></td></tr></tbody></table></figure>
-<p>不知道你是否曾经好奇过，上文中的<code>key1</code>、<code>key2</code>、<code>key3</code>、<code>myhash</code>，以及<code>myhash2</code>这些键，与它们各自的值（前三个为<code>string</code>，后两个为<code>hash</code>）之间的关系又是存储在什么数据结构中的呢？</p>
-<p>答案在意料之外，情理之中：键与值的关系，也是存储在一张哈希表中的，并且正是上文中的<code>hashtable</code>。</p>
-<p>求证的办法当然是阅读Redis的源代码。</p>
-<h1 id="Redis命令的派发逻辑"><a href="#Redis命令的派发逻辑" class="headerlink" title="Redis命令的派发逻辑"></a>Redis命令的派发逻辑</h1><p>阅读Redis的源码是比较轻松愉快的，一是因为其源码由简单易懂的C语言编写，二是因为源码仓库的<code>README.md</code>中对内部实现做了一番高屋建瓴的介绍。在<code>README.md</code>的<a href="https://github.com/redis/redis#serverc" target="_blank" rel="noopener">server.c</a>一节中，道出了有关命令派发的两个关键点</p>
-<blockquote>
-<p><code>call()</code> is used in order to call a given command in the context of a given client.</p>
-</blockquote>
-<blockquote>
-<p>The global variable <code>redisCommandTable</code> defines all the Redis commands, specifying the name of the command, the function implementing the command, the number of arguments required, and other properties of  each command.</p>
-</blockquote>
-<p>位于文件<code>src/server.c</code>中的变量<code>redisCommandTable</code>定义了所有可以在Redis中使用的命令——为什么一个C语言项目里要用<code>camelCase</code>这种格格不入的命名风格呢——它的元素的类型为<code>struct redisCommand</code>，其中：</p>
-<ul>
-<li><code>name</code>存放命令的名字；</li>
-<li><code>proc</code>存放实现命令的C函数的指针；</li>
-</ul>
-<p>比如高频使用的<code>GET</code>命令在<code>redisCommandTable</code>中就是这样定义的</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">{<span class="string">"get"</span>,getCommand,<span class="number">2</span>,</span><br><span class="line"> <span class="string">"read-only fast @string"</span>,</span><br><span class="line"> <span class="number">0</span>,<span class="literal">NULL</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>},</span><br></pre></td></tr></tbody></table></figure>
-<p>身为一名老解释器爱好者，对这种套路的代码当然是不会陌生的。我也曾在写过的、跑不起来的玩具解释器上用过类似的手法</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/liutscm中的类似代码.jpg" alt=""></p>
-<p>Redis收到一道需要执行的命令后，根据命令的名字用<code>lookupCommand</code>找到一个命令（是个<code>struct redisCommand</code>类型的结构体），然后<code>call</code>函数做的事情就是调用它的<code>proc</code>成员所指向的函数而已</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c-&gt;cmd-&gt;proc(c);</span><br></pre></td></tr></tbody></table></figure>
-<p>那么接下来，就要看看<code>SET</code>命令对应的C函数究竟做了些什么了。</p>
-<h1 id="SET命令的实现"><a href="#SET命令的实现" class="headerlink" title="SET命令的实现"></a><code>SET</code>命令的实现</h1><p><code>redisCommonTable</code>中下标为2的元素正是<code>SET</code>命令的定义</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Note that we can't flag set as fast, since it may perform an</span></span><br><span class="line"><span class="comment"> * implicit DEL of a large key. */</span></span><br><span class="line">{<span class="string">"set"</span>,setCommand,<span class="number">-3</span>,</span><br><span class="line"> <span class="string">"write use-memory @string"</span>,</span><br><span class="line"> <span class="number">0</span>,<span class="literal">NULL</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>},</span><br></pre></td></tr></tbody></table></figure>
-<p>其中函数<code>setCommand</code>定义在文件<code>t_string.c</code>中，它根据参数中是否有传入<code>NX</code>、<code>XX</code>、<code>EX</code>等选项计算出一个<code>flags</code>后，便调用<code>setGenericCommand</code>——顾名思义，这是一个通用的<code>SET</code>命令，它同时被<code>SET</code>、<code>SETNX</code>、<code>SETEX</code>，以及<code>PSETEX</code>四个Redis命令的实现函数所共用。</p>
-<p><code>setGenericCommand</code>调用了<code>genericSetKey</code>，后者定义在文件<code>db.c</code>中。尽管该函数上方的注释写着</p>
-<blockquote>
-<p>All the new keys in the database should be created via this interface.</p>
-</blockquote>
-<p>但<del>人生不如意事十之八九</del>事实并非如此。例如在命令<code>RPUSH</code>的实现函数<code>rpushCommand</code>中，调用了<code>pushGenericCommand</code>，后者直接调用了<code>dbAdd</code>往Redis中存入键和列表对象的关系。</p>
-<p>言归正传。根据键存在与否，<code>genericSetKey</code>会调用<code>dbAdd</code>或<code>dbOverwrite</code>。而在<code>dbAdd</code>中，最终调用了<code>dictAdd</code>将键与值存入数据库中。</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Add an element to the target hash table */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">dictAdd</span><span class="params">(dict *d, <span class="keyword">void</span> *key, <span class="keyword">void</span> *val)</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    dictEntry *entry = dictAddRaw(d,key,<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!entry) <span class="keyword">return</span> DICT_ERR;</span><br><span class="line">    dictSetVal(d, entry, val);</span><br><span class="line">    <span class="keyword">return</span> DICT_OK;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>现在我们知道了，使用<code>SET</code>命令时传入的<code>key</code>和<code>value</code>，是存储在一个<code>dict</code>类型的数据结构中。</p>
-<h1 id="HSET命令的实现"><a href="#HSET命令的实现" class="headerlink" title="HSET命令的实现"></a><code>HSET</code>命令的实现</h1><p>依葫芦画瓢，Redis的<code>HSET</code>命令由位于文件<code>t_hash.c</code>中的函数<code>hsetCommand</code>实现，它会尝试转换要操作的<code>hash</code>值的编码方式。</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashTypeTryConversion(o,c-&gt;argv,<span class="number">2</span>,c-&gt;argc<span class="number">-1</span>);</span><br></pre></td></tr></tbody></table></figure>
-<p>如果<code>hashTypeTryConversion</code>发现要写入哈希表的任何一个键或者值的长度超过了<code>server.hash_max_ziplist_value</code>所规定的值，就会将<code>hash</code>类型的编码从<code>ziplist</code>转换为<code>hashtable</code>。<code>server.hash_max_ziplist_value</code>的值在文件<code>config.c</code>中通过宏设置，默认值为64——这正是上文中<code>myhash2</code>所对应的值的编码为<code>hashtable</code>的原因。</p>
-<p>将思绪拉回到函数<code>hsetCommand</code>中。做完编码的转换后，它调用函数<code>hashTypeSet</code>，在编码为<code>hashtable</code>的世界线中，同样调用了<code>dictAdd</code>实现往哈希表中写入键值对。</p>
-<p>殊途同归</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/path_to_dbAdd.png" alt=""></p>
-<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>因此，在Redis中用以维持每一个键与其对应的值——这些值也许是<code>string</code>，也许是<code>list</code>，也许是<code>hash</code>——的关系的数据结构，与Redis中的一系列操作哈希表的命令——也许是<code>HSET</code>、也许<code>HGET</code>，也许是<code>HDEL</code>——所用的数据结构，不能说是毫不相关，起码是一模一样。</p>
-
+        
     </div>
 
     
@@ -345,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2021/04/17/当你SET的时候，Redis到底在SET些什么/" title="当你SET的时候，Redis到底在SET些什么">https://liutos.github.io/2021/04/17/当你SET的时候，Redis到底在SET些什么/</a>
+    <a href="https://liutos.github.io/2021/04/17/%E5%BD%93%E4%BD%A0SET%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8CRedis%E5%88%B0%E5%BA%95%E5%9C%A8SET%E4%BA%9B%E4%BB%80%E4%B9%88/" title="">https://liutos.github.io/2021/04/17/当你SET的时候，Redis到底在SET些什么/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -362,12 +308,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/03/14/多重返回值的阵营九宫格/" rel="prev" title="多重返回值的阵营九宫格">
-      <i class="fa fa-chevron-left"></i> 多重返回值的阵营九宫格
+    <a href="/2021/03/14/%E5%A4%9A%E9%87%8D%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E9%98%B5%E8%90%A5%E4%B9%9D%E5%AE%AB%E6%A0%BC/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/05/03/非递归遍历二叉树到底有什么用/" rel="next" title="非递归遍历二叉树到底有什么用">
-      非递归遍历二叉树到底有什么用 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/06/14/%E4%BB%8EAOP%E5%88%B0method-combination/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -448,13 +394,12 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis命令的派发逻辑"><span class="nav-number">1.</span> <span class="nav-text">Redis命令的派发逻辑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SET命令的实现"><span class="nav-number">2.</span> <span class="nav-text">SET命令的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HSET命令的实现"><span class="nav-number">3.</span> <span class="nav-text">HSET命令的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结论"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -463,21 +408,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -501,19 +434,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -562,16 +495,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -597,6 +530,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -625,6 +566,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -642,9 +590,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2021/04/17/当你SET的时候，Redis到底在SET些什么/",
+            url: "https://liutos.github.io/2021/04/17/%E5%BD%93%E4%BD%A0SET%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8CRedis%E5%88%B0%E5%BA%95%E5%9C%A8SET%E4%BA%9B%E4%BB%80%E4%B9%88/",
             identifier: "2021/04/17/当你SET的时候，Redis到底在SET些什么/",
-            title: "当你SET的时候，Redis到底在SET些什么"
+            title: ""
           }
         }
       });
@@ -665,7 +613,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '2398c496737cd58c4dbc93546a9475db',
+      id: 'c23f30aa9a9b1ed6a2808b578abb8483',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -673,4 +621,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

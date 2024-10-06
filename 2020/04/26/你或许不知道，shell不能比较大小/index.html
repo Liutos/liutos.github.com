@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,29 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="“究竟在干什么”是一系列关于软件开发过程中背后运作原理的文章，每一篇文章旨在讲解一些在日常编程实践中常见但可能并不为人所熟知的技术细节，抛砖引玉，期待激发读者朋友的更多思考。  如何在shell中比较大小？如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写[ blablabla ]这样的代码  例如，如果想知道当前的UNIX时间是否已经以16开头，可以用下列的shell">
-<meta name="keywords" content="bash,shell">
+  <meta name="description" content="记录编程生涯的大大小小的事情">
 <meta property="og:type" content="article">
-<meta property="og:title" content="你或许不知道，shell不能比较大小">
-<meta property="og:url" content="https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/index.html">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/2020/04/26/%E4%BD%A0%E6%88%96%E8%AE%B8%E4%B8%8D%E7%9F%A5%E9%81%93%EF%BC%8Cshell%E4%B8%8D%E8%83%BD%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="“究竟在干什么”是一系列关于软件开发过程中背后运作原理的文章，每一篇文章旨在讲解一些在日常编程实践中常见但可能并不为人所熟知的技术细节，抛砖引玉，期待激发读者朋友的更多思考。  如何在shell中比较大小？如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写[ blablabla ]这样的代码  例如，如果想知道当前的UNIX时间是否已经以16开头，可以用下列的shell">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2020-04-26T14:25:16.480Z">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-26T14:25:16.000Z">
+<meta property="article:modified_time" content="2020-04-26T14:25:16.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="你或许不知道，shell不能比较大小">
-<meta name="twitter:description" content="“究竟在干什么”是一系列关于软件开发过程中背后运作原理的文章，每一篇文章旨在讲解一些在日常编程实践中常见但可能并不为人所熟知的技术细节，抛砖引玉，期待激发读者朋友的更多思考。  如何在shell中比较大小？如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写[ blablabla ]这样的代码  例如，如果想知道当前的UNIX时间是否已经以16开头，可以用下列的shell">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
 
-<link rel="canonical" href="https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/">
+<link rel="canonical" href="https://liutos.github.io/2020/04/26/%E4%BD%A0%E6%88%96%E8%AE%B8%E4%B8%8D%E7%9F%A5%E9%81%93%EF%BC%8Cshell%E4%B8%8D%E8%83%BD%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/">
 
 
 <script id="page-configurations">
@@ -79,7 +70,7 @@
   };
 </script>
 
-  <title>你或许不知道，shell不能比较大小 | 小打小闹写点bug</title>
+  <title> | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -119,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -210,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/04/26/%E4%BD%A0%E6%88%96%E8%AE%B8%E4%B8%8D%E7%9F%A5%E9%81%93%EF%BC%8Cshell%E4%B8%8D%E8%83%BD%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -223,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          你或许不知道，shell不能比较大小
+          
         </h1>
 
         <div class="post-meta">
@@ -232,20 +224,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-04-26 21:19:01 / 修改时间：22:25:16" itemprop="dateCreated datePublished" datetime="2020-04-26T21:19:01+08:00">2020-04-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/究竟在干什么系列/" itemprop="url" rel="index">
-                    <span itemprop="name">究竟在干什么系列</span>
-                  </a>
-                </span>
+              <time title="创建时间：2020-04-26 22:25:16" itemprop="dateCreated datePublished" datetime="2020-04-26T22:25:16+08:00">2020-04-26</time>
             </span>
 
           
@@ -257,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2020/04/26/你或许不知道，shell不能比较大小/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2020/04/26/%E4%BD%A0%E6%88%96%E8%AE%B8%E4%B8%8D%E7%9F%A5%E9%81%93%EF%BC%8Cshell%E4%B8%8D%E8%83%BD%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/04/26/你或许不知道，shell不能比较大小/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -273,97 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <blockquote>
-<p>“究竟在干什么”是一系列关于软件开发过程中背后运作原理的文章，每一篇文章旨在讲解一些在日常编程实践中常见但可能并不为人所熟知的技术细节，抛砖引玉，期待激发读者朋友的更多思考。</p>
-</blockquote>
-<h1 id="如何在shell中比较大小？"><a href="#如何在shell中比较大小？" class="headerlink" title="如何在shell中比较大小？"></a>如何在shell中比较大小？</h1><p>如果在搜索引擎中搜索“shell 比较”，那么得到的结果基本上都在告诉你要写<code>[ blablabla ]</code>这样的代码</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/搜索“shell比较”的结果.jpg" alt=""></p>
-<p>例如，如果想知道当前的UNIX时间是否已经以<code>16</code>开头，可以用下列的shell代码</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">ts=$(date '+%s')</span><br><span class="line">if [ "${ts}" -gt 1600000000 -a "${ts}" -lt 1700000000 ]; then</span><br><span class="line">    echo '当前的UNIX时间戳已经以16开头啦。'</span><br><span class="line">else</span><br><span class="line">    echo '当前的UNIX时间戳还没以16开头哦。'</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
-<p>当我写这个的时候，<code>date '+%s'</code>的值为<code>1587901648</code>，所以运行后走的是<code>else</code>的分支。</p>
-<p>除了用<code>-gt</code>表示大于之外，还有各种各样的其它比较运算符，例如下列的四个运算符</p>
-<table>
-<thead>
-<tr>
-<th>运算符</th>
-<th>作用</th>
-<th>示例代码</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>-ge</code></td>
-<td>大于或等于</td>
-<td><code>[ 2 -ge 1 ]</code></td>
-</tr>
-<tr>
-<td><code>-eq</code></td>
-<td>等于</td>
-<td><code>[ 1 -eq 1 ]</code></td>
-</tr>
-<tr>
-<td><code>-le</code></td>
-<td>小于或等于</td>
-<td><code>[ 2 -le 3 ]</code></td>
-</tr>
-<tr>
-<td><code>-lt</code></td>
-<td>小于</td>
-<td><code>[ 3 -lt 4 ]</code></td>
-</tr>
-</tbody>
-</table>
-<p>还有一些“测试”类型的运算符，例如</p>
-<table>
-<thead>
-<tr>
-<th>运算符</th>
-<th>作用</th>
-<th>示例代码</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>-b file</code></td>
-<td>测试<code>file</code>是否存在并且是个块设备</td>
-<td><code>[ -b /dev/disk0 ]</code></td>
-</tr>
-<tr>
-<td><code>-c file</code></td>
-<td>测试<code>file</code>是否存在并且是个字符设备</td>
-<td><code>[ -c /dev/tty ]</code></td>
-</tr>
-</tbody>
-</table>
-<h1 id="是shell的语法么？"><a href="#是shell的语法么？" class="headerlink" title="[是shell的语法么？"></a><code>[</code>是shell的语法么？</h1><p>大部分写shell代码的人或许会认为，<code>[]</code>是shell语言用于实现一系列的比较操作的特殊语法。但实际上，<code>[]</code>并不是一个语法——<code>[</code>是一个独立的命令行程序，<code>]</code>则什么都不是，仅仅是一个普通的字符。</p>
-<p>在bash中使用<code>which</code>命令可以看到<code>[</code>的真面目</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/which方括号的结果.jpg" alt=""></p>
-<p><code>[</code>是一个独立的程序，对，你没有看错（鲍尔默脸）。而且<code>[</code>有它自己的man文档</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/方括号的man文档.jpg" alt=""></p>
-<p>在man文档中出现了另外一个命令<code>test</code>，它和<code>[</code>的功能是一模一样的。或许<code>test</code>是一个“yet another [”？真相却更简单一点——<code>test</code>和<code>[</code>是同一个东西</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/左方括号和test是同一个东西.jpg" alt=""></p>
-<h1 id="源代码的二三事"><a href="#源代码的二三事" class="headerlink" title="[源代码的二三事"></a><code>[</code>源代码的二三事</h1><p>可以在GitHub上找到<code>[</code>和<code>test</code>的<a href="https://github.com/freebsd/freebsd/blob/master/bin/test/test.c" target="_blank" rel="noopener">源代码</a>，代码很短，稍微读一下可以发现不少有意思的地方。</p>
-<p>众所周知，如果在shell代码中使用<code>[</code>做比较运算，必须写上对应的右方括号<code>]</code>。但既然<code>[</code>是一个普通的外部程序，那么这个匹配括号的检查显然不会是shell来做的——没错，<code>[</code>自己会检查是否有写上相应的右方括号，这一段逻辑在源文件的<code>main</code>函数开始不久就出现了。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/检测右方括号是否存在.jpg" alt=""></p>
-<p>这个检查只有在程序被以<code>[</code>的名字启动的时候才会生效，所以<code>test 1 -eq 1</code>是不需要写括号的。</p>
-<p>其实除了上文中给出的那些比较和测试运算符之外，<code>[</code>也支持复杂的逻辑运算表达式，比如文章开头的示例代码中的<code>-a</code>就是逻辑与的意思。在代码的注释中还贴心地给出了所接受的参数的BNF</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/test接受的语法.jpg" alt=""></p>
-<p>而解析参数的过程则是一个手写的递归下降语法分析器，在源代码中可以找到与上面的产生式对应的多个函数：<code>oexpr</code>、<code>aexpr</code>、<code>nexpr</code>、<code>primary</code>，以及<code>binop</code>。</p>
-<p>由于在shell语言中，0表示逻辑真，而1表示逻辑假（与C语言相反），所以在<code>main</code>函数中，如果发现传入的第一个参数为感叹号（<code>!</code>，表示逻辑取反），则将<code>oexpr</code>的调用结果直接返回，否则需要将结果取反后再从<code>main</code>函数中返回——给操作系统。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/调用oexpr后取反.jpg" alt=""></p>
-<h1 id="shell真的不原生支持比较？"><a href="#shell真的不原生支持比较？" class="headerlink" title="shell真的不原生支持比较？"></a>shell真的不原生支持比较？</h1><p>尽管在bash中，<code>[</code>的确是作为一个外部程序存在的，但在zsh中却相反</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200426/test作为内置命令.jpg" alt=""></p>
-<p>而且，即使是bash也并非完全没有原生的比较操作——此处需要召唤<code>[[</code>。<code>[[</code>是shell的<em>保留字</em>，它是一个<em>less suprise</em>版本的<code>[</code>，在Stack Overflow上有不少关于它的问答值得一看：</p>
-<ol>
-<li><a href="https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash" target="_blank" rel="noopener">https://stackoverflow.com/questions/3427872/whats-the-difference-between-and-in-bash</a></li>
-<li><a href="https://stackoverflow.com/questions/669452/is-double-square-brackets-preferable-over-single-square-brackets-in-ba" target="_blank" rel="noopener">https://stackoverflow.com/questions/669452/is-double-square-brackets-preferable-over-single-square-brackets-in-ba</a></li>
-</ol>
-<p>第二个链接的回答中还给出了一个值得一看的、关于bash中的“测试”功能的<a href="http://mywiki.wooledge.org/BashGuide/Practices#Bash_Tests" target="_blank" rel="noopener">指引</a>，其中甚至提到了</p>
-<blockquote>
-<p>It can produce surprising results, especially for people starting shell scripting that think [ ] is part of the shell syntax.</p>
-</blockquote>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>不得不承认，本文标题党了一把，shell还是自身就具备比较大小这样的功能的。</p>
-
+        
     </div>
 
     
@@ -401,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/" title="你或许不知道，shell不能比较大小">https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/</a>
+    <a href="https://liutos.github.io/2020/04/26/%E4%BD%A0%E6%88%96%E8%AE%B8%E4%B8%8D%E7%9F%A5%E9%81%93%EF%BC%8Cshell%E4%B8%8D%E8%83%BD%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/" title="">https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -411,11 +301,6 @@
 
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/bash/" rel="tag"><i class="fa fa-tag"></i> bash</a>
-              <a href="/tags/shell/" rel="tag"><i class="fa fa-tag"></i> shell</a>
-          </div>
 
         
 
@@ -423,12 +308,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/20/一条正则表达式闹的乌龙/" rel="prev" title="一条正则表达式闹的乌龙">
-      <i class="fa fa-chevron-left"></i> 一条正则表达式闹的乌龙
+    <a href="/2020/04/26/%E5%BD%93%E6%88%91%E4%BB%ACgit-merge%E7%9A%84%E6%97%B6%E5%80%99%E5%88%B0%E5%BA%95%E5%9C%A8merge%E4%BB%80%E4%B9%88/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/05/07/程序员特有的画图方式——语绘工具小入门/" rel="next" title="程序员特有的画图方式——语绘工具小入门">
-      程序员特有的画图方式——语绘工具小入门 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/05/07/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E2%80%94%E2%80%94%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -509,13 +394,12 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#如何在shell中比较大小？"><span class="nav-number">1.</span> <span class="nav-text">如何在shell中比较大小？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#是shell的语法么？"><span class="nav-number">2.</span> <span class="nav-text">[是shell的语法么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#源代码的二三事"><span class="nav-number">3.</span> <span class="nav-text">[源代码的二三事</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#shell真的不原生支持比较？"><span class="nav-number">4.</span> <span class="nav-text">shell真的不原生支持比较？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -524,21 +408,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -562,19 +434,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -623,16 +495,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -658,6 +530,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -686,6 +566,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -703,9 +590,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2020/04/26/你或许不知道，shell不能比较大小/",
+            url: "https://liutos.github.io/2020/04/26/%E4%BD%A0%E6%88%96%E8%AE%B8%E4%B8%8D%E7%9F%A5%E9%81%93%EF%BC%8Cshell%E4%B8%8D%E8%83%BD%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/",
             identifier: "2020/04/26/你或许不知道，shell不能比较大小/",
-            title: "你或许不知道，shell不能比较大小"
+            title: ""
           }
         }
       });
@@ -726,7 +613,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: 'aee60c03761b1bfd483b34a40513773c',
+      id: 'db50a2f9af217d2cd94ba7b40e9c8dad',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -734,4 +621,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

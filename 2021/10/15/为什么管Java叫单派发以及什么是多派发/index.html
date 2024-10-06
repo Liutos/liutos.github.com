@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,26 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="众所周知，在 Java 语言中支持基于子类型的多态，例如某百科全书中就给了一个基于Animal及其两个子类的例子（代码经过我微微调整） 1234567891011121314151617181920212223242526abstract class Animal &amp;#123;  abstract String talk();&amp;#125;class Cat extends Animal &amp;#123">
-<meta name="keywords" content="emacs,lisp,programming">
+  <meta name="description" content="记录编程生涯的大大小小的事情">
 <meta property="og:type" content="article">
-<meta property="og:title" content="为什么管Java叫单派发以及什么是多派发">
-<meta property="og:url" content="https://liutos.github.io/2021/10/15/为什么管Java叫单派发以及什么是多派发/index.html">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/2021/10/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AE%A1Java%E5%8F%AB%E5%8D%95%E6%B4%BE%E5%8F%91%E4%BB%A5%E5%8F%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%B4%BE%E5%8F%91/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="众所周知，在 Java 语言中支持基于子类型的多态，例如某百科全书中就给了一个基于Animal及其两个子类的例子（代码经过我微微调整） 1234567891011121314151617181920212223242526abstract class Animal &amp;#123;  abstract String talk();&amp;#125;class Cat extends Animal &amp;#123">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2021-10-15T15:43:05.190Z">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-15T15:43:05.000Z">
+<meta property="article:modified_time" content="2021-10-15T15:43:05.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="为什么管Java叫单派发以及什么是多派发">
-<meta name="twitter:description" content="众所周知，在 Java 语言中支持基于子类型的多态，例如某百科全书中就给了一个基于Animal及其两个子类的例子（代码经过我微微调整） 1234567891011121314151617181920212223242526abstract class Animal &amp;#123;  abstract String talk();&amp;#125;class Cat extends Animal &amp;#123">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
 
-<link rel="canonical" href="https://liutos.github.io/2021/10/15/为什么管Java叫单派发以及什么是多派发/">
+<link rel="canonical" href="https://liutos.github.io/2021/10/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AE%A1Java%E5%8F%AB%E5%8D%95%E6%B4%BE%E5%8F%91%E4%BB%A5%E5%8F%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%B4%BE%E5%8F%91/">
 
 
 <script id="page-configurations">
@@ -76,7 +70,7 @@
   };
 </script>
 
-  <title>为什么管Java叫单派发以及什么是多派发 | 小打小闹写点bug</title>
+  <title> | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -116,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -207,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/10/15/为什么管Java叫单派发以及什么是多派发/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/10/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AE%A1Java%E5%8F%AB%E5%8D%95%E6%B4%BE%E5%8F%91%E4%BB%A5%E5%8F%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%B4%BE%E5%8F%91/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -220,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          为什么管Java叫单派发以及什么是多派发
+          
         </h1>
 
         <div class="post-meta">
@@ -242,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/10/15/为什么管Java叫单派发以及什么是多派发/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2021/10/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AE%A1Java%E5%8F%AB%E5%8D%95%E6%B4%BE%E5%8F%91%E4%BB%A5%E5%8F%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%B4%BE%E5%8F%91/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/10/15/为什么管Java叫单派发以及什么是多派发/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -258,31 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>众所周知，在 Java 语言中支持基于子类型的多态，例如某百科全书中就给了一个基于<code>Animal</code>及其两个子类的例子（代码经过我微微调整）</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>{</span><br><span class="line">  <span class="function"><span class="keyword">abstract</span> String <span class="title">talk</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>{</span><br><span class="line">  <span class="function">String <span class="title">talk</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Meow!"</span>;</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>{</span><br><span class="line">  <span class="function">String <span class="title">talk</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Woof!"</span>;</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Example</span> </span>{</span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">letsHear</span><span class="params">(<span class="keyword">final</span> Animal a)</span> </span>{</span><br><span class="line">    System.out.println(a.talk());</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">    letsHear(<span class="keyword">new</span> Cat());</span><br><span class="line">    letsHear(<span class="keyword">new</span> Dog());</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>基于子类型的多态要求在程序的运行期根据参数的类型，选择不同的具体方法——例如在上述例子中，当方法<code>letsHear</code>中调用了参数<code>a</code>的方法<code>talk</code>时，是依照变量<code>a</code>在运行期的类型（第一次为<code>Cat</code>，第二次为<code>Dog</code>）来选择对应的<code>talk</code>方法的实例的，而不是依照编译期的类型<code>Animal</code>。</p>
-<p>但在不同的语言中，在运行期查找方法时，所选择的参数的个数是不同的。对于 Java 而言，它只取方法的第一个参数（即接收者），这个策略被称为 single dispatch。</p>
-<h1 id="Java-的-single-dispatch"><a href="#Java-的-single-dispatch" class="headerlink" title="Java 的 single dispatch"></a>Java 的 single dispatch</h1><p>要演示为什么 Java 是 single dispatch 的，必须让示例代码中的方法接收两个参数（除了方法的接收者之外再来一个参数）</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 演示 Java 是 single dispatch 的。</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Shape</span> </span>{}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Circle</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>{}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>{}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Triangle</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>{}</span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractResizer</span> </span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Circle c)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Rectangle r)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Shape s)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Triangle t)</span></span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Resizer</span> <span class="keyword">extends</span> <span class="title">AbstractResizer</span></span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Circle c)</span> </span>{ System.out.println(<span class="string">"缩放圆形"</span>); }</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Rectangle r)</span> </span>{ System.out.println(<span class="string">"缩放矩形"</span>); }</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Shape s)</span> </span>{ System.out.println(<span class="string">"缩放任意图形"</span>); }</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Triangle t)</span> </span>{ System.out.println(<span class="string">"缩放三角形"</span>); }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trial1</span></span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span></span><br><span class="line"><span class="function">	</span>{</span><br><span class="line">		AbstractResizer resizer = <span class="keyword">new</span> Resizer();</span><br><span class="line">		Shape[] shapes = {<span class="keyword">new</span> Circle(), <span class="keyword">new</span> Rectangle(), <span class="keyword">new</span> Triangle()};</span><br><span class="line">		<span class="keyword">for</span> (Shape shape : shapes)</span><br><span class="line">		{</span><br><span class="line">			resizer.resize(shape);</span><br><span class="line">		}</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>显然，类<code>Resizer</code>的实例方法<code>resize</code>就是接收两个参数的——第一个为<code>Resizer</code>类的实例对象，第二个则可能是<code>Shape</code>及其三个子类中的一种类的实例对象。假如 Java 的多态策略是 multiple dispatch 的，那么应当分别调用不同的三个版本的<code>resize</code>方法，但实际上并不是</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211015/Java是singledispatch的证据.jpg" alt=""></p>
-<p>通过 JDK 中提供的程序<code>javap</code>可以看到在<code>main</code>方法中调用<code>resize</code>方法时究竟用的是类<code>Resizer</code>中的哪一个版本，运行命令<code>javap -c -l -s -v Trial1</code>，可以看到调用<code>resize</code>方法对应的 JVM 字节码为<code>invokevirtual</code></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211015/invokevirtual命令.jpg" alt=""></p>
-<p>翻阅 JVM 规格文档可以找到对<a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.invokevirtual" target="_blank" rel="noopener">invokevirtual 指令的解释</a></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211015/invokevirtual的查找逻辑.jpg" alt=""></p>
-<p>显然，由于在 JVM 的字节码中，<code>invokevirtual</code>所调用的方法的参数类型已经解析完毕——<code>LShape</code>表示是一个叫做<code>Shape</code>的类，因此在方法接收者，即类<code>Resizer</code>中查找的时候，也只会命中<code>resize(Shape s)</code>这个版本的方法。变量<code>s</code>的运行期类型在查找方法的时候，丝毫没有派上用场，因此 Java 的多态是 single dispatch 的。</p>
-<p>想要依据参数的运行期类型来打印不同内容也不难，简单粗暴的办法可以选择<code>instanceOf</code></p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractResizer</span> </span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Shape s)</span></span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Resizer</span> <span class="keyword">extends</span> <span class="title">AbstractResizer</span></span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Shape s)</span> </span>{ </span><br><span class="line">    <span class="keyword">if</span> (s <span class="keyword">instanceof</span> Circle) {</span><br><span class="line">      System.out.println(<span class="string">"缩放圆形"</span>);</span><br><span class="line">    } <span class="keyword">else</span> <span class="keyword">if</span> (s <span class="keyword">instanceof</span> Rectangle) {</span><br><span class="line">      System.out.println(<span class="string">"缩放矩形"</span>);</span><br><span class="line">    } <span class="keyword">else</span> <span class="keyword">if</span> (s <span class="keyword">instanceof</span> Triangle) {</span><br><span class="line">      System.out.println(<span class="string">"缩放三角形"</span>);</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">      System.out.println(<span class="string">"缩放任意图形"</span>);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>或者动用 Visitor 模式。</p>
-<h1 id="什么是-multiple-dispatch？"><a href="#什么是-multiple-dispatch？" class="headerlink" title="什么是 multiple dispatch？"></a>什么是 multiple dispatch？</h1><p>我第一次知道 multiple dispatch 这个词语，其实就是在偶然间查找 CLOS 的相关资料时看到的。在 Common Lisp 中，定义类和方法的语法与常见的语言画风不太一样。例如，下列代码跟 Java 一样定义了四个类</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defclass</span> shape ()</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> circle (<span class="name">shape</span>)</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> rectangle (<span class="name">shape</span>)</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> triangle (<span class="name">shape</span>)</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> abstract-resizer ()</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> resizer (<span class="name">abstract-resizer</span>)</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defgeneric</span> resize (<span class="name">resizer</span> shape))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> resize ((<span class="name">resizer</span> resizer) (<span class="name">shape</span> circle))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"缩放圆形~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> resize ((<span class="name">resizer</span> resizer) (<span class="name">shape</span> rectangle))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"缩放矩形~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> resize ((<span class="name">resizer</span> resizer) (<span class="name">shape</span> shape))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"缩放任意图形~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> resize ((<span class="name">resizer</span> resizer) (<span class="name">shape</span> triangle))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"缩放三角形~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">let</span> ((<span class="name">resizer</span> (<span class="name">make-instance</span> 'resizer))</span><br><span class="line">      (<span class="name">shapes</span> (<span class="name">list</span></span><br><span class="line">               (<span class="name">make-instance</span> 'circle)</span><br><span class="line">               (<span class="name">make-instance</span> 'rectangle)</span><br><span class="line">               (<span class="name">make-instance</span> 'triangle))))</span><br><span class="line">  (<span class="name">dolist</span> (<span class="name">shape</span> shapes)</span><br><span class="line">    (<span class="name">resize</span> resizer shape)))</span><br></pre></td></tr></tbody></table></figure>
-<p>执行上述代码会调用不同版本的<code>resize</code>方法来打印内容</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211015/multipledispatch的例子.jpg" alt=""></p>
-<p>由于<code>defmethod</code>支持给每一个参数都声明对应的类这一做法是在太符合直觉了，以至于我丝毫没有意识到它有一个专门的名字叫做 multiple dispatch，并且在大多数语言中是不支持的。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211015/CL就是厉害.png" alt=""></p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>聪明的你应该已经发现了，在上面的 Common Lisp 代码中，其实与 Java 中的抽象类<code>AbstractResizer</code>对应的类<code>abstract-resizer</code>是完全没有必要的，<code>defgeneric</code>本身就是一种用来定义抽象<em>接口</em>的手段。</p>
-<p>此外，在第三个版本的<code>resize</code>方法中，可以看到标识符<code>shape</code>同时作为了参数的名字和该参数所属的类的名字——没错，在 Common Lisp 中，一个符号不仅仅可以同时代表一个变量和一个函数，同时还可以兼任一个类型，它不仅仅是一门通常所说的 Lisp-2 的语言。</p>
-
+        
     </div>
 
     
@@ -320,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2021/10/15/为什么管Java叫单派发以及什么是多派发/" title="为什么管Java叫单派发以及什么是多派发">https://liutos.github.io/2021/10/15/为什么管Java叫单派发以及什么是多派发/</a>
+    <a href="https://liutos.github.io/2021/10/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AE%A1Java%E5%8F%AB%E5%8D%95%E6%B4%BE%E5%8F%91%E4%BB%A5%E5%8F%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%B4%BE%E5%8F%91/" title="">https://liutos.github.io/2021/10/15/为什么管Java叫单派发以及什么是多派发/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -337,12 +308,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/10/06/直观地了解自己每天在吃上面的开销/" rel="prev" title="直观地了解自己每天在吃上面的开销">
-      <i class="fa fa-chevron-left"></i> 直观地了解自己每天在吃上面的开销
+    <a href="/2021/10/06/%E7%9B%B4%E8%A7%82%E5%9C%B0%E4%BA%86%E8%A7%A3%E8%87%AA%E5%B7%B1%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%90%83%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%BC%80%E9%94%80/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/05/02/自己动手打印整数/" rel="next" title="自己动手打印整数">
-      自己动手打印整数 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/05/02/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -423,13 +394,12 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-的-single-dispatch"><span class="nav-number">1.</span> <span class="nav-text">Java 的 single dispatch</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是-multiple-dispatch？"><span class="nav-number">2.</span> <span class="nav-text">什么是 multiple dispatch？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -438,21 +408,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -476,19 +434,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -537,16 +495,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -572,6 +530,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -600,6 +566,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -617,9 +590,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2021/10/15/为什么管Java叫单派发以及什么是多派发/",
+            url: "https://liutos.github.io/2021/10/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AE%A1Java%E5%8F%AB%E5%8D%95%E6%B4%BE%E5%8F%91%E4%BB%A5%E5%8F%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%B4%BE%E5%8F%91/",
             identifier: "2021/10/15/为什么管Java叫单派发以及什么是多派发/",
-            title: "为什么管Java叫单派发以及什么是多派发"
+            title: ""
           }
         }
       });
@@ -640,7 +613,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: 'b91ce4e805fa64f3a2d299ffcbb2b7be',
+      id: 'ea93497cdb8bb619b62b39c7e475f983',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -648,4 +621,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

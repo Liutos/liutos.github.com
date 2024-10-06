@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,23 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="序言入坑VS Code前，我已经是一名久经考验的Emacs老用户了，因此开始正式使用VS Code后，我第一时间启用了它的Emacs Keymap。但不久我便发现，这套键映射缺少一个重要的快捷键——ctrl-l。 在Emacs中，ctrl-l对应的命令是recenter-top-bottom，它用于将光标所在的行轮替地滚动到可视区域（即Emacs中的window）的中间、顶部，以及底部（如下图所示">
-<meta name="keywords" content="editor,编辑器,vscode,工具">
+  <meta name="description" content="记录编程生涯的大大小小的事情">
 <meta property="og:type" content="article">
-<meta property="og:title" content="年轻人的第一个VSCode扩展">
-<meta property="og:url" content="https://liutos.github.io/2021/01/02/年轻人的第一个VSCode插件/index.html">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/2021/01/02/%E5%B9%B4%E8%BD%BB%E4%BA%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAVSCode%E6%8F%92%E4%BB%B6/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="序言入坑VS Code前，我已经是一名久经考验的Emacs老用户了，因此开始正式使用VS Code后，我第一时间启用了它的Emacs Keymap。但不久我便发现，这套键映射缺少一个重要的快捷键——ctrl-l。 在Emacs中，ctrl-l对应的命令是recenter-top-bottom，它用于将光标所在的行轮替地滚动到可视区域（即Emacs中的window）的中间、顶部，以及底部（如下图所示">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2021-01-02T08:28:06.757Z">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-02T08:28:06.000Z">
+<meta property="article:modified_time" content="2021-01-02T08:28:06.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="年轻人的第一个VSCode扩展">
-<meta name="twitter:description" content="序言入坑VS Code前，我已经是一名久经考验的Emacs老用户了，因此开始正式使用VS Code后，我第一时间启用了它的Emacs Keymap。但不久我便发现，这套键映射缺少一个重要的快捷键——ctrl-l。 在Emacs中，ctrl-l对应的命令是recenter-top-bottom，它用于将光标所在的行轮替地滚动到可视区域（即Emacs中的window）的中间、顶部，以及底部（如下图所示">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
 
-<link rel="canonical" href="https://liutos.github.io/2021/01/02/年轻人的第一个VSCode插件/">
+<link rel="canonical" href="https://liutos.github.io/2021/01/02/%E5%B9%B4%E8%BD%BB%E4%BA%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAVSCode%E6%8F%92%E4%BB%B6/">
 
 
 <script id="page-configurations">
@@ -73,7 +70,7 @@
   };
 </script>
 
-  <title>年轻人的第一个VSCode扩展 | 小打小闹写点bug</title>
+  <title> | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -113,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -204,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/01/02/年轻人的第一个VSCode插件/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/01/02/%E5%B9%B4%E8%BD%BB%E4%BA%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAVSCode%E6%8F%92%E4%BB%B6/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -217,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          年轻人的第一个VSCode扩展
+          
         </h1>
 
         <div class="post-meta">
@@ -226,9 +224,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-01-02 16:18:34 / 修改时间：16:28:06" itemprop="dateCreated datePublished" datetime="2021-01-02T16:18:34+08:00">2021-01-02</time>
+              <time title="创建时间：2021-01-02 16:28:06" itemprop="dateCreated datePublished" datetime="2021-01-02T16:28:06+08:00">2021-01-02</time>
             </span>
 
           
@@ -240,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/01/02/年轻人的第一个VSCode插件/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2021/01/02/%E5%B9%B4%E8%BD%BB%E4%BA%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAVSCode%E6%8F%92%E4%BB%B6/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/02/年轻人的第一个VSCode插件/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -256,49 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>入坑<code>VS Code</code>前，我已经是一名久经考验的<code>Emacs</code>老用户了，因此开始正式使用<code>VS Code</code>后，我第一时间启用了它的<a href="https://marketplace.visualstudio.com/items?itemName=hiro-sun.vscode-emacs" target="_blank" rel="noopener"><code>Emacs Keymap</code></a>。但不久我便发现，这套键映射缺少一个重要的快捷键——<code>ctrl-l</code>。</p>
-<p>在<code>Emacs</code>中，<code>ctrl-l</code>对应的命令是<code>recenter-top-bottom</code>，它用于将光标所在的行轮替地滚动到可视区域（即<code>Emacs</code>中的<code>window</code>）的中间、顶部，以及底部（如下图所示）</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210102/Emacs的ctrl-l效果演示.gif" alt=""></p>
-<p>这是我高频使用的一个功能，尤其是跳转到函数的定义的首行后，我习惯于连按两次，将其滚动到<code>window</code>的顶部以便在一屏中看到尽量多的内容。</p>
-<p>为了避免重复发明轮子，我先搜索了一番，找到了一个宣称实现了该功能的扩展<a href="https://marketplace.visualstudio.com/items?itemName=yeannylam.recenter-top-bottom" target="_blank" rel="noopener"><code>Recenter Top Bottom</code></a>。可惜的是，安装后并不生效。</p>
-<p>难道只能委屈自己用鼠标小心翼翼地将光标所在行滚到顶部了吗？当然不是。既然没有开箱即用的，那便自己写一个<code>VS Code</code>的扩展实现这个功能吧。</p>
-<h1 id="年轻人的第一个VS-Code扩展"><a href="#年轻人的第一个VS-Code扩展" class="headerlink" title="年轻人的第一个VS Code扩展"></a>年轻人的第一个VS Code扩展</h1><h2 id="创建VS-Code扩展的项目"><a href="#创建VS-Code扩展的项目" class="headerlink" title="创建VS Code扩展的项目"></a>创建VS Code扩展的项目</h2><p>要想入门<code>VS Code</code>扩展的开发，官方便提供了一份不错的<a href="https://code.visualstudio.com/api/get-started/your-first-extension" target="_blank" rel="noopener">教程</a>。一个扩展有许多的“八股文”代码，可以用<code>yo</code>和<code>generator-code</code>来快速生成</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g yo generator-code</span><br><span class="line">yo code</span><br></pre></td></tr></tbody></table></figure>
-<p>到这里，便得到了一个名为<code>helloworld</code>的目录了。用<code>VS Code</code>打开它，接下来要在其中大展身手。</p>
-<h2 id="实现将光标所在行垂直居中的功能"><a href="#实现将光标所在行垂直居中的功能" class="headerlink" title="实现将光标所在行垂直居中的功能"></a>实现将光标所在行垂直居中的功能</h2><p><code>VS Code</code>扩展的核心逻辑定义在文件<code>src/extension.ts</code>中。在<code>yo</code>生成的示例代码中，用<code>registerCommand</code>注册了一个名为<code>helloworld.helloWorld</code>的命令，其逻辑是简单地在右下角弹出一句<code>Hello VS Code from HelloWorld!</code>。这个回调函数，便是业务逻辑的落脚点。</p>
-<p>要想实现将光标所在行滚动到中间的功能，首先要知道<code>VS Code</code>为开发者提供了哪些支持。在摸索了一通从<code>VS Code</code>的<a href="https://code.visualstudio.com/api/references/vscode-api" target="_blank" rel="noopener"><code>API文档</code></a>后，我有了以下的线索：</p>
-<ol>
-<li>通过<code>vscode.window.activeTextEditor</code>可以取得当前聚焦的编辑器——其值可能为空（<code>undefined</code>）；</li>
-<li><code>TextEditor</code>实例的属性<code>.selection.active</code>可以取得当前光标的位置；</li>
-<li><code>TextEditor</code>实例有一个方法<code>revealRange</code>可以滚动文本来改变展示的范围，它需要一个<code>vscode.Range</code>类的实例，以及一个<code>vscode.TextEditorRevealType</code>类型的枚举值；</li>
-<li><code>vscode.TextEditorRevealType.InCenter</code>的效果是将所给定的范围展示在中间，<code>vscode.TextEditorRevealType.AtTop</code>则是置顶。</li>
-</ol>
-<p>有了这些知识储备，实现这样的一个回调函数便是信手拈来的事情了</p>
-<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">recenterTop</span>(<span class="params"></span>) </span>{</span><br><span class="line">  <span class="keyword">const</span> editor = vscode.window.activeTextEditor;</span><br><span class="line">  <span class="keyword">if</span> (!editor) {</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">const</span> cursorPosition = editor.selection.active;</span><br><span class="line">  editor.revealRange(<span class="keyword">new</span> vscode.Range(cursorPosition, cursorPosition), vscode.TextEditorRevealType.InCenter);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>由于暂时没有配置该命令的快捷键，只能用<code>VS Code</code>的命令面板来调用</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210102/初步实现居中的效果.gif" alt=""></p>
-<h2 id="实现将光标所在行置顶的功能"><a href="#实现将光标所在行置顶的功能" class="headerlink" title="实现将光标所在行置顶的功能"></a>实现将光标所在行置顶的功能</h2><p>接下来我将实现连续调用两次<code>helloworld.helloWorld</code>命令，把光标所在行滚动到顶部的效果。在<code>Emacs</code>中，可以很轻松地知道一个命令是否被连续运行——<code>Emacs</code>有一个名为<code>last-command</code>的变量存储着上一个命令的名称，只需要检查其是否等于<code>recenter-top-bottom</code>即可。但<code>VS Code</code>没有暴露这么强大的功能，只能另辟蹊径。</p>
-<p>我的策略是，如果调用<code>helloworld.helloWorld</code>时光标的位置，与上一次调用该命令时的位置相同，就认为是连续调用。为此，需要两个在函数<code>recenterTop</code>之外定义的变量：</p>
-<ol>
-<li><code>previousPosition</code>负责记录上一次调用<code>recenterTop</code>时光标的位置，它的初始值为<code>null</code>；</li>
-<li><code>revealType</code>存储着上一次调整展示范围时传递给<code>TextEditor</code>实例的<code>revealRange</code>方法的第二个参数的值，它的初始值也为<code>null</code>。</li>
-</ol>
-<p>我的目标是尽量模拟<code>Emacs</code>中的<code>recenter-top-bottom</code>所具备的、交替使用居中、置顶效果的特点，因此：</p>
-<ol>
-<li>如果<code>revealType</code>为<code>null</code>，意味着这是第一次调用<code>recenterTop</code>，那么效果便是居中。否则；</li>
-<li>如果这一次与上一次的光标位置不同，意味着在上一次调用<code>recenterTop</code>后调用过其它命令，效果依然是居中。否则；</li>
-<li>如果<code>revealType</code>已经是居中了，就改为置顶。否则；</li>
-<li>将<code>revealType</code>改为居中。</li>
-</ol>
-<blockquote>
-<p>Talk is cheap. Show me the code.</p>
-</blockquote>
-<figure class="highlight typescript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> previousPosition: <span class="literal">null</span>|vscode.Position = <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">let</span> revealType: <span class="literal">null</span>|vscode.TextEditorRevealType = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">recenterTop</span>(<span class="params"></span>) </span>{</span><br><span class="line">  <span class="keyword">const</span> editor = vscode.window.activeTextEditor;</span><br><span class="line">  <span class="keyword">if</span> (!editor) {</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">const</span> cursorPosition = editor.selection.active;</span><br><span class="line">  <span class="keyword">if</span> (!revealType) {</span><br><span class="line">    revealType = vscode.TextEditorRevealType.InCenter;</span><br><span class="line">  } <span class="keyword">else</span> <span class="keyword">if</span> (previousPosition &amp;&amp; !cursorPosition.isEqual(previousPosition)) {</span><br><span class="line">    revealType = vscode.TextEditorRevealType.InCenter;</span><br><span class="line">  } <span class="keyword">else</span> <span class="keyword">if</span> (revealType === vscode.TextEditorRevealType.InCenter) {</span><br><span class="line">    revealType = vscode.TextEditorRevealType.AtTop;</span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">    revealType = vscode.TextEditorRevealType.InCenter;</span><br><span class="line">  }</span><br><span class="line">  previousPosition = cursorPosition;</span><br><span class="line">  editor.revealRange(<span class="keyword">new</span> vscode.Range(cursorPosition, cursorPosition), revealType);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="定义快捷键"><a href="#定义快捷键" class="headerlink" title="定义快捷键"></a>定义快捷键</h2><p>通过命令面板来使用不是我的最终目标，通过快捷键才是。根据<code>VS Code</code>的<a href="https://code.visualstudio.com/api/references/contribution-points#contributes.keybindings" target="_blank" rel="noopener">文档</a>可以知道，只要在<code>package.json</code>的<code>contributes</code>对象中，新增名为<code>keybindings</code>的属性，并定义命令及按键序列即可。</p>
-<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">{</span><br><span class="line">  <span class="comment">// 此处省略其它不必要的属性</span></span><br><span class="line">  <span class="string">"contributes"</span>: {</span><br><span class="line">    <span class="string">"keybindings"</span>:{ <span class="comment">// 新增属性</span></span><br><span class="line">      <span class="string">"command"</span>: <span class="string">"helloworld.helloWorld"</span>,</span><br><span class="line">      <span class="string">"key"</span>: <span class="string">"ctrl+l"</span></span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如果看过我之前的文章<a href="https://liutos.github.io/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/">《手指疼，写点代码缓解一下》</a>的读者应当会记得，我已经从<code>Emacs Keymap</code>“叛逃”到了<code>Vim Keymap</code>了。所以，我并没有真正用上上述的<code>VS Code</code>扩展。相反，目前高频使用的是<code>Vim Keymap</code>内置的<code>z-.</code>以及<code>z-↵</code>了——前者用于垂直居中，后者用于置顶。</p>
-<p>爱护手指，从使用<code>Vim Keymap</code>做起。</p>
-
+        
     </div>
 
     
@@ -336,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2021/01/02/年轻人的第一个VSCode插件/" title="年轻人的第一个VSCode扩展">https://liutos.github.io/2021/01/02/年轻人的第一个VSCode插件/</a>
+    <a href="https://liutos.github.io/2021/01/02/%E5%B9%B4%E8%BD%BB%E4%BA%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAVSCode%E6%8F%92%E4%BB%B6/" title="">https://liutos.github.io/2021/01/02/年轻人的第一个VSCode插件/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -346,13 +301,6 @@
 
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/editor/" rel="tag"><i class="fa fa-tag"></i> editor</a>
-              <a href="/tags/编辑器/" rel="tag"><i class="fa fa-tag"></i> 编辑器</a>
-              <a href="/tags/vscode/" rel="tag"><i class="fa fa-tag"></i> vscode</a>
-              <a href="/tags/工具/" rel="tag"><i class="fa fa-tag"></i> 工具</a>
-          </div>
 
         
 
@@ -360,12 +308,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/" rel="prev" title="自己动手丰衣足食——用Hammerspoon控制Emacs的窗口">
-      <i class="fa fa-chevron-left"></i> 自己动手丰衣足食——用Hammerspoon控制Emacs的窗口
+    <a href="/2020/12/20/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E4%B8%B0%E8%A1%A3%E8%B6%B3%E9%A3%9F%E2%80%94%E2%80%94%E7%94%A8Hammerspoon%E6%8E%A7%E5%88%B6Emacs%E7%9A%84%E7%AA%97%E5%8F%A3/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/01/29/format，不只是格式化/" rel="next" title="format，不只是格式化">
-      format，不只是格式化 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/02/27/%E7%BB%88%E7%AB%AF%E7%9C%8B%E7%89%87%E6%8C%87%E6%97%A5%E5%8F%AF%E5%BE%85/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -446,13 +394,12 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#年轻人的第一个VS-Code扩展"><span class="nav-number">2.</span> <span class="nav-text">年轻人的第一个VS Code扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建VS-Code扩展的项目"><span class="nav-number">2.1.</span> <span class="nav-text">创建VS Code扩展的项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现将光标所在行垂直居中的功能"><span class="nav-number">2.2.</span> <span class="nav-text">实现将光标所在行垂直居中的功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现将光标所在行置顶的功能"><span class="nav-number">2.3.</span> <span class="nav-text">实现将光标所在行置顶的功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义快捷键"><span class="nav-number">2.4.</span> <span class="nav-text">定义快捷键</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -461,21 +408,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -499,19 +434,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -560,16 +495,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -595,6 +530,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -623,6 +566,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -640,9 +590,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2021/01/02/年轻人的第一个VSCode插件/",
+            url: "https://liutos.github.io/2021/01/02/%E5%B9%B4%E8%BD%BB%E4%BA%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAVSCode%E6%8F%92%E4%BB%B6/",
             identifier: "2021/01/02/年轻人的第一个VSCode插件/",
-            title: "年轻人的第一个VSCode扩展"
+            title: ""
           }
         }
       });
@@ -663,7 +613,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '48eeda61c252e27c253b03b6e096dcc4',
+      id: '38dd60d85483ac09ab195a8f9dfefc02',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -671,4 +621,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -46,16 +46,15 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="记录编程生涯的大大小小的事情">
-<meta name="keywords" content="emacs,lisp,programming">
 <meta property="og:type" content="website">
 <meta property="og:title" content="小打小闹写点bug">
 <meta property="og:url" content="https://liutos.github.io/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
 <meta property="og:description" content="记录编程生涯的大大小小的事情">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="小打小闹写点bug">
-<meta name="twitter:description" content="记录编程生涯的大大小小的事情">
 
 <link rel="canonical" href="https://liutos.github.io/">
 
@@ -109,6 +108,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -200,10 +200,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2024/10/06/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -214,7 +214,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2023/05/23/在CommonLisp中支持JSON语法/" class="post-title-link" itemprop="url">在CommonLisp中支持JSON语法</a>
+            <a href="/2024/10/06/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/" class="post-title-link" itemprop="url">用Prolog开发WEB服务</a>
         </h1>
 
         <div class="post-meta">
@@ -223,9 +223,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-05-23 23:47:22 / 修改时间：23:49:42" itemprop="dateCreated datePublished" datetime="2023-05-23T23:47:22+08:00">2023-05-23</time>
+              <time title="创建时间：2024-10-06 20:12:02" itemprop="dateCreated datePublished" datetime="2024-10-06T20:12:02+08:00">2024-10-06</time>
             </span>
 
           
@@ -237,7 +236,297 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2023/05/23/在CommonLisp中支持JSON语法/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2024/10/06/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2024/10/06/用Prolog开发WEB服务/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="用-Prolog-开发-WEB-服务"><a href="#用-Prolog-开发-WEB-服务" class="headerlink" title="用 Prolog 开发 WEB 服务"></a>用 Prolog 开发 WEB 服务</h1><h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><p>在绝大多数互联网行业开发者看来，Prolog 不是一门会被用在本职开发工作中的语言。更多的时候，谈论起 Prolog，人们联想到的往往是诸如“逻辑编程”、“人工智能”等词语，将它与 SQL 放在一起，视为一种 DSL，而非像 Java、Python 这样的通用编程语言。因此，我一直很好奇能否使用 Prolog 来开发一些更偏向于业务系统的程序。</p>
+<p>答案是肯定的。基于 SWI-Prolog 这个实现和它的标准库，我开发出了一个简单的短链服务，验证了 Prolog 的确可以满足开发一个业务系统的各种功能需求。</p>
+<h2 id="Prolog-基础知识"><a href="#Prolog-基础知识" class="headerlink" title="Prolog 基础知识"></a>Prolog 基础知识</h2><p>由于本文的大多数读者对 Prolog 应当是比较陌生的，因此在开始讲解如何用它开发一个 WEB 应用之前，必须稍作科普，介绍一下 Prolog 的基础知识，包括但不限于：</p>
+<ol>
+<li>Prolog 程序的基本结构；</li>
+<li>运行 Prolog 脚本；</li>
+<li>编译 Prolog 程序。</li>
+</ol>
+<h3 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h3><p>Prolog 是一门语言而不是一个具体的解释器或者编译器，为了可以运行 Prolog 脚本或编译源代码，我选择使用 SWI-Prolog。有了它，就可以运行经典的 Hello World 程序了</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    format(<span class="string">"Hello, world!~n"</span>).</span><br></pre></td></tr></tbody></table></figure>
+
+<p>假设上述源代码被保存在文件<code>hello_world.pl</code>中，那么执行它的命令如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swipl ./hello_world.pl</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以看到它打印出了所期望的文本</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20241006/hello_world%E7%9A%84%E6%95%88%E6%9E%9C.jpg" alt="hello_world的效果"></p>
+<p>现在让我来稍微介绍一下上述代码中的细节。<code>:- initialization(main, main).</code>是一个给 SWI-Prolog 的“指示”，可以理解为其声明了程序启动后的入口是一个叫做<code>main</code>的函数。而</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    format(<span class="string">"Hello, world!~n"</span>).</span><br></pre></td></tr></tbody></table></figure>
+
+<p>则是函数<code>main</code>的定义，它调用内置的函数<code>format</code>来打印一个字符串到标准输出。</p>
+<h3 id="编译-Prolog-程序"><a href="#编译-Prolog-程序" class="headerlink" title="编译 Prolog 程序"></a>编译 Prolog 程序</h3><p>利用 SWI-Prolog 可以像运行 Python 脚本一般来运行 Prolog 程序，当然，也可以像 C 程序一样将其从文本形态的源代码编译为一个独立的可执行文件。仍然以前文的源文件<code>hello_world.pl</code>为例，编译的命令如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swipl --stand_alone=true -o hello_world -c hello_world.pl</span><br></pre></td></tr></tbody></table></figure>
+
+<p>效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20241006/%E7%BC%96%E8%AF%91prolog%E7%A8%8B%E5%BA%8F.jpg" alt="编译prolog程序"></p>
+<p>在 C 语言中，被编译的程序的入口是约定俗成的，即函数<code>main</code>。而由于在文件<code>hello_world.pl</code>中用指令<code>:- initialization(main, main).</code></p>
+<h2 id="Prolog-的使用"><a href="#Prolog-的使用" class="headerlink" title="Prolog 的使用"></a>Prolog 的使用</h2><p>在开发 WEB 服务的过程中，还会遇到许多与 WEB 无关的、Prolog 自身在其它领域的应用知识，例如：</p>
+<ol>
+<li>如何读写磁盘文件；</li>
+<li>如何处理 JSON 格式的数据；</li>
+<li>如何读写 MySQL；</li>
+<li>如何读写 Redis；</li>
+</ol>
+<p>因此在这一章节中，将会分别介绍在 Prolog 中如何做到上面的这些事情。</p>
+<h3 id="读取磁盘文件"><a href="#读取磁盘文件" class="headerlink" title="读取磁盘文件"></a>读取磁盘文件</h3><p>要读取磁盘文件的全部内容，可以使用 SWI-Prolog 的库提供的函数<a href="https://www.swi-prolog.org/pldoc/doc_for?object=read_file_to_string/3">read_file_to_string/3</a>。假设要读取的文件为<code>/tmp/demo.txt</code>，其内容如下</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Shopping List:</span><br><span class="line"></span><br><span class="line">- Milk</span><br><span class="line">- Bread</span><br><span class="line">- Eggs</span><br><span class="line">- Apples</span><br><span class="line">- Coffee</span><br></pre></td></tr></tbody></table></figure>
+
+<p>那么<code>read_file_to_string/3</code>的用法如下</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">:- use_module(library(readutil)).</span><br><span class="line"></span><br><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    read_file_to_string(<span class="string">"/tmp/demo.txt"</span>, <span class="symbol">String</span>, []),</span><br><span class="line">    format(<span class="string">"file content is: ~s~n"</span>, [<span class="symbol">String</span>]).</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样就可以将读到的文件内容完全打印到控制台上，如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20241006/%E8%AF%BB%E5%8F%96%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg" alt="读取磁盘文件"></p>
+<h3 id="写入磁盘文件"><a href="#写入磁盘文件" class="headerlink" title="写入磁盘文件"></a>写入磁盘文件</h3><p>如果要将数据写入到磁盘文件中——例如，在每次处理完请求后记录日志，那么可以使用函数<code>write</code>。以将前文中的字符串<code>Hello, world!</code>写入到文件中为例，示例代码如下</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    <span class="symbol">LogContent</span> = <span class="string">"Hello, world!"</span>,</span><br><span class="line">    open(<span class="string">"/tmp/access.log"</span>, write, <span class="symbol">Stream</span>),</span><br><span class="line">    write(<span class="symbol">Stream</span>, <span class="symbol">LogContent</span>),</span><br><span class="line">    close(<span class="symbol">Stream</span>).</span><br></pre></td></tr></tbody></table></figure>
+
+<p>效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20241006/%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg" alt="写入磁盘文件"></p>
+<h3 id="解析-JSON-格式"><a href="#解析-JSON-格式" class="headerlink" title="解析 JSON 格式"></a>解析 JSON 格式</h3><p>JSON 已经是应用最广泛的数据交互格式之一了，因此如果一门语言要能够投产于业务系统的开发，必然离不开对 JSON 数据的处理能力。假设要处理的 JSON 数据如下</p>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"mysql"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">        <span class="attr">"driver_string"</span><span class="punctuation">:</span> <span class="string">"DRIVER={MySQL ODBC 8.0 Driver};String Types=Unicode;password=1234567;port=3306;server=mysql;user=root"</span></span><br><span class="line">    <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"redis"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">        <span class="attr">"hostname"</span><span class="punctuation">:</span> <span class="string">"redis"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">"port"</span><span class="punctuation">:</span> <span class="number">6379</span></span><br><span class="line">    <span class="punctuation">}</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这些内容存储在文件<code>/tmp/config.json</code>中，那么下列代码会取出其中的叶子节点来输出</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">:- use_module(library(http/json)).</span><br><span class="line"></span><br><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    <span class="symbol">ConfigPath</span> = <span class="string">"/tmp/config.json"</span>,</span><br><span class="line">    read_file_to_string(<span class="symbol">ConfigPath</span>, <span class="symbol">String</span>, []),</span><br><span class="line">    <span class="comment">% 按照 JSON 格式反序列化为字典类型的数据。</span></span><br><span class="line">    atom_json_dict(<span class="symbol">String</span>, <span class="symbol">JSONDict</span>, []),</span><br><span class="line">    format(<span class="string">"mysql.driver_string = ~s~n"</span>, [<span class="symbol">JSONDict</span>.mysql.driver_string]),</span><br><span class="line">    format(<span class="string">"redis.hostname = ~s~n"</span>, [<span class="symbol">JSONDict</span>.redis.hostname]),</span><br><span class="line">    format(<span class="string">"redis.port = ~d~n"</span>, [<span class="symbol">JSONDict</span>.redis.port]).</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上文中的函数<a href="https://www.swi-prolog.org/pldoc/doc_for?object=atom_json_dict/3">atom_json_dict</a>将字符串类型的变量<code>String</code>反序列化为变量<code>JSONDict</code>。从<a href="https://www.swi-prolog.org/pldoc/man?section=ext-dict-functions">这里</a>可以看到，SWI-Prolog 为字典类型提供一个中缀操作符<code>.</code>，使得我们可以像在多数主流语言中引用类的成员变量一般，用简单的语法来获取字典内的字段——即<code>JSONDict.mysql.driver_string</code>这样的代码。</p>
+<p>上面的代码的运行效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20241006/%E8%A7%A3%E6%9E%90JSON%E5%AD%97%E5%85%B8%E7%9A%84%E6%95%88%E6%9E%9C.jpg" alt="解析JSON字典的效果"></p>
+<h3 id="自动导入的库"><a href="#自动导入的库" class="headerlink" title="自动导入的库"></a>自动导入的库</h3><p>如果分别查看函数<code>read_file_to_string</code>和<code>atom_json_dict</code>的文档（分别在<a href="https://www.swi-prolog.org/pldoc/doc_for?object=read_file_to_string/3">这里</a>和<a href="https://www.swi-prolog.org/pldoc/doc_for?object=atom_json_dict/3">这里</a>），就会发现前者的页面上写着<code>can be autoloaded</code>，而后者没有</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20241006/%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5%E7%9A%84%E6%8F%90%E7%A4%BA.jpg" alt="自动导入的提示"></p>
+<p>所以前文关于<code>read_file_to_string</code>的例子中，即便不写上<code>:- use_module(library(readutil)).</code>，也是可以正常调用的</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20241006/%E4%B8%8D%E9%9C%80%E8%A6%81%E5%AF%BC%E5%85%A5%E7%9A%84%E4%BE%8B%E5%AD%90.jpg" alt="不需要导入的例子"></p>
+<h3 id="事实与全局变量"><a href="#事实与全局变量" class="headerlink" title="事实与全局变量"></a>事实与全局变量</h3><p>在将磁盘上的配置文件的内容加载到内存中后，最好可以将其赋值为一个全局变量以便在所有的函数中访问到。要做到这一点，可以利用 Prolog 的一个特性：事实。</p>
+<p>在很多 Prolog 的入门教程中，都会介绍经典的、如何用 Prolog 来回答两个人是否为某种关系的例子。例如，在<a href="https://www.ruanyifeng.com/blog/2019/01/prolog.html">这个教程</a>中，就给出了如何判断两个人是否为朋友的示例，如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20241006/%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E4%B8%BA%E6%9C%8B%E5%8F%8B%E7%9A%84%E4%BE%8B%E5%AD%90.jpg" alt="判断是否为朋友的例子"></p>
+<p>其中，像</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">friend(john, julia).</span><br><span class="line">friend(john, jack).</span><br><span class="line">friend(julia, sam).</span><br><span class="line">friend(julia, molly).</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样的代码就是 Prolog 中的“事实”。其中，<code>friend</code>在 Prolog 中被称为“谓词”，也就是前文中一直提到的函数。因此，如果想要定义一个全局变量，可以：</p>
+<ol>
+<li>用<code>dynamic/1</code>声明一个只有一个参数的“动态”谓词；</li>
+<li>用<code>asserta/1</code>新增一个事实；</li>
+<li>在别的位置，用通常的归一语法就可以绑定全局的值到一个变量上了。</li>
+</ol>
+<p>就像下面这样子</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line"><span class="comment">% 声明为动态的以便允许使用 asserta 修改。</span></span><br><span class="line">:- dynamic odbc_driver_string/<span class="number">1.</span></span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    asserta(odbc_driver_string(<span class="string">"This is a global variable"</span>)),</span><br><span class="line">    odbc_driver_string(<span class="symbol">DriverString</span>),</span><br><span class="line">    format(<span class="string">"DriverString = ~s~n"</span>, [<span class="symbol">DriverString</span>]).</span><br></pre></td></tr></tbody></table></figure>
+
+<p>效果如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20241006/%E7%94%A8%E4%BA%8B%E5%AE%9E%E6%9D%A5%E5%AE%9A%E4%B9%89%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F.jpg" alt="用事实来定义全局变量"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/" class="post-title-link" itemprop="url">未命名</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-06-30 13:37:48" itemprop="dateCreated datePublished" datetime="2024-06-30T13:37:48+08:00">2024-06-30</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2024/06/30/用dockercompose部署Redis集群/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2024/05/05/getattr-%E5%9C%A8CommonLisp%E4%B8%AD%E7%9A%84%E8%BF%91%E4%BC%BC%E7%89%B9%E6%80%A7/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/05/05/getattr-%E5%9C%A8CommonLisp%E4%B8%AD%E7%9A%84%E8%BF%91%E4%BC%BC%E7%89%B9%E6%80%A7/" class="post-title-link" itemprop="url">未命名</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-05-05 21:14:12" itemprop="dateCreated datePublished" datetime="2024-05-05T21:14:12+08:00">2024-05-05</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2024/05/05/getattr-%E5%9C%A8CommonLisp%E4%B8%AD%E7%9A%84%E8%BF%91%E4%BC%BC%E7%89%B9%E6%80%A7/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2024/05/05/getattr-在CommonLisp中的近似特性/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/" class="post-title-link" itemprop="url">未命名</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-05-23 23:49:42" itemprop="dateCreated datePublished" datetime="2023-05-23T23:49:42+08:00">2023-05-23</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/05/23/在CommonLisp中支持JSON语法/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -253,32 +542,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="在-Lisp-中使用-reader-macro-支持-JSON-语法"><a href="#在-Lisp-中使用-reader-macro-支持-JSON-语法" class="headerlink" title="在 Lisp 中使用 reader macro 支持 JSON 语法"></a>在 Lisp 中使用 reader macro 支持 JSON 语法</h1><h2 id="什么是-reader-macro？"><a href="#什么是-reader-macro？" class="headerlink" title="什么是 reader macro？"></a>什么是 reader macro？</h2><p>Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为 reader macro function。举个例子，单引号<code>'</code>就是一个 macro character，可以用函数<code>get-macro-character</code>来获取它对应的 reader macro function。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">get-macro-character</span> #\')</span><br><span class="line">#&lt;FUNCTION SB-IMPL::READ-QUOTE&gt;</span><br><span class="line">NIL</span><br></pre></td></tr></tbody></table></figure>
-<p>借助单引号，可以简化一些代码的写法，例如表达一个符号<code>HELLO</code>本身可以写成这样。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; 'hello</span><br><span class="line">HELLO</span><br></pre></td></tr></tbody></table></figure>
-<p>而不是下面这种等价但更繁琐的形式。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">quote</span> hello)</span><br><span class="line">HELLO</span><br></pre></td></tr></tbody></table></figure>
-<p>Common Lisp 中还定义了由两个字符构成的 reader macro，例如用于书写<code>simple-vector</code>字面量的<code>#(</code>。借助它，如果想要表达一个依次由数字 1、2、3 构成的<code>simple-vector</code>类型的对象，不需要显式地调用函数<code>vector</code>并传给它 1、2、3，而是可以写成<code>#(1 2 3)</code>。</p>
-<h2 id="支持-JSON-语法后有什么效果？"><a href="#支持-JSON-语法后有什么效果？" class="headerlink" title="支持 JSON 语法后有什么效果？"></a>支持 JSON 语法后有什么效果？</h2><p>合法的 JSON 文本不一定是合法的 Common Lisp 源代码。例如，<code>[1, 2, 3]</code>在 JSON 标准看来是一个由数字 1、2、3 组成的数组，但在 Common Lisp 中，这段代码会触发 condition。（condition 就是 Common Lisp 中的“异常”、“出状况”了）</p>
-<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">eof-value</span> (<span class="name">gensym</span>)))</span><br><span class="line">  (<span class="name">with-input-from-string</span> (<span class="name">stream</span> <span class="string">"[1, 2, 3]"</span>)</span><br><span class="line">    (<span class="name">block</span> <span class="literal">nil</span></span><br><span class="line">      (<span class="name">loop</span></span><br><span class="line">        (<span class="name">let</span> ((<span class="name">expr</span> (<span class="name">read</span> stream <span class="literal">nil</span> eof-value)))</span><br><span class="line">          (<span class="name">when</span> (<span class="name">eq</span> expr eof-value)</span><br><span class="line">            (<span class="name">return</span>))</span><br><span class="line"></span><br><span class="line">          (<span class="name">print</span> expr))))))</span><br><span class="line"></span><br><span class="line">[1 ; Evaluation aborted on #&lt;SB-INT:SIMPLE-READER-ERROR "Comma not inside a backquote." {1003AAD863}&gt;.</span><br></pre></td></tr></tbody></table></figure>
-<p>这是因为按照 Common Lisp 的<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/02_b.htm" target="_blank" rel="noopener">读取算法</a>，左方括号<code>[</code>和数字 1 都是标准中所指的 constituent character，它们可以组成一个 token，并且最终被解析为一个符号类型的对象。而紧接着的字符是逗号<code>,</code>，<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/02_ad.htm" target="_blank" rel="noopener">它是一个 terminating macro char</a>，按照<a href="http://www.lispworks.com/documentation/lw60/CLHS/Body/02_dg.htm" target="_blank" rel="noopener">标准</a>，如果不是在一个反引号表达式中使用它将会是无效的，因此触发了 condition。</p>
-<p>假如存在一个由两个字符<code>#J</code>定义的 reader macro、允许开发者使用 JSON 语法来描述紧接着的对象的话，那么就可以写出下面这样的代码。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">progn</span></span><br><span class="line">           (<span class="name">print</span> #jfalse)</span><br><span class="line">           (<span class="name">print</span> #jtrue)</span><br><span class="line">           (<span class="name">print</span> #j233.<span class="number">666</span>)</span><br><span class="line">           (<span class="name">print</span> #jnull)</span><br><span class="line">           (<span class="name">print</span> #j[<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line">           (<span class="name">print</span> #j{<span class="string">"a"</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]})</span><br><span class="line">           (<span class="name">print</span> (<span class="name">gethash</span> <span class="string">"a"</span> #j{<span class="string">"a"</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]})))</span><br><span class="line"></span><br><span class="line">YASON:FALSE </span><br><span class="line">YASON:TRUE </span><br><span class="line"><span class="number">233.666d0</span> </span><br><span class="line">:NULL </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> #(<span class="number">3</span>) #(<span class="number">4</span> <span class="number">5</span>)) </span><br><span class="line">#&lt;HASH-TABLE :TEST EQUAL :COUNT 1 {1003889963}&gt; </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>显然，用上述语法表示一个哈希表，要比下面这样的代码简单得多</p>
-<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">obj</span> (<span class="name">make-hash-table</span> <span class="symbol">:test</span> #'equal)))</span><br><span class="line">           (<span class="name">setf</span> (<span class="name">gethash</span> <span class="string">"a"</span> obj) #(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">           obj)</span><br><span class="line"></span><br><span class="line">#&lt;HASH-TABLE :TEST EQUAL :COUNT 1 {1003CB7643}&gt;</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="如何用-reader-macro-解析-JSON？"><a href="#如何用-reader-macro-解析-JSON？" class="headerlink" title="如何用 reader macro 解析 JSON？"></a>如何用 reader macro 解析 JSON？</h2><p>Common Lisp 并没有预置<code>#J</code>这个 reader macro，但这门语言允许使用者定义自己的 macro character，因此前面的示例代码是可以实现的。要自定义出<code>#J</code>这个读取器宏，需要使用函数<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/f_set__1.htm#set-dispatch-macro-character" target="_blank" rel="noopener"><code>set-dispatch-macro-character</code></a>。它的前两个参数分别为构成 macro character 的前两个字符，即<code>#</code>和<code>J</code>——其中<code>J</code>即便是写成了小写，也会被转换为大写后再使用。第三个参数则是 Lisp 的词法解析器在遇到了<code>#J</code>时将会调用的参数。<code>set-dispatch-macro-character</code>会传给这个函数三个参数：</p>
-<ol>
-<li>用于读取源代码的字符输入流；</li>
-<li>构成 macro character 的第二个字符（即<code>J</code>）；</li>
-<li>非必传的、夹在<code>#</code>和<code>J</code>之间的数字。</li>
-</ol>
-<p>百闻不如一见，一段能够实现上一个章节中的示例代码的<code>set-dispatch-macro-character</code>用法如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">set-dispatch-macro-character</span></span><br><span class="line"> #\#</span><br><span class="line"> #\j</span><br><span class="line"> (<span class="name">lambda</span> (<span class="name">stream</span> char p)</span><br><span class="line">   (<span class="name">declare</span> (<span class="name">ignorable</span> char p))</span><br><span class="line">   (<span class="name">let</span> ((<span class="name">parsed</span> (<span class="name">yason</span><span class="symbol">:parse</span> stream</span><br><span class="line">                              <span class="symbol">:json-arrays-as-vectors</span> <span class="literal">t</span></span><br><span class="line">                              <span class="symbol">:json-booleans-as-symbols</span> <span class="literal">t</span></span><br><span class="line">                              <span class="symbol">:json-nulls-as-keyword</span> <span class="literal">t</span>)))</span><br><span class="line">     (<span class="name">if</span> (<span class="name">or</span> (<span class="name">symbolp</span> parsed)</span><br><span class="line">             (<span class="name">consp</span> parsed))</span><br><span class="line">         (<span class="name">list</span> 'quote parsed)</span><br><span class="line">         parsed))))</span><br></pre></td></tr></tbody></table></figure>
-<p>在<code>set-dispatch-macro-character</code>的回调函数中，我是用了开源的第三方库<code>yason</code>提供的函数<code>parse</code>，从输入流<code>stream</code>中按照 JSON 语法解析出一个值。函数<code>parse</code>的三个关键字参数的含义参见<a href="https://xh4.github.io/yason/#mapping" target="_blank" rel="noopener">这里</a>，此处不再赘述。由于 reader macro 的结果会被用于构造源代码的表达式，因此如果函数<code>parse</code>返回了符号或者<code>cons</code>类型，为了避免被编译器求值，需要将它们“引用”起来，因此将它们放到第一元素为<code>quote</code>的列表中。其它情况下，直接返回<code>parse</code>的返回值即可，因此它们是“自求值”的，求值结果是它们自身。</p>
-<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>本文我借助了现成的库<code>yason</code>来解析 JSON 格式的字符串，如果你对如何从零开始实现这样的 reader macro 感兴趣的话，可以参考<a href="https://gist.github.com/chaitanyagupta/9324402" target="_blank" rel="noopener">这篇文章</a>。</p>
-<p>全文完。</p>
-
+          
       
     </div>
 
@@ -300,7 +564,7 @@
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2023/05/07/impl-dotimes-by-callcc/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -311,7 +575,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2023/05/07/impl-dotimes-by-callcc/" class="post-title-link" itemprop="url">使用 call/cc 实现计数循环</a>
+            <a href="/2023/05/07/impl-dotimes-by-callcc/" class="post-title-link" itemprop="url">未命名</a>
         </h1>
 
         <div class="post-meta">
@@ -320,9 +584,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-05-07 16:52:26 / 修改时间：16:58:39" itemprop="dateCreated datePublished" datetime="2023-05-07T16:52:26+08:00">2023-05-07</time>
+              <time title="创建时间：2023-05-07 16:58:39" itemprop="dateCreated datePublished" datetime="2023-05-07T16:58:39+08:00">2023-05-07</time>
             </span>
 
           
@@ -350,318 +613,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="使用-call-cc-实现计数循环"><a href="#使用-call-cc-实现计数循环" class="headerlink" title="使用 call/cc 实现计数循环"></a>使用 call/cc 实现计数循环</h1><h2 id="什么是计数循环"><a href="#什么是计数循环" class="headerlink" title="什么是计数循环"></a>什么是计数循环</h2><p>计数循环就是从一个数字$i$开始一直遍历到另一个数字$j$为止的循环过程。例如，下面的 Python 代码就会遍历从 0 到 9 这 10 个整数并逐个打印它们</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">    print(i)</span><br></pre></td></tr></tbody></table></figure>
-<p>如果是在 C 语言中实现同样的功能，代码会更显著一些</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>在 C 语言的例子中，显式地指定了计数器变量<code>i</code>从 0 开始并且在等于 10 的时候结束循环，比之 Python 版本更有循环的味道。</p>
-<h2 id="拆开循环计数的语法糖"><a href="#拆开循环计数的语法糖" class="headerlink" title="拆开循环计数的语法糖"></a>拆开循环计数的语法糖</h2><p>使用 C 语言的<code>while</code>语句同样可以实现计数循环，示例代码如下</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">  <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">    i++;</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>如果将<code>while</code>也视为<code>if</code>和<code>goto</code>的语法糖的话，可以进一步将计数循环写成更原始的形式</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">  <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">label0:</span><br><span class="line">  <span class="keyword">if</span> (i &gt;= <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">goto</span> label1;</span><br><span class="line">  }</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">  i++;</span><br><span class="line">  <span class="keyword">goto</span> label0;</span><br><span class="line">label1:</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="Common-Lisp-中的-go-与续延"><a href="#Common-Lisp-中的-go-与续延" class="headerlink" title="Common Lisp 中的 go 与续延"></a>Common Lisp 中的 go 与续延</h2><p>在 Common Lisp 中也有与 C 语言的<code>goto</code>特性相近的 special form，那就是<a href="http://clhs.lisp.se/Body/s_tagbod.htm" target="_blank" rel="noopener"><code>tagbody</code></a>和<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/s_go.htm" target="_blank" rel="noopener"><code>go</code></a>。使用它们可以将 C 代码直白地翻译为对应的 Common Lisp 版本</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">i</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   label0</span><br><span class="line">     (<span class="name">when</span> (<span class="name">&gt;=</span> i <span class="number">10</span>)</span><br><span class="line">       (<span class="name">go</span> label1))</span><br><span class="line"></span><br><span class="line">     (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~%"</span> i)</span><br><span class="line">     (<span class="name">incf</span> i)</span><br><span class="line">     (<span class="name">go</span> label0)</span><br><span class="line">   label1))</span><br></pre></td></tr></tbody></table></figure>
-<p>聪明的你一定已经发现了，此处的第二个符号<code>label1</code>其实是丝毫不必要的，只要写成下面的形式即可</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">i</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   label0</span><br><span class="line">     (<span class="name">when</span> (<span class="name">&lt;</span> i <span class="number">10</span>)</span><br><span class="line">       (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~%"</span> i)</span><br><span class="line">       (<span class="name">incf</span> i)</span><br><span class="line">       (<span class="name">go</span> label0))))</span><br></pre></td></tr></tbody></table></figure>
-<p>这个形式不仅仅是更简单了，而且它暴露出了一个事实：<code>label0</code>所表示的，其实就是在将变量<code>i</code>绑定为 0<strong>之后</strong>要执行的代码的位置。换句话说，它标识了一个续延（continuation）。</p>
-<h2 id="用-call-cc-重新实现计数循环"><a href="#用-call-cc-重新实现计数循环" class="headerlink" title="用 call/cc 重新实现计数循环"></a>用 call/cc 重新实现计数循环</h2><p>如果你用的语言中支持 first-class 的续延，那么便可以用来实现计数循环，例如<a href="https://github.com/Liutos/LiutCL" target="_blank" rel="noopener">233-lisp</a>。在 233-lisp 中，提供了特殊操作符<code>call/cc</code>来捕捉当前续延对象，这个名字借鉴自 Scheme。借助这个操作符，即便没有<code>tagbody</code>和<code>go</code>，也可以实现计数循环。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20230507/用callcc模拟计数循环.jpg" alt="用callcc模拟计数循环"></p>
-<p>在上面的代码中，<code>call/cc</code>捕捉到的续延就是“赋值给局部变量<code>i</code>”。在将这个续延<code>k</code>保存到变量<code>next</code>之后，用 0 初始化变量<code>i</code>。之后只要<code>i</code>还小于 10，就将它打印到标准输出，并启动保存在了变量<code>next</code>中的续延，回到给变量<code>i</code>赋值的地方。此时传递给续延的参数为<code>(+ i 1)</code>，就实现了变量<code>i</code>的自增操作。当<code>(&lt; i 10)</code>不再成立时，也就不会启动续延“回到过去”了，至此，进程结束。</p>
-<p>在 233-lisp 中，将<code>dotimes</code>作为一个内置的宏用<code>call/cc</code>实现了一遍，参见<a href="https://github.com/Liutos/LiutCL/blob/6342693cb682b6d2f47067c3d3c9c6ce46eb891c/src/interpreter.lisp#L568" target="_blank" rel="noopener">这里</a>，其代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> expand-dotimes-to-call/cc (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"将 DOTIMES 语句 EXPR 编译为等价的 CALL/CC 语句。"</span></span><br><span class="line">  (<span class="name">assert</span> (<span class="name">eq</span> (<span class="name">first</span> expr) 'dotimes))</span><br><span class="line">  (<span class="name">destructuring-bind</span> ((<span class="name">var</span> count-form) <span class="symbol">&amp;rest</span> statements)</span><br><span class="line">      (<span class="name">rest</span> expr)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">a</span> (<span class="name">gensym</span>))</span><br><span class="line">          (<span class="name">count-form-result</span> (<span class="name">gensym</span>))</span><br><span class="line">          (<span class="name">next</span> (<span class="name">gensym</span>)))</span><br><span class="line">      `(let ((,count-form-result ,count-form)) ; 由于目前 LET 只支持一个绑定，因此这里要写多个 LET。</span><br><span class="line">         (let ((,next <span class="number">0</span>))               ; 由于 <span class="number">233</span>-lisp 中尚未支持 NIL，因此这里填个 <span class="number">0</span>。</span><br><span class="line">           (let ((,var (call/cc (k)</span><br><span class="line">                                (progn</span><br><span class="line">                                  (setf ,next k)</span><br><span class="line">                                  <span class="number">0</span>))))     ; 计数循环从 <span class="number">0</span> 开始。</span><br><span class="line">             (if (&lt; ,var ,count-form-result)</span><br><span class="line">                 (progn</span><br><span class="line">                   ,@statements</span><br><span class="line">                   (,next (+ ,var <span class="number">1</span>)))</span><br><span class="line">                 <span class="number">0</span>)))))))                  <span class="comment">; 由于目前没有 NIL，因此返回一个数字 0 来代替。</span></span><br></pre></td></tr></tbody></table></figure>
-<p>变量<code>count-form-result</code>和<code>next</code>分别表示在宏展开后的代码中的计数上限和被捕捉的续延。之所以让它们以<code>(gensym)</code>的方式来命名，是为了避免多次求值<code>count-form</code>表达式，以及避免存储续延的变量名恰好出乎意料地与<code>statements</code>中的变量名冲突了，这也算是编写 Common Lisp 的宏时的最佳实践了。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>直接用<code>call/cc</code>来一个个实现 Common Lisp 中的各种控制流还是太繁琐了，更好的方案是用<code>call/cc</code>先实现<code>tagbody</code>和<code>go</code>，然后再用后两者继续实现<code>do</code>，最后用<code>do</code>分别实现<code>dolist</code>和<code>dotimes</code>。当然了，这些都是后话了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2022/08/21/如何在CommonLisp中解析命令行参数/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2022/08/21/如何在CommonLisp中解析命令行参数/" class="post-title-link" itemprop="url">如何在CommonLisp中解析命令行参数</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-08-21 15:27:55 / 修改时间：15:39:48" itemprop="dateCreated datePublished" datetime="2022-08-21T15:27:55+08:00">2022-08-21</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2022/08/21/如何在CommonLisp中解析命令行参数/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/08/21/如何在CommonLisp中解析命令行参数/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="clingon"><a href="#clingon" class="headerlink" title="clingon"></a>clingon</h1><p>clingon 是一个 Common Lisp 的命令行选项的解析器，它可以轻松地解析具有复杂格式的命令行选项。例如，下面的代码可以打印给定次数的打招呼信息</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">#|-*- mode:lisp -*-|#</span><br><span class="line">#|</span><br><span class="line">exec ros -Q -- $0 "$@"</span><br><span class="line">|#</span><br><span class="line">(<span class="name">progn</span> <span class="comment">;;init forms</span></span><br><span class="line">  (<span class="name">ros</span><span class="symbol">:ensure-asdf</span>)</span><br><span class="line">  #+quicklisp(<span class="name">ql</span><span class="symbol">:quickload</span> '(clingon) <span class="symbol">:silent</span> <span class="literal">t</span>)</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">(<span class="name">defpackage</span> <span class="symbol">:ros</span>.script.hello.<span class="number">3868869124</span></span><br><span class="line">  (<span class="symbol">:use</span> <span class="symbol">:cl</span></span><br><span class="line">        <span class="symbol">:clingon</span>))</span><br><span class="line">(<span class="name">in-package</span> <span class="symbol">:ros</span>.script.hello.<span class="number">3868869124</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">check-type</span> cmd clingon<span class="symbol">:command</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">count</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:count</span>))</span><br><span class="line">        (<span class="name">name</span> (<span class="name">first</span> (<span class="name">clingon</span><span class="symbol">:command-arguments</span> cmd))))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">_</span> count)</span><br><span class="line">      (<span class="name">declare</span> (<span class="name">ignorable</span> _))</span><br><span class="line">      (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Hello ~A!~%"</span> name))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"hello"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:integer</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"number of greetings"</span></span><br><span class="line">                         <span class="symbol">:initial-value</span> <span class="number">1</span></span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:count</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"count"</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br><span class="line"><span class="comment">;;; vim: set ft=lisp lisp:</span></span><br></pre></td></tr></tbody></table></figure>
-<p>稍微做一些解释。首先执行命令<code>ros init hello</code>生成上面的代码的雏形——加载依赖、包定义，以及空的函数<code>main</code>。为了加载 clingon，将其作为函数<code>ql:quickload</code>的参数。然后分别定义一个<code>command</code>、<code>handler</code>，以及<code>option</code>。</p>
-<p>在 clingon 中，类<code>clingon:command</code>的实例对象表示一个可以在 shell 中被触发的命令，它们由函数<code>clingon:make-command</code>创建。每一个命令起码要有三个要素：</p>
-<ol>
-<li><code>:handler</code>，负责使用命令行选项、实现业务逻辑的函数；</li>
-<li><code>:name</code>，命令的名字，一般会被展示在命令的用法说明中；</li>
-<li><code>:options</code>，该命令所接受的选项。</li>
-</ol>
-<p>此处的<code>:handler</code>就是函数<code>top-level/handler</code>，它会被函数<code>clingon:run</code>调用（依赖注入的味道），并将一个合适的<code>clingon:command</code>对象传入。<code>:options</code>目前只承载了一个选项的定义，即</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line"> <span class="symbol">:integer</span></span><br><span class="line"> <span class="symbol">:description</span> <span class="string">"number of greetings"</span></span><br><span class="line"> <span class="symbol">:initial-value</span> <span class="number">1</span></span><br><span class="line"> <span class="symbol">:key</span> <span class="symbol">:count</span></span><br><span class="line"> <span class="symbol">:long-name</span> <span class="string">"count"</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>它定义了一个值为整数的选项，在命令行中通过<code>--count</code>指定。如果没有传入该选项，那么在使用函数<code>clingon:getopt</code>取值时，会获得默认值 1。如果要从一个命令对象中取出这个选项的值，需要以它的<code>:key</code>参数的值作为参数来调用函数<code>clingon:getopt</code>，正如上面的函数<code>top-level/handler</code>所示。</p>
-<h2 id="子命令"><a href="#子命令" class="headerlink" title="子命令"></a>子命令</h2><p>clingon 也可以实现诸如<code>git add</code>、<code>git branch</code>这样的子命令特性。像<code>add</code>、<code>branch</code>这样的子命令，对于 clingon 而言仍然是类<code>clingon:command</code>的实例对象，只不过它们不会传递给函数<code>clingon:run</code>调度，而是传递给函数<code>clingon:make-command</code>的参数<code>:sub-command</code>，如下列代码所示</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> cmd)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"cli"</span></span><br><span class="line">              <span class="symbol">:sub-commands</span> (<span class="name">list</span></span><br><span class="line">                             (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">                              <span class="symbol">:handler</span> #'(lambda (cmd)</span><br><span class="line">                                           (declare (ignorable cmd))</span><br><span class="line">                                           (format <span class="literal">t</span> <span class="string">"Dropped the database~%"</span>))</span><br><span class="line">                              <span class="symbol">:name</span> <span class="string">"dropdb"</span>)</span><br><span class="line">                             (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">                              <span class="symbol">:handler</span> #'(lambda (cmd)</span><br><span class="line">                                           (declare (ignorable cmd))</span><br><span class="line">                                           (format <span class="literal">t</span> <span class="string">"Initialized the database~%"</span>))</span><br><span class="line">                              <span class="symbol">:name</span> <span class="string">"initdb"</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="选项与参数"><a href="#选项与参数" class="headerlink" title="选项与参数"></a>选项与参数</h2><p>在 clingon 中通过命令行传递给进程的信息分为选项和参数两种形态，选项是通过名字来引用，而参数则通过它们的下标来引用。例如在第一个例子中，就定义了一个名为<code>--count</code>的选项，它在解析结果中被赋予了<code>:count</code>这个关键字，可以通过函数<code>clingon:getopt</code>来引用它的值；与之相反，变量<code>name</code>是从命令行中解析了选项后、剩余的参数中的<strong>第一个</strong>，它是以位置来标识的。clingon 通过函数<code>clingon:make-option</code>来定义选项，它提供了丰富的控制能力。</p>
-<h2 id="选项名称"><a href="#选项名称" class="headerlink" title="选项名称"></a>选项名称</h2><p>选项有好几种名字，一种叫做<code>:key</code>，是在程序内部使用的名字，用作函数<code>clingon:getopt</code>的参数之一；一种叫做<code>:long-name</code>，一般为多于一个字符的字符串，如<code>"count"</code>，在命令行该名称需要带上两个连字符的前缀来使用，如<code>--count 3</code>；最后一种叫做<code>:short-name</code>，为一个单独的字符，如<code>#\v</code>，在命令行中带上一个连字符前缀来使用，如<code>-v</code>。</p>
-<h2 id="必要性与默认值"><a href="#必要性与默认值" class="headerlink" title="必要性与默认值"></a>必要性与默认值</h2><p>通过传入参数<code>:required t</code>给函数<code>clingon:make-option</code>，可以要求一个选项为必传的。例如下面的命令的选项<code>--n</code>就是必传的</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:n</span>))</span><br><span class="line">    (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"."</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"dots"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:integer</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"打印的英文句号的数量"</span></span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:n</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"n"</span></span><br><span class="line">                         <span class="symbol">:required</span> <span class="literal">t</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
-<p>如果不希望在一些最简单的情况下也要繁琐地编写<code>--n 1</code>这样的命令行参数，可以用<code>:initial-value 1</code>来指定。除此之外，也可以让选项默认读取指定的环境变量中的值，使用<code>:env-vars</code>指定环境变量名即可</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Hello ~A~%"</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:username</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"greet"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:string</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"用户名"</span></span><br><span class="line">                         <span class="symbol">:env-vars</span> '(<span class="string">"GREETER_USERNAME"</span>)</span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:username</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"username"</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="可多次使用的选项"><a href="#可多次使用的选项" class="headerlink" title="可多次使用的选项"></a>可多次使用的选项</h2><p>像<code>curl</code>中的选项<code>-H</code>就是可以多次使用的，每指定一次就可以在请求中添加一个 HTTP 头部，如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20220821/curl多次传入-H的效果.jpg" alt="curl多次传入-H的效果"></p>
-<p>在 clingon 中可以通过往函数<code>clingon:make-option</code>传入<code>:list</code>来实现。当用<code>clingon:getopt</code>取出类型为<code>:list</code>的选项的值时，得到的是一个列表，其中依次存放着输入的值的字符串。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">messages</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:message</span>)))</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~{~A~^~%~}"</span> messages)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"commit"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:list</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"提交的消息"</span></span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:message</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"message"</span></span><br><span class="line">                         <span class="symbol">:short-name</span> #\m)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
-<p>另一种情况是尽管没有值，但仍然多次使用同一个选项。例如命令<code>ssh</code>的选项<code>-v</code>，使用的次数越多（最多为 3 次），则<code>ssh</code>打印的调试信息也就越详细。这种类型的选项在 clingon 中称为<code>:counter</code>。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"Verbosity: ~D~%"</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:verbose</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"log"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:counter</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"啰嗦程度"</span></span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:verbose</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"verbose"</span></span><br><span class="line">                         <span class="symbol">:short-name</span> #\v)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="信号选项"><a href="#信号选项" class="headerlink" title="信号选项"></a>信号选项</h2><p>有一些选项只需要区分【有】和【没有】两种情况就可以了，而不需要在意这个选项的值——或者这类选项本身就不允许有值，例如<code>docker run</code>命令的选项<code>-d</code>和<code>--detach</code>。这种选项的类型为<code>:boolean/true</code>，如果指定了这个选项，那么取出来的值始终为<code>t</code>。与之相反，类型<code>:boolean/false</code>取出来的值始终为<code>nil</code>。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">rv</span> (<span class="name">software-type</span>)))</span><br><span class="line">    (<span class="name">when</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:shout</span>)</span><br><span class="line">      (<span class="name">setf</span> rv (<span class="name">concatenate</span> 'string (<span class="name">string-upcase</span> rv) <span class="string">"!!!!111"</span>)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~A~%"</span> rv)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"info"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:boolean/true</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"大喊"</span></span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:shout</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"shout"</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="选择型选项"><a href="#选择型选项" class="headerlink" title="选择型选项"></a>选择型选项</h2><p>如果一个选项尽管接受的是字符串，但并非所有输入都是有意义的，例如命令<code>dot</code>的选项<code>-T</code>。从<code>dot</code>的 man 文档可以看到，它所支持的图片类型是有限的，如<code>ps</code>、<code>pdf</code>、<code>png</code>等。比起声明一个<code>:string</code>类型的选项，让 clingon 代劳输入值的有效性检查来得更轻松，这里可以使用<code>:choice</code>类型</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> top-level/handler (<span class="name">cmd</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~A~%"</span> (<span class="name">clingon</span><span class="symbol">:getopt</span> cmd <span class="symbol">:hash-type</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> main (<span class="name">&amp;rest</span> argv)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">app</span> (<span class="name">clingon</span><span class="symbol">:make-command</span></span><br><span class="line">              <span class="symbol">:handler</span> #'top-level/handler</span><br><span class="line">              <span class="symbol">:name</span> <span class="string">"digest"</span></span><br><span class="line">              <span class="symbol">:options</span> (<span class="name">list</span></span><br><span class="line">                        (<span class="name">clingon</span><span class="symbol">:make-option</span></span><br><span class="line">                         <span class="symbol">:choice</span></span><br><span class="line">                         <span class="symbol">:description</span> <span class="string">"哈希类型"</span></span><br><span class="line">                         <span class="symbol">:items</span> '(<span class="string">"MD5"</span> <span class="string">"SHA1"</span>)</span><br><span class="line">                         <span class="symbol">:key</span> <span class="symbol">:hash-type</span></span><br><span class="line">                         <span class="symbol">:long-name</span> <span class="string">"hash-type"</span>)))))</span><br><span class="line">    (<span class="name">clingon</span><span class="symbol">:run</span> app argv)))</span><br></pre></td></tr></tbody></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2022/05/02/自己动手打印整数/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/05/02/自己动手打印整数/" class="post-title-link" itemprop="url">自己动手打印整数</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2022-05-02 11:14:03 / 修改时间：11:21:16" itemprop="dateCreated datePublished" datetime="2022-05-02T11:14:03+08:00">2022-05-02</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2022/05/02/自己动手打印整数/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/05/02/自己动手打印整数/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在 Common Lisp 中，打印整数一般用函数<code>format</code>。例如，上面的代码会往标准输出中打印出233这个数字：</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D"</span> <span class="number">233</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>除此之外，<code>format</code>还可以控制打印内容的宽度、填充字符、是否打印正负号等方面。例如，要控制打印的内容至少占据6列的话，可以用如下代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~6D"</span> <span class="number">233</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>如果不使用字符串形式的 DSL，而是以关键字参数的方式来实现一个能够达到同样效果的函数<code>format-decimal</code>，代码可能如下：</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         mincol)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。"</span></span><br><span class="line">  <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">           (<span class="name">push</span> <span class="number">0</span> digits))</span><br><span class="line">          (<span class="name">t</span></span><br><span class="line">           (<span class="name">do</span> ((<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">               ((<span class="name">zerop</span> n))</span><br><span class="line">             (<span class="name">push</span> (<span class="name">rem</span> n <span class="number">10</span>) digits))))</span><br><span class="line">    <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">    (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">      (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">        (<span class="name">princ</span> #\Space)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">      (<span class="name">princ</span> (<span class="name">code-char</span> (<span class="name">+</span> digit (<span class="name">char-code</span> #\<span class="number">0</span>)))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">233</span> <span class="symbol">:mincol</span> <span class="number">6</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>如果要求用数字0而不是空格来填充左侧的列，用<code>format</code>的写法如下：</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~6,'0D"</span> <span class="number">233</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p><code>format-decimal</code>想要做到同样的事情，可以这么写：</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space))</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表达式为了填充多余的列时所用的字符。"</span></span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">           (<span class="name">push</span> <span class="number">0</span> digits))</span><br><span class="line">          (<span class="name">t</span></span><br><span class="line">           (<span class="name">do</span> ((<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">               ((<span class="name">zerop</span> n))</span><br><span class="line">             (<span class="name">push</span> (<span class="name">rem</span> n <span class="number">10</span>) digits))))</span><br><span class="line">    <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">    (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">      (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">        (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">      (<span class="name">princ</span> (<span class="name">code-char</span> (<span class="name">+</span> digit (<span class="name">char-code</span> #\<span class="number">0</span>)))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">233</span> <span class="symbol">:mincol</span> <span class="number">6</span> <span class="symbol">:padchar</span> #\<span class="number">0</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p><code>-D</code>默认是不会打印非负整数的符号的，可以用修饰符<code>@</code>来修改这个行为。例如，<code>(format t "~6,'0@D" 233)</code>会打印出<code>00+233</code>。稍微修改一下就可以在<code>format-decimal</code>中实现同样的功能</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space)</span><br><span class="line">                         signed)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表达式为了填充多余的列时所用的字符。"</span></span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">to-digits</span> (<span class="name">n</span>)</span><br><span class="line">           <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">                    (<span class="name">push</span> #\<span class="number">0</span> digits))</span><br><span class="line">                   (<span class="name">t</span></span><br><span class="line">                    (<span class="name">do</span> ((<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">                        ((<span class="name">zerop</span> n))</span><br><span class="line">                      (<span class="name">push</span> (<span class="name">code-char</span> (<span class="name">+</span> (<span class="name">rem</span> n <span class="number">10</span>) (<span class="name">char-code</span> #\<span class="number">0</span>))) digits))))</span><br><span class="line">             digits)))</span><br><span class="line">    <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">digits</span> (<span class="name">to-digits</span> (<span class="name">abs</span> n))))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">or</span> signed (<span class="name">&lt;</span> n <span class="number">0</span>))</span><br><span class="line">        (<span class="name">push</span> (<span class="name">if</span> (<span class="name">&lt;</span> n <span class="number">0</span>) #\- #\+) digits))</span><br><span class="line">      <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">          (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">          (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">      (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">        (<span class="name">princ</span> digit)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">233</span> <span class="symbol">:mincol</span> <span class="number">6</span> <span class="symbol">:padchar</span> #\<span class="number">0</span> <span class="symbol">:signed</span> <span class="literal">t</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>除了<code>@</code>之外，<code>:</code>也是一个<code>~D</code>的修饰符，它可以让<code>format</code>每隔3个数字就打印出一个逗号，方便阅读比较长的数字。例如，下列代码会打印出<code>00+23,333</code>：</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~9,'0@:D"</span> <span class="number">23333</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>为此，给<code>format-decimal</code>新增一个关键字参数<code>comma-separated</code>来控制这一行为。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         comma-separated</span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space)</span><br><span class="line">                         signed)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">COMMA-SEPARATED 如果为 T，则每打印3个字符就打印一个逗号。</span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表示填充多余的列时所用的字符。</span></span><br><span class="line"><span class="string">SIGNED 控制是否显示非负整数的加号。"</span></span><br><span class="line">  (<span class="name">check-type</span> comma-separated boolean)</span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  (<span class="name">check-type</span> signed boolean)</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">to-digits</span> (<span class="name">n</span>)</span><br><span class="line">           <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">                    (<span class="name">push</span> #\<span class="number">0</span> digits))</span><br><span class="line">                   (<span class="name">t</span></span><br><span class="line">                    (<span class="name">do</span> ((<span class="name">count</span> <span class="number">0</span> (<span class="number">1</span>+ count))</span><br><span class="line">                         (<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">                        ((<span class="name">zerop</span> n))</span><br><span class="line">                      (<span class="name">when</span> (<span class="name">and</span> comma-separated (<span class="name">&gt;</span> count <span class="number">0</span>) (<span class="name">zerop</span> (<span class="name">rem</span> count <span class="number">3</span>)))</span><br><span class="line">                        (<span class="name">push</span> #\, digits))</span><br><span class="line">                      (<span class="name">push</span> (<span class="name">code-char</span> (<span class="name">+</span> (<span class="name">rem</span> n <span class="number">10</span>) (<span class="name">char-code</span> #\<span class="number">0</span>))) digits))))</span><br><span class="line">             digits)))</span><br><span class="line">    <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">digits</span> (<span class="name">to-digits</span> (<span class="name">abs</span> n))))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">or</span> signed (<span class="name">&lt;</span> n <span class="number">0</span>))</span><br><span class="line">        (<span class="name">push</span> (<span class="name">if</span> (<span class="name">&lt;</span> n <span class="number">0</span>) #\- #\+) digits))</span><br><span class="line">      <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">          (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">          (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">      (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">        (<span class="name">princ</span> digit)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">-23333</span> <span class="symbol">:comma-separated</span> <span class="literal">t</span> <span class="symbol">:mincol</span> <span class="number">9</span> <span class="symbol">:padchar</span> #\<span class="number">0</span> <span class="symbol">:signed</span> <span class="literal">t</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>事实上，打印分隔符的步长，以及作为分隔符的逗号都是可以定制的。例如，可以改为每隔4个数字打印一个连字符</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~9,'0,'-,4@:D"</span> <span class="number">23333</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>对于<code>format-decimal</code>来说这个修改现在很简单了</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> format-decimal (<span class="name">n</span></span><br><span class="line">                       <span class="symbol">&amp;key</span></span><br><span class="line">                         (<span class="name">commachar</span> #\,)</span><br><span class="line">                         (<span class="name">comma-interval</span> <span class="number">3</span>)</span><br><span class="line">                         comma-separated</span><br><span class="line">                         mincol</span><br><span class="line">                         (<span class="name">padchar</span> #\Space)</span><br><span class="line">                         signed)</span><br><span class="line">  <span class="string">"打印整数 N 到标准输出。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">COMMACHAR 表示当需要打印分隔符时的分隔符。</span></span><br><span class="line"><span class="string">COMMA-INTERVAL 表示当需要打印分隔符时需要间隔的步长。</span></span><br><span class="line"><span class="string">COMMA-SEPARATED 如果为 T，则每打印3个字符就打印一个逗号。</span></span><br><span class="line"><span class="string">MINCOL 如果不为 NIL，则表示所打印的内容至少要占据的列数。</span></span><br><span class="line"><span class="string">PADCHAR 表示填充多余的列时所用的字符。</span></span><br><span class="line"><span class="string">SIGNED 控制是否显示非负整数的加号。"</span></span><br><span class="line">  (<span class="name">check-type</span> commachar character)</span><br><span class="line">  (<span class="name">check-type</span> comma-interval integer)</span><br><span class="line">  (<span class="name">check-type</span> comma-separated boolean)</span><br><span class="line">  (<span class="name">check-type</span> mincol (<span class="name">or</span> integer null))</span><br><span class="line">  (<span class="name">check-type</span> padchar character)</span><br><span class="line">  (<span class="name">check-type</span> signed boolean)</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">to-digits</span> (<span class="name">n</span>)</span><br><span class="line">           <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">digits</span> '()))</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">zerop</span> n)</span><br><span class="line">                    (<span class="name">push</span> #\<span class="number">0</span> digits))</span><br><span class="line">                   (<span class="name">t</span></span><br><span class="line">                    (<span class="name">do</span> ((<span class="name">count</span> <span class="number">0</span> (<span class="number">1</span>+ count))</span><br><span class="line">                         (<span class="name">n</span> n (<span class="name">truncate</span> n <span class="number">10</span>)))</span><br><span class="line">                        ((<span class="name">zerop</span> n))</span><br><span class="line">                      (<span class="name">when</span> (<span class="name">and</span> comma-separated (<span class="name">&gt;</span> count <span class="number">0</span>) (<span class="name">zerop</span> (<span class="name">rem</span> count comma-interval)))</span><br><span class="line">                        (<span class="name">push</span> commachar digits))</span><br><span class="line">                      (<span class="name">push</span> (<span class="name">code-char</span> (<span class="name">+</span> (<span class="name">rem</span> n <span class="number">10</span>) (<span class="name">char-code</span> #\<span class="number">0</span>))) digits))))</span><br><span class="line">             digits)))</span><br><span class="line">    <span class="comment">;; 通过取余的方式得到 N 的每一位并逐个入栈，之后出栈的顺序就是从左到右打印的顺序了。</span></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">digits</span> (<span class="name">to-digits</span> (<span class="name">abs</span> n))))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">or</span> signed (<span class="name">&lt;</span> n <span class="number">0</span>))</span><br><span class="line">        (<span class="name">push</span> (<span class="name">if</span> (<span class="name">&lt;</span> n <span class="number">0</span>) #\- #\+) digits))</span><br><span class="line">      <span class="comment">;; 打印出填充用的空格。</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">and</span> (<span class="name">integerp</span> mincol) (<span class="name">&gt;</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">        (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">-</span> mincol (<span class="name">length</span> digits)))</span><br><span class="line">          (<span class="name">declare</span> (<span class="name">ignorable</span> i))</span><br><span class="line">          (<span class="name">princ</span> padchar)))</span><br><span class="line"></span><br><span class="line">      (<span class="name">dolist</span> (<span class="name">digit</span> digits)</span><br><span class="line">        (<span class="name">princ</span> digit)))))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(<span class="name">format-decimal</span> <span class="number">-23333</span> <span class="symbol">:commachar</span> #\- <span class="symbol">:comma-interval</span> <span class="number">4</span> <span class="symbol">:comma-separated</span> <span class="literal">t</span> <span class="symbol">:mincol</span> <span class="number">9</span> <span class="symbol">:padchar</span> #\<span class="number">0</span> <span class="symbol">:signed</span> <span class="literal">t</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>全文完。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/10/15/为什么管Java叫单派发以及什么是多派发/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/15/为什么管Java叫单派发以及什么是多派发/" class="post-title-link" itemprop="url">为什么管Java叫单派发以及什么是多派发</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-10-15 23:43:05" itemprop="dateCreated datePublished" datetime="2021-10-15T23:43:05+08:00">2021-10-15</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2021/10/15/为什么管Java叫单派发以及什么是多派发/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/10/15/为什么管Java叫单派发以及什么是多派发/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>众所周知，在 Java 语言中支持基于子类型的多态，例如某百科全书中就给了一个基于<code>Animal</code>及其两个子类的例子（代码经过我微微调整）</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>{</span><br><span class="line">  <span class="function"><span class="keyword">abstract</span> String <span class="title">talk</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>{</span><br><span class="line">  <span class="function">String <span class="title">talk</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Meow!"</span>;</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>{</span><br><span class="line">  <span class="function">String <span class="title">talk</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"Woof!"</span>;</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Example</span> </span>{</span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">letsHear</span><span class="params">(<span class="keyword">final</span> Animal a)</span> </span>{</span><br><span class="line">    System.out.println(a.talk());</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">    letsHear(<span class="keyword">new</span> Cat());</span><br><span class="line">    letsHear(<span class="keyword">new</span> Dog());</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>基于子类型的多态要求在程序的运行期根据参数的类型，选择不同的具体方法——例如在上述例子中，当方法<code>letsHear</code>中调用了参数<code>a</code>的方法<code>talk</code>时，是依照变量<code>a</code>在运行期的类型（第一次为<code>Cat</code>，第二次为<code>Dog</code>）来选择对应的<code>talk</code>方法的实例的，而不是依照编译期的类型<code>Animal</code>。</p>
-<p>但在不同的语言中，在运行期查找方法时，所选择的参数的个数是不同的。对于 Java 而言，它只取方法的第一个参数（即接收者），这个策略被称为 single dispatch。</p>
-<h1 id="Java-的-single-dispatch"><a href="#Java-的-single-dispatch" class="headerlink" title="Java 的 single dispatch"></a>Java 的 single dispatch</h1><p>要演示为什么 Java 是 single dispatch 的，必须让示例代码中的方法接收两个参数（除了方法的接收者之外再来一个参数）</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 演示 Java 是 single dispatch 的。</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Shape</span> </span>{}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Circle</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>{}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>{}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Triangle</span> <span class="keyword">extends</span> <span class="title">Shape</span> </span>{}</span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractResizer</span> </span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Circle c)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Rectangle r)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Shape s)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Triangle t)</span></span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Resizer</span> <span class="keyword">extends</span> <span class="title">AbstractResizer</span></span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Circle c)</span> </span>{ System.out.println(<span class="string">"缩放圆形"</span>); }</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Rectangle r)</span> </span>{ System.out.println(<span class="string">"缩放矩形"</span>); }</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Shape s)</span> </span>{ System.out.println(<span class="string">"缩放任意图形"</span>); }</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Triangle t)</span> </span>{ System.out.println(<span class="string">"缩放三角形"</span>); }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Trial1</span></span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span></span><br><span class="line"><span class="function">	</span>{</span><br><span class="line">		AbstractResizer resizer = <span class="keyword">new</span> Resizer();</span><br><span class="line">		Shape[] shapes = {<span class="keyword">new</span> Circle(), <span class="keyword">new</span> Rectangle(), <span class="keyword">new</span> Triangle()};</span><br><span class="line">		<span class="keyword">for</span> (Shape shape : shapes)</span><br><span class="line">		{</span><br><span class="line">			resizer.resize(shape);</span><br><span class="line">		}</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>显然，类<code>Resizer</code>的实例方法<code>resize</code>就是接收两个参数的——第一个为<code>Resizer</code>类的实例对象，第二个则可能是<code>Shape</code>及其三个子类中的一种类的实例对象。假如 Java 的多态策略是 multiple dispatch 的，那么应当分别调用不同的三个版本的<code>resize</code>方法，但实际上并不是</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211015/Java是singledispatch的证据.jpg" alt=""></p>
-<p>通过 JDK 中提供的程序<code>javap</code>可以看到在<code>main</code>方法中调用<code>resize</code>方法时究竟用的是类<code>Resizer</code>中的哪一个版本，运行命令<code>javap -c -l -s -v Trial1</code>，可以看到调用<code>resize</code>方法对应的 JVM 字节码为<code>invokevirtual</code></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211015/invokevirtual命令.jpg" alt=""></p>
-<p>翻阅 JVM 规格文档可以找到对<a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.invokevirtual" target="_blank" rel="noopener">invokevirtual 指令的解释</a></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211015/invokevirtual的查找逻辑.jpg" alt=""></p>
-<p>显然，由于在 JVM 的字节码中，<code>invokevirtual</code>所调用的方法的参数类型已经解析完毕——<code>LShape</code>表示是一个叫做<code>Shape</code>的类，因此在方法接收者，即类<code>Resizer</code>中查找的时候，也只会命中<code>resize(Shape s)</code>这个版本的方法。变量<code>s</code>的运行期类型在查找方法的时候，丝毫没有派上用场，因此 Java 的多态是 single dispatch 的。</p>
-<p>想要依据参数的运行期类型来打印不同内容也不难，简单粗暴的办法可以选择<code>instanceOf</code></p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractResizer</span> </span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Shape s)</span></span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Resizer</span> <span class="keyword">extends</span> <span class="title">AbstractResizer</span></span></span><br><span class="line"><span class="class"></span>{</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">(Shape s)</span> </span>{ </span><br><span class="line">    <span class="keyword">if</span> (s <span class="keyword">instanceof</span> Circle) {</span><br><span class="line">      System.out.println(<span class="string">"缩放圆形"</span>);</span><br><span class="line">    } <span class="keyword">else</span> <span class="keyword">if</span> (s <span class="keyword">instanceof</span> Rectangle) {</span><br><span class="line">      System.out.println(<span class="string">"缩放矩形"</span>);</span><br><span class="line">    } <span class="keyword">else</span> <span class="keyword">if</span> (s <span class="keyword">instanceof</span> Triangle) {</span><br><span class="line">      System.out.println(<span class="string">"缩放三角形"</span>);</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">      System.out.println(<span class="string">"缩放任意图形"</span>);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<p>或者动用 Visitor 模式。</p>
-<h1 id="什么是-multiple-dispatch？"><a href="#什么是-multiple-dispatch？" class="headerlink" title="什么是 multiple dispatch？"></a>什么是 multiple dispatch？</h1><p>我第一次知道 multiple dispatch 这个词语，其实就是在偶然间查找 CLOS 的相关资料时看到的。在 Common Lisp 中，定义类和方法的语法与常见的语言画风不太一样。例如，下列代码跟 Java 一样定义了四个类</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defclass</span> shape ()</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> circle (<span class="name">shape</span>)</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> rectangle (<span class="name">shape</span>)</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> triangle (<span class="name">shape</span>)</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> abstract-resizer ()</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> resizer (<span class="name">abstract-resizer</span>)</span><br><span class="line">  ())</span><br><span class="line"></span><br><span class="line">(<span class="name">defgeneric</span> resize (<span class="name">resizer</span> shape))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> resize ((<span class="name">resizer</span> resizer) (<span class="name">shape</span> circle))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"缩放圆形~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> resize ((<span class="name">resizer</span> resizer) (<span class="name">shape</span> rectangle))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"缩放矩形~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> resize ((<span class="name">resizer</span> resizer) (<span class="name">shape</span> shape))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"缩放任意图形~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> resize ((<span class="name">resizer</span> resizer) (<span class="name">shape</span> triangle))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"缩放三角形~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">let</span> ((<span class="name">resizer</span> (<span class="name">make-instance</span> 'resizer))</span><br><span class="line">      (<span class="name">shapes</span> (<span class="name">list</span></span><br><span class="line">               (<span class="name">make-instance</span> 'circle)</span><br><span class="line">               (<span class="name">make-instance</span> 'rectangle)</span><br><span class="line">               (<span class="name">make-instance</span> 'triangle))))</span><br><span class="line">  (<span class="name">dolist</span> (<span class="name">shape</span> shapes)</span><br><span class="line">    (<span class="name">resize</span> resizer shape)))</span><br></pre></td></tr></tbody></table></figure>
-<p>执行上述代码会调用不同版本的<code>resize</code>方法来打印内容</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211015/multipledispatch的例子.jpg" alt=""></p>
-<p>由于<code>defmethod</code>支持给每一个参数都声明对应的类这一做法是在太符合直觉了，以至于我丝毫没有意识到它有一个专门的名字叫做 multiple dispatch，并且在大多数语言中是不支持的。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211015/CL就是厉害.png" alt=""></p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>聪明的你应该已经发现了，在上面的 Common Lisp 代码中，其实与 Java 中的抽象类<code>AbstractResizer</code>对应的类<code>abstract-resizer</code>是完全没有必要的，<code>defgeneric</code>本身就是一种用来定义抽象<em>接口</em>的手段。</p>
-<p>此外，在第三个版本的<code>resize</code>方法中，可以看到标识符<code>shape</code>同时作为了参数的名字和该参数所属的类的名字——没错，在 Common Lisp 中，一个符号不仅仅可以同时代表一个变量和一个函数，同时还可以兼任一个类型，它不仅仅是一门通常所说的 Lisp-2 的语言。</p>
-
       
     </div>
 
@@ -738,7 +690,7 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -747,21 +699,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -785,19 +725,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -846,16 +786,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -881,6 +821,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -905,6 +853,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -916,4 +871,12 @@
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

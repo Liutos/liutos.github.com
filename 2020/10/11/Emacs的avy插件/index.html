@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,26 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="用Emacs的时候，我习惯将它分成“四个部分”  怎么弄的呢？一般是先按C-x 3分出左右两个window，再到各个window中用C-x 2分出上下两个window——这不是我的笔误，在Emacs的术语中，用来显示一个buffer的区域就叫做一个window。而常常被人们冠名为window的、最外层的窗体，则叫做frame。 这样划分后，多次按下C-Tab（我把这个快捷键绑定到了命令other-">
-<meta name="keywords" content="editor,编辑器,elisp,emacs,效率">
+  <meta name="description" content="记录编程生涯的大大小小的事情">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Emacs的avy插件">
-<meta property="og:url" content="https://liutos.github.io/2020/10/11/Emacs的avy插件/index.html">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="用Emacs的时候，我习惯将它分成“四个部分”  怎么弄的呢？一般是先按C-x 3分出左右两个window，再到各个window中用C-x 2分出上下两个window——这不是我的笔误，在Emacs的术语中，用来显示一个buffer的区域就叫做一个window。而常常被人们冠名为window的、最外层的窗体，则叫做frame。 这样划分后，多次按下C-Tab（我把这个快捷键绑定到了命令other-">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2020-10-11T02:56:12.431Z">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-10-11T02:56:12.000Z">
+<meta property="article:modified_time" content="2020-10-11T02:56:12.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Emacs的avy插件">
-<meta name="twitter:description" content="用Emacs的时候，我习惯将它分成“四个部分”  怎么弄的呢？一般是先按C-x 3分出左右两个window，再到各个window中用C-x 2分出上下两个window——这不是我的笔误，在Emacs的术语中，用来显示一个buffer的区域就叫做一个window。而常常被人们冠名为window的、最外层的窗体，则叫做frame。 这样划分后，多次按下C-Tab（我把这个快捷键绑定到了命令other-">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
 
-<link rel="canonical" href="https://liutos.github.io/2020/10/11/Emacs的avy插件/">
+<link rel="canonical" href="https://liutos.github.io/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/">
 
 
 <script id="page-configurations">
@@ -76,7 +70,7 @@
   };
 </script>
 
-  <title>Emacs的avy插件 | 小打小闹写点bug</title>
+  <title> | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -116,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -207,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/10/11/Emacs的avy插件/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -220,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Emacs的avy插件
+          
         </h1>
 
         <div class="post-meta">
@@ -229,9 +224,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-10-11 10:07:27 / 修改时间：10:56:12" itemprop="dateCreated datePublished" datetime="2020-10-11T10:07:27+08:00">2020-10-11</time>
+              <time title="创建时间：2020-10-11 10:56:12" itemprop="dateCreated datePublished" datetime="2020-10-11T10:56:12+08:00">2020-10-11</time>
             </span>
 
           
@@ -243,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2020/10/11/Emacs的avy插件/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/11/Emacs的avy插件/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -259,35 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>用Emacs的时候，我习惯将它分成“四个部分”</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/Emacs分成四部分.jpg" alt=""></p>
-<p>怎么弄的呢？一般是先按<code>C-x 3</code>分出左右两个window，再到各个window中用<code>C-x 2</code>分出上下两个window——这不是我的笔误，在Emacs的术语中，用来显示一个buffer的区域就叫做一个<a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Windows.html" target="_blank" rel="noopener">window</a>。而常常被人们冠名为window的、最外层的窗体，则叫做<a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Frames.html#Frames" target="_blank" rel="noopener">frame</a>。</p>
-<p>这样划分后，多次按下<code>C-Tab</code>（我把这个快捷键绑定到了命令<code>other-window</code>上），便可以按照左上、左下、右上、右下的顺序轮换当前聚焦的window了。</p>
-<p>如果需要从其它window中复制内容到当前window中粘贴，操作会麻烦一点。以右上角需要左下角的内容为例：</p>
-<ol>
-<li>按三次<code>C-Tab</code>换到左下角的window中——用快捷键是因为我不想去挪鼠标；</li>
-<li>按<code>k</code>或<code>j</code>上下移动光标到目标行——用<code>k</code>和<code>j</code>是因为用了<code>evil-mode</code>插件（参见<a href="https://liutos.github.io/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/">这篇文章</a>）；</li>
-<li>复制内容，再按一次<code>C-Tab</code>回到原来的window中粘贴。</li>
-</ol>
-<p>听起来可麻烦了。</p>
-<p>好在Emacs有一个非常好用的插件，可以把第1和第2个步骤合在一起完成。</p>
-<h1 id="avy"><a href="#avy" class="headerlink" title="avy"></a>avy</h1><p>这个非常好用的插件就是<a href="https://github.com/abo-abo/avy" target="_blank" rel="noopener">avy</a>，它提供的<code>avy-goto-line</code>函数可以一步到位地完成上面的第1和第2个步骤。</p>
-<p>用Emacs的包管理器就可以安装它</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M-x package-install RET avy RET</span><br></pre></td></tr></tbody></table></figure>
-<p>接着要为命令<code>avy-goto-line</code>绑定一个喜欢的快捷键</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">global-set-key</span> (<span class="name">kbd</span> <span class="string">"M-g f"</span>) 'avy-goto-line)</span><br></pre></td></tr></tbody></table></figure>
-<p>至此便可以在Emacs中愉快地使用<code>M-g f</code>来快速跳转到当前或其它window中的行了。百闻不如一见，我来演示一番。</p>
-<h1 id="avy-goto-line"><a href="#avy-goto-line" class="headerlink" title="avy-goto-line"></a>avy-goto-line</h1><p><del>众所周知，</del>我用org-mode来跟踪自己的学习计划，还会将摸索过程中的一些半成品代码保存到org-mode的条目中。例如，我想要将左下角的window中的三个函数的定义，复制到右上角的代码块中去</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/移动前的景象.jpg" alt=""></p>
-<p>于是我先按下<code>M-g f</code>，让<code>avy</code>为每一行赋予一个标记</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/按下快捷键之后的景象.jpg" alt=""></p>
-<p>因为希望切换到左下角的window的第一行，所以我先按下<code>j</code></p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/按下字母j之后的景象.jpg" alt=""></p>
-<p>此时，在前一幅截图中不以字母<code>j</code>开始的标记统统消失了，而以字母<code>j</code>开始的标记则只留下了从第二个字符开始的部分。</p>
-<p>再按下字母<code>l</code>，就可以将焦点切换到左下角的window，并且将光标移动到第一行的行首了。然后只需要选中内容、复制，并返回原来的window中粘贴即可。完整的过程如下</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/使用avy-goto-line的全过程.gif" alt=""></p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如果在按下组合键<code>M-g f</code>后，接着按下的是数字键的话，<code>avy-goto-line</code>会认为使用者打算跳转到指定的行。它将在Emacs的minibuffer中继续等待输入更多的数字或按下回车。不过我不怎么用这个功能，因为我没有让Emacs显示行号，按行号来跳转对我并不方便。</p>
-
+        
     </div>
 
     
@@ -325,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/10/11/Emacs的avy插件/" title="Emacs的avy插件">https://liutos.github.io/2020/10/11/Emacs的avy插件/</a>
+    <a href="https://liutos.github.io/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/" title="">https://liutos.github.io/2020/10/11/Emacs的avy插件/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -335,14 +301,6 @@
 
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/editor/" rel="tag"><i class="fa fa-tag"></i> editor</a>
-              <a href="/tags/编辑器/" rel="tag"><i class="fa fa-tag"></i> 编辑器</a>
-              <a href="/tags/elisp/" rel="tag"><i class="fa fa-tag"></i> elisp</a>
-              <a href="/tags/emacs/" rel="tag"><i class="fa fa-tag"></i> emacs</a>
-              <a href="/tags/效率/" rel="tag"><i class="fa fa-tag"></i> 效率</a>
-          </div>
 
         
 
@@ -350,12 +308,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/09/28/手指疼，写点代码缓解一下/" rel="prev" title="手指疼，写点代码缓解一下">
-      <i class="fa fa-chevron-left"></i> 手指疼，写点代码缓解一下
+    <a href="/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/10/29/精确之美——用TikZ画硬盘示意图/" rel="next" title="精确之美——用TikZ画硬盘示意图">
-      精确之美——用TikZ画硬盘示意图 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/10/29/%E7%B2%BE%E7%A1%AE%E4%B9%8B%E7%BE%8E%E2%80%94%E2%80%94%E7%94%A8TikZ%E7%94%BB%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -436,13 +394,12 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#avy"><span class="nav-number">1.</span> <span class="nav-text">avy</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#avy-goto-line"><span class="nav-number">2.</span> <span class="nav-text">avy-goto-line</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -451,21 +408,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -489,19 +434,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -550,16 +495,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -585,6 +530,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -613,6 +566,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -630,9 +590,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2020/10/11/Emacs的avy插件/",
+            url: "https://liutos.github.io/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/",
             identifier: "2020/10/11/Emacs的avy插件/",
-            title: "Emacs的avy插件"
+            title: ""
           }
         }
       });
@@ -653,7 +613,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '121ef6ca0bae5a725f2700746d1f2a76',
+      id: '0d96afaecb57b5c85feab735687e9203',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -661,4 +621,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

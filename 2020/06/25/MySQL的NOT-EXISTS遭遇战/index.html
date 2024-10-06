@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,23 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="浅尝一下NOT EXISTS最近老婆在看视频学习MySQL，然后碰到了这样一道习题：有三个表，分别记录学生、课程，以及学生选修了什么课程的信息，问如何用NOT EXISTS找出选修了所有课程的学生。 为了避免想破脑袋编造一些尴尬的学生姓名和课程名，我简化了一下习题中的表的结构，只留下它们的ID列。建表语句如下 12345678910111213141516171819-- 学生表CREATE TA">
-<meta name="keywords" content="database,mysql,数据库">
+  <meta name="description" content="记录编程生涯的大大小小的事情">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL的NOT EXISTS遭遇战">
-<meta property="og:url" content="https://liutos.github.io/2020/06/25/MySQL的NOT-EXISTS遭遇战/index.html">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/2020/06/25/MySQL%E7%9A%84NOT-EXISTS%E9%81%AD%E9%81%87%E6%88%98/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="浅尝一下NOT EXISTS最近老婆在看视频学习MySQL，然后碰到了这样一道习题：有三个表，分别记录学生、课程，以及学生选修了什么课程的信息，问如何用NOT EXISTS找出选修了所有课程的学生。 为了避免想破脑袋编造一些尴尬的学生姓名和课程名，我简化了一下习题中的表的结构，只留下它们的ID列。建表语句如下 12345678910111213141516171819-- 学生表CREATE TA">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2020-06-25T14:15:19.391Z">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-25T14:15:19.000Z">
+<meta property="article:modified_time" content="2020-06-25T14:15:19.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL的NOT EXISTS遭遇战">
-<meta name="twitter:description" content="浅尝一下NOT EXISTS最近老婆在看视频学习MySQL，然后碰到了这样一道习题：有三个表，分别记录学生、课程，以及学生选修了什么课程的信息，问如何用NOT EXISTS找出选修了所有课程的学生。 为了避免想破脑袋编造一些尴尬的学生姓名和课程名，我简化了一下习题中的表的结构，只留下它们的ID列。建表语句如下 12345678910111213141516171819-- 学生表CREATE TA">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
 
-<link rel="canonical" href="https://liutos.github.io/2020/06/25/MySQL的NOT-EXISTS遭遇战/">
+<link rel="canonical" href="https://liutos.github.io/2020/06/25/MySQL%E7%9A%84NOT-EXISTS%E9%81%AD%E9%81%87%E6%88%98/">
 
 
 <script id="page-configurations">
@@ -73,7 +70,7 @@
   };
 </script>
 
-  <title>MySQL的NOT EXISTS遭遇战 | 小打小闹写点bug</title>
+  <title> | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -113,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -204,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/06/25/MySQL的NOT-EXISTS遭遇战/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/06/25/MySQL%E7%9A%84NOT-EXISTS%E9%81%AD%E9%81%87%E6%88%98/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -217,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          MySQL的NOT EXISTS遭遇战
+          
         </h1>
 
         <div class="post-meta">
@@ -226,9 +224,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-06-25 22:12:40 / 修改时间：22:15:19" itemprop="dateCreated datePublished" datetime="2020-06-25T22:12:40+08:00">2020-06-25</time>
+              <time title="创建时间：2020-06-25 22:15:19" itemprop="dateCreated datePublished" datetime="2020-06-25T22:15:19+08:00">2020-06-25</time>
             </span>
 
           
@@ -240,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2020/06/25/MySQL的NOT-EXISTS遭遇战/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2020/06/25/MySQL%E7%9A%84NOT-EXISTS%E9%81%AD%E9%81%87%E6%88%98/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/06/25/MySQL的NOT-EXISTS遭遇战/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -256,34 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="浅尝一下NOT-EXISTS"><a href="#浅尝一下NOT-EXISTS" class="headerlink" title="浅尝一下NOT EXISTS"></a>浅尝一下<code>NOT EXISTS</code></h1><p>最近老婆在看视频学习MySQL，然后碰到了这样一道习题：有三个表，分别记录学生、课程，以及学生选修了什么课程的信息，问如何用<code>NOT EXISTS</code>找出选修了所有课程的学生。</p>
-<p>为了避免想破脑袋编造一些尴尬的学生姓名和课程名，我简化了一下习题中的表的结构，只留下它们的ID列。建表语句如下</p>
-<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 学生表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`student`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 课程表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`course`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span> AUTO_INCREMENT,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 选修关系</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`elective`</span> (</span><br><span class="line">  <span class="string">`student_id`</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`course_id`</span> <span class="built_in">INT</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (<span class="string">`student_id`</span>) <span class="keyword">REFERENCES</span> <span class="string">`student`</span>(<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">FOREIGN</span> <span class="keyword">KEY</span> (<span class="string">`course_id`</span>) <span class="keyword">REFERENCES</span> <span class="string">`course`</span>(<span class="string">`id`</span>)</span><br><span class="line">);</span><br></pre></td></tr></tbody></table></figure>
-<p>还需要给它们塞入一些示例数据</p>
-<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`student`</span> (<span class="string">`id`</span>) <span class="keyword">VALUES</span> (<span class="number">1</span>), (<span class="number">2</span>), (<span class="number">3</span>), (<span class="number">4</span>), (<span class="number">5</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`course`</span> (<span class="string">`id`</span>) <span class="keyword">VALUES</span> (<span class="number">1</span>), (<span class="number">2</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`elective`</span> (<span class="string">`course_id`</span>, <span class="string">`student_id`</span>) <span class="keyword">VALUES</span> (<span class="number">1</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">5</span>), (<span class="number">1</span>, <span class="number">5</span>);</span><br></pre></td></tr></tbody></table></figure>
-<p>显然，只有<code>id</code>列的值为1和5的学生是选修了全部课程的。用<code>NOT EXISTS</code>写出来的SQL语句如下</p>
-<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * </span><br><span class="line"><span class="keyword">FROM</span>   <span class="string">`student`</span> </span><br><span class="line"><span class="keyword">WHERE</span>  <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> (<span class="keyword">SELECT</span> * </span><br><span class="line">                   <span class="keyword">FROM</span>   <span class="string">`course`</span> </span><br><span class="line">                   <span class="keyword">WHERE</span>  <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> (<span class="keyword">SELECT</span> * </span><br><span class="line">                                      <span class="keyword">FROM</span>   <span class="string">`elective`</span> </span><br><span class="line">                                      <span class="keyword">WHERE</span>  <span class="string">`student`</span>.<span class="string">`id`</span> = </span><br><span class="line">                                             <span class="string">`elective`</span>.<span class="string">`student_id`</span> </span><br><span class="line">                                             <span class="keyword">AND</span> <span class="string">`course`</span>.<span class="string">`id`</span> = </span><br><span class="line">                                     <span class="string">`elective`</span>.<span class="string">`course_id`</span>));</span><br></pre></td></tr></tbody></table></figure>
-<p>在<a href="https://dbeaver.io/" target="_blank" rel="noopener">DBEaver</a>中运行后的结果为</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200625/双重NOT_EXISTS的执行结果.jpg" alt="在DBEaver中执行的结果"></p>
-<p>正确地找出了两个选修了所有课程的学生的<code>id</code>。</p>
-<h1 id="如何理解双重NOT-EXISTS"><a href="#如何理解双重NOT-EXISTS" class="headerlink" title="如何理解双重NOT EXISTS"></a>如何理解双重<code>NOT EXISTS</code></h1><p>当第一次被请教这道习题的时候，我其实并不能理解<code>NOT EXISTS</code>的含义。直到后来去看<code>EXISTS</code>的<a href="https://dev.mysql.com/doc/refman/8.0/en/exists-and-not-exists-subqueries.html" target="_blank" rel="noopener">文档</a>，才顿悟了上面的SQL。</p>
-<p>我的理解方法是将双重<code>NOT EXISTS</code>转换为三层循环。以上面的SQL为例，转述为人话就是：找出<code>student</code>表中所有的、<strong>没有</strong>任何一门<code>course</code>表中的课程是<strong>没有</strong>选修的、的学生——双重的 <strong>没有</strong>。</p>
-<p>转换为三层循环大概长这样</p>
-<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> student <span class="keyword">of</span> students) {</span><br><span class="line">  <span class="comment">// 是否存在学生未选修的课程</span></span><br><span class="line">  <span class="keyword">let</span> existSuchCourse = <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> course <span class="keyword">of</span> courses) {</span><br><span class="line">    <span class="keyword">let</span> existSuchElective = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> elective <span class="keyword">of</span> electives) {</span><br><span class="line">      <span class="keyword">if</span> (elective.student_id === student.id &amp;&amp; elective.course_id === course.id) {</span><br><span class="line">        existSuchElective = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 如果遍历完elective表的记录后，existSuchElective仍然为false，说明的确有一门课程是没有选修记录的</span></span><br><span class="line">    <span class="comment">// 那么便意味着“存在至少一门课程，使得当前被遍历的学生与该课程没有选修关系”。</span></span><br><span class="line">    <span class="keyword">if</span> (!existSuchElective) {</span><br><span class="line">      existSuchCourse = <span class="literal">true</span>;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="comment">// 如果遍历完一圈后确实没有找到“未选修”的课程，说明这名学生全都选修了</span></span><br><span class="line">  <span class="keyword">if</span> (!existSuchCourse) {</span><br><span class="line">    <span class="built_in">console</span>.log(student);</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="NOT-EXISTS的本质"><a href="#NOT-EXISTS的本质" class="headerlink" title="NOT EXISTS的本质"></a><code>NOT EXISTS</code>的本质</h1><p>即使不强行理解，也可以让MySQL明确告知双重<code>NOT EXISTS</code>是怎么运作的。用<code>EXPLAIN</code>解释上面的SQL的结果如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200625/双重NOT_EXISTS的EXPLAIN结果.jpg" alt=""></p>
-<p>MySQL的<a href="https://dev.mysql.com/doc/refman/8.0/en/explain-output.html" target="_blank" rel="noopener">EXPLAIN命令的文档</a>中说明了如何解读执行计划</p>
-<blockquote>
-<p>EXPLAIN returns a row of information for each table used in the SELECT statement. It lists the tables in the output in the order that MySQL would read them while processing the statement. This means that MySQL reads a row from the first table, then finds a matching row in the second table, and then in the third table, and so on. When all tables are processed, MySQL outputs the selected columns and backtracks through the table list until a table is found for which there are more matching rows. The next row is read from this table and the process continues with the next table.</p>
-</blockquote>
-<p>以上面的<code>EXPLAIN</code>为例，MySQL从<code>student</code>表中读出一行，再从<code>course</code>表中读取一行，最后从<code>elective</code>表中读取一行，然后看看<code>WHERE</code>子句是否能够被满足。如果可以，就输出从<code>student</code>表中读出来的这行数据。上图第2和第3行的<code>select_type</code>都是<code>DEPENDENT SUBQUERY</code>，表示它们依赖于“外层”的查询上下文——<code>elective</code>的<code>WHERE</code>子句依赖于<code>student</code>和<code>course</code>中读出来的行。</p>
-<p>似乎和方才的三重循环有异曲同工之妙呢。</p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>像<code>NOT EXISTS</code>这么“高阶”的功能我从未在业务代码中读过和使用过——别说<code>NOT EXISTS</code>，就算是<code>EXISTS</code>也是从未有之，甚至连子查询也极少。毕竟“正经的互联网公司”只是把MySQL<del>当妹妹</del>当一个具备复杂查询查询功能的key-value数据库来使用（笑</p>
-<p>比起双重<code>NOT EXISTS</code>，我更可能凭直觉写出基于子查询的解决方法</p>
-<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * </span><br><span class="line"><span class="keyword">FROM</span>   <span class="string">`student`</span> </span><br><span class="line"><span class="keyword">WHERE</span>  <span class="string">`id`</span> <span class="keyword">IN</span> (<span class="keyword">SELECT</span> <span class="string">`student_id`</span> </span><br><span class="line">                <span class="keyword">FROM</span>   <span class="string">`elective`</span> </span><br><span class="line">                <span class="keyword">GROUP</span>  <span class="keyword">BY</span> <span class="string">`student_id`</span> </span><br><span class="line">                <span class="keyword">HAVING</span>( <span class="keyword">Count</span>(<span class="number">0</span>) ) = <span class="number">2</span>);</span><br></pre></td></tr></tbody></table></figure>
-<p>我甚至觉得会有人把数据库里的行读进内存然后用应用层代码来找出选修了全部课程的学生！</p>
-<p>全文完。</p>
-
+        
     </div>
 
     
@@ -321,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/06/25/MySQL的NOT-EXISTS遭遇战/" title="MySQL的NOT EXISTS遭遇战">https://liutos.github.io/2020/06/25/MySQL的NOT-EXISTS遭遇战/</a>
+    <a href="https://liutos.github.io/2020/06/25/MySQL%E7%9A%84NOT-EXISTS%E9%81%AD%E9%81%87%E6%88%98/" title="">https://liutos.github.io/2020/06/25/MySQL的NOT-EXISTS遭遇战/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -331,12 +301,6 @@
 
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/database/" rel="tag"><i class="fa fa-tag"></i> database</a>
-              <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i> mysql</a>
-              <a href="/tags/数据库/" rel="tag"><i class="fa fa-tag"></i> 数据库</a>
-          </div>
 
         
 
@@ -344,12 +308,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/06/10/用org-mode管理API测试用例/" rel="prev" title="用org-mode管理API测试用例">
-      <i class="fa fa-chevron-left"></i> 用org-mode管理API测试用例
+    <a href="/2020/06/10/%E7%94%A8org-mode%E7%AE%A1%E7%90%86API%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/07/03/如何写一个命令行的秒表/" rel="next" title="如何写一个命令行的秒表">
-      如何写一个命令行的秒表 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/07/03/%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E7%A7%92%E8%A1%A8/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -430,13 +394,12 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浅尝一下NOT-EXISTS"><span class="nav-number">1.</span> <span class="nav-text">浅尝一下NOT EXISTS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何理解双重NOT-EXISTS"><span class="nav-number">2.</span> <span class="nav-text">如何理解双重NOT EXISTS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NOT-EXISTS的本质"><span class="nav-number">3.</span> <span class="nav-text">NOT EXISTS的本质</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -445,21 +408,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -483,19 +434,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -544,16 +495,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -579,6 +530,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -607,6 +566,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -624,9 +590,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2020/06/25/MySQL的NOT-EXISTS遭遇战/",
+            url: "https://liutos.github.io/2020/06/25/MySQL%E7%9A%84NOT-EXISTS%E9%81%AD%E9%81%87%E6%88%98/",
             identifier: "2020/06/25/MySQL的NOT-EXISTS遭遇战/",
-            title: "MySQL的NOT EXISTS遭遇战"
+            title: ""
           }
         }
       });
@@ -647,7 +613,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '6d52023916ad766ac567dc4b0cfdfecd',
+      id: '71a49522e6f4e675ae58d59a4c3ee8db',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -655,4 +621,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

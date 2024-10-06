@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,20 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="在 Lisp 中使用 reader macro 支持 JSON 语法什么是 reader macro？Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为">
-<meta name="keywords" content="common lisp,lisp,编程语言">
+  <meta name="description" content="记录编程生涯的大大小小的事情">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在CommonLisp中支持JSON语法">
-<meta property="og:url" content="https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/index.html">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="在 Lisp 中使用 reader macro 支持 JSON 语法什么是 reader macro？Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2023-05-23T15:49:42.238Z">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-05-23T15:49:42.000Z">
+<meta property="article:modified_time" content="2023-05-23T15:49:42.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="在CommonLisp中支持JSON语法">
-<meta name="twitter:description" content="在 Lisp 中使用 reader macro 支持 JSON 语法什么是 reader macro？Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为">
 
-<link rel="canonical" href="https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/">
+<link rel="canonical" href="https://liutos.github.io/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/">
 
 
 <script id="page-configurations">
@@ -70,7 +70,7 @@
   };
 </script>
 
-  <title>在CommonLisp中支持JSON语法 | 小打小闹写点bug</title>
+  <title> | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -110,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -201,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -214,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          在CommonLisp中支持JSON语法
+          
         </h1>
 
         <div class="post-meta">
@@ -223,9 +224,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-05-23 23:47:22 / 修改时间：23:49:42" itemprop="dateCreated datePublished" datetime="2023-05-23T23:47:22+08:00">2023-05-23</time>
+              <time title="创建时间：2023-05-23 23:49:42" itemprop="dateCreated datePublished" datetime="2023-05-23T23:49:42+08:00">2023-05-23</time>
             </span>
 
           
@@ -237,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2023/05/23/在CommonLisp中支持JSON语法/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/05/23/在CommonLisp中支持JSON语法/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -253,32 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="在-Lisp-中使用-reader-macro-支持-JSON-语法"><a href="#在-Lisp-中使用-reader-macro-支持-JSON-语法" class="headerlink" title="在 Lisp 中使用 reader macro 支持 JSON 语法"></a>在 Lisp 中使用 reader macro 支持 JSON 语法</h1><h2 id="什么是-reader-macro？"><a href="#什么是-reader-macro？" class="headerlink" title="什么是 reader macro？"></a>什么是 reader macro？</h2><p>Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为 reader macro function。举个例子，单引号<code>'</code>就是一个 macro character，可以用函数<code>get-macro-character</code>来获取它对应的 reader macro function。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">get-macro-character</span> #\')</span><br><span class="line">#&lt;FUNCTION SB-IMPL::READ-QUOTE&gt;</span><br><span class="line">NIL</span><br></pre></td></tr></tbody></table></figure>
-<p>借助单引号，可以简化一些代码的写法，例如表达一个符号<code>HELLO</code>本身可以写成这样。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; 'hello</span><br><span class="line">HELLO</span><br></pre></td></tr></tbody></table></figure>
-<p>而不是下面这种等价但更繁琐的形式。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">quote</span> hello)</span><br><span class="line">HELLO</span><br></pre></td></tr></tbody></table></figure>
-<p>Common Lisp 中还定义了由两个字符构成的 reader macro，例如用于书写<code>simple-vector</code>字面量的<code>#(</code>。借助它，如果想要表达一个依次由数字 1、2、3 构成的<code>simple-vector</code>类型的对象，不需要显式地调用函数<code>vector</code>并传给它 1、2、3，而是可以写成<code>#(1 2 3)</code>。</p>
-<h2 id="支持-JSON-语法后有什么效果？"><a href="#支持-JSON-语法后有什么效果？" class="headerlink" title="支持 JSON 语法后有什么效果？"></a>支持 JSON 语法后有什么效果？</h2><p>合法的 JSON 文本不一定是合法的 Common Lisp 源代码。例如，<code>[1, 2, 3]</code>在 JSON 标准看来是一个由数字 1、2、3 组成的数组，但在 Common Lisp 中，这段代码会触发 condition。（condition 就是 Common Lisp 中的“异常”、“出状况”了）</p>
-<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">eof-value</span> (<span class="name">gensym</span>)))</span><br><span class="line">  (<span class="name">with-input-from-string</span> (<span class="name">stream</span> <span class="string">"[1, 2, 3]"</span>)</span><br><span class="line">    (<span class="name">block</span> <span class="literal">nil</span></span><br><span class="line">      (<span class="name">loop</span></span><br><span class="line">        (<span class="name">let</span> ((<span class="name">expr</span> (<span class="name">read</span> stream <span class="literal">nil</span> eof-value)))</span><br><span class="line">          (<span class="name">when</span> (<span class="name">eq</span> expr eof-value)</span><br><span class="line">            (<span class="name">return</span>))</span><br><span class="line"></span><br><span class="line">          (<span class="name">print</span> expr))))))</span><br><span class="line"></span><br><span class="line">[1 ; Evaluation aborted on #&lt;SB-INT:SIMPLE-READER-ERROR "Comma not inside a backquote." {1003AAD863}&gt;.</span><br></pre></td></tr></tbody></table></figure>
-<p>这是因为按照 Common Lisp 的<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/02_b.htm" target="_blank" rel="noopener">读取算法</a>，左方括号<code>[</code>和数字 1 都是标准中所指的 constituent character，它们可以组成一个 token，并且最终被解析为一个符号类型的对象。而紧接着的字符是逗号<code>,</code>，<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/02_ad.htm" target="_blank" rel="noopener">它是一个 terminating macro char</a>，按照<a href="http://www.lispworks.com/documentation/lw60/CLHS/Body/02_dg.htm" target="_blank" rel="noopener">标准</a>，如果不是在一个反引号表达式中使用它将会是无效的，因此触发了 condition。</p>
-<p>假如存在一个由两个字符<code>#J</code>定义的 reader macro、允许开发者使用 JSON 语法来描述紧接着的对象的话，那么就可以写出下面这样的代码。</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">progn</span></span><br><span class="line">           (<span class="name">print</span> #jfalse)</span><br><span class="line">           (<span class="name">print</span> #jtrue)</span><br><span class="line">           (<span class="name">print</span> #j233.<span class="number">666</span>)</span><br><span class="line">           (<span class="name">print</span> #jnull)</span><br><span class="line">           (<span class="name">print</span> #j[<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line">           (<span class="name">print</span> #j{<span class="string">"a"</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]})</span><br><span class="line">           (<span class="name">print</span> (<span class="name">gethash</span> <span class="string">"a"</span> #j{<span class="string">"a"</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]})))</span><br><span class="line"></span><br><span class="line">YASON:FALSE </span><br><span class="line">YASON:TRUE </span><br><span class="line"><span class="number">233.666d0</span> </span><br><span class="line">:NULL </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> #(<span class="number">3</span>) #(<span class="number">4</span> <span class="number">5</span>)) </span><br><span class="line">#&lt;HASH-TABLE :TEST EQUAL :COUNT 1 {1003889963}&gt; </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>显然，用上述语法表示一个哈希表，要比下面这样的代码简单得多</p>
-<figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">obj</span> (<span class="name">make-hash-table</span> <span class="symbol">:test</span> #'equal)))</span><br><span class="line">           (<span class="name">setf</span> (<span class="name">gethash</span> <span class="string">"a"</span> obj) #(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">           obj)</span><br><span class="line"></span><br><span class="line">#&lt;HASH-TABLE :TEST EQUAL :COUNT 1 {1003CB7643}&gt;</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="如何用-reader-macro-解析-JSON？"><a href="#如何用-reader-macro-解析-JSON？" class="headerlink" title="如何用 reader macro 解析 JSON？"></a>如何用 reader macro 解析 JSON？</h2><p>Common Lisp 并没有预置<code>#J</code>这个 reader macro，但这门语言允许使用者定义自己的 macro character，因此前面的示例代码是可以实现的。要自定义出<code>#J</code>这个读取器宏，需要使用函数<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/f_set__1.htm#set-dispatch-macro-character" target="_blank" rel="noopener"><code>set-dispatch-macro-character</code></a>。它的前两个参数分别为构成 macro character 的前两个字符，即<code>#</code>和<code>J</code>——其中<code>J</code>即便是写成了小写，也会被转换为大写后再使用。第三个参数则是 Lisp 的词法解析器在遇到了<code>#J</code>时将会调用的参数。<code>set-dispatch-macro-character</code>会传给这个函数三个参数：</p>
-<ol>
-<li>用于读取源代码的字符输入流；</li>
-<li>构成 macro character 的第二个字符（即<code>J</code>）；</li>
-<li>非必传的、夹在<code>#</code>和<code>J</code>之间的数字。</li>
-</ol>
-<p>百闻不如一见，一段能够实现上一个章节中的示例代码的<code>set-dispatch-macro-character</code>用法如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">set-dispatch-macro-character</span></span><br><span class="line"> #\#</span><br><span class="line"> #\j</span><br><span class="line"> (<span class="name">lambda</span> (<span class="name">stream</span> char p)</span><br><span class="line">   (<span class="name">declare</span> (<span class="name">ignorable</span> char p))</span><br><span class="line">   (<span class="name">let</span> ((<span class="name">parsed</span> (<span class="name">yason</span><span class="symbol">:parse</span> stream</span><br><span class="line">                              <span class="symbol">:json-arrays-as-vectors</span> <span class="literal">t</span></span><br><span class="line">                              <span class="symbol">:json-booleans-as-symbols</span> <span class="literal">t</span></span><br><span class="line">                              <span class="symbol">:json-nulls-as-keyword</span> <span class="literal">t</span>)))</span><br><span class="line">     (<span class="name">if</span> (<span class="name">or</span> (<span class="name">symbolp</span> parsed)</span><br><span class="line">             (<span class="name">consp</span> parsed))</span><br><span class="line">         (<span class="name">list</span> 'quote parsed)</span><br><span class="line">         parsed))))</span><br></pre></td></tr></tbody></table></figure>
-<p>在<code>set-dispatch-macro-character</code>的回调函数中，我是用了开源的第三方库<code>yason</code>提供的函数<code>parse</code>，从输入流<code>stream</code>中按照 JSON 语法解析出一个值。函数<code>parse</code>的三个关键字参数的含义参见<a href="https://xh4.github.io/yason/#mapping" target="_blank" rel="noopener">这里</a>，此处不再赘述。由于 reader macro 的结果会被用于构造源代码的表达式，因此如果函数<code>parse</code>返回了符号或者<code>cons</code>类型，为了避免被编译器求值，需要将它们“引用”起来，因此将它们放到第一元素为<code>quote</code>的列表中。其它情况下，直接返回<code>parse</code>的返回值即可，因此它们是“自求值”的，求值结果是它们自身。</p>
-<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>本文我借助了现成的库<code>yason</code>来解析 JSON 格式的字符串，如果你对如何从零开始实现这样的 reader macro 感兴趣的话，可以参考<a href="https://gist.github.com/chaitanyagupta/9324402" target="_blank" rel="noopener">这篇文章</a>。</p>
-<p>全文完。</p>
-
+        
     </div>
 
     
@@ -316,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/" title="在CommonLisp中支持JSON语法">https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/</a>
+    <a href="https://liutos.github.io/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/" title="">https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -326,12 +301,6 @@
 
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
-              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
-              <a href="/tags/编程语言/" rel="tag"><i class="fa fa-tag"></i> 编程语言</a>
-          </div>
 
         
 
@@ -339,10 +308,13 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/05/07/impl-dotimes-by-callcc/" rel="prev" title="使用 call/cc 实现计数循环">
-      <i class="fa fa-chevron-left"></i> 使用 call/cc 实现计数循环
+    <a href="/2023/05/07/impl-dotimes-by-callcc/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2024/05/05/getattr-%E5%9C%A8CommonLisp%E4%B8%AD%E7%9A%84%E8%BF%91%E4%BC%BC%E7%89%B9%E6%80%A7/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -422,13 +394,12 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在-Lisp-中使用-reader-macro-支持-JSON-语法"><span class="nav-number">1.</span> <span class="nav-text">在 Lisp 中使用 reader macro 支持 JSON 语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-reader-macro？"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 reader macro？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#支持-JSON-语法后有什么效果？"><span class="nav-number">1.2.</span> <span class="nav-text">支持 JSON 语法后有什么效果？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何用-reader-macro-解析-JSON？"><span class="nav-number">1.3.</span> <span class="nav-text">如何用 reader macro 解析 JSON？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#尾声"><span class="nav-number">1.4.</span> <span class="nav-text">尾声</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -437,21 +408,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -475,19 +434,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -536,16 +495,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -571,6 +530,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -599,6 +566,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -616,9 +590,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/",
+            url: "https://liutos.github.io/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/",
             identifier: "2023/05/23/在CommonLisp中支持JSON语法/",
-            title: "在CommonLisp中支持JSON语法"
+            title: ""
           }
         }
       });
@@ -639,7 +613,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '52674133c334e7c0fc13bdb71e8b09be',
+      id: '3f68d07639c26cef5658d5ee872ca1ba',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -647,4 +621,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

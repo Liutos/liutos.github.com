@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,26 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="我经常使用Emacs来干写字的活——有时候是写代码、有时候是用org-mode管理待办事项、有时候是用restclient-mode来测试HTTP API。Emacs丰富的快捷键让我可以双手不离主键盘区就做到很多事情，不过这也带来了别样的烦恼：快捷键按多了，手容易累。 导致手累的第一个因素，是Emacs的不少快捷键需要按住ctrl来使用，而ctrl常常不容易按到。以我的键盘为例，ctrl键分布在主">
-<meta name="keywords" content="editor,elisp,emacs,vscode,tool">
+  <meta name="description" content="记录编程生涯的大大小小的事情">
 <meta property="og:type" content="article">
-<meta property="og:title" content="手指疼，写点代码缓解一下">
-<meta property="og:url" content="https://liutos.github.io/2020/09/28/手指疼，写点代码缓解一下/index.html">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="我经常使用Emacs来干写字的活——有时候是写代码、有时候是用org-mode管理待办事项、有时候是用restclient-mode来测试HTTP API。Emacs丰富的快捷键让我可以双手不离主键盘区就做到很多事情，不过这也带来了别样的烦恼：快捷键按多了，手容易累。 导致手累的第一个因素，是Emacs的不少快捷键需要按住ctrl来使用，而ctrl常常不容易按到。以我的键盘为例，ctrl键分布在主">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2020-09-28T14:39:01.897Z">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-28T14:39:01.000Z">
+<meta property="article:modified_time" content="2020-09-28T14:39:01.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="手指疼，写点代码缓解一下">
-<meta name="twitter:description" content="我经常使用Emacs来干写字的活——有时候是写代码、有时候是用org-mode管理待办事项、有时候是用restclient-mode来测试HTTP API。Emacs丰富的快捷键让我可以双手不离主键盘区就做到很多事情，不过这也带来了别样的烦恼：快捷键按多了，手容易累。 导致手累的第一个因素，是Emacs的不少快捷键需要按住ctrl来使用，而ctrl常常不容易按到。以我的键盘为例，ctrl键分布在主">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
 
-<link rel="canonical" href="https://liutos.github.io/2020/09/28/手指疼，写点代码缓解一下/">
+<link rel="canonical" href="https://liutos.github.io/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/">
 
 
 <script id="page-configurations">
@@ -76,7 +70,7 @@
   };
 </script>
 
-  <title>手指疼，写点代码缓解一下 | 小打小闹写点bug</title>
+  <title> | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -116,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -207,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/09/28/手指疼，写点代码缓解一下/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -220,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          手指疼，写点代码缓解一下
+          
         </h1>
 
         <div class="post-meta">
@@ -229,9 +224,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-09-28 22:29:09 / 修改时间：22:39:01" itemprop="dateCreated datePublished" datetime="2020-09-28T22:29:09+08:00">2020-09-28</time>
+              <time title="创建时间：2020-09-28 22:39:01" itemprop="dateCreated datePublished" datetime="2020-09-28T22:39:01+08:00">2020-09-28</time>
             </span>
 
           
@@ -243,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2020/09/28/手指疼，写点代码缓解一下/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/28/手指疼，写点代码缓解一下/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -259,41 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>我经常使用Emacs来干写字的活——有时候是写代码、有时候是用org-mode管理待办事项、有时候是用restclient-mode来测试HTTP API。Emacs丰富的快捷键让我可以双手不离主键盘区就做到很多事情，不过这也带来了别样的烦恼：快捷键按多了，手容易累。</p>
-<p>导致手累的第一个因素，是Emacs的不少快捷键需要按住<code>ctrl</code>来使用，而<code>ctrl</code>常常不容易按到。以我的键盘为例，<code>ctrl</code>键分布在主键盘区的最外侧</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/我所用的美式键盘举例.jpeg" alt=""></p>
-<p>为了便于尾指按到两侧的<code>ctrl</code>键，我在macOS中交换了<code>command</code>和<code>control</code>键的效果</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/交换了command和control.jpg" alt=""></p>
-<p>当需要按住两边的<code>ctrl</code>键（实际按下的是上面照片中的Windows图标键）时，手腕需要往外拐过去。这个问题在使用VSCode时同样存在，因为我在VSCode中用的也是Emacs的键映射。</p>
-<p>第二个因素是Emacs的一些快捷键太繁琐，导致使用时双手像在键盘上起舞一般到处按来按去，敲击次数过多。例如，让光标上下左右移动的快捷键分别是<code>ctrl-p</code>、<code>ctrl-n</code>、<code>ctrl-b</code>，以及<code>ctrl-f</code>，这比直接用键盘上的方向键麻烦得多。有一些功能甚至要按三组快捷键，比如<code>org-clock-out</code>要先按<code>ctrl-c</code>，再按<code>ctrl-x</code>，最后按<code>ctrl-o</code>。</p>
-<p>有没有办法既可以保留快捷键的高效，又尽量地减少击键导致的手腕和手指的疲劳呢？</p>
-<p>当然有。</p>
-<h1 id="在Emacs中改用Vim的快捷键"><a href="#在Emacs中改用Vim的快捷键" class="headerlink" title="在Emacs中改用Vim的快捷键"></a>在Emacs中改用Vim的快捷键</h1><p>既然Emacs默认的快捷键不容易按，那么不妨换成Vim风格的快捷键。同样是上下左右移动光标，在Vim中只需要单击<code>k/j/h/l</code>这四个按键即可，不仅能够单手操作，而且这四个键正好是右手”触手可及“的位置。其它的功能，例如在文件内搜索、保存文件等，也只需要按<code>/</code>和<code>:w</code>即可，比起Emacs真是”finger-friendly“得多了。</p>
-<p>那么如何才能在Emacs中用上Vim的快捷键呢？答案是用<code>evil</code>插件。先用包管理器安装它</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M-x package-install RET evil RET</span><br></pre></td></tr></tbody></table></figure>
-<p>然后在Emacs的启动配置文件中添加启用<code>evil-mode</code>的代码</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">require</span> 'evil)</span><br><span class="line">(<span class="name">evil-mode</span> <span class="number">1</span>)</span><br></pre></td></tr></tbody></table></figure>
-<p>现在便可以在Emacs中使用Vim风格的快捷键了</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/在Emacs中用Vim快捷键.gif" alt=""></p>
-<h1 id="定制evil-mode"><a href="#定制evil-mode" class="headerlink" title="定制evil-mode"></a>定制<code>evil-mode</code></h1><p>只是简单地启用<code>evil-mode</code>还不足以将双手从频繁的按<code>ctrl</code>中解放出来，因为在Emacs中还有不少其它的高频快捷键依赖于<code>ctrl</code>，例如用<code>ctrl-x b</code>来切换到其它的buffer中、用<code>ctrl-x ctrl-f</code>来打开或新建一个文件，甚至是用<code>ctrl-c ctrl-x ctrl-o</code>来停止一个任务的计时器。</p>
-<p>就像在数据压缩中，用较短的串来代替出现频率较高的原始字符串一样，对于高频使用且快捷键较长的功能，可以为它们绑定较短的快捷键。在<code>evil-mode</code>中，<code>g</code>是一个前缀键并且也很好按，所以我把一些重度使用的功能都绑定了在了以它为前缀的快捷键上</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;;; evil-mode相关的键绑定</span></span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g b"</span>) 'ido-switch-buffer)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g f"</span>) 'ido-find-file)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g o"</span>) 'org-clock-out)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g s"</span>) 'cuckoo-org-schedule)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"g t"</span>) 'org-todo)</span><br><span class="line">(<span class="name">evil-global-set-key</span> 'normal (<span class="name">kbd</span> <span class="string">"s"</span>) 'save-buffer)</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="在VSCode中改用Vim的快捷键"><a href="#在VSCode中改用Vim的快捷键" class="headerlink" title="在VSCode中改用Vim的快捷键"></a>在VSCode中改用Vim的快捷键</h1><p>搬砖的工具是VSCode，用来写Node.js的项目，主要是因VSCode在写Node.js代码这方面确实比Emacs的<code>js-mode</code>、<code>js2-mode</code>，以及<code>tide-mode</code>之流要好用那么一点。在VSCode中我也改用了Vim的键映射，只需要在插件市场中点击安装即可</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/VSCode自带的键映射.jpg" alt=""></p>
-<p>VSCode的Vim键映射实际上是一个独立的插件<a href="https://github.com/VSCodeVim/Vim" target="_blank" rel="noopener">Vim</a>，它也支持进一步地自定义快捷键。出于个人喜好，我把<code>s</code>绑定为保存文件的功能</p>
-<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// VSCode的配置文件setting.json</span></span><br><span class="line"><span class="string">"vim.normalModeKeyBindings"</span>: [</span><br><span class="line">  {</span><br><span class="line">    <span class="string">"before"</span>: [<span class="string">"s"</span>],</span><br><span class="line">    <span class="string">"commands"</span>: [</span><br><span class="line">      <span class="string">"workbench.action.files.save"</span></span><br><span class="line">    ]</span><br><span class="line">  }</span><br><span class="line">],</span><br></pre></td></tr></tbody></table></figure>
-<h1 id="用BetterTouchTools补充evil-mode的不足"><a href="#用BetterTouchTools补充evil-mode的不足" class="headerlink" title="用BetterTouchTools补充evil-mode的不足"></a>用BetterTouchTools补充evil-mode的不足</h1><p>尽管在Emacs中可以将常用的功能绑定到一系列的、以<code>g</code>开头的较短的快捷键上，但这一招并不能用来处理所有的快捷键，因为太多的自定义快捷键也会带来记忆上的负担。但我不会就此止步。</p>
-<p>仔细观察就会发现，多数较长的快捷键是以<code>ctrl-c</code>或<code>ctrl-x</code>作为前缀的。因此，如果能够让<code>ctrl-c</code>和<code>ctrl-x</code>更容易按——比如替换为单个按键，也有利于减少尾指按<code>ctrl</code>键的负担。</p>
-<p>要用单键来代替<code>ctrl-c</code>，光凭Emacs其实也可以做到。比如可以让<code>F10</code>被按下的时候相当于按下<code>ctrl-c</code></p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> simulate-C-c ()</span><br><span class="line">  <span class="string">"模拟输入C-c"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">setq</span> unread-command-events (<span class="name">listify-key-sequence</span> <span class="string">"\C-c"</span>)))</span><br><span class="line">(<span class="name">global-set-key</span> [f10] 'simulate-C-c)</span><br></pre></td></tr></tbody></table></figure>
-<p>问题在于它不可组合。</p>
-<p>例如，先按<code>F10</code>再按<code>ctrl-x</code>，等价于按下<code>ctrl-c ctrl-x</code>。但如果先按<code>ctrl-x</code>再按<code>F10</code>，则Emacs不会再将<code>F10</code>转换为<code>ctrl-c</code>，它只会认为我按下的是<code>ctrl-x F10</code>的键序列。</p>
-<p>既要用<code>F10</code>代替<code>ctrl-c</code>，又要具备可组合性，怎么办？我的答案是使用<a href="https://folivora.ai/" target="_blank" rel="noopener">BetterTouchTool</a>。我用BTT将<code>F9</code>到<code>F12</code>都重定义了一遍</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200928/用BTT重定义Fn键.jpg" alt=""></p>
-<p>如此一来，当我需要输入复杂的、含有<code>ctrl-c</code>或<code>ctrl-x</code>的快捷键的时候，只需要单击一次<code>F10</code>或<code>F11</code>就足够了，轻而易举！</p>
-<p>遗憾的是，BTT是一款macOS only的软件。</p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>或许脑机接口才是缓解手指劳损的终极解决方案吧。</p>
-
+        
     </div>
 
     
@@ -331,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/09/28/手指疼，写点代码缓解一下/" title="手指疼，写点代码缓解一下">https://liutos.github.io/2020/09/28/手指疼，写点代码缓解一下/</a>
+    <a href="https://liutos.github.io/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/" title="">https://liutos.github.io/2020/09/28/手指疼，写点代码缓解一下/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -341,14 +301,6 @@
 
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/editor/" rel="tag"><i class="fa fa-tag"></i> editor</a>
-              <a href="/tags/elisp/" rel="tag"><i class="fa fa-tag"></i> elisp</a>
-              <a href="/tags/emacs/" rel="tag"><i class="fa fa-tag"></i> emacs</a>
-              <a href="/tags/vscode/" rel="tag"><i class="fa fa-tag"></i> vscode</a>
-              <a href="/tags/tool/" rel="tag"><i class="fa fa-tag"></i> tool</a>
-          </div>
 
         
 
@@ -356,12 +308,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/09/09/那么，Prolog，告诉我怎么走/" rel="prev" title="那么，Prolog，告诉我怎么走">
-      <i class="fa fa-chevron-left"></i> 那么，Prolog，告诉我怎么走
+    <a href="/2020/09/09/%E9%82%A3%E4%B9%88%EF%BC%8CProlog%EF%BC%8C%E5%91%8A%E8%AF%89%E6%88%91%E6%80%8E%E4%B9%88%E8%B5%B0/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/10/11/Emacs的avy插件/" rel="next" title="Emacs的avy插件">
-      Emacs的avy插件 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -442,13 +394,12 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在Emacs中改用Vim的快捷键"><span class="nav-number">1.</span> <span class="nav-text">在Emacs中改用Vim的快捷键</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#定制evil-mode"><span class="nav-number">2.</span> <span class="nav-text">定制evil-mode</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在VSCode中改用Vim的快捷键"><span class="nav-number">3.</span> <span class="nav-text">在VSCode中改用Vim的快捷键</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用BetterTouchTools补充evil-mode的不足"><span class="nav-number">4.</span> <span class="nav-text">用BetterTouchTools补充evil-mode的不足</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -457,21 +408,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -495,19 +434,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -556,16 +495,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -591,6 +530,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -619,6 +566,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -636,9 +590,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2020/09/28/手指疼，写点代码缓解一下/",
+            url: "https://liutos.github.io/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/",
             identifier: "2020/09/28/手指疼，写点代码缓解一下/",
-            title: "手指疼，写点代码缓解一下"
+            title: ""
           }
         }
       });
@@ -659,7 +613,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '90a3712aa59d4c3d7ccf65fca5ee3beb',
+      id: '0348fa79d810a77a330cafcfa13686fb',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -667,4 +621,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

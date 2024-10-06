@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,20 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="大学的时候挺喜欢解Project Euler上的题目的，尤其是它不在乎答题者使用哪一门编程语言，甚至还有很多参与者是使用pen&amp;amp;paper来解题的。去年开始重新开始做Project Euler上的题目，而第69题则是最近刚刚解决的一题。惭愧的是，因为不晓得欧拉函数的计算公式（甚至都没有想过欧拉函数有没有可以用来计算的公式），所以这一题我是用暴力计算的方法来解决的。尽管花了40分钟左右才找出">
-<meta name="keywords" content="common lisp,project euler,algorithm,算法,数学">
+  <meta name="description" content="记录编程生涯的大大小小的事情">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Project-Euler第69题">
-<meta property="og:url" content="https://liutos.github.io/2019/01/28/Project-Euler第69题/index.html">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/2019/01/28/Project-Euler%E7%AC%AC69%E9%A2%98/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="大学的时候挺喜欢解Project Euler上的题目的，尤其是它不在乎答题者使用哪一门编程语言，甚至还有很多参与者是使用pen&amp;amp;paper来解题的。去年开始重新开始做Project Euler上的题目，而第69题则是最近刚刚解决的一题。惭愧的是，因为不晓得欧拉函数的计算公式（甚至都没有想过欧拉函数有没有可以用来计算的公式），所以这一题我是用暴力计算的方法来解决的。尽管花了40分钟左右才找出">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-28T15:26:03.000Z">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-01-28T15:26:03.000Z">
+<meta property="article:modified_time" content="2019-01-28T15:26:03.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Project-Euler第69题">
-<meta name="twitter:description" content="大学的时候挺喜欢解Project Euler上的题目的，尤其是它不在乎答题者使用哪一门编程语言，甚至还有很多参与者是使用pen&amp;amp;paper来解题的。去年开始重新开始做Project Euler上的题目，而第69题则是最近刚刚解决的一题。惭愧的是，因为不晓得欧拉函数的计算公式（甚至都没有想过欧拉函数有没有可以用来计算的公式），所以这一题我是用暴力计算的方法来解决的。尽管花了40分钟左右才找出">
 
-<link rel="canonical" href="https://liutos.github.io/2019/01/28/Project-Euler第69题/">
+<link rel="canonical" href="https://liutos.github.io/2019/01/28/Project-Euler%E7%AC%AC69%E9%A2%98/">
 
 
 <script id="page-configurations">
@@ -70,7 +70,7 @@
   };
 </script>
 
-  <title>Project-Euler第69题 | 小打小闹写点bug</title>
+  <title> | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -110,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -201,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/28/Project-Euler第69题/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/28/Project-Euler%E7%AC%AC69%E9%A2%98/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -214,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Project-Euler第69题
+          
         </h1>
 
         <div class="post-meta">
@@ -223,9 +224,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-01-28 23:21:22 / 修改时间：23:26:03" itemprop="dateCreated datePublished" datetime="2019-01-28T23:21:22+08:00">2019-01-28</time>
+              <time title="创建时间：2019-01-28 23:26:03" itemprop="dateCreated datePublished" datetime="2019-01-28T23:26:03+08:00">2019-01-28</time>
             </span>
 
           
@@ -237,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/01/28/Project-Euler第69题/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2019/01/28/Project-Euler%E7%AC%AC69%E9%A2%98/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/28/Project-Euler第69题/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -253,24 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>大学的时候挺喜欢解<a href="https://projecteuler.net/" target="_blank" rel="noopener">Project Euler</a>上的题目的，尤其是它不在乎答题者使用哪一门编程语言，甚至还有很多参与者是使用pen&amp;paper来解题的。去年开始重新开始做Project Euler上的题目，而<a href="https://projecteuler.net/problem=69" target="_blank" rel="noopener">第69题</a>则是最近刚刚解决的一题。惭愧的是，因为不晓得欧拉函数的计算公式（甚至都没有想过欧拉函数有没有可以用来计算的公式），所以这一题我是用暴力计算的方法来解决的。尽管花了40分钟左右才找出了问题的答案，但欧拉函数的计算方法本身还是让我觉得挺有意思的，下面我就来讲讲我在计算欧拉函数方面做的一些尝试。</p>
-<p>69题本身很容易读懂，就是要找到一个不大于一百万的正整数<code>n</code>，这个<code>n</code>与以它为参的欧拉函数值的比值能够达到最大。欧拉函数的介绍可以看<a href="https://zh.wikipedia.org/wiki/%E6%AC%A7%E6%8B%89%E5%87%BD%E6%95%B0" target="_blank" rel="noopener">维基百科</a>，简而言之，就是在不大于<code>n</code>的正整数中与<code>n</code>互质的数的个数，具体的例子可以参见69题描述中给出的表格。</p>
-<p>网上可以找到别人的<a href="https://www.jianshu.com/p/d0fad6213433" target="_blank" rel="noopener">解法</a>，基本的思路是：按从小到大的顺序，对于一百万以内的每个素数，都计算出它们的倍数的欧拉函数值的一部分——即对于素数<code>p</code>计算出<code>1-1/p</code>并与这个位置上原来的值相乘。当遍历完一百万以内的所有素数后，也就计算出每一个位置上的欧拉函数值，再遍历一次就可以计算出比值最大的数字了。</p>
-<p>但我今天要讲的是笨方法。</p>
-<p>笨方法的关键就是乖巧地计算出每一个数字的欧拉函数值。而其中最笨的，当属挑出每一个不大于<code>n</code>的因数，计算它们与<code>n</code>的最大公约数，并根据这个最大公约数是否为1，来决定是否给某一个计数器加一。示例代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">count</span> <span class="number">0</span>))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">i</span> n count)</span><br><span class="line">      (<span class="name">when</span> (<span class="name">=</span> (<span class="name">gcd</span> (<span class="number">1</span>+ i) n) <span class="number">1</span>)</span><br><span class="line">        (<span class="name">incf</span> count)))))</span><br></pre></td></tr></tbody></table></figure>
-<p>这个<code>phi</code>可以稍微改进一下。例如，如果一个数a与<code>n</code>不是互质的，那么<code>a</code>的倍数（小于<code>n</code>的那一些）也一定不会与<code>n</code>互质。因此，每当遇到这么一个因数<code>a</code>，就知道后续的<code>2a</code>、<code>3a</code>等等，都不再需要计算其与<code>n</code>的最大公约数了。改进后的算法代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi (<span class="name">n</span>)</span><br><span class="line">  <span class="string">"通过将不互质的比特设置为1并计算为0的比特的个数来计算phi函数"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">bits</span> (<span class="name">make-array</span> n <span class="symbol">:element-type</span> 'bit <span class="symbol">:initial-element</span> <span class="number">0</span>))</span><br><span class="line">        (<span class="name">count</span> <span class="number">0</span>))</span><br><span class="line">    (<span class="name">dotimes</span> (<span class="name">i</span> n)</span><br><span class="line">      (<span class="name">cond</span> ((<span class="name">=</span> (<span class="name">bit</span> bits i) <span class="number">1</span>)</span><br><span class="line">             <span class="comment">;; 该比特已经为1，说明已经在比它小的倍数被处理时一并被标记了</span></span><br><span class="line">             )</span><br><span class="line">            ((<span class="name">=</span> i (<span class="number">1</span>- n))</span><br><span class="line">             <span class="comment">;; 只处理比上界要小的数字</span></span><br><span class="line">             )</span><br><span class="line">            ((<span class="name">/=</span> (<span class="name">gcd</span> (<span class="number">1</span>+ i) n) <span class="number">1</span>)</span><br><span class="line">             <span class="comment">;; 除了当前这个不互质的数字之外，还需要将这个数字的倍数也一并处理</span></span><br><span class="line">             (<span class="name">dotimes</span> (<span class="name">j</span> (<span class="name">floor</span> n (<span class="number">1</span>+ i)))</span><br><span class="line">               (<span class="name">let*</span> ((<span class="name">j</span> (<span class="number">1</span>+ j))</span><br><span class="line">                      (<span class="name">m</span> (<span class="name">*</span> (<span class="number">1</span>+ i) j)))</span><br><span class="line">                 (<span class="name">setf</span> (<span class="name">bit</span> bits (<span class="number">1</span>- m)) <span class="number">1</span>))))</span><br><span class="line">            (<span class="name">t</span> (<span class="name">incf</span> count))))</span><br><span class="line">    count))</span><br></pre></td></tr></tbody></table></figure>
-<p>为了节省内存空间，这里用了一个bitmap来标记小于<code>n</code>的每一个数字是否与<code>n</code>互质——1表示不互质，0表示互质。</p>
-<p>其实并不需要遍历所有比<code>n</code>小的数字，只要遍历所有<code>n</code>的素因子即可。比如，将8分解为素因子，就是3个2，那么对于小于8的所有2的倍数（4和6）都是与8不互质的。基于这个方法，将所有的素因子的倍数所对应的位置为1，再数一下总共有多少个0比特即可。</p>
-<p>对每个<code>n</code>都进行质因数分解效率不高，先生成一个一百万以内的素数表吧</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> primep (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">&lt;</span> n <span class="number">2</span>) <span class="literal">nil</span>)</span><br><span class="line">	((<span class="name">=</span> <span class="number">2</span> n) <span class="literal">t</span>)</span><br><span class="line">	(<span class="name">t</span></span><br><span class="line">	 (<span class="name">let</span> ((<span class="name">bnd</span> (<span class="name">truncate</span> (<span class="name">sqrt</span> n))))</span><br><span class="line">	   (<span class="name">labels</span> ((<span class="name">rec</span> (<span class="name">test</span>)</span><br><span class="line">		      (<span class="name">cond</span> ((<span class="name">&gt;</span> test bnd) <span class="literal">t</span>)</span><br><span class="line">			    ((<span class="name">=</span> <span class="number">0</span> (<span class="name">rem</span> n test)) <span class="literal">nil</span>)</span><br><span class="line">			    (<span class="name">t</span> (<span class="name">rec</span> (<span class="number">1</span>+ test))))))</span><br><span class="line">	     (<span class="name">rec</span> <span class="number">2</span>))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defvar</span> *primes-in-1000000* <span class="literal">nil</span>)</span><br><span class="line">(<span class="name">defun</span> generate-primes-in-1000000 ()</span><br><span class="line">  (<span class="name">dotimes</span> (<span class="name">i</span> <span class="number">1000000</span>)</span><br><span class="line">    (<span class="name">when</span> (<span class="name">primep</span> (<span class="number">1</span>+ i))</span><br><span class="line">      (<span class="name">push</span> (<span class="number">1</span>+ i) *primes-in-1000000*)))</span><br><span class="line">  (<span class="name">setf</span> *primes-in-1000000* (<span class="name">nreverse</span> *primes-in-1000000*)))</span><br></pre></td></tr></tbody></table></figure>
-<p>然后对于一个给定的<code>n</code>，遍历所有小于它的素数并对相应的倍数所在的比特置一就可以了，示例代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> phi3 (<span class="name">n</span>)</span><br><span class="line">  <span class="string">"直接用素数表来做筛法"</span></span><br><span class="line">  (<span class="name">prog</span></span><br><span class="line">      ((<span class="name">bits</span> (<span class="name">make-array</span> n <span class="symbol">:element-type</span> 'bit <span class="symbol">:initial-element</span> <span class="number">0</span>)))</span><br><span class="line">     (<span class="name">dolist</span> (<span class="name">num</span> *primes-in-1000000*)</span><br><span class="line">       (<span class="name">cond</span> ((<span class="name">&gt;</span> num n)</span><br><span class="line">              (<span class="name">go</span> <span class="symbol">:return</span>))</span><br><span class="line">             ((<span class="name">zerop</span> (<span class="name">mod</span> n num))</span><br><span class="line">              (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">i</span>)</span><br><span class="line">                         (<span class="name">when</span> (<span class="name">&lt;</span> i n)</span><br><span class="line">                           (<span class="name">setf</span> (<span class="name">bit</span> bits i) <span class="number">1</span>)</span><br><span class="line">                           (<span class="name">aux</span> (<span class="name">+</span> i num)))))</span><br><span class="line">                (<span class="name">aux</span> (<span class="number">1</span>- num))))))</span><br><span class="line">     <span class="symbol">:return</span></span><br><span class="line">     (<span class="name">return-from</span> phi3</span><br><span class="line">       (<span class="name">count-if</span> (<span class="name">lambda</span> (<span class="name">bit</span>) (<span class="name">zerop</span> bit)) bits))))</span><br></pre></td></tr></tbody></table></figure>
-<p>PS：写这个<code>phi3</code>的时候发现Common Lisp提供了一个<a href="http://clhs.lisp.se/Body/m_prog_.htm" target="_blank" rel="noopener"><code>prog</code></a>宏，这个宏倒是真的挺好用。</p>
-<p>改进了两轮，其实这仍然是笨方法。即便是用<code>phi3</code>，用来计算题目的答案也花了40多分钟。</p>
-<p>全文完</p>
-
+        
     </div>
 
     
@@ -308,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2019/01/28/Project-Euler第69题/" title="Project-Euler第69题">https://liutos.github.io/2019/01/28/Project-Euler第69题/</a>
+    <a href="https://liutos.github.io/2019/01/28/Project-Euler%E7%AC%AC69%E9%A2%98/" title="">https://liutos.github.io/2019/01/28/Project-Euler第69题/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -318,14 +301,6 @@
 
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
-              <a href="/tags/project-euler/" rel="tag"><i class="fa fa-tag"></i> project euler</a>
-              <a href="/tags/algorithm/" rel="tag"><i class="fa fa-tag"></i> algorithm</a>
-              <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
-              <a href="/tags/数学/" rel="tag"><i class="fa fa-tag"></i> 数学</a>
-          </div>
 
         
 
@@ -333,12 +308,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/01/11/一些在Emacs中搜索文本的方法/" rel="prev" title="一些在Emacs中搜索文本的方法">
-      <i class="fa fa-chevron-left"></i> 一些在Emacs中搜索文本的方法
+    <a href="/2019/01/11/%E4%B8%80%E4%BA%9B%E5%9C%A8Emacs%E4%B8%AD%E6%90%9C%E7%B4%A2%E6%96%87%E6%9C%AC%E7%9A%84%E6%96%B9%E6%B3%95/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/02/05/拿Emacs对接我的cuckoo/" rel="next" title="拿Emacs对接我的cuckoo">
-      拿Emacs对接我的cuckoo <i class="fa fa-chevron-right"></i>
+    <a href="/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -424,7 +399,7 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -433,21 +408,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -471,19 +434,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -532,16 +495,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -567,6 +530,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -595,6 +566,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -612,9 +590,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2019/01/28/Project-Euler第69题/",
+            url: "https://liutos.github.io/2019/01/28/Project-Euler%E7%AC%AC69%E9%A2%98/",
             identifier: "2019/01/28/Project-Euler第69题/",
-            title: "Project-Euler第69题"
+            title: ""
           }
         }
       });
@@ -635,7 +613,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: 'c2c634914874dbfeb2c048ff34f951c5',
+      id: '9fcda87bb1e9448228326d359a3f4b7b',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -643,4 +621,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

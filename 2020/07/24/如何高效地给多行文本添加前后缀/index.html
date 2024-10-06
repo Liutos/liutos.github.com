@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,26 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="序言理论上，开发人员是不允许操作生产环境的，更别说是像商品、订单这样的重要业务数据。不过对小公司来说，后台系统往往不是很完善，总有一些需求让运营或客服部门的同事操作起来捉襟见肘，不得不寻求开发人员的帮助。 通常这些部门的同事会给过来一批需要处理的商品或订单的ID，我会将它们粘贴到一个脚本中，并将脚本放到生产环境的机器上运行，以实现他们的ad hoc需求。ID一般用Excel文件，或在线文档的方式提">
-<meta name="keywords" content="elisp,emacs,实战Elisp">
+  <meta name="description" content="记录编程生涯的大大小小的事情">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何高效地给多行文本添加前后缀">
-<meta property="og:url" content="https://liutos.github.io/2020/07/24/如何高效地给多行文本添加前后缀/index.html">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/2020/07/24/%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%9C%B0%E7%BB%99%E5%A4%9A%E8%A1%8C%E6%96%87%E6%9C%AC%E6%B7%BB%E5%8A%A0%E5%89%8D%E5%90%8E%E7%BC%80/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="序言理论上，开发人员是不允许操作生产环境的，更别说是像商品、订单这样的重要业务数据。不过对小公司来说，后台系统往往不是很完善，总有一些需求让运营或客服部门的同事操作起来捉襟见肘，不得不寻求开发人员的帮助。 通常这些部门的同事会给过来一批需要处理的商品或订单的ID，我会将它们粘贴到一个脚本中，并将脚本放到生产环境的机器上运行，以实现他们的ad hoc需求。ID一般用Excel文件，或在线文档的方式提">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2020-07-24T14:35:12.137Z">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-24T14:35:12.000Z">
+<meta property="article:modified_time" content="2020-07-24T14:35:12.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何高效地给多行文本添加前后缀">
-<meta name="twitter:description" content="序言理论上，开发人员是不允许操作生产环境的，更别说是像商品、订单这样的重要业务数据。不过对小公司来说，后台系统往往不是很完善，总有一些需求让运营或客服部门的同事操作起来捉襟见肘，不得不寻求开发人员的帮助。 通常这些部门的同事会给过来一批需要处理的商品或订单的ID，我会将它们粘贴到一个脚本中，并将脚本放到生产环境的机器上运行，以实现他们的ad hoc需求。ID一般用Excel文件，或在线文档的方式提">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
 
-<link rel="canonical" href="https://liutos.github.io/2020/07/24/如何高效地给多行文本添加前后缀/">
+<link rel="canonical" href="https://liutos.github.io/2020/07/24/%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%9C%B0%E7%BB%99%E5%A4%9A%E8%A1%8C%E6%96%87%E6%9C%AC%E6%B7%BB%E5%8A%A0%E5%89%8D%E5%90%8E%E7%BC%80/">
 
 
 <script id="page-configurations">
@@ -76,7 +70,7 @@
   };
 </script>
 
-  <title>如何高效地给多行文本添加前后缀 | 小打小闹写点bug</title>
+  <title> | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -116,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -207,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/07/24/如何高效地给多行文本添加前后缀/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/07/24/%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%9C%B0%E7%BB%99%E5%A4%9A%E8%A1%8C%E6%96%87%E6%9C%AC%E6%B7%BB%E5%8A%A0%E5%89%8D%E5%90%8E%E7%BC%80/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -220,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          如何高效地给多行文本添加前后缀
+          
         </h1>
 
         <div class="post-meta">
@@ -229,9 +224,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-07-24 21:45:36 / 修改时间：22:35:12" itemprop="dateCreated datePublished" datetime="2020-07-24T21:45:36+08:00">2020-07-24</time>
+              <time title="创建时间：2020-07-24 22:35:12" itemprop="dateCreated datePublished" datetime="2020-07-24T22:35:12+08:00">2020-07-24</time>
             </span>
 
           
@@ -243,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2020/07/24/如何高效地给多行文本添加前后缀/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2020/07/24/%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%9C%B0%E7%BB%99%E5%A4%9A%E8%A1%8C%E6%96%87%E6%9C%AC%E6%B7%BB%E5%8A%A0%E5%89%8D%E5%90%8E%E7%BC%80/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/07/24/如何高效地给多行文本添加前后缀/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -259,37 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>理论上，开发人员是不允许操作生产环境的，更别说是像商品、订单这样的重要业务数据。不过对小公司来说，后台系统往往不是很完善，总有一些需求让运营或客服部门的同事操作起来捉襟见肘，不得不寻求开发人员的帮助。</p>
-<p>通常这些部门的同事会给过来一批需要处理的商品或订单的ID，我会将它们粘贴到一个脚本中，并将脚本放到生产环境的机器上运行，以实现他们的<em>ad hoc</em>需求。ID一般用<code>Excel</code>文件，或在线文档的方式提供过来，将它们粘贴到脚本的源码中之后，还要为它们添加必要的引号和逗号，以满足所用语言的语法要求。比如下图就是直接粘贴后，VSCode提示错误的样子</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200724/直接粘贴导致语法错误的例子.jpg" alt=""></p>
-<p>那么，怎样才能不失逼格地给这批ID加上前后的引号及行末的逗号呢？</p>
-<h1 id="八仙过海，各显神通"><a href="#八仙过海，各显神通" class="headerlink" title="八仙过海，各显神通"></a>八仙过海，各显神通</h1><p>有很多方法可以完成这个任务，比如借助VSCode<a href="https://code.visualstudio.com/docs/editor/codebasics#_multiple-selections-multicursor" target="_blank" rel="noopener">multi-cursor</a>功能，手动添加前后缀</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200724/VSCode的multiple_cursor效果s.gif" alt=""></p>
-<p>当要添加光标的位置处于同一列时，更适合用VSCode的另一个功能<code>在下面添加光标</code>（快捷键是<code>command+option+↓</code>）来实现，免去了一遍遍点击鼠标的烦恼。<code>multi-cursor</code>所敲入的每个光标还可以在各自的行上沿同方向移动不同的距离，适合处理每行长度不一致的情况。</p>
-<p>也可以用Vim中的<a href="http://www.uni-koeln.de/~pbogusze/posts/ViM_column_mode_edit.html" target="_blank" rel="noopener">列编辑模式</a>，操作体验差不多，还可以比VSCode按更少的键——起码不需要一直压着<code>option</code>键。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200724/LargeGIF430x248s.gif" alt="Vim列模式的效果"></p>
-<p>但列编辑模式不方便在行末追加内容——必须先在第一行的末尾敲入一个空格，往右移动依次光标，然后才能继续用列编辑模式批量添加后缀。</p>
-<p>Emacs也有类似列编辑模式的功能，它的<code>string-insert-rectangle</code>命令比Vim的更便于添加后缀。但它没有默认的快捷键，需要先按下<code>M-x</code>，再输入命令名并回车，略为繁琐（尽管命令名可以自动补全）。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200724/LargeGIF594x278s.gif" alt="Emacs的string-insert-rectangle的效果"></p>
-<p>除了各家编辑器内置的功能，命令行工具也适合完成这种处理，比如可以用<code>sed</code></p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">➜  /tmp cat b</span><br><span class="line">5FEB1AE4-239A-4276-8E37-BE913CE6D117</span><br><span class="line">5FEB1AE4-239A-4276-8E37-BE913CE6D117</span><br><span class="line">5FEB1AE4-239A-4276-8E37-BE913CE6D117</span><br><span class="line">5FEB1AE4-239A-4276-8E37-BE913CE6D117</span><br><span class="line">5FEB1AE4-239A-4276-8E37-BE913CE6D117</span><br><span class="line">5FEB1AE4-239A-4276-8E37-BE913CE6D117</span><br><span class="line">5FEB1AE4-239A-4276-8E37-BE913CE6D117</span><br><span class="line">➜  /tmp sed -e "s/^/'/" -i '' b</span><br><span class="line">➜  /tmp sed -e "s/$/',/" -i '' b</span><br><span class="line">➜  /tmp cat b</span><br><span class="line">'5FEB1AE4-239A-4276-8E37-BE913CE6D117',</span><br><span class="line">'5FEB1AE4-239A-4276-8E37-BE913CE6D117',</span><br><span class="line">'5FEB1AE4-239A-4276-8E37-BE913CE6D117',</span><br><span class="line">'5FEB1AE4-239A-4276-8E37-BE913CE6D117',</span><br><span class="line">'5FEB1AE4-239A-4276-8E37-BE913CE6D117',</span><br><span class="line">'5FEB1AE4-239A-4276-8E37-BE913CE6D117',</span><br><span class="line">'5FEB1AE4-239A-4276-8E37-BE913CE6D117',</span><br></pre></td></tr></tbody></table></figure>
-<p>有些从在线文档上复制下来的ID会有一行空行存在于两两之间，如果是在命令行的话，只需要先用<code>grep</code>筛选一遍即可，可组合性比编辑器更强。</p>
-<p>美中不足的是，用<code>sed</code>处理后需要手动将文件<code>b</code>的内容粘贴到脚本中——如果是用Emacs的话，也可以用<code>C-x i</code>让编辑器在光标处直接插入该文件的内容。</p>
-<p>如果可以寸步不离Emacs，通过简单的命令或快捷键来完成这个操作，岂不美哉？</p>
-<h1 id="自己动手，丰衣足食"><a href="#自己动手，丰衣足食" class="headerlink" title="自己动手，丰衣足食"></a>自己动手，丰衣足食</h1><p>用上自定义的Elisp函数后的效果如下</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200724/LargeGIF644x338s.gif" alt=""></p>
-<p>其实实现思路很简单：</p>
-<ol>
-<li>首先用户会选中一片要添加前后缀的区域；</li>
-<li>使用<code>buffer-substring-no-properties</code>函数复制这个region中的字符串，绑定为<code>text</code>；</li>
-<li>用<code>read-from-minibuffer</code>提示并读取用户输入待添加的前后缀字符串；</li>
-<li>用<code>split-string</code>将<code>text</code>切割为一行行的字符串，给每一行添加前后缀，再用<code>mapconcat</code>拼回一个字符串；</li>
-<li>用<code>delete-region</code>删除被选中的内容，然后用<code>insert</code>插入新的字符串。</li>
-</ol>
-<p>最终的Elisp函数的定义如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> lt--insert-at-start-end ()</span><br><span class="line">  <span class="string">"为TEXT中的每一行添加PREFIX前缀和SUFFIX后缀。"</span></span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">text</span> (<span class="name">buffer-substring-no-properties</span> (<span class="name">mark</span>) (<span class="name">point</span>)))</span><br><span class="line">         (<span class="name">prefix</span> (<span class="name">read-from-minibuffer</span> <span class="string">"插入的前缀："</span>))</span><br><span class="line">         (<span class="name">suffix</span> (<span class="name">read-from-minibuffer</span> <span class="string">"插入的后缀："</span>))</span><br><span class="line">         (<span class="name">lines</span> (<span class="name">split-string</span> text))</span><br><span class="line">         (<span class="name">decorated-lines</span></span><br><span class="line">          (<span class="name">mapcar</span> (<span class="name">lambda</span> (<span class="name">line</span>)</span><br><span class="line">                    (<span class="name">concat</span> prefix line suffix))</span><br><span class="line">                  lines))</span><br><span class="line">         (<span class="name">new-text</span> (<span class="name">mapconcat</span> 'identity decorated-lines <span class="string">"\n"</span>)))</span><br><span class="line">    (<span class="name">delete-region</span> (<span class="name">mark</span>) (<span class="name">point</span>))</span><br><span class="line">    (<span class="name">insert</span> new-text)))</span><br></pre></td></tr></tbody></table></figure>
-<p>欢迎读者朋友中的Emacs用户也来使用使用;-)</p>
-
+        
     </div>
 
     
@@ -327,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/07/24/如何高效地给多行文本添加前后缀/" title="如何高效地给多行文本添加前后缀">https://liutos.github.io/2020/07/24/如何高效地给多行文本添加前后缀/</a>
+    <a href="https://liutos.github.io/2020/07/24/%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%9C%B0%E7%BB%99%E5%A4%9A%E8%A1%8C%E6%96%87%E6%9C%AC%E6%B7%BB%E5%8A%A0%E5%89%8D%E5%90%8E%E7%BC%80/" title="">https://liutos.github.io/2020/07/24/如何高效地给多行文本添加前后缀/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -337,12 +301,6 @@
 
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/elisp/" rel="tag"><i class="fa fa-tag"></i> elisp</a>
-              <a href="/tags/emacs/" rel="tag"><i class="fa fa-tag"></i> emacs</a>
-              <a href="/tags/实战Elisp/" rel="tag"><i class="fa fa-tag"></i> 实战Elisp</a>
-          </div>
 
         
 
@@ -350,12 +308,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/07/09/你知道吗？2和10的整数次幂永不相等/" rel="prev" title="你知道吗？2和10的整数次幂永不相等">
-      <i class="fa fa-chevron-left"></i> 你知道吗？2和10的整数次幂永不相等
+    <a href="/2020/07/09/%E4%BD%A0%E7%9F%A5%E9%81%93%E5%90%97%EF%BC%9F2%E5%92%8C10%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E5%B9%82%E6%B0%B8%E4%B8%8D%E7%9B%B8%E7%AD%89/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/08/02/没有除法的除法——LeetCode第29题/" rel="next" title="没有除法的除法——LeetCode第29题">
-      没有除法的除法——LeetCode第29题 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/08/02/%E6%B2%A1%E6%9C%89%E9%99%A4%E6%B3%95%E7%9A%84%E9%99%A4%E6%B3%95%E2%80%94%E2%80%94LeetCode%E7%AC%AC29%E9%A2%98/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -436,13 +394,12 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#八仙过海，各显神通"><span class="nav-number">2.</span> <span class="nav-text">八仙过海，各显神通</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自己动手，丰衣足食"><span class="nav-number">3.</span> <span class="nav-text">自己动手，丰衣足食</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -451,21 +408,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -489,19 +434,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -550,16 +495,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -585,6 +530,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -613,6 +566,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -630,9 +590,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2020/07/24/如何高效地给多行文本添加前后缀/",
+            url: "https://liutos.github.io/2020/07/24/%E5%A6%82%E4%BD%95%E9%AB%98%E6%95%88%E5%9C%B0%E7%BB%99%E5%A4%9A%E8%A1%8C%E6%96%87%E6%9C%AC%E6%B7%BB%E5%8A%A0%E5%89%8D%E5%90%8E%E7%BC%80/",
             identifier: "2020/07/24/如何高效地给多行文本添加前后缀/",
-            title: "如何高效地给多行文本添加前后缀"
+            title: ""
           }
         }
       });
@@ -653,7 +613,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: 'd9cf965f457c66fd7fdc69baa3098e39',
+      id: 'aea0ceff238a68b963421deb81a21363',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -661,4 +621,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

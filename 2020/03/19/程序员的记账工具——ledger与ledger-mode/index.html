@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,28 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="上大学后不久我开始用挖财记账，当时记得很随意，不会去追究一些不知道花在哪里的钱，不时就要强行修正账户余额，就这么一直用到了2019年中。后来挖财的启动时间越来越长，同时我不想看启动时的广告，便动了换记账软件的念头。 本想着试试MoneyWiz，但其价格令人望而却步，于是决定继续物色免费的记账工具，不久便遇到了GnuCash。由于它是GNU出品的，让我对其一开始便比较有好感，加上想尝试一下复式记账，">
-<meta name="keywords" content="emacs,工具,tool,accounting,double-entry accounting,ledger,复式记账,记账">
+  <meta name="description" content="记录编程生涯的大大小小的事情">
 <meta property="og:type" content="article">
-<meta property="og:title" content="程序员的记账工具——ledger与ledger-mode">
-<meta property="og:url" content="https://liutos.github.io/2020/03/19/程序员的记账工具——ledger与ledger-mode/index.html">
+<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:url" content="https://liutos.github.io/2020/03/19/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%AE%B0%E8%B4%A6%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94ledger%E4%B8%8Eledger-mode/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="上大学后不久我开始用挖财记账，当时记得很随意，不会去追究一些不知道花在哪里的钱，不时就要强行修正账户余额，就这么一直用到了2019年中。后来挖财的启动时间越来越长，同时我不想看启动时的广告，便动了换记账软件的念头。 本想着试试MoneyWiz，但其价格令人望而却步，于是决定继续物色免费的记账工具，不久便遇到了GnuCash。由于它是GNU出品的，让我对其一开始便比较有好感，加上想尝试一下复式记账，">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2020-03-19T14:44:49.754Z">
+<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-19T14:44:49.000Z">
+<meta property="article:modified_time" content="2020-03-19T14:44:49.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="程序员的记账工具——ledger与ledger-mode">
-<meta name="twitter:description" content="上大学后不久我开始用挖财记账，当时记得很随意，不会去追究一些不知道花在哪里的钱，不时就要强行修正账户余额，就这么一直用到了2019年中。后来挖财的启动时间越来越长，同时我不想看启动时的广告，便动了换记账软件的念头。 本想着试试MoneyWiz，但其价格令人望而却步，于是决定继续物色免费的记账工具，不久便遇到了GnuCash。由于它是GNU出品的，让我对其一开始便比较有好感，加上想尝试一下复式记账，">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
 
-<link rel="canonical" href="https://liutos.github.io/2020/03/19/程序员的记账工具——ledger与ledger-mode/">
+<link rel="canonical" href="https://liutos.github.io/2020/03/19/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%AE%B0%E8%B4%A6%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94ledger%E4%B8%8Eledger-mode/">
 
 
 <script id="page-configurations">
@@ -78,7 +70,7 @@
   };
 </script>
 
-  <title>程序员的记账工具——ledger与ledger-mode | 小打小闹写点bug</title>
+  <title> | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -118,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -209,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/03/19/程序员的记账工具——ledger与ledger-mode/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/03/19/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%AE%B0%E8%B4%A6%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94ledger%E4%B8%8Eledger-mode/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -222,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          程序员的记账工具——ledger与ledger-mode
+          
         </h1>
 
         <div class="post-meta">
@@ -231,9 +224,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-03-19 22:40:01 / 修改时间：22:44:49" itemprop="dateCreated datePublished" datetime="2020-03-19T22:40:01+08:00">2020-03-19</time>
+              <time title="创建时间：2020-03-19 22:44:49" itemprop="dateCreated datePublished" datetime="2020-03-19T22:44:49+08:00">2020-03-19</time>
             </span>
 
           
@@ -245,7 +237,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2020/03/19/程序员的记账工具——ledger与ledger-mode/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2020/03/19/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%AE%B0%E8%B4%A6%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94ledger%E4%B8%8Eledger-mode/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/03/19/程序员的记账工具——ledger与ledger-mode/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -261,77 +253,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>上大学后不久我开始用挖财记账，当时记得很随意，不会去追究一些不知道花在哪里的钱，不时就要强行修正账户余额，就这么一直用到了2019年中。后来挖财的启动时间越来越长，同时我不想看启动时的广告，便动了换记账软件的念头。</p>
-<p>本想着试试<a href="https://wiz.money/" target="_blank" rel="noopener">MoneyWiz</a>，但其价格令人望而却步，于是决定继续物色免费的记账工具，不久便遇到了<a href="https://www.gnucash.org/index.phtml?lang=zh_CN" target="_blank" rel="noopener">GnuCash</a>。由于它是GNU出品的，让我对其一开始便比较有好感，加上想尝试一下复式记账，便在同年9月份换到了GnuCash上。</p>
-<p>可惜好景不长，我很快便发现了GnuCash的不足：</p>
-<ol>
-<li>启动速度随着录入数据的增多显著变慢；</li>
-<li>UI不够美观；</li>
-<li>比较依赖鼠标操作；</li>
-<li>交易时间的精度只到天，且无法轻松调整一笔交易的位置——这一点是我尤其在意的，因为着意味着一旦我有一笔交易漏记了，再追加回去后，整个账本的交易数据次序也与银行记录的不一致了。</li>
-</ol>
-<p>于是我抛弃了GnuCash，投向了ledger（以及ledger-mode）的怀抱。</p>
-<h1 id="ledger和ledger-mode"><a href="#ledger和ledger-mode" class="headerlink" title="ledger和ledger-mode"></a>ledger和ledger-mode</h1><a id="more"></a>
-<h2 id="ledger"><a href="#ledger" class="headerlink" title="ledger"></a>ledger</h2><p><a href="https://www.ledger-cli.org/" target="_blank" rel="noopener">ledger</a>是一个基于复式记账的、生成财务报表的命令行程序——它不具备录入的功能，它只生成报表。</p>
-<p>要使用ledger，必须先将交易数据按它的语法写在一个文本文件中，然后才用ledger读取这个文件，生成各种各样的报表。百闻不如一见，下图便是ledger生成的报表</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200319/WX20200308-213943@2x.jpeg" alt=""></p>
-<h2 id="ledger-mode"><a href="#ledger-mode" class="headerlink" title="ledger-mode"></a>ledger-mode</h2><p>记录交易数据的源文件是纯文本格式的，可以用任何文本编辑器（text editor，不是word processor）来编辑。如果打算用Emacs，那么就不容错过<a href="https://github.com/ledger/ledger-mode" target="_blank" rel="noopener">ledger-mode</a>了。</p>
-<p>ledger-mode是一个Emacs主模式，为编辑ledger的源文件（一般以<code>ledger</code>为后缀名）提供诸多便利。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200319/交易明细源文件.jpeg" alt=""></p>
-<p>比如在上图中，ledger提供了语法高亮：日期（<code>2020-03-04</code>）和描述（<code>利口福</code>）是红色的，金额（<code>-32</code>）和货币（<code>CNY</code>）是紫色的，注释（分号及其后面的内容）是灰色的。ledger-mode还提供自动缩进，在输入了<code>利口福</code>并回车后，光标会自动定位到字母<code>L</code>的位置，下一行也是如此——连续敲入两个回车得到一行空行，标志着一笔交易记录结束。ledger-mode还支持在Emacs内查看ledger输出的报表（见下文）。</p>
-<h1 id="ledger的优势"><a href="#ledger的优势" class="headerlink" title="ledger的优势"></a>ledger的优势</h1><p>用ledger记账至少有以下优势：</p>
-<ol>
-<li>交易数据保存在本地，有利于保护用户的隐私；</li>
-<li>交易数据保存为纯文本文件，用户可以依自己的喜好选择编辑工具（比如我就喜欢用Emacs），即使哪天ledger没法用了，这些数据也依旧可以查看；</li>
-<li>ledger支持自由定制符合个人习惯的资产和支出的层级。例如，我在<code>Assets</code>账户下细分了<code>Checking</code>和<code>Investment</code>子账户分别囊括消费和投资账户；<code>Checking</code>下细分了三个储蓄卡、微信零钱，及支付宝余额账户；<code>Investment</code>下细分了<code>Fund</code>和<code>WMP</code>，分别表示基金和银行理财产品；<code>Expense</code>下有一个<code>Food</code>，从上面的截图中可以看到，<code>Food</code>下进一步分了十个子账户——只要愿意，就可以随意定制账户名称和层级；</li>
-<li>ledger支持给每一笔交易添加<a href="https://www.ledger-cli.org/3.0/doc/ledger3.html#Metadata" target="_blank" rel="noopener">元数据</a>，其中一种便是<a href="https://www.ledger-cli.org/3.0/doc/ledger3.html#Metadata-tags" target="_blank" rel="noopener">tag</a>（标签）。tag增强了ledger生成报表的灵活度，比如我给在公司点外卖的支出打上<code>:公司:</code>的tag后，便可以让ledger只生成在公司就餐的支出报表；</li>
-</ol>
-<h1 id="ledger的用法"><a href="#ledger的用法" class="headerlink" title="ledger的用法"></a>ledger的用法</h1><h2 id="初始化账户"><a href="#初始化账户" class="headerlink" title="初始化账户"></a>初始化账户</h2><p>用ledger记账，要先初始化每个账户的余额。基于复式记账的原则，ledger要求每一笔交易中所有账户的金额变化之和为0，因此若要往储蓄卡资产账户中“充值”，就必须从另一个账户中减去等额的钱。在ledger中，这个“另一个账户”便是<code>Equity</code>。（在ledger的在线文档中有一个章节<a href="https://www.ledger-cli.org/3.0/doc/ledger3.html#Understanding-Equity" target="_blank" rel="noopener">Understanding Equity</a>可以帮助理解）。</p>
-<p>所以，初始化账户余额就是添加一笔交易，将与账户余额等量的钱从<code>Equity:Opening Balance</code>流到<code>Assets</code>下的细分账户中，如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200319/初始化账户.jpeg" alt=""></p>
-<p>尽管在上图中，金额<code>123</code>后的货币为<code>CNY</code>，但ledger并不理解这三个字母是否真的为合法的货币名称——ledger只要求用户指定了即可。（可以参见ledger在线文档的<a href="https://www.ledger-cli.org/3.0/doc/ledger3.html#Commodities-and-Currencies" target="_blank" rel="noopener">Commodities and Currencies</a>章节）</p>
-<p>PS：在上图中没有明确写出<code>Equity:Opening Balance</code>的变化为<code>-123 CNY</code>，是因为ledger足够“聪明”，可以自己补足这个信息。</p>
-<p>现在可以用ledger输出报表了</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200319/第一次查看资产余额.jpeg" alt=""></p>
-<h2 id="记录第一笔交易"><a href="#记录第一笔交易" class="headerlink" title="记录第一笔交易"></a>记录第一笔交易</h2><p>有了钱便可以开始买买买了。假设早餐在楼下肠粉店花了6块钱吃了一份鸡蛋肠，可以记为</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200319/记录第一笔早餐消费.jpeg" alt=""></p>
-<p>用ledger输出新的资产报表</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200319/一笔交易后的总资产.jpeg" alt=""></p>
-<p>还可以用ledger输出支出账户的明细，示例代码为</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ledger -f a.ledger register 'Expense'</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="其它报表命令"><a href="#其它报表命令" class="headerlink" title="其它报表命令"></a>其它报表命令</h2><p>除了查看资产余额和支出明细之外，我常用的报表还包括：</p>
-<ol>
-<li><code>ledger -f a.txt balance ^assets and \( not 公积金 \) or ^liabilities</code>，查看不含公积金的资产和负债的余额，主要用于核对账本（<code>a.txt</code>文件）与银行卡、信用卡余额是否一致；</li>
-<li><code>ledger -S '-date' -f ~/Dropbox/Accounting/a.txt register Liabilities</code>，查看信用卡的交易明细，用于在账单日核对银行的信用卡账单明细。参数<code>-S 'date'表示按日期由近及远、从上往下排序</code>；</li>
-<li><code>ledger -e 10/01 -f a.txt balance '^Asset' and \( not '公积金' \) or '^Liabilities'</code>，统计至上月末为止的净资产（资产减去负债），用于了解自己的资产是上升还是下降的趋势。参数<code>-e 10/01</code>表示计算范围截止于10月1日——每次运行时需要调整为本月一号；</li>
-<li><code>ledger -b 11/01 -e 11/30 -f a.txt balance '^Expense:Food'</code>，统计上个月在用餐方面的总支出，用于核对上个月的饮食开支是否超支。参数<code>-b 11/01</code>表示计算范围开始于11月1日——每次运行时需要调整为上个月一号。</li>
-</ol>
-<h3 id="在Emacs中查看报表"><a href="#在Emacs中查看报表" class="headerlink" title="在Emacs中查看报表"></a>在Emacs中查看报表</h3><p>ledger-mode允许用户直接在Emacs中查看报表：先按下组合键<code>C-c C-o C-r</code>，然后在minibuffer中输入报表名称，最后输入完整的调用ledger的命令即可。Emacs会打开一个新的buffer展示ledger的输出</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200319/在Emacs内查看ledger报表的效果.jpeg" alt=""></p>
-<h2 id="账户划分方法"><a href="#账户划分方法" class="headerlink" title="账户划分方法"></a>账户划分方法</h2><p>ledger中划分账户的自由度很高，以下是我划分的一部分，供读者参考。</p>
-<p>首先按照ledger在线文档的<a href="https://www.ledger-cli.org/3.0/doc/ledger3.html#Structuring-your-Accounts" target="_blank" rel="noopener">Structuring your Accounts</a>的要求，划分出五个顶层的账户：</p>
-<ol>
-<li><code>Assets</code>，表示用户的资产；</li>
-<li><code>Equity</code>，用于初始化时作为账户余额的来源；</li>
-<li><code>Expense</code>，表示用户的支出；</li>
-<li><code>Income</code>，表示用户的收入；</li>
-<li><code>Liabilities</code>，表示用户的负债。</li>
-</ol>
-<p>在<code>Assets</code>账户下，我还划分了</p>
-<ol>
-<li><code>Assets:Checking</code>，表示用于消费的账户，其下还划分了储蓄卡账户、微信零钱、支付宝余额账户；</li>
-<li><code>Assets:Investment:Fund</code>，表示购买的基金，其下为不同的基金划分不同的账户；</li>
-<li><code>Assets:Investment:WMP</code>，表示购买的理财产品，其下按理财产品代号划分不同的账户。</li>
-</ol>
-<p>在<code>Expense</code>账户下，我细分了：</p>
-<ol>
-<li><code>Expense:Clothes</code>，表示衣服鞋饰的支出；</li>
-<li><code>Expense:Education</code>，表示书籍、文具的支出；</li>
-<li><code>Expense:Entertainment</code>，表示电影、游戏等娱乐方面的支出；</li>
-<li><code>Expense:Food</code>，表示买菜、就餐方面的支出。</li>
-</ol>
-<p>还有其它的许多账户，就不一一赘述了。</p>
-
+        
     </div>
 
     
@@ -369,7 +291,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/03/19/程序员的记账工具——ledger与ledger-mode/" title="程序员的记账工具——ledger与ledger-mode">https://liutos.github.io/2020/03/19/程序员的记账工具——ledger与ledger-mode/</a>
+    <a href="https://liutos.github.io/2020/03/19/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%AE%B0%E8%B4%A6%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94ledger%E4%B8%8Eledger-mode/" title="">https://liutos.github.io/2020/03/19/程序员的记账工具——ledger与ledger-mode/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -379,17 +301,6 @@
 
 
       <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/emacs/" rel="tag"><i class="fa fa-tag"></i> emacs</a>
-              <a href="/tags/工具/" rel="tag"><i class="fa fa-tag"></i> 工具</a>
-              <a href="/tags/tool/" rel="tag"><i class="fa fa-tag"></i> tool</a>
-              <a href="/tags/accounting/" rel="tag"><i class="fa fa-tag"></i> accounting</a>
-              <a href="/tags/double-entry-accounting/" rel="tag"><i class="fa fa-tag"></i> double-entry accounting</a>
-              <a href="/tags/ledger/" rel="tag"><i class="fa fa-tag"></i> ledger</a>
-              <a href="/tags/复式记账/" rel="tag"><i class="fa fa-tag"></i> 复式记账</a>
-              <a href="/tags/记账/" rel="tag"><i class="fa fa-tag"></i> 记账</a>
-          </div>
 
         
 
@@ -397,12 +308,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/21/优化org-mode管理观影进度/" rel="prev" title="优化org-mode管理观影进度">
-      <i class="fa fa-chevron-left"></i> 优化org-mode管理观影进度
+    <a href="/2020/02/21/%E4%BC%98%E5%8C%96org-mode%E7%AE%A1%E7%90%86%E8%A7%82%E5%BD%B1%E8%BF%9B%E5%BA%A6/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/03/21/弥补org-refile的不足/" rel="next" title="弥补org-refile的不足">
-      弥补org-refile的不足 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/03/21/%E5%BC%A5%E8%A1%A5org-refile%E7%9A%84%E4%B8%8D%E8%B6%B3/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -483,13 +394,12 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ledger和ledger-mode"><span class="nav-number">1.</span> <span class="nav-text">ledger和ledger-mode</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ledger"><span class="nav-number">1.1.</span> <span class="nav-text">ledger</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ledger-mode"><span class="nav-number">1.2.</span> <span class="nav-text">ledger-mode</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ledger的优势"><span class="nav-number">2.</span> <span class="nav-text">ledger的优势</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ledger的用法"><span class="nav-number">3.</span> <span class="nav-text">ledger的用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化账户"><span class="nav-number">3.1.</span> <span class="nav-text">初始化账户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记录第一笔交易"><span class="nav-number">3.2.</span> <span class="nav-text">记录第一笔交易</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它报表命令"><span class="nav-number">3.3.</span> <span class="nav-text">其它报表命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在Emacs中查看报表"><span class="nav-number">3.3.1.</span> <span class="nav-text">在Emacs中查看报表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#账户划分方法"><span class="nav-number">3.4.</span> <span class="nav-text">账户划分方法</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -498,21 +408,9 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">114</span>
-        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -536,19 +434,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -597,16 +495,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -632,6 +530,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -660,6 +566,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -677,9 +590,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2020/03/19/程序员的记账工具——ledger与ledger-mode/",
+            url: "https://liutos.github.io/2020/03/19/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%AE%B0%E8%B4%A6%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94ledger%E4%B8%8Eledger-mode/",
             identifier: "2020/03/19/程序员的记账工具——ledger与ledger-mode/",
-            title: "程序员的记账工具——ledger与ledger-mode"
+            title: ""
           }
         }
       });
@@ -700,7 +613,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '4b6420c317e6558e8a41e212e91f9921',
+      id: '42c794976b6f7fdb5952d3c1fad85efb',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -708,4 +621,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
