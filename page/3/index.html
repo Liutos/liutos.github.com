@@ -200,7 +200,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2022/05/02/%E6%A8%A1%E6%8B%9F%E5%B0%8F%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E7%9F%AD%E8%B7%AF%E7%89%B9%E6%80%A7/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/08/12/%E8%BF%99%E6%96%B9%E9%9D%A2Python%E8%BF%98%E6%98%AF%E6%AF%94Lisp%E7%95%A5%E9%80%8A%E4%B8%80%E7%AD%B9/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -214,7 +214,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/02/%E6%A8%A1%E6%8B%9F%E5%B0%8F%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E7%9F%AD%E8%B7%AF%E7%89%B9%E6%80%A7/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2021/08/12/%E8%BF%99%E6%96%B9%E9%9D%A2Python%E8%BF%98%E6%98%AF%E6%AF%94Lisp%E7%95%A5%E9%80%8A%E4%B8%80%E7%AD%B9/" class="post-title-link" itemprop="url">这方面Python还是比Lisp略逊一筹</a>
         </h1>
 
         <div class="post-meta">
@@ -223,8 +223,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-05-02 11:18:47" itemprop="dateCreated datePublished" datetime="2022-05-02T11:18:47+08:00">2022-05-02</time>
+              <time title="创建时间：2021-08-12 23:08:37 / 修改时间：23:08:47" itemprop="dateCreated datePublished" datetime="2021-08-12T23:08:37+08:00">2021-08-12</time>
             </span>
 
           
@@ -236,8 +237,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2022/05/02/%E6%A8%A1%E6%8B%9F%E5%B0%8F%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E7%9F%AD%E8%B7%AF%E7%89%B9%E6%80%A7/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/05/02/模拟小于运算符的短路特性/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/08/12/%E8%BF%99%E6%96%B9%E9%9D%A2Python%E8%BF%98%E6%98%AF%E6%AF%94Lisp%E7%95%A5%E9%80%8A%E4%B8%80%E7%AD%B9/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/08/12/这方面Python还是比Lisp略逊一筹/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -252,7 +253,70 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>众所周知，Python 支持向函数传递关键字参数。比如 Python 的内置函数<code>max</code>就接受名为<code>key</code>的关键字参数，以决定如何获取比较两个参数时的依据</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">max</span>({<span class="string">'v'</span>: <span class="number">1</span>}, {<span class="string">'v'</span>: <span class="number">3</span>}, {<span class="string">'v'</span>: <span class="number">2</span>}, key=<span class="keyword">lambda</span> o: o[<span class="string">'v'</span>])  <span class="comment"># 返回值为{'v': 3}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>自定义一个运用了关键字参数特性的函数当然也不在话下。例如模仿一下 Common Lisp 中的函数<code>string-equal</code></p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">string_equal</span>(<span class="params">string1, string2, *, start1=<span class="literal">None</span>, end1=<span class="literal">None</span>, start2=<span class="literal">None</span>, end2=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> start1:</span><br><span class="line">        start1 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> end1:</span><br><span class="line">        end1 = <span class="built_in">len</span>(string1) - <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> start2:</span><br><span class="line">        start2 = <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> end2:</span><br><span class="line">        end2 = <span class="built_in">len</span>(string2) - <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> string1[start1:end1 + <span class="number">1</span>] == string2[start2:end2 + <span class="number">1</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<p>再以关键字参数的形式向它传参</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string_equal(<span class="string">"Hello, world!"</span>, <span class="string">"ello"</span>, start1=<span class="number">1</span>, end1=<span class="number">4</span>)  <span class="comment"># 返回值为True</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><del>秉承 Python 之禅中的<code>There should be one-- and preferably only one --obvious way to do it.</code>理念，</del> 我甚至可以花里胡哨地、用关键字参数的语法向<code>string1</code>和<code>string2</code>传参</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string_equal(string1=<span class="string">'Goodbye, world!'</span>, string2=<span class="string">'ello'</span>)  <span class="comment"># 返回值为False</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>但瑜不掩瑕，Python 的关键字参数也有其不足。</p>
+<h1 id="Python-的不足"><a href="#Python-的不足" class="headerlink" title="Python 的不足"></a>Python 的不足</h1><p>Python 的关键字参数特性的缺点在于，同一个参数无法同时以：</p>
+<ol>
+<li>具有自身的参数名，以及；</li>
+<li>可以从<code>**kwargs</code>中取得，</li>
+</ol>
+<p>两种形态存在于参数列表中。</p>
+<p>举个例子，我们都知道 Python 有一个知名的第三方库叫做 requests，提供了<del>用于开发爬虫牢底坐穿的</del>发起 HTTP 请求的功能。它的类<code>requests.Session</code>的实例方法<code>request</code>有着让人忍不住运用 Long Parameter List 对其重构的、长达 16 个参数的参数列表。（你可以移步<a href="https://docs.python-requests.org/en/latest/api/#requests.Session.request"><code>request</code>方法的文档</a>观摩）</p>
+<p>为了便于使用，requests 的作者贴心地提供了<code>requests.request</code>，这样只需要一次简单的函数调用即可</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">requests.request(<span class="string">'GET'</span>, <span class="string">'http://example.com'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>requests.request</code>函数支持与<code>requests.Session#request</code>（请允许我借用 Ruby 对于实例方法的写法）相同的参数列表，这一切都是通过在参数列表中声明<code>**kwargs</code>变量，并在函数体中用相同的语法向后者传参来实现的。（你可以移步<a href="https://docs.python-requests.org/en/latest/_modules/requests/api/#request">request 函数的源代码</a>观摩）</p>
+<p>这样的缺陷在于，<code>requests.request</code>函数的参数列表丢失了大量的信息。要想知道使用者能往<code>kwargs</code>中传入什么参数，必须：</p>
+<ol>
+<li>先知道<code>requests.request</code>是如何往<code>requests.Session#request</code>中传参的——将<code>kwargs</code>完全展开传入是最简单的情况；</li>
+<li>再查看<code>requests.Session#request</code>的参数列表中排除掉<code>method</code>和<code>url</code>的部分剩下哪些参数。</li>
+</ol>
+<p>如果想在<code>requests.request</code>的参数列表中使用参数自身的名字（例如<code>params</code>、<code>data</code>、<code>json</code>等），那么调用<code>requests.Session#request</code>则变得繁琐起来，不得不写成</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> sessions.Session() <span class="keyword">as</span> session:</span><br><span class="line">    <span class="keyword">return</span> session.request(method=method, url=url, params=params, data=data, json=data, **kwargs)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>的形式——果然人类的本质是复读机。</p>
+<p>一个优雅的解决方案，可以参考隔壁的 Common Lisp。</p>
+<h1 id="Common-Lisp-的优越性"><a href="#Common-Lisp-的优越性" class="headerlink" title="Common Lisp 的优越性"></a>Common Lisp 的优越性</h1><p>Common Lisp 第一次面世是在1984年，比 Python 的1991年要足足早了7年。但据悉，Python 的关键字参数特性借鉴自 Modula-3，而不是<del>万物起源的</del> Lisp。Common Lisp 中的关键字参数特性与 Python 有诸多不同。例如，根据 Python 官方手册中的说法，<code>**kwargs</code>中只有多出来的关键字参数</p>
+<blockquote>
+<p>If the form “**identifier” is present, it is initialized to a new ordered mapping receiving any excess keyword arguments</p>
+</blockquote>
+<p>而在 Common Lisp 中，与<code>**kwargs</code>对应的是<code>&amp;rest args</code>，它必须放置在关键字参数之前（即左边），并且根据 CLHS 中<a href="http://www.lispworks.com/documentation/lw51/CLHS/Body/03_dac.htm">《A specifier for a rest parameter》</a>的说法，<code>args</code>中含有所有未经处理的参数——也包含了位于其后的关键字参数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar (<span class="name">&amp;rest</span> args <span class="symbol">&amp;key</span> k1 k2)</span><br><span class="line">  (<span class="name">list</span> args k1 k2))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobar</span> <span class="symbol">:k1</span> <span class="number">1</span> <span class="symbol">:k2</span> <span class="number">3</span>)  <span class="comment">;; 返回值为((:K1 1 :K2 3) 1 3)</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果我还有另一个函数与<code>foobar</code>有着相似的参数列表，那么也可以轻松将所有参数传递给它</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz (<span class="name">a</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> k1 k2)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> k1 k2))</span><br><span class="line">  (<span class="name">cons</span> a</span><br><span class="line">        (<span class="name">apply</span> #'foobar args)))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobaz</span> <span class="number">1</span> <span class="symbol">:k1</span> <span class="number">2</span> <span class="symbol">:k2</span> <span class="number">3</span>)  <span class="comment">;; 返回值为(1 (:K1 2 :K2 3) 2 3)</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>甚至于，即使在<code>foobaz</code>中支持的关键字参数比<code>foobar</code>要多，也能轻松地处理，因为 Common Lisp 支持向被调用的函数传入一个特殊的关键字参数<code>:allow-other-keys</code>即可</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz (<span class="name">a</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> k1 k2 my-key)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> k1 k2))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"my-key is ~S~%"</span> my-key)</span><br><span class="line">  (<span class="name">cons</span> a</span><br><span class="line">        (<span class="name">apply</span> #'foobar <span class="symbol">:allow-other-keys</span> <span class="literal">t</span> args)))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobaz</span> <span class="number">1</span> <span class="symbol">:k1</span> <span class="number">2</span> <span class="symbol">:k2</span> <span class="number">3</span> <span class="symbol">:my-key</span> <span class="number">4</span>)  <span class="comment">;; 打印my-key is 4，并返回(1 (:ALLOW-OTHER-KEYS T :K1 2 :K2 3 :MY-KEY 4) 2 3)</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>回到 HTTP 客户端的例子。在 Common Lisp 中我一般用<a href="https://edicl.github.io/drakma/">drakma</a>这个第三方库来发起 HTTP 请求，它导出了一个<code>http-request</code>函数，用法与<code>requests.request</code>差不多</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">drakma</span><span class="symbol">:http-request</span> <span class="string">"http://example.com"</span> <span class="symbol">:method</span> <span class="symbol">:get</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果我想要基于它来封装一个便捷地发出 GET 请求的函数<code>http-get</code>的话，可以这样写</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> http-get (<span class="name">uri</span> <span class="symbol">&amp;rest</span> args)</span><br><span class="line">  (<span class="name">apply</span> #'drakma<span class="symbol">:http-request</span> uri <span class="symbol">:method</span> <span class="symbol">:get</span> args))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果我希望在<code>http-get</code>的参数列表中直接暴露出一部分<code>http-request</code>支持的关键字参数的话，可以这样写</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> http-get (<span class="name">uri</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> content)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> content))</span><br><span class="line">  (<span class="name">apply</span> #'drakma<span class="symbol">:http-request</span> uri <span class="symbol">:method</span> <span class="symbol">:get</span> args))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>更进一步，如果我想在<code>http-get</code>中支持解析<code>Content-Type</code>为<code>application/json</code>的响应结果的话，还可以这样写</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">ql</span><span class="symbol">:quickload</span> 'jonathan)</span><br><span class="line">(<span class="name">ql</span><span class="symbol">:quickload</span> 'str)</span><br><span class="line">(<span class="name">defun</span> http-get (<span class="name">uri</span> <span class="symbol">&amp;rest</span> args <span class="symbol">&amp;key</span> content (<span class="name">decode-json</span> <span class="literal">t</span>))</span><br><span class="line">  <span class="comment">;; http-request并不支持decode-json这个参数，但依然可以将整个args传给它。</span></span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> content))</span><br><span class="line">  (<span class="name">multiple-value-bind</span> (<span class="name">bytes</span> code headers)</span><br><span class="line">      (<span class="name">apply</span> #'drakma<span class="symbol">:http-request</span> uri</span><br><span class="line">             <span class="symbol">:allow-other-keys</span> <span class="literal">t</span></span><br><span class="line">             <span class="symbol">:method</span> <span class="symbol">:get</span></span><br><span class="line">             args)</span><br><span class="line">    (<span class="name">declare</span> (<span class="name">ignorable</span> code))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">content-type</span> (<span class="name">cdr</span> (<span class="name">assoc</span> <span class="symbol">:content-type</span> headers)))</span><br><span class="line">          (<span class="name">text</span> (<span class="name">flexi-streams</span><span class="symbol">:octets-to-string</span> bytes)))</span><br><span class="line">      (<span class="name">if</span> (<span class="name">and</span> decode-json</span><br><span class="line">               (<span class="name">str</span><span class="symbol">:starts-with-p</span> <span class="string">"application/json"</span> content-type))</span><br><span class="line">          (<span class="name">jonathan</span><span class="symbol">:parse</span> text)</span><br><span class="line">          text))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>不愧是<del>Dio</del> Common Lisp，轻易就做到了我们做不到的事情。</p>
+<h2 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h2><p>曾几何时，Python 程序员还会津津乐道于 Python 之禅中的<code>There should be one-- and preferably only one --obvious way to do it.</code>，但其实 Python 光是在定义一个函数的参数方面就有五花八门的写法了。甚至在写这篇文章的过程中，我才知道原来 Python 的参数列表中可以通过写上<code>/</code>来使其左侧的参数都成为 positional-only 的参数。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">foo1</span>(<span class="params">a, b</span>): <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">foo2</span>(<span class="params">a, /, b</span>): <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">foo1(a=<span class="number">1</span>, b=<span class="number">2</span>)</span><br><span class="line">foo2(a=<span class="number">1</span>, b=<span class="number">2</span>)  <span class="comment"># 会抛出异常，因为a只能按位置来传参。</span></span><br></pre></td></tr></tbody></table></figure>
+
+
       
     </div>
 
@@ -271,7 +335,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2022/05/02/format%EF%BC%8C%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%A0%BC%E5%BC%8F%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/08/02/%E5%B1%A0%E9%BE%99%E6%9C%AF%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E8%BF%90%E7%94%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -285,7 +349,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/02/format%EF%BC%8C%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%A0%BC%E5%BC%8F%E5%8C%96/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2021/08/02/%E5%B1%A0%E9%BE%99%E6%9C%AF%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E8%BF%90%E7%94%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84/" class="post-title-link" itemprop="url">屠龙术——如何运用整洁架构</a>
         </h1>
 
         <div class="post-meta">
@@ -294,8 +358,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-05-02 11:18:42" itemprop="dateCreated datePublished" datetime="2022-05-02T11:18:42+08:00">2022-05-02</time>
+              <time title="创建时间：2021-08-02 23:13:45 / 修改时间：23:13:48" itemprop="dateCreated datePublished" datetime="2021-08-02T23:13:45+08:00">2021-08-02</time>
             </span>
 
           
@@ -307,8 +372,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2022/05/02/format%EF%BC%8C%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%A0%BC%E5%BC%8F%E5%8C%96/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/05/02/format，不只是格式化/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/08/02/%E5%B1%A0%E9%BE%99%E6%9C%AF%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E8%BF%90%E7%94%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/08/02/屠龙术——如何运用整洁架构/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -323,7 +388,228 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>或许是为了显摆，也或许是虚心学习，总之我在去年年初花了大约两个月读完了<a href="https://book.douban.com/subject/30333919/">《架构整洁之道》</a>。但读过后也仅仅就是读了而已，尽管书中描绘了一个名为整洁架构的软件架构，但我并没有理解并应用到实际的开发中去。书中的诸多理念最终都蛰伏在了我的脑海深处。</p>
+<p>今年年初的时候我换了工作。新的单位给每人都配备了办公用的电脑，从此我也不用背着2公斤重的MacBook Pro通勤了。美中不足的地方是，我和<a href="https://github.com/Liutos/cuckoo">cuckoo</a>之间的联系被斩断了，因为<code>cuckoo</code>是个单机程序，要在私人电脑和办公电脑上各装一份太不方便了。于是乎，我决定开两个新的项目，将<code>cuckoo</code>拆分为客户端和服务端两部分。</p>
+<p>正好，这给了我在实际的项目中践行整洁架构的机会。</p>
+<h2 id="什么是整洁架构"><a href="#什么是整洁架构" class="headerlink" title="什么是整洁架构"></a>什么是整洁架构</h2><p>不像数学领域的概念往往有一个精确的定义，书中甚至没有道出整洁架构是什么。相对的，只有一副引人入胜的架构示意图（图片摘自作者博客的<a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html">这篇文章</a>）</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210802/%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84.jpg"></p>
+<p>在作者的<a href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html">文章</a>中，对图中的四个层次给出了响应的解释：</p>
+<!-- 对Entities的解释：Entities封装了企业范围内的业务规则。如果你没有经营一个企业，仅仅是开发一款应用，那么Entities就是应用的业务对象，它们封装了应用内最通用、上层的规则。 -->
+
+<!-- TODO: 将几个层的名字都用一对反引号包裹起来。 -->
+
+<ul>
+<li>Entities封装了企业范围内的业务规则。如果你没有经营一个企业，仅仅是开发一款应用，那么Entities就是应用的业务对象，它们封装了应用内最通用、上层的规则。</li>
+</ul>
+<!-- 对Use Cases的解释：Use Cases包含了与应用相关的业务规则。它封装并实现了系统的所有用例。 -->
+
+<ul>
+<li>Use Cases包含了与应用相关的业务规则。它封装并实现了系统的所有用例。</li>
+</ul>
+<!-- 衍生出来的问题：何谓用例（Use Cases）？ -->
+
+<!-- 对Interface Adapters的解释：这一层负责将最方便entities和use cases的数据转换为最方便外部系统使用的格式。在这一层以内都是抽象的，对外界诸如MVC、GUI、数据库等均是无感知的。此外，这一层也负责与外部服务通信。（可以举fledgling的repository目录下的例子） -->
+
+<ul>
+<li>这一层负责将最方便entities和use cases的数据转换为最方便外部系统使用的格式。在这一层以内都是抽象的，对外界诸如MVC、GUI、数据库等均是无感知的。此外，这一层也负责与外部服务通信。</li>
+<li><code>Frameworks &amp; Drivers</code>，顾名思义，这一层包含了与框架相关的代码，或者像C语言中的<code>main</code>函数这样的入口函数代码；</li>
+</ul>
+<!-- 有多少层不要紧，关键在于必须遵循依赖规则：在源代码层面，总是外层的依赖于内层的。例如，nest中use_case目录下总是依赖于entity目录、infra和repository依赖于entity目录、cli和web依赖于app、infra，以及repository等“内层”目录。 -->
+
+<h1 id="如何应用整洁架构"><a href="#如何应用整洁架构" class="headerlink" title="如何应用整洁架构"></a>如何应用整洁架构</h1><!-- 这里给出我的实践心得：实践整洁架构的项目的简介、目录结构的划分、语言特性的运用、设计模式的运用、SOLID原则的体现、与MVC相比更为清晰的边界。除了这些通用的，还有一些具体的编码细节：参数的传递方式、抽象方法对比NotImplementedError、返回值对比传入Presenter、更新资源的用例的输入定义、为什么不要防御性编程、无法隐藏的I/O、类方法对比实例方法、避免循环依赖 -->
+
+<h2 id="实际项目的例子"><a href="#实际项目的例子" class="headerlink" title="实际项目的例子"></a>实际项目的例子</h2><p>前文提到，为了满足新需求，我需要将<a href="https://github.com/Liutos/cuckoo">cuckoo</a>改造为C/S模型。但比起缓缓地将cuckoo拆解为两部分，我更乐于大刀阔斧地从头开发开发这两个程序，于是便诞生了：</p>
+<ul>
+<li>服务端程序为<a href="https://github.com/Liutos/nest">nest</a>，负责管理任务、计划等实体对象，并提供基于HTTP协议的API；</li>
+<li>客户端程序为<a href="https://github.com/Liutos/fledgling">fledgling</a>，负责与<code>nest</code>通信，并在客户机上触发通知（如macOS的右上角弹出通知）。</li>
+</ul>
+<p>它们都是我依照自己对整洁架构的理解来编写的。</p>
+<h2 id="从架构理念到具体决策"><a href="#从架构理念到具体决策" class="headerlink" title="从架构理念到具体决策"></a>从架构理念到具体决策</h2><p>正如<a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a>仅仅是一种软件结构风格而不是具体的设计指南一样，整洁架构也并没有规定示意图中的分层结构该如何运用一门语言的特性来实现，这需要开发者自己去摸索。下文我给出自己在<code>nest</code>和<code>fledgling</code>项目中的做法。</p>
+<h3 id="如何安排代码目录结构"><a href="#如何安排代码目录结构" class="headerlink" title="如何安排代码目录结构"></a>如何安排代码目录结构</h3><p>在程序的代码结构中，最接近于架构示意图的分层架构的，当属代码仓库的目录结构了。模仿整洁架构中的四层结构，我在<code>nest</code>中也安排了相似的目录结构</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  nest git:(master) tree -I '__pycache__' -d ./nest</span><br><span class="line">./nest</span><br><span class="line">├── app</span><br><span class="line">│&nbsp;&nbsp; ├── entity</span><br><span class="line">│&nbsp;&nbsp; └── use_case</span><br><span class="line">├── cli</span><br><span class="line">│&nbsp;&nbsp; ├── command</span><br><span class="line">│&nbsp;&nbsp; └── config</span><br><span class="line">├── infra</span><br><span class="line">├── repository</span><br><span class="line">│&nbsp;&nbsp; └── DDL</span><br><span class="line">└── web</span><br><span class="line">    ├── config</span><br><span class="line">    ├── controller</span><br><span class="line">    └── presenter</span><br><span class="line"></span><br><span class="line">13 directories</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="nest-app-entity-目录"><a href="#nest-app-entity-目录" class="headerlink" title="nest/app/entity/目录"></a><code>nest/app/entity/</code>目录</h4><p><code>nest/app/entity/</code>目录下的各个文件分别定义了系统中的各个实体类型</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  nest git:(master) ls nest/app/entity</span><br><span class="line">__pycache__    certificate.py location.py    plan.py        task.py        user.py</span><br></pre></td></tr></tbody></table></figure>
+
+<p>例如：</p>
+<ul>
+<li><code>task.py</code>中定义了类<code>Task</code>，表示一个任务；</li>
+<li><code>plan.py</code>中定义了类<code>Plan</code>，表示任务的一次触发计划，等等。</li>
+</ul>
+<p><code>entity/</code>目录下的各个文件中，还定义了管理各种实体对象生命期的仓库对象，例如：</p>
+<ul>
+<li><code>task.py</code>中定义了类<code>ITaskRepository</code>，它负责增（<code>add</code>方法）删（<code>clear</code>、<code>remove</code>方法）查（<code>find</code>、<code>find_by_id</code>方法）改（同样是<code>add</code>方法）任务对象；</li>
+<li><code>plan.py</code>中定义了类<code>IPlanRepository</code>，同样能够增（<code>add</code>方法）删（<code>clear</code>、<code>remove</code>方法）查（<code>find_as_queue</code>、<code>find_by_id</code>、<code>find_by_task_id</code>方法）改（同样是<code>add</code>方法）计划对象，等等。</li>
+</ul>
+<p>实体类型都是充血模型，它们实现了系统核心的业务规则，例如：</p>
+<ul>
+<li>类<code>Plan</code>有方法<code>is_repeated</code>用于检查是否为重复性任务；</li>
+<li>有方法<code>is_visible</code>用于检查该计划在当前时间是否可见；</li>
+<li>有方法<code>rebirth</code>用于生成一个新的、下一次触发的计划，等等。</li>
+</ul>
+<p>这个目录下的内容相当于整洁架构中的<code>Entities</code>层。</p>
+<h4 id="nest-app-use-case-目录"><a href="#nest-app-use-case-目录" class="headerlink" title="nest/app/use_case/目录"></a><code>nest/app/use_case/</code>目录</h4><p><code>nest/app/use_case/</code>目录下的各个文件分别定义了系统所提供的功能</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  nest git:(master) ls nest/app/use_case</span><br><span class="line">__init__.py        authenticate.py    change_task.py     create_plan.py     delete_plan.py     get_location.py    get_task.py        list_plan.py       login.py           registration.py</span><br><span class="line">__pycache__        change_plan.py     create_location.py create_task.py     delete_task.py     get_plan.py        list_location.py   list_task.py       pop_plan.py</span><br></pre></td></tr></tbody></table></figure>
+
+<p>例如：</p>
+<ul>
+<li><code>authenticate.py</code>定义了系统如何认证发送当前请求的用户；</li>
+<li><code>change_task.py</code>定义了系统如何修改一个任务对象，等等。</li>
+</ul>
+<p>每一个处于该目录下的文件，只会依赖<code>nest/app/entity/</code>中的代码，并且它们都是抽象的。例如，<code>authenticate.py</code>中的类<code>AuthenticateUseCase</code>的构造方法中，要求其：</p>
+<ul>
+<li>参数<code>certificate_repository</code>必须是类<code>ICertificateRepository</code>或其子类的实例；</li>
+<li>参数<code>params</code>必须是类<code>IParams</code>或其子类的实例。</li>
+</ul>
+<p>然而<code>ICertificateRepository</code>和<code>IParams</code>其实都是抽象基类<code>ABC</code>的子类，并且它们都有被装饰器<code>abstractmethod</code>装饰的抽象方法，因此并不能直接实例化。</p>
+<p>该目录相当于整洁架构中的<code>Use Cases</code>层。</p>
+<h4 id="其它目录"><a href="#其它目录" class="headerlink" title="其它目录"></a>其它目录</h4><p>顾名思义，<code>cli</code>和<code>web</code>目录分别是与命令行程序、基于HTTP的API相关的代码，它们实现了处理来自命令行和HTTP协议的输入，以及打印到终端和返回HTTP响应的功能。<code>repository</code>目录下的各个文件实现了<code>entity</code>目录中各个抽象的仓库类的具体子类</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(venv) ➜  nest git:(master) ls nest/repository</span><br><span class="line">DDL             __init__.py     __pycache__     certificate.py  db_operation.py location.py     plan.py         task.py         user.py</span><br></pre></td></tr></tbody></table></figure>
+
+<p>例如：</p>
+<ul>
+<li><code>certificate.py</code>中实现了<code>entity/</code>目录下的同名文件中的抽象类<code>ICertificateRepository</code>——一个基于内存的子类<code>MemoryCertificateRepository</code>，以及一个基于Redis的子类<code>RedisCertificateRepository</code>；</li>
+<li><code>location.py</code>中实现了<code>entity/</code>目录下的同名文件中的抽象类<code>ILocationRepository</code>——基于MySQL的子类<code>DatabaseLocationRepository</code>，等等。</li>
+</ul>
+<p>需要注意的是，除了<code>app</code>外的这些目录，并不能与整洁架构示意图中的外面两层严格对应起来。例如，尽管<code>cli</code>和<code>web</code>的名字一下子就让人认为它们处于<code>Frameworks &amp; Drivers</code>层，但<code>web/presenter/</code>目录下的内容其实与框架并无联系。反倒是从命名上看处于<code>Interface Adapters</code>层的<code>web/controller/</code>目录，其中的代码依赖于<code>Flask</code>框架。</p>
+<h3 id="如何往Use-Cases层传入数据"><a href="#如何往Use-Cases层传入数据" class="headerlink" title="如何往Use Cases层传入数据"></a>如何往<code>Use Cases</code>层传入数据</h3><p>在鲍勃大叔的文章中，提到了关于如何在层之间传递数据的原则</p>
+<blockquote>
+<p>Typically the data that crosses the boundaries is simple data structures. You can use basic structs or simple Data Transfer objects if you like.  Or the data can simply be arguments in function calls. Or you can pack  it into a hashmap, or construct it into an object.</p>
+</blockquote>
+<p>在<code>nest/app/use_case/</code>目录下的所有用例采用的都是这里提到的<code>construct it into an object</code>的方式。以<code>create_task.py</code>为例：</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">IParams</span>(<span class="title class_ inherited__">ABC</span>):</span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_brief</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_keywords</span>(<span class="params">self</span>) -&gt; <span class="type">List</span>[<span class="built_in">str</span>]:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_user_id</span>(<span class="params">self</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>用内置模块<code>abc</code>中的抽象基类<code>ABC</code>、装饰器<code>abstractmethod</code>，以及类<code>CreateTaskUseCase</code>中的<code>assert</code>一起模拟类似Java中的<code>interface</code>的效果；</li>
+<li>用方法而不是成员变量来获取不同的输入参数：<ul>
+<li><code>get_brief</code>获取任务的简述；</li>
+<li><code>get_keywords</code>获取关键字列表；</li>
+<li><code>get_user_id</code>获取创建该任务的用户的ID。</li>
+</ul>
+</li>
+</ul>
+<p>聪明的盲生已经发现了华点：明明只需要在类<code>CreateTaskUseCase</code>的构造方法中定义<code>brief</code>、<code>keywords</code>，以及<code>user_id</code>三个参数即可，为什么要用方法这么麻烦呢？答案是因为方法更灵活。</p>
+<p>当你采用构造方法参数的方案时，本质上是立了一个假设：</p>
+<ol>
+<li><del>在所有惯性系中，物理定律有相同的表达形式</del>先完成所有参数的获取；</li>
+<li>再执行用例中的业务逻辑。</li>
+</ol>
+<p>如果是一个基于HTTP协议的API，那么这个假设是成立的——用户在客户端发送的HTTP请求到达服务端后，便无法再补充参数了。但有一种场景，用户能够在用例执行业务逻辑的过程中，持续地与应用交互，那便是命令行程序。</p>
+<p>我在<code>fledgling</code>项目中给了一个用户在用例执行过程中，交互式地输入的例子。在文件<code>fledgling/app/use_case/delete_task.py</code>中，实现了删除指定任务的用例。它要求输入两个参数</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">IParams</span>(<span class="title class_ inherited__">ABC</span>):</span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_confirmation</span>(<span class="params">self</span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        <span class="string">"""获取用户是否要删除该任务的确认。"""</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_task_id</span>(<span class="params">self</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>在文件<code>fledgling/cli/command/delete_task.py</code>中实现了<code>IParams</code>类的命令行形态。当没有从命令行参数中获取到任务的ID时，便会使用第三方库<code>PyInquirer</code>询问用户输入任务ID，并进一步确认</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Params</span>(<span class="title class_ inherited__">IParams</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, *, task_id: <span class="type">Optional</span>[<span class="built_in">int</span>]</span>):</span><br><span class="line">        <span class="variable language_">self</span>.task_id = task_id</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_confirmation</span>(<span class="params">self</span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.task_id:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        questions = [</span><br><span class="line">            {</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'确定删除该任务'</span>,</span><br><span class="line">                <span class="string">'name'</span>: <span class="string">'confirmation'</span>,</span><br><span class="line">                <span class="string">'type'</span>: <span class="string">'confirm'</span>,</span><br><span class="line">            }</span><br><span class="line">        ]</span><br><span class="line">        answers = prompt(questions)</span><br><span class="line">        <span class="keyword">return</span> answers[<span class="string">'confirmation'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_task_id</span>(<span class="params">self</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>.task_id:</span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">self</span>.task_id</span><br><span class="line">        questions = [</span><br><span class="line">            {</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'输入要删除的任务的ID'</span>,</span><br><span class="line">                <span class="string">'name'</span>: <span class="string">'task_id'</span>,</span><br><span class="line">                <span class="string">'type'</span>: <span class="string">'input'</span>,</span><br><span class="line">            }</span><br><span class="line">        ]</span><br><span class="line">        answers = prompt(questions)</span><br><span class="line">        <span class="keyword">return</span> answers[<span class="string">'task_id'</span>]</span><br></pre></td></tr></tbody></table></figure>
+
+<p>而这一切<del>煮不在乎</del><code>DeleteTaskUseCase</code>并不会感知到，它独立于用户界面。</p>
+<h3 id="在哪一层维护业务规则"><a href="#在哪一层维护业务规则" class="headerlink" title="在哪一层维护业务规则"></a>在哪一层维护业务规则</h3><p>在《架构整洁之道》第20章中，鲍勃大叔给出了业务规则的定义</p>
+<blockquote>
+<p>Strictly speaking, business rules are rules or procedures that make or save<br>the business money. Very strictly speaking, these rules would make or save the business money, irrespective of whether they were implemented on a computer. They would make or save money even if they were executed manually.</p>
+</blockquote>
+<p>业务规则往往不是独立存在的，它们需要作用在一些数据上</p>
+<blockquote>
+<p>Critical Business Rules usually require some data to work with. For example, our loan requires a loan balance, an interest rate, and a payment schedule.</p>
+</blockquote>
+<p>而整洁架构中的实体就是包含了一部分业务规则及其操作的数据的对象。以<code>nest</code>中的计划实体为例，在类<code>Plan</code>中包含了几种业务规则——尽管这些规则不能为我赚钱或者省钱：</p>
+<ul>
+<li>一个计划的持续时长（如果有的话）不会是负的秒数——由<code>duration</code>的setter保障；</li>
+<li>周期性计划必须指定周期——由<code>new</code>方法维护；</li>
+<li>一个计划是重复的，当且仅当它有指定重复类型——由<code>is_repeated</code>方法维护；</li>
+<li>一个计划是可见的，当且仅当它：<ul>
+<li>要么没有指定可见的小时，要么当且时间处于指定的小时中，并且；</li>
+<li>要么没有指定星期几可见，要么今天是指定的<code>weekday</code>——由<code>is_visible</code>方法维护。</li>
+</ul>
+</li>
+</ul>
+<p>但在整洁架构的示意图中，<code>Use Cases</code>层也是有维护规则的，它维护的是应用的业务规则（<code>Application Business Rules</code>）。与<code>Entities</code>层所维护的业务规则不同，<code>Use Cases</code>层的业务规则取决于应用提供的功能。例如，在<code>nest</code>项目修改一个计划的用例<code>ChangePlanUseCase</code>类的方法<code>run</code>中，会：</p>
+<ol>
+<li>检查指定的计划是否存在——显然，实体没法检查自己是否存在；</li>
+<li>检查计划是否能被修改；</li>
+<li>检查新的地点的ID是否指向真实存在的地点对象——显然，<code>Plan</code>对象不会去检查<code>Location</code>存在与否；</li>
+</ol>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 文件nest/app/use_case/change_plan.py</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChangePlanUseCase</span>:</span><br><span class="line">    <span class="comment"># 省略__init__的定义</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 省略一些无关要紧的代码</span></span><br><span class="line">        params = <span class="variable language_">self</span>.params</span><br><span class="line">        plan_id = params.get_plan_id()</span><br><span class="line">        plan = <span class="variable language_">self</span>.plan_repository.find_by_id(plan_id)</span><br><span class="line">        <span class="keyword">if</span> plan <span class="keyword">is</span> <span class="literal">None</span>:  <span class="comment"># 上面第1点</span></span><br><span class="line">            <span class="keyword">raise</span> PlanNotFoundError(plan_id=plan_id)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> plan.is_changeable():  <span class="comment"># 上面第2点</span></span><br><span class="line">            <span class="keyword">raise</span> UnchangeableError()</span><br><span class="line"></span><br><span class="line">        found, location_id = params.get_location_id()</span><br><span class="line">        <span class="keyword">if</span> found:</span><br><span class="line">            <span class="keyword">if</span> location_id:</span><br><span class="line">                location = <span class="variable language_">self</span>.location_repository.get(id_=location_id)</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> location:  <span class="comment"># 上面第3点</span></span><br><span class="line">                    <span class="keyword">raise</span> LocationNotFoundError(location_id=location_id)</span><br><span class="line">            plan.location_id = location_id</span><br></pre></td></tr></tbody></table></figure>
+
+<p>聪明的你一定发现了：<code>is_changeable</code>为什么不作为<code>Enterpries Business Rules</code>，在<code>Plan</code>对象内自行检查呢？答案是因为这样写更简单。</p>
+<p>试想一下，如果要让<code>Plan</code>自己禁止在<code>is_changeable</code>为<code>False</code>时被修改，那么必须：</p>
+<ul>
+<li>先为所有可修改的属性设置setter；</li>
+<li>在每一个setter中都调用<code>is_changeable</code>进行检查。</li>
+</ul>
+<p>之所以要这么做，是因为一个实体对象（在这里是指<code>Plan</code>的实例对象）是外部的时间流动是无感知的。它不知道外层（此处是<code>Use Cases</code>层）会<strong>先</strong>调用哪一个方法，<strong>后</strong>调用哪一个方法。因此，要想保持“终止状态的计划不能修改”，就必须在每一处setter都检查。</p>
+<p>与之相反，在用例中有编排，因此它可以感知时间的流动。用例可以让<code>Plan</code>的<code>is_changeable</code>方法在其它任何方法之前被调用，因此免除了繁琐地在每一个setter中检查<code>is_changeable</code>的必要。</p>
+<h3 id="如何获取Use-Cases层的处理结果"><a href="#如何获取Use-Cases层的处理结果" class="headerlink" title="如何获取Use Cases层的处理结果"></a>如何获取<code>Use Cases</code>层的处理结果</h3><p>正如往<code>Use Cases</code>层中输入参数可以采用：</p>
+<ol>
+<li>直接在<code>__init__</code>中传入对应类型的参数，或；</li>
+<li>在<code>__init__</code>中传入一个能根据方法提取参数的对象。</li>
+</ol>
+<p>两种方案一样，获取<code>Use Cases</code>层的计算结果同样有两种方案：</p>
+<ol>
+<li>获取<code>run</code>方法的返回值，捕捉它的异常，或；</li>
+<li>在<code>__init__</code>中传入一个能够接受不同结果并处理的对象。</li>
+</ol>
+<p>在<code>nest</code>这样的仅仅提供HTTP API的应用中，第1种方案便已经足够了。例如，在文件<code>nest/web/controller/create_plan.py</code>中，类<code>CreatePlanUseCase</code>的<code>run</code>方法的返回值为创建的计划对象，如果<code>run</code>调用成功，这个controller会借助于<code>PlanPresenter</code>，将计划对象转换为JSON对象格式的字符串，返回给调用方；如果调用失败，那么controller中也会捕捉异常（如<code>InvalidRepeatTypeError</code>）并以另一种格式返回给调用方。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">create_plan</span>(<span class="params">certificate_repository, repository_factory</span>):</span><br><span class="line">    <span class="comment"># 省略了不必要的代码</span></span><br><span class="line">    params = HTTPParams()</span><br><span class="line">    use_case = CreatePlanUseCase(</span><br><span class="line">        location_repository=repository_factory.location(),</span><br><span class="line">        params=params,</span><br><span class="line">        plan_repository=repository_factory.plan(),</span><br><span class="line">        task_repository=repository_factory.task(),</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        plan = use_case.run()</span><br><span class="line">        presenter = PlanPresenter(plan=plan)</span><br><span class="line">        <span class="keyword">return</span> {  <span class="comment"># 成功的情形</span></span><br><span class="line">            <span class="string">'error'</span>: <span class="literal">None</span>,</span><br><span class="line">            <span class="string">'result'</span>: presenter.<span class="built_in">format</span>(),</span><br><span class="line">            <span class="string">'status'</span>: <span class="string">'success'</span>,</span><br><span class="line">        }, <span class="number">201</span></span><br><span class="line">    <span class="keyword">except</span> InvalidRepeatTypeError <span class="keyword">as</span> e:  <span class="comment"># 失败的情形</span></span><br><span class="line">        <span class="keyword">return</span> {</span><br><span class="line">            <span class="string">'error'</span>: {</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'不支持的重复类型：{}'</span>.<span class="built_in">format</span>(e.repeat_type),</span><br><span class="line">            },</span><br><span class="line">            <span class="string">'result'</span>: <span class="literal">None</span>,</span><br><span class="line">            <span class="string">'status'</span>: <span class="string">'failure'</span>,</span><br><span class="line">        }, <span class="number">422</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果想要更高的灵活性并且也有施展的空间，那么可以考虑第2种方案。例如<code>fledgling</code>项目中文件<code>fledgling/app/use_case/list_plan.py</code>中，就定义了一个接口<code>IPresenter</code></p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">IPresenter</span>(<span class="title class_ inherited__">ABC</span>):</span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_find_location</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_find_task</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">on_invalid_location</span>(<span class="params">self, *, error: InvalidLocationError</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @abstractmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">show_plans</span>(<span class="params">self, *, count: <span class="built_in">int</span>, plans: <span class="type">List</span>[Plan]</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>并且在用例的执行过程中，会多次向<code>self.presenter</code>传递数据</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ListPlanUseCase</span>:</span><br><span class="line">    <span class="comment"># 省略__init__方法</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self</span>):</span><br><span class="line">        location_id = <span class="literal">None</span></span><br><span class="line">        location_name = <span class="variable language_">self</span>.params.get_location_name()</span><br><span class="line">        no_location = <span class="variable language_">self</span>.params.get_no_location()</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> no_location <span class="keyword">and</span> location_name <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            locations = <span class="variable language_">self</span>.location_repository.find(name=location_name)</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(locations) == <span class="number">0</span>:</span><br><span class="line">                <span class="variable language_">self</span>.presenter.on_invalid_location(error=InvalidLocationError(name=location_name))  <span class="comment"># 第1次，触发无效地点的错误</span></span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">            location_id = locations[<span class="number">0</span>].<span class="built_in">id</span></span><br><span class="line"></span><br><span class="line">        page = <span class="variable language_">self</span>.params.get_page()</span><br><span class="line">        per_page = <span class="variable language_">self</span>.params.get_per_page()</span><br><span class="line">        criteria = {</span><br><span class="line">            <span class="string">'page'</span>: page,</span><br><span class="line">            <span class="string">'per_page'</span>: per_page,</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> location_id <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            criteria[<span class="string">'location_id'</span>] = location_id</span><br><span class="line">        plans, count = <span class="variable language_">self</span>.plan_repository.<span class="built_in">list</span>(**criteria)</span><br><span class="line">        location_ids = [plan.location_id <span class="keyword">for</span> plan <span class="keyword">in</span> plans]</span><br><span class="line">        <span class="variable language_">self</span>.presenter.on_find_location()  <span class="comment"># 第2次交互，通知presenter开始查找地点的事件</span></span><br><span class="line">        locations = <span class="variable language_">self</span>.location_repository.find(</span><br><span class="line">            ids=location_ids,</span><br><span class="line">            page=<span class="number">1</span>,</span><br><span class="line">            per_page=<span class="built_in">len</span>(location_ids),</span><br><span class="line">        )</span><br><span class="line">        task_ids = [plan.task_id <span class="keyword">for</span> plan <span class="keyword">in</span> plans]</span><br><span class="line">        <span class="variable language_">self</span>.presenter.on_find_task()  <span class="comment"># 第3次交互，通知presenter开始查找任务的事件</span></span><br><span class="line">        tasks = <span class="variable language_">self</span>.task_repository.<span class="built_in">list</span>(</span><br><span class="line">            page=<span class="number">1</span>,</span><br><span class="line">            per_page=<span class="built_in">len</span>(task_ids),</span><br><span class="line">            task_ids=task_ids,</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">for</span> plan <span class="keyword">in</span> plans:</span><br><span class="line">            location_id = plan.location_id</span><br><span class="line">            location = [location <span class="keyword">for</span> location <span class="keyword">in</span> locations <span class="keyword">if</span> location.<span class="built_in">id</span> == location_id][<span class="number">0</span>]</span><br><span class="line">            plan.location = location</span><br><span class="line">            task_id = plan.task_id</span><br><span class="line">            task = [task <span class="keyword">for</span> task <span class="keyword">in</span> tasks <span class="keyword">if</span> task.<span class="built_in">id</span> == task_id][<span class="number">0</span>]</span><br><span class="line">            plan.task = task</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 第4次，也是最后一次，传入用例的处理结果</span></span><br><span class="line">        <span class="variable language_">self</span>.presenter.show_plans(</span><br><span class="line">            count=count,</span><br><span class="line">            plans=plans,</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>在构造方法中注入<code>presenter</code>的缺点在于用例的<code>run</code>方法中需要显式地<code>return</code>，否则用例会继续执行下去。</p>
+<h3 id="Python语言特性的运用"><a href="#Python语言特性的运用" class="headerlink" title="Python语言特性的运用"></a>Python语言特性的运用</h3><h4 id="模拟接口——abstractmethodv-s-NotImplementedError"><a href="#模拟接口——abstractmethodv-s-NotImplementedError" class="headerlink" title="模拟接口——abstractmethodv.s.NotImplementedError"></a>模拟接口——<code>abstractmethod</code>v.s.<code>NotImplementedError</code></h4><p>整洁架构的每一层都只会依赖于内层，而内层又对外层一无所知，负责解耦两者的便是编程语言的接口特性。但Python并不像Java那般有<code>interface</code>关键字，因此我利用它的其它一系列特性来模拟出接口：</p>
+<ul>
+<li>用<code>class</code>代替<code>interface</code>，这些类继承自内置模块<code>abc</code>的抽象基类<code>ABC</code>；</li>
+<li>除此之外，这些类中的方法还用同一模块中的<code>abstractmethod</code>装饰，使它们必须由该类的子类全部定义；</li>
+<li>在使用这个接口的位置（例如<code>Use Cases</code>层）用断言<code>assert</code>约束输入参数的类型。</li>
+</ul>
+<p><code>nest</code>中的大部分需要接口的位置我都是用这种手法来做的，但这种方式会给编写单元测试用例带来一些不便：</p>
+<ol>
+<li>因为代码中用<code>assert</code>来检查参数类型，导致传入的参数只能是这个接口或其子类的实例；</li>
+<li>因为接口类继承自<code>ABC</code>，所以必须定义所有被<code>abstractmethod</code>装饰的方法，否则在实例化时就会抛出异常。</li>
+</ol>
+<p>例如，在<code>nest</code>项目的文件<code>tests/use_case/task/test_list.py</code>中，作为白盒测试的人员，我确切地知道类<code>ListTaskUseCase</code>的<code>run</code>方法只会调用它的<code>task_repository</code>的<code>find</code>方法，但在类<code>MockTaskRepository</code>中依然不得不定义基类的每一个方法——尽管它们只有一行<code>pass</code>语句。</p>
+<p>如果愿意放弃一点点的严谨性，那么可以弱化一下上面的接口方案：</p>
+<ol>
+<li>不使用<code>abstractmethod</code>，而是在本应为抽象方法的方法中只留下一句<code>raise NotImplementedError</code>；</li>
+<li>不使用<code>assert</code>检查类型，而是在参数中写上type hint。</li>
+</ol>
+<p>有了第1点，那么在测试用例中就不需要为测试路径上不会调用的方法写多余的定义了。而有了第2点，也就不需要为测试路径上不会引用的属性创建对象了，大可直接传入一个<code>None</code>。选择哪一种都无妨，取决于开发者或团队的口味。</p>
+<h2 id="金坷垃整洁架构的好处都有啥"><a href="#金坷垃整洁架构的好处都有啥" class="headerlink" title="金坷垃整洁架构的好处都有啥"></a><del>金坷垃</del>整洁架构的好处都有啥</h2><p>在《架构整洁之道》的第20章，作者给出了整洁架构的五种优秀特性：</p>
+<ul>
+<li>独立于框架。例如，我可以花不是很大的力气，将<code>nest</code>从<a href="https://flask.palletsprojects.com/en/2.0.x/">Flask</a>迁移到<a href="http://bottlepy.org/docs/dev/">Bottle</a>上，尽管并不会无缘无故或频繁地这么做；</li>
+<li>容易测试。例如，在<code>nest</code>项目的目录<code>tests/use_case</code>下的测试用例不需要有任何外部系统的依赖就可以编写并运行；</li>
+<li>独立于用户界面。例如，在<code>nest</code>项目中同一个用例<code>RegistrationUseCase</code>就有HTTP API和命令行两种用户界面：<ul>
+<li>在文件<code>nest/web/controller/registration.py</code>中是HTTP API形态；</li>
+<li>在文件<code>nest/cli/command/register.py</code>中则是命令行形态。</li>
+</ul>
+</li>
+<li>独立于数据库。例如，就像更换Web框架一样，我也可以从MySQL迁移到PostgreSQL中，这对于<code>Entities</code>和<code>Use Cases</code>层的代码而言别无二致；</li>
+<li>独立于外部系统。例如，在<code>fledgling</code>项目中，尽管也定义了一个接口<code>ITaskRepository</code>，但不同于<code>nest</code>中基于数据库的实现子类<code>DatabaseTaskRepository</code>，在<code>fledgling</code>中实现的是基于网络传输的类<code>TaskRepository</code>。但究竟是基于单机数据库，还是身处一个分布式系统（C/S模型）中，<code>Entities</code>和<code>Use Cases</code>层对此是无感知的。</li>
+</ul>
+<h2 id="甘瓜苦蒂——整洁架构的不足"><a href="#甘瓜苦蒂——整洁架构的不足" class="headerlink" title="甘瓜苦蒂——整洁架构的不足"></a>甘瓜苦蒂——整洁架构的不足</h2><h3 id="渗入内层的I-O"><a href="#渗入内层的I-O" class="headerlink" title="渗入内层的I/O"></a>渗入内层的I/O</h3><!-- 无法隐藏的I/O -->
+
+<!-- 在整洁架构中，为了不在entity层面感知到数据库，但又为了可以最终利用到数据库的事务能力，发明了基于start_transaction/commit/rollback的抽象方法。其中，当需要多个repository联合使用事务时，可以将多个repository传入到start_transaction的参数中。 -->
+
+<!-- 设计模式的运用 -->
+
+<!-- Python的module v.s. 单例模式 -->
+
+<!-- repository.py中的工厂方法模式 -->
+
+<!-- SOLID原则的体现 -->
+
+<!-- 书中是如何理解SOLID原则的，给出每一个对应章节的解释。 -->
+
+<!-- 不同编程语言实践整洁架构的体会 -->
+
+<!-- Python如何 -->
+
+<!-- CL如何 -->
+
+<!-- go如何 -->
+
+
       
     </div>
 
@@ -342,7 +628,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2022/05/02/all-first-registers-to-strings/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/06/26/%E6%A8%A1%E6%8B%9F%E5%B0%8F%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E7%9F%AD%E8%B7%AF%E7%89%B9%E6%80%A7/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -356,7 +642,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/02/all-first-registers-to-strings/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2021/06/26/%E6%A8%A1%E6%8B%9F%E5%B0%8F%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E7%9F%AD%E8%B7%AF%E7%89%B9%E6%80%A7/" class="post-title-link" itemprop="url">模拟小于运算符的短路特性</a>
         </h1>
 
         <div class="post-meta">
@@ -366,7 +652,25 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2022-05-02 11:18:35" itemprop="dateCreated datePublished" datetime="2022-05-02T11:18:35+08:00">2022-05-02</time>
+              <time title="创建时间：2021-06-26 11:02:53" itemprop="dateCreated datePublished" datetime="2021-06-26T11:02:53+08:00">2021-06-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-02 11:18:50" itemprop="dateModified" datetime="2022-05-02T11:18:50+08:00">2022-05-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AE%9E%E6%88%98CommonLisp/" itemprop="url" rel="index">
+                    <span itemprop="name">实战CommonLisp</span>
+                  </a>
+                </span>
             </span>
 
           
@@ -378,8 +682,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2022/05/02/all-first-registers-to-strings/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/05/02/all-first-registers-to-strings/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/06/26/%E6%A8%A1%E6%8B%9F%E5%B0%8F%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E7%9F%AD%E8%B7%AF%E7%89%B9%E6%80%A7/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/06/26/模拟小于运算符的短路特性/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -394,7 +698,47 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p><del>忆往昔峥嵘岁月稠</del>在Python的语言标准的<a href="https://docs.python.org/3/reference/expressions.html#comparisons">Comparisions章节</a>中提到</p>
+<blockquote>
+<p>Also unlike C, expressions like a &lt; b &lt; c have the interpretation that is conventional in mathematics</p>
+</blockquote>
+<p>也就是说，在C语言中要写成<code>a &lt; b &amp;&amp; b &lt; c</code>的表达式，在Python中可以写成<code>a &lt; b &lt; c</code>。并且，标准中还提到</p>
+<blockquote>
+<p>Comparisons can be chained arbitrarily, e.g., x &lt; y &lt;= z is equivalent to x &lt; y and y &lt;= z, except that y is evaluated only once (but in both cases z is not evaluated at all when x &lt; y is found to be false).</p>
+</blockquote>
+<p>一般将这种性质成为短路。因此，像<code>2 &lt; 1 &lt; (1 / 0)</code>这样的表达式在Python中不会引发异常，而是返回<code>False</code>。</p>
+<p>Python的小于号能拥有短路特性，是因为它并非一个普通函数，而是有语言层面加持的操作符。而在Common Lisp（下称CL）中，小于号仅仅是一个普通函数，就像Haskell中的小于号也是一个函数一般。不同的是，CL的小于号能接受多于两个的参数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">&lt;</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">-1</span>) <span class="comment">; 结果为NIL</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>但它并没有短路特性</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">&lt;</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">-1</span> (<span class="name">/</span> <span class="number">1</span> <span class="number">0</span>)) <span class="comment">; 引发名为DIVISION-BY-ZERO的错误</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>要想模拟出具有短路特性的小于号，必须借助于宏的力量。</p>
+<h1 id="想生成什么样的代码"><a href="#想生成什么样的代码" class="headerlink" title="想生成什么样的代码"></a>想生成什么样的代码</h1><p>要想写出一个宏，必须先设想出它的语法，以及它会展开成什么样的代码。姑且为这个宏起名为<code>less-than</code>，它的语法应当为</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> less-than (<span class="name">form</span> <span class="symbol">&amp;rest</span> more-forms)</span><br><span class="line">  <span class="comment">; TBC</span></span><br><span class="line">  )</span><br></pre></td></tr></tbody></table></figure>
+
+<p>至于它的展开结果可以有多种选择。例如，可以<code>(less-than 2 1 (/ 1 0))</code>展开为自身具有短路特性的<code>and</code>形式</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">and</span> (<span class="name">&lt;</span> <span class="number">2</span> <span class="number">1</span>) (<span class="name">&lt;</span> <span class="number">1</span> (<span class="name">/</span> <span class="number">1</span> <span class="number">0</span>)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但就像在C语言中用宏朴素地实现计算二者最大值的<code>MAX</code>宏一样，上面的展开方式在一些情况下会招致重复求值</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">less-than</span> <span class="number">1</span> (<span class="name">progn</span> (<span class="name">print</span> 'hello) <span class="number">2</span>) <span class="number">3</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>因此，起码要展开为<code>and</code>和<code>let</code>的搭配</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">g917</span> <span class="number">1</span>)</span><br><span class="line">      (<span class="name">g918</span> (<span class="name">progn</span> (<span class="name">print</span> 'hello) <span class="number">2</span>)))</span><br><span class="line">  (<span class="name">and</span> (<span class="name">&lt;</span> g917 g918)</span><br><span class="line">       (<span class="name">let</span> ((<span class="name">g919</span> <span class="number">3</span>))</span><br><span class="line">         (<span class="name">&lt;</span> g918 g919))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>要想展开为这种结构，可以如这般实现<code>less-than</code></p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> less-than (<span class="name">form</span> <span class="symbol">&amp;rest</span> more-forms)</span><br><span class="line">  (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">lhs</span> forms)</span><br><span class="line">             <span class="string">"LHS表示紧接着下一次要比较的、小于号的左操作数。"</span></span><br><span class="line">             (<span class="name">unless</span> forms</span><br><span class="line">               (<span class="name">return-from</span> aux))</span><br><span class="line">             (<span class="name">let*</span> ((<span class="name">rhs</span> (<span class="name">gensym</span>))</span><br><span class="line">                    (<span class="name">rv</span> (<span class="name">aux</span> rhs (<span class="name">rest</span> forms))))</span><br><span class="line">               (<span class="name">if</span> rv</span><br><span class="line">                   `(let ((,rhs ,(first forms)))</span><br><span class="line">                      (and (&lt; ,lhs ,rhs)</span><br><span class="line">                           ,rv))</span><br><span class="line">                   `(&lt; ,lhs ,(first forms))))))</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">null</span> more-forms)</span><br><span class="line">           `(&lt; ,form))</span><br><span class="line">          (<span class="name">t</span></span><br><span class="line">           (<span class="name">let</span> ((<span class="name">lhs</span> (<span class="name">gensym</span>)))</span><br><span class="line">             `(let ((,lhs ,form))</span><br><span class="line">                ,(aux lhs more-forms)))))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>用上面的输入验证一下是否会导致重复求值</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">macroexpand-1</span> '(less-than <span class="number">1</span> (progn (print 'hello) <span class="number">2</span>) <span class="number">3</span>))</span><br><span class="line">(<span class="name">LET</span> ((<span class="name">#</span><span class="symbol">:G942</span> <span class="number">1</span>))</span><br><span class="line">  (<span class="name">LET</span> ((<span class="name">#</span><span class="symbol">:G943</span> (<span class="name">PROGN</span> (<span class="name">PRINT</span> 'HELLO) <span class="number">2</span>)))</span><br><span class="line">    (<span class="name">AND</span> (<span class="name">&lt;</span> #<span class="symbol">:G942</span> #<span class="symbol">:G943</span>) (<span class="name">&lt;</span> #<span class="symbol">:G943</span> <span class="number">3</span>))))</span><br><span class="line">T</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="优化一下"><a href="#优化一下" class="headerlink" title="优化一下"></a>优化一下</h1><p>显然<code>less-than</code>可以优化，只需要简单地运用递归的技巧即可</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> less-than (<span class="name">form</span> <span class="symbol">&amp;rest</span> more-forms)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">&lt;=</span> (<span class="name">length</span> more-forms) <span class="number">1</span>)</span><br><span class="line">         `(&lt; ,form ,@more-forms))</span><br><span class="line">        (<span class="name">t</span></span><br><span class="line">         (<span class="name">let</span> ((<span class="name">lhs</span> (<span class="name">gensym</span>))</span><br><span class="line">               (<span class="name">rhs</span> (<span class="name">gensym</span>)))</span><br><span class="line">           `(let ((,lhs ,form)</span><br><span class="line">                  (,rhs ,(first more-forms)))</span><br><span class="line">              (and (&lt; ,lhs ,rhs)</span><br><span class="line">                   (less-than ,rhs ,@(rest more-forms))))))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>展开后的代码简短得多</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">macroexpand-1</span> '(less-than <span class="number">1</span> (progn (print 'hello) <span class="number">2</span>) <span class="number">3</span>))</span><br><span class="line">(<span class="name">LET</span> ((<span class="name">#</span><span class="symbol">:G955</span> <span class="number">1</span>) (<span class="name">#</span><span class="symbol">:G956</span> (<span class="name">PROGN</span> (<span class="name">PRINT</span> 'HELLO) <span class="number">2</span>)))</span><br><span class="line">  (<span class="name">AND</span> (<span class="name">&lt;</span> #<span class="symbol">:G955</span> #<span class="symbol">:G956</span>) (<span class="name">LESS-THAN</span> #<span class="symbol">:G956</span> <span class="number">3</span>)))</span><br><span class="line">T</span><br></pre></td></tr></tbody></table></figure>
+
+
       
     </div>
 
@@ -413,7 +757,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2022/05/02/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/06/14/%E4%BB%8EAOP%E5%88%B0method-combination/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -427,7 +771,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2022/05/02/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2021/06/14/%E4%BB%8EAOP%E5%88%B0method-combination/" class="post-title-link" itemprop="url">从AOP到method-combination</a>
         </h1>
 
         <div class="post-meta">
@@ -436,8 +780,20 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-05-02 11:18:18" itemprop="dateCreated datePublished" datetime="2022-05-02T11:18:18+08:00">2022-05-02</time>
+              <time title="创建时间：2021-06-14 20:28:28 / 修改时间：20:30:38" itemprop="dateCreated datePublished" datetime="2021-06-14T20:28:28+08:00">2021-06-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AE%9E%E6%88%98Elisp/" itemprop="url" rel="index">
+                    <span itemprop="name">实战Elisp</span>
+                  </a>
+                </span>
             </span>
 
           
@@ -449,8 +805,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2022/05/02/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/05/02/非递归遍历二叉树到底有什么用/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/06/14/%E4%BB%8EAOP%E5%88%B0method-combination/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/06/14/从AOP到method-combination/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -465,7 +821,75 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <blockquote>
+<p>“实战Elisp”系列旨在讲述我使用Elisp定制Emacs的经验，抛砖引玉，还请广大Emacs同好不吝赐教——如果真的有广大Emacs用户的话，哈哈哈。</p>
+</blockquote>
+<p>Emacs的org-mode用的是一门叫Org的标记语言，正如大部分的标记语言那样，它也支持无序列表和检查清单——前者以<code>- </code>（一个连字符、一个空格）为前缀，后者以<code>- [ ] </code>或<code>- [x] </code>为前缀（比无序列表多了一对方括号及中间的字母<code>x</code>）</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/org%E6%A8%A1%E5%BC%8F%E4%B8%ADcheckbox%E7%9A%84%E8%AF%AD%E6%B3%95.jpg"></p>
+<p>此外，org-mode还为编辑这两种列表提供了快速插入新一行的快捷键<code>M-RET</code>（即按住<code>alt</code>键并按下回车键）。如果光标位于无序列表中，那么新的一行将会自动插入<code>- </code>前缀。遗憾的是，如果光标位于检查清单中，那么新一行并没有自动插入一对方括号</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/%E5%9C%A8Emacs%E4%B8%AD%E7%94%A8alt%E5%9B%9E%E8%BD%A6%E6%B7%BB%E5%8A%A0%E4%B8%80%E8%A1%8C.gif"></p>
+<p>每次都要手动敲入<code>[ ] </code>还挺繁琐的。好在这是Emacs，它是可扩展的、可定制的。只需敲几行代码，就可以让Emacs代劳输入方括号了。</p>
+<h1 id="Emacs的AOP特性——advice-add"><a href="#Emacs的AOP特性——advice-add" class="headerlink" title="Emacs的AOP特性——advice-add"></a>Emacs的AOP特性——<code>advice-add</code></h1><p>借助Emacs的<code>describe-key</code>功能，可以知道在一个<code>org-mode</code>的文件中按下<code>M-RET</code>时，Emacs会调用到函数<code>org-insert-item</code>上。要想让<code>M-RET</code>实现自动追加方括号的效果，马上可以想到简单粗暴的办法：</p>
+<ul>
+<li>定义一个新的函数，并将<code>M-RET</code>绑定到它身上；</li>
+<li>重新定义<code>org-insert-item</code>函数，使其追加方括号；</li>
+</ul>
+<p>但不管是上述的哪一种，都需要连带着重新实现插入连字符、空格前缀的已有功能。有一种更温和的办法可以在现有的<code>org-insert-item</code>的基础上扩展它的行为，那就是Emacs的<code>advice</code>特性。</p>
+<p><code>advice</code>是面向切面编程范式的一种，使用Emacs的<code>advice-add</code>函数，可以在一个普通的函数被调用前或被调用后捎带做一些事情——比如追加一对方括号。对于这两个时机，分别可以直接用<code>advice-add</code>的<code>:before</code>和<code>:after</code>来实现，但用在这里都不合适，因为：</p>
+<ul>
+<li>检测是否位于检查清单中，需要在调用<code>org-insert-item</code>前做；</li>
+<li>追加一对方括号，则需要在<code>org-insert-item</code>之后做。</li>
+</ul>
+<p>因此，正确的做法是使用<code>:around</code>来修饰原始的<code>org-insert-item</code>函数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-defun</span> lt-around-org-insert-item (<span class="name">oldfunction</span> <span class="symbol">&amp;rest</span> args)</span><br><span class="line">  <span class="string">"在调用了org-insert-item后识时务地追加 [ ]这样的内容。"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">is-checkbox</span> <span class="literal">nil</span>)</span><br><span class="line">        (<span class="name">line</span> (<span class="name">buffer-substring-no-properties</span> (<span class="name">line-beginning-position</span>) (<span class="name">line-end-position</span>))))</span><br><span class="line">    <span class="comment">;; 检查当前行是否为checkbox</span></span><br><span class="line">    (<span class="name">when</span> (<span class="name">string-match-p</span> <span class="string">"- \\[.\\]"</span> line)</span><br><span class="line">      (<span class="name">setf</span> is-checkbox <span class="literal">t</span>))</span><br><span class="line">    <span class="comment">;; 继续使用原来的org-insert-item插入文本</span></span><br><span class="line">    (<span class="name">apply</span> oldfunction args)</span><br><span class="line">    <span class="comment">;; 决定要不要追加“ [ ]”字符串</span></span><br><span class="line">    (<span class="name">when</span> is-checkbox</span><br><span class="line">      (<span class="name">insert</span> <span class="string">"[ ] "</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">advice-add</span> 'org-insert-item <span class="symbol">:around</span> #'lt-around-org-insert-item)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这下子，<code>M-RET</code>对检查清单也一视同仁了</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/advice%E5%90%8E%E7%9A%84%E6%95%88%E6%9E%9C.gif"></p>
+<h1 id="Common-Lisp的method-combination"><a href="#Common-Lisp的method-combination" class="headerlink" title="Common Lisp的method combination"></a>Common Lisp的<code>method combination</code></h1><p><code>advice-add</code>的<code>:after</code>、<code>:around</code>，以及<code>:before</code>在Common Lisp中有着完全同名的等价物，只不过不是用一个叫<code>advice-add</code>的函数，而是喂给一个叫<code>defmethod</code>的宏。举个例子，用<code>defmethod</code>可以定义出一个多态的<code>len</code>函数，对不同类型的入参执行不同的逻辑</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defgeneric</span> len (<span class="name">x</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">length</span> x))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len ((<span class="name">x</span> hash-table))</span><br><span class="line">  (<span class="name">hash-table-count</span> x))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后为其中参数类型为字符串的特化版本定义对应的<code>:after</code>、<code>:around</code>，以及<code>:before</code>修饰过的方法</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmethod</span> len <span class="symbol">:after</span> ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"after len~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len <span class="symbol">:around</span> ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"around中调用len前~%"</span>)</span><br><span class="line">  (<span class="name">prog1</span></span><br><span class="line">      (<span class="name">call-next-method</span>)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"around中调用len后~%"</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> len <span class="symbol">:before</span> ((<span class="name">x</span> string))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"before len~%"</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这一系列方法的调用规则为：</p>
+<ol>
+<li>先调用<code>:around</code>修饰的方法；</li>
+<li>由于上述方法中调用了<code>call-next-method</code>，因此再调用<code>:before</code>修饰的方法；</li>
+<li>调用不加修饰的方法（在CL中这称为<code>primary</code>方法）；</li>
+<li>再调用<code>:after</code>修饰的方法；</li>
+<li>最后，又回到了<code>:around</code>中调用<code>call-next-method</code>的位置。</li>
+</ol>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/%E5%AE%9E%E9%99%85%E6%95%88%E6%9E%9C.jpg"></p>
+<p>咋看之下，Emacs的<code>advice-add</code>支持的修饰符要多得多，实则不然。在CL中，<code>:after</code>、<code>:around</code>，以及<code>:before</code>同属于一个名为<code>standard</code>的<code>method combination</code>，而CL还内置了其它的<code>method combination</code>。在<a href="https://lispcookbook.github.io/cl-cookbook/clos.html#method-qualifiers-before-after-around">《Other method combinations》</a>一节中，作者演示了<code>progn</code>和<code>list</code>的例子。</p>
+<p>如果想要模拟Emacs的<code>advice-add</code>所支持的其它修饰符，那么就必须定义新的<code>method combination</code>了。</p>
+<h1 id="可编程的编程语言——define-method-combination"><a href="#可编程的编程语言——define-method-combination" class="headerlink" title="可编程的编程语言——define-method-combination"></a>可编程的编程语言——<code>define-method-combination</code></h1><p>曾经我以为，<code>defmethod</code>只能接受<code>:after</code>、<code>:around</code>，以及<code>:before</code>，认为这三个修饰符是必须在语言一级支持的特性。直到有一天我闯入了LispWorks的<a href="http://www.lispworks.com/documentation/HyperSpec/Body/m_defi_4.htm">define-method-combination</a>词条中，才发现它们也是三个平凡的修饰符而已。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define-method-combination</span> standard ()</span><br><span class="line">  ((<span class="name">around</span> (<span class="symbol">:around</span>))</span><br><span class="line">   (<span class="name">before</span> (<span class="symbol">:before</span>))</span><br><span class="line">   (<span class="name">primary</span> () <span class="symbol">:required</span> <span class="literal">t</span>)</span><br><span class="line">   (<span class="name">after</span> (<span class="symbol">:after</span>)))</span><br><span class="line">  (<span class="name">flet</span> ((<span class="name">call-methods</span> (<span class="name">methods</span>)</span><br><span class="line">           (<span class="name">mapcar</span> #'(lambda (method)</span><br><span class="line">                       `(call-method ,method))</span><br><span class="line">                   methods)))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">form</span> (<span class="name">if</span> (<span class="name">or</span> before after (<span class="name">rest</span> primary))</span><br><span class="line">                    `(multiple-value-prog1</span><br><span class="line">                         (progn ,@(call-methods before)</span><br><span class="line">                                (call-method ,(first primary)</span><br><span class="line">                                             ,(rest primary)))</span><br><span class="line">                       ,@(call-methods (reverse after)))</span><br><span class="line">                    `(call-method ,(first primary)))))</span><br><span class="line">      (<span class="name">if</span> around</span><br><span class="line">          `(call-method ,(first around)</span><br><span class="line">                        (,@(rest around)</span><br><span class="line">                           (make-method ,form)))</span><br><span class="line">          form))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210614/DIO%E5%B0%B1%E6%98%AF%E5%8E%89%E5%AE%B3%E6%A2%97%E5%9B%BE.jpg"></p>
+<p>秉持“柿子要挑软的捏”的原则，让我来尝试模拟出<code>advice-add</code>的<code>:after-while</code>和<code>:before-while</code>的效果吧。</p>
+<p><code>:after-while</code>和<code>:before-while</code>的效果还是很容易理解的</p>
+<blockquote>
+<p>Call function after the old function and only if the old function returned non-<code>nil</code>.</p>
+<p>Call function before the old function and don’t call the old function if function returns <code>nil</code>.</p>
+</blockquote>
+<p>因此，由<code>define-method-combination</code>生成的<code>form</code>中（犹记得伞哥在《PCL》中将它翻译为形式），势必要：</p>
+<ul>
+<li>检查是否有被<code>:before-while</code>修饰的方法；</li>
+<li>如果有，检查调用了被<code>:before-while</code>修饰的方法后的返回值是否为<code>NIL</code>；</li>
+<li>如果没有，或者被<code>:before-while</code>修饰的方法的返回值为非<code>NIL</code>，便调用<code>primary</code>方法；</li>
+<li>如果有被<code>:after-while</code>修饰的方法，并且<code>primary</code>方法的返回值不为<code>NIL</code>，就调用这些方法；</li>
+<li>返回<code>primary</code>方法的返回值。</li>
+</ul>
+<p>为了简单起见，尽管<code>after-while</code>和<code>before-while</code>变量指向的是多个“可调用”的方法，但这里只调用“最具体”的一个。</p>
+<p>给这个新的<code>method combination</code>取名为<code>emacs-advice</code>，其具体实现已是水到渠成</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define-method-combination</span> emacs-advice ()</span><br><span class="line">  ((<span class="name">after-while</span> (<span class="symbol">:after-while</span>))</span><br><span class="line">   (<span class="name">before-while</span> (<span class="symbol">:before-while</span>))</span><br><span class="line">   (<span class="name">primary</span> () <span class="symbol">:required</span> <span class="literal">t</span>))</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">after-while-fn</span> (<span class="name">first</span> after-while))</span><br><span class="line">        (<span class="name">before-while-fn</span> (<span class="name">first</span> before-while))</span><br><span class="line">        (<span class="name">result</span> (<span class="name">gensym</span>)))</span><br><span class="line">    `(let ((,result (when ,before-while-fn</span><br><span class="line">                      (call-method ,before-while-fn))))</span><br><span class="line">       (when (or (null ,before-while-fn)</span><br><span class="line">                 ,result)</span><br><span class="line">         (let ((,result (call-method ,(first primary))))</span><br><span class="line">           (when (and ,result ,after-while-fn)</span><br><span class="line">             (call-method ,after-while-fn))</span><br><span class="line">           ,result)))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>call-method</code>（以及它的搭档<code>make-method</code>）是专门用于在<code>define-method-combination</code>中调用传入的方法的宏。</p>
+<p>用一系列<code>foobar</code>方法来验证一番</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defgeneric</span> foobar (<span class="name">x</span>)</span><br><span class="line">  (<span class="symbol">:method-combination</span> emacs-advice))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> foobar (<span class="name">x</span>)</span><br><span class="line">  'hello)</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> foobar <span class="symbol">:after-while</span> (<span class="name">x</span>)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> x))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"for side effect~%"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> foobar <span class="symbol">:before-while</span> (<span class="name">x</span>)</span><br><span class="line">  (<span class="name">evenp</span> x))</span><br><span class="line"></span><br><span class="line">(<span class="name">foobar</span> <span class="number">1</span>) <span class="comment">;; 返回NIL</span></span><br><span class="line">(<span class="name">foobar</span> <span class="number">2</span>) <span class="comment">;; 打印“fo side effect”，并返回HELLO</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>尽管我对CL赏识有加，但越是琢磨<code>define-method-combination</code>，就越会发现编程语言的能力是有极限的<del>，除非超越编程语言</del>。比如Emacs的<code>advice-add</code>所支持的<code>:filter-args</code>和<code>:filter-return</code>就无法用<code>define-method-combination</code>优雅地实现出来——并不是完全不行，只不过需要将它们合并在由<code>:around</code>修饰的方法之中。</p>
+
       
     </div>
 
@@ -484,7 +908,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/10/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AE%A1Java%E5%8F%AB%E5%8D%95%E6%B4%BE%E5%8F%91%E4%BB%A5%E5%8F%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%B4%BE%E5%8F%91/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/05/03/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -498,7 +922,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2021/10/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AE%A1Java%E5%8F%AB%E5%8D%95%E6%B4%BE%E5%8F%91%E4%BB%A5%E5%8F%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%B4%BE%E5%8F%91/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2021/05/03/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/" class="post-title-link" itemprop="url">非递归遍历二叉树到底有什么用</a>
         </h1>
 
         <div class="post-meta">
@@ -508,8 +932,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-10-15 23:43:05" itemprop="dateCreated datePublished" datetime="2021-10-15T23:43:05+08:00">2021-10-15</time>
+              <time title="创建时间：2021-05-03 11:58:11" itemprop="dateCreated datePublished" datetime="2021-05-03T11:58:11+08:00">2021-05-03</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-02 11:18:26" itemprop="dateModified" datetime="2022-05-02T11:18:26+08:00">2022-05-02</time>
+              </span>
 
           
   
@@ -520,8 +951,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/10/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AE%A1Java%E5%8F%AB%E5%8D%95%E6%B4%BE%E5%8F%91%E4%BB%A5%E5%8F%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%B4%BE%E5%8F%91/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/10/15/为什么管Java叫单派发以及什么是多派发/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/05/03/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/05/03/非递归遍历二叉树到底有什么用/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -536,7 +967,47 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p>准备过互联网公司的服务端岗位面试的人，对于二叉树的三种遍历方式想必是如数家珍。假设以类<code>BinaryTree</code>定义一棵二叉树</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BinaryTree</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, left, right, value</span>):</span><br><span class="line">        <span class="variable language_">self</span>.left = left</span><br><span class="line">        <span class="variable language_">self</span>.right = right</span><br><span class="line">        <span class="variable language_">self</span>.value = value</span><br></pre></td></tr></tbody></table></figure>
+
+<p>实现一个前序遍历的算法便是信手拈来的事情</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">preorder_traversal</span>(<span class="params">tree, func</span>):</span><br><span class="line">    <span class="string">"""前序遍历二叉树的每个节点。"""</span></span><br><span class="line">    <span class="keyword">if</span> tree <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    func(tree.value)</span><br><span class="line">    preorder_traversal(tree.left, func)</span><br><span class="line">    preorder_traversal(tree.right, func)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>随着行业曲率的增大，要求写出不使用递归的版本也没什么过分的</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">iterative_preorder_traversal</span>(<span class="params">tree, func</span>):</span><br><span class="line">    nodes = [tree]</span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">len</span>(nodes) &gt; <span class="number">0</span>:</span><br><span class="line">        node = nodes.pop()</span><br><span class="line">        func(node)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            nodes.append(node.right)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            nodes.append(node.left)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>一直以来，我觉得这种用一个显式的栈来代替递归过程中隐式的栈的做法就是镜花水月。但最近却找到了它的一个用武之地——用于实现<code>iterator</code>。</p>
+<h1 id="iterator是个啥？"><a href="#iterator是个啥？" class="headerlink" title="iterator是个啥？"></a><code>iterator</code>是个啥？</h1><p>这年头，<code>iterator</code>已经不是什么新鲜事物了，许多语言中都有支持，维基百科上有一份<a href="https://en.wikipedia.org/wiki/Iterator#In_different_programming_languages">清单</a>列出了比较知名的语言的<code>iterator</code>特性。按照Python官方的术语表中的<a href="https://docs.python.org/3/glossary.html#term-iterator">定义</a>，<code>iterator</code>表示一个数据流，反复调用其<code>__next__</code>方法可以一个接一个地返回流中的下一项数据。将内置函数<code>iter</code>作用于<code>list</code>、<code>str</code>、<code>tuple</code>类型的对象，可以获得相应的迭代器</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> get_iter.py</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-*- coding: utf8 -*-</span></span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    values = [</span><br><span class="line">        [1, 2, 3],</span><br><span class="line">        'Hello, world!',</span><br><span class="line">        (True, None),</span><br><span class="line">    ]</span><br><span class="line">    for v in values:</span><br><span class="line">        print('type of iter({}) is {}'.format(v, type(iter(v))))</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python get_iter.py</span></span><br><span class="line">type of iter([1, 2, 3]) is &lt;class 'list_iterator'&gt;</span><br><span class="line">type of iter(Hello, world!) is &lt;class 'str_iterator'&gt;</span><br><span class="line">type of iter((True, None)) is &lt;class 'tuple_iterator'&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="写一个前序遍历的iterator"><a href="#写一个前序遍历的iterator" class="headerlink" title="写一个前序遍历的iterator"></a>写一个前序遍历的<code>iterator</code></h1><p>一个<code>iterator</code>对象必须要实现<code>__iter__</code>和<code>__next__</code>方法：</p>
+<ul>
+<li><code>__iter__</code>只需要返回<code>iterator</code>对象自身即可；</li>
+<li>顾名思义，<code>__next__</code>负责返回下一个元素。</li>
+</ul>
+<p>仔细观察一下前文中的<code>iterative_preorder_traversal</code>函数可以看出：</p>
+<ul>
+<li><code>nodes = [tree]</code>属于初始化逻辑；</li>
+<li><code>len(nodes) &gt; 0</code>用于判断是应当抛出<code>StopIteration</code>，还是应当继续返回下一个值（<code>nodes.pop()</code>）；</li>
+<li>最后四行就是负责填充<code>nodes</code>，好让它可以在下一次调用<code>__next__</code>的时候有值可以返回的。</li>
+</ul>
+<p>到这里，<code>iterator</code>的具体实现代码已经呼之欲出了</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BinaryTreePreorderIterator</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, root</span>):</span><br><span class="line">        nodes = []</span><br><span class="line">        <span class="keyword">if</span> root <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            nodes.append(root)</span><br><span class="line">        <span class="variable language_">self</span>.nodes = nodes</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__next__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(<span class="variable language_">self</span>.nodes) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration</span><br><span class="line">        node = <span class="variable language_">self</span>.nodes.pop()</span><br><span class="line">        <span class="keyword">if</span> node.right <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="variable language_">self</span>.nodes.append(node.right)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="variable language_">self</span>.nodes.append(node.left)</span><br><span class="line">        <span class="keyword">return</span> node.value</span><br></pre></td></tr></tbody></table></figure>
+
+<p>构造一棵这样的满二叉树</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210503/%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91.png"></p>
+<p>用<code>BinaryTreePreorderIterator</code>可以正确地打印出每一个节点的值</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    tree = BinaryTree(</span><br><span class="line">        BinaryTree(</span><br><span class="line">            BinaryTree(<span class="literal">None</span>, <span class="literal">None</span>, <span class="number">1</span>), </span><br><span class="line">            BinaryTree(<span class="literal">None</span>, <span class="literal">None</span>, <span class="number">3</span>), </span><br><span class="line">            <span class="number">2</span>,</span><br><span class="line">        ),</span><br><span class="line">        BinaryTree(</span><br><span class="line">            BinaryTree(<span class="literal">None</span>, <span class="literal">None</span>, <span class="number">5</span>), </span><br><span class="line">            BinaryTree(<span class="literal">None</span>, <span class="literal">None</span>, <span class="number">7</span>), </span><br><span class="line">            <span class="number">6</span>,</span><br><span class="line">        ),</span><br><span class="line">        <span class="number">4</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> BinaryTreePreorderIterator(tree):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'{}\t'</span>.<span class="built_in">format</span>(n), end=<span class="string">''</span>)</span><br><span class="line"><span class="comment"># 打印内容为：4	2	1	3	6	5	7</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="iterator的优势"><a href="#iterator的优势" class="headerlink" title="iterator的优势"></a><code>iterator</code>的优势</h1><p>显然，<code>iterator</code>比起<code>preorder_traversal</code>更为灵活——很容易在<code>for-in</code>循环内添加各种各样的控制逻辑：用<code>continue</code>跳过一些值，或者用<code>break</code>提前结束遍历过程。这些在函数<code>preorder_traversal</code>中做起来会比较别扭。</p>
+<p>聪明的你应该已经发现了，大可不必将<code>preorder_traversal</code>拆解到一个构造方法和一个<code>__next__</code>方法中。用<code>generator</code>写起来明明更加直观</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">preorder_generator</span>(<span class="params">tree</span>):</span><br><span class="line">    <span class="string">"""返回一个能够以前序遍历的次序遍历二叉树节点的generator。"""</span></span><br><span class="line">    nodes = [tree]</span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">len</span>(nodes) &gt; <span class="number">0</span>:</span><br><span class="line">        node = nodes.pop()</span><br><span class="line">        <span class="keyword">yield</span> node.value</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            nodes.append(node.right)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            nodes.append(node.left)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但是，很多语言并不支持<code>generator</code>。与之相比，<code>iterator</code>要亲民得多，更容易移植。例如，即使是Common Lisp这种一穷二白的语言，也可以实现和Python的<code>iterator</code>以及<code>for</code>类似的效果</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">in-package</span> #<span class="symbol">:cl-user</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defpackage</span> #<span class="symbol">:com</span>.liutos.binary-tree</span><br><span class="line">  (<span class="symbol">:use</span> #<span class="symbol">:cl</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">in-package</span> #<span class="symbol">:com</span>.liutos.binary-tree)</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> preorder-iterator ()</span><br><span class="line">  ((<span class="name">nodes</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="literal">nil</span>)</span><br><span class="line">   (<span class="name">tree</span></span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:tree</span>))</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"前序遍历二叉树的迭代器"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> initialize-instance <span class="symbol">:after</span> ((<span class="name">instance</span> preorder-iterator) <span class="symbol">&amp;key</span>)</span><br><span class="line">  (<span class="name">with-slots</span> (<span class="name">nodes</span> tree)</span><br><span class="line">      instance</span><br><span class="line">    (<span class="name">when</span> tree</span><br><span class="line">      (<span class="name">push</span> tree nodes))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defgeneric</span> next (<span class="name">iterator</span>)</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"返回迭代器的下一个值。"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">define-condition</span> stop-iteration (<span class="name">error</span>)</span><br><span class="line">  ()</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"Python中StopIteration异常的等价物。"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> next ((<span class="name">iterator</span> preorder-iterator))</span><br><span class="line">  (<span class="name">with-slots</span> (<span class="name">nodes</span>) iterator</span><br><span class="line">    (<span class="name">when</span> (<span class="name">null</span> nodes)</span><br><span class="line">      (<span class="name">error</span> 'stop-iteration))</span><br><span class="line"></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">node</span> (<span class="name">pop</span> nodes)))</span><br><span class="line">      <span class="comment">;; 一个节点的结构为：(值 左子树 右子树)</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">third</span> node)</span><br><span class="line">        (<span class="name">push</span> (<span class="name">third</span> node) nodes))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">second</span> node)</span><br><span class="line">        (<span class="name">push</span> (<span class="name">second</span> node) nodes))</span><br><span class="line">      (<span class="name">first</span> node))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmacro</span> for-in (<span class="name">var</span> iterator <span class="symbol">&amp;body</span> forms)</span><br><span class="line">  <span class="string">"将iterator中的值逐个绑定到变量var上，并执行forms中的表达式。"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">iter</span> (<span class="name">gensym</span>)))</span><br><span class="line">    `(let ((,iter ,iterator))</span><br><span class="line">       (handler-case</span><br><span class="line">           (loop</span><br><span class="line">              (let ((,var (next ,iter)))</span><br><span class="line">                ,@forms))</span><br><span class="line">         (stop-iteration (c)</span><br><span class="line">           (declare (ignorable c)))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defparameter</span> *tree*</span><br><span class="line">  '(<span class="number">4</span> (<span class="number">2</span> (<span class="number">1</span> <span class="literal">nil</span> <span class="literal">nil</span>) (<span class="number">3</span> <span class="literal">nil</span> <span class="literal">nil</span>)) (<span class="number">6</span> (<span class="number">5</span> <span class="literal">nil</span> <span class="literal">nil</span>) (<span class="number">7</span> <span class="literal">nil</span> <span class="literal">nil</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> test-preorder-iterator ()</span><br><span class="line">  <span class="string">"测试前序遍历迭代器。"</span></span><br><span class="line">  (<span class="name">for-in</span> n (<span class="name">make-instance</span> 'preorder-iterator</span><br><span class="line">                           <span class="symbol">:tree</span> *tree*)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~C"</span> n #\Tab)))</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>中序遍历和后序遍历也可以写成迭代器，证明略。</p>
+
       
     </div>
 
@@ -625,6 +1096,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

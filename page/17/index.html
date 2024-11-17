@@ -200,7 +200,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/09/%E5%A6%82%E4%BD%95%E7%94%A8Common-Lisp%E5%AE%9E%E7%8E%B0%E5%B0%BE%E9%80%92%E5%BD%92%E4%BC%98%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/12/14/%E7%94%A8%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9BMarkdown%E7%BC%96%E8%BE%91%E5%99%A8/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -214,7 +214,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/09/%E5%A6%82%E4%BD%95%E7%94%A8Common-Lisp%E5%AE%9E%E7%8E%B0%E5%B0%BE%E9%80%92%E5%BD%92%E4%BC%98%E5%8C%96/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2018/12/14/%E7%94%A8%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9BMarkdown%E7%BC%96%E8%BE%91%E5%99%A8/" class="post-title-link" itemprop="url">用过的一些Markdown编辑器</a>
         </h1>
 
         <div class="post-meta">
@@ -224,8 +224,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-09 23:20:35" itemprop="dateCreated datePublished" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+              <time title="创建时间：2018-12-14 23:43:50" itemprop="dateCreated datePublished" datetime="2018-12-14T23:43:50+08:00">2018-12-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -236,8 +243,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/01/09/%E5%A6%82%E4%BD%95%E7%94%A8Common-Lisp%E5%AE%9E%E7%8E%B0%E5%B0%BE%E9%80%92%E5%BD%92%E4%BC%98%E5%8C%96/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/09/如何用Common-Lisp实现尾递归优化/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2018/12/14/%E7%94%A8%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9BMarkdown%E7%BC%96%E8%BE%91%E5%99%A8/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/14/用过的一些Markdown编辑器/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -252,7 +259,47 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h2 id="开篇"><a href="#开篇" class="headerlink" title="开篇"></a>开篇</h2><p>买了MacBook Pro之后的一段时间里，为了打造适合自己的知识管理体系，折腾起了笔记类软件（题外话，我还挺喜欢尝试新软件的，尤其在接触macOS后发现许多软件都长得很漂亮）。其实在入手Mac之前，我已经试用过不少笔记类软件和服务了，包括Evernote（还有印象笔记）、有道云笔记、为知笔记，等等。再后来，改用Emacs的<a href="https://orgmode.org/">org-mode</a>来写笔记——主要是将一些常常搜索的内容或经验记录在了多个.org文件中，算是一份自己的FAQ。后来想看看在macOS的世界中有没有更好的工具，同时渐渐觉得Markdown是一个更好的笔记内容载体，便尝试了一些知名的笔记类软件暨Markdown编辑器。</p>
+<p>大致上尝试了下列这些：</p>
+<ul>
+<li>Emacs</li>
+<li>Boostnote</li>
+<li>Quiver</li>
+<li>Typora</li>
+<li>Visual Studio Code</li>
+<li>Yu Writer</li>
+</ul>
+<p>本文并不是一篇完整的、专业的软件评测报告，只是我兴趣使然的对各个软件的吐槽和赞美，各位权当打发时间吧。下面我按顺序说一下上面提及的各款软件。</p>
+<h2 id="Emacs"><a href="#Emacs" class="headerlink" title="Emacs"></a>Emacs</h2><p><a href="https://www.gnu.org/software/emacs/index.html">Emacs</a>并不仅仅是一款Markdown编辑器，我用得最多的是用它来做计划（之前还用来写Node.js代码，不过现在交给VSCode了）。用Emacs来写Markdown，坏处是没有live preview的功能。在Emacs中打开了一个.md文件，只会原原本本地显示着井号、星号，三个反引号等Markdown语法的关键字——并且还是白底黑字的模样，而不带有丝毫不同的样式。为了让它们好看点，你还需要安装一个叫做<code>markdown-mode</code>的Emacs扩展。但几遍安装了<code>markdown-mode</code>，也无法实时预览。<code>markdown-mode</code>的菜单栏中有一个叫做“Preview”的功能，它依赖一个名为<code>markdown</code>的命令行工具（用<code>brew install markdown</code>可以安装）。当一切安装完毕点击“Preview”菜单项时，才发现是在网页浏览器中查看的方式——虽然有preview了，但并不live。</p>
+<p>Emacs在写Markdown方面也并非一无是处。对程序员而言，在一篇Markdown写就的文章中插入代码是再正常不过的事情了。在Emacs中将光标定位到Markdown语法的代码块内，按下<code>control</code>和<code>c</code>的组合键，再敲一下单引号键，Emacs便会另起一个相应模式的buffer，并将代码块中的内容复制到新buffer中供继续编辑。如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Emacs_%E7%BC%96%E8%BE%91Markdown%E4%BB%A3%E7%A0%81%E5%9D%97.gif" alt="Emacs_编辑Markdown代码块.gif"></p>
+<p>在上面的GIF中，代码块以GitHub Flavored Markdown的语法在开头的三个反引号后附上了模式的名字，即lisp，Emacs便会打开<code>lisp-mode</code>的buffer。在这个buffer中可以继续使用Emacs的完整功能编辑对代码，包括语法高亮、自动补全，等等——如果启动了<a href="https://common-lisp.net/project/slime/">SLIME</a>，甚至可以运行里面的Common Lisp代码。</p>
+<p>Emacs和VSCode用于在编写代码的同时写写项目的README.md文件应当是绰绰有余的了。</p>
+<h2 id="Boostnote"><a href="#Boostnote" class="headerlink" title="Boostnote"></a>Boostnote</h2><p><a href="https://boostnote.io/">Boostnote</a>自诩为“程序员的笔记本”，它并不是我在Emacs之外寻找的第一款笔记软件，在它之前，我还尝试了<a href="https://www.notion.so/">Notion</a>、<a href="http://happenapps.com/">Quiver</a>来着。上手后发现，Boostnote简直就是Quiver的开源免费版本，相当的喜爱。</p>
+<p>Boostnote当然让我格外喜欢的有几点：首先，Boostnote可以实时预览键入的Markdown源文档。会有一列跟编辑区域差不多宽的区域被用来展示Markdown渲染后的效果。（刚刚发现，原来这个区域的宽度是可以拖动调节的）</p>
+<p>其次，它不仅支持Markdown、带语法高亮的代码块，甚至还支持表格和流程图的绘制！当然我以为，用竖线和连字符绘制表格的功能仅在Emacs的org-mode中存在（孤陋寡闻了汗颜），刚开始用Boostnote制作表格的时候可是相当兴奋。而text-based的绘制流程图的方式也是让我大开眼界（后来才知道原来有<a href="http://flowchart.js.org/">flowchart.js</a>这样的工具）——尽管后来我渐渐发现，绘制流程图其实挺少用。</p>
+<p>然后Boostnote具备在多份笔记中搜索的功能，这对于一款笔记软件而言倒是真的非常重要，因为有时候只能想到一些只言片语，而并不能确定所要查阅的内容究竟在哪一份笔记中。</p>
+<p>但Boostnote也有一些缺点。首先，Boostnote是用自有的文件格式（而不是纯文本的.md文件）来存储输入的内容的——打开<code>~/Boostnote/notes/</code>可以看到这些后缀为<code>.cson</code>的文件。这样一来，假设我日后发现了一款更优秀的Markdown编辑器，那就不能无痛迁移了，还得先从Boostnote中将这些笔记逐一导出成.md文件才行。</p>
+<p>其次，Boostnote只支持三层的组织结构——最外层是storage，然后是folder，最后就是笔记本身。当初有道云笔记特别让我喜欢的，就是它支持非常多层级的目录结构。尽管目录不是越多越好，但有这种灵活性总是更好的。否则，笔记的使用者就只能在命名和标签上下功夫了</p>
+<p>最后一点，就是Boostnote在我的系统上非常容易崩溃。有时候一翻起盖子，看到的就是Boostnote崩溃的提示。</p>
+<p>不过Boostnote支持往其中粘贴图片，当我需要快速记录一些图文内容时，我还是很喜欢用它的。</p>
+<h2 id="Yu-Writer"><a href="#Yu-Writer" class="headerlink" title="Yu Writer"></a>Yu Writer</h2><p>某一天偶然遇到了<a href="https://ivarptr.github.io/yu-writer.site/">Yu Writer</a>，它官网上的截图看着很吸引人，于是我便试用了一下。第一印象是，Yu Writer is awesome！首先它很人性化。它的预览区域是一个minimap——就是Sublime Text最右侧的那一列。在做到实时预览的时候，也不会占用太多的横向空间。其次，它支持大纲视图</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Yu%20Writer%E7%9A%84%E5%A4%A7%E7%BA%B2%E8%A7%86%E5%9B%BE.png" alt="Yu Writer的大纲视图"></p>
+<p>即上图左侧的目录。恰逢当时我在用Boostnote写一篇比较长的设计文档，深刻地体验到了一个大纲视图的重要意义——对在长文档内的多个标题间跳转非常有帮助。再次，Yu Writer还准备了工具栏，方便不懂得Markdown语法的用户；支持标签页，便于在多个文档间切换；甚至可以把一个Markdown文档作为幻灯片来播放。</p>
+<p>但Yu Writer也有它自己的劣势。第一，在Yu Writer内，原本在macOS系统中全局可用的Emacs风格快捷键——即<code>control+b</code>往左移动光标、<code>control+f</code>往右移动光标——居然不生效！这些快捷键对我个人还是非常重要的。</p>
+<p>第二，在Yu Writer中，不能直接插入磁盘上的图片文件的绝对地址，既没有在预览区域显示出来，也没有在文档列表显示成功。</p>
+<p>据说Yu Writer的作者的主业是厨师，感觉好强</p>
+<h2 id="Typora"><a href="#Typora" class="headerlink" title="Typora"></a>Typora</h2><p><a href="https://typora.io/">Typora</a> is best。不同于前面提到的几款Markdown编辑器，Typora是“所见即所得”的编辑器。你敲入两个井号，加一个空格，再敲入你的标题内容，最后回车，那么标题内容就会被渲染为二级标题的形式，如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora_%E8%BE%93%E5%85%A5%E4%BA%8C%E7%BA%A7%E6%A0%87%E9%A2%98.gif" alt="Typora_输入二级标题"></p>
+<p>这么一来，屏幕上的空间基本都可以被用来写作，不需要担心被预览用的列给占据了。</p>
+<p>然后，Typora没有自定义它的存储结构，它直接打开磁盘上的.md文件进行编辑，这些Markdown源文件可以随心所欲地放在任何喜欢的目录下，只要能打开就行。再加上它文件树视图，就实现了不受限制的笔记组织方式了，如下图</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora_%E6%96%87%E4%BB%B6%E6%A0%91%E8%A7%86%E5%9B%BE.png" alt="Typora_文件树视图"></p>
+<p>不过一个可以想到的缺点，就是Typora不支持在所有的Markdown文件上搜索关键字——毕竟它也不知道要去哪个目录下寻找这些待搜索的源文件。</p>
+<p>尽管Typora外观很简洁，但Boostnote有的功能它一个也没有落下，就像它的官网所说的那样</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Typora%E7%9A%84%E5%AE%98%E7%BD%91%E5%AE%A3%E4%BC%A0.png" alt="Typora的官网宣传"></p>
+<p>现在我的博客的文章基本都是用Typora来写的，冥冥中感受到了一股乐趣。但Typora毕竟没有搜索功能，所以我又开始摸索额外的搜索笔记的方式了（比如把记录在.org文件中的FAQ导入到ElasticSearch中再借助全文搜索的力量来找到自己要的内容）。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>没有最好的，只有最适合的，祝各位都能找到最适合自己的Markdown编辑器。</p>
+
       
     </div>
 
@@ -271,7 +318,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/09/%E5%A6%82%E4%BD%95%E9%9A%8F%E6%9C%BA%E6%8C%91%E9%80%89%E8%A6%81%E5%81%9A%E7%9A%84%E4%BB%BB%E5%8A%A1/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/12/07/%E6%8A%8AGitHub%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -285,7 +332,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/09/%E5%A6%82%E4%BD%95%E9%9A%8F%E6%9C%BA%E6%8C%91%E9%80%89%E8%A6%81%E5%81%9A%E7%9A%84%E4%BB%BB%E5%8A%A1/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2018/12/07/%E6%8A%8AGitHub%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A/" class="post-title-link" itemprop="url">把GitHub作为图床</a>
         </h1>
 
         <div class="post-meta">
@@ -295,8 +342,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-09 23:20:35" itemprop="dateCreated datePublished" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+              <time title="创建时间：2018-12-07 13:31:59" itemprop="dateCreated datePublished" datetime="2018-12-07T13:31:59+08:00">2018-12-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -307,8 +361,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/01/09/%E5%A6%82%E4%BD%95%E9%9A%8F%E6%9C%BA%E6%8C%91%E9%80%89%E8%A6%81%E5%81%9A%E7%9A%84%E4%BB%BB%E5%8A%A1/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/09/如何随机挑选要做的任务/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2018/12/07/%E6%8A%8AGitHub%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/07/把GitHub作为图床/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -323,7 +377,31 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近又迷恋上了写博客，尤其是前一段时间很想要写点东西分享一些软件的使用感想。但当写完文章想要发表时就会碰到一个问题：由于我是现在本机的编辑器中用Markdown写好了全文的内容，再发表到各个平台（曾经是GitHub Pages搭建的博客，后来又多了简书，现在再加上SegmentFault）上的，因此文章里的图片都是引用在本地磁盘上的文件路径的。这么一来，如果直接将文章源码粘贴到博客平台上——比如粘贴到SegmentFault中，那么这些本地的图片链接就无法在发布后的文章中正常显示了。</p>
+<p>如果一开始就在SegmentFault中写作也会遇到问题。SegmentFault上的文章插入图片后，并不是像普通的Markdown源码那般插入一条<code>![]()</code>形式的标记的，而是像下图这样</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8SegmentFault%E7%BC%96%E8%BE%91%E5%99%A8%E4%B8%AD%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E5%90%8E%E7%9A%84%E6%95%88%E6%9E%9C.png" alt="在SegmentFault中插入图片后的效果"></p>
+<p>显然，这样的文章源码复制到其它平台（GitHub Pages、简书）去发布的话，必然是需要针对其中的图片标记修改一番的——比刚开始的方法或许要更麻烦。</p>
+<p>看来要解决这个图片链接在不同平台间共用的问题，必须有一处纯粹的用于存放图片文件的地方——也就是大家常说的图床了。刚开始我也放狗搜了一下，看看别人的推荐，印象中得到的答复不外乎是又○云、七○云、新○微博，以及<a href="https://sm.ms/">sm.ms</a>等。但它们要么需要注册并且实名认证，要么不纯粹，要么让人觉得随时会丢失。</p>
+<p>某个晚上忽然想到，GitHub不就是一个很好的图床么？！在GitHub上建一个仓库专门存放博客中的图片，不仅免费、完全受自己管理，而且自带CDN加速，并且我的读者群（如果真的有这么一个群体的话）也应当可以畅通地访问GitHub。</p>
+<p>放图片的仓库虽然有了，但用起来还不是很便利——因为作为写作素材的图片在我的电脑上是存放在一个单独的、非GitHub仓库的目录下的，所以如果要丢到图床上，就需要先将文件复制过去，然后执行git的add、commit、push三部曲，最后还要到GitHub上复制这张新图片的“raw”地址。</p>
+<p>这个过程很机械化，完全可以用一个<a href="https://www.alfredapp.com/">Alfred</a>的<a href="https://www.alfredapp.com/workflows/">Workflow</a>来代劳。</p>
+<h2 id="编写Workflow"><a href="#编写Workflow" class="headerlink" title="编写Workflow"></a>编写Workflow</h2><p>编写Workflow就像编写Common Lisp中的宏一样，总是从它们的用法入手的。在我的设想中，这个Workflow的使用方式应当是：</p>
+<ol>
+<li>首先，按下快捷键调出Alfred的输入框，输入关键字（在我这里就叫做upload）来唤起这个Workflow；</li>
+<li>然后，输入要上传的图片文件的绝对路径并按下回车，开始在后台处理</li>
+<li>最后，上传完毕后，弹出通知来告诉我</li>
+</ol>
+<p>整个Workflow的概貌其实很简单</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Alfred%E4%B8%AD%E7%9A%84upload%E7%9A%84%E9%B8%9F%E7%9E%B0%E5%9B%BE.png" alt="upload Workflow的全貌"></p>
+<p>第二个节点所调用的External Script是长这样子的</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将磁盘文件上传到GitHub</span></span><br><span class="line"></span><br><span class="line">path=${1}</span><br><span class="line"></span><br><span class="line">pictures_dir="${HOME}/Documents/Projects/riverbed/pictures"</span><br><span class="line">cp "${path}" "${pictures_dir}"</span><br><span class="line">echo '文件复制完毕'</span><br><span class="line"></span><br><span class="line">file=$(basename "${path}")</span><br><span class="line">cd "${pictures_dir}"</span><br><span class="line">git add "${file}"</span><br><span class="line">git commit -m '上传一张图片'</span><br><span class="line">git push -u origin master</span><br><span class="line">echo '文件已提交到GitHub'</span><br><span class="line"></span><br><span class="line">/usr/local/bin/node -e "console.log(encodeURI('https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/${file}'));" | tr -d '\n' | pbcopy</span><br></pre></td></tr></tbody></table></figure>
+
+<p>获取文件的绝对路径其实很简单，在Finder中选中文件后，按下Command+Option+C即可</p>
+<p>这里使用<code>basename</code>命令获取文件名。并且，为了避免<code>git</code>打开文本编辑器要求输入commit message，向git-commit命令传递了<code>-m</code>选项。</p>
+<p>因为文件名含有非ASCII的字符（毕竟会有中文），需要做一次URL编码，因此用了<code>node</code>来做转换。在Node.js代码中用<code>console.log</code>输出编码后的图片URL，结尾会有一个换行符，所以用<code>tr</code>将其去掉。最后，输出的内容重定向给<code>pbcopy</code>，就将上传后的图片URL复制到剪贴板中了。如果此时正在编辑文章，便可以粘贴这个图片的链接到源码中。</p>
+<p>Alfred也提供<code>Copy to Clipboard</code>，用于将Workflow中上一个节点的输出复制到剪贴板中。之所以不使用，其实是因为刚开始的时候就是用的Alfred的<code>Copy to Clipboard</code>，结果发现<code>git</code>运行过程中的输出也被Alfred接收了，跟图片URL一起混进了剪贴板中。所以最后改为直接调用<code>pbcopy</code>。</p>
+<p>全文完。</p>
+
       
     </div>
 
@@ -342,7 +420,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/09/%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85mysql/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/11/27/%E7%BC%96%E5%86%99%E5%B5%8C%E5%A5%97%E5%8F%8D%E5%BC%95%E5%8F%B7%E7%9A%84%E5%AE%8F/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -356,7 +434,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/09/%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85mysql/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2018/11/27/%E7%BC%96%E5%86%99%E5%B5%8C%E5%A5%97%E5%8F%8D%E5%BC%95%E5%8F%B7%E7%9A%84%E5%AE%8F/" class="post-title-link" itemprop="url">编写嵌套反引号的宏</a>
         </h1>
 
         <div class="post-meta">
@@ -366,8 +444,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-09 23:20:35" itemprop="dateCreated datePublished" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+              <time title="创建时间：2018-11-27 23:11:42" itemprop="dateCreated datePublished" datetime="2018-11-27T23:11:42+08:00">2018-11-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -378,8 +463,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/01/09/%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85mysql/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/09/手动安装mysql/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2018/11/27/%E7%BC%96%E5%86%99%E5%B5%8C%E5%A5%97%E5%8F%8D%E5%BC%95%E5%8F%B7%E7%9A%84%E5%AE%8F/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/27/编写嵌套反引号的宏/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -394,7 +479,62 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h2 id="一个没事找事的例子"><a href="#一个没事找事的例子" class="headerlink" title="一个没事找事的例子"></a>一个没事找事的例子</h2><p>当在Common Lisp中定义宏的时候，常常会使用到反引号（`）。比方说，我有这么一个函数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>它被调用后会返回最后一个表达式的结果——13。如果我希望在第二个表达式计算后就把结果返回给外部的调用者的话，可以用<code>return-from</code></p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">return-from</span> foobar (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当然了，这属于没事找事，因为完全可以把最后两个表达式放到一个<code>prog1</code>（这也是没事找事），或者直接点，把最后一个表达式删掉来做到同样的效果——但如果是这样的话这篇东西就写不下去了，所以我偏要用<code>return-from</code>。</p>
+<p>还有一个更加没事找事的办法，就是用<code>macrolet</code>定义一个局部的宏来代替<code>return-from</code>——我很想把这个新的宏叫做<code>return</code>，但这样<a href="http://www.sbcl.org/">SBCL</a>会揍我一顿，所以我只好把这个宏叫做<code>bye</code>（叫做<code>exit</code>也会被揍）</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobar ()</span><br><span class="line">  (<span class="name">macrolet</span> ((<span class="name">bye</span> (<span class="name">&amp;optional</span> value)</span><br><span class="line">               `(return-from foobar ,value)))</span><br><span class="line">    (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">    (<span class="name">bye</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">    (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果我有另一个叫做<code>foobaz</code>的函数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz ()</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>)</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">6</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>也想要拥有<code>bye</code>这种想来就来想走就走的能力的话，可以依葫芦画瓢地包含一个<code>macrolet</code></p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foobaz ()</span><br><span class="line">  (<span class="name">macrolet</span> ((<span class="name">bye</span> (<span class="name">&amp;optional</span> value)</span><br><span class="line">               `(return-from foobaz ,value)))</span><br><span class="line">    (<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br><span class="line">    (<span class="name">bye</span> (<span class="name">+</span> <span class="number">3</span> <span class="number">4</span>))</span><br><span class="line">    (<span class="name">+</span> <span class="number">5</span> <span class="number">6</span>)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>好了，现在我觉得每次都需要在函数体内粘贴一份<code>bye</code>的实现代码太麻烦了，想要减少这种重复劳作。于是乎，我打算写一个宏来帮我复制粘贴代码。既然要定义宏，那么首先应当定义这个宏的名字以及用法，姑且是这么用的吧</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">with-bye</span> foobar</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">bye</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>with-bye</code>这个宏需要能够展开成上面的手动编写的<code>foobar</code>中的函数体的代码形式，那么<code>with-bye</code>的定义中，就一定会含有<code>macrolet</code>的代码，同时也就含有了反引号——好了，现在要来处理嵌套的反引号了。</p>
+<p><a href="https://blog.csdn.net/xiaojianpitt/article/details/7747230">这篇文章</a>有个不错的讲解，各位不妨先看看。现在，让我来机械化地操作一遍，给出<code>with-bye</code>的定义。首先，要确定生成的目标代码中，那一些部分是可变的。对于<code>with-bye</code>而言，<code>return-from</code>的第一个参数已经<code>macrolet</code>的函数体是可变的，那么不妨把这两部分先抽象为参数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但这样是不够的，因为<code>name</code>是一个在最外层绑定的，但它被放在了两层的反引号当中，如果它只有一个前缀的逗号，那么它就无法在外层的反引号求值的时候被替换为目标的<code>FOOBAR</code>符号。因此，需要在<code>,name</code>之前再添加一个反引号</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,,name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果你在Emacs中对上述的表达式进行求值，那么它吐出来的结果实际上是</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">MACROLET</span> ((<span class="name">BYE</span> (<span class="name">&amp;OPTIONAL</span> VALUE)</span><br><span class="line">             `(RETURN-FROM ,FOOBAR ,VALUE)))</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> <span class="number">1</span>)</span><br><span class="line">  (<span class="name">BYE</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">5</span> <span class="number">8</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>显然，这还是不对。如果生成了上面这样的代码，那么对于<code>bye</code>而言<code>FOOBAR</code>就是一个未绑定的符号了。之所以会这样，是因为</p>
+<ol>
+<li><code>name</code>在绑定的时候输入的是一个符号，并且</li>
+<li><code>name</code>被用在了嵌套的反引号内，它会被求值两次——第一次求值得到符号<code>foobar</code>，第二次则是<code>foobar</code>会被求值</li>
+</ol>
+<p>因此，为了对抗第二次的求值，需要给<code>,name</code>加上一个前缀的引号（‘），最终效果如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">name</span> 'foobar)</span><br><span class="line">      (<span class="name">body</span> '((+ <span class="number">1</span> <span class="number">1</span>) (bye (+ <span class="number">2</span> <span class="number">3</span>)) (+ <span class="number">5</span> <span class="number">8</span>))))</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,',name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>所以<code>with-bye</code>的定义是这样的</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> with-bye (<span class="name">name</span> <span class="symbol">&amp;body</span> body)</span><br><span class="line">  `(macrolet ((bye (&amp;optional value)</span><br><span class="line">                `(return-from ,',name ,value)))</span><br><span class="line">     ,@body))</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="机械化的操作方法"><a href="#机械化的操作方法" class="headerlink" title="机械化的操作方法"></a>机械化的操作方法</h2><p>我大言不惭地总结一下，刚才的操作步骤是这样的。首先，找出一段有规律的、需要被用宏来实现的目标代码；然后，识别其中的可变的代码，给这些可变的代码的位置起一个名字（例如上文中的<code>name</code>和<code>body</code>），将它们作为<code>let</code>表达式的绑定，把目标代码装进同一个<code>let</code>表达式中。此时，目标代码被加上了一层反引号，而根据每个名字出现的位置的不同，为它们适当地补充一个前缀的逗号；最后，如果在嵌套的反引号中出现的名字无法被求值多次——比如符号或者列表，那么还需要给它们在第一个逗号后面插入一个引号，避免被求值两次招致未绑定的错误。</p>
+<h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2><p>就用上面所引用的文章里的例子好了。有一天我觉得Common Lisp中一些常用的宏的名字实在是太长了想要精简一下——毕竟敲键盘也是会累的——假装没有自动补全的功能。我可能会定义下面这两个宏</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> d-bind (<span class="name">&amp;body</span> body)</span><br><span class="line">  `(destructuring-bind ,@body))</span><br><span class="line">(<span class="name">defmacro</span> mv-bind (<span class="name">&amp;body</span> body)</span><br><span class="line">  `(multiple-value-bind ,@body))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>显然，这里的代码的写法出现了重复模式，不妨试用按照机械化的操作手法来提炼出一个宏。第一步，先识别出其中可变的内容。对于上面这个例子而言，变化的地方其实只有两个名字——新宏的名字（<code>d-bind</code>和<code>mv-bind</code>），以及旧宏的名字（<code>destructuring-bind</code>和<code>multiple-value-bind</code>）。第二步，给它们命名并剥离成<code>let</code>表达式的绑定，得到如下的代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">new-name</span> 'd-bind)</span><br><span class="line">      (<span class="name">old-name</span> 'destructuring-bind))</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,old-name ,@body)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>因为<code>old-name</code>处于嵌套的反引号中，但是它是由最外层的<code>let</code>定义的，所以应当添上一个前缀的逗号，得到</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">new-name</span> 'd-bind)</span><br><span class="line">      (<span class="name">old-name</span> 'destructuring-bind))</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,,old-name ,@body)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后，因为<code>old-name</code>绑定的是一个符号，不能被两次求值（第二次是在<code>defmacro</code>定义的新宏中展开，此时<code>old-name</code>已经被替换为了<code>destructuring-bind</code>，而它对于新宏而言是一个自由变量，并没有被绑定），所以需要有一个单引号来阻止第二次的求值——因为需要的就是符号<code>destructuring-bind</code>本身。所以，最终的代码为</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> define-abbreviation (<span class="name">new-name</span> old-name)</span><br><span class="line">  `(defmacro ,new-name (&amp;body body)</span><br><span class="line">     `(,',old-name ,@body)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>试一下就可以确认这个<code>define-abbreviation</code>是能用的（笑</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>能够指导编写宏的、万能的、机械化的操作方法，我想应该是不存在的</p>
+
       
     </div>
 
@@ -413,7 +553,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/09/%E6%8A%8AGitHub%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/11/25/%E9%87%8D%E5%A4%8D%E8%BE%93%E5%85%A5%E7%9B%B8%E4%BC%BC%E7%9A%84%E5%91%BD%E4%BB%A4%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -427,7 +567,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/09/%E6%8A%8AGitHub%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2018/11/25/%E9%87%8D%E5%A4%8D%E8%BE%93%E5%85%A5%E7%9B%B8%E4%BC%BC%E7%9A%84%E5%91%BD%E4%BB%A4%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">重复输入相似的命令的几种方法</a>
         </h1>
 
         <div class="post-meta">
@@ -437,8 +577,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-09 23:20:35" itemprop="dateCreated datePublished" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+              <time title="创建时间：2018-11-25 22:40:51" itemprop="dateCreated datePublished" datetime="2018-11-25T22:40:51+08:00">2018-11-25</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -449,8 +596,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/01/09/%E6%8A%8AGitHub%E4%BD%9C%E4%B8%BA%E5%9B%BE%E5%BA%8A/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/09/把GitHub作为图床/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2018/11/25/%E9%87%8D%E5%A4%8D%E8%BE%93%E5%85%A5%E7%9B%B8%E4%BC%BC%E7%9A%84%E5%91%BD%E4%BB%A4%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/25/重复输入相似的命令的几种方法/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -465,7 +612,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p>在命令行经常需要重复输入一些shell代码，例如用cd切换到某个目录、运行npm run local，或者git commit等。每次都完整地一个个字符地敲入这些命令还是很麻烦的，这种时候就要寻找可以解决重复输入，提高效率的办法了。</p>
+<p>最原始的，当然是找一个文本文件，把平时经常敲入的命令存放在其中，每当需要运行这些命令的时候就打开文件选中内容复制一下，再到终端粘贴并运行，但这未免过于原始了。</p>
+<h2 id="使用ctrl-r翻出历史命令"><a href="#使用ctrl-r翻出历史命令" class="headerlink" title="使用ctrl-r翻出历史命令"></a>使用ctrl-r翻出历史命令</h2><p>使用ctrl-r是一种不那么原始的方法。在终端中按下ctrl-r后，shell会等待进一步地输入，并根据输入从以前输入过的命令中找出匹配的一条。找到了自己所需要的命令行，直接敲击回车即可，效果如下<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/ctrl_r%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="ctrl-r的效果"><br>PS：上面是使用了<a href="https://github.com/junegunn/fzf">fzf</a>之后的效果，所以在敲入回车后并不会立即执行所选中的命令。原生的ctrl-r命令不支持在不同的位置上匹配输入字符，所以还是推荐一试fzf的。</p>
+<h2 id="使用alias"><a href="#使用alias" class="headerlink" title="使用alias"></a>使用alias</h2><p>alias相比于ctrl-r而言进化了一点，因为它毕竟不再需要往命令行中塞入那么多字符了——它让终端用户可以用较短的内容来代替较长的内容。例如，我就给登录我本地的MySQL的命令写了一个alias</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> myroot=<span class="string">'mysql -u root -p*******'</span></span><br></pre></td></tr></tbody></table></figure>
+<p>而且alias更像是宏展开，所以可以在后面添加其它内容，如下图<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/alias%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="alias的效果"><br>在myroot之后输入的test和user_info都跟着myroot展开后的结果一起喂给了shell去执行。使用alias之后，每次只需要输入较短的myroot即可。</p>
+<h2 id="使用函数"><a href="#使用函数" class="headerlink" title="使用函数"></a>使用函数</h2><p>如果说alias是C语言里面的宏的话，那么shell所支持的函数就是C语言里面的函数了（这不是废话么）。alias始终不太适合所要输入的内容比较多的场景——定义也特别难写，并且alias没有输入参数可言，也不适合处理需要有为妙差异的重复内容的情况。shell函数很适合这种情况，例如，我在本地编辑完一个.sd文件后需要用<a href="http://sdedit.sourceforge.net/index.html">sdedit</a>将其转换为.png文件，方能上传到Confluence上贴到设计文档里，我希望.png文件跟.sd文件有相同的basename，那么用下面这个shell函数可以减轻一些重复输入的劳动力</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 根据.sd文件生成同名的.png文件</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">sdpng</span></span>() {</span><br><span class="line">    <span class="built_in">basename</span>=<span class="variable">${1}</span></span><br><span class="line">    /usr/local/bin/sdedit -t png -o <span class="variable">${basename}</span>.png <span class="variable">${basename}</span>.sd</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>只需要我输入一次文件名即可，效果如下<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/shell%E5%87%BD%E6%95%B0%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="shell函数的效果"></p>
+<h2 id="使用Alfred的Snippets功能"><a href="#使用Alfred的Snippets功能" class="headerlink" title="使用Alfred的Snippets功能"></a>使用Alfred的Snippets功能</h2><p><a href="https://www.alfredapp.com/">Alfred</a>带有一个叫做Snippets的特性<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Alfred%E7%9A%84Snippets%E7%89%B9%E6%80%A7.png" alt="Alfred的Snippets特性"><br>它跟上面所说的alias很相似，但它不是由shell自己处理悄悄展开的，它是显式地输入一长串的字符。比如说我定义了三个短语：gpd、gct，以及gpt，它们分别会展开为</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git push -u origin develop</span><br><span class="line">git checkout <span class="built_in">test</span></span><br><span class="line">git push -u origin <span class="built_in">test</span></span><br></pre></td></tr></tbody></table></figure>
+<p>效果如下<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Alfred%E8%87%AA%E5%8A%A8%E5%B1%95%E5%BC%80%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="Alfred的Snippets自动展开的效果"><br>Alfred的Snippets也跟alias一样是不能接受参数的，不过支持一些占位符，可以展开为一些特定模式的动态内容。一个比较有用的是{cursor}这个占位符，可以让光标定位至此。例如我可以定义这样的一串展开结果</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM `user_info` WHERE `userId` = {cursor}\G</span><br></pre></td></tr></tbody></table></figure>
+<p>这样我敲入对应的短语后就可以正确定位到WHERE语句，然后直接输入要查询的参数即可，效果如下<br><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/cursor%E5%8D%A0%E4%BD%8D%E7%AC%A6%E7%9A%84%E6%95%88%E6%9E%9C.gif" alt="cursor占位符的效果"></p>
+<p>除了Alfred之外，还有其它的通过snippet提高输入效率的软件，比如<a href="http://www.trankynam.com/atext/">aText</a>，<a href="https://kapeli.com/dash">Dash</a>，不过我没有实际地用过，就不多说了。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>没有代码才是最快地输入代码的方式</p>
+
       
     </div>
 
@@ -484,7 +647,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/09/%E6%8A%A5%E5%91%8A%E5%B1%82%E6%95%B0%E7%9A%84%E5%B9%BF%E5%BA%A6%E6%9C%89%E9%99%90%E6%90%9C%E7%B4%A2/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/11/16/%E5%80%BC%E5%BE%97%E4%BD%BF%E7%94%A8%E7%9A%84%E8%BD%AF%E4%BB%B6%E4%B9%8BAlfred/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -498,7 +661,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/09/%E6%8A%A5%E5%91%8A%E5%B1%82%E6%95%B0%E7%9A%84%E5%B9%BF%E5%BA%A6%E6%9C%89%E9%99%90%E6%90%9C%E7%B4%A2/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2018/11/16/%E5%80%BC%E5%BE%97%E4%BD%BF%E7%94%A8%E7%9A%84%E8%BD%AF%E4%BB%B6%E4%B9%8BAlfred/" class="post-title-link" itemprop="url">值得使用的软件之Alfred</a>
         </h1>
 
         <div class="post-meta">
@@ -508,8 +671,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-09 23:20:35" itemprop="dateCreated datePublished" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+              <time title="创建时间：2018-11-16 23:05:00" itemprop="dateCreated datePublished" datetime="2018-11-16T23:05:00+08:00">2018-11-16</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -520,8 +690,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/01/09/%E6%8A%A5%E5%91%8A%E5%B1%82%E6%95%B0%E7%9A%84%E5%B9%BF%E5%BA%A6%E6%9C%89%E9%99%90%E6%90%9C%E7%B4%A2/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/09/报告层数的广度有限搜索/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2018/11/16/%E5%80%BC%E5%BE%97%E4%BD%BF%E7%94%A8%E7%9A%84%E8%BD%AF%E4%BB%B6%E4%B9%8BAlfred/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/16/值得使用的软件之Alfred/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -536,7 +706,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p><a href="https://www.alfredapp.com/">Alfred</a>是一款所谓的“生产力工具”，可以理解为就是帮助Mac用户提高日常事务的处理效率的工具，在我还没有入手MBP的时候就已经（在知乎上）听闻了这款软件的大名了。实际使用了之后发现确实可以提升一些事情的处理效率，是一款值得身为程序员的读者朋友使用的应用。接下来我会举一些例子来说明一下，希望可以传达到我的感受。献上我的Alfred使用统计<br><img src="/images/loading.png" data-original="http://wx1.sinaimg.cn/large/791cf7abgy1fx5nx11uumj21kw115n9m.jpg" alt="Alfred的使用统计"></p>
+<h2 id="Alfred的Clipboard"><a href="#Alfred的Clipboard" class="headerlink" title="Alfred的Clipboard"></a>Alfred的Clipboard</h2><p>剪贴板真是一个再常用不过的功能了，我想所有的读者朋友应该都使用过复制&amp;粘贴的功能——不管是在Windows上面的Ctrl-c Ctrl-v也好，还是在Mac上面的Command-c Command-v也罢。Alfred的Clipboard功能可以认为是一个强化版的剪贴板，它可以通过快捷键（在我的系统上设置为了Command-p）快速唤出<br><img src="/images/loading.png" data-original="http://wx1.sinaimg.cn/large/791cf7abgy1fx5o8vf7g9j20vs0ngh1e.jpg" alt="Alfred唤出Clipboard"></p>
+<p>并且支持搜索（虽然很遗憾图片没办法搜索）<br><img src="/images/loading.png" data-original="http://wx1.sinaimg.cn/large/791cf7abgy1fx5oh8pgiyj20vs0ngnh2.jpg" alt="在Clipboard中搜索"></p>
+<p>当需要在两个应用间复制粘贴多段内容的时候，Clipboard就派上用场了。只需要先把需要的每一段内容在一个应用中分别复制一次，打开另一个应用后唤出Clipboard，便可以把刚才复制的内容逐个粘贴进来。每当我在一些地方看到有趣的图片想要分享给微信或者QQ的朋友时，也是打开微信或者QQ后进入Alfred的Clipboard浏览——打开Clipboard后，敲入“Image”，便可以只查看记录在剪贴板中的图片了，并且还可以在发送前预览<br><img src="/images/loading.png" data-original="http://wx4.sinaimg.cn/large/791cf7abgy1fx6clzi5sej20vq0ngqnt.jpg" alt="在Clipboard中搜索图片"></p>
+<h2 id="Alfred的Snippets"><a href="#Alfred的Snippets" class="headerlink" title="Alfred的Snippets"></a>Alfred的Snippets</h2><p>Snippets算是我近期才挖掘到并开始重度使用的功能，用一句话概括，就是“长话短说”。在Snippets中可以新建一个较短的关键字来代替一串较长的输入，例如我就分别用了gcd、gct，以及gmd来代替切换到develop分支、切换到test分支，以及合并develop分支这三条常用的Git操作命令<br><img src="/images/loading.png" data-original="http://wx1.sinaimg.cn/large/791cf7abgy1fx7i4n82ouj21kw1144kh.jpg" alt="在Snippets中定义短语"></p>
+<p>之后既可以通过快捷键唤出Snippets面板的方式来输入短语，也可以直接在短语定义时勾选【Auto expandsion allowed】来做到输入短语后自动展开为完整的内容。下图演示的是输入gcd后自动展开为完整的命令<br><img src="/images/loading.png" data-original="http://wx1.sinaimg.cn/large/791cf7abgy1fx95zf440lg20dc06n42u.gif" alt="自动展开Snippets中的短语"></p>
+<p>我现在已经积累了很多的短语了，不仅提高了输入的速度，也降低了重复输入这些内容的出错率，实在是居家旅行coding必备。</p>
+<h2 id="Alfred的Workflow"><a href="#Alfred的Workflow" class="headerlink" title="Alfred的Workflow"></a>Alfred的Workflow</h2><p>购买Alfred的Powerpack后就可以开启<a href="https://www.alfredapp.com/workflows/">Workflow</a>的功能了，实际上，在我真正开始用Alfred之前（还在用着Windows的时候），对Alfred的了解基本上局限于“它拥有一个很强大的叫做Workflow的功能”这样，可以说，让Alfred如此闻名遐迩的就是它的Workflow特性吧——不过后来我才知道原来Mac自带一个叫做Automator的类似的功能。</p>
+<p>刚开始接触Workflow的时候，我也沉迷于在网上搜罗别人写好的来用，慢慢地才发现这些其他人经常（在知乎的答案里）列举到的Workflow，其实并不适合我。有一两个觉得眼前一亮的，在使用了一两次之后也就不怎么用了。现在，我自己写了一些Workflow，倒是显著地提升了我的开发过程。</p>
+<p>比较合适作为例子的是我写的三个用于处理时间的Workflow。一个是用于将日期时间字符串转换为UNIX时间戳（毫秒单位）的Workflow，名为gt——取的是get time之意。使用起来的效果大致如下<br><img src="/images/loading.png" data-original="http://wx1.sinaimg.cn/large/791cf7abgy1fx95y9x87ng20dc0c81en.gif" alt="gt的使用效果"></p>
+<p>这个Workflow最终会把结果复制到剪贴板中，便于在其它应用中使用。由于工作内容的缘故，我常常会需要获取某一个时候的UNIX时间戳（毫秒单位）。在有这个Workflow之前，我都是打开iTerm运行node，然后敲入</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">Date</span>(<span class="string">'2018-11-15 00:00:00'</span>).<span class="title function_">getTime</span>();</span><br></pre></td></tr></tbody></table></figure>
+<p>这般的代码来得到结果的，不仅要在不同的应用间切换来切换去的，而且还需要重复地敲入new、Date，以及getTime等字眼，实在是一件很低效的事情。使用了gt之后，感觉幸福感也提高了很多。</p>
+<p>另一个Workflow名为wt——取的是what time之意，它的作用跟gt相反，是将毫秒数转换为可读的日期时间字符串，效果如下<br><img src="/images/loading.png" data-original="http://wx2.sinaimg.cn/large/791cf7abgy1fx960hx1heg20dc0c849f.gif" alt="wt的使用效果"></p>
+<p>最后一个Workflow名为int——即I need time，它可以提供特定的一些时刻的时间戳，例如【今天零点】这样的特定的时刻。这三个Workflow的入口节点都是一个<a href="https://www.alfredapp.com/help/workflows/inputs/script-filter/">Script Filter</a>，int的使用效果如下<br><img src="/images/loading.png" data-original="http://wx3.sinaimg.cn/large/791cf7abgy1fx9um0vongg20dc0c8k95.gif" alt="int的使用效果"></p>
+<p>Alfred的Workflow还可以做很多的事情。它是一个入口，很适合用于不需要肉眼查看含有大段文字的结果的交互场景，例如对字符串做编码转换、计算字符串的摘要、通过AppleScript调起微信联系人，以及控制音量等等，只要好好利用，就可以提升平时的使用效率。程序员朋友们，不妨一起来发挥自己的创造力吧。</p>
+
       
     </div>
 
@@ -625,6 +811,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

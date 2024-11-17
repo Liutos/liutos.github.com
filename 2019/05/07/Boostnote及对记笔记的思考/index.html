@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -46,19 +46,28 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="这篇文章就是在Boostnote 中写成的XD 来龙去脉有一阵子，我沉迷于“笔记软件狩猎”中——就是不停寻找各种各样的笔记软件，再一个个试用，企图从中选出一个最强大的。回想起来，我尝试过有道云笔记、印象笔记、Quiver、Boostnote、OneNote、Yu Writer、Leanote（在本地搭建），等等。大部分都是浅尝辄止，例如OneNote，当我发现它不支持代码块语法高亮时，就放弃了它。">
-<meta name="keywords" content="boostnote,editor,markdown,note taking,org-mode,sequence diagram,typora,yu writer,笔记类软件,编辑器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Boostnote及对记笔记的思考">
-<meta property="og:url" content="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/index.html">
+<meta property="og:url" content="https://liutos.github.io/2019/05/07/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
 <meta property="og:description" content="这篇文章就是在Boostnote 中写成的XD 来龙去脉有一阵子，我沉迷于“笔记软件狩猎”中——就是不停寻找各种各样的笔记软件，再一个个试用，企图从中选出一个最强大的。回想起来，我尝试过有道云笔记、印象笔记、Quiver、Boostnote、OneNote、Yu Writer、Leanote（在本地搭建），等等。大部分都是浅尝辄止，例如OneNote，当我发现它不支持代码块语法高亮时，就放弃了它。">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-05-14T14:57:51.000Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-07T15:06:43.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="boostnote">
+<meta property="article:tag" content="editor">
+<meta property="article:tag" content="markdown">
+<meta property="article:tag" content="note taking">
+<meta property="article:tag" content="org-mode">
+<meta property="article:tag" content="sequence diagram">
+<meta property="article:tag" content="typora">
+<meta property="article:tag" content="yu writer">
+<meta property="article:tag" content="笔记类软件">
+<meta property="article:tag" content="编辑器">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Boostnote及对记笔记的思考">
-<meta name="twitter:description" content="这篇文章就是在Boostnote 中写成的XD 来龙去脉有一阵子，我沉迷于“笔记软件狩猎”中——就是不停寻找各种各样的笔记软件，再一个个试用，企图从中选出一个最强大的。回想起来，我尝试过有道云笔记、印象笔记、Quiver、Boostnote、OneNote、Yu Writer、Leanote（在本地搭建），等等。大部分都是浅尝辄止，例如OneNote，当我发现它不支持代码块语法高亮时，就放弃了它。">
 
-<link rel="canonical" href="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/">
+<link rel="canonical" href="https://liutos.github.io/2019/05/07/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/">
 
 
 <script id="page-configurations">
@@ -110,6 +119,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -201,10 +211,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/07/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -231,7 +241,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-05-14 22:57:51" itemprop="dateModified" datetime="2019-05-14T22:57:51+08:00">2019-05-14</time>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
               </span>
 
           
@@ -243,7 +253,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/05/07/Boostnote及对记笔记的思考/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2019/05/07/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/07/Boostnote及对记笔记的思考/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -259,13 +269,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>这篇文章就是在<a href="https://boostnote.io/" target="_blank" rel="noopener">Boostnote</a> 中写成的XD</p>
+        <p>这篇文章就是在<a href="https://boostnote.io/">Boostnote</a> 中写成的XD</p>
 <h2 id="来龙去脉"><a href="#来龙去脉" class="headerlink" title="来龙去脉"></a>来龙去脉</h2><p>有一阵子，我沉迷于“笔记软件狩猎”中——就是不停寻找各种各样的笔记软件，再一个个试用，企图从中选出一个最强大的。回想起来，我尝试过有道云笔记、印象笔记、Quiver、Boostnote、OneNote、Yu Writer、Leanote（在本地搭建），等等。大部分都是浅尝辄止，例如OneNote，当我发现它不支持代码块语法高亮时，就放弃了它。目前仍然在使用的是Boostnote，并且也是最令我满意的。</p>
-<a id="more"></a>
+<span id="more"></span>
+
 <h2 id="走马观花"><a href="#走马观花" class="headerlink" title="走马观花"></a>走马观花</h2><p>Boostnote自诩为“for developer”的笔记软件，除了书写Markdown以及实时预览之外，还支持绘图（UML、流程图、时序图）、制表，甚至可以添加LaTeX公式。</p>
-<p>GitHub上可以找到官方对Boostnote绘图能力的简单<a href="https://github.com/BoostIO/Boostnote/wiki/Diagram-support" target="_blank" rel="noopener">示例</a>，但我用得极少。不管是画UML、流程图，还是时序图，方法都是“写代码”。画UML用的是PlantUML的语法（你甚至可以在首选项中找到PlantUML服务器的地址），画流程图用的是<a href="http://flowchart.js.org/" target="_blank" rel="noopener">flowchart.js</a>的语法。我自己很喜欢这类语绘的方式，只需要熟悉一下语法，画起来图来比鼠标拖拖拉拉不知道要高到哪里去了。说到时序图，我更喜欢用<a href="http://sdedit.sourceforge.net/example/index.html" target="_blank" rel="noopener">sdedit</a>。</p>
+<p>GitHub上可以找到官方对Boostnote绘图能力的简单<a href="https://github.com/BoostIO/Boostnote/wiki/Diagram-support">示例</a>，但我用得极少。不管是画UML、流程图，还是时序图，方法都是“写代码”。画UML用的是PlantUML的语法（你甚至可以在首选项中找到PlantUML服务器的地址），画流程图用的是<a href="http://flowchart.js.org/">flowchart.js</a>的语法。我自己很喜欢这类语绘的方式，只需要熟悉一下语法，画起来图来比鼠标拖拖拉拉不知道要高到哪里去了。说到时序图，我更喜欢用<a href="http://sdedit.sourceforge.net/example/index.html">sdedit</a>。</p>
 <p>制表只需要敲入竖线和横线即可。例如，下面的内容</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">|这|是|一|</span><br><span class="line">|-|-|-|</span><br><span class="line">|个|表|格|</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">|这|是|一|</span><br><span class="line">|-|-|-|</span><br><span class="line">|个|表|格|</span><br></pre></td></tr></tbody></table></figure>
+
 <p>在Boostnote中预览时的效果是如下这样的</p>
 <table>
 <thead>
@@ -275,17 +287,16 @@
 <th>一</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>个</td>
 <td>表</td>
 <td>格</td>
 </tr>
-</tbody>
-</table>
-<p>制表在Emacs的<a href="https://orgmode.org/manual/Built_002din-table-editor.html#Built_002din-table-editor" target="_blank" rel="noopener">org-mode</a>中有更风骚的表现。比如，按下tab键可以让光标跳至下一个单元格，同时会自动调整每一列的宽度；甚至，还可以在单元格中使用公式。</p>
+</tbody></table>
+<p>制表在Emacs的<a href="https://orgmode.org/manual/Built_002din-table-editor.html#Built_002din-table-editor">org-mode</a>中有更风骚的表现。比如，按下tab键可以让光标跳至下一个单元格，同时会自动调整每一列的宽度；甚至，还可以在单元格中使用公式。</p>
 <p>既然可以嵌入LaTeX，那么下列的内容</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$ \LaTeX $$</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">$</span><span class="built_in">$</span> <span class="keyword">\LaTeX</span> <span class="built_in">$</span><span class="built_in">$</span></span><br></pre></td></tr></tbody></table></figure>
+
 <p>就能够用来绘制酷炫版的LaTeX logo了，如下所示</p>
 <p>$$ \LaTeX $$</p>
 <p>只可惜这玩意儿不是inline的。</p>
@@ -358,7 +369,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/" title="Boostnote及对记笔记的思考">https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/</a>
+    <a href="https://liutos.github.io/2019/05/07/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/" title="Boostnote及对记笔记的思考">https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -378,8 +389,8 @@
               <a href="/tags/sequence-diagram/" rel="tag"><i class="fa fa-tag"></i> sequence diagram</a>
               <a href="/tags/typora/" rel="tag"><i class="fa fa-tag"></i> typora</a>
               <a href="/tags/yu-writer/" rel="tag"><i class="fa fa-tag"></i> yu writer</a>
-              <a href="/tags/笔记类软件/" rel="tag"><i class="fa fa-tag"></i> 笔记类软件</a>
-              <a href="/tags/编辑器/" rel="tag"><i class="fa fa-tag"></i> 编辑器</a>
+              <a href="/tags/%E7%AC%94%E8%AE%B0%E7%B1%BB%E8%BD%AF%E4%BB%B6/" rel="tag"><i class="fa fa-tag"></i> 笔记类软件</a>
+              <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> 编辑器</a>
           </div>
 
         
@@ -388,11 +399,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/03/13/更过程式的let——vertical-let/" rel="prev" title="更过程式的let——vertical-let">
+    <a href="/2019/03/13/%E6%9B%B4%E8%BF%87%E7%A8%8B%E5%BC%8F%E7%9A%84let%E2%80%94%E2%80%94vertical-let/" rel="prev" title="更过程式的let——vertical-let">
       <i class="fa fa-chevron-left"></i> 更过程式的let——vertical-let
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/05/17/一个简陋的四则运算编译器实现/" rel="next" title="开发一个trivial的lisp编译器（一）">
+    <a href="/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/" rel="next" title="开发一个trivial的lisp编译器（一）">
       开发一个trivial的lisp编译器（一） <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -474,13 +485,13 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#来龙去脉"><span class="nav-number">1.</span> <span class="nav-text">来龙去脉</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#走马观花"><span class="nav-number">2.</span> <span class="nav-text">走马观花</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#槽点"><span class="nav-number">3.</span> <span class="nav-text">槽点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些胡言乱语"><span class="nav-number">4.</span> <span class="nav-text">一些胡言乱语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后记"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A5%E9%BE%99%E5%8E%BB%E8%84%89"><span class="nav-number">1.</span> <span class="nav-text">来龙去脉</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%B0%E9%A9%AC%E8%A7%82%E8%8A%B1"><span class="nav-number">2.</span> <span class="nav-text">走马观花</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A7%BD%E7%82%B9"><span class="nav-number">3.</span> <span class="nav-text">槽点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E8%83%A1%E8%A8%80%E4%B9%B1%E8%AF%AD"><span class="nav-number">4.</span> <span class="nav-text">一些胡言乱语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -489,7 +500,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -502,7 +513,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">120</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -527,19 +538,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -588,16 +599,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -623,6 +634,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -651,6 +670,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -668,7 +694,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2019/05/07/Boostnote及对记笔记的思考/",
+            url: "https://liutos.github.io/2019/05/07/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/",
             identifier: "2019/05/07/Boostnote及对记笔记的思考/",
             title: "Boostnote及对记笔记的思考"
           }
@@ -691,7 +717,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: 'f0e3b2381d70afa10228dcd142f884f0',
+      id: '4d6c30a76d21d4cccd94efea0d9cd4b0',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -699,4 +725,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

@@ -45,18 +45,27 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="Common Lisp中有一个叫做return的宏，它的作用和平常在C、Java，或者Node.js里面见到的return关键字完全不一样。Common Lisp中的return用于从一个块（block）中返的，而不是从一个函数中返回。用return可以写出下面这样的代码，符号YOU-WILL-NOT-SEE-ME永远不会被打印 1234(defun foo ()  (block nil    (">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="编译return语句">
 <meta property="og:url" content="https://liutos.github.io/2019/09/18/%E7%BC%96%E8%AF%91return%E8%AF%AD%E5%8F%A5/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="Common Lisp中有一个叫做return的宏，它的作用和平常在C、Java，或者Node.js里面见到的return关键字完全不一样。Common Lisp中的return用于从一个块（block）中返的，而不是从一个函数中返回。用return可以写出下面这样的代码，符号YOU-WILL-NOT-SEE-ME永远不会被打印 1234(defun foo ()  (block nil    (">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-09-18T14:05:37.000Z">
-<meta property="article:modified_time" content="2019-09-18T14:05:37.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/SBCL%E7%BC%96%E8%AF%91%E6%97%B6%E7%BB%99%E5%87%BA%E7%9A%84note.png">
+<meta property="article:published_time" content="2019-09-18T14:01:33.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="common lisp">
+<meta property="article:tag" content="lisp">
+<meta property="article:tag" content="assembly">
+<meta property="article:tag" content="compiler">
+<meta property="article:tag" content="setq">
+<meta property="article:tag" content="x64">
+<meta property="article:tag" content="汇编">
+<meta property="article:tag" content="编译器">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/SBCL%E7%BC%96%E8%AF%91%E6%97%B6%E7%BB%99%E5%87%BA%E7%9A%84note.png">
 
 <link rel="canonical" href="https://liutos.github.io/2019/09/18/%E7%BC%96%E8%AF%91return%E8%AF%AD%E5%8F%A5/">
 
@@ -70,7 +79,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>编译return语句 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +224,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          编译return语句
         </h1>
 
         <div class="post-meta">
@@ -225,8 +234,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-09-18 22:05:37" itemprop="dateCreated datePublished" datetime="2019-09-18T22:05:37+08:00">2019-09-18</time>
+              <time title="创建时间：2019-09-18 22:01:33" itemprop="dateCreated datePublished" datetime="2019-09-18T22:01:33+08:00">2019-09-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -253,7 +269,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>Common Lisp中有一个叫做<a href="http://www.lispworks.com/documentation/HyperSpec/Body/m_return.htm"><code>return</code></a>的宏，它的作用和平常在C、Java，或者Node.js里面见到的<code>return</code>关键字完全不一样。Common Lisp中的<code>return</code>用于从一个块（<a href="http://www.lispworks.com/documentation/HyperSpec/Body/s_block.htm"><code>block</code></a>）中返的，而不是从一个函数中返回。用<code>return</code>可以写出下面这样的代码，符号<code>YOU-WILL-NOT-SEE-ME</code>永远不会被打印</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foo ()</span><br><span class="line">  (<span class="name">block</span> <span class="literal">nil</span></span><br><span class="line">    (<span class="name">return</span> <span class="number">123</span>)</span><br><span class="line">    (<span class="name">print</span> 'you-will-not-see-me)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>求值<code>return</code>，就将123作为<code>block</code>的返回值从中返回了，后面的<code>print</code>并没有机会执行——在SBCL中编译上面这段<code>defun</code>的时候，编译器甚至已经给出了提醒</p>
+<span id="more"></span>
+
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/SBCL%E7%BC%96%E8%AF%91%E6%97%B6%E7%BB%99%E5%87%BA%E7%9A%84note.png"></p>
+<p><code>return</code>是一个宏，它可以展开为一个<code>return-from</code>，并带有一个名为<code>NIL</code>的块名。用<code>return-from</code>可以直接从函数<code>foo</code>中返回而不需要多一层<code>block</code>，示例代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foo2 ()</span><br><span class="line">  (<span class="name">return-from</span> foo2 <span class="number">123</span>)</span><br><span class="line">  (<span class="name">print</span> 'you-will-not-see-me))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>除了要多写一个函数的名称之外，<code>return-from</code>跟C、Java，或者Node.js中的<code>return</code>语句是差不多的——没错，只是差不多而已。实际上，<code>return-from</code>也是从一个<code>block</code>中返回的，上面的代码之所以有效，是因为<code>defun</code>会隐式地定义一个跟函数同名的块。</p>
+<p>这一次要在<code>jjcc2</code>中支持的<code>return</code>，比起Common Lisp，更接近于C语言中的<code>return</code>语句——是用来直接从函数调用中返回的。</p>
+<p>编译<code>return</code>其实很简单。在目前的<code>inside-out</code>中，<code>return</code>会落入到最后的分支，因此它的唯一一个参数会被翻出来先编译，并且其结果是放入到<code>%EAX</code>寄存器中的。所以，编译<code>return</code>只需要生成一道简单的<code>RET</code>指令就足够了。修改后的<code>jjcc2</code>如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span> globals)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">check-type</span> globals hash-table)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (addl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '-)</span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (subl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '*)</span><br><span class="line">         <span class="comment">;; 将两个数字相乘的结果放到第二个操作数所在的寄存器中</span></span><br><span class="line">         <span class="comment">;; 因为约定了用EAX寄存器作为存放最终结果给continuation用的寄存器，所以第二个操作数应当为EAX</span></span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (imull %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '/)</span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (cltd)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (idivl %ebx)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'progn)</span><br><span class="line">         (<span class="name">let</span> ((<span class="name">result</span> '()))</span><br><span class="line">           (<span class="name">dolist</span> (<span class="name">expr</span> (<span class="name">rest</span> expr))</span><br><span class="line">             (<span class="name">setf</span> result (<span class="name">append</span> result (<span class="name">jjcc2</span> expr globals))))</span><br><span class="line">           result))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'setq)</span><br><span class="line">         <span class="comment">;; 编译赋值语句的方式比较简单，就是将被赋值的符号视为一个全局变量，然后将eax寄存器中的内容移动到这里面去</span></span><br><span class="line">         <span class="comment">;; <span class="doctag">TODO:</span> 这里expr的second的结果必须是一个符号才行</span></span><br><span class="line">         <span class="comment">;; <span class="doctag">FIXME:</span> 不知道应该赋值什么比较好，先随便写个0吧</span></span><br><span class="line">         (<span class="name">setf</span> (<span class="name">gethash</span> (<span class="name">second</span> expr) globals) <span class="number">0</span>)</span><br><span class="line">         (<span class="name">values</span> (<span class="name">append</span> (<span class="name">jjcc2</span> (<span class="name">third</span> expr) globals)</span><br><span class="line">                         <span class="comment">;; 为了方便stringify函数的实现，这里直接构造出RIP-relative形式的字符串</span></span><br><span class="line">                         `((movl %eax ,(get-operand expr <span class="number">0</span>))))</span><br><span class="line">                 globals))</span><br><span class="line">        <span class="comment">;; ((eq (first expr) '_exit)</span></span><br><span class="line">        <span class="comment">;;  ;; 因为知道_exit只需要一个参数，所以将它的第一个操作数塞到EDI寄存器里面就可以了</span></span><br><span class="line">        <span class="comment">;;  ;; <span class="doctag">TODO:</span> 更好的写法，应该是有一个单独的函数来处理这种参数传递的事情（以符合calling convention的方式）</span></span><br><span class="line">        <span class="comment">;;  `((movl ,(get-operand expr 0) %edi)</span></span><br><span class="line">        <span class="comment">;;    (movl #x2000001 %eax)</span></span><br><span class="line">        <span class="comment">;;    (syscall)))</span></span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '&gt;)</span><br><span class="line">         <span class="comment">;; 为了可以把比较之后的结果放入到EAX寄存器中，以我目前不完整的汇编语言知识，可以想到的方法如下</span></span><br><span class="line">         (<span class="name">let</span> ((<span class="name">label-greater-than</span> (<span class="name">intern</span> (<span class="name">symbol-name</span> (<span class="name">gensym</span>)) <span class="symbol">:keyword</span>))</span><br><span class="line">               (<span class="name">label-end</span> (<span class="name">intern</span> (<span class="name">symbol-name</span> (<span class="name">gensym</span>)) <span class="symbol">:keyword</span>)))</span><br><span class="line">           <span class="comment">;; 根据这篇文章（https://en.wikibooks.org/wiki/X86_Assembly/Control_Flow#Comparison_Instructions）中的说法，大于号左边的数字应该放在CMP指令的第二个操作数中，右边的放在第一个操作数中</span></span><br><span class="line">           `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">             (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">             (cmpl %ebx %eax)</span><br><span class="line">             (jg ,label-greater-than)</span><br><span class="line">             (movl $<span class="number">0</span> %eax)</span><br><span class="line">             (jmp ,label-end)</span><br><span class="line">             ,label-greater-than</span><br><span class="line">             (movl $<span class="number">1</span> %eax)</span><br><span class="line">             ,label-end)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'if)</span><br><span class="line">         <span class="comment">;; 假定if语句的测试表达式的结果也是放在%eax寄存器中的，所以只需要拿%eax寄存器中的值跟0做比较即可（类似于C语言）</span></span><br><span class="line">         (<span class="name">let</span> ((<span class="name">label-else</span> (<span class="name">intern</span> (<span class="name">symbol-name</span> (<span class="name">gensym</span>)) <span class="symbol">:keyword</span>))</span><br><span class="line">               (<span class="name">label-end</span> (<span class="name">intern</span> (<span class="name">symbol-name</span> (<span class="name">gensym</span>)) <span class="symbol">:keyword</span>)))</span><br><span class="line">           (<span class="name">append</span> (<span class="name">jjcc2</span> (<span class="name">second</span> expr) globals)</span><br><span class="line">                   `((cmpl $<span class="number">0</span> %eax)</span><br><span class="line">                     (je ,label-else))</span><br><span class="line">                   (<span class="name">jjcc2</span> (<span class="name">third</span> expr) globals)</span><br><span class="line">                   `((jmp ,label-end)</span><br><span class="line">                     ,label-else)</span><br><span class="line">                   (<span class="name">jjcc2</span> (<span class="name">fourth</span> expr) globals)</span><br><span class="line">                   `(,label-end))))</span><br><span class="line">        ((<span class="name">member</span> (<span class="name">first</span> expr) '(_exit exit))</span><br><span class="line">         <span class="comment">;; 暂时以硬编码的方式识别一个函数是否来自于C语言的标准库</span></span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %edi)</span><br><span class="line">           ;; 据这篇回答（https<span class="symbol">://stackoverflow</span>.com/questions/12678230/how-to-print-argv0-in-nasm）所说，在macOS上调用C语言函数，需要将栈对齐到<span class="number">16</span>位</span><br><span class="line">           ;; 假装要对齐的是栈顶地址。因为栈顶地址是往低地址增长的，所以只需要将地址的低<span class="number">16</span>位抹掉就可以了</span><br><span class="line">           (and ,(format <span class="literal">nil</span> <span class="string">"$0x~X"</span> <span class="number">#XFFFFFFFFFFFFFFF0</span>) %rsp)</span><br><span class="line">           (call :|_exit|)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'return)</span><br><span class="line">         <span class="comment">;; 由于经过inside-out的处理之后，return的参数就是一个“原子”了，因此不再需要调用jjcc2来处理一遍</span></span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (ret)))</span><br><span class="line">        (<span class="name">t</span></span><br><span class="line">         <span class="comment">;; 按照这里（https://www3.nd.edu/~dthain/courses/cse40243/fall2015/intel-intro.html）所给的函数调用约定来传递参数</span></span><br><span class="line">         (<span class="name">let</span> ((<span class="name">instructions</span> '())</span><br><span class="line">               (<span class="name">registers</span> '(%rdi %rsi %rdx %rcx %r8 %r9)))</span><br><span class="line">           (<span class="name">dotimes</span> (<span class="name">i</span> (<span class="name">length</span> (<span class="name">rest</span> expr)))</span><br><span class="line">             (<span class="name">if</span> (<span class="name">nth</span> i registers)</span><br><span class="line">                 (<span class="name">push</span> `(movq ,(get-operand expr i) ,(nth i registers)) instructions)</span><br><span class="line">                 (<span class="name">push</span> `(pushq ,(get-operand expr i)) instructions)))</span><br><span class="line">           <span class="comment">;; 经过一番尝试后，我发现必须在完成函数调用后恢复RSP寄存器才不会导致段错误</span></span><br><span class="line">           `(,@(nreverse instructions)</span><br><span class="line">             (pushq %rsp)</span><br><span class="line">             (and ,(format <span class="literal">nil</span> <span class="string">"$0x~X"</span> <span class="number">#XFFFFFFFFFFFFFFF0</span>) %rsp)</span><br><span class="line">             (call ,(first expr))</span><br><span class="line">             (popq %rsp))))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在，就不需要总是依靠<code>exit</code>函数来退出了。下列的代码可以使用<code>RET</code>指令从<code>_main</code>函数中返回</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">fb</span> '(return (+ <span class="number">1</span> <span class="number">2</span>)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>生成的汇编代码如下</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">        .data</span><br><span class="line">G565: .long 0</span><br><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EAX</span><br><span class="line">        MOVL $2, %EBX</span><br><span class="line">        ADDL %EBX, %EAX</span><br><span class="line">        MOVL %EAX, G565(%RIP)</span><br><span class="line">        MOVL G565(%RIP), %EAX</span><br><span class="line">        RET</span><br></pre></td></tr></tbody></table></figure>
+
+<p>全文完。</p>
+
     </div>
 
     
@@ -291,7 +329,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2019/09/18/%E7%BC%96%E8%AF%91return%E8%AF%AD%E5%8F%A5/" title="">https://liutos.github.io/2019/09/18/编译return语句/</a>
+    <a href="https://liutos.github.io/2019/09/18/%E7%BC%96%E8%AF%91return%E8%AF%AD%E5%8F%A5/" title="编译return语句">https://liutos.github.io/2019/09/18/编译return语句/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +339,17 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+              <a href="/tags/assembly/" rel="tag"><i class="fa fa-tag"></i> assembly</a>
+              <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
+              <a href="/tags/setq/" rel="tag"><i class="fa fa-tag"></i> setq</a>
+              <a href="/tags/x64/" rel="tag"><i class="fa fa-tag"></i> x64</a>
+              <a href="/tags/%E6%B1%87%E7%BC%96/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
+              <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> 编译器</a>
+          </div>
 
         
 
@@ -308,12 +357,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/08/15/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91%E9%80%9A%E7%94%A8%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2019/08/15/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91%E9%80%9A%E7%94%A8%E7%9A%84%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="prev" title="输出HELLO WORLD——如何编译通用的函数调用表达式">
+      <i class="fa fa-chevron-left"></i> 输出HELLO WORLD——如何编译通用的函数调用表达式
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/10/11/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91defun/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2019/10/11/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91defun/" rel="next" title="如何编译defun">
+      如何编译defun <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -411,6 +460,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +653,7 @@
         config: {page: {
             url: "https://liutos.github.io/2019/09/18/%E7%BC%96%E8%AF%91return%E8%AF%AD%E5%8F%A5/",
             identifier: "2019/09/18/编译return语句/",
-            title: ""
+            title: "编译return语句"
           }
         }
       });

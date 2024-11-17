@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -46,19 +46,19 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="TL;DR;这是一篇为了完成写作KPI而写的博客，总结起来就是提供了一种用Common Lisp实现来自于Twitter的雪花算法的实现方案。成品在这里，本文只是简单地描述一下生成雪花ID的大致思路，详细内容请各位移步代码仓库查看。 上述代码仓库中的snowflake算法——如果我的实现确实可以称作snowflake算法的话——的思路来自于下列两个地方：  http://www.lanindex.">
-<meta name="keywords" content="common lisp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何使用CL实现snowflake">
-<meta property="og:url" content="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/index.html">
+<meta property="og:url" content="https://liutos.github.io/2017/04/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
 <meta property="og:description" content="TL;DR;这是一篇为了完成写作KPI而写的博客，总结起来就是提供了一种用Common Lisp实现来自于Twitter的雪花算法的实现方案。成品在这里，本文只是简单地描述一下生成雪花ID的大致思路，详细内容请各位移步代码仓库查看。 上述代码仓库中的snowflake算法——如果我的实现确实可以称作snowflake算法的话——的思路来自于下列两个地方：  http://www.lanindex.">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-02T13:30:33.000Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-04-30T14:59:30.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="common lisp">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何使用CL实现snowflake">
-<meta name="twitter:description" content="TL;DR;这是一篇为了完成写作KPI而写的博客，总结起来就是提供了一种用Common Lisp实现来自于Twitter的雪花算法的实现方案。成品在这里，本文只是简单地描述一下生成雪花ID的大致思路，详细内容请各位移步代码仓库查看。 上述代码仓库中的snowflake算法——如果我的实现确实可以称作snowflake算法的话——的思路来自于下列两个地方：  http://www.lanindex.">
 
-<link rel="canonical" href="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/">
+<link rel="canonical" href="https://liutos.github.io/2017/04/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/">
 
 
 <script id="page-configurations">
@@ -110,6 +110,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -201,10 +202,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/04/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -231,7 +232,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-12-02 21:30:33" itemprop="dateModified" datetime="2018-12-02T21:30:33+08:00">2018-12-02</time>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
               </span>
 
           
@@ -243,7 +244,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2017/04/30/如何使用CL实现snowflake/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2017/04/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/30/如何使用CL实现snowflake/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -259,15 +260,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR;"></a>TL;DR;</h2><p>这是一篇为了完成写作KPI而写的博客，总结起来就是提供了一种用Common Lisp实现来自于Twitter的雪花算法的实现方案。成品在<a href="https://github.com/Liutos/clitool/blob/master/cl/misc/snowflake.lisp" target="_blank" rel="noopener">这里</a>，本文只是简单地描述一下生成雪花ID的大致思路，详细内容请各位移步代码仓库查看。</p>
+        <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR;"></a>TL;DR;</h2><p>这是一篇为了完成写作KPI而写的博客，总结起来就是提供了一种用Common Lisp实现来自于Twitter的雪花算法的实现方案。成品在<a href="https://github.com/Liutos/clitool/blob/master/cl/misc/snowflake.lisp">这里</a>，本文只是简单地描述一下生成雪花ID的大致思路，详细内容请各位移步代码仓库查看。</p>
 <p>上述代码仓库中的snowflake算法——如果我的实现确实可以称作snowflake算法的话——的思路来自于下列两个地方：</p>
 <ol>
-<li><a href="http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/" target="_blank" rel="noopener">http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/</a></li>
-<li><a href="https://github.com/sony/sonyflake" target="_blank" rel="noopener">https://github.com/sony/sonyflake</a></li>
+<li><a href="http://www.lanindex.com/twitter-snowflake%EF%BC%8C64%E4%BD%8D%E8%87%AA%E5%A2%9Eid%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/">http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/</a></li>
+<li><a href="https://github.com/sony/sonyflake">https://github.com/sony/sonyflake</a></li>
 </ol>
-<h2 id="如何获取时间戳"><a href="#如何获取时间戳" class="headerlink" title="如何获取时间戳"></a>如何获取时间戳</h2><p>Common Lisp本身提供了一个获取时间戳的函数，也就是<code>get-universal-time</code>，可惜的是，这个函数所返回的并不是通常意义上的<a href="https://en.wikipedia.org/wiki/Unix_time" target="_blank" rel="noopener">Epoch时间戳</a>，而是自己的一套计算时间的方式中的表示时间的整数。为了获得UNIX时间戳，需要借助于第三方库<a href="https://common-lisp.net/project/local-time/manual.html" target="_blank" rel="noopener"><code>local-time</code></a>。为了可以获取到毫秒精度的时间戳，一个可运行的函数如下</p>
+<h2 id="如何获取时间戳"><a href="#如何获取时间戳" class="headerlink" title="如何获取时间戳"></a>如何获取时间戳</h2><p>Common Lisp本身提供了一个获取时间戳的函数，也就是<code>get-universal-time</code>，可惜的是，这个函数所返回的并不是通常意义上的<a href="https://en.wikipedia.org/wiki/Unix_time">Epoch时间戳</a>，而是自己的一套计算时间的方式中的表示时间的整数。为了获得UNIX时间戳，需要借助于第三方库<a href="https://common-lisp.net/project/local-time/manual.html"><code>local-time</code></a>。为了可以获取到毫秒精度的时间戳，一个可运行的函数如下</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> now ()</span><br><span class="line">  <span class="string">"Returns the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC."</span></span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">now</span> (<span class="name">local-time</span><span class="symbol">:now</span>))</span><br><span class="line">         (<span class="name">seconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-to-unix</span> now))</span><br><span class="line">         (<span class="name">milliseconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-millisecond</span> now)))</span><br><span class="line">    (<span class="name">+</span> (<span class="name">*</span> <span class="number">1000</span> seconds) milliseconds)))</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="如何获取机器ID"><a href="#如何获取机器ID" class="headerlink" title="如何获取机器ID"></a>如何获取机器ID</h2><p>这里参考了Sony的雪花ID算法中的思路，基于机器的内网IP地址来生成机器ID。当然了，Common Lisp标准中是没有提供获取机器的内网IP地址的方法的，这一点也可以借助于第三方库实现，选用的是<a href="https://common-lisp.net/project/ip-interfaces/" target="_blank" rel="noopener"><code>ip-interfaces</code></a>。通过这个库提供的<code>get-ip-interfaces</code>函数可以获取到机器的所有“接口”，遍历这个接口的列表后即可找出其中的内网IP。一台机器可能会有多个内网IP，我的方法是选用了第一个找到的内网IP地址。当然了，还需要一个将向量转化为数值的函数，并取出转化为数值后的IP地址的低10位，作为机器ID。</p>
+
+<h2 id="如何获取机器ID"><a href="#如何获取机器ID" class="headerlink" title="如何获取机器ID"></a>如何获取机器ID</h2><p>这里参考了Sony的雪花ID算法中的思路，基于机器的内网IP地址来生成机器ID。当然了，Common Lisp标准中是没有提供获取机器的内网IP地址的方法的，这一点也可以借助于第三方库实现，选用的是<a href="https://common-lisp.net/project/ip-interfaces/"><code>ip-interfaces</code></a>。通过这个库提供的<code>get-ip-interfaces</code>函数可以获取到机器的所有“接口”，遍历这个接口的列表后即可找出其中的内网IP。一台机器可能会有多个内网IP，我的方法是选用了第一个找到的内网IP地址。当然了，还需要一个将向量转化为数值的函数，并取出转化为数值后的IP地址的低10位，作为机器ID。</p>
 <h2 id="序号"><a href="#序号" class="headerlink" title="序号"></a>序号</h2><p>如果希望生成的ID是保持递增的，那么就需要维护一个可以原子递增的数值计数器。在真实的使用中可以通过Redis的INCR指令来生成这一个ID，但是因为这里的雪花ID算法是作为一个独立的库实现的，不需要依赖于数据库等外部组建，因此这里就直接使用了Common Lisp自带的<code>random</code>函数来生成这个序号了。</p>
 <p>全文完</p>
 
@@ -308,7 +310,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/" title="如何使用CL实现snowflake">https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/</a>
+    <a href="https://liutos.github.io/2017/04/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/" title="如何使用CL实现snowflake">https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -329,11 +331,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2017/03/19/如何检查一组区间中是否存在两个区间有交集/" rel="prev" title="如何检查一组区间中是否存在两个区间有交集">
+    <a href="/2017/03/19/%E5%A6%82%E4%BD%95%E6%A3%80%E6%9F%A5%E4%B8%80%E7%BB%84%E5%8C%BA%E9%97%B4%E4%B8%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E4%B8%A4%E4%B8%AA%E5%8C%BA%E9%97%B4%E6%9C%89%E4%BA%A4%E9%9B%86/" rel="prev" title="如何检查一组区间中是否存在两个区间有交集">
       <i class="fa fa-chevron-left"></i> 如何检查一组区间中是否存在两个区间有交集
     </a></div>
       <div class="post-nav-item">
-    <a href="/2017/05/18/远程请求Squid/" rel="next" title="远程请求Squid">
+    <a href="/2017/05/18/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82Squid/" rel="next" title="远程请求Squid">
       远程请求Squid <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -415,13 +417,13 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TL-DR"><span class="nav-number">1.</span> <span class="nav-text">TL;DR;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何获取时间戳"><span class="nav-number">2.</span> <span class="nav-text">如何获取时间戳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何获取机器ID"><span class="nav-number">3.</span> <span class="nav-text">如何获取机器ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序号"><span class="nav-number">4.</span> <span class="nav-text">序号</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#TL-DR"><span class="nav-number">1.</span> <span class="nav-text">TL;DR;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E6%97%B6%E9%97%B4%E6%88%B3"><span class="nav-number">2.</span> <span class="nav-text">如何获取时间戳</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E6%9C%BA%E5%99%A8ID"><span class="nav-number">3.</span> <span class="nav-text">如何获取机器ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E5%8F%B7"><span class="nav-number">4.</span> <span class="nav-text">序号</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -430,7 +432,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -443,7 +445,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">120</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -468,19 +470,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -529,16 +531,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -564,6 +566,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -592,6 +602,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -609,7 +626,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2017/04/30/如何使用CL实现snowflake/",
+            url: "https://liutos.github.io/2017/04/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/",
             identifier: "2017/04/30/如何使用CL实现snowflake/",
             title: "如何使用CL实现snowflake"
           }
@@ -632,7 +649,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '8ba0698a06aab15dcd2c0b807f610b0b',
+      id: 'd24a54d5db54d80f926aa635ea7c1aa4',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -640,4 +657,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

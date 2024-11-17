@@ -45,18 +45,25 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="API测试用例是什么？在互联网大行其道的今天，身为一名电商平台的程序员，必定经常与HTTP API打交道，一个常见的情况便是做API测试。抛开可以用单元测试代替的，很多时候需要真地发出HTTP请求才行。这些负责发出HTTP请求的东西可能是一行curl命令，可能是一个.js文件，也可能是一个在postman中点击按钮的操作，但不管形态如何，它们便是API测试用例。尽管名字中带有“用例”二字，但很多时">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="用org-mode管理API测试用例">
 <meta property="og:url" content="https://liutos.github.io/2020/06/10/%E7%94%A8org-mode%E7%AE%A1%E7%90%86API%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="API测试用例是什么？在互联网大行其道的今天，身为一名电商平台的程序员，必定经常与HTTP API打交道，一个常见的情况便是做API测试。抛开可以用单元测试代替的，很多时候需要真地发出HTTP请求才行。这些负责发出HTTP请求的东西可能是一行curl命令，可能是一个.js文件，也可能是一个在postman中点击按钮的操作，但不管形态如何，它们便是API测试用例。尽管名字中带有“用例”二字，但很多时">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-06-10T13:58:19.000Z">
-<meta property="article:modified_time" content="2020-06-10T13:58:19.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/org-mode%E5%AE%98%E7%BD%91%E7%A4%BA%E4%BE%8B.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/%E7%94%A8%E4%B8%8D%E5%90%8C%E7%9A%84org%E6%96%87%E4%BB%B6%E5%8C%BA%E5%88%86%E7%8E%AF%E5%A2%83.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/%E7%94%A8%E4%B8%8D%E5%90%8C%E5%B1%82%E7%BA%A7%E7%9A%84headline%E7%AE%A1%E7%90%86%E7%9A%84%E7%A4%BA%E4%BE%8B.jpg">
+<meta property="article:published_time" content="2020-06-10T13:31:58.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="org-mode">
+<meta property="article:tag" content="emacs">
+<meta property="article:tag" content="api">
+<meta property="article:tag" content="http">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/org-mode%E5%AE%98%E7%BD%91%E7%A4%BA%E4%BE%8B.jpg">
 
 <link rel="canonical" href="https://liutos.github.io/2020/06/10/%E7%94%A8org-mode%E7%AE%A1%E7%90%86API%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/">
 
@@ -70,7 +77,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>用org-mode管理API测试用例 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          用org-mode管理API测试用例
         </h1>
 
         <div class="post-meta">
@@ -225,8 +232,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-06-10 21:58:19" itemprop="dateCreated datePublished" datetime="2020-06-10T21:58:19+08:00">2020-06-10</time>
+              <time title="创建时间：2020-06-10 21:31:58" itemprop="dateCreated datePublished" datetime="2020-06-10T21:31:58+08:00">2020-06-10</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -253,7 +267,51 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="API测试用例是什么？"><a href="#API测试用例是什么？" class="headerlink" title="API测试用例是什么？"></a>API测试用例是什么？</h1><p>在互联网大行其道的今天，身为一名电商平台的程序员，必定经常与HTTP API打交道，一个常见的情况便是做API测试。抛开可以用单元测试代替的，很多时候需要真地发出HTTP请求才行。这些负责发出HTTP请求的东西可能是一行<code>curl</code>命令，可能是一个<code>.js</code>文件，也可能是一个在postman中点击按钮的操作，但不管形态如何，它们便是API测试用例。尽管名字中带有“用例”二字，但很多时候是由人来校验结果的，用例更关注发出怎样的HTTP请求。</p>
+<h1 id="为什么要管理它们？"><a href="#为什么要管理它们？" class="headerlink" title="为什么要管理它们？"></a>为什么要管理它们？</h1><p>不同于每天在浏览器中发生成千上万次的、平凡的HTTP（或HTTPS）请求，API测试用例是值得一番精心管理的，因为：</p>
+<ol>
+<li><p>API测试用例通常会重复使用，因此必须将它们持久化保存。也许是保存成shell脚本，也许是保存成脚本语言源文件，也许是保存为某一款软件的数据文件；</p>
+</li>
+<li><p>需要为多个API编写测试用例，因此必须区分不同的API对应的测试用例。例如，负责管理业务资源的服务（比如一个管理商品数据的、提供RESTful API的服务），起码需要提供增删查改的功能，那么也就需要有增删查改对应的API测试用例；</p>
+</li>
+<li><p>需要为多个服务的API编写用例，因此必须区分不同的服务对应的测试用例集。例如，既然有商品服务，那么极可能还有订单服务、优惠券服务、物流服务，等等，每个服务又都有增删查改的功能，这些不同服务的API也需要各自的测试用例；</p>
+</li>
+<li><p>需要区分不同的运行环境。通常本地、开发、测试，以及生产环境是互相隔离的，一个用例中的参数往往不能照搬到另一个环境中。</p>
+</li>
+</ol>
+<p>API、服务，以及环境这三个维度上的区别，使得测试用例的数量显著增加，如不进行管理，当要用时，要么不得不从零开始再写一遍脚本，要么得翻查很久才能找到所需的用例。</p>
+<h1 id="用org-mode管理"><a href="#用org-mode管理" class="headerlink" title="用org-mode管理"></a>用org-mode管理</h1><h2 id="org-mode是什么？"><a href="#org-mode是什么？" class="headerlink" title="org-mode是什么？"></a>org-mode是什么？</h2><p><code>org-mode</code>是一款Emacs编辑器的扩展，它让使用者能够用快速高效的纯文本方式来记笔记、维护待办事项、安排计划，以及编写文档。<code>org-mode</code>的精髓在于它的大纲组织能力，以及依托于Emacs的扩展能力，两者使其正好可以胜任管理API测试用例的工作。一个<code>.org</code>文件的示例如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/org-mode%E5%AE%98%E7%BD%91%E7%A4%BA%E4%BE%8B.jpg" alt="org-mode官网的示例截图"></p>
+<h2 id="如何用org-mode管理API测试用例？"><a href="#如何用org-mode管理API测试用例？" class="headerlink" title="如何用org-mode管理API测试用例？"></a>如何用org-mode管理API测试用例？</h2><p>尽管<code>org-mode</code>提供了丰富的功能，但只是管理API测试用例的话，并用不上太多花里胡哨的东西，只需要<code>org-mode</code>的大纲功能和<code>org-babel</code>特性即可。</p>
+<p>首先用不同的<code>.org</code>文件区分不同的环境。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/%E7%94%A8%E4%B8%8D%E5%90%8C%E7%9A%84org%E6%96%87%E4%BB%B6%E5%8C%BA%E5%88%86%E7%8E%AF%E5%A2%83.jpg"></p>
+<p>接着用不同层级的headline区分不同的服务、资源类型，以及API。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/%E7%94%A8%E4%B8%8D%E5%90%8C%E5%B1%82%E7%BA%A7%E7%9A%84headline%E7%AE%A1%E7%90%86%E7%9A%84%E7%A4%BA%E4%BE%8B.jpg"></p>
+<p>然后用<code>org-mode</code>的<a href="https://orgmode.org/manual/Structure-of-Code-Blocks.html">代码块</a>语法来编写HTTP请求。以请求<code>https://httpbin.org/uuid</code>为例</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#+BEGIN_SRC restclient</span><br><span class="line">  GET https://httpbin.org/uuid</span><br><span class="line">#+END_SRC</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>#+BEGIN_SRC</code>和<code>#+END_SRC</code>分别表示开启和结束代码块，<code>restclient</code>表示这个代码块内的代码可以用Emacs的<code>restclient-mode</code>来编辑。在代码块中，<code>GET https://httpbin.org/uuid</code>表示以GET方法请求<code>https://httpbin.org/uuid</code>。</p>
+<p>安装了<a href="https://github.com/pashky/restclient.el"><code>restclient</code></a>后，将光标定位在代码块上并按下<code>ctrl-c '</code>，可以进入一个单独的buffer编辑其中的源代码</p>
+<video controls="">
+  <source src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/进入restclient模式的buffer.mp4" type="video/mp4">
+</video>
+
+<p>最后，如果配置了<code>org-babel</code>，甚至可以直接在代码块上按下<code>ctrl-c ctrl-c</code>来发出HTTP请求。</p>
+<video controls="">
+  <source src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200610/org-mode中发出HTTP请求.mp4" type="video/mp4">
+</video>
+可以看到，HTTP响应的内容会保留在这个`.org`文件中。
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>以前我也用过其它的工具来管理API测试用例：</p>
+<ol>
+<li>刚工作的时候用的是Postman，那时候Postman还是Chrome的一个插件；</li>
+<li>后来出于对Firefox浏览器的喜爱，找了一个叫RESTClient的插件来代替postman，久而久之发觉两者的差距蛮大，终究无法代替；</li>
+<li>接着遇到了Emacs中的<code>restclient.el</code>，于是用了好一段时间的纯<code>restclient-mode</code>（没有搭配<code>org-mode</code>）；</li>
+<li>再后来开始用Mac办公了，便开始寻找Mac下的这类工具，遇到了<a href="https://insomnia.rest/">Insomnia</a>。如果有人找我推荐用于HTTP API测试的GUI工具的话，我会毫无不犹豫地推荐这款。</li>
+</ol>
+<p>再后来，我又回到了Emacs，并用<code>org-mode</code>来管理这些API测试用例。目前这是最适合我的一种方式。</p>
+<p>全文完。</p>
+
     </div>
 
     
@@ -291,7 +349,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/06/10/%E7%94%A8org-mode%E7%AE%A1%E7%90%86API%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/" title="">https://liutos.github.io/2020/06/10/用org-mode管理API测试用例/</a>
+    <a href="https://liutos.github.io/2020/06/10/%E7%94%A8org-mode%E7%AE%A1%E7%90%86API%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/" title="用org-mode管理API测试用例">https://liutos.github.io/2020/06/10/用org-mode管理API测试用例/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +359,13 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/org-mode/" rel="tag"><i class="fa fa-tag"></i> org-mode</a>
+              <a href="/tags/emacs/" rel="tag"><i class="fa fa-tag"></i> emacs</a>
+              <a href="/tags/api/" rel="tag"><i class="fa fa-tag"></i> api</a>
+              <a href="/tags/http/" rel="tag"><i class="fa fa-tag"></i> http</a>
+          </div>
 
         
 
@@ -308,12 +373,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/22/%E9%87%8D%E5%AE%9A%E5%90%91%E7%9A%84%E6%97%B6%E5%80%99shell%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88%EF%BC%9F/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2020/05/22/%E9%87%8D%E5%AE%9A%E5%90%91%E7%9A%84%E6%97%B6%E5%80%99shell%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88%EF%BC%9F/" rel="prev" title="重定向的时候shell在干什么？">
+      <i class="fa fa-chevron-left"></i> 重定向的时候shell在干什么？
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/06/25/MySQL%E7%9A%84NOT-EXISTS%E9%81%AD%E9%81%87%E6%88%98/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2020/06/25/MySQL%E7%9A%84NOT-EXISTS%E9%81%AD%E9%81%87%E6%88%98/" rel="next" title="MySQL的NOT EXISTS遭遇战">
+      MySQL的NOT EXISTS遭遇战 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +459,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#API%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">API测试用例是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%AE%A1%E7%90%86%E5%AE%83%E4%BB%AC%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">为什么要管理它们？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8org-mode%E7%AE%A1%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">用org-mode管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#org-mode%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">org-mode是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%94%A8org-mode%E7%AE%A1%E7%90%86API%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%EF%BC%9F"><span class="nav-number">3.2.</span> <span class="nav-text">如何用org-mode管理API测试用例？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +477,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +670,7 @@
         config: {page: {
             url: "https://liutos.github.io/2020/06/10/%E7%94%A8org-mode%E7%AE%A1%E7%90%86API%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/",
             identifier: "2020/06/10/用org-mode管理API测试用例/",
-            title: ""
+            title: "用org-mode管理API测试用例"
           }
         }
       });

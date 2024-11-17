@@ -200,7 +200,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/01/07/Emacs%E7%9A%84org-mode%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%9A%84internal-archive/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/04/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -214,7 +214,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/01/07/Emacs%E7%9A%84org-mode%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%9A%84internal-archive/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2017/04/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/" class="post-title-link" itemprop="url">如何使用CL实现snowflake</a>
         </h1>
 
         <div class="post-meta">
@@ -224,8 +224,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-01-07 14:18:51" itemprop="dateCreated datePublished" datetime="2019-01-07T14:18:51+08:00">2019-01-07</time>
+              <time title="创建时间：2017-04-30 22:59:30" itemprop="dateCreated datePublished" datetime="2017-04-30T22:59:30+08:00">2017-04-30</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -236,8 +243,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/01/07/Emacs%E7%9A%84org-mode%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E7%9A%84internal-archive/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/01/07/Emacs的org-mode实现自动的internal-archive/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2017/04/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/04/30/如何使用CL实现snowflake/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -252,7 +259,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR;"></a>TL;DR;</h2><p>这是一篇为了完成写作KPI而写的博客，总结起来就是提供了一种用Common Lisp实现来自于Twitter的雪花算法的实现方案。成品在<a href="https://github.com/Liutos/clitool/blob/master/cl/misc/snowflake.lisp">这里</a>，本文只是简单地描述一下生成雪花ID的大致思路，详细内容请各位移步代码仓库查看。</p>
+<p>上述代码仓库中的snowflake算法——如果我的实现确实可以称作snowflake算法的话——的思路来自于下列两个地方：</p>
+<ol>
+<li><a href="http://www.lanindex.com/twitter-snowflake%EF%BC%8C64%E4%BD%8D%E8%87%AA%E5%A2%9Eid%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/">http://www.lanindex.com/twitter-snowflake，64位自增id算法详解/</a></li>
+<li><a href="https://github.com/sony/sonyflake">https://github.com/sony/sonyflake</a></li>
+</ol>
+<h2 id="如何获取时间戳"><a href="#如何获取时间戳" class="headerlink" title="如何获取时间戳"></a>如何获取时间戳</h2><p>Common Lisp本身提供了一个获取时间戳的函数，也就是<code>get-universal-time</code>，可惜的是，这个函数所返回的并不是通常意义上的<a href="https://en.wikipedia.org/wiki/Unix_time">Epoch时间戳</a>，而是自己的一套计算时间的方式中的表示时间的整数。为了获得UNIX时间戳，需要借助于第三方库<a href="https://common-lisp.net/project/local-time/manual.html"><code>local-time</code></a>。为了可以获取到毫秒精度的时间戳，一个可运行的函数如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> now ()</span><br><span class="line">  <span class="string">"Returns the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC."</span></span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">now</span> (<span class="name">local-time</span><span class="symbol">:now</span>))</span><br><span class="line">         (<span class="name">seconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-to-unix</span> now))</span><br><span class="line">         (<span class="name">milliseconds</span> (<span class="name">local-time</span><span class="symbol">:timestamp-millisecond</span> now)))</span><br><span class="line">    (<span class="name">+</span> (<span class="name">*</span> <span class="number">1000</span> seconds) milliseconds)))</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="如何获取机器ID"><a href="#如何获取机器ID" class="headerlink" title="如何获取机器ID"></a>如何获取机器ID</h2><p>这里参考了Sony的雪花ID算法中的思路，基于机器的内网IP地址来生成机器ID。当然了，Common Lisp标准中是没有提供获取机器的内网IP地址的方法的，这一点也可以借助于第三方库实现，选用的是<a href="https://common-lisp.net/project/ip-interfaces/"><code>ip-interfaces</code></a>。通过这个库提供的<code>get-ip-interfaces</code>函数可以获取到机器的所有“接口”，遍历这个接口的列表后即可找出其中的内网IP。一台机器可能会有多个内网IP，我的方法是选用了第一个找到的内网IP地址。当然了，还需要一个将向量转化为数值的函数，并取出转化为数值后的IP地址的低10位，作为机器ID。</p>
+<h2 id="序号"><a href="#序号" class="headerlink" title="序号"></a>序号</h2><p>如果希望生成的ID是保持递增的，那么就需要维护一个可以原子递增的数值计数器。在真实的使用中可以通过Redis的INCR指令来生成这一个ID，但是因为这里的雪花ID算法是作为一个独立的库实现的，不需要依赖于数据库等外部组建，因此这里就直接使用了Common Lisp自带的<code>random</code>函数来生成这个序号了。</p>
+<p>全文完</p>
+
       
     </div>
 
@@ -271,7 +290,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/12/29/2018%E5%B9%B4%E5%BA%A6%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/03/19/%E5%A6%82%E4%BD%95%E6%A3%80%E6%9F%A5%E4%B8%80%E7%BB%84%E5%8C%BA%E9%97%B4%E4%B8%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E4%B8%A4%E4%B8%AA%E5%8C%BA%E9%97%B4%E6%9C%89%E4%BA%A4%E9%9B%86/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -285,7 +304,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/29/2018%E5%B9%B4%E5%BA%A6%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2017/03/19/%E5%A6%82%E4%BD%95%E6%A3%80%E6%9F%A5%E4%B8%80%E7%BB%84%E5%8C%BA%E9%97%B4%E4%B8%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E4%B8%A4%E4%B8%AA%E5%8C%BA%E9%97%B4%E6%9C%89%E4%BA%A4%E9%9B%86/" class="post-title-link" itemprop="url">如何检查一组区间中是否存在两个区间有交集</a>
         </h1>
 
         <div class="post-meta">
@@ -295,8 +314,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-12-29 13:45:22" itemprop="dateCreated datePublished" datetime="2018-12-29T13:45:22+08:00">2018-12-29</time>
+              <time title="创建时间：2017-03-19 22:49:46" itemprop="dateCreated datePublished" datetime="2017-03-19T22:49:46+08:00">2017-03-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -307,8 +333,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2018/12/29/2018%E5%B9%B4%E5%BA%A6%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/29/2018年度技术总结/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2017/03/19/%E5%A6%82%E4%BD%95%E6%A3%80%E6%9F%A5%E4%B8%80%E7%BB%84%E5%8C%BA%E9%97%B4%E4%B8%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E4%B8%A4%E4%B8%AA%E5%8C%BA%E9%97%B4%E6%9C%89%E4%BA%A4%E9%9B%86/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/19/如何检查一组区间中是否存在两个区间有交集/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -323,7 +349,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p>假设有N个区间，将它们表达为<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_i,%20e_i%5D">，其中下标i位于区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D">中</p>
+<p>为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5B0,%20N-1%5D">而言，都有<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_i%20%3C%20b_%7Bi+1%7D">（这里的i小于N-1）。</p>
+<p>为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系</p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k"></p>
+<p>这是因为如果<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3C%20b_k">，那么所有位于区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_j,%20e_j%5D">中的数都将会小于 b_k，那么第j个区间与第k个区间就不可能有交集了，因此上述不等式一定成立。再加上这一组区间都是按照区间的下界递增排序的，那么必然有</p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_k%20%3C%20e_j"></p>
+<p>假设<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?k%20-%20j%20%3E%201">，由于k和j都是正整数，这意味着在第j和第k个区间之间，必然还存在着一个区间l，那么这个区间的必然满足</p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?b_j%20%3C%20b_l"></p>
+<p><img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_j%20%3E%20b_k%20%3E%20b_l"></p>
+<p>这就意味着第j个区间和第l个区间也存在交集，它们的交集是子区间<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?%5Bb_l,%20e_j%5D">（这里假设<img src="/images/loading.png" data-original="http://latex.codecogs.com/gif.latex?e_l%20%3E%20e_j">）。这就说明了，如果可以在一组区间中找到两个不相邻的区间，它们存在重叠的部分，那么一定可以找到第三个区间，使得这个区间与其中的一个区间也存在重叠。</p>
+<p>这表示如果我们要判定一组区间是否存在重叠，那么只需要先将它们基于区间的起点按照递增排序后，比较每一对相邻的两个区间是否存在重叠即可。</p>
+
       
     </div>
 
@@ -342,7 +379,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/12/02/%E5%A6%82%E4%BD%95%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%A1%A5%E5%85%A8/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/03/08/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8Elastic-Search/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -356,7 +393,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/02/%E5%A6%82%E4%BD%95%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%A1%A5%E5%85%A8/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2017/03/08/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8Elastic-Search/" class="post-title-link" itemprop="url">如何安装及使用Elastic Search</a>
         </h1>
 
         <div class="post-meta">
@@ -366,8 +403,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-12-02 21:31:08" itemprop="dateCreated datePublished" datetime="2018-12-02T21:31:08+08:00">2018-12-02</time>
+              <time title="创建时间：2017-03-08 17:31:32" itemprop="dateCreated datePublished" datetime="2017-03-08T17:31:32+08:00">2017-03-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -378,8 +422,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2018/12/02/%E5%A6%82%E4%BD%95%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%A1%A5%E5%85%A8/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/02/如何自定义命令行补全/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2017/03/08/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8Elastic-Search/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/08/如何安装及使用Elastic-Search/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -394,7 +438,59 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p>最近产品需要一个搜索商城中的商品的功能，于是接触了一下Elastic Search。虽然久仰它的大名，但一直都没有真正用过。这次稍微摸索了一下，顺便记录下来，说不定哪天就真的需要用上了。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>首先需要下载Elastic Search，我选择了.zip格式的安装包，下载地址在<a href="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.2.zip">这里</a>。下载完成后就拿到了一个5.2.2版本的Elastic Search的安装包，只需要解压即可使用。因为我喜欢把软件安装到主目录的app目录下，所以我用的命令是</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /home/liutos/app</span><br><span class="line">unzip ../installer/elasticsearch-5.2.2.zip</span><br></pre></td></tr></tbody></table></figure>
+
+<p>主目录下的installer是我习惯的用来存放软件的安装包的位置。解压后生成了一个名为elasticsearch-5.2.2的新目录。在这个目录下有一个名为bin的子目录，只需要进入该目录运行其中的elasticsearch文件即可，实例命令为</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> elasticsearch-5.2.2/bin</span><br><span class="line">./elasticsearch -d</span><br></pre></td></tr></tbody></table></figure>
+
+<p>为了让Elastic Search可以不占用当前的终端，添加了-d选项，使其以后台进程（daemon）的方式运行。Elastic Search需要JVM才能运行，在执行上面的命令之前请各位自行准备好Java程序的运行环境。成功启动后，Elastic Search默认会监听9200端口，可以通过浏览器访问<a href="http://localhost:9200/">http://localhost:9200</a>来确认Elastic Search是否正常启动了</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h2><p>遵照官方文档中的指导，先创建一个索引以便后续向这个索引中添加文档。假设要创建的索引是为商品准备的，取名为products，可以通过如下的命令创建出来</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X PUT <span class="string">'http://localhost:9200/products'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>创建成功后Elastic Search的响应结果为</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">{<span class="string">"acknowledged"</span>:<span class="literal">true</span>,<span class="string">"shards_acknowledged"</span>:<span class="literal">true</span>}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果希望Elastic Search返回更可读的形式，可以添加<code>?pretty</code>参数到上面的URL的末尾。</p>
+<h2 id="文档的增删查改"><a href="#文档的增删查改" class="headerlink" title="文档的增删查改"></a>文档的增删查改</h2><p>索引已经创建了，就可以创建文档了。Elastic Search的文档是对象形式的，假设现在要创建的对象的类型为product，示例命令如下</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">'http://localhost:9200/products/product'</span> --data <span class="string">'</span></span><br><span class="line"><span class="string">{</span></span><br><span class="line"><span class="string">  "id": 1,</span></span><br><span class="line"><span class="string">  "name": "Product 1"</span></span><br><span class="line"><span class="string">}'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>在我的机器上，Elastic Search的响应结果为</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">{<span class="string">"_index"</span>:<span class="string">"products"</span>,<span class="string">"_type"</span>:<span class="string">"product"</span>,<span class="string">"_id"</span>:<span class="string">"AVqpZHmVckriR6iVcbaW"</span>,<span class="string">"_version"</span>:1,<span class="string">"result"</span>:<span class="string">"created"</span>,<span class="string">"_shards"</span>:{<span class="string">"total"</span>:2,<span class="string">"successful"</span>:1,<span class="string">"failed"</span>:0},<span class="string">"created"</span>:<span class="literal">true</span>}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中名为”_id”的字段的值为Elastic Search自动为这份新写入的文档分配的ID，通过这个ID可以从Elastic Search中取出这份文档，示例命令如下</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">'http://localhost:9200/products/product/AVqpZHmVckriR6iVcbaW?pretty'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>相当的RESTful的接口路径，也许你已经猜到了，删除一个文档的代码就是将请求的GET方法替换为DELETE。是的，示例代码如下</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X DELETE <span class="string">'http://localhost:9200/products/product/AVqpZHmVckriR6iVcbaW?pretty'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>再次查找刚才的ID的文档时，响应结果中的”_found”字段的值就已经变成了false了。关于修改文档的方法，请参考官方手册中的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html">章节</a>。</p>
+<h2 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h2><h3 id="准备数据"><a href="#准备数据" class="headerlink" title="准备数据"></a>准备数据</h3><p>最简单的搜索接口的使用就是通过浏览器访问<a href="http://localhost:9200/products/_search">http://localhost:9200/products/_search</a>这个地址了。在我的机器上，看到的页面内容为如下的JSON字符串</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">{</span><br><span class="line"></span><br><span class="line">    <span class="string">"took"</span>: <span class="number">42</span>,</span><br><span class="line">    <span class="string">"timed_out"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"_shards"</span>: {</span><br><span class="line">        <span class="string">"total"</span>: <span class="number">5</span>,</span><br><span class="line">        <span class="string">"successful"</span>: <span class="number">5</span>,</span><br><span class="line">        <span class="string">"failed"</span>: <span class="number">0</span></span><br><span class="line">    },</span><br><span class="line">    <span class="string">"hits"</span>: {</span><br><span class="line">        <span class="string">"total"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">"max_score"</span>: <span class="literal">null</span>,</span><br><span class="line">        <span class="string">"hits"</span>: [ ]</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>为了方便接下来的演示，先通过Elastic Search的_bulk接口向其批量创建文档数据，示例代码如下</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">'http://localhost:9200/_bulk?pretty'</span> --data-binary <span class="string">'@docs'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中docs文件中的内容为</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">{"create": {"_index": "products", "_type": "product", "_id": 1}}</span><br><span class="line">{"name": "设计模式之禅"}</span><br><span class="line">{"create": {"_index": "products", "_type": "product", "_id": 2}}</span><br><span class="line">{"name": "失控：全人类的最终命运和结局"}</span><br><span class="line">{"create": {"_index": "products", "_type": "product", "_id": 3}}</span><br><span class="line">{"name": "构建高性能Web站点", "price": 75.00, "author": "郭欣"}</span><br><span class="line">{"create": {"_index": "products", "_type": "product", "_id": 4}}</span><br><span class="line">{"name": "大型网站技术架构：核心原理与案例分析", "price": 59.00, "author": "李智慧", "publisher": "电子工业出版社"}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>尽管这里是一个文本文件，但是根据<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html">官方文档</a>的说法，此处需要使用curl的二进制模式来发送数据，否则会报错。</p>
+<h3 id="个性化搜索"><a href="#个性化搜索" class="headerlink" title="个性化搜索"></a>个性化搜索</h3><p>如果希望找到《失控》这本书的信息，那么可以根据书名进行查找，示例代码如下</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">'http://localhost:9200/products/_search?q=name:失控'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>Elastic Search提供了许多的搜索选项，如果全部通过URL中的query string来传递将会非常难以构造。为此，可以使用Elastic Search提供的基于HTTP body的参数传递方式，示例代码如下</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search'</span> --data <span class="string">'{"query": {"match": {"name": "失控"}}}'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>Elastic Search支持相当丰富的搜索选项，这里不逐一介绍了，大家可以从官方文档的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html">这里</a>开始翻看。本来想在Chrome的POSTMAN插件中试验搜索功能的，结果当我选定了GET方法后，就不需要我提交HTTP body了，因此还是用curl进行演示。回到正题，如果我们搜索的是一个“站”字，那么Elastic Search会吐出两个结果，此处可以使用搜索接口的<code>from</code>和<code>size</code>参数，分别控制返回的内容取自搜索结果中的哪一个片段。例如想要取出结果中的第二个，可以使用下列代码</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search?pretty'</span> --data <span class="string">'{"from": 1, "size": 1, "query": {"match": {"name": "站"}}}'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>通过结合使用<code>from</code>和<code>size</code>参数，可以实现许多应用中所要求的分页功能。在我厂的业务场景中，商品信息还是很多的，不可能全部放入到Elastic Search中作为文档数据存储，Elastic Search只是负责提供搜索出来的商品ID即可，之后再通过商品ID从原来的商品的数据库中按照顺序取出对应的完整的商品信息。因此，在搜索Elastic Search时实际上只需要商品的ID就足够了，可以通过Elastic Search提供的<code>_source</code>字段控制接口吐出的内容，示例代码如下</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET <span class="string">'http://localhost:9200/products/_search?pretty'</span> --data <span class="string">'{"query": {"match_all": {}}, "_source": ["_id"]}'</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样在吐出的内容中<code>_source</code>字段的值就会是一个空对象，应用程序只需要取每一个hits数组中的记录的”_id”字段即可。这样做的目的是减少Elastic Search通过网络传输了一部分毫无必要的数据，略微优化一下网络开销</p>
+<p>全文完</p>
+
       
     </div>
 
@@ -413,7 +509,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/12/02/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/02/23/%E5%A6%82%E4%BD%95%E7%94%A8Common-Lisp%E5%AE%9E%E7%8E%B0%E5%B0%BE%E9%80%92%E5%BD%92%E4%BC%98%E5%8C%96/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -427,7 +523,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/02/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2017/02/23/%E5%A6%82%E4%BD%95%E7%94%A8Common-Lisp%E5%AE%9E%E7%8E%B0%E5%B0%BE%E9%80%92%E5%BD%92%E4%BC%98%E5%8C%96/" class="post-title-link" itemprop="url">如何用Common Lisp实现尾递归优化</a>
         </h1>
 
         <div class="post-meta">
@@ -437,8 +533,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-12-02 21:30:33" itemprop="dateCreated datePublished" datetime="2018-12-02T21:30:33+08:00">2018-12-02</time>
+              <time title="创建时间：2017-02-23 22:58:07" itemprop="dateCreated datePublished" datetime="2017-02-23T22:58:07+08:00">2017-02-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -449,8 +552,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2018/12/02/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/02/如何使用CL实现snowflake/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2017/02/23/%E5%A6%82%E4%BD%95%E7%94%A8Common-Lisp%E5%AE%9E%E7%8E%B0%E5%B0%BE%E9%80%92%E5%BD%92%E4%BC%98%E5%8C%96/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/02/23/如何用Common-Lisp实现尾递归优化/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -465,7 +568,53 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h2 id="什么是尾递归"><a href="#什么是尾递归" class="headerlink" title="什么是尾递归"></a>什么是尾递归</h2><p>如果一个函数在定义时引用了自身，那么这个函数就是一个递归函数。例如我们所熟知的阶乘就可以通过递归函数的形式予以定义</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> fact (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">&lt;=</span> n <span class="number">0</span>)</span><br><span class="line">      <span class="number">1</span></span><br><span class="line">      (<span class="name">*</span> n (<span class="name">fact</span> (<span class="number">1</span>- n)))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在if语句的备选路径上，正在定义的函数<code>fact</code>被自身所调用，因此<code>fact</code>就是一个递归函数了。递归有一类较为特殊的形式，叫做尾递归，它们的特征是递归函数的调用位于被定义函数的最后一个步骤。也就是说，这个递归调用的返回值也就是整个函数调用的返回值，后面不再有其它的计算步骤了。例如实现了辗转相除法的下面这个函数就是尾递归的</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-gcd (<span class="name">a</span> b)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">zerop</span> a) b)</span><br><span class="line">        ((<span class="name">zerop</span> b) a)</span><br><span class="line">        (<span class="name">t</span> (<span class="name">my-gcd</span> b (<span class="name">mod</span> a b)))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>此处命名为<code>my-gcd</code>，是因为在Common Lisp中已经预置了一个叫做<code>gcd</code>的函数了</p>
+<h2 id="什么是尾递归优化"><a href="#什么是尾递归优化" class="headerlink" title="什么是尾递归优化"></a>什么是尾递归优化</h2><p>递归调用其实也就是函数调用，每一次调用都需要保存当前的执行上下文（寄存器的值、程序计数器的值等信息）并压入栈中。如果递归调用得非常深，那么很可能将栈空间消耗殆尽导致程序崩溃，因此很多时候都会选择使用循环来实现用递归实现的效果。尾递归形式的一个优势，就在于编译器可以对其进行优化，使得原本需要添加一个栈帧的函数调用操作，直接重用当前的调用中所使用的栈帧即可。这样一来，递归函数的调用就不会无节制地消耗栈空间了。</p>
+<p>另一种对尾递归进行优化的方式，则是将其改写为【赋值】与【跳转】。例如对于上面的<code>my-gcd</code>函数，可以改写为如下形式</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-gcd (<span class="name">a</span> b)</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   rec</span><br><span class="line">     (<span class="name">cond</span> ((<span class="name">zerop</span> a) (<span class="name">return-from</span> my-gcd b))</span><br><span class="line">           ((<span class="name">zerop</span> b) (<span class="name">return-from</span> my-gcd a))</span><br><span class="line">           (<span class="name">t</span> (<span class="name">progn</span></span><br><span class="line">                (<span class="name">psetf</span> a b</span><br><span class="line">                       b (<span class="name">mod</span> a b))</span><br><span class="line">                (<span class="name">go</span> rec))))))</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="如何在Common-Lisp中实现"><a href="#如何在Common-Lisp中实现" class="headerlink" title="如何在Common Lisp中实现"></a>如何在Common Lisp中实现</h2><p>如果要使用递归的形式定义一个计算列表长度的函数，那么很可能会写出这样子的代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span>)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">      <span class="number">0</span></span><br><span class="line">      (<span class="number">1</span>+ (<span class="name">my-length</span> (<span class="name">rest</span> lst)))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>采用累加器的思路，可以将上述函数改写为下面的尾递归形式</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">      acc</span><br><span class="line">      (<span class="name">my-length</span> (<span class="name">rest</span> lst) (<span class="number">1</span>+ acc))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>对于第二个版本的<code>my-length</code>函数，同样可以手动改写为基于【赋值】和【跳转】的实现形式，结果如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   rec</span><br><span class="line">     (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">         (<span class="name">return-from</span> my-length acc)</span><br><span class="line">         (<span class="name">progn</span></span><br><span class="line">           (<span class="name">psetf</span> lst (<span class="name">rest</span> lst)</span><br><span class="line">                  acc (<span class="number">1</span>+ acc))</span><br><span class="line">           (<span class="name">go</span> rec)))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>你可能已经注意到了，<code>my-gcd</code>和<code>my-length</code>函数的改写都是很有规律的，甚至可以通过一个宏来帮助我们自动完成这种变换。这个宏所需要做的事情其实只有三件：</p>
+<ol>
+<li>将原本的定义中的函数体包裹在一个<code>tagbody</code>中</li>
+<li>将原本作为返回值的表达式包裹在一个<code>return-from</code>中</li>
+<li>将递归调用的表达式改为按顺序执行的<code>psetf</code>和<code>go</code>的组合</li>
+</ol>
+<p>为了降低一下实现难度，第二点暂时就不处理了，函数的实现者必须手动编写<code>return-from</code>语句。因此，如果只考虑首尾两个条件，首先，可以考虑实现第三条，将函数体内的递归调用修改为<code>progn</code>、<code>psetf</code>和<code>go</code>的组合。要实现这个变换，可以使用<code>macrolet</code>，如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   rec</span><br><span class="line">     (<span class="name">macrolet</span> ((<span class="name">my-length</span> (<span class="name">&amp;rest</span> args)</span><br><span class="line">                  `(progn</span><br><span class="line">                     (psetf ,@(mapcan #'list '(lst acc) args))</span><br><span class="line">                     (go rec))))</span><br><span class="line">       (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">           (<span class="name">return-from</span> my-length acc)</span><br><span class="line">           (<span class="name">my-length</span> (<span class="name">rest</span> lst) (<span class="number">1</span>+ acc))))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>为了自动生成上面的代码，我编写了这样的一个宏</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmacro</span> define-rec (<span class="name">name</span> lambda-list <span class="symbol">&amp;body</span> body)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">rec</span> (<span class="name">gensym</span>)))</span><br><span class="line">    `(defun ,name ,lambda-list</span><br><span class="line">       (tagbody</span><br><span class="line">          ,rec</span><br><span class="line">          (macrolet ((,name (&amp;rest exprs)</span><br><span class="line">                       ,``(progn</span><br><span class="line">                            (psetf ,@(mapcan #'list ',lambda-list exprs))</span><br><span class="line">                            (go ,',rec))))</span><br><span class="line">            ,@body)))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>利用上面这个宏编写一个计算列表长度的尾递归形式的函数，代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define-rec</span> my-length (<span class="name">lst</span> acc)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">null</span> lst)</span><br><span class="line">      (<span class="name">return-from</span> my-length acc)</span><br><span class="line">      (<span class="name">my-length</span> (<span class="name">rest</span> lst) (<span class="number">1</span>+ acc))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>利用<code>macroexpand-1</code>或者是SLIME提供的展开一次宏的调试功能，在我的及其上得到的代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">DEFUN</span> MY-LENGTH (<span class="name">LST</span> ACC)</span><br><span class="line">  (<span class="name">TAGBODY</span></span><br><span class="line">   #<span class="symbol">:G937</span></span><br><span class="line">    (<span class="name">MACROLET</span> ((<span class="name">MY-LENGTH</span> (<span class="name">&amp;REST</span> EXPRS)</span><br><span class="line">                 `(PROGN</span><br><span class="line">                   (PSETF ,@(MAPCAN #'LIST '(LST ACC) EXPRS))</span><br><span class="line">                   (GO ,'#:G937))))</span><br><span class="line">      (<span class="name">IF</span> (<span class="name">NULL</span> LST)</span><br><span class="line">          (<span class="name">RETURN-FROM</span> MY-LENGTH ACC)</span><br><span class="line">          (<span class="name">MY-LENGTH</span> (<span class="name">REST</span> LST) (<span class="number">1</span>+ ACC))))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>跟上面手写的代码没有太大的差别，并且用于计算所得到的列表长度也是正确的。那么如何验证这个函数是采用了【赋值】和【跳转】的机制来完成运算的呢？可以借助Common Lisp提供的<code>trace</code>函数。如果使用的真实执行递归调用的<code>my-length</code>函数的定义，那么执行<code>(trace my-length)</code>后运行<code>(my-length '(1 2 4 5) 0)</code>，在我的机器上会输出如下内容</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">my-length</span> '(<span class="number">1</span> <span class="number">2</span> <span class="number">4</span> <span class="number">5</span>) <span class="number">0</span>)</span><br><span class="line">  <span class="number">0</span>: (<span class="name">MY-LENGTH</span> (<span class="number">1</span> <span class="number">2</span> <span class="number">4</span> <span class="number">5</span>) <span class="number">0</span>)</span><br><span class="line">    <span class="number">1</span>: (<span class="name">MY-LENGTH</span> (<span class="number">2</span> <span class="number">4</span> <span class="number">5</span>) <span class="number">1</span>)</span><br><span class="line">      <span class="number">2</span>: (<span class="name">MY-LENGTH</span> (<span class="number">4</span> <span class="number">5</span>) <span class="number">2</span>)</span><br><span class="line">        <span class="number">3</span>: (<span class="name">MY-LENGTH</span> (<span class="number">5</span>) <span class="number">3</span>)</span><br><span class="line">          <span class="number">4</span>: (<span class="name">MY-LENGTH</span> NIL <span class="number">4</span>)</span><br><span class="line">          <span class="number">4</span>: MY-LENGTH returned <span class="number">4</span></span><br><span class="line">        <span class="number">3</span>: MY-LENGTH returned <span class="number">4</span></span><br><span class="line">      <span class="number">2</span>: MY-LENGTH returned <span class="number">4</span></span><br><span class="line">    <span class="number">1</span>: MY-LENGTH returned <span class="number">4</span></span><br><span class="line">  <span class="number">0</span>: MY-LENGTH returned <span class="number">4</span></span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>而如果是使用<code>define-rec</code>宏定义的<code>my-length</code>，求值同样的表达式的输出为</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">my-length</span> '(<span class="number">1</span> <span class="number">2</span> <span class="number">4</span> <span class="number">5</span>) <span class="number">0</span>)</span><br><span class="line">  <span class="number">0</span>: (<span class="name">MY-LENGTH</span> (<span class="number">1</span> <span class="number">2</span> <span class="number">4</span> <span class="number">5</span>) <span class="number">0</span>)</span><br><span class="line">  <span class="number">0</span>: MY-LENGTH returned <span class="number">4</span></span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>显然，这当中没有递归的函数调用，<code>my-length</code>确实不需要调用自身。</p>
+<p>全文完</p>
+
       
     </div>
 
@@ -484,7 +633,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2018/12/02/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8Elastic-Search/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/01/20/%E5%A6%82%E4%BD%95%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%A1%A5%E5%85%A8/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -498,7 +647,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2018/12/02/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8Elastic-Search/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2017/01/20/%E5%A6%82%E4%BD%95%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%A1%A5%E5%85%A8/" class="post-title-link" itemprop="url">如何自定义命令行补全</a>
         </h1>
 
         <div class="post-meta">
@@ -508,8 +657,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-12-02 21:30:33" itemprop="dateCreated datePublished" datetime="2018-12-02T21:30:33+08:00">2018-12-02</time>
+              <time title="创建时间：2017-01-20 23:07:36" itemprop="dateCreated datePublished" datetime="2017-01-20T23:07:36+08:00">2017-01-20</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -520,8 +676,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2018/12/02/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8Elastic-Search/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/02/如何安装及使用Elastic-Search/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2017/01/20/%E5%A6%82%E4%BD%95%E8%87%AA%E5%AE%9A%E4%B9%89%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%A1%A5%E5%85%A8/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/01/20/如何自定义命令行补全/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -536,7 +692,27 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p>在UC就职时养成了一个习惯，就是将自己所参与的项目的源代码都存放在一个名为uc的目录下。换了工作之后这个习惯仍然保留下来了，只不过原本名为uc的目录现在改名了（假设这个目录叫做work）。在新公司参与的项目比较多，因此在这个work目录下有许多的子目录，大致上的结构如下</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">work/</span><br><span class="line">|-- A/</span><br><span class="line">|-- B/</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中A和B分别表示一个项目的源代码目录。在work目录下存放的直接是A和B两个项目的目录。work目录本身是放置在<code>~/src/</code>这个目录下的，因此项目A和B的完整根目录路径是<code>~/src/work/A/</code>和<code>~/src/work/B/</code>。由于参与的项目比较多，经常需要在几个项目间交替着编码，因此经常会在终端键入下面的指令</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/src/work/A/ <span class="comment"># 或者</span></span><br><span class="line"><span class="built_in">cd</span> ~/src/work/B/</span><br></pre></td></tr></tbody></table></figure>
+
+<p>不得不说这样确实是非常的麻烦，因此我很快就定义了一个shell函数来简化这串命令，这个shell函数的定义如下</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">she</span></span>() {</span><br><span class="line">    <span class="built_in">dir</span>=<span class="variable">${1}</span></span><br><span class="line">    target=<span class="string">"/home/liutos/src/work/<span class="variable">${dir}</span>"</span></span><br><span class="line">    <span class="keyword">if</span> [ -d <span class="string">"<span class="variable">${target}</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">cd</span> <span class="string">"<span class="variable">${target}</span>"</span></span><br><span class="line">        <span class="built_in">return</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>有了这个辅助工具后，要切换到项目A和B中就简单多了，只需要输入</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">she A <span class="comment"># 或者</span></span><br><span class="line">she B</span><br></pre></td></tr></tbody></table></figure>
+
+<p>即可。但一使用起来就会发现，原本直接使用cd命令时所能享用的目录名补全功能没有了！绝大多数情况下补全功能是非常有用的，为此打算动手为she函数配备一个目录名的补全功能。显然自定义命令行补全的想法已经有前人实践过了，略加搜索就可以找到这么一篇<a href="http://www.shareditor.com/blogshow/?blogId=22">指南</a>。模仿文章中的方法，我先是写了下面的代码骨架</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">}</span><br><span class="line">complete -F _she she</span><br></pre></td></tr></tbody></table></figure>
+
+<p>我的想法是只要当前的输入能够作为work下的一个目录名字的前缀，那么就认为这个子目录是本次补全的目标。为此，我需要先获取到work目录下的所有子目录的名称。利用ls命令可以做到这一点，同时为了便于处理，在这里将ls返回的文件名列表作为数组保存起来。修改后的_she函数的代码如下</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(<span class="built_in">ls</span> ~/src/work/))</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在，只要遍历<code>${dirs}</code>并找出第一个以用户输入的<code>${cur}</code>为名字前缀的目录即可。最终_she函数的定义如下</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">_she</span></span>() {</span><br><span class="line">    <span class="built_in">local</span> cur</span><br><span class="line">    <span class="built_in">local</span> <span class="built_in">dirs</span></span><br><span class="line">    _get_comp_words_by_ref cur</span><br><span class="line">    <span class="built_in">dirs</span>=($(<span class="built_in">ls</span> ~/src/work/))</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">dir</span> <span class="keyword">in</span> <span class="variable">${dirs[@]}</span></span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">case</span> <span class="variable">${dir}</span> <span class="keyword">in</span></span><br><span class="line">            <span class="variable">${cur}</span>*)</span><br><span class="line">                COMPREPLY=<span class="string">"<span class="variable">${dir}</span>"</span></span><br><span class="line">                <span class="built_in">return</span> 0</span><br><span class="line">                ;;</span><br><span class="line">        <span class="keyword">esac</span></span><br><span class="line">    <span class="keyword">done</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
       
     </div>
 
@@ -625,6 +801,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

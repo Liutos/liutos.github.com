@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -46,19 +46,25 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="序言我已经记不清写过多少个lisp-like语言的解释器，以及编译成自制字节码的编译器了，但我想这一次依然不会是最后一个。我还记得之所以入坑写第一个解释器，是因为当时正好学了一点Common Lisp，数据结构的课本中又正好提到一种叫做广义表的数据结构，顿时觉得：“这个广义表不是正好可以表达CL中的atom和cons吗？”于是便尝试写一段程序解析输入、创建广义表，并打印成S表达式。在此基础上，又尝">
-<meta name="keywords" content="common lisp,lisp,assembly,compiler,x64,汇编,编译器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="开发一个trivial的lisp编译器（一）">
-<meta property="og:url" content="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/index.html">
+<meta property="og:url" content="https://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
 <meta property="og:description" content="序言我已经记不清写过多少个lisp-like语言的解释器，以及编译成自制字节码的编译器了，但我想这一次依然不会是最后一个。我还记得之所以入坑写第一个解释器，是因为当时正好学了一点Common Lisp，数据结构的课本中又正好提到一种叫做广义表的数据结构，顿时觉得：“这个广义表不是正好可以表达CL中的atom和cons吗？”于是便尝试写一段程序解析输入、创建广义表，并打印成S表达式。在此基础上，又尝">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-10T04:59:00.430Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-17T13:57:50.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="common lisp">
+<meta property="article:tag" content="lisp">
+<meta property="article:tag" content="assembly">
+<meta property="article:tag" content="compiler">
+<meta property="article:tag" content="x64">
+<meta property="article:tag" content="汇编">
+<meta property="article:tag" content="编译器">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="开发一个trivial的lisp编译器（一）">
-<meta name="twitter:description" content="序言我已经记不清写过多少个lisp-like语言的解释器，以及编译成自制字节码的编译器了，但我想这一次依然不会是最后一个。我还记得之所以入坑写第一个解释器，是因为当时正好学了一点Common Lisp，数据结构的课本中又正好提到一种叫做广义表的数据结构，顿时觉得：“这个广义表不是正好可以表达CL中的atom和cons吗？”于是便尝试写一段程序解析输入、创建广义表，并打印成S表达式。在此基础上，又尝">
 
-<link rel="canonical" href="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/">
+<link rel="canonical" href="https://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/">
 
 
 <script id="page-configurations">
@@ -110,6 +116,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -201,10 +208,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -231,7 +238,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-10 12:59:00" itemprop="dateModified" datetime="2019-12-10T12:59:00+08:00">2019-12-10</time>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
               </span>
 
           
@@ -243,7 +250,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/05/17/一个简陋的四则运算编译器实现/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/17/一个简陋的四则运算编译器实现/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -259,20 +266,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>我已经记不清写过多少个lisp-like语言的解释器，以及编译成自制字节码的编译器了，但我想这一次依然不会是最后一个。我还记得之所以入坑写第一个解释器，是因为当时正好学了一点Common Lisp，数据结构的课本中又正好提到一种叫做广义表的数据结构，顿时觉得：“这个广义表不是正好可以表达CL中的atom和cons吗？”于是便尝试写一段程序解析输入、创建广义表，并打印成S表达式。在此基础上，又尝试着实现加减乘除等运算功能，一步步地开启了编写解释器的旅程。后来我看了Peter Norvig写的<a href="https://en.wikipedia.org/wiki/Paradigms_of_AI_Programming" target="_blank" rel="noopener">《Paradigms of AI Programming》</a>，里面有两章分别讲了如何编写解释器和编译器——编译到一个自制虚拟机的字节码的那种。在巨擘的指引下，我也开始写起了trivial的编译器。</p>
+        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>我已经记不清写过多少个lisp-like语言的解释器，以及编译成自制字节码的编译器了，但我想这一次依然不会是最后一个。我还记得之所以入坑写第一个解释器，是因为当时正好学了一点Common Lisp，数据结构的课本中又正好提到一种叫做广义表的数据结构，顿时觉得：“这个广义表不是正好可以表达CL中的atom和cons吗？”于是便尝试写一段程序解析输入、创建广义表，并打印成S表达式。在此基础上，又尝试着实现加减乘除等运算功能，一步步地开启了编写解释器的旅程。后来我看了Peter Norvig写的<a href="https://en.wikipedia.org/wiki/Paradigms_of_AI_Programming">《Paradigms of AI Programming》</a>，里面有两章分别讲了如何编写解释器和编译器——编译到一个自制虚拟机的字节码的那种。在巨擘的指引下，我也开始写起了trivial的编译器。</p>
 <p>这次开工的这一款有所不同：它不再将lisp-like代码编译成架空虚拟机的字节码，而是编译成macOS的x64汇编代码，着实是一个不小的挑战。众所周知，lisp-like的语言（Scheme、Common Lisp、Clojure等）都是一些高级语言，它们摆弄着一些高层次的概念：cons、continua、lambda、symbol，等等。这些语言中的概念无法直接对应到x64汇编上，因此我必须填补它们之间的鸿沟；另一方面，我对x86汇编可以说是一窍不通，完全是一边搜索资料一边写，生成的汇编代码的运行效率多半很低。但，管它呢，只要好玩就足够了。</p>
 <p>开始来实现一个lisp-like语言到x64汇编的trivial编译器吧。</p>
-<h1 id="编译加法运算"><a href="#编译加法运算" class="headerlink" title="编译加法运算"></a>编译加法运算</h1><p>如果你看过<a href="https://book.douban.com/subject/3296317/" target="_blank" rel="noopener">龙书</a>，或其它经典的编译原理方面的书，那肯定知道编译器是一个很复杂的玩意儿。但我的编译器很简单，它会从一个小小的二元加法计算器开始演化。为了偷懒不写编译器的前端，我会使用Common Lisp来编写这个编译器的代码，也方便我直接从最让人兴奋的、生成汇编代码的环节入手。</p>
+<h1 id="编译加法运算"><a href="#编译加法运算" class="headerlink" title="编译加法运算"></a>编译加法运算</h1><p>如果你看过<a href="https://book.douban.com/subject/3296317/">龙书</a>，或其它经典的编译原理方面的书，那肯定知道编译器是一个很复杂的玩意儿。但我的编译器很简单，它会从一个小小的二元加法计算器开始演化。为了偷懒不写编译器的前端，我会使用Common Lisp来编写这个编译器的代码，也方便我直接从最让人兴奋的、生成汇编代码的环节入手。</p>
 <p>首先从最简单的两个小整数的加法运算开始。在lisp家族的语言，比如Common Lisp中，一段加法运算的代码如下</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br></pre></td></tr></tbody></table></figure>
+
 <p>对于寄存器可以容纳的整数的相加，直接输出<code>add</code>指令即可，两个操作数可以暂时随意地存放到寄存器中。按照这个思路，一个简单的、可以编译小整数加法运算的编译器就出来了</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (addl %eax %ebx)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> stringify (<span class="name">asm</span>)</span><br><span class="line">  <span class="string">"根据jjcc2产生的S表达式生成汇编代码字符串"</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .section __TEXT,__text,regular,pure_instructions~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .globl _main~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"_main:~%"</span>)</span><br><span class="line">  (<span class="name">dolist</span> (<span class="name">ins</span> asm)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A, ~A~%"</span></span><br><span class="line">            (<span class="name">first</span> ins)</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">second</span> ins))</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">third</span> ins))))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl %ebx, %edi~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl $0x2000001, %eax~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        syscall~%"</span>))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>在 REPL 中运行如下代码</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">stringify</span> (<span class="name">jjcc2</span> '(+ <span class="number">1</span> <span class="number">2</span>)))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>得到如下的汇编代码</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EAX</span><br><span class="line">        MOVL $2, %EBX</span><br><span class="line">        ADDL %EAX, %EBX</span><br><span class="line">        movl %ebx, %edi</span><br><span class="line">        movl $0x2000001, %eax</span><br><span class="line">        syscall</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EAX</span><br><span class="line">        MOVL $2, %EBX</span><br><span class="line">        ADDL %EAX, %EBX</span><br><span class="line">        movl %ebx, %edi</span><br><span class="line">        movl $0x2000001, %eax</span><br><span class="line">        syscall</span><br></pre></td></tr></tbody></table></figure>
+
 <p>将这段代码保存到名为<code>jjcc.s</code>的文件中再运行下列的命令，就得到一个能运行的<code>a.out</code>可执行文件了</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">as -o jjcc.o jjcc.s</span><br><span class="line">gcc jjcc.o</span><br><span class="line">./a.out</span><br><span class="line">echo $? # 输出3</span><br></pre></td></tr></tbody></table></figure>
+
 <h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>有了这个基本的框架后，便可以开始扩展出很多功能了。比如除了加法，还可以支持减法、乘法，以及除法；可以支持<code>progn</code>，实现顺序求值多个表达式的效果；可以支持<code>setq</code>，实现变量和赋值的功能，等等。</p>
 <p>此外，这一小段代码也有不少问题。比如调用<code>format</code>输出<code>.section</code>的代码来自于<code>gcc -S</code>的结果，可以用更简短的<code>.text</code>代替；生成的汇编代码中，指令助记符和寄存器名字的大小写不统一，等等。之后我会尝试重构，将代码写得更好。</p>
 
@@ -313,7 +325,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/" title="开发一个trivial的lisp编译器（一）">https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/</a>
+    <a href="https://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/" title="开发一个trivial的lisp编译器（一）">https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -330,8 +342,8 @@
               <a href="/tags/assembly/" rel="tag"><i class="fa fa-tag"></i> assembly</a>
               <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
               <a href="/tags/x64/" rel="tag"><i class="fa fa-tag"></i> x64</a>
-              <a href="/tags/汇编/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
-              <a href="/tags/编译器/" rel="tag"><i class="fa fa-tag"></i> 编译器</a>
+              <a href="/tags/%E6%B1%87%E7%BC%96/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
+              <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> 编译器</a>
           </div>
 
         
@@ -340,11 +352,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/05/07/Boostnote及对记笔记的思考/" rel="prev" title="Boostnote及对记笔记的思考">
+    <a href="/2019/05/07/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/" rel="prev" title="Boostnote及对记笔记的思考">
       <i class="fa fa-chevron-left"></i> Boostnote及对记笔记的思考
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/05/21/Evernote与Leanote/" rel="next" title="Evernote与Leanote">
+    <a href="/2019/05/21/Evernote%E4%B8%8ELeanote/" rel="next" title="Evernote与Leanote">
       Evernote与Leanote <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -426,13 +438,13 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译加法运算"><span class="nav-number">2.</span> <span class="nav-text">编译加法运算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%8A%A0%E6%B3%95%E8%BF%90%E7%AE%97"><span class="nav-number">2.</span> <span class="nav-text">编译加法运算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -441,7 +453,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -454,7 +466,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">120</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -479,19 +491,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -540,16 +552,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -575,6 +587,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -603,6 +623,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -620,7 +647,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2019/05/17/一个简陋的四则运算编译器实现/",
+            url: "https://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/",
             identifier: "2019/05/17/一个简陋的四则运算编译器实现/",
             title: "开发一个trivial的lisp编译器（一）"
           }
@@ -643,7 +670,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '2900dd6e5fca5beb1740c2ece4ee9640',
+      id: 'a050e6e000988e2964f482dc7b313fbc',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -651,4 +678,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

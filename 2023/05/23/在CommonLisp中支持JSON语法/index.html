@@ -45,17 +45,19 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="在 Lisp 中使用 reader macro 支持 JSON 语法什么是 reader macro？Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="在CommonLisp中支持JSON语法">
 <meta property="og:url" content="https://liutos.github.io/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="在 Lisp 中使用 reader macro 支持 JSON 语法什么是 reader macro？Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-05-23T15:49:42.000Z">
-<meta property="article:modified_time" content="2023-05-23T15:49:42.000Z">
+<meta property="article:published_time" content="2023-05-23T15:47:22.000Z">
+<meta property="article:modified_time" content="2023-05-23T15:49:45.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="common lisp">
+<meta property="article:tag" content="lisp">
+<meta property="article:tag" content="编程语言">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://liutos.github.io/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/">
@@ -70,7 +72,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>在CommonLisp中支持JSON语法 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +217,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          在CommonLisp中支持JSON语法
         </h1>
 
         <div class="post-meta">
@@ -224,8 +226,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2023-05-23 23:49:42" itemprop="dateCreated datePublished" datetime="2023-05-23T23:49:42+08:00">2023-05-23</time>
+              <time title="创建时间：2023-05-23 23:47:22 / 修改时间：23:49:45" itemprop="dateCreated datePublished" datetime="2023-05-23T23:47:22+08:00">2023-05-23</time>
             </span>
 
           
@@ -253,7 +256,39 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="在-Lisp-中使用-reader-macro-支持-JSON-语法"><a href="#在-Lisp-中使用-reader-macro-支持-JSON-语法" class="headerlink" title="在 Lisp 中使用 reader macro 支持 JSON 语法"></a>在 Lisp 中使用 reader macro 支持 JSON 语法</h1><h2 id="什么是-reader-macro？"><a href="#什么是-reader-macro？" class="headerlink" title="什么是 reader macro？"></a>什么是 reader macro？</h2><p>Reader macro 是 Common Lisp 提供的众多有趣特性之一，它让语言的使用者能够自定义词法分析的逻辑，使其在读取源代码时，如果遇到了特定的一两个字符，可以调用相应的函数来个性化处理。此处所说的“特定的一两个字符”，被称为 macro character，而“相应的函数”则被称为 reader macro function。举个例子，单引号<code>'</code>就是一个 macro character，可以用函数<code>get-macro-character</code>来获取它对应的 reader macro function。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">get-macro-character</span> #\')</span><br><span class="line">#&lt;FUNCTION SB-IMPL::READ-QUOTE&gt;</span><br><span class="line">NIL</span><br></pre></td></tr></tbody></table></figure>
+
+<p>借助单引号，可以简化一些代码的写法，例如表达一个符号<code>HELLO</code>本身可以写成这样。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; 'hello</span><br><span class="line">HELLO</span><br></pre></td></tr></tbody></table></figure>
+
+<p>而不是下面这种等价但更繁琐的形式。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">quote</span> hello)</span><br><span class="line">HELLO</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Common Lisp 中还定义了由两个字符构成的 reader macro，例如用于书写<code>simple-vector</code>字面量的<code>#(</code>。借助它，如果想要表达一个依次由数字 1、2、3 构成的<code>simple-vector</code>类型的对象，不需要显式地调用函数<code>vector</code>并传给它 1、2、3，而是可以写成<code>#(1 2 3)</code>。</p>
+<h2 id="支持-JSON-语法后有什么效果？"><a href="#支持-JSON-语法后有什么效果？" class="headerlink" title="支持 JSON 语法后有什么效果？"></a>支持 JSON 语法后有什么效果？</h2><p>合法的 JSON 文本不一定是合法的 Common Lisp 源代码。例如，<code>[1, 2, 3]</code>在 JSON 标准看来是一个由数字 1、2、3 组成的数组，但在 Common Lisp 中，这段代码会触发 condition。（condition 就是 Common Lisp 中的“异常”、“出状况”了）</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">eof-value</span> (<span class="name">gensym</span>)))</span><br><span class="line">  (<span class="name">with-input-from-string</span> (<span class="name">stream</span> <span class="string">"[1, 2, 3]"</span>)</span><br><span class="line">    (<span class="name">block</span> <span class="literal">nil</span></span><br><span class="line">      (<span class="name">loop</span></span><br><span class="line">        (<span class="name">let</span> ((<span class="name">expr</span> (<span class="name">read</span> stream <span class="literal">nil</span> eof-value)))</span><br><span class="line">          (<span class="name">when</span> (<span class="name">eq</span> expr eof-value)</span><br><span class="line">            (<span class="name">return</span>))</span><br><span class="line"></span><br><span class="line">          (<span class="name">print</span> expr))))))</span><br><span class="line"></span><br><span class="line">[<span class="number">1</span> <span class="comment">; Evaluation aborted on #&lt;SB-INT:SIMPLE-READER-ERROR "Comma not inside a backquote." {1003AAD863}&gt;.</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>这是因为按照 Common Lisp 的<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/02_b.htm">读取算法</a>，左方括号<code>[</code>和数字 1 都是标准中所指的 constituent character，它们可以组成一个 token，并且最终被解析为一个符号类型的对象。而紧接着的字符是逗号<code>,</code>，<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/02_ad.htm">它是一个 terminating macro char</a>，按照<a href="http://www.lispworks.com/documentation/lw60/CLHS/Body/02_dg.htm">标准</a>，如果不是在一个反引号表达式中使用它将会是无效的，因此触发了 condition。</p>
+<p>假如存在一个由两个字符<code>#J</code>定义的 reader macro、允许开发者使用 JSON 语法来描述紧接着的对象的话，那么就可以写出下面这样的代码。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">progn</span></span><br><span class="line">           (<span class="name">print</span> #jfalse)</span><br><span class="line">           (<span class="name">print</span> #jtrue)</span><br><span class="line">           (<span class="name">print</span> #j233.<span class="number">666</span>)</span><br><span class="line">           (<span class="name">print</span> #jnull)</span><br><span class="line">           (<span class="name">print</span> #j[<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line">           (<span class="name">print</span> #j{<span class="string">"a"</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]})</span><br><span class="line">           (<span class="name">print</span> (<span class="name">gethash</span> <span class="string">"a"</span> #j{<span class="string">"a"</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]})))</span><br><span class="line"></span><br><span class="line">YASON:FALSE </span><br><span class="line">YASON:TRUE </span><br><span class="line"><span class="number">233.666d0</span> </span><br><span class="line">:NULL </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> #(<span class="number">3</span>) #(<span class="number">4</span> <span class="number">5</span>)) </span><br><span class="line">#&lt;HASH-TABLE :TEST EQUAL :COUNT <span class="number">1</span> {<span class="number">1003889963</span>}&gt; </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) </span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>显然，用上述语法表示一个哈希表，要比下面这样的代码简单得多</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">obj</span> (<span class="name">make-hash-table</span> <span class="symbol">:test</span> #'equal)))</span><br><span class="line">           (<span class="name">setf</span> (<span class="name">gethash</span> <span class="string">"a"</span> obj) #(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">           obj)</span><br><span class="line"></span><br><span class="line">#&lt;HASH-TABLE :TEST EQUAL :COUNT <span class="number">1</span> {<span class="number">1003</span>CB7643}&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="如何用-reader-macro-解析-JSON？"><a href="#如何用-reader-macro-解析-JSON？" class="headerlink" title="如何用 reader macro 解析 JSON？"></a>如何用 reader macro 解析 JSON？</h2><p>Common Lisp 并没有预置<code>#J</code>这个 reader macro，但这门语言允许使用者定义自己的 macro character，因此前面的示例代码是可以实现的。要自定义出<code>#J</code>这个读取器宏，需要使用函数<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/f_set__1.htm#set-dispatch-macro-character"><code>set-dispatch-macro-character</code></a>。它的前两个参数分别为构成 macro character 的前两个字符，即<code>#</code>和<code>J</code>——其中<code>J</code>即便是写成了小写，也会被转换为大写后再使用。第三个参数则是 Lisp 的词法解析器在遇到了<code>#J</code>时将会调用的参数。<code>set-dispatch-macro-character</code>会传给这个函数三个参数：</p>
+<ol>
+<li>用于读取源代码的字符输入流；</li>
+<li>构成 macro character 的第二个字符（即<code>J</code>）；</li>
+<li>非必传的、夹在<code>#</code>和<code>J</code>之间的数字。</li>
+</ol>
+<p>百闻不如一见，一段能够实现上一个章节中的示例代码的<code>set-dispatch-macro-character</code>用法如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">set-dispatch-macro-character</span></span><br><span class="line"> #\#</span><br><span class="line"> #\j</span><br><span class="line"> (<span class="name">lambda</span> (<span class="name">stream</span> char p)</span><br><span class="line">   (<span class="name">declare</span> (<span class="name">ignorable</span> char p))</span><br><span class="line">   (<span class="name">let</span> ((<span class="name">parsed</span> (<span class="name">yason</span><span class="symbol">:parse</span> stream</span><br><span class="line">                              <span class="symbol">:json-arrays-as-vectors</span> <span class="literal">t</span></span><br><span class="line">                              <span class="symbol">:json-booleans-as-symbols</span> <span class="literal">t</span></span><br><span class="line">                              <span class="symbol">:json-nulls-as-keyword</span> <span class="literal">t</span>)))</span><br><span class="line">     (<span class="name">if</span> (<span class="name">or</span> (<span class="name">symbolp</span> parsed)</span><br><span class="line">             (<span class="name">consp</span> parsed))</span><br><span class="line">         (<span class="name">list</span> 'quote parsed)</span><br><span class="line">         parsed))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在<code>set-dispatch-macro-character</code>的回调函数中，我是用了开源的第三方库<code>yason</code>提供的函数<code>parse</code>，从输入流<code>stream</code>中按照 JSON 语法解析出一个值。函数<code>parse</code>的三个关键字参数的含义参见<a href="https://xh4.github.io/yason/#mapping">这里</a>，此处不再赘述。由于 reader macro 的结果会被用于构造源代码的表达式，因此如果函数<code>parse</code>返回了符号或者<code>cons</code>类型，为了避免被编译器求值，需要将它们“引用”起来，因此将它们放到第一元素为<code>quote</code>的列表中。其它情况下，直接返回<code>parse</code>的返回值即可，因此它们是“自求值”的，求值结果是它们自身。</p>
+<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>本文我借助了现成的库<code>yason</code>来解析 JSON 格式的字符串，如果你对如何从零开始实现这样的 reader macro 感兴趣的话，可以参考<a href="https://gist.github.com/chaitanyagupta/9324402">这篇文章</a>。</p>
+<p>全文完。</p>
+
     </div>
 
     
@@ -291,7 +326,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/" title="">https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/</a>
+    <a href="https://liutos.github.io/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/" title="在CommonLisp中支持JSON语法">https://liutos.github.io/2023/05/23/在CommonLisp中支持JSON语法/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +336,12 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag"><i class="fa fa-tag"></i> 编程语言</a>
+          </div>
 
         
 
@@ -308,12 +349,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/05/07/impl-dotimes-by-callcc/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2023/05/07/impl-dotimes-by-callcc/" rel="prev" title="使用 call/cc 实现计数循环">
+      <i class="fa fa-chevron-left"></i> 使用 call/cc 实现计数循环
     </a></div>
       <div class="post-nav-item">
-    <a href="/2024/05/05/getattr-%E5%9C%A8CommonLisp%E4%B8%AD%E7%9A%84%E8%BF%91%E4%BC%BC%E7%89%B9%E6%80%A7/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2024/05/05/getattr-%E5%9C%A8CommonLisp%E4%B8%AD%E7%9A%84%E8%BF%91%E4%BC%BC%E7%89%B9%E6%80%A7/" rel="next" title="从 Ruby 的 method_missing 到杂鱼 Common Lisp">
+      从 Ruby 的 method_missing 到杂鱼 Common Lisp <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +435,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8-Lisp-%E4%B8%AD%E4%BD%BF%E7%94%A8-reader-macro-%E6%94%AF%E6%8C%81-JSON-%E8%AF%AD%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">在 Lisp 中使用 reader macro 支持 JSON 语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-reader-macro%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 reader macro？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81-JSON-%E8%AF%AD%E6%B3%95%E5%90%8E%E6%9C%89%E4%BB%80%E4%B9%88%E6%95%88%E6%9E%9C%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">支持 JSON 语法后有什么效果？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%94%A8-reader-macro-%E8%A7%A3%E6%9E%90-JSON%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">如何用 reader macro 解析 JSON？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%BE%E5%A3%B0"><span class="nav-number">1.4.</span> <span class="nav-text">尾声</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +453,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +646,7 @@
         config: {page: {
             url: "https://liutos.github.io/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/",
             identifier: "2023/05/23/在CommonLisp中支持JSON语法/",
-            title: ""
+            title: "在CommonLisp中支持JSON语法"
           }
         }
       });

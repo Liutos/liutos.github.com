@@ -45,17 +45,23 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="在上一篇文章中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。 我自己模仿着x64的调用约定，规定四则运算的结果始终放在EAX这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到EAX寄存器中，再从EAX中减去或者">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="支持减、乘，以及除">
 <meta property="og:url" content="https://liutos.github.io/2019/05/23/%E6%94%AF%E6%8C%81%E5%87%8F%E3%80%81%E4%B9%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%99%A4/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="在上一篇文章中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。 我自己模仿着x64的调用约定，规定四则运算的结果始终放在EAX这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到EAX寄存器中，再从EAX中减去或者">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-05-23T13:56:18.000Z">
-<meta property="article:modified_time" content="2019-05-23T13:56:18.000Z">
+<meta property="article:published_time" content="2019-05-23T13:50:19.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="common lisp">
+<meta property="article:tag" content="lisp">
+<meta property="article:tag" content="assembly">
+<meta property="article:tag" content="compiler">
+<meta property="article:tag" content="x64">
+<meta property="article:tag" content="汇编">
+<meta property="article:tag" content="编译器">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://liutos.github.io/2019/05/23/%E6%94%AF%E6%8C%81%E5%87%8F%E3%80%81%E4%B9%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%99%A4/">
@@ -70,7 +76,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>支持减、乘，以及除 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +221,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          支持减、乘，以及除
         </h1>
 
         <div class="post-meta">
@@ -225,8 +231,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-05-23 21:56:18" itemprop="dateCreated datePublished" datetime="2019-05-23T21:56:18+08:00">2019-05-23</time>
+              <time title="创建时间：2019-05-23 21:50:19" itemprop="dateCreated datePublished" datetime="2019-05-23T21:50:19+08:00">2019-05-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -253,7 +266,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>在<a href="http://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/">上一篇文章</a>中，初步搭建了一个输入Common Lisp代码，输出汇编代码的编译器的骨架，实现了二元整数的加法运算。在这个基础上，要想实现减法、乘法，以及除法就是手到擒来的事情了。只需依葫芦画瓢，补充更多的分支情况即可。</p>
+<p>我自己模仿着x64的调用约定，规定四则运算的结果始终放在<code>EAX</code>这个寄存器中。在稍后给出的代码中，对于减法和除法运算，都是把运算符的左操作数放到<code>EAX</code>寄存器中，再从<code>EAX</code>中减去或者除掉右操作数。</p>
+<p>在摸索除法的汇编代码怎么生成时，遇到了个费解的问题，最后才知道，原来需要把<code>EAX</code>寄存器的符号扩展到高位的<code>EDX</code>寄存器中去。对于<code>as</code>这个汇编器来说，需要用到<a href="https://docs.oracle.com/cd/E19455-01/806-3773/instructionset-49/index.html"><code>CLTD</code></a>指令。</p>
+<p>最后，<code>jjcc2</code>和<code>stringify</code>两个函数被修改为如下的样子</p>
+<span id="more"></span>
+
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (addl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '-)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (subl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '*)</span><br><span class="line">         <span class="comment">;; 将两个数字相乘的结果放到第二个操作数所在的寄存器中</span></span><br><span class="line">         <span class="comment">;; 因为约定了用EAX寄存器作为存放最终结果给continuation用的寄存器，所以第二个操作数应当为EAX</span></span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (imull %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '/)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (cltd)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (idivl %ebx)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> stringify (<span class="name">asm</span>)</span><br><span class="line">  <span class="string">"根据jjcc2产生的S表达式生成汇编代码字符串"</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .section __TEXT,__text,regular,pure_instructions~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .globl _main~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"_main:~%"</span>)</span><br><span class="line">  (<span class="name">dolist</span> (<span class="name">ins</span> asm)</span><br><span class="line">    (<span class="name">cond</span> ((<span class="name">=</span> (<span class="name">length</span> ins) <span class="number">3</span>)</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A, ~A~%"</span></span><br><span class="line">                   (<span class="name">first</span> ins)</span><br><span class="line">                   (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">second</span> ins))</span><br><span class="line">                   (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">third</span> ins))</span><br><span class="line">                       (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">third</span> ins))</span><br><span class="line">                       (<span class="name">third</span> ins))))</span><br><span class="line">          ((<span class="name">=</span> (<span class="name">length</span> ins) <span class="number">2</span>)</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A~%"</span></span><br><span class="line">                   (<span class="name">first</span> ins)</span><br><span class="line">                   (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                       (<span class="name">second</span> ins))))</span><br><span class="line">          ((<span class="name">=</span> (<span class="name">length</span> ins) <span class="number">1</span>)</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A~%"</span> (<span class="name">first</span> ins)))))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl %eax, %edi~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl $0x2000001, %eax~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        syscall~%"</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>全文完。</p>
+
     </div>
 
     
@@ -291,7 +313,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2019/05/23/%E6%94%AF%E6%8C%81%E5%87%8F%E3%80%81%E4%B9%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%99%A4/" title="">https://liutos.github.io/2019/05/23/支持减、乘，以及除/</a>
+    <a href="https://liutos.github.io/2019/05/23/%E6%94%AF%E6%8C%81%E5%87%8F%E3%80%81%E4%B9%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%99%A4/" title="支持减、乘，以及除">https://liutos.github.io/2019/05/23/支持减、乘，以及除/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +323,16 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+              <a href="/tags/assembly/" rel="tag"><i class="fa fa-tag"></i> assembly</a>
+              <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
+              <a href="/tags/x64/" rel="tag"><i class="fa fa-tag"></i> x64</a>
+              <a href="/tags/%E6%B1%87%E7%BC%96/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
+              <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> 编译器</a>
+          </div>
 
         
 
@@ -308,12 +340,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/05/21/Evernote%E4%B8%8ELeanote/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2019/05/21/Evernote%E4%B8%8ELeanote/" rel="prev" title="Evernote与Leanote">
+      <i class="fa fa-chevron-left"></i> Evernote与Leanote
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/05/27/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91progn/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2019/05/27/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91progn/" rel="next" title="如何编译progn">
+      如何编译progn <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -411,6 +443,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +636,7 @@
         config: {page: {
             url: "https://liutos.github.io/2019/05/23/%E6%94%AF%E6%8C%81%E5%87%8F%E3%80%81%E4%B9%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%99%A4/",
             identifier: "2019/05/23/支持减、乘，以及除/",
-            title: ""
+            title: "支持减、乘，以及除"
           }
         }
       });

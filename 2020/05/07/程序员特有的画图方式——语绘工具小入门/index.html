@@ -45,18 +45,30 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="黑客与画家虽然程序员多数时候都在与字符打交道，但偶尔也会像建筑或制造业的工程师一样，画一些图，比如：  为了表达多个系统如何协作以实现业务需求，会画时序图； 为了表达存储到数据库中的业务实体间的关系，会画ER图； 为了表达复杂的业务实体在整个生存期中状态的变化，会画状态图。  除此之外，还有流程图、甘特图、火焰图，等等。 尽管软件开发过程中产出的这些图不一定逼真、漂亮，或严谨，但凭着图上不同的形状">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="程序员特有的画图方式——语绘工具小入门">
 <meta property="og:url" content="https://liutos.github.io/2020/05/07/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E2%80%94%E2%80%94%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="黑客与画家虽然程序员多数时候都在与字符打交道，但偶尔也会像建筑或制造业的工程师一样，画一些图，比如：  为了表达多个系统如何协作以实现业务需求，会画时序图； 为了表达存储到数据库中的业务实体间的关系，会画ER图； 为了表达复杂的业务实体在整个生存期中状态的变化，会画状态图。  除此之外，还有流程图、甘特图、火焰图，等等。 尽管软件开发过程中产出的这些图不一定逼真、漂亮，或严谨，但凭着图上不同的形状">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-05-07T13:07:31.000Z">
-<meta property="article:modified_time" content="2020-05-07T13:07:31.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/%E4%BD%A0%E5%80%92%E6%98%AF%E4%B8%8A%E4%B8%AA%E5%9B%BE%E5%95%8A.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/hello.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/flowchart.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/dfa.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/sequencediagram.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/%E7%94%A8%E4%BE%8B%E5%9B%BE.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/%E7%B1%BB%E5%9B%BE.jpeg">
+<meta property="article:published_time" content="2020-05-07T12:37:04.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="sequence diagram">
+<meta property="article:tag" content="emacs">
+<meta property="article:tag" content="vscode">
+<meta property="article:tag" content="tool">
+<meta property="article:tag" content="绘图">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/%E4%BD%A0%E5%80%92%E6%98%AF%E4%B8%8A%E4%B8%AA%E5%9B%BE%E5%95%8A.jpeg">
 
 <link rel="canonical" href="https://liutos.github.io/2020/05/07/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E2%80%94%E2%80%94%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/">
 
@@ -70,7 +82,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>程序员特有的画图方式——语绘工具小入门 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +227,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          程序员特有的画图方式——语绘工具小入门
         </h1>
 
         <div class="post-meta">
@@ -225,8 +237,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-05-07 21:07:31" itemprop="dateCreated datePublished" datetime="2020-05-07T21:07:31+08:00">2020-05-07</time>
+              <time title="创建时间：2020-05-07 20:37:04" itemprop="dateCreated datePublished" datetime="2020-05-07T20:37:04+08:00">2020-05-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -253,7 +272,94 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="黑客与画家"><a href="#黑客与画家" class="headerlink" title="黑客与画家"></a>黑客与画家</h1><p>虽然程序员多数时候都在与字符打交道，但偶尔也会像建筑或制造业的工程师一样，画一些图，比如：</p>
+<ol>
+<li>为了表达多个系统如何协作以实现业务需求，会画时序图；</li>
+<li>为了表达存储到数据库中的业务实体间的关系，会画ER图；</li>
+<li>为了表达复杂的业务实体在整个生存期中状态的变化，会画状态图。</li>
+</ol>
+<p>除此之外，还有流程图、甘特图、火焰图，等等。</p>
+<p>尽管软件开发过程中产出的这些图不一定逼真、漂亮，或严谨，但凭着图上不同的形状、颜色，以及布局，也可以做到一图胜千言的效果。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/%E4%BD%A0%E5%80%92%E6%98%AF%E4%B8%8A%E4%B8%AA%E5%9B%BE%E5%95%8A.jpeg"></p>
+<p>图很有用，画图的工具也同样举足轻重。如果是本地的桌面应用，多数人可能会选择用Windows平台的Visio或macOS平台的OmniGraffle；若说到作图网站，则可能会选择ProcessOn或Draw.io。</p>
+<p>但比起用鼠标拖拖拉拉，我更喜欢用代码来画图。</p>
+<h1 id="用代码画图？"><a href="#用代码画图？" class="headerlink" title="用代码画图？"></a>用代码画图？</h1><p>用代码画图大致上可以分为两类：</p>
+<ol>
+<li>用具体的编程语言控制某种绘图的API画出想要的图形，比如OpenGL、HTML5中的Canvas；</li>
+<li>用DSL描述想要画的图，然后用程序根据DSL生成图片。</li>
+</ol>
+<p>我所说的<em>用代码画图</em>指的是上述的第二类。</p>
+<p>百闻不如一见，以最容易上手的<code>DOT</code>语言为例，将下列内容保存在名为<code>hello.dot</code>的文件中</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">digraph G {</span><br><span class="line">        Hello -&gt; World</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后在shell中运行如下命令</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dot -Tpng hello.dot -o hello.png</span><br></pre></td></tr></tbody></table></figure>
+
+<p>便得到了相应的PNG文件</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/hello.jpeg"></p>
+<h1 id="更多的栗子"><a href="#更多的栗子" class="headerlink" title="更多的栗子"></a>更多的栗子</h1><p>下面就带各位读者走马观花地看看不同的图可以用哪些工具来绘制。</p>
+<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><p>说到程序员画的图，最出名的当属流程图了。依稀记得在高中的时候，某一册的数学课本中讲到了算法（也许是辗转相除法），并且给出了图示，那应当就是我第一次见到流程图。上大学后也有一段时间痴迷于寻找能够绘制流程图的DSL，不过一直未果。直到遇到Boostnote后，才知道的确有这样的DSL，那便是<a href="https://flowchart.js.org/">flowchart.js</a>。</p>
+<p><code>flowchart.js</code>是一个JS编写的、用来绘制流程图的库。比如下面这张图</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/flowchart.jpeg"></p>
+<p>便是依据下列的DSL生成的</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">st=&gt;start: Start</span><br><span class="line">op=&gt;operation: Your Operation</span><br><span class="line">cond=&gt;condition: Yes or No?</span><br><span class="line">e=&gt;end</span><br><span class="line"></span><br><span class="line">st-&gt;op-&gt;cond</span><br><span class="line">cond(yes)-&gt;e</span><br><span class="line">cond(no)-&gt;op</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>flowchart.js</code>生成的是SVG格式的图片文件，但SVG文件不方便嵌入到Markdown或Confluence的文档中，因此我会把它转换为PNG格式。折腾了一番后，发现在Mac上最靠谱的方法，是将SVG文件嵌入一个HTML文档，再用浏览器打开这个HTML，然后复制图片到<em>预览</em>程序上保存下来。</p>
+<p>遗憾的是，不管是Emacs还是VSCode，似乎都没有辅助编辑<code>flowchart.js</code>的DSL的插件。</p>
+<h2 id="有限状态机"><a href="#有限状态机" class="headerlink" title="有限状态机"></a>有限状态机</h2><p>有限状态机的示意图也是很常见的图形，尤其是在讲解编译器的书的语法分析章节中。在Graphviz项目官网的<a href="https://graphviz.gitlab.io/gallery/">Gallery板块</a>中，便有一个有限状态机的例子</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/dfa.jpeg"></p>
+<p>它由如下的<code>DOT</code>代码描述</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">digraph finite_state_machine {</span><br><span class="line">	rankdir=LR;</span><br><span class="line">	size="8,5"</span><br><span class="line">	node [shape = doublecircle]; LR_0 LR_3 LR_4 LR_8;</span><br><span class="line">	node [shape = circle];</span><br><span class="line">	LR_0 -&gt; LR_2 [ label = "SS(B)" ];</span><br><span class="line">	LR_0 -&gt; LR_1 [ label = "SS(S)" ];</span><br><span class="line">	LR_1 -&gt; LR_3 [ label = "S($end)" ];</span><br><span class="line">	LR_2 -&gt; LR_6 [ label = "SS(b)" ];</span><br><span class="line">	LR_2 -&gt; LR_5 [ label = "SS(a)" ];</span><br><span class="line">	LR_2 -&gt; LR_4 [ label = "S(A)" ];</span><br><span class="line">	LR_5 -&gt; LR_7 [ label = "S(b)" ];</span><br><span class="line">	LR_5 -&gt; LR_5 [ label = "S(a)" ];</span><br><span class="line">	LR_6 -&gt; LR_6 [ label = "S(b)" ];</span><br><span class="line">	LR_6 -&gt; LR_5 [ label = "S(a)" ];</span><br><span class="line">	LR_7 -&gt; LR_8 [ label = "S(b)" ];</span><br><span class="line">	LR_7 -&gt; LR_5 [ label = "S(a)" ];</span><br><span class="line">	LR_8 -&gt; LR_6 [ label = "S(b)" ];</span><br><span class="line">	LR_8 -&gt; LR_5 [ label = "S(a)" ];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>不少工具将<code>DOT</code>语言作为中间媒介来实现绘图的功能。</p>
+<p>与<code>flowchart.js</code>不同，Emacs和VSCode都可以很好地支持<code>DOT</code>代码的编辑和预览。Emacs上有<code>dot-mode</code>，VSCode则有<a href="https://marketplace.visualstudio.com/items?itemName=Stephanvs.dot">Graphviz (dot) language support for Visual Studio Code</a>这个插件。</p>
+<h2 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h2><p>我画得最多的当属时序图。在旧文<a href="https://liutos.github.io/2019/06/18/%E6%97%B6%E5%BA%8F%E5%9B%BE%E7%BB%98%E5%88%B6%E5%B7%A5%E5%85%B7%E8%B5%B0%E9%A9%AC%E8%A7%82%E8%8A%B1/">《时序图绘制工具走马观花》</a>中，提到了三个工具：</p>
+<ol>
+<li><a href="https://www.websequencediagrams.com/">WebSequenceDiagrams</a>，一个在线绘制时序图的网站；</li>
+<li><a href="http://sdedit.sourceforge.net/">sdedit</a>，一个本地的命令行兼GUI绘图工具；</li>
+<li><a href="https://sequencediagram.org/">SequenceDiagram</a>，也是一个网站。</li>
+</ol>
+<p>当时倾向于使用<code>sdedit</code>。时过境迁，如今的<code>WebSequenceDiagrams</code>变得更好看了，而我也选择了<a href="https://plantuml.com/zh/">PlantUML</a>作为绘制时序图的主力工具。下面这张图是<code>PlantUML</code>官网给出的例子</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/sequencediagram.jpeg"></p>
+<p>它依据如下的代码生成</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">用户 -&gt; 认证中心: 登录操作</span><br><span class="line">认证中心 -&gt; 缓存: 存放(key=token+ip,value=token)token</span><br><span class="line"></span><br><span class="line">用户 &lt;- 认证中心 : 认证成功返回token</span><br><span class="line">用户 -&gt; 认证中心: 下次访问头部携带token认证</span><br><span class="line">认证中心 &lt;- 缓存: key=token+ip获取token</span><br><span class="line">其他服务 &lt;- 认证中心: 存在且校验成功则跳转到用户请求的其他服务</span><br><span class="line">其他服务 -&gt; 用户: 信息</span><br><span class="line">@enduml</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Emacs的<code>plantuml-mode</code>，以及VSCode的<a href="https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml">PlantUML</a>插件都可以为<code>PlantUML</code>的DSL提供语法高亮。</p>
+<p>下载了<code>PlantUML</code>的<code>jar</code>包后，在Emacs中添加如下的配置，就可以不依赖远程服务器来生成PNG格式的图片了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> plantuml-default-exec-mode 'jar)</span><br><span class="line">(<span class="name">setq</span> plantuml-jar-path <span class="string">"/path/to/plantuml.jar"</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="UML用例图"><a href="#UML用例图" class="headerlink" title="UML用例图"></a>UML用例图</h2><p>在《架构整洁之道》一书中，作者提出了一个软件架构模式，其中有一层便是<em>用例</em>。看完这本书后，我越发地喜欢作者这一套架构模式，渐渐开始在设计文档中给出需求的典型用例——尽管是文字描述。再后来，才知道原来UML中已经有一类专门用于描述用例的图形方法——用例图。</p>
+<p>用于画用例图的依然是<code>PlantUML</code>。下列这张图</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/%E7%94%A8%E4%BE%8B%E5%9B%BE.jpeg"></p>
+<p>便是依据如下的源代码生成的</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">left to right direction</span><br><span class="line">actor 员工 as yg</span><br><span class="line">actor 顾客 as gk</span><br><span class="line">actor 餐厅员工 as ctyg</span><br><span class="line">actor A2 as a2</span><br><span class="line">actor 送餐员 as scy</span><br><span class="line">rectangle cos {</span><br><span class="line">        note "没注册工资\n支付的采用\n送餐时收费" as mzc</span><br><span class="line">        usecase 查看菜单 as ckcd</span><br><span class="line">        usecase 注册 as zc</span><br><span class="line">        usecase 登录 as dl</span><br><span class="line">        usecase 订餐 as dc</span><br><span class="line">        usecase "预约/覆盖预约" as yy</span><br><span class="line">        usecase 备餐 as bc</span><br><span class="line">        usecase 请求送餐 as qqsc</span><br><span class="line">        usecase 记录送餐 as jlsc</span><br><span class="line">        usecase 打印送餐说明 as dyscsm</span><br><span class="line">        usecase 记录收费 as jlsf</span><br><span class="line">        zc .&gt; dl : &lt;&lt;extends&gt;&gt;</span><br><span class="line">        dl .&gt; dc : &lt;&lt;extends&gt;&gt;</span><br><span class="line">}</span><br><span class="line">actor A1 as a1</span><br><span class="line">note bottom of a1 : 已注册工资支付</span><br><span class="line"></span><br><span class="line">yg &lt;|-- gk</span><br><span class="line">gk &lt;|-- ctyg</span><br><span class="line">ctyg &lt;|-- a2</span><br><span class="line">ctyg &lt;|-- scy</span><br><span class="line"></span><br><span class="line">yg -- ckcd</span><br><span class="line">yg ---- zc</span><br><span class="line">yg --- dl</span><br><span class="line">gk -- dc</span><br><span class="line">gk ---- yy</span><br><span class="line">ctyg -- bc</span><br><span class="line">ctyg --- qqsc</span><br><span class="line">scy -- jlsc</span><br><span class="line">scy --- dyscsm</span><br><span class="line">scy -- mzc</span><br><span class="line">jlsf -- mzc</span><br><span class="line">@enduml</span><br></pre></td></tr></tbody></table></figure>
+
+<p>比较遗憾的是，<code>PlantUML</code>自动排版的结果显得不那么整齐，左下角有一个明显的三角形空白区域——这也是DSL大法的一个缺点，即无法完美地控制最终的排列效果。</p>
+<h2 id="UML类图"><a href="#UML类图" class="headerlink" title="UML类图"></a>UML类图</h2><p>最开始接触UML的时候，学习的便是类图——尽管接触得最早，画得却最少。比起类图，ER图反而画得更多一点。</p>
+<p>如果要画类图，首选的工具是<a href="https://mermaid-js.github.io/mermaid/#/"><code>mermaid</code></a>。跟<code>PlantUML</code>一样，<code>mermaid</code>也是一个大而全的东西，除了画UML类图，也可以画流程图、时序图，以及UML状态图等。下面这张图</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200507/%E7%B1%BB%E5%9B%BE.jpeg"></p>
+<p>便是<code>mermaid-cli</code>依据如下的源代码生成的</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">classDiagram</span><br><span class="line">  Image &lt;|-- BMP</span><br><span class="line">  Image &lt;|-- GIF</span><br><span class="line">  Image &lt;|-- JPEG</span><br><span class="line">  Image: +setImpl()</span><br><span class="line">  Image: +parseFile()</span><br><span class="line"></span><br><span class="line">  ImageImpl &lt;|-- WinImpl</span><br><span class="line">  ImageImpl &lt;|-- LinuxImpl</span><br><span class="line">  ImageImpl: +doPaint()</span><br><span class="line"></span><br><span class="line">  Image ..&gt; ImageImpl</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Emacs用户可以安装<code>mermaid-mode</code>，VSCode用户则可以使用<a href="https://marketplace.visualstudio.com/items?itemName=vstirbu.vscode-mermaid-preview">Mermaid Preview</a>这个插件，来辅助编辑<code>mermaid</code>的源文件。</p>
+<p>方才提到的<code>mermaid-cli</code>是一个命令行程序，用于在本地根据<code>mermaid</code>的源文件产生PNG格式的图片，安装也很简单</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g mermaid.cli</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>还有许多的图可以用DSL来绘制，感兴趣的读者可以到<code>mermaid</code>或<code>PlantUML</code>的官网了解一番，这里不再一一举例。</p>
+<p>用DSL来绘图有一些优点：</p>
+<ol>
+<li>不需要借助鼠标工具，纯键盘党的福音；</li>
+<li>源代码为纯文本，生成器跨多平台，可以在多个平台甚至网页上编辑和查看，不受单一软件厂商的约束；</li>
+<li>方便修改，改完不需要来回调整各个图形的位置。</li>
+</ol>
+<p>但也有一些缺点：</p>
+<ol>
+<li>不直观，生成图片前不好猜测最终的效果；</li>
+<li>无法准确地控制图中所有元素的排列和位置，有时候得不到想要的效果；</li>
+<li>需要学习不同的DSL，学习成本比可视化工具要高。</li>
+</ol>
+<p>就像软件开发中没有银弹一样，画图工具也没有万金油，关键还是要因地制宜地选择最合适的工具来解决眼前的问题。</p>
+
     </div>
 
     
@@ -291,7 +397,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/05/07/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E2%80%94%E2%80%94%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/" title="">https://liutos.github.io/2020/05/07/程序员特有的画图方式——语绘工具小入门/</a>
+    <a href="https://liutos.github.io/2020/05/07/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E2%80%94%E2%80%94%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/" title="程序员特有的画图方式——语绘工具小入门">https://liutos.github.io/2020/05/07/程序员特有的画图方式——语绘工具小入门/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +407,14 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/sequence-diagram/" rel="tag"><i class="fa fa-tag"></i> sequence diagram</a>
+              <a href="/tags/emacs/" rel="tag"><i class="fa fa-tag"></i> emacs</a>
+              <a href="/tags/vscode/" rel="tag"><i class="fa fa-tag"></i> vscode</a>
+              <a href="/tags/tool/" rel="tag"><i class="fa fa-tag"></i> tool</a>
+              <a href="/tags/%E7%BB%98%E5%9B%BE/" rel="tag"><i class="fa fa-tag"></i> 绘图</a>
+          </div>
 
         
 
@@ -308,12 +422,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/26/%E4%BD%A0%E6%88%96%E8%AE%B8%E4%B8%8D%E7%9F%A5%E9%81%93%EF%BC%8Cshell%E4%B8%8D%E8%83%BD%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2020/04/26/%E4%BD%A0%E6%88%96%E8%AE%B8%E4%B8%8D%E7%9F%A5%E9%81%93%EF%BC%8Cshell%E4%B8%8D%E8%83%BD%E6%AF%94%E8%BE%83%E5%A4%A7%E5%B0%8F/" rel="prev" title="你或许不知道，shell不能比较大小">
+      <i class="fa fa-chevron-left"></i> 你或许不知道，shell不能比较大小
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/05/22/%E9%87%8D%E5%AE%9A%E5%90%91%E7%9A%84%E6%97%B6%E5%80%99shell%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88%EF%BC%9F/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2020/05/22/%E9%87%8D%E5%AE%9A%E5%90%91%E7%9A%84%E6%97%B6%E5%80%99shell%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88%EF%BC%9F/" rel="next" title="重定向的时候shell在干什么？">
+      重定向的时候shell在干什么？ <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +508,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%BB%91%E5%AE%A2%E4%B8%8E%E7%94%BB%E5%AE%B6"><span class="nav-number">1.</span> <span class="nav-text">黑客与画家</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E4%BB%A3%E7%A0%81%E7%94%BB%E5%9B%BE%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">用代码画图？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B4%E5%A4%9A%E7%9A%84%E6%A0%97%E5%AD%90"><span class="nav-number">3.</span> <span class="nav-text">更多的栗子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">3.1.</span> <span class="nav-text">流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E9%99%90%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="nav-number">3.2.</span> <span class="nav-text">有限状态机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E5%9B%BE"><span class="nav-number">3.3.</span> <span class="nav-text">时序图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UML%E7%94%A8%E4%BE%8B%E5%9B%BE"><span class="nav-number">3.4.</span> <span class="nav-text">UML用例图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UML%E7%B1%BB%E5%9B%BE"><span class="nav-number">3.5.</span> <span class="nav-text">UML类图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +526,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +719,7 @@
         config: {page: {
             url: "https://liutos.github.io/2020/05/07/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E2%80%94%E2%80%94%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/",
             identifier: "2020/05/07/程序员特有的画图方式——语绘工具小入门/",
-            title: ""
+            title: "程序员特有的画图方式——语绘工具小入门"
           }
         }
       });

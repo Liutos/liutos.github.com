@@ -45,17 +45,24 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="progn是什么玩意progn是Common Lisp里面的一个special operator，见这份文档的说明：http://clhs.lisp.se/Body/s_progn.htm 为嘛要编译这东西现在已经支持了二元四则运算了，但现在这里有一个大问题，就是这四个运算没办法嵌套着组合使用。比如，遇到下面这样的代码，jjcc2函数就懵逼了 1(+ 1 (+ 2 3))  那要编译这种代码的话怎">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="如何编译progn">
 <meta property="og:url" content="https://liutos.github.io/2019/05/27/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91progn/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="progn是什么玩意progn是Common Lisp里面的一个special operator，见这份文档的说明：http://clhs.lisp.se/Body/s_progn.htm 为嘛要编译这东西现在已经支持了二元四则运算了，但现在这里有一个大问题，就是这四个运算没办法嵌套着组合使用。比如，遇到下面这样的代码，jjcc2函数就懵逼了 1(+ 1 (+ 2 3))  那要编译这种代码的话怎">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-05-27T14:41:00.000Z">
-<meta property="article:modified_time" content="2019-05-27T14:41:00.000Z">
+<meta property="article:published_time" content="2019-05-27T14:38:22.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="common lisp">
+<meta property="article:tag" content="lisp">
+<meta property="article:tag" content="assembly">
+<meta property="article:tag" content="compiler">
+<meta property="article:tag" content="x64">
+<meta property="article:tag" content="汇编">
+<meta property="article:tag" content="编译器">
+<meta property="article:tag" content="progn">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://liutos.github.io/2019/05/27/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91progn/">
@@ -70,7 +77,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>如何编译progn | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          如何编译progn
         </h1>
 
         <div class="post-meta">
@@ -225,8 +232,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-05-27 22:41:00" itemprop="dateCreated datePublished" datetime="2019-05-27T22:41:00+08:00">2019-05-27</time>
+              <time title="创建时间：2019-05-27 22:38:22" itemprop="dateCreated datePublished" datetime="2019-05-27T22:38:22+08:00">2019-05-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -253,7 +267,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h2 id="progn是什么玩意"><a href="#progn是什么玩意" class="headerlink" title="progn是什么玩意"></a>progn是什么玩意</h2><p><code>progn</code>是Common Lisp里面的一个special operator，见这份文档的说明：<a href="http://clhs.lisp.se/Body/s_progn.htm">http://clhs.lisp.se/Body/s_progn.htm</a></p>
+<h2 id="为嘛要编译这东西"><a href="#为嘛要编译这东西" class="headerlink" title="为嘛要编译这东西"></a>为嘛要编译这东西</h2><p>现在已经支持了二元四则运算了，但现在这里有一个大问题，就是这四个运算没办法嵌套着组合使用。比如，遇到下面这样的代码，<code>jjcc2</code>函数就懵逼了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> <span class="number">1</span> (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>那要编译这种代码的话怎么办呢？一个比较直观的做法，是引入临时变量，来保存嵌套在其中的表达式的求值结果，然后再用变量来代替原本嵌套的表达式。修改后的代码可能长这个样子</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> a (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">(<span class="name">+</span> <span class="number">1</span> a)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>显然，这是有先后的时间依赖关系的两条语句，因此应当使用<code>progn</code>将它们包裹起来，结果如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">setq</span> a (<span class="name">+</span> <span class="number">2</span> <span class="number">3</span>))</span><br><span class="line">  (<span class="name">+</span> <span class="number">1</span> a))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这样整个表达式的求值结果，或者说它被编译之后的运行结果，应当就是在寄存器<code>EAX</code>中放入整数6了。所以，本篇将来解决对<code>progn</code>的编译问题。</p>
+<h2 id="如何编译progn"><a href="#如何编译progn" class="headerlink" title="如何编译progn"></a>如何编译progn</h2><span id="more"></span>
+
+<p>其实很简单，<code>progn</code>可能有不定数量的form在其中，那么只需要按照顺序对它们一个个进行编译，输出汇编代码就可以了，因此最终<code>jjcc2</code>被修改为如下的样子</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (addl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '-)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (subl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '*)</span><br><span class="line">         <span class="comment">;; 将两个数字相乘的结果放到第二个操作数所在的寄存器中</span></span><br><span class="line">         <span class="comment">;; 因为约定了用EAX寄存器作为存放最终结果给continuation用的寄存器，所以第二个操作数应当为EAX</span></span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (imull %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '/)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (cltd)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (idivl %ebx)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'progn)</span><br><span class="line">         (<span class="name">let</span> ((<span class="name">result</span> '()))</span><br><span class="line">           (<span class="name">dolist</span> (<span class="name">expr</span> (<span class="name">rest</span> expr))</span><br><span class="line">             (<span class="name">setf</span> result (<span class="name">append</span> result (<span class="name">jjcc2</span> expr))))</span><br><span class="line">           result))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>就酱就足够了。下一篇，是时候讲一下如何编译<code>setq</code>了。</p>
+<p>全文完。</p>
+
     </div>
 
     
@@ -291,7 +323,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2019/05/27/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91progn/" title="">https://liutos.github.io/2019/05/27/如何编译progn/</a>
+    <a href="https://liutos.github.io/2019/05/27/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91progn/" title="如何编译progn">https://liutos.github.io/2019/05/27/如何编译progn/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +333,17 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+              <a href="/tags/assembly/" rel="tag"><i class="fa fa-tag"></i> assembly</a>
+              <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
+              <a href="/tags/x64/" rel="tag"><i class="fa fa-tag"></i> x64</a>
+              <a href="/tags/%E6%B1%87%E7%BC%96/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
+              <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> 编译器</a>
+              <a href="/tags/progn/" rel="tag"><i class="fa fa-tag"></i> progn</a>
+          </div>
 
         
 
@@ -308,12 +351,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/05/23/%E6%94%AF%E6%8C%81%E5%87%8F%E3%80%81%E4%B9%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%99%A4/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2019/05/23/%E6%94%AF%E6%8C%81%E5%87%8F%E3%80%81%E4%B9%98%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%99%A4/" rel="prev" title="支持减、乘，以及除">
+      <i class="fa fa-chevron-left"></i> 支持减、乘，以及除
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/06/01/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91setq%EF%BC%9F/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2019/06/01/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91setq%EF%BC%9F/" rel="next" title="如何编译setq？">
+      如何编译setq？ <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +437,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#progn%E6%98%AF%E4%BB%80%E4%B9%88%E7%8E%A9%E6%84%8F"><span class="nav-number">1.</span> <span class="nav-text">progn是什么玩意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E5%98%9B%E8%A6%81%E7%BC%96%E8%AF%91%E8%BF%99%E4%B8%9C%E8%A5%BF"><span class="nav-number">2.</span> <span class="nav-text">为嘛要编译这东西</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91progn"><span class="nav-number">3.</span> <span class="nav-text">如何编译progn</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +455,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +648,7 @@
         config: {page: {
             url: "https://liutos.github.io/2019/05/27/%E5%A6%82%E4%BD%95%E7%BC%96%E8%AF%91progn/",
             identifier: "2019/05/27/如何编译progn/",
-            title: ""
+            title: "如何编译progn"
           }
         }
       });

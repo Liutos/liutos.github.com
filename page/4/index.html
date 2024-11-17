@@ -200,7 +200,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/10/06/%E7%9B%B4%E8%A7%82%E5%9C%B0%E4%BA%86%E8%A7%A3%E8%87%AA%E5%B7%B1%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%90%83%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%BC%80%E9%94%80/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/04/17/%E5%BD%93%E4%BD%A0SET%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8CRedis%E5%88%B0%E5%BA%95%E5%9C%A8SET%E4%BA%9B%E4%BB%80%E4%B9%88/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -214,7 +214,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2021/10/06/%E7%9B%B4%E8%A7%82%E5%9C%B0%E4%BA%86%E8%A7%A3%E8%87%AA%E5%B7%B1%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%90%83%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%BC%80%E9%94%80/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2021/04/17/%E5%BD%93%E4%BD%A0SET%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8CRedis%E5%88%B0%E5%BA%95%E5%9C%A8SET%E4%BA%9B%E4%BB%80%E4%B9%88/" class="post-title-link" itemprop="url">当你SET的时候，Redis到底在SET些什么</a>
         </h1>
 
         <div class="post-meta">
@@ -223,8 +223,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-10-06 22:45:06" itemprop="dateCreated datePublished" datetime="2021-10-06T22:45:06+08:00">2021-10-06</time>
+              <time title="创建时间：2021-04-17 15:09:24 / 修改时间：15:14:22" itemprop="dateCreated datePublished" datetime="2021-04-17T15:09:24+08:00">2021-04-17</time>
             </span>
 
           
@@ -236,8 +237,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/10/06/%E7%9B%B4%E8%A7%82%E5%9C%B0%E4%BA%86%E8%A7%A3%E8%87%AA%E5%B7%B1%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%90%83%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%BC%80%E9%94%80/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/10/06/直观地了解自己每天在吃上面的开销/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/04/17/%E5%BD%93%E4%BD%A0SET%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8CRedis%E5%88%B0%E5%BA%95%E5%9C%A8SET%E4%BA%9B%E4%BB%80%E4%B9%88/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/04/17/当你SET的时候，Redis到底在SET些什么/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -252,7 +253,62 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p>准备过互联网公司的服务端岗位面试的人，对Redis中的5种数据类型想必是如数家珍。而网上很多面试题里也会出现这道题目</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BE%8B%E5%AD%901.jpg" alt="来自https://blog.csdn.net/ThinkWon/article/details/103522351"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BE%8B%E5%AD%902.jpg" alt="来自https://juejin.cn/post/6844903982066827277"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/%E9%9D%A2%E8%AF%95%E9%A2%98%E4%BE%8B%E5%AD%903.jpg" alt="来自https://mikechen.cc/3313.html"></p>
+<p>随着行业曲率的增大，光是知道有这些数据类型已经不够了，还得知道同一个类型也有不同的底层数据结构。例如同样是<code>string</code>类型，不同内容或不同长度会采用不同的编码方式：</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SET key1 "1"</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; SET key2 "value"</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; SET key3 "Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp."</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; TYPE key1</span><br><span class="line">string</span><br><span class="line">127.0.0.1:6379&gt; TYPE key2</span><br><span class="line">string</span><br><span class="line">127.0.0.1:6379&gt; TYPE key3</span><br><span class="line">string</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING key1</span><br><span class="line">"int"</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING key2</span><br><span class="line">"embstr"</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING key3</span><br><span class="line">"raw"</span><br></pre></td></tr></tbody></table></figure>
+
+<p>而<code>hash</code>类型也有两种底层实现</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt;  HSET myhash field1 "Hello"</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt;  HSET myhash2 field1 "Any sufficiently complicated C or Fortran program contains an ad hoc, informally-specified, bug-ridden, slow implementation of half of Common Lisp."</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING myhash</span><br><span class="line">"ziplist"</span><br><span class="line">127.0.0.1:6379&gt; OBJECT ENCODING myhash2</span><br><span class="line">"hashtable"</span><br></pre></td></tr></tbody></table></figure>
+
+<p>不知道你是否曾经好奇过，上文中的<code>key1</code>、<code>key2</code>、<code>key3</code>、<code>myhash</code>，以及<code>myhash2</code>这些键，与它们各自的值（前三个为<code>string</code>，后两个为<code>hash</code>）之间的关系又是存储在什么数据结构中的呢？</p>
+<p>答案在意料之外，情理之中：键与值的关系，也是存储在一张哈希表中的，并且正是上文中的<code>hashtable</code>。</p>
+<p>求证的办法当然是阅读Redis的源代码。</p>
+<h1 id="Redis命令的派发逻辑"><a href="#Redis命令的派发逻辑" class="headerlink" title="Redis命令的派发逻辑"></a>Redis命令的派发逻辑</h1><p>阅读Redis的源码是比较轻松愉快的，一是因为其源码由简单易懂的C语言编写，二是因为源码仓库的<code>README.md</code>中对内部实现做了一番高屋建瓴的介绍。在<code>README.md</code>的<a href="https://github.com/redis/redis#serverc">server.c</a>一节中，道出了有关命令派发的两个关键点</p>
+<blockquote>
+<p><code>call()</code> is used in order to call a given command in the context of a given client.</p>
+</blockquote>
+<blockquote>
+<p>The global variable <code>redisCommandTable</code> defines all the Redis commands, specifying the name of the command, the function implementing the command, the number of arguments required, and other properties of  each command.</p>
+</blockquote>
+<p>位于文件<code>src/server.c</code>中的变量<code>redisCommandTable</code>定义了所有可以在Redis中使用的命令——为什么一个C语言项目里要用<code>camelCase</code>这种格格不入的命名风格呢——它的元素的类型为<code>struct redisCommand</code>，其中：</p>
+<ul>
+<li><code>name</code>存放命令的名字；</li>
+<li><code>proc</code>存放实现命令的C函数的指针；</li>
+</ul>
+<p>比如高频使用的<code>GET</code>命令在<code>redisCommandTable</code>中就是这样定义的</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">{<span class="string">"get"</span>,getCommand,<span class="number">2</span>,</span><br><span class="line"> <span class="string">"read-only fast @string"</span>,</span><br><span class="line"> <span class="number">0</span>,<span class="literal">NULL</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>},</span><br></pre></td></tr></tbody></table></figure>
+
+<p>身为一名老解释器爱好者，对这种套路的代码当然是不会陌生的。我也曾在写过的、跑不起来的玩具解释器上用过类似的手法</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/liutscm%E4%B8%AD%E7%9A%84%E7%B1%BB%E4%BC%BC%E4%BB%A3%E7%A0%81.jpg"></p>
+<p>Redis收到一道需要执行的命令后，根据命令的名字用<code>lookupCommand</code>找到一个命令（是个<code>struct redisCommand</code>类型的结构体），然后<code>call</code>函数做的事情就是调用它的<code>proc</code>成员所指向的函数而已</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c-&gt;cmd-&gt;proc(c);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>那么接下来，就要看看<code>SET</code>命令对应的C函数究竟做了些什么了。</p>
+<h1 id="SET命令的实现"><a href="#SET命令的实现" class="headerlink" title="SET命令的实现"></a><code>SET</code>命令的实现</h1><p><code>redisCommonTable</code>中下标为2的元素正是<code>SET</code>命令的定义</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Note that we can't flag set as fast, since it may perform an</span></span><br><span class="line"><span class="comment"> * implicit DEL of a large key. */</span></span><br><span class="line">{<span class="string">"set"</span>,setCommand,<span class="number">-3</span>,</span><br><span class="line"> <span class="string">"write use-memory @string"</span>,</span><br><span class="line"> <span class="number">0</span>,<span class="literal">NULL</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>},</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中函数<code>setCommand</code>定义在文件<code>t_string.c</code>中，它根据参数中是否有传入<code>NX</code>、<code>XX</code>、<code>EX</code>等选项计算出一个<code>flags</code>后，便调用<code>setGenericCommand</code>——顾名思义，这是一个通用的<code>SET</code>命令，它同时被<code>SET</code>、<code>SETNX</code>、<code>SETEX</code>，以及<code>PSETEX</code>四个Redis命令的实现函数所共用。</p>
+<p><code>setGenericCommand</code>调用了<code>genericSetKey</code>，后者定义在文件<code>db.c</code>中。尽管该函数上方的注释写着</p>
+<blockquote>
+<p>All the new keys in the database should be created via this interface.</p>
+</blockquote>
+<p>但<del>人生不如意事十之八九</del>事实并非如此。例如在命令<code>RPUSH</code>的实现函数<code>rpushCommand</code>中，调用了<code>pushGenericCommand</code>，后者直接调用了<code>dbAdd</code>往Redis中存入键和列表对象的关系。</p>
+<p>言归正传。根据键存在与否，<code>genericSetKey</code>会调用<code>dbAdd</code>或<code>dbOverwrite</code>。而在<code>dbAdd</code>中，最终调用了<code>dictAdd</code>将键与值存入数据库中。</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Add an element to the target hash table */</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">dictAdd</span><span class="params">(dict *d, <span class="type">void</span> *key, <span class="type">void</span> *val)</span></span><br><span class="line">{</span><br><span class="line">    dictEntry *entry = dictAddRaw(d,key,<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!entry) <span class="keyword">return</span> DICT_ERR;</span><br><span class="line">    dictSetVal(d, entry, val);</span><br><span class="line">    <span class="keyword">return</span> DICT_OK;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在我们知道了，使用<code>SET</code>命令时传入的<code>key</code>和<code>value</code>，是存储在一个<code>dict</code>类型的数据结构中。</p>
+<h1 id="HSET命令的实现"><a href="#HSET命令的实现" class="headerlink" title="HSET命令的实现"></a><code>HSET</code>命令的实现</h1><p>依葫芦画瓢，Redis的<code>HSET</code>命令由位于文件<code>t_hash.c</code>中的函数<code>hsetCommand</code>实现，它会尝试转换要操作的<code>hash</code>值的编码方式。</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashTypeTryConversion(o,c-&gt;argv,<span class="number">2</span>,c-&gt;argc<span class="number">-1</span>);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果<code>hashTypeTryConversion</code>发现要写入哈希表的任何一个键或者值的长度超过了<code>server.hash_max_ziplist_value</code>所规定的值，就会将<code>hash</code>类型的编码从<code>ziplist</code>转换为<code>hashtable</code>。<code>server.hash_max_ziplist_value</code>的值在文件<code>config.c</code>中通过宏设置，默认值为64——这正是上文中<code>myhash2</code>所对应的值的编码为<code>hashtable</code>的原因。</p>
+<p>将思绪拉回到函数<code>hsetCommand</code>中。做完编码的转换后，它调用函数<code>hashTypeSet</code>，在编码为<code>hashtable</code>的世界线中，同样调用了<code>dictAdd</code>实现往哈希表中写入键值对。</p>
+<p>殊途同归</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210417/path_to_dbAdd.png"></p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>因此，在Redis中用以维持每一个键与其对应的值——这些值也许是<code>string</code>，也许是<code>list</code>，也许是<code>hash</code>——的关系的数据结构，与Redis中的一系列操作哈希表的命令——也许是<code>HSET</code>、也许<code>HGET</code>，也许是<code>HDEL</code>——所用的数据结构，不能说是毫不相关，起码是一模一样。</p>
+
       
     </div>
 
@@ -271,7 +327,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/09/04/git-log%E5%BE%88%E5%A5%BD%EF%BC%8C%E4%BD%A0%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%86%99%E4%B8%80%E4%B8%AA/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/03/14/%E5%A4%9A%E9%87%8D%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E9%98%B5%E8%90%A5%E4%B9%9D%E5%AE%AB%E6%A0%BC/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -285,7 +341,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2021/09/04/git-log%E5%BE%88%E5%A5%BD%EF%BC%8C%E4%BD%A0%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%86%99%E4%B8%80%E4%B8%AA/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2021/03/14/%E5%A4%9A%E9%87%8D%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E9%98%B5%E8%90%A5%E4%B9%9D%E5%AE%AB%E6%A0%BC/" class="post-title-link" itemprop="url">多重返回值的阵营九宫格</a>
         </h1>
 
         <div class="post-meta">
@@ -295,8 +351,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-09-04 17:29:17" itemprop="dateCreated datePublished" datetime="2021-09-04T17:29:17+08:00">2021-09-04</time>
+              <time title="创建时间：2021-03-14 15:52:34" itemprop="dateCreated datePublished" datetime="2021-03-14T15:52:34+08:00">2021-03-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-03-15 22:46:49" itemprop="dateModified" datetime="2021-03-15T22:46:49+08:00">2021-03-15</time>
+              </span>
 
           
   
@@ -307,8 +370,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/09/04/git-log%E5%BE%88%E5%A5%BD%EF%BC%8C%E4%BD%A0%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%86%99%E4%B8%80%E4%B8%AA/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/09/04/git-log很好，你也可以写一个/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/03/14/%E5%A4%9A%E9%87%8D%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E9%98%B5%E8%90%A5%E4%B9%9D%E5%AE%AB%E6%A0%BC/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/03/14/多重返回值的阵营九宫格/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -323,7 +386,59 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p>通常在糊业务代码的时候，不管是函数、方法，还是宏，都只会有一个返回值。比如在C语言用于检查一个字符是否为阿拉伯数字的<code>isdigit</code>函数就只会返回是（1）或否（0）</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ctype.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> c = <span class="string">'a'</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"isdigit('%c') is %d\n"</span>, c, <span class="built_in">isdigit</span>(c));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但有时候如果一个函数、方法，或宏可以返回多个值的话会更加方便。例如，在Python中<code>dict</code>类型有一个实例方法<code>get</code>，它可以取得<code>dict</code>实例中与给定的键对应的值。但如果有一个键在字典中的值为<code>None</code>，那么光凭<code>get</code>的返回值无法准确判断这个键是否存在——除非你给它一个非<code>None</code>的默认值</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>(<span class="params">d, key</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"d.get('{0}') is {1}\t'{0}' in d is {2}"</span>.<span class="built_in">format</span>(key, d.get(key), key <span class="keyword">in</span> d))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    d = {</span><br><span class="line">        <span class="string">'foo'</span>: <span class="string">'bar'</span>,</span><br><span class="line">        <span class="string">'baz'</span>: <span class="literal">None</span>,</span><br><span class="line">    }</span><br><span class="line">    test(d, <span class="string">'foo'</span>)</span><br><span class="line">    test(d, <span class="string">'baz'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>发展了这么多年的编程语言，又怎么会连一次调用、多值返回这么简单的事情都做不到呢。事实上，有各种各样、各显神通的返回多个值的方法，我给其中的一些做了个分类</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210314/%E5%A4%9A%E9%87%8D%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E5%AE%9A%E4%B9%89%E9%98%B5%E8%90%A5%E4%B9%9D%E5%AE%AB%E6%A0%BC.png"></p>
+<h1 id="Lisp的multiple-value-bind"><a href="#Lisp的multiple-value-bind" class="headerlink" title="Lisp的multiple-value-bind"></a>Lisp的<code>multiple-value-bind</code></h1><p>Common Lisp（简称为CL）的多重返回值当之无愧是其中最正统、最好用的实现方式。以它的内置函数<code>truncate</code>为例，它的第一个返回值为第一个参数除以第二个参数的商，第二个返回值为对应的余数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">truncate</span> <span class="number">10</span> <span class="number">3</span>)</span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果不加修饰地调用<code>truncate</code>，就像其它只返回一个值的函数一样，也只会拿到一个返回值</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">let</span> ((<span class="name">q</span> (<span class="name">truncate</span> <span class="number">10</span> <span class="number">3</span>)))</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"q = ~D~%"</span> q))</span><br><span class="line">q = <span class="number">3</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>除非用<code>multiple-value-bind</code>来捕获一个函数产生的所有返回值</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CL-USER&gt; (<span class="name">multiple-value-bind</span> (<span class="name">q</span> r)</span><br><span class="line">             (<span class="name">truncate</span> <span class="number">10</span> <span class="number">3</span>)</span><br><span class="line">           (<span class="name">format</span> <span class="literal">t</span> <span class="string">"q = ~D~8Tr = ~D~%"</span> q r))</span><br><span class="line">q = <span class="number">3</span>   r = <span class="number">1</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>CL的方案的优点在于它十分灵活。即使将一个函数从返回单个值改为返回多个值，也不会导致原本调用该函数的位置要全部修改一遍——对修改封闭，对扩展开放（误）。</p>
+<h1 id="Go的多重返回值"><a href="#Go的多重返回值" class="headerlink" title="Go的多重返回值"></a>Go的多重返回值</h1><p>踩在C语言肩膀上的Go也能够从函数中返回多个值。在<code>io/ioutil</code>包的<a href="https://golang.org/pkg/io/ioutil/">官方文档</a>中有大量的例子，比如用<code>ReadAll</code>方法从字符串衍生的流中读取全部内容，就会返回两个值</p>
+<figure class="highlight go"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"io/ioutil"</span></span><br><span class="line">	<span class="string">"log"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> {</span><br><span class="line">	s := <span class="string">"Hello, world!"</span></span><br><span class="line">	reader := strings.NewReader(s)</span><br><span class="line">	bytes, err := ioutil.ReadAll(reader)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> {</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	}</span><br><span class="line">	fmt.Printf(<span class="string">"bytes is %s"</span>, bytes)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Go以这种方式取代了C语言中用返回值表达成功与否、再通过指针传出读到的数据的风格。由于这个模式在有用的Go程序中到处出现，因此Gopher们用的都是定制的键盘（误）</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210314/go%E7%9A%84%E9%94%99%E8%AF%AF%E6%A3%80%E6%9F%A5.jpg"></p>
+<p>不同于前文的<code>multiple-value-bind</code>，如果一个函数或方法返回多个值，那么调用者必须捕获每一个值，否则编译无法通过</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">➜  try cat try_read_all_ignore_err.go</span><br><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	"fmt"</span><br><span class="line">	"io/ioutil"</span><br><span class="line">	"strings"</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main() {</span><br><span class="line">	s := "Hello, world!"</span><br><span class="line">	reader := strings.NewReader(s)</span><br><span class="line">	bytes := ioutil.ReadAll(reader)</span><br><span class="line">	fmt.Printf("bytes is %s", bytes)</span><br><span class="line">}</span><br><span class="line">➜  try go build try_read_all_ignore_err.go</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">command-line-arguments</span></span><br><span class="line">./try_read_all_ignore_err.go:12:8: assignment mismatch: 1 variable but ioutil.ReadAll returns 2 values</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这一要求也是合理的，毕竟多重返回值机制主要用于向调用者传递出错原因——既然可能出错，那么就必须要检查一番。</p>
+<h1 id="Python和Rust的解构"><a href="#Python和Rust的解构" class="headerlink" title="Python和Rust的解构"></a>Python和Rust的解构</h1><p>就像CL的<code>truncate</code>函数一样，Python中的函数<code>divmod</code>也可以同时返回两个数相除的商和余数，并且咋看之下也是返回多个值的形式</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    q, r = <span class="built_in">divmod</span>(<span class="number">10</span>, <span class="number">3</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'q = {}\tr = {}'</span>.<span class="built_in">format</span>(q, r))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但本质上，这是因为Python支持<a href="https://docs.python.org/3/reference/simple_stmts.html#assignment-statements">解构</a>，同时<a href="https://docs.python.org/3/library/functions.html#divmod"><code>divmod</code></a>返回的是一个由商和余数组成的元组。这样的做法与CL的真·奥义·多重返回值的差异在于，如果只想要<code>divmod</code>的第一个值，那么等号左侧也要写成对应的结构</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    q, _ = <span class="built_in">divmod</span>(<span class="number">10</span>, <span class="number">3</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'q = {}'</span>.<span class="built_in">format</span>(q))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在支持解构的语言中都可以模仿出多重返回值，例如Rust</p>
+<figure class="highlight rust"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">divmod</span>(a: <span class="type">u32</span>, b: <span class="type">u32</span>) <span class="punctuation">-&gt;</span> (<span class="type">u32</span>, <span class="type">u32</span>) {</span><br><span class="line">    (a / b, a % b)</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() {</span><br><span class="line">    <span class="keyword">let</span> (q, r) = <span class="title function_ invoke__">divmod</span>(<span class="number">10</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">"q = {}\tr = {}"</span>, q, r);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="Prolog的归一"><a href="#Prolog的归一" class="headerlink" title="Prolog的归一"></a>Prolog的归一</h1><p>到了Prolog这里，画风就有点不一样了。首先Prolog既没有函数，也没有方法，更没有宏。在Prolog中，像<code>length/2</code>和<code>member/2</code>这样的东西叫做<code>functor</code>，它们之于Prolog中的列表，就犹如CL的<code>length</code>和<code>member</code>之于列表、Python的<code>len</code>函数和<code>in</code>操作符之于列表，JavaScript的<code>length</code>属性和<code>indexOf</code>方法之于数组……</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210314/prolog%E7%9A%84length%E5%92%8Cmember.jpg"></p>
+<p>其次，Prolog并不“返回”一个<code>functor</code>的“调用结果”，它只是判断输入的查询是否成立，以及给出使查询成立的变量值。在第一个查询中，<code>length/2</code>的第二个参数为变量<code>L</code>，因此Prolog给出了使这个查询成立的<code>L</code>的值4；第二个查询中没有变量，Prolog只是简单地给出查询是否成立；第三个查询中，Prolog给出了四个能够使查询成立的变量<code>X</code>的值。</p>
+<p>由于Prolog会给出查询中每一个变量的值，可以用这个特性来模拟多重返回值。例如，可以让Prolog一次性给出两个数字的和、差、积，和商</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210314/%E5%90%8C%E6%97%B6%E8%AE%A1%E7%AE%97%E5%87%BA%E5%92%8C%E6%9F%A5%E7%A7%AF%E5%95%86.jpg"></p>
+<p>麻烦之处在于就算只想要得到两数之和，也必须用占位符填在后三个参数上：<code>jjcc(10, 3, S, _, _, _)</code>。</p>
+<h1 id="作弊的指针与全局变量"><a href="#作弊的指针与全局变量" class="headerlink" title="作弊的指针与全局变量"></a>作弊的指针与全局变量</h1><p>尽管在开篇的时候提到了C语言中的函数无法返回多个值，但如果像上文的Prolog那般允许修改参数的话，C语言也是可以做到的，谁让它有指针这个强力特性呢。例如，<code>stat(2)</code>函数就会将关于一个文件的信息填充到参数中所指向的结构体的内存中</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">char</span> *path = <span class="string">"./try_stat.c"</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">buf</span>;</span></span><br><span class="line">    stat(path, &amp;buf);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"inode's number of %s is %llu\n"</span>, path, buf.st_ino);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>查看<code>man 2 stat</code>可以知道<code>struct stat</code>类型中有非常多的内容，这显然也是一种多重返回值。同样的手法，在Go中也可以运用，例如用于把从数据库中读取出来的行的数据写入目标数据结构的<a href="https://golang.org/pkg/database/sql/#Rows.Scan"><code>Scan</code>方法</a>。</p>
+<p>最后，如果只要能让调用者感知就行，那么全局变量未尝不是一种通用的多重返回值机制。例如在C语言中的<code>strtol</code>函数，就会在无法转换出任何数字的时候返回0并设置<code>errno</code>，因此检查<code>errno</code>是必须的步骤</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">try_conversion</span><span class="params">(<span class="type">const</span> <span class="type">char</span> *str)</span></span><br><span class="line">{</span><br><span class="line">    <span class="type">long</span> num = strtol(str, <span class="literal">NULL</span>, <span class="number">10</span>);</span><br><span class="line">    <span class="keyword">if</span> (errno == EINVAL || errno == ERANGE)</span><br><span class="line">    {</span><br><span class="line">        <span class="type">char</span> message[<span class="number">64</span>];</span><br><span class="line">        <span class="built_in">snprintf</span>(message, <span class="keyword">sizeof</span>(message), <span class="string">"strtol(\"%s\")"</span>, str);</span><br><span class="line">        perror(message);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"strtol(\"%s\") is %ld\n"</span>, str, num);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">    try_conversion(<span class="string">"233"</span>);</span><br><span class="line">    try_conversion(<span class="string">"0"</span>);</span><br><span class="line">    try_conversion(<span class="string">"lisp"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>鉴于<code>errno</code>是一个全局变量，<code>strtol</code>的使用者完全有可能忘记要检查。相比之下，Go的<a href="https://golang.org/pkg/strconv/">strconv</a>包的函数都将转换过程中的错误以第二个参数的形式返回给调用者，用起来更安全。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>按照<a href="https://mp.weixin.qq.com/s/8T0rrl5dkwtYB_XCbAhACQ">《代码写得不好，不要总觉得是自己抽象得不好》</a>这篇文章的说法，代码写成什么样子完全是由产品经理决定的。但产品经理又怎么会在意你用的技术是怎么实现多重返回值的呢。综上所述，这个特性没用（误）。</p>
+<p>全文完。</p>
+
       
     </div>
 
@@ -342,7 +457,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/08/12/%E8%BF%99%E6%96%B9%E9%9D%A2Python%E8%BF%98%E6%98%AF%E6%AF%94Lisp%E7%95%A5%E9%80%8A%E4%B8%80%E7%AD%B9/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/02/27/%E7%BB%88%E7%AB%AF%E7%9C%8B%E7%89%87%E6%8C%87%E6%97%A5%E5%8F%AF%E5%BE%85/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -356,7 +471,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2021/08/12/%E8%BF%99%E6%96%B9%E9%9D%A2Python%E8%BF%98%E6%98%AF%E6%AF%94Lisp%E7%95%A5%E9%80%8A%E4%B8%80%E7%AD%B9/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2021/02/27/%E7%BB%88%E7%AB%AF%E7%9C%8B%E7%89%87%E6%8C%87%E6%97%A5%E5%8F%AF%E5%BE%85/" class="post-title-link" itemprop="url">终端看片指日可待</a>
         </h1>
 
         <div class="post-meta">
@@ -365,8 +480,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-08-12 23:08:37" itemprop="dateCreated datePublished" datetime="2021-08-12T23:08:37+08:00">2021-08-12</time>
+              <time title="创建时间：2021-02-27 14:54:55 / 修改时间：15:02:55" itemprop="dateCreated datePublished" datetime="2021-02-27T14:54:55+08:00">2021-02-27</time>
             </span>
 
           
@@ -378,8 +494,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/08/12/%E8%BF%99%E6%96%B9%E9%9D%A2Python%E8%BF%98%E6%98%AF%E6%AF%94Lisp%E7%95%A5%E9%80%8A%E4%B8%80%E7%AD%B9/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/08/12/这方面Python还是比Lisp略逊一筹/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/02/27/%E7%BB%88%E7%AB%AF%E7%9C%8B%E7%89%87%E6%8C%87%E6%97%A5%E5%8F%AF%E5%BE%85/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/27/终端看片指日可待/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -394,7 +510,46 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>在旧文<a href="https://liutos.github.io/2020/07/03/%E5%A6%82%E4%BD%95%E5%86%99%E4%B8%80%E4%B8%AA%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E7%A7%92%E8%A1%A8/">《如何写一个命令行的秒表》</a>中，借助命令<code>tput</code>，我实现了“原地更新”所输出的时分秒的效果</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210227/stopwatch%E7%9A%84%E6%BC%94%E7%A4%BA%E6%95%88%E6%9E%9C.gif"></p>
+<p>其中用到的是ASCII转义序列<code>\x1b[8D</code>和<code>\x1b[0K</code>。除此之外，ASCII转义序列还有许多其它功能。例如，可以用来定制输出内容的前景色</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210227/%E6%89%93%E5%8D%B0%E7%BA%A2%E8%89%B2%E7%9A%84helloworld.jpg"></p>
+<p>将转义序列中的参数<code>38</code>改为<code>48</code>，可以定制输出内容的背景色</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210227/%E6%89%93%E5%8D%B0%E7%BA%A2%E8%89%B2%E8%83%8C%E6%99%AF%E7%9A%84helloworld.jpg"></p>
+<p>将打印内容改为两个空格，看起来就像是在一块黑色的画布上涂了一个红色的方块</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210227/%E6%89%93%E5%8D%B0%E7%BA%A2%E8%89%B2%E6%96%B9%E5%9D%97.jpg"></p>
+<p>既然如此，只要尺寸合适，就可以在终端打印出一张图片，只需要将每一个像素的颜色作为背景色，在坐标对应的行列上输出两个空格即可。如果能抹掉输出的内容并在同样的位置上打印一张不同的图片，甚至可以实现动画的效果。</p>
+<p>百闻不如一见，下面我用Python演示一番。</p>
+<h1 id="把GIF装进终端"><a href="#把GIF装进终端" class="headerlink" title="把GIF装进终端"></a>把GIF装进终端</h1><p>要想用前文的思路在终端中显示一张GIF图片，必须先得到GIF图片每一帧的每个像素的颜色才行。在Python中使用名为<a href="https://github.com/python-pillow/Pillow">Pillow</a>的库可以轻松地解析GIF文件，先安装这个库</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">➜  /tmp rmdir show_gif</span><br><span class="line">➜  /tmp mkdir show_gif</span><br><span class="line">➜  /tmp cd show_gif</span><br><span class="line">➜  show_gif python3 -m venv ./venv</span><br><span class="line">➜  show_gif . ./venv/bin/activate</span><br><span class="line">(venv) ➜  show_gif pip install Pillow</span><br><span class="line">Collecting Pillow</span><br><span class="line">  Using cached Pillow-8.1.0-cp39-cp39-macosx_10_10_x86_64.whl (2.2 MB)</span><br><span class="line">Installing collected packages: Pillow</span><br><span class="line">Successfully installed Pillow-8.1.0</span><br><span class="line">WARNING: You are using pip version 20.2.3; however, version 21.0.1 is available.</span><br><span class="line">You should consider upgrading via the '/private/tmp/show_gif/venv/bin/python3 -m pip install --upgrade pip' command.</span><br></pre></td></tr></tbody></table></figure>
+
+<p>接着便可以让它读入并解析一张GIF图片</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image, ImageSequence</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    path = sys.argv[<span class="number">1</span>]</span><br><span class="line">    im = Image.<span class="built_in">open</span>(path)</span><br><span class="line">    <span class="keyword">for</span> frame <span class="keyword">in</span> ImageSequence.Iterator(im):</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后将每一帧都转换为<code>RGB</code>模式再遍历其每一个像素</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image, ImageSequence</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    path = sys.argv[<span class="number">1</span>]</span><br><span class="line">    im = Image.<span class="built_in">open</span>(path)</span><br><span class="line">    <span class="keyword">for</span> frame <span class="keyword">in</span> ImageSequence.Iterator(im):</span><br><span class="line">        rgb_frame = frame.convert(<span class="string">'RGB'</span>)</span><br><span class="line">        pixels = rgb_frame.load()</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, rgb_frame.height):</span><br><span class="line">            <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, rgb_frame.width):</span><br><span class="line">                <span class="keyword">pass</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>调用<code>Image</code>类的实例方法<code>load</code>得到的是一个<a href="https://pillow.readthedocs.io/en/stable/reference/PixelAccess.html"><code>PixelAccess</code></a>类的实例，它可以像二维数组一般用坐标获取每一个像素的颜色值，颜色值则是一个长度为3的<code>tuple</code>类型的值，其中依次是像素的三原色的分量。</p>
+<p>从<a href="https://en.wikipedia.org/wiki/ANSI_escape_code#24-bit">ANSI escape code词条的24-bit小节</a>中得知，使用参数为<code>48;2;</code>的转义序列，再接上以分号分隔的三原色分量即可设置24位的背景色</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image, ImageSequence</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    path = sys.argv[<span class="number">1</span>]</span><br><span class="line">    im = Image.<span class="built_in">open</span>(path)</span><br><span class="line">    <span class="keyword">for</span> frame <span class="keyword">in</span> ImageSequence.Iterator(im):</span><br><span class="line">        rgb_frame = frame.convert(<span class="string">'RGB'</span>)</span><br><span class="line">        pixels = rgb_frame.load()</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, rgb_frame.height):</span><br><span class="line">            <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, rgb_frame.width):</span><br><span class="line">                colors = pixels[x, y]</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">'\x1b[48;2;{};{};{}m  \x1b[0m'</span>.<span class="built_in">format</span>(*colors), end=<span class="string">''</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">''</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在每次二重循环遍历了所有像素后，还必须清除输出的内容，并将光标重置到左上角才能再次打印，这可以用ASCII转义序列来实现。查阅<a href="https://vt100.net/docs/vt100-ug/chapter3.html">VT100 User Guide</a>可以知道，用<a href="https://vt100.net/docs/vt100-ug/chapter3.html#ED">ED命令</a>可以擦除显示的字符，对应的转义序列为<code>\x1b[2J</code>；用<a href="https://vt100.net/docs/vt100-ug/chapter3.html#CUP">CUP命令</a>可以移动光标的位置到左上角，对应的转义序列为<code>\x1b[0;0H</code>。在每次开始打印一帧图像前输出这两个转义序列即可</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image, ImageSequence</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    path = sys.argv[<span class="number">1</span>]</span><br><span class="line">    im = Image.<span class="built_in">open</span>(path)</span><br><span class="line">    <span class="keyword">for</span> frame <span class="keyword">in</span> ImageSequence.Iterator(im):</span><br><span class="line">        rgb_frame = frame.convert(<span class="string">'RGB'</span>)</span><br><span class="line">        pixels = rgb_frame.load()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'\x1b[2J\x1b[0;0H'</span>, end=<span class="string">''</span>)</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, rgb_frame.height):</span><br><span class="line">            <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, rgb_frame.width):</span><br><span class="line">                colors = pixels[x, y]</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">'\x1b[48;2;{};{};{}m  \x1b[0m'</span>.<span class="built_in">format</span>(*colors), end=<span class="string">''</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">''</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后，只需要在每次打印完一帧后，按GIF文件的要求睡眠一段时间即可。每一帧的展示时长可以从<code>info</code>属性的键<code>duration</code>中得到，单位是毫秒</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image, ImageSequence</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    path = sys.argv[<span class="number">1</span>]</span><br><span class="line">    im = Image.<span class="built_in">open</span>(path)</span><br><span class="line">    <span class="keyword">for</span> frame <span class="keyword">in</span> ImageSequence.Iterator(im):</span><br><span class="line">        rgb_frame = frame.convert(<span class="string">'RGB'</span>)</span><br><span class="line">        pixels = rgb_frame.load()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'\x1b[2J\x1b[0;0H'</span>, end=<span class="string">''</span>)</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, rgb_frame.height):</span><br><span class="line">            <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, rgb_frame.width):</span><br><span class="line">                colors = pixels[x, y]</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">'\x1b[48;2;{};{};{}m  \x1b[0m'</span>.<span class="built_in">format</span>(*colors), end=<span class="string">''</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">''</span>)</span><br><span class="line">        time.sleep(rgb_frame.info[<span class="string">'duration'</span>] / <span class="number">1000</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在可以看看效果了。我准备了一张测试用的GIF图片，宽度和高度均为47像素，共34帧</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210227/%E4%B8%80%E9%A2%97%E8%8B%B9%E6%9E%9C%E7%9A%84%E5%8A%A8%E7%94%BB.gif"></p>
+<p>让它在终端中显示出来吧</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210227/%E5%9C%A8%E7%BB%88%E7%AB%AF%E6%92%AD%E6%94%BE%E4%B8%80%E6%A3%B5%E8%8B%B9%E6%9E%9C%E7%9A%84%E5%8A%A8%E5%9B%BE.gif"></p>
+<h1 id="一点微小的改进"><a href="#一点微小的改进" class="headerlink" title="一点微小的改进"></a>一点微小的改进</h1><p>你可能留意到了，前文的演示效果中有明显的闪烁，这是因为打印ASCII转义序列的速度不够快导致的。既然如此，可以将一整行的转义序列先生成出来，再一次性输出到终端。改动不复杂</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image, ImageSequence</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    path = sys.argv[<span class="number">1</span>]</span><br><span class="line">    im = Image.<span class="built_in">open</span>(path)</span><br><span class="line">    <span class="keyword">for</span> frame <span class="keyword">in</span> ImageSequence.Iterator(im):</span><br><span class="line">        rgb_frame = frame.convert(<span class="string">'RGB'</span>)</span><br><span class="line">        pixels = rgb_frame.load()</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'\x1b[2J\x1b[0;0H'</span>, end=<span class="string">''</span>)</span><br><span class="line">        <span class="keyword">for</span> y <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, rgb_frame.height):</span><br><span class="line">            last_colors = <span class="literal">None</span></span><br><span class="line">            line = <span class="string">''</span></span><br><span class="line">            <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, rgb_frame.width):</span><br><span class="line">                colors = pixels[x, y]</span><br><span class="line">                <span class="keyword">if</span> colors != last_colors:</span><br><span class="line">                    line += <span class="string">'\x1b[0m\x1b[48;2;{};{};{}m  '</span>.<span class="built_in">format</span>(*colors)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    line += <span class="string">'  '</span></span><br><span class="line">                last_colors = colors</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">'{}\x1b[0m'</span>.<span class="built_in">format</span>(line))</span><br><span class="line">        time.sleep(rgb_frame.info[<span class="string">'duration'</span>] / <span class="number">1000</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但效果却很显著</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210227/%E4%B8%8D%E6%80%8E%E4%B9%88%E9%97%AA%E7%83%81%E7%9A%84%E7%89%88%E6%9C%AC.gif"></p>
+<p>全文完</p>
+
       
     </div>
 
@@ -413,7 +568,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/08/02/%E5%B1%A0%E9%BE%99%E6%9C%AF%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E8%BF%90%E7%94%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/02/11/%E6%AD%A4%E6%95%B0%E7%BB%B5%E7%BB%B5%E6%97%A0%E7%BB%9D%E6%9C%9F%E2%80%94%E2%80%94%E6%AC%A7%E6%8B%89%E8%AE%A1%E5%88%92%E7%AC%AC66%E9%A2%98/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -427,7 +582,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2021/08/02/%E5%B1%A0%E9%BE%99%E6%9C%AF%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E8%BF%90%E7%94%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2021/02/11/%E6%AD%A4%E6%95%B0%E7%BB%B5%E7%BB%B5%E6%97%A0%E7%BB%9D%E6%9C%9F%E2%80%94%E2%80%94%E6%AC%A7%E6%8B%89%E8%AE%A1%E5%88%92%E7%AC%AC66%E9%A2%98/" class="post-title-link" itemprop="url">此数绵绵无绝期——欧拉计划第66题</a>
         </h1>
 
         <div class="post-meta">
@@ -437,8 +592,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-08-02 23:13:46" itemprop="dateCreated datePublished" datetime="2021-08-02T23:13:46+08:00">2021-08-02</time>
+              <time title="创建时间：2021-02-11 15:21:32" itemprop="dateCreated datePublished" datetime="2021-02-11T15:21:32+08:00">2021-02-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-02 11:19:01" itemprop="dateModified" datetime="2022-05-02T11:19:01+08:00">2022-05-02</time>
+              </span>
 
           
   
@@ -449,8 +611,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/08/02/%E5%B1%A0%E9%BE%99%E6%9C%AF%E2%80%94%E2%80%94%E5%A6%82%E4%BD%95%E8%BF%90%E7%94%A8%E6%95%B4%E6%B4%81%E6%9E%B6%E6%9E%84/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/08/02/屠龙术——如何运用整洁架构/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/02/11/%E6%AD%A4%E6%95%B0%E7%BB%B5%E7%BB%B5%E6%97%A0%E7%BB%9D%E6%9C%9F%E2%80%94%E2%80%94%E6%AC%A7%E6%8B%89%E8%AE%A1%E5%88%92%E7%AC%AC66%E9%A2%98/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/11/此数绵绵无绝期——欧拉计划第66题/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -465,7 +627,53 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <blockquote>
+<p>仅以此文膜拜八年前的自己</p>
+</blockquote>
+<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p><a href="https://projecteuler.net/about">欧拉计划</a>（Project Euler）就像LeetCode，是一个编程答题的网站。不同于LeetCode的是，欧拉计划只要求用户提交最终答案即可（一般是一个数字），而不需要完整代码。因此，可以尽情地使用自己喜欢的编程语言——不少题目甚至光靠笔和纸便能解决。</p>
+<p>欧拉计划的<a href="https://projecteuler.net/problem=66">第66题</a>非常有意思，它的题目很简单，就是要求找出在不大于1000的整数中，以哪一个数字为丢番图方程的系数，可以得到所有最小解中的最大值。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E7%AC%AC66%E9%A2%98%E7%9A%84%E6%8F%8F%E8%BF%B0.jpeg"></p>
+<p>可以很容易地看出方程有一个直观的暴力算法：让y从1开始递增，对于每一个y，计算公式<code>Dy^2+1</code>的值。如果该值为平方数，那么它的平方根就是最小的x解。再依照这个算法求解所有D不大于1000的方程，便可以求出题目的答案。很容易用Python写出这个算法</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">is_square</span>(<span class="params">num: <span class="built_in">int</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">    <span class="keyword">return</span> math.isqrt(num) ** <span class="number">2</span> == num</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_x</span>(<span class="params">D: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    求出给定D时，满足题目所给的丢番图方程的最小的x。</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="keyword">not</span> is_square(D)</span><br><span class="line">    y = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        candidate = D * y * y + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> is_square(candidate):</span><br><span class="line">            <span class="keyword">return</span> math.isqrt(candidate)</span><br><span class="line">        y += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">solve_66</span>(<span class="params">limit</span>):</span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    找出不大于limi的D中，使find_x的返回值最大的那一个数字。</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    max_D = <span class="literal">None</span></span><br><span class="line">    max_x = <span class="literal">None</span></span><br><span class="line">    D = <span class="number">2</span></span><br><span class="line">    <span class="keyword">while</span> D &lt;= limit:</span><br><span class="line">        <span class="keyword">if</span> is_square(D):</span><br><span class="line">            D += <span class="number">1</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        x = find_x(D)</span><br><span class="line">        <span class="keyword">if</span> max_x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">or</span> x &gt; max_x:</span><br><span class="line">            max_D = D</span><br><span class="line">            max_x = x</span><br><span class="line">        D += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> max_D, max_x</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    D, x = solve_66(<span class="number">7</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'D is {} and x is {}'</span>.<span class="built_in">format</span>(D, x))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但如果将上限<code>limit</code>提升为1000，这个算法在有生之年是算不出结果的。</p>
+<p>要想解决这一题，需要借助数学的力量。</p>
+<h1 id="佩尔方程"><a href="#佩尔方程" class="headerlink" title="佩尔方程"></a>佩尔方程</h1><p>八年前第一次做这一题的时候，经过一番搜索，我从<a href="https://eli.thegreenplace.net/2009/06/19/project-euler-problem-66-and-continued-fractions/">这篇文章</a>中知道了题目中的方程叫做<a href="https://zh.wikipedia.org/wiki/%E4%BD%A9%E5%B0%94%E6%96%B9%E7%A8%8B">佩尔方程。</a>它有标准的解法，但需要用到连分数。那么什么是连分数呢？</p>
+<p>连分数不是一种新的数系，只是小数的另一种写法。例如可以把分数45除以16写成下面的形式</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E4%B8%80%E4%B8%AA%E8%BF%9E%E5%88%86%E6%95%B0%E7%9A%84%E4%BE%8B%E5%AD%90.jpg"></p>
+<p>就像定义递归的数据结构一样，可以给连分数一个递归的定义。连分数要么是一个整数，要么是一个整数加上另一个连分数的倒数。除了上面的形式，连分数也可以写成更节省篇幅的样子。比如把45除以16写成<code>[2;1,4,3]</code>，即把原本的式子中所有的整数部分按顺序写在一对方括号之间。这种记法，看起来就像是编程语言中的数组一般。</p>
+<p>如果用数组<code>[2;1,4,3]</code>的不同前缀来构造分式，那么结果依次为<code>2/1</code>、<code>3/1</code>、<code>14/5</code>。它们是这个连分数的渐进连分数，而佩尔方程的一组解，就来自于渐进连分数的分子和分母。</p>
+<p>以系数为7的佩尔方程为例，先计算出根号7的连分数，然后依次尝试它的渐进连分数。前三个分别为<code>2/1</code>、<code>3/1</code>、<code>5/2</code>，都不是方程的解。第四个渐进连分数<code>8/3</code>才是方程的解。如果继续提高连分数的精度，还会找到第二个解<code>127/48</code>。继续找，还有更多，而8则是其中最小的x。</p>
+<p>所以，想要快速算出佩尔方程的解，最重要的是找到计算一个数的平方根的连分数的算法。</p>
+<h1 id="计算平方根的连分数的错误方法"><a href="#计算平方根的连分数的错误方法" class="headerlink" title="计算平方根的连分数的错误方法"></a>计算平方根的连分数的错误方法</h1><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E8%BF%9E%E5%88%86%E6%95%B0%E7%9A%84%E9%80%9A%E7%94%A8%E5%BD%A2%E5%BC%8F.jpg"></p>
+<p>要计算一个数字的连分数，最重要的便是要算出所有的整数部分（<code>a0</code>、<code>a2</code>、<code>a2</code>等）。它们都可以依据定义直接计算</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E6%95%B4%E6%95%B0%E9%83%A8%E5%88%86%E7%9A%84%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95.png"></p>
+<p>推广到一半情况，如果用变量<code>n</code>存储开平方的数字，用<code>numbers</code>存储所有已知的整数，那么用Python可以写出下面的算法来计算出下一个整数</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算连分数数列的下一个数字</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compute_next_integer_part</span>(<span class="params">n, numbers</span>):</span><br><span class="line">    v = math.sqrt(n)</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> numbers:</span><br><span class="line">        v = <span class="number">1</span> / (v - a)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">int</span>(v)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    n = <span class="number">14</span></span><br><span class="line">    numbers = [<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line">    v = compute_next_integer_part(n, numbers)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'下一个数字为{}'</span>.<span class="built_in">format</span>(v))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>遗憾的是，这个算法算出来的数字会因为计算上的精度误差而导致失之毫厘谬以千里。</p>
+<h1 id="计算平方根的连分数的正确方法"><a href="#计算平方根的连分数的正确方法" class="headerlink" title="计算平方根的连分数的正确方法"></a>计算平方根的连分数的正确方法</h1><p>要想计算出正确的结果，就需要尽可能地消除在计算<code>1 / (v - a)</code>的时候引入的误差，因此必须把浮点数从分母中除去。</p>
+<p>在<a href="http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/cfINTRO.html#section6.2.2">这个网站</a>中，作者以计算根号14的连分数为例，列出了一个表格</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E8%AE%A1%E7%AE%97%E6%A0%B9%E5%8F%B714%E8%BF%9E%E5%88%86%E6%95%B0%E7%9A%84%E8%BF%87%E7%A8%8B.jpeg"></p>
+<p>可以看到<code>x1</code>、<code>x2</code>，以及<code>x3</code>都是形如<code>(sqrt(n)+a)/b</code>这样的格式，这样的式子更利于控制误差。那么是否每一个待计算的<code>x</code>都符合这种格式呢？答案是肯定的，可以用数学归纳法予以证明（为了方便写公式，用LaTeX写好后截了图）</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E6%95%B0%E5%AD%A6%E5%BD%92%E7%BA%B3%E6%B3%95%E8%BF%87%E7%A8%8B.jpg"></p>
+<p>在这个证明过程中，还得到了分子中的<code>a</code>以及分母中的<code>b</code>的递推公式，现在可以写出正确的计算连分数整数部分的代码了。</p>
+<h1 id="用Common-Lisp实现上述算法"><a href="#用Common-Lisp实现上述算法" class="headerlink" title="用Common Lisp实现上述算法"></a>用Common Lisp实现上述算法</h1><p>为了在实现这个算法的同时还要写出优雅的代码，我会用上Common Lisp的面向对象特性。首先是定义一个类来表示一个可以不断提高精度的连分数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defpackage</span> #<span class="symbol">:com</span>.liutos.cf</span><br><span class="line">  (<span class="symbol">:use</span> #<span class="symbol">:cl</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">in-package</span> #<span class="symbol">:com</span>.liutos.cf)</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> &lt;cf&gt; ()</span><br><span class="line">  ((<span class="name">a</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"数学归纳法中、分子中与平方根相加的数"</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="number">0</span>)</span><br><span class="line">   (<span class="name">b</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"数学归纳法中的分母"</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="number">1</span>)</span><br><span class="line">   (<span class="name">numbers</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"连分数中的整数部分依次组成的数组。"</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="literal">nil</span>)</span><br><span class="line">   (<span class="name">origin</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"被开平方的数字"</span></span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:origin</span>))</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"表示整数ORIGIN的平方根的连分数。"</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>接着再定义这个类需要实现的“接口”</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defgeneric</span> advance (<span class="name">cf</span>)</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"让连分数CF提高到下一个精度。"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defgeneric</span> into-rational (<span class="name">cf</span>)</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"将连分数CF转换为有理数类型的值。"</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后来实现上述两个接口</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmethod</span> advance ((<span class="name">cf</span> &lt;cf&gt;))</span><br><span class="line">  <span class="string">"根据递推公式计算出下一批a、b，以及连分数的整数部分。"</span></span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">slot-value</span> cf 'a))</span><br><span class="line">         (<span class="name">b</span> (<span class="name">slot-value</span> cf 'b))</span><br><span class="line">         (<span class="name">n</span> (<span class="name">slot-value</span> cf 'origin))</span><br><span class="line">         (<span class="name">m</span> (<span class="name">truncate</span> (<span class="name">+</span> (<span class="name">sqrt</span> n) a) b)))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">a</span> (<span class="name">-</span> (<span class="name">*</span> b m) a))</span><br><span class="line">          (<span class="name">b</span> (<span class="name">/</span> (<span class="name">-</span> n (<span class="name">expt</span> (<span class="name">-</span> a (<span class="name">*</span> b m)) <span class="number">2</span>)) b)))</span><br><span class="line">      (<span class="name">setf</span> (<span class="name">slot-value</span> cf 'a) a</span><br><span class="line">            (<span class="name">slot-value</span> cf 'b) b</span><br><span class="line">            (<span class="name">slot-value</span> cf 'numbers) (<span class="name">append</span> (<span class="name">slot-value</span> cf 'numbers) (<span class="name">list</span> m))))</span><br><span class="line">    (<span class="name">values</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> into-rational ((<span class="name">cf</span> &lt;cf&gt;))</span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">numbers</span> (<span class="name">reverse</span> (<span class="name">slot-value</span> cf 'numbers)))</span><br><span class="line">         (<span class="name">v</span> (<span class="name">first</span> numbers)))</span><br><span class="line">    (<span class="name">dolist</span> (<span class="name">n</span> (<span class="name">rest</span> numbers))</span><br><span class="line">      (<span class="name">setf</span> v</span><br><span class="line">            (<span class="name">+</span> n (<span class="name">/</span> <span class="number">1</span> v))))</span><br><span class="line">    v))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在实现<code>into-rational</code>方法上，Common Lisp的有理数数值类型给我带来了极大的便利，它使我不必担心计算<code>(/ 1 v)</code>的时候会引入误差，代码写起来简单直白。</p>
+<h1 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h1><p>乘胜追击，用Common Lisp解答第66题</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> find-min-x (<span class="name">D</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">cf</span> (<span class="name">make-instance</span> '&lt;cf&gt; <span class="symbol">:origin</span> D)))</span><br><span class="line">    (<span class="name">loop</span></span><br><span class="line">       (<span class="name">advance</span> cf)</span><br><span class="line">       (<span class="name">let*</span> ((<span class="name">ratio</span> (<span class="name">into-rational</span> cf))</span><br><span class="line">              (<span class="name">x</span> (<span class="name">numerator</span> ratio))</span><br><span class="line">              (<span class="name">y</span> (<span class="name">denominator</span> ratio)))</span><br><span class="line">         (<span class="name">when</span> (<span class="name">=</span> (<span class="name">-</span> (<span class="name">*</span> x x) (<span class="name">*</span> D y y)) <span class="number">1</span>)</span><br><span class="line">           (<span class="name">return-from</span> find-min-x x))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> square-p (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">rt</span> (<span class="name">sqrt</span> n)))</span><br><span class="line">    (<span class="name">=</span> rt (<span class="name">truncate</span> rt))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> pro66 (<span class="name">&amp;optional</span> (<span class="name">bnd</span> <span class="number">1000</span>))</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">target-d</span>)</span><br><span class="line">	(<span class="name">max-x</span> <span class="number">0</span>))</span><br><span class="line">    (<span class="name">loop</span> <span class="symbol">:for</span> i <span class="symbol">:from</span> <span class="number">2</span> <span class="symbol">:to</span> bnd</span><br><span class="line">       <span class="symbol">:when</span> (<span class="name">not</span> (<span class="name">square-p</span> i))</span><br><span class="line">       <span class="symbol">:do</span> (<span class="name">let</span> ((<span class="name">x</span> (<span class="name">find-min-x</span> i)))</span><br><span class="line">	     (<span class="name">if</span> (<span class="name">&gt;</span> x max-x)</span><br><span class="line">		 (<span class="name">setf</span> target-d i</span><br><span class="line">		       max-x x))))</span><br><span class="line">    (<span class="name">values</span> target-d max-x)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>答案的D是多少就不说了，不过作为答案的x是16421658242965910275055840472270471049。有兴趣的读者可以试一下暴力解法要花多久才能算到这个数字。</p>
+<p>全文完。</p>
+
       
     </div>
 
@@ -484,7 +692,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/06/14/%E4%BB%8EAOP%E5%88%B0method-combination/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/01/29/format%EF%BC%8C%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%A0%BC%E5%BC%8F%E5%8C%96/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -498,7 +706,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2021/06/14/%E4%BB%8EAOP%E5%88%B0method-combination/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2021/01/29/format%EF%BC%8C%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%A0%BC%E5%BC%8F%E5%8C%96/" class="post-title-link" itemprop="url">format，不只是格式化</a>
         </h1>
 
         <div class="post-meta">
@@ -508,7 +716,25 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-06-14 20:30:36" itemprop="dateCreated datePublished" datetime="2021-06-14T20:30:36+08:00">2021-06-14</time>
+              <time title="创建时间：2021-01-29 23:05:51" itemprop="dateCreated datePublished" datetime="2021-01-29T23:05:51+08:00">2021-01-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-02 11:18:46" itemprop="dateModified" datetime="2022-05-02T11:18:46+08:00">2022-05-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AE%9E%E6%88%98CommonLisp/" itemprop="url" rel="index">
+                    <span itemprop="name">实战CommonLisp</span>
+                  </a>
+                </span>
             </span>
 
           
@@ -520,8 +746,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/06/14/%E4%BB%8EAOP%E5%88%B0method-combination/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/06/14/从AOP到method-combination/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021/01/29/format%EF%BC%8C%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%A0%BC%E5%BC%8F%E5%8C%96/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/01/29/format，不只是格式化/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -536,7 +762,124 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <blockquote>
+<p>《实战Common Lisp》系列主要讲述在使用Common Lisp时能派上用场的小函数，希望能为Common Lisp的复兴做一些微小的贡献。MAKE COMMON LISP GREAT AGAIN。</p>
+</blockquote>
+<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>写了一段时间的Python后，总觉得它跟Common Lisp（下文简称CL）有亿点点像。例如，Python和CL都支持可变数量的函数参数。在Python中写作</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">* args</span>):</span><br><span class="line">    <span class="built_in">print</span>(args)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>而在CL中则写成</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> foo (<span class="name">&amp;rest</span> args)</span><br><span class="line">  (<span class="name">print</span> args))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Python的语法更紧凑，而CL的语法表意更清晰。此外，它们也都支持关键字参数。在Python中写成</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">bar</span>(<span class="params">*, a=<span class="literal">None</span>, b=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'a={}\tb={}'</span>.<span class="built_in">format</span>(a, b))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>而在CL中则是</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> bar (<span class="name">&amp;key</span> (<span class="name">a</span> <span class="literal">nil</span>) (<span class="name">b</span> <span class="literal">nil</span>))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"a=~A~8Tb=~A~%"</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>尽管CL的<code>&amp;key</code>仍然更清晰，但声明参数默认值的语法确实是Python更胜一筹。</p>
+<p>细心的读者可能发现了，在Python中有一个叫做<code>format</code>的方法（属于字符串类），而在CL则有一个叫做<code>format</code>的函数。并且，从上面的例子来看，它们都负责生成格式化的字符串，那么它们有相似之处吗？</p>
+<p>答案是否定的，CL的<code>format</code>简直就是格式化打印界的一股泥石流。</p>
+<h1 id="format的基本用法"><a href="#format的基本用法" class="headerlink" title="format的基本用法"></a><code>format</code>的基本用法</h1><p>不妨从上面的示例代码入手介绍CL中的<code>format</code>（下文在不引起歧义的情况下，简称为<code>format</code>）的基本用法。首先，它需要至少两个参数：</p>
+<ul>
+<li>第一个参数控制了<code>format</code>将会把格式化后的字符串打印到什么地方。<code>t</code>表示打印到标准输出；</li>
+<li>第二个参数则是本文的主角，名为控制字符串（control-string）。它指导<code>format</code>如何格式化。</li>
+</ul>
+<p>听起来很神秘，但其实跟C语言的<code>fprintf</code>也没什么差别。</p>
+<p>在控制字符串中，一般会有许多像占位符一般的命令（directive）。正如Python的<code>format</code>方法中，有各式各样的<a href="https://docs.python.org/3/library/string.html#formatspec">format_spec</a>能够格式化对应类型的数据，控制字符串中的命令也有很多种，常见的有：</p>
+<ul>
+<li>打印二进制数字的<code>~B</code>，例如<code>(format t "~B" 5)</code>会打印出101；</li>
+<li>打印八进制数字的<code>~O</code>，例如<code>(format t "~O" 8)</code>会打印出10；</li>
+<li>打印十进制数字的<code>~D</code>；</li>
+<li>打印十六进制数字的<code>~X</code>，例如<code>(format t "~X" 161)</code>会打印出A1；</li>
+<li>打印任意一种类型的<code>~A</code>，一般打印字符串的时候会用到。</li>
+</ul>
+<p>另外，<code>format</code>的命令也支持参数。在Python中，可以用下列代码打印右对齐的、左侧填充字符0的、二进制形式的数字5</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">'{:0&gt;8b}'</span>.<span class="built_in">format</span>(<span class="number">5</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>format</code>函数也可以做到同样的事情</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~8,'0B"</span> <span class="number">5</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>到这里为止，你可能会觉得<code>format</code>的控制字符串，不过就是将花括号去掉、冒号换成波浪线，以及参数语法不一样的<code>format</code>方法的翻版罢了。</p>
+<p>接下来，让我们进入<code>format</code>的黑科技领域。</p>
+<h1 id="format的高级用法"><a href="#format的高级用法" class="headerlink" title="format的高级用法"></a><code>format</code>的高级用法</h1><h2 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h2><p>前面列举了打印二、八、十，以及十六进制的命令，但<code>format</code>还支持其它的进制。使用命令<code>~R</code>搭配参数，<code>format</code>可以打印数字从2到36进制的所有形态。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~3R~%"</span> <span class="number">36</span>)   <span class="comment">; 以 3进制打印数字36，结果为1100</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~5R~%"</span> <span class="number">36</span>)   <span class="comment">; 以 5进制打印数字36，结果为 121</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~7R~%"</span> <span class="number">36</span>)   <span class="comment">; 以 7进制打印数字36，结果为  51</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~11R~%"</span> <span class="number">36</span>)  <span class="comment">; 以11进制打印数字36，结果为  33</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~13R~%"</span> <span class="number">36</span>)  <span class="comment">; 以13进制打印数字36，结果为  2A</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~17R~%"</span> <span class="number">36</span>)  <span class="comment">; 以17进制打印数字36，结果为  22</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~19R~%"</span> <span class="number">36</span>)  <span class="comment">; 以19进制打印数字36，结果为  1H</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~23R~%"</span> <span class="number">36</span>)  <span class="comment">; 以23进制打印数字36，结果为  1D</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~29R~%"</span> <span class="number">36</span>)  <span class="comment">; 以29进制打印数字36，结果为  17</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~31R~%"</span> <span class="number">36</span>)  <span class="comment">; 以31进制打印数字36，结果为  15</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>之所以最大为36进制，是因为十个阿拉伯数字，加上二十六个英文字母正好是三十六个。那如果不给<code>~R</code>加任何参数，会使用0进制吗？非也，<code>format</code>会把数字打印成英文单词</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~R~%"</span> <span class="number">123</span>) <span class="comment">; 打印出one hundred twenty-three</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>甚至可以让<code>format</code>打印罗马数字，只要加上<code>@</code>这个修饰符即可</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~@R~%"</span> <span class="number">123</span>) <span class="comment">; 打印出CXXIII</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>天晓得为什么要内置这么冷门的功能。</p>
+<h2 id="大小写转换"><a href="#大小写转换" class="headerlink" title="大小写转换"></a>大小写转换</h2><p>你，作为一名细心的读者，可能留意到了，<code>format</code>的<code>~X</code>只能打印出大写字母，而在Python的<code>format</code>方法中，<code>{:x}</code>可以输出小写字母的十六进制数字。即使你在<code>format</code>函数中使用<code>~x</code>也是无效的，因为命令是大小写不敏感的（case insensitive）。</p>
+<p>那要怎么实现打印小写字母的十六进制数字呢？答案是使用新的命令<code>~(</code>，以及它配套的命令<code>~)</code></p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~(~X~)~%"</span> <span class="number">26</span>) <span class="comment">; 打印1a</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>配合<code>:</code>和<code>@</code>修饰符，一共可以实现四种大小写风格</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~(hello world~)~%"</span>)   <span class="comment">; 打印hello world</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~:(hello world~)~%"</span>)  <span class="comment">; 打印Hello World</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~@(hello world~)~%"</span>)  <span class="comment">; 打印Hello world</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~:@(hello world~)~%"</span>) <span class="comment">; 打印HELLO WORLD</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="对齐控制"><a href="#对齐控制" class="headerlink" title="对齐控制"></a>对齐控制</h2><p>在Python的<code>format</code>方法中，可以控制打印出的内容的宽度，这一点在“<code>format</code>的基本用法”中已经演示过了。如果设置的最小宽度（在上面的例子中，是8）超过了打印的内容所占据的宽度（在上面的例子中，是3），那么还可以控制其采用左对齐、右对齐，还是居中对齐。</p>
+<p>在CL的<code>format</code>函数中，不管是<code>~B</code>、<code>~D</code>、<code>~O</code>，还是<code>~X</code>，都没有控制对齐方式的选项，数字总是右对齐。要控制对齐方式，需要用到<code>~&lt;</code>和它配套的<code>~&gt;</code>。例如，下面的CL代码可以让数字在八个宽度中左对齐</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"|~8&lt;~B~;~&gt;|"</span> <span class="number">5</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>打印内容为<code>|101     |</code>。<code>~&lt;</code>跟前面提到的其它命令不一样，它不消耗控制字符串之后的参数，它只控制<code>~&lt;</code>和<code>~&gt;</code>之间的字符串的布局。这意味着，即使<code>~&lt;</code>和<code>~&gt;</code>之间是字符串常量，它也可以起作用。</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"|~8,,,'-&lt;~;hello~&gt;|"</span> <span class="number">5</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>上面的代码运行后会打印出<code>|---hello|</code>：8表示用于打印的最小宽度；三个逗号（<code>,</code>）之间为空，表示忽略<code>~&lt;</code>的第二和第三个参数；第四个参数控制着打印结果中用于填充的字符，由于<code>-</code>不是数字，因此需要加上单引号前缀；<code>~;</code>是内部的分隔符，由于它的存在，<code>hello</code>成了最右侧的字符串，因此会被右对齐。</p>
+<p>如果<code>~&lt;</code>和<code>~&gt;</code>之间的内容被<code>~;</code>分隔成了三部分，还可以实现左对齐、居中对齐，以及右对齐的效果</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"|~24&lt;left~;middle~;right~&gt;|"</span>) <span class="comment">; 打印出|left    middle     right|</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="跳转"><a href="#跳转" class="headerlink" title="跳转"></a>跳转</h2><p>通常情况下，控制字符串中的命令会消耗参数，比如<code>~B</code>和<code>~D</code>等命令。也有像<code>~&lt;</code>这样不消耗参数的命令。但有的命令甚至可以做到“一参多用”，那就是<code>~*</code>。比如，给<code>~*</code>加上冒号修饰，就可以让上一个被消耗的参数重新被消耗一遍</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~8D~:*~8D~8D~%"</span> <span class="number">1</span> <span class="number">2</span>) <span class="comment">; 打印出       1       1       2</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>在<code>~8D</code>消耗了参数1之后，<code>~:*</code>让下一个被消耗的参数重新指向了1，因此第二个<code>~8D</code>拿到的参数仍然是1，最后一个拿到了2。尽管控制字符串中看起来有三个<code>~D</code>命令而参数只有两个，却依然可以正常打印。</p>
+<p>在<code>format</code>的文档中一个不错的例子，就是让<code>~*</code>和<code>~P</code>搭配使用。<code>~P</code>可以根据它对应的参数是否大于1，来打印出字母<code>s</code>或者什么都不打印。配合<code>~:*</code>就可以实现根据参数打印出单词的单数或复数形式的功能</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D dog~:*~P~%"</span> <span class="number">1</span>) <span class="comment">; 打印出1 dog</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D dog~:*~P~%"</span> <span class="number">2</span>) <span class="comment">; 打印出2 dogs</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>甚至你可以组合一下前面的毕生所学</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~@(~R dog~:*~P~)~%"</span> <span class="number">2</span>) <span class="comment">; 打印出Two dogs</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="条件打印"><a href="#条件打印" class="headerlink" title="条件打印"></a>条件打印</h2><p>命令<code>~[</code>和<code>~]</code>也是成对出现的，它们的作用是选择性打印，不过比起编程语言中的<code>if</code>，更像是取数组某个下标的元素</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~[~;one~;two~;three~]~%"</span> <span class="number">1</span>) <span class="comment">; 打印one</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~[~;one~;two~;three~]~%"</span> <span class="number">2</span>) <span class="comment">; 打印two</span></span><br><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~[~;one~;two~;three~]~%"</span> <span class="number">3</span>) <span class="comment">; 打印three</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>但这个特性还挺鸡肋的。想想，你肯定不会无缘无故传入一个数字来作为下标，而这个作为下标的数字很可能本身就是通过<code>position</code>之类的函数计算出来的，而<code>position</code>就要求传入待查找的<code>item</code>和整个列表<code>sequence</code>，而为了用上<code>~[</code>你还得把列表中的每个元素硬编码到控制字符串中，颇有南辕北辙的味道。</p>
+<p>给它加上冒号修饰符之后倒是有点用处，比如可以将CL中的真（<code>NIL</code>以外的所有对象）和假（<code>NIL</code>）打印成单词<code>true</code>和<code>false</code></p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~:[false~;true~]"</span> <span class="literal">nil</span>) <span class="comment">; 打印false</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="循环打印"><a href="#循环打印" class="headerlink" title="循环打印"></a>循环打印</h2><p>圆括号和方括号都用了，又怎么能少了花括号呢。没错，<code>~{</code>也是一个命令，它的作用是遍历列表。例如，想要打印出一个列表中的每个元素，并且两两之间用逗号和空格分开的话，可以用下列代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~{~D~^, ~}"</span> '(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)) <span class="comment">; 打印出1, 2, 3</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>~{</code>和<code>~}</code>之间也可以有不止一个命令，例如下列代码中每次会消耗列表中的两个元素</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"{~{\"~A\": ~D~^, ~}}"</span> '(<span class="symbol">:a</span> <span class="number">3</span> <span class="symbol">:b</span> <span class="number">2</span> <span class="symbol">:c</span> <span class="number">1</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>打印结果为<code>{"A": 3, "B": 2, "C": 1}</code>。如果把这两个<code>format</code>表达式拆成用循环写的、不使用<code>format</code>的等价形式，大约是下面这样子</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">; 与(format t "~{~D~^, ~}" '(1 2 3))等价</span></span><br><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">do</span> ((<span class="name">lst</span> '(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) (<span class="name">cdr</span> lst)))</span><br><span class="line">      ((<span class="name">null</span> lst))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">e</span> (<span class="name">car</span> lst)))</span><br><span class="line">      (<span class="name">princ</span> e)</span><br><span class="line">      (<span class="name">when</span> (<span class="name">cdr</span> lst)</span><br><span class="line">        (<span class="name">princ</span> <span class="string">", "</span>))))</span><br><span class="line">  (<span class="name">princ</span> #\Newline))</span><br><span class="line"></span><br><span class="line"><span class="comment">; 与(format t "{~{\"~A\": ~D~^, ~}}" '(:a 3 :b 2 :c 1))等价</span></span><br><span class="line">(<span class="name">progn</span></span><br><span class="line">  (<span class="name">princ</span> <span class="string">"{"</span>)</span><br><span class="line">  (<span class="name">do</span> ((<span class="name">lst</span> '(<span class="symbol">:c</span> <span class="number">3</span> <span class="symbol">:b</span> <span class="number">2</span> <span class="symbol">:a</span> <span class="number">1</span>) (<span class="name">cddr</span> lst)))</span><br><span class="line">      ((<span class="name">null</span> lst))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">key</span> (<span class="name">car</span> lst))</span><br><span class="line">          (<span class="name">val</span> (<span class="name">cadr</span> lst)))</span><br><span class="line">      (<span class="name">princ</span> <span class="string">"\""</span>)</span><br><span class="line">      (<span class="name">princ</span> key)</span><br><span class="line">      (<span class="name">princ</span> <span class="string">"\": "</span>)</span><br><span class="line">      (<span class="name">princ</span> val)</span><br><span class="line">      (<span class="name">when</span> (<span class="name">cddr</span> lst)</span><br><span class="line">        (<span class="name">princ</span> <span class="string">", "</span>))))</span><br><span class="line">  (<span class="name">princ</span> <span class="string">"}"</span>)</span><br><span class="line">  (<span class="name">princ</span> #\Newline))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这么看来，<code>~{</code>确实可以让使用者写出更紧凑的代码。</p>
+<h2 id="参数化参数"><a href="#参数化参数" class="headerlink" title="参数化参数"></a>参数化参数</h2><p>在前面的例子中，尽管用<code>~R</code>搭配不同的参数可以将数字打印成不同进制的形式，但毕竟这个参数是固化在控制字符串中的，局限性很大。例如，如果我想要定义一个函数<code>print-x-in-base-y</code>，使得参数<code>x</code>可以打印为<code>y</code>进程的形式，那么也许会这么写</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> print-x-in-base-y (<span class="name">x</span> y)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">control-string</span> (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"~~~DR"</span> y)))</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> control-string x)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但<code>format</code>的灵活性，允许使用者将命令的前缀参数也放到控制字符串之后的列表中，因此可以写成如下更简练的实现</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> print-x-in-base-y (<span class="name">x</span> y)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~VR"</span> y x))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>而且不只一个，你可以把所有参数都写成参数的形式</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> print-x-in-base-y (<span class="name">x</span></span><br><span class="line">                          <span class="symbol">&amp;optional</span> y</span><br><span class="line">                          <span class="symbol">&amp;rest</span> args</span><br><span class="line">                          <span class="symbol">&amp;key</span> mincol padchar commachar commainterval)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> args))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~V,V,V,V,VR"</span></span><br><span class="line">          y mincol padchar commachar commainterval x))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>恭喜你重新发明了<code>~R</code>，而且还不支持<code>:</code>和<code>@</code>修饰符。</p>
+<h2 id="自定义命令"><a href="#自定义命令" class="headerlink" title="自定义命令"></a>自定义命令</h2><p>要在CL中打印形如<code>2021-01-29 22:43</code>这样的日期和时间字符串，是一件比较麻烦的事情</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">multiple-value-bind</span> (<span class="name">sec</span> min hour date mon year)</span><br><span class="line">    (<span class="name">decode-universal-time</span> (<span class="name">get-universal-time</span>))</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> sec))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~4D-~2,'0D-~2,'0D ~2,'0D:~2,'0D~%"</span></span><br><span class="line">          year mon date hour min))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>谁让CL没有内置像Python的<code>datetime</code>模块这般完善的功能呢。不过，借助<code>format</code>的<code>~/</code>命令，我们可以在控制字符串中写上要调用的自定义函数，来深度定制打印出来的内容。以打印上述格式的日期和时间为例，首先定义一个后续要用的自定义函数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> yyyy-mm-dd-HH-MM (<span class="name">dest</span> arg is-colon-p is-at-p <span class="symbol">&amp;rest</span> args)</span><br><span class="line">  (<span class="name">declare</span> (<span class="name">ignorable</span> args is-at-p is-colon-p))</span><br><span class="line">  (<span class="name">multiple-value-bind</span> (<span class="name">sec</span> min hour date mon year)</span><br><span class="line">      (<span class="name">decode-universal-time</span> arg)</span><br><span class="line">    (<span class="name">declare</span> (<span class="name">ignorable</span> sec))</span><br><span class="line">    (<span class="name">format</span> dest <span class="string">"~4D-~2,'0D-~2,'0D ~2,'0D:~2,'0D~%"</span></span><br><span class="line">            year mon date hour min)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后便可以直接在控制字符串中使用它的名字</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">format</span> <span class="literal">t</span> <span class="string">"~/yyyy-mm-dd-HH-MM/"</span> (<span class="name">get-universal-time</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在我的机器上运行的时候，打印内容为<code>2021-01-29 22:51</code>。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p><code>format</code>可以做的事情还有很多，CL的HyperSpec中有关于<code>format</code>函数的<a href="http://www.ai.mit.edu/projects/iiip/doc/CommonLISP/HyperSpec/Body/sec_22-3.html">详细介绍</a>，CL爱好者一定不容错过。</p>
+<p>最后，其实Python跟CL并不怎么像。每每看到Python中的<code>__eq__</code>、<code>__ge__</code>，以及<code>__len__</code>等方法的巧妙运用时，身为一名Common Lisp爱好者，我都会流露出羡慕的神情。纵然CL被称为可扩展的编程语言，这些平凡的功能却依旧无法方便地做到呢。</p>
+
       
     </div>
 
@@ -625,6 +968,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

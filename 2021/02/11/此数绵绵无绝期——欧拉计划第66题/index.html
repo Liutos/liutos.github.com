@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -46,26 +46,31 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="仅以此文膜拜八年前的自己  序言欧拉计划（Project Euler）就像LeetCode，是一个编程答题的网站。不同于LeetCode的是，欧拉计划只要求用户提交最终答案即可（一般是一个数字），而不需要完整代码。因此，可以尽情地使用自己喜欢的编程语言——不少题目甚至光靠笔和纸便能解决。 欧拉计划的第66题非常有意思，它的题目很简单，就是要求找出在不大于1000的整数中，以哪一个数字为丢番图方程">
-<meta name="keywords" content="common lisp,project euler,algorithm,算法,数学,lisp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="此数绵绵无绝期——欧拉计划第66题">
-<meta property="og:url" content="https://liutos.github.io/2021/02/11/此数绵绵无绝期——欧拉计划第66题/index.html">
+<meta property="og:url" content="https://liutos.github.io/2021/02/11/%E6%AD%A4%E6%95%B0%E7%BB%B5%E7%BB%B5%E6%97%A0%E7%BB%9D%E6%9C%9F%E2%80%94%E2%80%94%E6%AC%A7%E6%8B%89%E8%AE%A1%E5%88%92%E7%AC%AC66%E9%A2%98/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
 <meta property="og:description" content="仅以此文膜拜八年前的自己  序言欧拉计划（Project Euler）就像LeetCode，是一个编程答题的网站。不同于LeetCode的是，欧拉计划只要求用户提交最终答案即可（一般是一个数字），而不需要完整代码。因此，可以尽情地使用自己喜欢的编程语言——不少题目甚至光靠笔和纸便能解决。 欧拉计划的第66题非常有意思，它的题目很简单，就是要求找出在不大于1000的整数中，以哪一个数字为丢番图方程">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2022-05-02T03:18:57.017Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E7%AC%AC66%E9%A2%98%E7%9A%84%E6%8F%8F%E8%BF%B0.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E4%B8%80%E4%B8%AA%E8%BF%9E%E5%88%86%E6%95%B0%E7%9A%84%E4%BE%8B%E5%AD%90.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E8%BF%9E%E5%88%86%E6%95%B0%E7%9A%84%E9%80%9A%E7%94%A8%E5%BD%A2%E5%BC%8F.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E6%95%B4%E6%95%B0%E9%83%A8%E5%88%86%E7%9A%84%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E8%AE%A1%E7%AE%97%E6%A0%B9%E5%8F%B714%E8%BF%9E%E5%88%86%E6%95%B0%E7%9A%84%E8%BF%87%E7%A8%8B.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E6%95%B0%E5%AD%A6%E5%BD%92%E7%BA%B3%E6%B3%95%E8%BF%87%E7%A8%8B.jpg">
+<meta property="article:published_time" content="2021-02-11T07:21:32.000Z">
+<meta property="article:modified_time" content="2022-05-02T03:19:01.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="common lisp">
+<meta property="article:tag" content="project euler">
+<meta property="article:tag" content="algorithm">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="数学">
+<meta property="article:tag" content="lisp">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="此数绵绵无绝期——欧拉计划第66题">
-<meta name="twitter:description" content="仅以此文膜拜八年前的自己  序言欧拉计划（Project Euler）就像LeetCode，是一个编程答题的网站。不同于LeetCode的是，欧拉计划只要求用户提交最终答案即可（一般是一个数字），而不需要完整代码。因此，可以尽情地使用自己喜欢的编程语言——不少题目甚至光靠笔和纸便能解决。 欧拉计划的第66题非常有意思，它的题目很简单，就是要求找出在不大于1000的整数中，以哪一个数字为丢番图方程">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E7%AC%AC66%E9%A2%98%E7%9A%84%E6%8F%8F%E8%BF%B0.jpeg">
 
-<link rel="canonical" href="https://liutos.github.io/2021/02/11/此数绵绵无绝期——欧拉计划第66题/">
+<link rel="canonical" href="https://liutos.github.io/2021/02/11/%E6%AD%A4%E6%95%B0%E7%BB%B5%E7%BB%B5%E6%97%A0%E7%BB%9D%E6%9C%9F%E2%80%94%E2%80%94%E6%AC%A7%E6%8B%89%E8%AE%A1%E5%88%92%E7%AC%AC66%E9%A2%98/">
 
 
 <script id="page-configurations">
@@ -117,6 +122,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -208,10 +214,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/02/11/此数绵绵无绝期——欧拉计划第66题/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/02/11/%E6%AD%A4%E6%95%B0%E7%BB%B5%E7%BB%B5%E6%97%A0%E7%BB%9D%E6%9C%9F%E2%80%94%E2%80%94%E6%AC%A7%E6%8B%89%E8%AE%A1%E5%88%92%E7%AC%AC66%E9%A2%98/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -238,7 +244,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-02 11:18:57" itemprop="dateModified" datetime="2022-05-02T11:18:57+08:00">2022-05-02</time>
+                <time title="修改时间：2022-05-02 11:19:01" itemprop="dateModified" datetime="2022-05-02T11:19:01+08:00">2022-05-02</time>
               </span>
 
           
@@ -250,7 +256,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/02/11/此数绵绵无绝期——欧拉计划第66题/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2021/02/11/%E6%AD%A4%E6%95%B0%E7%BB%B5%E7%BB%B5%E6%97%A0%E7%BB%9D%E6%9C%9F%E2%80%94%E2%80%94%E6%AC%A7%E6%8B%89%E8%AE%A1%E5%88%92%E7%AC%AC66%E9%A2%98/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/11/此数绵绵无绝期——欧拉计划第66题/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -269,41 +275,47 @@
         <blockquote>
 <p>仅以此文膜拜八年前的自己</p>
 </blockquote>
-<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p><a href="https://projecteuler.net/about" target="_blank" rel="noopener">欧拉计划</a>（Project Euler）就像LeetCode，是一个编程答题的网站。不同于LeetCode的是，欧拉计划只要求用户提交最终答案即可（一般是一个数字），而不需要完整代码。因此，可以尽情地使用自己喜欢的编程语言——不少题目甚至光靠笔和纸便能解决。</p>
-<p>欧拉计划的<a href="https://projecteuler.net/problem=66" target="_blank" rel="noopener">第66题</a>非常有意思，它的题目很简单，就是要求找出在不大于1000的整数中，以哪一个数字为丢番图方程的系数，可以得到所有最小解中的最大值。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/第66题的描述.jpeg" alt=""></p>
+<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p><a href="https://projecteuler.net/about">欧拉计划</a>（Project Euler）就像LeetCode，是一个编程答题的网站。不同于LeetCode的是，欧拉计划只要求用户提交最终答案即可（一般是一个数字），而不需要完整代码。因此，可以尽情地使用自己喜欢的编程语言——不少题目甚至光靠笔和纸便能解决。</p>
+<p>欧拉计划的<a href="https://projecteuler.net/problem=66">第66题</a>非常有意思，它的题目很简单，就是要求找出在不大于1000的整数中，以哪一个数字为丢番图方程的系数，可以得到所有最小解中的最大值。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E7%AC%AC66%E9%A2%98%E7%9A%84%E6%8F%8F%E8%BF%B0.jpeg"></p>
 <p>可以很容易地看出方程有一个直观的暴力算法：让y从1开始递增，对于每一个y，计算公式<code>Dy^2+1</code>的值。如果该值为平方数，那么它的平方根就是最小的x解。再依照这个算法求解所有D不大于1000的方程，便可以求出题目的答案。很容易用Python写出这个算法</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_square</span><span class="params">(num: int)</span> -&gt; bool:</span></span><br><span class="line">    <span class="keyword">return</span> math.isqrt(num) ** <span class="number">2</span> == num</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_x</span><span class="params">(D: int)</span> -&gt; int:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    求出给定D时，满足题目所给的丢番图方程的最小的x。</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="keyword">not</span> is_square(D)</span><br><span class="line">    y = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        candidate = D * y * y + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> is_square(candidate):</span><br><span class="line">            <span class="keyword">return</span> math.isqrt(candidate)</span><br><span class="line">        y += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">solve_66</span><span class="params">(limit)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    找出不大于limi的D中，使find_x的返回值最大的那一个数字。</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    max_D = <span class="keyword">None</span></span><br><span class="line">    max_x = <span class="keyword">None</span></span><br><span class="line">    D = <span class="number">2</span></span><br><span class="line">    <span class="keyword">while</span> D &lt;= limit:</span><br><span class="line">        <span class="keyword">if</span> is_square(D):</span><br><span class="line">            D += <span class="number">1</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        x = find_x(D)</span><br><span class="line">        <span class="keyword">if</span> max_x <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">or</span> x &gt; max_x:</span><br><span class="line">            max_D = D</span><br><span class="line">            max_x = x</span><br><span class="line">        D += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> max_D, max_x</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    D, x = solve_66(<span class="number">7</span>)</span><br><span class="line">    print(<span class="string">'D is {} and x is {}'</span>.format(D, x))</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf8 -*-</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">is_square</span>(<span class="params">num: <span class="built_in">int</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">    <span class="keyword">return</span> math.isqrt(num) ** <span class="number">2</span> == num</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_x</span>(<span class="params">D: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    求出给定D时，满足题目所给的丢番图方程的最小的x。</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">assert</span> <span class="keyword">not</span> is_square(D)</span><br><span class="line">    y = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        candidate = D * y * y + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> is_square(candidate):</span><br><span class="line">            <span class="keyword">return</span> math.isqrt(candidate)</span><br><span class="line">        y += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">solve_66</span>(<span class="params">limit</span>):</span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    找出不大于limi的D中，使find_x的返回值最大的那一个数字。</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    max_D = <span class="literal">None</span></span><br><span class="line">    max_x = <span class="literal">None</span></span><br><span class="line">    D = <span class="number">2</span></span><br><span class="line">    <span class="keyword">while</span> D &lt;= limit:</span><br><span class="line">        <span class="keyword">if</span> is_square(D):</span><br><span class="line">            D += <span class="number">1</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        x = find_x(D)</span><br><span class="line">        <span class="keyword">if</span> max_x <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">or</span> x &gt; max_x:</span><br><span class="line">            max_D = D</span><br><span class="line">            max_x = x</span><br><span class="line">        D += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> max_D, max_x</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    D, x = solve_66(<span class="number">7</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'D is {} and x is {}'</span>.<span class="built_in">format</span>(D, x))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>但如果将上限<code>limit</code>提升为1000，这个算法在有生之年是算不出结果的。</p>
 <p>要想解决这一题，需要借助数学的力量。</p>
-<h1 id="佩尔方程"><a href="#佩尔方程" class="headerlink" title="佩尔方程"></a>佩尔方程</h1><p>八年前第一次做这一题的时候，经过一番搜索，我从<a href="https://eli.thegreenplace.net/2009/06/19/project-euler-problem-66-and-continued-fractions/" target="_blank" rel="noopener">这篇文章</a>中知道了题目中的方程叫做<a href="https://zh.wikipedia.org/wiki/%E4%BD%A9%E5%B0%94%E6%96%B9%E7%A8%8B" target="_blank" rel="noopener">佩尔方程。</a>它有标准的解法，但需要用到连分数。那么什么是连分数呢？</p>
+<h1 id="佩尔方程"><a href="#佩尔方程" class="headerlink" title="佩尔方程"></a>佩尔方程</h1><p>八年前第一次做这一题的时候，经过一番搜索，我从<a href="https://eli.thegreenplace.net/2009/06/19/project-euler-problem-66-and-continued-fractions/">这篇文章</a>中知道了题目中的方程叫做<a href="https://zh.wikipedia.org/wiki/%E4%BD%A9%E5%B0%94%E6%96%B9%E7%A8%8B">佩尔方程。</a>它有标准的解法，但需要用到连分数。那么什么是连分数呢？</p>
 <p>连分数不是一种新的数系，只是小数的另一种写法。例如可以把分数45除以16写成下面的形式</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/一个连分数的例子.jpg" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E4%B8%80%E4%B8%AA%E8%BF%9E%E5%88%86%E6%95%B0%E7%9A%84%E4%BE%8B%E5%AD%90.jpg"></p>
 <p>就像定义递归的数据结构一样，可以给连分数一个递归的定义。连分数要么是一个整数，要么是一个整数加上另一个连分数的倒数。除了上面的形式，连分数也可以写成更节省篇幅的样子。比如把45除以16写成<code>[2;1,4,3]</code>，即把原本的式子中所有的整数部分按顺序写在一对方括号之间。这种记法，看起来就像是编程语言中的数组一般。</p>
 <p>如果用数组<code>[2;1,4,3]</code>的不同前缀来构造分式，那么结果依次为<code>2/1</code>、<code>3/1</code>、<code>14/5</code>。它们是这个连分数的渐进连分数，而佩尔方程的一组解，就来自于渐进连分数的分子和分母。</p>
 <p>以系数为7的佩尔方程为例，先计算出根号7的连分数，然后依次尝试它的渐进连分数。前三个分别为<code>2/1</code>、<code>3/1</code>、<code>5/2</code>，都不是方程的解。第四个渐进连分数<code>8/3</code>才是方程的解。如果继续提高连分数的精度，还会找到第二个解<code>127/48</code>。继续找，还有更多，而8则是其中最小的x。</p>
 <p>所以，想要快速算出佩尔方程的解，最重要的是找到计算一个数的平方根的连分数的算法。</p>
-<h1 id="计算平方根的连分数的错误方法"><a href="#计算平方根的连分数的错误方法" class="headerlink" title="计算平方根的连分数的错误方法"></a>计算平方根的连分数的错误方法</h1><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/连分数的通用形式.jpg" alt=""></p>
+<h1 id="计算平方根的连分数的错误方法"><a href="#计算平方根的连分数的错误方法" class="headerlink" title="计算平方根的连分数的错误方法"></a>计算平方根的连分数的错误方法</h1><p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E8%BF%9E%E5%88%86%E6%95%B0%E7%9A%84%E9%80%9A%E7%94%A8%E5%BD%A2%E5%BC%8F.jpg"></p>
 <p>要计算一个数字的连分数，最重要的便是要算出所有的整数部分（<code>a0</code>、<code>a2</code>、<code>a2</code>等）。它们都可以依据定义直接计算</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/整数部分的计算方法.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E6%95%B4%E6%95%B0%E9%83%A8%E5%88%86%E7%9A%84%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95.png"></p>
 <p>推广到一半情况，如果用变量<code>n</code>存储开平方的数字，用<code>numbers</code>存储所有已知的整数，那么用Python可以写出下面的算法来计算出下一个整数</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算连分数数列的下一个数字</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_next_integer_part</span><span class="params">(n, numbers)</span>:</span></span><br><span class="line">    v = math.sqrt(n)</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> numbers:</span><br><span class="line">        v = <span class="number">1</span> / (v - a)</span><br><span class="line">    <span class="keyword">return</span> int(v)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    n = <span class="number">14</span></span><br><span class="line">    numbers = [<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line">    v = compute_next_integer_part(n, numbers)</span><br><span class="line">    print(<span class="string">'下一个数字为{}'</span>.format(v))</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算连分数数列的下一个数字</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compute_next_integer_part</span>(<span class="params">n, numbers</span>):</span><br><span class="line">    v = math.sqrt(n)</span><br><span class="line">    <span class="keyword">for</span> a <span class="keyword">in</span> numbers:</span><br><span class="line">        v = <span class="number">1</span> / (v - a)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">int</span>(v)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    n = <span class="number">14</span></span><br><span class="line">    numbers = [<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line">    v = compute_next_integer_part(n, numbers)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">'下一个数字为{}'</span>.<span class="built_in">format</span>(v))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>遗憾的是，这个算法算出来的数字会因为计算上的精度误差而导致失之毫厘谬以千里。</p>
 <h1 id="计算平方根的连分数的正确方法"><a href="#计算平方根的连分数的正确方法" class="headerlink" title="计算平方根的连分数的正确方法"></a>计算平方根的连分数的正确方法</h1><p>要想计算出正确的结果，就需要尽可能地消除在计算<code>1 / (v - a)</code>的时候引入的误差，因此必须把浮点数从分母中除去。</p>
-<p>在<a href="http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/cfINTRO.html#section6.2.2" target="_blank" rel="noopener">这个网站</a>中，作者以计算根号14的连分数为例，列出了一个表格</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/计算根号14连分数的过程.jpeg" alt=""></p>
+<p>在<a href="http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/cfINTRO.html#section6.2.2">这个网站</a>中，作者以计算根号14的连分数为例，列出了一个表格</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E8%AE%A1%E7%AE%97%E6%A0%B9%E5%8F%B714%E8%BF%9E%E5%88%86%E6%95%B0%E7%9A%84%E8%BF%87%E7%A8%8B.jpeg"></p>
 <p>可以看到<code>x1</code>、<code>x2</code>，以及<code>x3</code>都是形如<code>(sqrt(n)+a)/b</code>这样的格式，这样的式子更利于控制误差。那么是否每一个待计算的<code>x</code>都符合这种格式呢？答案是肯定的，可以用数学归纳法予以证明（为了方便写公式，用LaTeX写好后截了图）</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/数学归纳法过程.jpg" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210211/%E6%95%B0%E5%AD%A6%E5%BD%92%E7%BA%B3%E6%B3%95%E8%BF%87%E7%A8%8B.jpg"></p>
 <p>在这个证明过程中，还得到了分子中的<code>a</code>以及分母中的<code>b</code>的递推公式，现在可以写出正确的计算连分数整数部分的代码了。</p>
 <h1 id="用Common-Lisp实现上述算法"><a href="#用Common-Lisp实现上述算法" class="headerlink" title="用Common Lisp实现上述算法"></a>用Common Lisp实现上述算法</h1><p>为了在实现这个算法的同时还要写出优雅的代码，我会用上Common Lisp的面向对象特性。首先是定义一个类来表示一个可以不断提高精度的连分数</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defpackage</span> #<span class="symbol">:com</span>.liutos.cf</span><br><span class="line">  (<span class="symbol">:use</span> #<span class="symbol">:cl</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">in-package</span> #<span class="symbol">:com</span>.liutos.cf)</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> &lt;cf&gt; ()</span><br><span class="line">  ((<span class="name">a</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"数学归纳法中、分子中与平方根相加的数"</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="number">0</span>)</span><br><span class="line">   (<span class="name">b</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"数学归纳法中的分母"</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="number">1</span>)</span><br><span class="line">   (<span class="name">numbers</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"连分数中的整数部分依次组成的数组。"</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="literal">nil</span>)</span><br><span class="line">   (<span class="name">origin</span></span><br><span class="line">    <span class="symbol">:documentation</span> <span class="string">"被开平方的数字"</span></span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:origin</span>))</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"表示整数ORIGIN的平方根的连分数。"</span>))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>接着再定义这个类需要实现的“接口”</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defgeneric</span> advance (<span class="name">cf</span>)</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"让连分数CF提高到下一个精度。"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defgeneric</span> into-rational (<span class="name">cf</span>)</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"将连分数CF转换为有理数类型的值。"</span>))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>最后来实现上述两个接口</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defmethod</span> advance ((<span class="name">cf</span> &lt;cf&gt;))</span><br><span class="line">  <span class="string">"根据递推公式计算出下一批a、b，以及连分数的整数部分。"</span></span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">slot-value</span> cf 'a))</span><br><span class="line">         (<span class="name">b</span> (<span class="name">slot-value</span> cf 'b))</span><br><span class="line">         (<span class="name">n</span> (<span class="name">slot-value</span> cf 'origin))</span><br><span class="line">         (<span class="name">m</span> (<span class="name">truncate</span> (<span class="name">+</span> (<span class="name">sqrt</span> n) a) b)))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">a</span> (<span class="name">-</span> (<span class="name">*</span> b m) a))</span><br><span class="line">          (<span class="name">b</span> (<span class="name">/</span> (<span class="name">-</span> n (<span class="name">expt</span> (<span class="name">-</span> a (<span class="name">*</span> b m)) <span class="number">2</span>)) b)))</span><br><span class="line">      (<span class="name">setf</span> (<span class="name">slot-value</span> cf 'a) a</span><br><span class="line">            (<span class="name">slot-value</span> cf 'b) b</span><br><span class="line">            (<span class="name">slot-value</span> cf 'numbers) (<span class="name">append</span> (<span class="name">slot-value</span> cf 'numbers) (<span class="name">list</span> m))))</span><br><span class="line">    (<span class="name">values</span>)))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> into-rational ((<span class="name">cf</span> &lt;cf&gt;))</span><br><span class="line">  (<span class="name">let*</span> ((<span class="name">numbers</span> (<span class="name">reverse</span> (<span class="name">slot-value</span> cf 'numbers)))</span><br><span class="line">         (<span class="name">v</span> (<span class="name">first</span> numbers)))</span><br><span class="line">    (<span class="name">dolist</span> (<span class="name">n</span> (<span class="name">rest</span> numbers))</span><br><span class="line">      (<span class="name">setf</span> v</span><br><span class="line">            (<span class="name">+</span> n (<span class="name">/</span> <span class="number">1</span> v))))</span><br><span class="line">    v))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>在实现<code>into-rational</code>方法上，Common Lisp的有理数数值类型给我带来了极大的便利，它使我不必担心计算<code>(/ 1 v)</code>的时候会引入误差，代码写起来简单直白。</p>
 <h1 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h1><p>乘胜追击，用Common Lisp解答第66题</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> find-min-x (<span class="name">D</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">cf</span> (<span class="name">make-instance</span> '&lt;cf&gt; <span class="symbol">:origin</span> D)))</span><br><span class="line">    (<span class="name">loop</span></span><br><span class="line">       (<span class="name">advance</span> cf)</span><br><span class="line">       (<span class="name">let*</span> ((<span class="name">ratio</span> (<span class="name">into-rational</span> cf))</span><br><span class="line">              (<span class="name">x</span> (<span class="name">numerator</span> ratio))</span><br><span class="line">              (<span class="name">y</span> (<span class="name">denominator</span> ratio)))</span><br><span class="line">         (<span class="name">when</span> (<span class="name">=</span> (<span class="name">-</span> (<span class="name">*</span> x x) (<span class="name">*</span> D y y)) <span class="number">1</span>)</span><br><span class="line">           (<span class="name">return-from</span> find-min-x x))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> square-p (<span class="name">n</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">rt</span> (<span class="name">sqrt</span> n)))</span><br><span class="line">    (<span class="name">=</span> rt (<span class="name">truncate</span> rt))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> pro66 (<span class="name">&amp;optional</span> (<span class="name">bnd</span> <span class="number">1000</span>))</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">target-d</span>)</span><br><span class="line">	(<span class="name">max-x</span> <span class="number">0</span>))</span><br><span class="line">    (<span class="name">loop</span> <span class="symbol">:for</span> i <span class="symbol">:from</span> <span class="number">2</span> <span class="symbol">:to</span> bnd</span><br><span class="line">       <span class="symbol">:when</span> (<span class="name">not</span> (<span class="name">square-p</span> i))</span><br><span class="line">       <span class="symbol">:do</span> (<span class="name">let</span> ((<span class="name">x</span> (<span class="name">find-min-x</span> i)))</span><br><span class="line">	     (<span class="name">if</span> (<span class="name">&gt;</span> x max-x)</span><br><span class="line">		 (<span class="name">setf</span> target-d i</span><br><span class="line">		       max-x x))))</span><br><span class="line">    (<span class="name">values</span> target-d max-x)))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>答案的D是多少就不说了，不过作为答案的x是16421658242965910275055840472270471049。有兴趣的读者可以试一下暴力解法要花多久才能算到这个数字。</p>
 <p>全文完。</p>
 
@@ -344,7 +356,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2021/02/11/此数绵绵无绝期——欧拉计划第66题/" title="此数绵绵无绝期——欧拉计划第66题">https://liutos.github.io/2021/02/11/此数绵绵无绝期——欧拉计划第66题/</a>
+    <a href="https://liutos.github.io/2021/02/11/%E6%AD%A4%E6%95%B0%E7%BB%B5%E7%BB%B5%E6%97%A0%E7%BB%9D%E6%9C%9F%E2%80%94%E2%80%94%E6%AC%A7%E6%8B%89%E8%AE%A1%E5%88%92%E7%AC%AC66%E9%A2%98/" title="此数绵绵无绝期——欧拉计划第66题">https://liutos.github.io/2021/02/11/此数绵绵无绝期——欧拉计划第66题/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -359,8 +371,8 @@
               <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
               <a href="/tags/project-euler/" rel="tag"><i class="fa fa-tag"></i> project euler</a>
               <a href="/tags/algorithm/" rel="tag"><i class="fa fa-tag"></i> algorithm</a>
-              <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
-              <a href="/tags/数学/" rel="tag"><i class="fa fa-tag"></i> 数学</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"><i class="fa fa-tag"></i> 数学</a>
               <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
           </div>
 
@@ -370,11 +382,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/01/29/format，不只是格式化/" rel="prev" title="format，不只是格式化">
+    <a href="/2021/01/29/format%EF%BC%8C%E4%B8%8D%E5%8F%AA%E6%98%AF%E6%A0%BC%E5%BC%8F%E5%8C%96/" rel="prev" title="format，不只是格式化">
       <i class="fa fa-chevron-left"></i> format，不只是格式化
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/02/27/终端看片指日可待/" rel="next" title="终端看片指日可待">
+    <a href="/2021/02/27/%E7%BB%88%E7%AB%AF%E7%9C%8B%E7%89%87%E6%8C%87%E6%97%A5%E5%8F%AF%E5%BE%85/" rel="next" title="终端看片指日可待">
       终端看片指日可待 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -456,13 +468,13 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#序言"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#佩尔方程"><span class="nav-number">2.</span> <span class="nav-text">佩尔方程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算平方根的连分数的错误方法"><span class="nav-number">3.</span> <span class="nav-text">计算平方根的连分数的错误方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算平方根的连分数的正确方法"><span class="nav-number">4.</span> <span class="nav-text">计算平方根的连分数的正确方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用Common-Lisp实现上述算法"><span class="nav-number">5.</span> <span class="nav-text">用Common Lisp实现上述算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解题"><span class="nav-number">6.</span> <span class="nav-text">解题</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%A9%E5%B0%94%E6%96%B9%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">佩尔方程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%B9%B3%E6%96%B9%E6%A0%B9%E7%9A%84%E8%BF%9E%E5%88%86%E6%95%B0%E7%9A%84%E9%94%99%E8%AF%AF%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">计算平方根的连分数的错误方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%B9%B3%E6%96%B9%E6%A0%B9%E7%9A%84%E8%BF%9E%E5%88%86%E6%95%B0%E7%9A%84%E6%AD%A3%E7%A1%AE%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">计算平方根的连分数的正确方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8Common-Lisp%E5%AE%9E%E7%8E%B0%E4%B8%8A%E8%BF%B0%E7%AE%97%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">用Common Lisp实现上述算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">解题</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -471,7 +483,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -484,7 +496,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">120</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -509,19 +521,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -570,16 +582,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -605,6 +617,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -633,6 +653,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -650,7 +677,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2021/02/11/此数绵绵无绝期——欧拉计划第66题/",
+            url: "https://liutos.github.io/2021/02/11/%E6%AD%A4%E6%95%B0%E7%BB%B5%E7%BB%B5%E6%97%A0%E7%BB%9D%E6%9C%9F%E2%80%94%E2%80%94%E6%AC%A7%E6%8B%89%E8%AE%A1%E5%88%92%E7%AC%AC66%E9%A2%98/",
             identifier: "2021/02/11/此数绵绵无绝期——欧拉计划第66题/",
             title: "此数绵绵无绝期——欧拉计划第66题"
           }
@@ -673,7 +700,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '379aa3c9a9f978237823e5c5fb36735d',
+      id: '8a47625e47226efe15d30333c6b3bcf0',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -681,4 +708,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

@@ -45,15 +45,15 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="序言作为一个天天都在用的工具，各位同行想必都非常熟悉 Git 的基本用法，例如：  用git-blame找出某一行 bug 是哪一位同事引入的，由他背锅； 用git-merge把别人的代码合进自己完美无瑕的分支中，然后发现单元测试无法跑通； 用git-push -f把团队里其他人的提交通通覆盖掉。  除此之外，Git 其实还是一个带版本功能的键值数据库：  所有提交的内容都存储在目录.git/ob">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="git-log很好，你也可以写一个">
 <meta property="og:url" content="https://liutos.github.io/2021/09/04/git-log%E5%BE%88%E5%A5%BD%EF%BC%8C%E4%BD%A0%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%86%99%E4%B8%80%E4%B8%AA/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="序言作为一个天天都在用的工具，各位同行想必都非常熟悉 Git 的基本用法，例如：  用git-blame找出某一行 bug 是哪一位同事引入的，由他背锅； 用git-merge把别人的代码合进自己完美无瑕的分支中，然后发现单元测试无法跑通； 用git-push -f把团队里其他人的提交通通覆盖掉。  除此之外，Git 其实还是一个带版本功能的键值数据库：  所有提交的内容都存储在目录.git/ob">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-09-04T09:29:17.000Z">
-<meta property="article:modified_time" content="2021-09-04T09:29:17.000Z">
+<meta property="article:modified_time" content="2021-09-04T09:29:20.000Z">
 <meta property="article:author" content="Liutos">
 <meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
@@ -70,7 +70,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>git-log很好，你也可以写一个 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          git-log很好，你也可以写一个
         </h1>
 
         <div class="post-meta">
@@ -224,8 +224,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-09-04 17:29:17" itemprop="dateCreated datePublished" datetime="2021-09-04T17:29:17+08:00">2021-09-04</time>
+              <time title="创建时间：2021-09-04 17:29:17 / 修改时间：17:29:20" itemprop="dateCreated datePublished" datetime="2021-09-04T17:29:17+08:00">2021-09-04</time>
             </span>
 
           
@@ -253,7 +254,71 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>作为一个天天都在用的工具，各位同行想必都非常熟悉 Git 的基本用法，例如：</p>
+<ul>
+<li>用<code>git-blame</code>找出某一行 bug 是哪一位同事引入的，由他背锅；</li>
+<li>用<code>git-merge</code>把别人的代码合进自己完美无瑕的分支中，然后发现单元测试无法跑通；</li>
+<li>用<code>git-push -f</code>把团队里其他人的提交通通覆盖掉。</li>
+</ul>
+<p>除此之外，Git 其实还是一个带版本功能的键值数据库：</p>
+<ul>
+<li>所有提交的内容都存储在目录<code>.git/objects/</code>下；</li>
+<li>有存储文件内容的<code>blob</code>对象、存储文件元数据的<code>tree</code>对象，还有存储提交记录的<code>commit</code>对象等；</li>
+<li>Git 提供了键值风格的读写命令<code>git-cat-file</code>和<code>git-hash-object</code>。</li>
+</ul>
+<p>读过我以前的文章<a href="https://liutos.github.io/2019/12/21/%E5%BD%93%E6%88%91%E4%BB%ACgit-merge%E7%9A%84%E6%97%B6%E5%80%99%E5%88%B0%E5%BA%95%E5%9C%A8merge%E4%BB%80%E4%B9%88/">《当我们git merge的时候到底在merge什么》</a>的朋友们应该都知道，如果一次合并不是<code>fast-forward</code>的，那么会产生一个新的<code>commit</code>类型的对象，并且它有两个父级<code>commit</code>对象。以知名的 Go 语言 Web 框架<code>gin</code>的仓库为例，它的哈希值为<code>e38955615a14e567811e390c87afe705df957f3a</code>的提交是一次合并产生的，这个提交的内容中有两行<code>parent</code></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">➜  gin git:(master) git cat-file -p 'e38955615a14e567811e390c87afe705df957f3a'</span><br><span class="line">tree 93e5046e502847a6355ed26223a902b4de2de7c7</span><br><span class="line">parent ad087650e9881c93a19fd8db75a86968aa998cac</span><br><span class="line">parent ce26751a5a3ed13e9a6aa010d9a7fa767de91b8c</span><br><span class="line">author Javier Provecho Fernandez &lt;javiertitan@gmail.com&gt; 1499534953 +0200</span><br><span class="line">committer Javier Provecho Fernandez &lt;javiertitan@gmail.com&gt; 1499535020 +0200</span><br><span class="line"></span><br><span class="line">Merge pull request #520 from 178inaba/travis-import_path</span><br></pre></td></tr></tbody></table></figure>
+
+<p>通过一个提交的<code>parent</code>属性，所有的提交对象组成了一个有向无环图。但聪明的你应该发现了，<code>git-log</code>的输出结果是线性的，所以 Git 用到了某种图的遍历算法。</p>
+<p>查阅<code>man git-log</code>，可以在<code>Commit Ordering</code>一节中看到</p>
+<blockquote>
+<p>By default, the commits are shown in reverse chronological order.</p>
+</blockquote>
+<p>聪明的你想必已经知道该如何实现这个图的遍历算法了。</p>
+<h1 id="自己动手写一个git-log"><a href="#自己动手写一个git-log" class="headerlink" title="自己动手写一个git-log"></a>自己动手写一个<code>git-log</code></h1><h2 id="解析commit对象"><a href="#解析commit对象" class="headerlink" title="解析commit对象"></a>解析<code>commit</code>对象</h2><p>要想以正确的顺序打印<code>commit</code>对象的信息，得先解析它。我们不需要从零开始自己打开文件、读取字节流，以及解压文件内容，只需要像上文那样调用<code>git-cat-file</code>即可。<code>git-cat-file</code>打印的内容中，有一些是需要提取备用的：</p>
+<ul>
+<li>以<code>parent</code>开头的行。这一行的哈希值要用于定位到有向无环图中的一个节点；</li>
+<li>以<code>committer</code>开头的行。这一行的 UNIX 时间戳将会作为决定谁是“下一个节点”的排序依据。</li>
+</ul>
+<p>可以随手写一个 Python 中的类来解析一个<code>commit</code>对象</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CommitObject</span>:</span><br><span class="line">    <span class="string">"""一个Git中的commit类型的对象解析后的结果。"""</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, *, commit_id: <span class="built_in">str</span></span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="variable language_">self</span>.commit_id = commit_id</span><br><span class="line"></span><br><span class="line">        file_content = <span class="variable language_">self</span>._cat_file(commit_id)</span><br><span class="line">        <span class="variable language_">self</span>.parents = <span class="variable language_">self</span>._parse_parents(file_content)</span><br><span class="line">        <span class="variable language_">self</span>.timestamp = <span class="variable language_">self</span>._parse_commit_timestamp(file_content)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_cat_file</span>(<span class="params">self, commit_id: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        cmd = [<span class="string">'git'</span>, <span class="string">'cat-file'</span>, <span class="string">'-p'</span>, commit_id]</span><br><span class="line">        <span class="keyword">return</span> subprocess.check_output(cmd).decode(<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_parse_commit_timestamp</span>(<span class="params">self, file_content: <span class="built_in">str</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="string">"""解析出提交的UNIX时间戳。"""</span></span><br><span class="line">        lines = file_content.split(<span class="string">'\n'</span>)</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">            <span class="keyword">if</span> line.startswith(<span class="string">'committer '</span>):</span><br><span class="line">                m = re.search(<span class="string">'committer .+ &lt;[^ ]+&gt; ([0-9]+)'</span>, line.strip())</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">int</span>(m.group(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_parse_parents</span>(<span class="params">self, file_content: <span class="built_in">str</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">str</span>]:</span><br><span class="line">        lines = file_content.split(<span class="string">'\n'</span>)</span><br><span class="line">        parents: <span class="type">List</span>[<span class="built_in">str</span>] = []</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">            <span class="keyword">if</span> line.startswith(<span class="string">'parent '</span>):</span><br><span class="line">                m = re.search(<span class="string">'parent (.*)'</span>, line.strip())</span><br><span class="line">                parent_id = m.group(<span class="number">1</span>)</span><br><span class="line">                parents.append(parent_id)</span><br><span class="line">        <span class="keyword">return</span> parents</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="遍历commit组成的有向无环图——大根堆"><a href="#遍历commit组成的有向无环图——大根堆" class="headerlink" title="遍历commit组成的有向无环图——大根堆"></a>遍历<code>commit</code>组成的有向无环图——大根堆</h2><p>恭喜你，你学过的数据结构可以派上用场了。</p>
+<p>假设用上面的类<code>CommitObject</code>解析了<code>gin</code>中哈希值为<code>e38955615a14e567811e390c87afe705df957f3a</code>的提交，那么它的<code>parents</code>属性中会有两个字符串：</p>
+<ul>
+<li><code>ad087650e9881c93a19fd8db75a86968aa998cac</code>；</li>
+<li><code>ce26751a5a3ed13e9a6aa010d9a7fa767de91b8c</code>。</li>
+</ul>
+<p>其中：</p>
+<ul>
+<li>哈希值为<code>ad087650e9881c93a19fd8db75a86968aa998cac</code>的提交的时间为<code>Sat Jul 8 12:31:44</code>；</li>
+<li>哈希值为<code>ce26751a5a3ed13e9a6aa010d9a7fa767de91b8c</code>的提交时间为<code>Jan 28 02:32:44</code>。</li>
+</ul>
+<p>显然，按照反转的时间先后顺序（<code>reverse chronological</code>）打印日志的话，下一个打印的节点应当是是<code>ad087650e9881c93a19fd8db75a86968aa998cac</code>——用<code>git-log</code>命令可以确认这一点。</p>
+<p>打印完<code>ad087650e9881c93a19fd8db75a86968aa998cac</code>之后，又要从它的父级提交和<code>ce26751a5a3ed13e9a6aa010d9a7fa767de91b8c</code>中，挑选出下一个要打印的提交对象。显然，这是一个循环往复的过程：</p>
+<ol>
+<li>从待打印的<code>commit</code>对象中，找出提交时间戳最大的一个；</li>
+<li>打印它的消息；</li>
+<li>将<code>commit</code>的所有父级提交加入到待打印的对象池中，回到第1个步骤；</li>
+</ol>
+<p>这个过程一直持续到没有待打印的<code>commit</code>对象为止，而所有待打印的<code>commit</code>对象组成了一个优先级队列——可以用一个大根堆来实现。</p>
+<p>然而，我并不打算在这短短的演示当中真的去实现一个堆数据结构——我用插入排序来代替它。</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyGitLogPrinter</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, *, commit_id: <span class="built_in">str</span>, n: <span class="built_in">int</span></span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="variable language_">self</span>.commits: <span class="type">List</span>[CommitObject] = []</span><br><span class="line">        <span class="variable language_">self</span>.times = n</span><br><span class="line"></span><br><span class="line">        commit = CommitObject(commit_id=commit_id)</span><br><span class="line">        <span class="variable language_">self</span>._enqueue(commit)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">run</span>(<span class="params">self</span>):</span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> <span class="built_in">len</span>(<span class="variable language_">self</span>.commits) &gt; <span class="number">0</span> <span class="keyword">and</span> i &lt; <span class="variable language_">self</span>.times:</span><br><span class="line">            commit = <span class="variable language_">self</span>.commits.pop(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> parent_id <span class="keyword">in</span> commit.parents:</span><br><span class="line">                parent = CommitObject(commit_id=parent_id)</span><br><span class="line">                <span class="variable language_">self</span>._enqueue(parent)</span><br><span class="line"></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">'{} {}'</span>.<span class="built_in">format</span>(commit.commit_id, commit.timestamp))</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_enqueue</span>(<span class="params">self, commit: CommitObject</span>):</span><br><span class="line">        <span class="keyword">for</span> comm <span class="keyword">in</span> <span class="variable language_">self</span>.commits:</span><br><span class="line">            <span class="keyword">if</span> commit.commit_id == comm.commit_id:</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">        <span class="comment"># 插入排序，先找到一个待插入的下标，然后将从i到最后一个元素都往尾部移动，再将新节点插入下标i的位置。</span></span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> i &lt; <span class="built_in">len</span>(<span class="variable language_">self</span>.commits):</span><br><span class="line">            <span class="keyword">if</span> commit.timestamp &gt; <span class="variable language_">self</span>.commits[i].timestamp:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        <span class="variable language_">self</span>.commits = <span class="variable language_">self</span>.commits[<span class="number">0</span>:i] + [commit] + <span class="variable language_">self</span>.commits[i:]</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后再提供一个启动函数就可以体验一番了</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@click.command()</span></span><br><span class="line"><span class="meta">@click.option(<span class="params"><span class="string">'--commit-id'</span>, required=<span class="literal">True</span></span>)</span></span><br><span class="line"><span class="meta">@click.option(<span class="params"><span class="string">'-n'</span>, default=<span class="number">20</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cli</span>(<span class="params">commit_id: <span class="built_in">str</span>, n: <span class="built_in">int</span></span>):</span><br><span class="line">    MyGitLogPrinter(commit_id=commit_id, n=n).run()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cli()</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="真假美猴王对比"><a href="#真假美猴王对比" class="headerlink" title="真假美猴王对比"></a>真假美猴王对比</h2><p>为了看看上面的代码所打印出来的<code>commit</code>对象的顺序是否正确，我先将它的输出内容重定向到一个文件中</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  gin git:(master) python3 ~/SourceCode/python/my_git_log/my_git_log.py --commit-id 'e38955615a14e567811e390c87afe705df957f3a' -n 20 &gt; /tmp/my_git_log.txt</span><br></pre></td></tr></tbody></table></figure>
+
+<p>再用<code>git-log</code>以同样的格式打印出来</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  gin git:(master) git log --pretty='format:%H %ct' 'e38955615a14e567811e390c87afe705df957f3a' -n 20 &gt; /tmp/git_log.txt</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后让<code>diff</code>命令告诉我们这两个文件是否有差异</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  gin git:(master) diff /tmp/git_log.txt /tmp/my_git_log.txt</span><br><span class="line">20c20</span><br><span class="line">&lt; 2521d8246d9813d65700650b29e278a08823e3ae 1499266911</span><br><span class="line">\ No newline at end of file</span><br><span class="line">---</span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">2521d8246d9813d65700650b29e278a08823e3ae 1499266911</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以说是一模一样了。</p>
+
     </div>
 
     
@@ -291,7 +356,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2021/09/04/git-log%E5%BE%88%E5%A5%BD%EF%BC%8C%E4%BD%A0%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%86%99%E4%B8%80%E4%B8%AA/" title="">https://liutos.github.io/2021/09/04/git-log很好，你也可以写一个/</a>
+    <a href="https://liutos.github.io/2021/09/04/git-log%E5%BE%88%E5%A5%BD%EF%BC%8C%E4%BD%A0%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%86%99%E4%B8%80%E4%B8%AA/" title="git-log很好，你也可以写一个">https://liutos.github.io/2021/09/04/git-log很好，你也可以写一个/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -308,12 +373,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/08/12/%E8%BF%99%E6%96%B9%E9%9D%A2Python%E8%BF%98%E6%98%AF%E6%AF%94Lisp%E7%95%A5%E9%80%8A%E4%B8%80%E7%AD%B9/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2021/08/12/%E8%BF%99%E6%96%B9%E9%9D%A2Python%E8%BF%98%E6%98%AF%E6%AF%94Lisp%E7%95%A5%E9%80%8A%E4%B8%80%E7%AD%B9/" rel="prev" title="这方面Python还是比Lisp略逊一筹">
+      <i class="fa fa-chevron-left"></i> 这方面Python还是比Lisp略逊一筹
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/10/06/%E7%9B%B4%E8%A7%82%E5%9C%B0%E4%BA%86%E8%A7%A3%E8%87%AA%E5%B7%B1%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%90%83%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%BC%80%E9%94%80/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2021/10/06/%E7%9B%B4%E8%A7%82%E5%9C%B0%E4%BA%86%E8%A7%A3%E8%87%AA%E5%B7%B1%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%90%83%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%BC%80%E9%94%80/" rel="next" title="直观地了解自己每天在吃上面的开销">
+      直观地了解自己每天在吃上面的开销 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +459,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AAgit-log"><span class="nav-number">2.</span> <span class="nav-text">自己动手写一个git-log</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90commit%E5%AF%B9%E8%B1%A1"><span class="nav-number">2.1.</span> <span class="nav-text">解析commit对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%8D%E5%8E%86commit%E7%BB%84%E6%88%90%E7%9A%84%E6%9C%89%E5%90%91%E6%97%A0%E7%8E%AF%E5%9B%BE%E2%80%94%E2%80%94%E5%A4%A7%E6%A0%B9%E5%A0%86"><span class="nav-number">2.2.</span> <span class="nav-text">遍历commit组成的有向无环图——大根堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%9F%E5%81%87%E7%BE%8E%E7%8C%B4%E7%8E%8B%E5%AF%B9%E6%AF%94"><span class="nav-number">2.3.</span> <span class="nav-text">真假美猴王对比</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +477,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +670,7 @@
         config: {page: {
             url: "https://liutos.github.io/2021/09/04/git-log%E5%BE%88%E5%A5%BD%EF%BC%8C%E4%BD%A0%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%86%99%E4%B8%80%E4%B8%AA/",
             identifier: "2021/09/04/git-log很好，你也可以写一个/",
-            title: ""
+            title: "git-log很好，你也可以写一个"
           }
         }
       });

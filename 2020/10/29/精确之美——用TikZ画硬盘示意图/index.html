@@ -45,18 +45,35 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="序言备考某等级考试的时候，在教材中碰到了几个一直不太理解的、关于硬盘的概念：磁道、柱面号、扇区。然而教材没有配图，无法直观地了解这些概念的物理形态。维基百科的硬盘词条页中倒是有一副不错的示意图，我截图搬运了过来  原图是一张SVG图片，本质上是一堆指令——也就是所谓的语绘啦。我是一个语绘爱好者，也想试试看能否用代码画一幅差不多的图出来。 在旧文《程序员特有的画图方式——语绘工具小入门》中，我演示过">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="精确之美——用TikZ画硬盘示意图">
 <meta property="og:url" content="https://liutos.github.io/2020/10/29/%E7%B2%BE%E7%A1%AE%E4%B9%8B%E7%BE%8E%E2%80%94%E2%80%94%E7%94%A8TikZ%E7%94%BB%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="序言备考某等级考试的时候，在教材中碰到了几个一直不太理解的、关于硬盘的概念：磁道、柱面号、扇区。然而教材没有配图，无法直观地了解这些概念的物理形态。维基百科的硬盘词条页中倒是有一副不错的示意图，我截图搬运了过来  原图是一张SVG图片，本质上是一堆指令——也就是所谓的语绘啦。我是一个语绘爱好者，也想试试看能否用代码画一幅差不多的图出来。 在旧文《程序员特有的画图方式——语绘工具小入门》中，我演示过">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-10-29T14:07:17.000Z">
-<meta property="article:modified_time" content="2020-10-29T14:07:17.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%E6%9C%BA%E6%A2%B0%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/three_in_one.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/%E6%80%8E%E6%A0%B7%E7%94%BB%E9%A9%AC.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_circle.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_30.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_split.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_B.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_CD.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_ring.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_color.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_line.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_text.png">
+<meta property="article:published_time" content="2020-10-29T05:42:17.000Z">
+<meta property="article:modified_time" content="2020-10-29T14:07:22.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="工具">
+<meta property="article:tag" content="语绘">
+<meta property="article:tag" content="绘图">
+<meta property="article:tag" content="latex">
+<meta property="article:tag" content="tikz">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%E6%9C%BA%E6%A2%B0%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE.png">
 
 <link rel="canonical" href="https://liutos.github.io/2020/10/29/%E7%B2%BE%E7%A1%AE%E4%B9%8B%E7%BE%8E%E2%80%94%E2%80%94%E7%94%A8TikZ%E7%94%BB%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE/">
 
@@ -70,7 +87,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>精确之美——用TikZ画硬盘示意图 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +232,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          精确之美——用TikZ画硬盘示意图
         </h1>
 
         <div class="post-meta">
@@ -224,8 +241,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-10-29 22:07:17" itemprop="dateCreated datePublished" datetime="2020-10-29T22:07:17+08:00">2020-10-29</time>
+              <time title="创建时间：2020-10-29 13:42:17 / 修改时间：22:07:22" itemprop="dateCreated datePublished" datetime="2020-10-29T13:42:17+08:00">2020-10-29</time>
             </span>
 
           
@@ -253,7 +271,73 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>备考某等级考试的时候，在教材中碰到了几个一直不太理解的、关于硬盘的概念：磁道、柱面号、扇区。然而教材没有配图，无法直观地了解这些概念的物理形态。维基百科的<a href="https://zh.wikipedia.org/wiki/%E7%A1%AC%E7%9B%98">硬盘</a>词条页中倒是有一副不错的示意图，我截图搬运了过来</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/%E7%BB%B4%E5%9F%BA%E7%99%BE%E7%A7%91%E6%9C%BA%E6%A2%B0%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE.png" alt="机械硬盘示意图"></p>
+<p>原图是一张SVG图片，本质上是一堆指令——也就是所谓的语绘啦。我是一个语绘爱好者，也想试试看能否用代码画一幅差不多的图出来。</p>
+<p>在旧文<a href="https://liutos.github.io/2020/05/07/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E2%80%94%E2%80%94%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/">《程序员特有的画图方式——语绘工具小入门》</a>中，我演示过几款写代码画图的工具，但它们都不适合用来绘制几何图形，所以这次它们没有用武之地。</p>
+<p>本来我想试试用<a href="https://zh.wikipedia.org/wiki/MetaPost">MetaPost</a>来画的，但鉴于“入门”了太多次，这次还是换点新花样吧。这一次，我用LaTeX+TikZ来画。</p>
+<h1 id="TikZ是什么及光速入门"><a href="#TikZ是什么及光速入门" class="headerlink" title="TikZ是什么及光速入门"></a>TikZ是什么及光速入门</h1><p>著名的<del>压泡面神器、麻将桌脚垫</del>《TAOCP》的作者发明了<a href="https://zh.wikipedia.org/wiki/TeX">TeX</a>，知名的<del>Raft竞品</del>Paxos算法的作者在此基础上创造了<a href="https://zh.wikipedia.org/wiki/LaTeX">LaTeX</a>，它们都是<del>程序员简历</del>论文排版的好帮手。而TikZ则是如虎添翼地在LaTeX中实现了简单易懂的绘图功能的一个<del>红包</del>宏包（macro package，TeX的术语）。简而言之，TikZ自定义了一套“语言”，可以在用LaTeX编写的文档中画出各种图形。</p>
+<p>百闻不如一见，我演示一下如何用TikZ画一条线段、一个圆，以及一段圆弧。先将下列的代码保存到一个文件<code>three_in_one.tex</code>中</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>{standalone}</span><br><span class="line"><span class="keyword">\usepackage</span>{tikz}</span><br><span class="line"><span class="keyword">\usetikzlibrary</span>{shapes.geometric, arrows}</span><br><span class="line"><span class="keyword">\begin</span>{document}</span><br><span class="line"><span class="keyword">\begin</span>{tikzpicture}[scale=2]</span><br><span class="line">  <span class="comment">%% 画一条从原点指向(1, 1)的线段</span></span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) -- (1, 1);</span><br><span class="line">  <span class="comment">%% 画一个以(1, 1)为圆心，半径为2的圆。</span></span><br><span class="line">  <span class="keyword">\draw</span> (1, 1) circle (2);</span><br><span class="line">  <span class="comment">%% 画一段以原点为圆心，半径为1，张开角度为30度的圆弧。</span></span><br><span class="line">  <span class="keyword">\draw</span> (1, 0) arc (0:30:1);</span><br><span class="line"><span class="keyword">\end</span>{tikzpicture}</span><br><span class="line"><span class="keyword">\end</span>{document}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>再使用<code>xelatex</code>将其编译成PDF文件（<code>xelatex</code>可以通过安装TeXLive 2020获得）</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xelatex three_in_one.tex</span><br></pre></td></tr></tbody></table></figure>
+
+<p>此时便得到了<code>three_in_one.pdf</code>文件。为了可以在文章中显示，我用ImageMagick将其转换为PNG文件</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">convert three_in_one.pdf /tmp/three_in_one.png</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最终的图片如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/three_in_one.png"></p>
+<p>简单，就像画一匹马一样简单。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/%E6%80%8E%E6%A0%B7%E7%94%BB%E9%A9%AC.jpeg"></p>
+<p>现在该来试试用TikZ复刻维基百科上的硬盘示意图了。</p>
+<h1 id="来点同心圆"><a href="#来点同心圆" class="headerlink" title="来点同心圆"></a>来点同心圆</h1><p>在原图中最引人注目的，当属那十几个同心圆了。简单起见，我只画六个圆。这六个圆的半径相差<code>1pt</code>（<code>pt</code>是TikZ默认的长度单位），从<code>3pt</code>一直递增到<code>8pt</code>，它们的圆心都在坐标原点<code>(0, 0)</code>上。</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% 为了节省篇幅，只给出TikZ部分的代码。</span></span><br><span class="line"><span class="keyword">\begin</span>{tikzpicture}</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (3);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (4);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (5);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (6);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (7);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (8);</span><br><span class="line"><span class="keyword">\end</span>{tikzpicture}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_circle.png"></p>
+<h1 id="来点等分线"><a href="#来点等分线" class="headerlink" title="来点等分线"></a>来点等分线</h1><p>原图中有12根线段，将每一个圆等分成了全等的12份。从前一节的内容可知，要用<code>\draw</code>命令绘制线段，需要的是线段两端的坐标，那么这批坐标要怎么计算呢？尽管可以用三角函数计算出这些点的笛卡尔坐标，但在TikZ中可以用更方便的极坐标来指定这些点。</p>
+<p>以原图中从X轴开始逆时针旋转遇到的第一条线段为例，它在半径为<code>3pt</code>的圆上的点的坐标为<code>(30:3)</code>（30是极坐标中的角度，3是半径长度），而在半径为<code>8pt</code>的圆上的点的坐标为<code>(30:8)</code>，因此可以用<code>\draw (30:3) -- (30:8)</code>来画出这根线段。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_30.png"></p>
+<p>通过调整其中的角度可以画出剩余的其它线段。</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\begin</span>{tikzpicture}</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (3);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (4);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (5);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (6);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (7);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (0:3) -- (0:8);</span><br><span class="line">  <span class="keyword">\draw</span> (30:3) -- (30:8);</span><br><span class="line">  <span class="keyword">\draw</span> (60:3) -- (60:8);</span><br><span class="line">  <span class="keyword">\draw</span> (90:3) -- (90:8);</span><br><span class="line">  <span class="keyword">\draw</span> (120:3) -- (120:8);</span><br><span class="line">  <span class="keyword">\draw</span> (150:3) -- (150:8);</span><br><span class="line">  <span class="keyword">\draw</span> (180:3) -- (180:8);</span><br><span class="line">  <span class="keyword">\draw</span> (210:3) -- (210:8);</span><br><span class="line">  <span class="keyword">\draw</span> (240:3) -- (240:8);</span><br><span class="line">  <span class="keyword">\draw</span> (270:3) -- (270:8);</span><br><span class="line">  <span class="keyword">\draw</span> (300:3) -- (300:8);</span><br><span class="line">  <span class="keyword">\draw</span> (330:3) -- (330:8);</span><br><span class="line"><span class="keyword">\end</span>{tikzpicture}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_split.png"></p>
+<h1 id="来张色图"><a href="#来张色图" class="headerlink" title="来张色图"></a>来张色图</h1><p>原图大致的骨架已经画完了，现在来尝试给它上色。在TikZ中，可以用<code>\fill</code>命令给一段封闭的曲线上色。比如用<code>\fill[red] (0, 0) -- (1, 0) -- (1, 1) -- (0, 1) -- cycle</code>可以将左下角在原点、边长为<code>1pt</code>的正方形涂成红色。</p>
+<p>先给原图中的区域B上色。区域B是一个扇形，它由两根长度为<code>8pt</code>的半径和一段夹角为30度的圆弧构成。要描述这段封闭曲线，可以借助入门一节中介绍的<code>arc</code>命令。</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\begin</span>{tikzpicture}</span><br><span class="line">  <span class="comment">%% 给区域B上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[blue] (0, 0) -- (30:8) arc (30:60:8) -- cycle;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (3);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (4);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (5);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (6);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (7);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (0:3) -- (0:8);</span><br><span class="line">  <span class="keyword">\draw</span> (30:3) -- (30:8);</span><br><span class="line">  <span class="keyword">\draw</span> (60:3) -- (60:8);</span><br><span class="line">  <span class="keyword">\draw</span> (90:3) -- (90:8);</span><br><span class="line">  <span class="keyword">\draw</span> (120:3) -- (120:8);</span><br><span class="line">  <span class="keyword">\draw</span> (150:3) -- (150:8);</span><br><span class="line">  <span class="keyword">\draw</span> (180:3) -- (180:8);</span><br><span class="line">  <span class="keyword">\draw</span> (210:3) -- (210:8);</span><br><span class="line">  <span class="keyword">\draw</span> (240:3) -- (240:8);</span><br><span class="line">  <span class="keyword">\draw</span> (270:3) -- (270:8);</span><br><span class="line">  <span class="keyword">\draw</span> (300:3) -- (300:8);</span><br><span class="line">  <span class="keyword">\draw</span> (330:3) -- (330:8);</span><br><span class="line"><span class="keyword">\end</span>{tikzpicture}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_B.png"></p>
+<p><code>\fill</code>命令那一行最后的<code>cycle</code>的意思，是让曲线回到起点组成一个封闭的形状。另外，<code>\fill</code>命令需要写在<code>\draw</code>命令之前，是为了避免蓝色颜料将区域内的圆弧给盖住了。</p>
+<p>对于区域C和区域D，方法是一样的，只是描述封闭曲线的坐标不同罢了。</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\begin</span>{tikzpicture}</span><br><span class="line">  <span class="comment">%% 给区域B上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[blue] (0, 0) -- (30:8) arc (30:60:8) -- cycle;</span><br><span class="line">  <span class="comment">%% 给区域C上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[purple] (30:4) -- (30:5) arc (30:60:5) -- (60:4) -- (60:4) arc (60:30:4);</span><br><span class="line">  <span class="comment">%% 给区域D上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[green] (240:6) -- (240:7) arc (240:330:7) -- (330:6) -- (330:6) arc (330:240:6);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (3);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (4);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (5);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (6);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (7);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (0:3) -- (0:8);</span><br><span class="line">  <span class="keyword">\draw</span> (30:3) -- (30:8);</span><br><span class="line">  <span class="keyword">\draw</span> (60:3) -- (60:8);</span><br><span class="line">  <span class="keyword">\draw</span> (90:3) -- (90:8);</span><br><span class="line">  <span class="keyword">\draw</span> (120:3) -- (120:8);</span><br><span class="line">  <span class="keyword">\draw</span> (150:3) -- (150:8);</span><br><span class="line">  <span class="keyword">\draw</span> (180:3) -- (180:8);</span><br><span class="line">  <span class="keyword">\draw</span> (210:3) -- (210:8);</span><br><span class="line">  <span class="keyword">\draw</span> (240:3) -- (240:8);</span><br><span class="line">  <span class="keyword">\draw</span> (270:3) -- (270:8);</span><br><span class="line">  <span class="keyword">\draw</span> (300:3) -- (300:8);</span><br><span class="line">  <span class="keyword">\draw</span> (330:3) -- (330:8);</span><br><span class="line"><span class="keyword">\end</span>{tikzpicture}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_CD.png"></p>
+<h1 id="给环形上色"><a href="#给环形上色" class="headerlink" title="给环形上色"></a>给环形上色</h1><p>聪明的读者也许已经发现了，区域A的环形没办法用这种方式来描述。不过没关系，只要将其视为上下半两部分，再分别上色即可。</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\begin</span>{tikzpicture}</span><br><span class="line">  <span class="comment">%% 环的上半部分</span></span><br><span class="line">  <span class="keyword">\fill</span>[red] (4, 0) -- (5, 0) arc (0:180:5) -- (-4, 0) -- (-4, 0) arc (180:0:4);</span><br><span class="line">  <span class="comment">%% 环的下半部分</span></span><br><span class="line">  <span class="keyword">\fill</span>[red] (4, 0) -- (5, 0) arc (360:180:5) -- (-4, 0) -- (-4, 0) arc (180:360:4);</span><br><span class="line">  <span class="comment">%% 给区域B上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[blue] (0, 0) -- (30:8) arc (30:60:8) -- cycle;</span><br><span class="line">  <span class="comment">%% 给区域C上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[purple] (30:4) -- (30:5) arc (30:60:5) -- (60:4) -- (60:4) arc (60:30:4);</span><br><span class="line">  <span class="comment">%% 给区域D上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[green] (240:6) -- (240:7) arc (240:330:7) -- (330:6) -- (330:6) arc (330:240:6);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (3);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (4);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (5);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (6);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (7);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (0:3) -- (0:8);</span><br><span class="line">  <span class="keyword">\draw</span> (30:3) -- (30:8);</span><br><span class="line">  <span class="keyword">\draw</span> (60:3) -- (60:8);</span><br><span class="line">  <span class="keyword">\draw</span> (90:3) -- (90:8);</span><br><span class="line">  <span class="keyword">\draw</span> (120:3) -- (120:8);</span><br><span class="line">  <span class="keyword">\draw</span> (150:3) -- (150:8);</span><br><span class="line">  <span class="keyword">\draw</span> (180:3) -- (180:8);</span><br><span class="line">  <span class="keyword">\draw</span> (210:3) -- (210:8);</span><br><span class="line">  <span class="keyword">\draw</span> (240:3) -- (240:8);</span><br><span class="line">  <span class="keyword">\draw</span> (270:3) -- (270:8);</span><br><span class="line">  <span class="keyword">\draw</span> (300:3) -- (300:8);</span><br><span class="line">  <span class="keyword">\draw</span> (330:3) -- (330:8);</span><br><span class="line"><span class="keyword">\end</span>{tikzpicture}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_ring.png"></p>
+<h1 id="润色一下"><a href="#润色一下" class="headerlink" title="润色一下"></a>润色一下</h1><p>用macOS的“数码测色计”看了一下原图中各个区域的颜色的RGB值，区域A大概是<code>(236, 133, 130)</code>、区域B大概是<code>(122, 127, 237)</code>、区域C大概是<code>(131, 132, 139)</code>、区域D大概是<code>(0, 151, 27)</code>。接下来我让TikZ以这四种指定的颜色填充图中的四个区域，先用LaTeX的<code>\definecolor</code>命令定义四个新的颜色的名字。</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% 下列四行代码置于document环境之前</span></span><br><span class="line"><span class="keyword">\definecolor</span>{areaA}{RGB}{236,133,130}</span><br><span class="line"><span class="keyword">\definecolor</span>{areaB}{RGB}{122,127,237}</span><br><span class="line"><span class="keyword">\definecolor</span>{areaC}{RGB}{131,32,139}</span><br><span class="line"><span class="keyword">\definecolor</span>{areaD}{RGB}{0,151,27}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>再替换掉<code>\fill</code>命令中的颜色名即可</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\begin</span>{tikzpicture}</span><br><span class="line">  <span class="comment">%% 环的上半部分</span></span><br><span class="line">  <span class="keyword">\fill</span>[areaA] (4, 0) -- (5, 0) arc (0:180:5) -- (-4, 0) -- (-4, 0) arc (180:0:4);</span><br><span class="line">  <span class="comment">%% 环的下半部分</span></span><br><span class="line">  <span class="keyword">\fill</span>[areaA] (4, 0) -- (5, 0) arc (360:180:5) -- (-4, 0) -- (-4, 0) arc (180:360:4);</span><br><span class="line">  <span class="comment">%% 给区域B上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[areaB] (0, 0) -- (30:8) arc (30:60:8) -- cycle;</span><br><span class="line">  <span class="comment">%% 给区域C上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[areaC] (30:4) -- (30:5) arc (30:60:5) -- (60:4) -- (60:4) arc (60:30:4);</span><br><span class="line">  <span class="comment">%% 给区域D上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[areaD] (240:6) -- (240:7) arc (240:330:7) -- (330:6) -- (330:6) arc (330:240:6);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (3);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (4);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (5);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (6);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (7);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (0:3) -- (0:8);</span><br><span class="line">  <span class="keyword">\draw</span> (30:3) -- (30:8);</span><br><span class="line">  <span class="keyword">\draw</span> (60:3) -- (60:8);</span><br><span class="line">  <span class="keyword">\draw</span> (90:3) -- (90:8);</span><br><span class="line">  <span class="keyword">\draw</span> (120:3) -- (120:8);</span><br><span class="line">  <span class="keyword">\draw</span> (150:3) -- (150:8);</span><br><span class="line">  <span class="keyword">\draw</span> (180:3) -- (180:8);</span><br><span class="line">  <span class="keyword">\draw</span> (210:3) -- (210:8);</span><br><span class="line">  <span class="keyword">\draw</span> (240:3) -- (240:8);</span><br><span class="line">  <span class="keyword">\draw</span> (270:3) -- (270:8);</span><br><span class="line">  <span class="keyword">\draw</span> (300:3) -- (300:8);</span><br><span class="line">  <span class="keyword">\draw</span> (330:3) -- (330:8);</span><br><span class="line"><span class="keyword">\end</span>{tikzpicture}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_color.png"></p>
+<h1 id="图文并茂"><a href="#图文并茂" class="headerlink" title="图文并茂"></a>图文并茂</h1><p>剩下的需要复刻的东西就是原图中的文字以及标注用的线了。线很容易画，只要规定了坐标后用<code>\draw</code>命令即可。比如说，我可以把四条线定义如下，其中的坐标和线段的长度纯粹是个人偏好</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\draw</span> (75:4.5) -- (75:9);</span><br><span class="line"><span class="keyword">\draw</span> (40:7.5) -- (40:9);</span><br><span class="line"><span class="keyword">\draw</span> (50:4.5) -- (50:9);</span><br><span class="line"><span class="keyword">\draw</span> (285:6.5) -- (285:9);</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_line.png"></p>
+<p>线画完了，再到每一根线的“终点”标上文字说明，这需要用到TikZ的<code>node</code>功能。用法很简单，就是在需要标注文字的坐标后，紧跟着关键字<code>node</code>，以及一段用花括号包裹的文本即可</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>{standalone}</span><br><span class="line"><span class="keyword">\usepackage</span>{tikz}</span><br><span class="line"><span class="keyword">\usepackage</span>{xeCJK}</span><br><span class="line"><span class="keyword">\setCJKmainfont</span>{Songti TC}</span><br><span class="line"><span class="keyword">\usetikzlibrary</span>{shapes.geometric, arrows}</span><br><span class="line"><span class="keyword">\definecolor</span>{areaA}{RGB}{236,133,130}</span><br><span class="line"><span class="keyword">\definecolor</span>{areaB}{RGB}{122,127,237}</span><br><span class="line"><span class="keyword">\definecolor</span>{areaC}{RGB}{131,32,139}</span><br><span class="line"><span class="keyword">\definecolor</span>{areaD}{RGB}{0,151,27}</span><br><span class="line"><span class="keyword">\begin</span>{document}</span><br><span class="line"><span class="keyword">\begin</span>{tikzpicture}</span><br><span class="line">  <span class="comment">%% 环的上半部分</span></span><br><span class="line">  <span class="keyword">\fill</span>[areaA] (4, 0) -- (5, 0) arc (0:180:5) -- (-4, 0) -- (-4, 0) arc (180:0:4);</span><br><span class="line">  <span class="comment">%% 环的下半部分</span></span><br><span class="line">  <span class="keyword">\fill</span>[areaA] (4, 0) -- (5, 0) arc (360:180:5) -- (-4, 0) -- (-4, 0) arc (180:360:4);</span><br><span class="line">  <span class="comment">%% 给区域B上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[areaB] (0, 0) -- (30:8) arc (30:60:8) -- cycle;</span><br><span class="line">  <span class="comment">%% 给区域C上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[areaC] (30:4) -- (30:5) arc (30:60:5) -- (60:4) -- (60:4) arc (60:30:4);</span><br><span class="line">  <span class="comment">%% 给区域D上色。</span></span><br><span class="line">  <span class="keyword">\fill</span>[areaD] (240:6) -- (240:7) arc (240:330:7) -- (330:6) -- (330:6) arc (330:240:6);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (3);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (4);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (5);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (6);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (7);</span><br><span class="line">  <span class="keyword">\draw</span> (0, 0) circle (8);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (0:3) -- (0:8);</span><br><span class="line">  <span class="keyword">\draw</span> (30:3) -- (30:8);</span><br><span class="line">  <span class="keyword">\draw</span> (60:3) -- (60:8);</span><br><span class="line">  <span class="keyword">\draw</span> (90:3) -- (90:8);</span><br><span class="line">  <span class="keyword">\draw</span> (120:3) -- (120:8);</span><br><span class="line">  <span class="keyword">\draw</span> (150:3) -- (150:8);</span><br><span class="line">  <span class="keyword">\draw</span> (180:3) -- (180:8);</span><br><span class="line">  <span class="keyword">\draw</span> (210:3) -- (210:8);</span><br><span class="line">  <span class="keyword">\draw</span> (240:3) -- (240:8);</span><br><span class="line">  <span class="keyword">\draw</span> (270:3) -- (270:8);</span><br><span class="line">  <span class="keyword">\draw</span> (300:3) -- (300:8);</span><br><span class="line">  <span class="keyword">\draw</span> (330:3) -- (330:8);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">\draw</span> (75:4.5) -- (75:9) node {磁道};</span><br><span class="line">  <span class="keyword">\draw</span> (40:7.5) -- (40:9) node {扇面};</span><br><span class="line">  <span class="keyword">\draw</span> (50:4.5) -- (50:9) node {扇区};</span><br><span class="line">  <span class="keyword">\draw</span> (285:6.5) -- (285:9) node {簇};</span><br><span class="line"><span class="keyword">\end</span>{tikzpicture}</span><br><span class="line"><span class="keyword">\end</span>{document}</span><br></pre></td></tr></tbody></table></figure>
+
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201029/hdd2_text.png"></p>
+<p>需要留意的是，我在源代码开头的位置，引入了<code>xeCJK</code>宏包（<code>\usepackage{xeCJK}</code>），并且指定了中文内容用的字体为宋体（<code>\setCJKmainfont{Songti TC}</code>），这样才能成功编译。</p>
+<p>至此，复刻算是完成了。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>本文只是管中窥豹，TikZ还可以画出其它更复杂更美轮美奂的图形，有兴趣的读者可以移步<a href="https://texample.net/tikz/examples/">这里</a>观赏。此外，TikZ也可以“编程”，比如下面的两行代码便足矣画出上文中12行代码才完成的等分线</p>
+<figure class="highlight latex"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\foreach</span> <span class="keyword">\x</span> in {0,30,60,90,120,150,180,210,240,270,300,330}</span><br><span class="line"><span class="keyword">\draw</span> (<span class="keyword">\x</span>:3) -- (<span class="keyword">\x</span>:8);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>TikZ的更多潜力和乐趣，就由各位读者自己探索吧。</p>
+
     </div>
 
     
@@ -291,7 +375,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/10/29/%E7%B2%BE%E7%A1%AE%E4%B9%8B%E7%BE%8E%E2%80%94%E2%80%94%E7%94%A8TikZ%E7%94%BB%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE/" title="">https://liutos.github.io/2020/10/29/精确之美——用TikZ画硬盘示意图/</a>
+    <a href="https://liutos.github.io/2020/10/29/%E7%B2%BE%E7%A1%AE%E4%B9%8B%E7%BE%8E%E2%80%94%E2%80%94%E7%94%A8TikZ%E7%94%BB%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE/" title="精确之美——用TikZ画硬盘示意图">https://liutos.github.io/2020/10/29/精确之美——用TikZ画硬盘示意图/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +385,14 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag"><i class="fa fa-tag"></i> 工具</a>
+              <a href="/tags/%E8%AF%AD%E7%BB%98/" rel="tag"><i class="fa fa-tag"></i> 语绘</a>
+              <a href="/tags/%E7%BB%98%E5%9B%BE/" rel="tag"><i class="fa fa-tag"></i> 绘图</a>
+              <a href="/tags/latex/" rel="tag"><i class="fa fa-tag"></i> latex</a>
+              <a href="/tags/tikz/" rel="tag"><i class="fa fa-tag"></i> tikz</a>
+          </div>
 
         
 
@@ -308,12 +400,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/" rel="prev" title="Emacs的avy插件">
+      <i class="fa fa-chevron-left"></i> Emacs的avy插件
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/11/19/%E4%B8%80%E7%AE%AD%E5%8F%8C%E9%9B%95%E2%80%94%E2%80%94org-mode%E4%B8%AD%E7%9A%84ID%E5%92%8CCUSTOM-ID%E5%AD%97%E6%AE%B5/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2020/11/18/%E4%B8%80%E7%AE%AD%E5%8F%8C%E9%9B%95%E2%80%94%E2%80%94org-mode%E4%B8%AD%E7%9A%84ID%E5%92%8CCUSTOM-ID%E5%AD%97%E6%AE%B5/" rel="next" title="一箭双雕——org-mode中的ID和CUSTOM_ID字段">
+      一箭双雕——org-mode中的ID和CUSTOM_ID字段 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +486,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TikZ%E6%98%AF%E4%BB%80%E4%B9%88%E5%8F%8A%E5%85%89%E9%80%9F%E5%85%A5%E9%97%A8"><span class="nav-number">2.</span> <span class="nav-text">TikZ是什么及光速入门</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%A5%E7%82%B9%E5%90%8C%E5%BF%83%E5%9C%86"><span class="nav-number">3.</span> <span class="nav-text">来点同心圆</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%A5%E7%82%B9%E7%AD%89%E5%88%86%E7%BA%BF"><span class="nav-number">4.</span> <span class="nav-text">来点等分线</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%A5%E5%BC%A0%E8%89%B2%E5%9B%BE"><span class="nav-number">5.</span> <span class="nav-text">来张色图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%99%E7%8E%AF%E5%BD%A2%E4%B8%8A%E8%89%B2"><span class="nav-number">6.</span> <span class="nav-text">给环形上色</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B6%A6%E8%89%B2%E4%B8%80%E4%B8%8B"><span class="nav-number">7.</span> <span class="nav-text">润色一下</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E6%96%87%E5%B9%B6%E8%8C%82"><span class="nav-number">8.</span> <span class="nav-text">图文并茂</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">9.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +504,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +697,7 @@
         config: {page: {
             url: "https://liutos.github.io/2020/10/29/%E7%B2%BE%E7%A1%AE%E4%B9%8B%E7%BE%8E%E2%80%94%E2%80%94%E7%94%A8TikZ%E7%94%BB%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE/",
             identifier: "2020/10/29/精确之美——用TikZ画硬盘示意图/",
-            title: ""
+            title: "精确之美——用TikZ画硬盘示意图"
           }
         }
       });

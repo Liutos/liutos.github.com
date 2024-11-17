@@ -45,18 +45,20 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="尽管我最近开始用VNote做读书或读在线文档的笔记，但更多的时候，我把经验型知识都记录在一个名为my_note的Git仓库中。这个仓库中有许多.org`文件：  TeX.org，记录与LaTeX相关的问题和解决方法； asm.org，记录的是与编写汇编语言程序相关的问题和解决办法； cl.org，记录的是与编写Common Lisp代码相关的问题和解决办法；  这些内容被我称为FAQ。尽管">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="我是怎么把笔记导入ElasticSearch的">
 <meta property="og:url" content="https://liutos.github.io/2020/03/26/%E6%88%91%E6%98%AF%E6%80%8E%E4%B9%88%E6%8A%8A%E7%AC%94%E8%AE%B0%E5%AF%BC%E5%85%A5ElasticSearch%E7%9A%84/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="尽管我最近开始用VNote做读书或读在线文档的笔记，但更多的时候，我把经验型知识都记录在一个名为my_note的Git仓库中。这个仓库中有许多.org`文件：  TeX.org，记录与LaTeX相关的问题和解决方法； asm.org，记录的是与编写汇编语言程序相关的问题和解决办法； cl.org，记录的是与编写Common Lisp代码相关的问题和解决办法；  这些内容被我称为FAQ。尽管">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-03-26T15:01:26.000Z">
-<meta property="article:modified_time" content="2020-03-26T15:01:26.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200326/TeX%E7%AC%94%E8%AE%B0%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9.jpeg">
+<meta property="article:published_time" content="2020-03-26T14:51:56.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
 <meta property="article:author" content="Liutos">
 <meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200326/TeX%E7%AC%94%E8%AE%B0%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9.jpeg">
 
 <link rel="canonical" href="https://liutos.github.io/2020/03/26/%E6%88%91%E6%98%AF%E6%80%8E%E4%B9%88%E6%8A%8A%E7%AC%94%E8%AE%B0%E5%AF%BC%E5%85%A5ElasticSearch%E7%9A%84/">
 
@@ -70,7 +72,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>我是怎么把笔记导入ElasticSearch的 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +217,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          我是怎么把笔记导入ElasticSearch的
         </h1>
 
         <div class="post-meta">
@@ -225,8 +227,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-03-26 23:01:26" itemprop="dateCreated datePublished" datetime="2020-03-26T23:01:26+08:00">2020-03-26</time>
+              <time title="创建时间：2020-03-26 22:51:56" itemprop="dateCreated datePublished" datetime="2020-03-26T22:51:56+08:00">2020-03-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -253,7 +262,36 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>尽管我最近开始用<a href="https://github.com/tamlok/vnote">VNote</a>做读书或读在线文档的笔记，但更多的时候，我把经验型知识都记录在一个名为<code>my_note</code>的Git仓库中。这个仓库中有许多.org`文件：</p>
+<ol>
+<li><code>TeX.org</code>，记录与<code>LaTeX</code>相关的问题和解决方法；</li>
+<li><code>asm.org</code>，记录的是与编写汇编语言程序相关的问题和解决办法；</li>
+<li><code>cl.org</code>，记录的是与编写Common Lisp代码相关的问题和解决办法；</li>
+</ol>
+<p>这些内容被我称为FAQ。尽管不同的文件记载着不同方面的内容，但它们的格式是一致的：</p>
+<ol>
+<li>每个文件都以org-mode的语法书写；</li>
+<li>文件中只有一级条目，没有嵌套；</li>
+<li>每一个条目的标题就是一个问题的表述，下方的文字则是这个问题的答案。</li>
+</ol>
+<p>A picture is worth a thousand words</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200326/TeX%E7%AC%94%E8%AE%B0%E4%B8%AD%E7%9A%84%E5%86%85%E5%AE%B9.jpeg"></p>
+<p>这些问题都比较常见（不然怎么叫FAQ呢——也许上图的不算常见吧），回过头来查找的机率很高。显然，在纷繁复杂的文字中凭肉眼寻找关键字是低效的，即使是祭出<code>grep</code>，用正则表达式这样的大杀器来查找也不是特别称手——因为并不知道怎样的正则表达式可以匹配到寻找的内容——也许多写了关键词，也许少写了，也许顺序不对。</p>
+<p>对于搜索这类非结构的文字资料来说，全文检索是一个更好的选择，因此，我是把这些内容丢进ElasticSearch里再查找的。</p>
+<h1 id="解析并导入到ElasticSearch"><a href="#解析并导入到ElasticSearch" class="headerlink" title="解析并导入到ElasticSearch"></a>解析并导入到ElasticSearch</h1><span id="more"></span>
+
+<p>FAQ中的每一个条目，都对应ElasticSearch中的一个文档，它们都存储在索引<code>faq</code>中。一个文档有如下的字段：</p>
+<ol>
+<li><code>answer</code>，即问题的答案；</li>
+<li><code>path</code>，文件绝对路径，表示文档来自于哪一个文件中的条目；</li>
+<li><code>question</code>，即问题的描述；</li>
+<li><code>questionLineNum</code>，即问题存在于文件的第几行。</li>
+</ol>
+<p>解析这些文件的逻辑也很简单：每当读入行首为星号的一行后（这一行即为问题），便继续读入后续的每一行直到再次遇到行首为星号的行为止，这些后续读入的行组成了这个问题的答案。有了问题和答案，便可以导入到ElasticSearch中。最终的脚本如下</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> request = <span class="built_in">require</span>(<span class="string">'co-request'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">parseFaqOrg</span>(<span class="params">path</span>) {</span><br><span class="line">  <span class="keyword">const</span> content = fs.<span class="title function_">readFileSync</span>(path).<span class="title function_">toString</span>(<span class="string">'utf-8'</span>);</span><br><span class="line">  <span class="keyword">const</span> lines = content.<span class="title function_">split</span>(<span class="string">'\n'</span>);</span><br><span class="line">  <span class="keyword">const</span> qas = [];</span><br><span class="line">  <span class="keyword">let</span> answer = [];</span><br><span class="line">  <span class="keyword">let</span> lineNum = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">let</span> mode;</span><br><span class="line">  <span class="keyword">let</span> question;</span><br><span class="line">  <span class="keyword">let</span> questionLineNum;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> line <span class="keyword">of</span> lines) {</span><br><span class="line">    lineNum += <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (line.<span class="title function_">startsWith</span>(<span class="string">'*'</span>)) {</span><br><span class="line">      <span class="keyword">if</span> (mode === <span class="string">'answer'</span>) {</span><br><span class="line">        <span class="comment">// 在遇到星号的时候模式已经处于answer中，说明在此之前还有未处理的QA</span></span><br><span class="line">        qas.<span class="title function_">push</span>({</span><br><span class="line">          <span class="attr">answer</span>: answer.<span class="title function_">join</span>(<span class="string">'\n'</span>),</span><br><span class="line">          path,</span><br><span class="line">          question,</span><br><span class="line">          questionLineNum</span><br><span class="line">        });</span><br><span class="line">        answer = [];</span><br><span class="line">        question = <span class="literal">null</span>;</span><br><span class="line">      }</span><br><span class="line">      mode = <span class="string">'question'</span>;</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">      mode = <span class="string">'answer'</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (mode === <span class="string">'answer'</span>) {</span><br><span class="line">      answer.<span class="title function_">push</span>(line);</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">      question = line;</span><br><span class="line">      questionLineNum = lineNum;</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">if</span> (question) {</span><br><span class="line">    qas.<span class="title function_">push</span>({</span><br><span class="line">      <span class="attr">answer</span>: answer.<span class="title function_">join</span>(<span class="string">'\n'</span>),</span><br><span class="line">      question</span><br><span class="line">    });</span><br><span class="line">  }</span><br><span class="line">  <span class="comment">// console.log(JSON.stringify(qas, null, 2));</span></span><br><span class="line">  <span class="keyword">return</span> qas;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">dropFaq</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">request</span>({</span><br><span class="line">    <span class="attr">method</span>: <span class="string">'delete'</span>,</span><br><span class="line">    <span class="attr">url</span>: <span class="string">'http://localhost:9200/faq'</span></span><br><span class="line">  });</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 重建faq索引并写入全量的笔记数据</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">new</span> <span class="title class_">Date</span>().<span class="title function_">toLocaleString</span>());</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">dropFaq</span>();</span><br><span class="line">  <span class="keyword">const</span> dir = <span class="string">'/Users/liutos/Documents/Projects/my_note/faq/'</span>;</span><br><span class="line">  <span class="keyword">const</span> basenames = fs.<span class="title function_">readdirSync</span>(dir);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> basename <span class="keyword">of</span> basenames) {</span><br><span class="line">    <span class="keyword">const</span> path = dir + basename;</span><br><span class="line">    <span class="keyword">const</span> type = basename.<span class="title function_">match</span>(<span class="regexp">/(.*)\.org/</span>)[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">const</span> qas = <span class="title function_">parseFaqOrg</span>(path);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> qa <span class="keyword">of</span> qas) {</span><br><span class="line">      <span class="keyword">await</span> <span class="title function_">request</span>({</span><br><span class="line">        <span class="attr">body</span>: qa,</span><br><span class="line">        <span class="attr">json</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">method</span>: <span class="string">'post'</span>,</span><br><span class="line">        <span class="attr">url</span>: <span class="string">'http://localhost:9200/faq/_doc'</span></span><br><span class="line">      });</span><br><span class="line">    }</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`文件<span class="subst">${path}</span>处理完毕`</span>);</span><br><span class="line">  }</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">new</span> <span class="title class_">Date</span>().<span class="title function_">toLocaleString</span>());</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="title function_">main</span>();</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如果想知道我是如何在Emacs中查询这些FAQ的，可以参见<a href="http://liutos.github.io/2019/10/20/%E5%9C%A8Emacs%E4%B8%AD%E6%90%AD%E5%BB%BA%E7%AC%94%E8%AE%B0%E6%9F%A5%E9%98%85%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%B0%9D%E8%AF%95/">《在Emacs中搭建笔记查阅系统的尝试》</a>这篇文章。</p>
+
     </div>
 
     
@@ -291,7 +329,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/03/26/%E6%88%91%E6%98%AF%E6%80%8E%E4%B9%88%E6%8A%8A%E7%AC%94%E8%AE%B0%E5%AF%BC%E5%85%A5ElasticSearch%E7%9A%84/" title="">https://liutos.github.io/2020/03/26/我是怎么把笔记导入ElasticSearch的/</a>
+    <a href="https://liutos.github.io/2020/03/26/%E6%88%91%E6%98%AF%E6%80%8E%E4%B9%88%E6%8A%8A%E7%AC%94%E8%AE%B0%E5%AF%BC%E5%85%A5ElasticSearch%E7%9A%84/" title="我是怎么把笔记导入ElasticSearch的">https://liutos.github.io/2020/03/26/我是怎么把笔记导入ElasticSearch的/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -308,12 +346,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/21/%E5%BC%A5%E8%A1%A5org-refile%E7%9A%84%E4%B8%8D%E8%B6%B3/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2020/03/21/%E5%BC%A5%E8%A1%A5org-refile%E7%9A%84%E4%B8%8D%E8%B6%B3/" rel="prev" title="弥补org-refile的不足">
+      <i class="fa fa-chevron-left"></i> 弥补org-refile的不足
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/03/29/%E6%94%B9%E8%89%AF%E5%9C%A8Emacs%E4%B8%AD%E6%B5%8F%E8%A7%88%E7%AC%94%E8%AE%B0%E7%9A%84%E6%96%B9%E5%BC%8F/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2020/03/29/%E6%94%B9%E8%89%AF%E5%9C%A8Emacs%E4%B8%AD%E6%B5%8F%E8%A7%88%E7%AC%94%E8%AE%B0%E7%9A%84%E6%96%B9%E5%BC%8F/" rel="next" title="改良在Emacs中浏览笔记的方式">
+      改良在Emacs中浏览笔记的方式 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +432,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E5%B9%B6%E5%AF%BC%E5%85%A5%E5%88%B0ElasticSearch"><span class="nav-number">1.</span> <span class="nav-text">解析并导入到ElasticSearch</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">2.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +450,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +643,7 @@
         config: {page: {
             url: "https://liutos.github.io/2020/03/26/%E6%88%91%E6%98%AF%E6%80%8E%E4%B9%88%E6%8A%8A%E7%AC%94%E8%AE%B0%E5%AF%BC%E5%85%A5ElasticSearch%E7%9A%84/",
             identifier: "2020/03/26/我是怎么把笔记导入ElasticSearch的/",
-            title: ""
+            title: "我是怎么把笔记导入ElasticSearch的"
           }
         }
       });

@@ -45,17 +45,19 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="序言在入手MacBook Pro前，我的开发环境主要是一个运行在VirtualBox中的Mint发行版。在这个系统中，只要运行一次git push并输入passphrase（下称密码）后，之后便不再需要输入了——即使ssh登录远程机器也是如此。 但用上Mac后发现，这里的ssh没有这个方便的特性——每次运行git push或ssh，都需要输入密码，颇不方便。 为了避免一遍又一遍地输入密码，每次登录">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="免除频繁输入ssh密码的烦恼">
 <meta property="og:url" content="https://liutos.github.io/2020/02/19/%E5%85%8D%E9%99%A4%E9%A2%91%E7%B9%81%E8%BE%93%E5%85%A5ssh%E5%AF%86%E7%A0%81%E7%9A%84%E7%83%A6%E6%81%BC/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="序言在入手MacBook Pro前，我的开发环境主要是一个运行在VirtualBox中的Mint发行版。在这个系统中，只要运行一次git push并输入passphrase（下称密码）后，之后便不再需要输入了——即使ssh登录远程机器也是如此。 但用上Mac后发现，这里的ssh没有这个方便的特性——每次运行git push或ssh，都需要输入密码，颇不方便。 为了避免一遍又一遍地输入密码，每次登录">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-02-19T03:42:19.000Z">
-<meta property="article:modified_time" content="2020-02-19T03:42:19.000Z">
+<meta property="article:published_time" content="2020-02-19T03:40:18.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="shell">
+<meta property="article:tag" content="macos">
+<meta property="article:tag" content="ssh">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://liutos.github.io/2020/02/19/%E5%85%8D%E9%99%A4%E9%A2%91%E7%B9%81%E8%BE%93%E5%85%A5ssh%E5%AF%86%E7%A0%81%E7%9A%84%E7%83%A6%E6%81%BC/">
@@ -70,7 +72,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>免除频繁输入ssh密码的烦恼 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +217,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          免除频繁输入ssh密码的烦恼
         </h1>
 
         <div class="post-meta">
@@ -225,8 +227,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-02-19 11:42:19" itemprop="dateCreated datePublished" datetime="2020-02-19T11:42:19+08:00">2020-02-19</time>
+              <time title="创建时间：2020-02-19 11:40:18" itemprop="dateCreated datePublished" datetime="2020-02-19T11:40:18+08:00">2020-02-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -253,7 +262,28 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>在入手MacBook Pro前，我的开发环境主要是一个运行在VirtualBox中的Mint发行版。在这个系统中，只要运行一次<code>git push</code>并输入passphrase（下称密码）后，之后便不再需要输入了——即使ssh登录远程机器也是如此。</p>
+<p>但用上Mac后发现，这里的ssh没有这个方便的特性——每次运行<code>git push</code>或<code>ssh</code>，都需要输入密码，颇不方便。</p>
+<p>为了避免一遍又一遍地输入密码，每次登录后，我都会运行<code>ssh-add</code>来一劳永逸地解决问题</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></tbody></table></figure>
+
+<p>自从升级到macOS Catalina后，如果在合盖睡眠前没有注销的话，下次开盖唤醒极有可能卡死在登录界面。无奈之下，我每天都需要注销并在第二天重新登录，以至于每天都得运行<code>ssh-add</code>并输入密码。久而久之，这也挺烦人的。</p>
+<h1 id="一次失败的优化"><a href="#一次失败的优化" class="headerlink" title="一次失败的优化"></a>一次失败的优化</h1><span id="more"></span>
+
+<p>为了省却每次都输入长达14个字符的密码的烦恼，我想到了<code>expect(1)</code>，这是一种可以交互式地控制其它命令的脚本语言。遗憾的是，经过一番折腾，仍然没办法成功让expect把密码输入给<code>ssh-add</code>，我只好继续寻找其它的办法。</p>
+<h1 id="一次成功的优化"><a href="#一次成功的优化" class="headerlink" title="一次成功的优化"></a>一次成功的优化</h1><p>某天在阅读<code>ssh-add</code>的<code>man</code>文档时，了解到原来<code>ssh-add</code>有一个<code>-K</code>选项，可以在添加身份到<code>ssh-agent</code>时，将密码存储到用户的keychain中。同时还有一个<code>-A</code>选项，可以让<code>ssh-add</code>使用来自于keychain的密码——这意味着可以不用一遍又一遍地输入！</p>
+<p>那么接下来要做的事情已经很清楚了。先手动运行一次带<code>-K</code>选项的<code>ssh-add</code></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-add -K ~/.ssh/id_rsa</span><br></pre></td></tr></tbody></table></figure>
+
+<p>并输入密码——这将会是在Mac上的最后一次输入。再用<code>-A</code>选项调用<code>ssh-add</code></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">ssh-add -A ~/.ssh/id_rsa</span><br></pre></td></tr></tbody></table></figure>
+
+<p>我把上面这段代码保存为文件<code>/Users/liutos/SourceCode/shell/auto_ssh_add/auto_ssh_add.sh</code>，它很快就会被用到。最后，写一个Launchd的配置文件<code>~/Library/LaunchAgents/com.liutos.tools.sshAdd.plist</code></p>
+<figure class="highlight xml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">plist</span> <span class="keyword">PUBLIC</span> <span class="string">"-//Apple//DTD PLIST 1.0//EN"</span> <span class="string">"http://www.apple.com/DTDs/PropertyList-1.0.dtd"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plist</span> <span class="attr">version</span>=<span class="string">"1.0"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dict</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>Label<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>com.liutos.tools.sshAdd<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>Program<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>/Users/liutos/SourceCode/shell/auto_ssh_add/auto_ssh_add.sh<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>RunAtLoad<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">true</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardOutPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>/tmp/auto_ssh_add.log<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">key</span>&gt;</span>StandardErrorPath<span class="tag">&lt;/<span class="name">key</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">string</span>&gt;</span>/tmp/auto_ssh_add.err<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dict</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plist</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>从现在起，再也不需要一遍又一遍地输入ssh的密码了——一次也不需要。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>要是有哪些读者朋友成功地用<code>expect</code>实现自动输入密码的，还望不吝赐教;)</p>
+
     </div>
 
     
@@ -291,7 +321,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/02/19/%E5%85%8D%E9%99%A4%E9%A2%91%E7%B9%81%E8%BE%93%E5%85%A5ssh%E5%AF%86%E7%A0%81%E7%9A%84%E7%83%A6%E6%81%BC/" title="">https://liutos.github.io/2020/02/19/免除频繁输入ssh密码的烦恼/</a>
+    <a href="https://liutos.github.io/2020/02/19/%E5%85%8D%E9%99%A4%E9%A2%91%E7%B9%81%E8%BE%93%E5%85%A5ssh%E5%AF%86%E7%A0%81%E7%9A%84%E7%83%A6%E6%81%BC/" title="免除频繁输入ssh密码的烦恼">https://liutos.github.io/2020/02/19/免除频繁输入ssh密码的烦恼/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +331,12 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/shell/" rel="tag"><i class="fa fa-tag"></i> shell</a>
+              <a href="/tags/macos/" rel="tag"><i class="fa fa-tag"></i> macos</a>
+              <a href="/tags/ssh/" rel="tag"><i class="fa fa-tag"></i> ssh</a>
+          </div>
 
         
 
@@ -308,12 +344,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/11/%E6%8F%90%E5%8D%87%E6%9D%A1%E7%9B%AE%E4%B8%BA%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AD%A9%E5%AD%90%E8%8A%82%E7%82%B9/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2020/02/12/%E9%87%8D%E6%9E%84vertical-let%EF%BC%8C%E6%94%AF%E6%8C%81%E8%A7%A3%E6%9E%84/" rel="prev" title="重构vertical-let，支持解构">
+      <i class="fa fa-chevron-left"></i> 重构vertical-let，支持解构
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/02/21/%E4%BC%98%E5%8C%96org-mode%E7%AE%A1%E7%90%86%E8%A7%82%E5%BD%B1%E8%BF%9B%E5%BA%A6/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2020/02/21/%E4%BC%98%E5%8C%96org-mode%E7%AE%A1%E7%90%86%E8%A7%82%E5%BD%B1%E8%BF%9B%E5%BA%A6/" rel="next" title="优化org-mode管理观影进度">
+      优化org-mode管理观影进度 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +430,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%BC%98%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">一次失败的优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E6%88%90%E5%8A%9F%E7%9A%84%E4%BC%98%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">一次成功的优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +448,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +641,7 @@
         config: {page: {
             url: "https://liutos.github.io/2020/02/19/%E5%85%8D%E9%99%A4%E9%A2%91%E7%B9%81%E8%BE%93%E5%85%A5ssh%E5%AF%86%E7%A0%81%E7%9A%84%E7%83%A6%E6%81%BC/",
             identifier: "2020/02/19/免除频繁输入ssh密码的烦恼/",
-            title: ""
+            title: "免除频繁输入ssh密码的烦恼"
           }
         }
       });

@@ -45,18 +45,23 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="cuckoo是一个我自己开发的类似待办事项的工具，运行在我本地的电脑上。它有如下两个接口：  传入一个UNIX Epoch时间戳创建提醒 传入一个标题以及提醒的ID来创建任务  这样一来，便能在设定的时刻调用alerter在屏幕右上角弹出提醒。 我喜欢用Emacs的org-mode来安排任务，但可惜的是，org-mode没有定点提醒的功能（如果有的话希望来个人打我的脸XD）。开发了cuckoo后，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="拿Emacs对接我的cuckoo">
 <meta property="og:url" content="https://liutos.github.io/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="cuckoo是一个我自己开发的类似待办事项的工具，运行在我本地的电脑上。它有如下两个接口：  传入一个UNIX Epoch时间戳创建提醒 传入一个标题以及提醒的ID来创建任务  这样一来，便能在设定的时刻调用alerter在屏幕右上角弹出提醒。 我喜欢用Emacs的org-mode来安排任务，但可惜的是，org-mode没有定点提醒的功能（如果有的话希望来个人打我的脸XD）。开发了cuckoo后，">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-02-05T07:19:57.000Z">
-<meta property="article:modified_time" content="2019-02-05T07:19:57.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/org-heading-components%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.png">
+<meta property="article:published_time" content="2019-02-05T07:17:08.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="org-mode">
+<meta property="article:tag" content="elisp">
+<meta property="article:tag" content="emacs">
+<meta property="article:tag" content="lisp">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/org-heading-components%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.png">
 
 <link rel="canonical" href="https://liutos.github.io/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/">
 
@@ -70,7 +75,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>拿Emacs对接我的cuckoo | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +220,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          拿Emacs对接我的cuckoo
         </h1>
 
         <div class="post-meta">
@@ -225,8 +230,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-02-05 15:19:57" itemprop="dateCreated datePublished" datetime="2019-02-05T15:19:57+08:00">2019-02-05</time>
+              <time title="创建时间：2019-02-05 15:17:08" itemprop="dateCreated datePublished" datetime="2019-02-05T15:17:08+08:00">2019-02-05</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -253,7 +265,40 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>cuckoo是一个我自己开发的类似待办事项的工具，运行在我本地的电脑上。它有如下两个接口：</p>
+<ol>
+<li>传入一个UNIX Epoch时间戳创建提醒</li>
+<li>传入一个标题以及提醒的ID来创建任务</li>
+</ol>
+<p>这样一来，便能在设定的时刻调用<a href="https://github.com/vjeantet/alerter"><code>alerter</code></a>在屏幕右上角弹出提醒。</p>
+<p>我喜欢用<a href="https://www.gnu.org/software/emacs/index.html">Emacs</a>的<a href="https://orgmode.org/">org-mode</a>来安排任务，但可惜的是，org-mode没有定点提醒的功能（如果有的话希望来个人打我的脸XD）。开发了cuckoo后，忽然灵机一动——何不给Emacs添砖加瓦，让它可以把org-mode中的条目内容（所谓的heading）当做任务丢给cuckoo，以此来实现定点提醒呢。感觉是个好主意，马上着手写这么些Elisp函数。</p>
+<p>PS：读者朋友们就不用执着于我的cuckoo究竟是怎样的接口定义了。</p>
+<p>为了实现所需要的功能，让我从结果反过来推导一番。首先，需要提炼一个TODO条目的标题和时间戳（用来创建提醒获取ID），才能调用cuckoo的接口。标题就是org-mode中一个TODO条目的heading text，在Emacs中用下面的代码获取</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">nth</span> <span class="number">4</span> (<span class="name">org-heading-components</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>org-headline-components</code>在光标位于TODO条目上的时候，会返回许多信息（参见下图）</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/org-heading-components%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.png"></p>
+<p>其中下标为4的component就是我所需要的内容。</p>
+<p>接着便是要获取一个提醒的ID。ID当然是从cuckoo的接口中返回的，这就需要能够解析JSON格式的文本。在Emacs中解析JSON序列化后的文本可以用<a href="https://github.com/ryancrum/json.el">json</a>这个库，示例代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">s</span> <span class="string">"{\"remind\":{\"create_at\":\"2019-01-11T14:53:59.000Z\",\"duration\":null,\"id\":41,\"restricted_hours\":null,\"timestamp\":1547216100,\"update_at\":\"2019-01-11T14:53:59.000Z\"}}"</span>))</span><br><span class="line">  (<span class="name">cdr</span> (<span class="name">assoc</span> 'id (<span class="name">cdr</span> (<span class="name">car</span> (<span class="name">json-read-from-string</span> s))))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>既然知道如何解析（同时还知道如何提取解析后的内容），那么接下来便是要能够获取上述示例代码中的<code>s</code>。<code>s</code>来自于HTTP响应的body，为了发出HTTP请求，可以用Emacs的<a href="https://github.com/tkf/emacs-request">request</a>库，示例代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">this-request</span> (<span class="name">request</span></span><br><span class="line">                      <span class="string">"http://localhost:7001/remind"</span></span><br><span class="line">                      <span class="symbol">:data</span> <span class="string">"{\"timestamp\":1547216100}"</span></span><br><span class="line">                      <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">                      <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">                      <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">                      <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">                                (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                                  (<span class="name">message</span> <span class="string">"data: %S"</span> data)))</span><br><span class="line">                      <span class="symbol">:sync</span> <span class="literal">t</span>))</span><br><span class="line">       (<span class="name">data</span> (<span class="name">request-response-data</span> this-request)))</span><br><span class="line">  data)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>此处的<code>:sync</code>参数花了我好长的时间才捣鼓出来——看了一下<code>request</code>函数的docstring后才发现，原来需要传递<code>:sync</code>为<code>t</code>才可以让<code>request</code>函数阻塞地调用，否则一调用<code>request</code>就立马返回了<code>nil</code>。</p>
+<p>现在需要的就是构造<code>:data</code>的值了，其中的关键是生成秒级的UNIX Epoch时间戳，这个时间戳可以通过TODO条目的<code>SCHEDULED</code>属性转换而来。比如，一个条目的<code>SCHEDULED</code>属性的值可能是<code>&lt;2019-01-11 Fri 22:15&gt;</code>，将这个字符串传递给<code>date-to-time</code>函数可以解析成代表着秒数的几个数字</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">date-to-time</span> <span class="string">"&lt;2019-01-11 Fri 22:15&gt;"</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>时间戳字符串要怎么拿到？答案是使用org-mode的<code>org-entry-get</code>函数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">org-entry-get</span> <span class="literal">nil</span> <span class="string">"SCHEDULED"</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>PS：需要先将光标定位在一个TODO条目上。</p>
+<p>至此，所有的原件都准备齐全了，最终我的Elisp代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> scheduled-to-time (<span class="name">scheduled</span>)</span><br><span class="line">  <span class="string">"将TODO条目的SCHEDULED属性转换为UNIX时间戳"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">lst</span> (<span class="name">date-to-time</span> scheduled)))</span><br><span class="line">    (<span class="name">+</span> (<span class="name">*</span> (<span class="name">car</span> lst) (<span class="name">expt</span> <span class="number">2</span> <span class="number">16</span>))</span><br><span class="line">       (<span class="name">cadr</span> lst))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> create-remind-in-cuckoo (<span class="name">timestamp</span>)</span><br><span class="line">  <span class="string">"往cuckoo中创建一个定时提醒并返回这个刚创建的提醒的ID"</span></span><br><span class="line">  (<span class="name">let</span> (<span class="name">remind-id</span>)</span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:7001/remind"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">json-encode-alist</span></span><br><span class="line">            (<span class="name">list</span> (<span class="name">cons</span> <span class="string">"timestamp"</span> timestamp)))</span><br><span class="line">     <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">     <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">     <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">message</span> <span class="string">"返回内容为：%S"</span> data)</span><br><span class="line">                 (<span class="name">let</span> ((<span class="name">remind</span> (<span class="name">json-read-from-string</span> data)))</span><br><span class="line">                   (<span class="name">setq</span> remind-id (<span class="name">cdr</span> (<span class="name">assoc</span> 'id (<span class="name">cdr</span> (<span class="name">car</span> remind))))))))</span><br><span class="line">     <span class="symbol">:sync</span> <span class="literal">t</span>)</span><br><span class="line">    remind-id))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> create-task-in-cuckoo ()</span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">brief</span>)</span><br><span class="line">        (<span class="name">remind-id</span>))</span><br><span class="line"></span><br><span class="line">    (<span class="name">setq</span> brief (<span class="name">nth</span> <span class="number">4</span> (<span class="name">org-heading-components</span>)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">let*</span> ((<span class="name">scheduled</span> (<span class="name">org-entry-get</span> <span class="literal">nil</span> <span class="string">"SCHEDULED"</span>))</span><br><span class="line">           (<span class="name">timestamp</span> (<span class="name">scheduled-to-time</span> scheduled)))</span><br><span class="line">      (<span class="name">setq</span> remind-id (<span class="name">create-remind-in-cuckoo</span> timestamp)))</span><br><span class="line">    </span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:7001/task"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">concat</span> <span class="string">"brief="</span> (<span class="name">url-encode-url</span> brief) <span class="string">"&amp;detail=&amp;remind_id="</span> (<span class="name">format</span> <span class="string">"%S"</span> remind-id))</span><br><span class="line">     <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">message</span> <span class="string">"任务创建完毕"</span>))))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在<code>create-task-in-cuckoo</code>中，之所以没有再传递<code>application/json</code>形式的数据给cuckoo，是因为不管我怎么测试，始终无法避免中文字符在传递到接口的时候变成了<code>\u</code>编码的形式，不得已而为之，只好把中文先做一遍url encoding，然后再通过表单的形式（<code>form/x-www-urlencode</code>）发送给接口了。</p>
+<p>全文完。</p>
+
     </div>
 
     
@@ -291,7 +336,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/" title="">https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/</a>
+    <a href="https://liutos.github.io/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/" title="拿Emacs对接我的cuckoo">https://liutos.github.io/2019/02/05/拿Emacs对接我的cuckoo/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +346,13 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/org-mode/" rel="tag"><i class="fa fa-tag"></i> org-mode</a>
+              <a href="/tags/elisp/" rel="tag"><i class="fa fa-tag"></i> elisp</a>
+              <a href="/tags/emacs/" rel="tag"><i class="fa fa-tag"></i> emacs</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+          </div>
 
         
 
@@ -308,12 +360,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/01/28/Project-Euler%E7%AC%AC69%E9%A2%98/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2019/01/28/Project-Euler%E7%AC%AC69%E9%A2%98/" rel="prev" title="Project-Euler第69题">
+      <i class="fa fa-chevron-left"></i> Project-Euler第69题
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/02/28/%E4%B8%8D%E5%90%8C%E5%B7%A5%E5%85%B7%E6%9F%A5%E7%9C%8B%E4%BB%A3%E7%A0%81%E5%88%86%E6%94%AFdiff%E7%9A%84%E5%B7%AE%E5%BC%82/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2019/02/28/%E4%B8%8D%E5%90%8C%E5%B7%A5%E5%85%B7%E6%9F%A5%E7%9C%8B%E4%BB%A3%E7%A0%81%E5%88%86%E6%94%AFdiff%E7%9A%84%E5%B7%AE%E5%BC%82/" rel="next" title="不同工具查看代码分支diff的差异">
+      不同工具查看代码分支diff的差异 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -411,6 +463,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +656,7 @@
         config: {page: {
             url: "https://liutos.github.io/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/",
             identifier: "2019/02/05/拿Emacs对接我的cuckoo/",
-            title: ""
+            title: "拿Emacs对接我的cuckoo"
           }
         }
       });

@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -46,19 +46,20 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="之前在新浪博客上已经发表了一篇同样主题的文章了，不过心血来潮想重写一份发到这边的博客上来，顺便看看自己能不能够在自己重写这篇的东西的过程中再发掘出一些有价值的东西，充实一下内容。 什么是CPS首先双手奉上来自维基百科的Continuation-passing-style条目。CPS一般译作续延传递风格，这里最不好理解的词语莫过于续延了。维基百科上关于续延也有详细的介绍，不过我也可以简单地介绍一下。">
-<meta name="keywords" content="common lisp,cps">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CommonLisp函数调用的CPS变换">
-<meta property="og:url" content="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/index.html">
+<meta property="og:url" content="https://liutos.github.io/2012/09/08/CommonLisp%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84CPS%E5%8F%98%E6%8D%A2/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
 <meta property="og:description" content="之前在新浪博客上已经发表了一篇同样主题的文章了，不过心血来潮想重写一份发到这边的博客上来，顺便看看自己能不能够在自己重写这篇的东西的过程中再发掘出一些有价值的东西，充实一下内容。 什么是CPS首先双手奉上来自维基百科的Continuation-passing-style条目。CPS一般译作续延传递风格，这里最不好理解的词语莫过于续延了。维基百科上关于续延也有详细的介绍，不过我也可以简单地介绍一下。">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-02T13:28:58.000Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2012-09-08T05:44:38.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="common lisp">
+<meta property="article:tag" content="cps">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CommonLisp函数调用的CPS变换">
-<meta name="twitter:description" content="之前在新浪博客上已经发表了一篇同样主题的文章了，不过心血来潮想重写一份发到这边的博客上来，顺便看看自己能不能够在自己重写这篇的东西的过程中再发掘出一些有价值的东西，充实一下内容。 什么是CPS首先双手奉上来自维基百科的Continuation-passing-style条目。CPS一般译作续延传递风格，这里最不好理解的词语莫过于续延了。维基百科上关于续延也有详细的介绍，不过我也可以简单地介绍一下。">
 
-<link rel="canonical" href="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/">
+<link rel="canonical" href="https://liutos.github.io/2012/09/08/CommonLisp%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84CPS%E5%8F%98%E6%8D%A2/">
 
 
 <script id="page-configurations">
@@ -110,6 +111,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -201,10 +203,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2012/09/08/CommonLisp%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84CPS%E5%8F%98%E6%8D%A2/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -231,7 +233,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-12-02 21:28:58" itemprop="dateModified" datetime="2018-12-02T21:28:58+08:00">2018-12-02</time>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
               </span>
 
           
@@ -243,7 +245,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2012/09/08/CommonLisp函数调用的CPS变换/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2012/09/08/CommonLisp%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84CPS%E5%8F%98%E6%8D%A2/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2012/09/08/CommonLisp函数调用的CPS变换/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -260,41 +262,50 @@
 
       
         <p>之前在新浪博客上已经发表了一篇同样主题的文章了，不过心血来潮想重写一份发到这边的博客上来，顺便看看自己能不能够在自己重写这篇的东西的过程中再发掘出一些有价值的东西，充实一下内容。</p>
-<h2 id="什么是CPS"><a href="#什么是CPS" class="headerlink" title="什么是CPS"></a>什么是CPS</h2><p>首先双手奉上来自<a href="http://en.wikipedia.org/wiki/Continuation-passing_style" target="_blank" rel="noopener">维基百科的Continuation-passing-style条目</a>。CPS一般译作<em>续延传递风格</em>，这里最不好理解的词语莫过于<em>续延</em>了。维基百科上关于<a href="http://en.wikipedia.org/wiki/Continuation" target="_blank" rel="noopener">续延</a>也有详细的介绍，不过我也可以简单地介绍一下。<em>续延</em>是一种表示接下来所要进行的计算的对象，也就是你在计算了这一步之后需要继续做的事情的一个描述。举个例子，对于Common Lisp代码(+ (+ 1 2) 3)而言，最左边的参数首先会被计算，也就是Lisp实现先计算的是<em>(+ 1 2)</em>这个表达式，于是可以得到返回值为3。那么计算完了最左边的参数之后，Lisp实现接下来要做什么呢？显然，接下来会计算作为直接值的3得到3本身，然后再将第一次计算得到的3和第二次求值得到的3进行相加。而上面的这两个步骤，其实可以用Lisp中的对象进行描述，只需要用一个匿名函数就可以了，写成</p>
+<h2 id="什么是CPS"><a href="#什么是CPS" class="headerlink" title="什么是CPS"></a>什么是CPS</h2><p>首先双手奉上来自<a href="http://en.wikipedia.org/wiki/Continuation-passing_style">维基百科的Continuation-passing-style条目</a>。CPS一般译作<em>续延传递风格</em>，这里最不好理解的词语莫过于<em>续延</em>了。维基百科上关于<a href="http://en.wikipedia.org/wiki/Continuation">续延</a>也有详细的介绍，不过我也可以简单地介绍一下。<em>续延</em>是一种表示接下来所要进行的计算的对象，也就是你在计算了这一步之后需要继续做的事情的一个描述。举个例子，对于Common Lisp代码(+ (+ 1 2) 3)而言，最左边的参数首先会被计算，也就是Lisp实现先计算的是*(+ 1 2)*这个表达式，于是可以得到返回值为3。那么计算完了最左边的参数之后，Lisp实现接下来要做什么呢？显然，接下来会计算作为直接值的3得到3本身，然后再将第一次计算得到的3和第二次求值得到的3进行相加。而上面的这两个步骤，其实可以用Lisp中的对象进行描述，只需要用一个匿名函数就可以了，写成</p>
 <pre><code>(lambda (v) (+ v 3))。
-</code></pre><p>那么我们就可以思考，在这一个匿名函数被计算之后，再一次的<em>接下来的计算</em>又是什么呢？对于在REPL中输入的代码而言，Lisp实现会把表达式最终计算得到的返回值打印在终端上，所以我们可以认为上面的匿名函数，也就是一个计算过程，所对应的续延是</p>
+</code></pre>
+<p>那么我们就可以思考，在这一个匿名函数被计算之后，再一次的<em>接下来的计算</em>又是什么呢？对于在REPL中输入的代码而言，Lisp实现会把表达式最终计算得到的返回值打印在终端上，所以我们可以认为上面的匿名函数，也就是一个计算过程，所对应的续延是</p>
 <pre><code>(lambda (u) (print u))。
-</code></pre><p>那么原来的表达式<em>(+ (+ 1 2) 3)</em>就可以写成下面这样的风格的代码：</p>
+</code></pre>
+<p>那么原来的表达式*(+ (+ 1 2) 3)*就可以写成下面这样的风格的代码：</p>
 <pre><code>(+&amp; 1 2 (lambda (v)
           (+&amp; v 3 (lambda (u)
                     (print u)))))
-</code></pre><p>你或许会感到奇怪：这里的<em>+&amp;</em>是个什么东西啊？+&amp;是一个和加法类似的函数，只是它除了会把前两个参数相加之外，还会将这个参数传递给作为第三个参数传入的匿名函数，并进行函数调用。按照维基百科上的说明，CPS代码有两个规范：</p>
+</code></pre>
+<p>你或许会感到奇怪：这里的*+&amp;*是个什么东西啊？+&amp;是一个和加法类似的函数，只是它除了会把前两个参数相加之外，还会将这个参数传递给作为第三个参数传入的匿名函数，并进行函数调用。按照维基百科上的说明，CPS代码有两个规范：</p>
 <ol>
 <li>每一个函数都要接受一个续延作为额外的参数；</li>
 <li>每一个函数调用中的参数都只能是一个变量或者λ表达式。</li>
 </ol>
-<p>可以说，+&amp;这样的函数是为了将代码变换成CPS才创造出来的。当然了，除了+函数需要进行变换之外，其它的普通函数（regular function）也是需要进行变换的。例如对代码<em>(\</em> (+ 1 2) 3)<em>进行变换的话，就需要为\</em>函数提供相应的变体，结果应该是：</p>
+<p>可以说，+&amp;这样的函数是为了将代码变换成CPS才创造出来的。当然了，除了+函数需要进行变换之外，其它的普通函数（regular function）也是需要进行变换的。例如对代码*(* (+ 1 2) 3)*进行变换的话，就需要为*函数提供相应的变体，结果应该是：</p>
 <pre><code>(+&amp; 1 2 (lambda (v)
           (*&amp; v 3 (lambda (u)
                     (print u)))))。
-</code></pre><p>上面的代码中有个可以稍微琢磨的地方：为什么在两个不同的匿名函数的参数列表中偏偏要使用不同的参数名呢？事实上，在上面的两个变换出来的结果中，完全可以统一使用v或者u来作为参数名，那是因为参数v不需要在第二层嵌套的匿名函数中被使用。可是有时候一开始就进行求值的表达式不一定是马上就被使用的，例如代码<em>(- (+ 1 2) (\</em> 3 4))*的变换结果就是</p>
+</code></pre>
+<p>上面的代码中有个可以稍微琢磨的地方：为什么在两个不同的匿名函数的参数列表中偏偏要使用不同的参数名呢？事实上，在上面的两个变换出来的结果中，完全可以统一使用v或者u来作为参数名，那是因为参数v不需要在第二层嵌套的匿名函数中被使用。可是有时候一开始就进行求值的表达式不一定是马上就被使用的，例如代码*(- (+ 1 2) (* 3 4))*的变换结果就是</p>
 <pre><code>(+&amp; 1 2 (lambda (v)
           (*&amp; 3 4 (lambda (u)
                     (-&amp; v u)))))。
-</code></pre><p>可以说，当参数列表表达式中不止一个<em>复杂</em>表达式时，就需要至少两个不重名的参数了。讲了这么多手动变换的事情，现在可以讨论最重要的问题了：</p>
-<h2 id="如何对Lisp代码进行CPS变换"><a href="#如何对Lisp代码进行CPS变换" class="headerlink" title="如何对Lisp代码进行CPS变换"></a>如何对Lisp代码进行CPS变换</h2><p>如果我们可以对一类简单的代码进行CPS变换了，那么如何在这个基础上对复杂的代码进行CPS变换呢？例如我们有一段简单的代码<em>(op3 (op2 (op1 a b) c) d)</em>，并且我们已经有了一个通用的功能F可以对其中的嵌套的表达式<em>(op2 (op1 a b) c)</em>进行变换，那么要如何将其和外层的对op3函数的调用结合在一起呢？显然，我们可以先把<em>(op2 (op1 a b) c)</em>换掉，换成一个普通的符号v，以表示一个变量。那么接下来我们的处理对象就是一个稍微简单的表达式<em>(op3 v c)</em>了，对于这种参数列表均由变量所构成的表达式，要将其变换成CPS代码只需要修改其函数为<em>加&amp;的形式</em>，并且添上一个额外的参数——续延就可以了。至于这个续延应该是由调用者提供，而又可以使用默认的<em>(lambda (XXX) (print XXX))</em>的。所以，上面的代码最终会变成</p>
+</code></pre>
+<p>可以说，当参数列表表达式中不止一个<em>复杂</em>表达式时，就需要至少两个不重名的参数了。讲了这么多手动变换的事情，现在可以讨论最重要的问题了：</p>
+<h2 id="如何对Lisp代码进行CPS变换"><a href="#如何对Lisp代码进行CPS变换" class="headerlink" title="如何对Lisp代码进行CPS变换"></a>如何对Lisp代码进行CPS变换</h2><p>如果我们可以对一类简单的代码进行CPS变换了，那么如何在这个基础上对复杂的代码进行CPS变换呢？例如我们有一段简单的代码*(op3 (op2 (op1 a b) c) d)<em>，并且我们已经有了一个通用的功能F可以对其中的嵌套的表达式</em>(op2 (op1 a b) c)<em>进行变换，那么要如何将其和外层的对op3函数的调用结合在一起呢？显然，我们可以先把</em>(op2 (op1 a b) c)<em>换掉，换成一个普通的符号v，以表示一个变量。那么接下来我们的处理对象就是一个稍微简单的表达式</em>(op3 v c)<em>了，对于这种参数列表均由变量所构成的表达式，要将其变换成CPS代码只需要修改其函数为</em>加&amp;的形式<em>，并且添上一个额外的参数——续延就可以了。至于这个续延应该是由调用者提供，而又可以使用默认的</em>(lambda (XXX) (print XXX))*的。所以，上面的代码最终会变成</p>
 <pre><code>(经过F处理的代码 (lambda (v)
                 (op3&amp; v c (lambda (XXX)
                             (print XXX)))))。
-</code></pre><p>对内层的表达式应用F处理完之后还要再计算外层表达式的续延，而计算续延正是函数F所做的事情，所以实际上对一个复杂的表达式做CPS变换，是一个递归的过程。用两段代码进行变换可以有更直观的体验：假设我们有一个正确实现的变换函数F，它接受一个代码和一个续延，并产生出对代码进行CPS变换所得到的结果。那么如果应用在代码<em>(+ (+ 1 1) 3)</em>上，就是</p>
+</code></pre>
+<p>对内层的表达式应用F处理完之后还要再计算外层表达式的续延，而计算续延正是函数F所做的事情，所以实际上对一个复杂的表达式做CPS变换，是一个递归的过程。用两段代码进行变换可以有更直观的体验：假设我们有一个正确实现的变换函数F，它接受一个代码和一个续延，并产生出对代码进行CPS变换所得到的结果。那么如果应用在代码*(+ (+ 1 1) 3)*上，就是</p>
 <pre><code>(F (+ (+ 1 1) 3) (lambda (v) (print v)))。
-</code></pre><p>显然，这段代码应该和下面的这段代码是等价的：</p>
+</code></pre>
+<p>显然，这段代码应该和下面的这段代码是等价的：</p>
 <pre><code>(F (+ 1 1) (lambda (u)
              (+&amp; u 3 (lambda (v)
                        (print v)))))。
-</code></pre><p>并且上面这段代码的续延参数部分，和下面的这段代码是等价的：</p>
+</code></pre>
+<p>并且上面这段代码的续延参数部分，和下面的这段代码是等价的：</p>
 <pre><code>(F (+ u 3) (lambda (v) (print v)))。
-</code></pre><p>是不是就是说，对于一个复杂的表达式expr0，如果想要在提供一个额外续延cont0的情况下，将其正确变换成CPS形式，那么可以先提取出它的第一个被求值的子表达式expr1，将原来子表达式出现的地方替换为一个变量，那么原本的表达式就变成了expr1对应的续延cont1。此时先将cont1和cont0传入函数F进行CPS变换，得到的结果cont将会成为和expr1一起传入函数F进行变换，并最终得到对expr0和cont0进行变换的正确结果呢？显然这是对的，因为cont0紧随expr0求值，而expr0可以拆分为两部分：expr1以及紧随其求值的cont1。那么显然cont0紧随cont1求值，所以cont0是cont1的续延，同样需要进行CPS变换，然后得到新的代码作为expr1的续延继续进行变换，那么最终就会得到代码，它反映的求值顺序正是expr1 -&gt; cont1 -&gt; expr0。</p>
+</code></pre>
+<p>是不是就是说，对于一个复杂的表达式expr0，如果想要在提供一个额外续延cont0的情况下，将其正确变换成CPS形式，那么可以先提取出它的第一个被求值的子表达式expr1，将原来子表达式出现的地方替换为一个变量，那么原本的表达式就变成了expr1对应的续延cont1。此时先将cont1和cont0传入函数F进行CPS变换，得到的结果cont将会成为和expr1一起传入函数F进行变换，并最终得到对expr0和cont0进行变换的正确结果呢？显然这是对的，因为cont0紧随expr0求值，而expr0可以拆分为两部分：expr1以及紧随其求值的cont1。那么显然cont0紧随cont1求值，所以cont0是cont1的续延，同样需要进行CPS变换，然后得到新的代码作为expr1的续延继续进行变换，那么最终就会得到代码，它反映的求值顺序正是expr1 -&gt; cont1 -&gt; expr0。</p>
 <p>那么重点就在于怎么把原本的expr0给拆分成expr1和cont1，以及具体结合代码和续延的技术细节了。假设实现拆分功能的函数叫做split-funcall，那么它需要在什么情况下做什么事情呢？一般而言，split-funcall处理的是有复杂的子表达式的代码，那么它需要能够在整个表达式expr0中找出尽量左的一个复杂子表达式，也就是expr1。如果找到这样的expr1了，那么就需要同时找出对应的续延cont1并将两者都返回；如果没有这样的expr1，那么直接返回逻辑假和整个expr0就可以了。说到需要返回多个值的情况，正是Common Lisp的values函数派上大用场的时候了。</p>
 <p>对于含有复杂子表达式的情况，split-funcall函数会返回提取到的子表达式和对应的续延，那么这里的续延应该用什么样的形式来表示呢？为了方便使用从split-funcall内部所gensym出来的符号，所以直接返回一个经过构造的lambda表达式就可以了，但是在递归调用函数F时，不能直接对其进行变换处理，因为lambda表达式不是一个会对参数求值的操作符，所以真正需要变换的是lambda表达式的函数体。因此必须先拆开lambda表达式，对其函数体进行变换并再次构造成lambda表达式，以传递给函数F使用。</p>
 <p>最后，贴一下自己放在Gist上的代码:<script src="https://gist.github.com/3148312.js"> </script></p>
@@ -336,7 +347,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/" title="CommonLisp函数调用的CPS变换">https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/</a>
+    <a href="https://liutos.github.io/2012/09/08/CommonLisp%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84CPS%E5%8F%98%E6%8D%A2/" title="CommonLisp函数调用的CPS变换">https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -358,11 +369,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2012/08/31/连分数与ProjectEuler的第66题/" rel="prev" title="连分数与ProjectEuler的第66题">
+    <a href="/2012/08/31/%E8%BF%9E%E5%88%86%E6%95%B0%E4%B8%8EProjectEuler%E7%9A%84%E7%AC%AC66%E9%A2%98/" rel="prev" title="连分数与ProjectEuler的第66题">
       <i class="fa fa-chevron-left"></i> 连分数与ProjectEuler的第66题
     </a></div>
       <div class="post-nav-item">
-    <a href="/2012/09/16/ProjectEuler第18题/" rel="next" title="ProjectEuler第18题">
+    <a href="/2012/09/16/ProjectEuler%E7%AC%AC18%E9%A2%98/" rel="next" title="ProjectEuler第18题">
       ProjectEuler第18题 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -444,13 +455,13 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是CPS"><span class="nav-number">1.</span> <span class="nav-text">什么是CPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何对Lisp代码进行CPS变换"><span class="nav-number">2.</span> <span class="nav-text">如何对Lisp代码进行CPS变换</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFCPS"><span class="nav-number">1.</span> <span class="nav-text">什么是CPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AF%B9Lisp%E4%BB%A3%E7%A0%81%E8%BF%9B%E8%A1%8CCPS%E5%8F%98%E6%8D%A2"><span class="nav-number">2.</span> <span class="nav-text">如何对Lisp代码进行CPS变换</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -459,7 +470,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -472,7 +483,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">120</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -497,19 +508,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -558,16 +569,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -593,6 +604,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -621,6 +640,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -638,7 +664,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2012/09/08/CommonLisp函数调用的CPS变换/",
+            url: "https://liutos.github.io/2012/09/08/CommonLisp%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%9A%84CPS%E5%8F%98%E6%8D%A2/",
             identifier: "2012/09/08/CommonLisp函数调用的CPS变换/",
             title: "CommonLisp函数调用的CPS变换"
           }
@@ -661,7 +687,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: 'f97ceab6457be3e45e361d4b4ce23d07',
+      id: '2012acabc1c8fa6bd761eaad6342b7f9',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -669,4 +695,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

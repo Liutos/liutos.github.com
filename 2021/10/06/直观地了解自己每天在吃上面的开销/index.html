@@ -45,18 +45,23 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="众所周知，我用Emacs的ledger-mode来记账（参见以前的文章《程序员的记账工具——ledger与ledger-mode》）。作为一个出色的命令行报表工具，ledger的命令balance和register足以涵盖大部分的使用场景：  balance可以生成所有帐号的余额的报表，用于每天与各个账户中的真实余额进行比较； register可以生成给定帐号的交易明细，用于在余额不一致时与真实账">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="直观地了解自己每天在吃上面的开销">
 <meta property="og:url" content="https://liutos.github.io/2021/10/06/%E7%9B%B4%E8%A7%82%E5%9C%B0%E4%BA%86%E8%A7%A3%E8%87%AA%E5%B7%B1%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%90%83%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%BC%80%E9%94%80/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="众所周知，我用Emacs的ledger-mode来记账（参见以前的文章《程序员的记账工具——ledger与ledger-mode》）。作为一个出色的命令行报表工具，ledger的命令balance和register足以涵盖大部分的使用场景：  balance可以生成所有帐号的余额的报表，用于每天与各个账户中的真实余额进行比较； register可以生成给定帐号的交易明细，用于在余额不一致时与真实账">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/gnuplot%E7%BB%98%E5%9B%BE%E6%95%88%E6%9E%9C%E5%88%9D%E8%AF%86.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz_bak.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz2years.png">
 <meta property="article:published_time" content="2021-10-06T14:45:06.000Z">
-<meta property="article:modified_time" content="2021-10-06T14:45:06.000Z">
+<meta property="article:modified_time" content="2021-10-06T14:45:12.000Z">
 <meta property="article:author" content="Liutos">
 <meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/gnuplot%E7%BB%98%E5%9B%BE%E6%95%88%E6%9E%9C%E5%88%9D%E8%AF%86.jpg">
 
 <link rel="canonical" href="https://liutos.github.io/2021/10/06/%E7%9B%B4%E8%A7%82%E5%9C%B0%E4%BA%86%E8%A7%A3%E8%87%AA%E5%B7%B1%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%90%83%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%BC%80%E9%94%80/">
 
@@ -70,7 +75,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>直观地了解自己每天在吃上面的开销 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +220,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          直观地了解自己每天在吃上面的开销
         </h1>
 
         <div class="post-meta">
@@ -224,8 +229,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-10-06 22:45:06" itemprop="dateCreated datePublished" datetime="2021-10-06T22:45:06+08:00">2021-10-06</time>
+              <time title="创建时间：2021-10-06 22:45:06 / 修改时间：22:45:12" itemprop="dateCreated datePublished" datetime="2021-10-06T22:45:06+08:00">2021-10-06</time>
             </span>
 
           
@@ -253,7 +259,78 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p><del>众所周知，</del>我用<code>Emacs</code>的<code>ledger-mode</code>来记账（参见以前的文章<a href="https://liutos.github.io/2020/03/19/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%AE%B0%E8%B4%A6%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94ledger%E4%B8%8Eledger-mode/">《程序员的记账工具——ledger与ledger-mode》</a>）。作为一个出色的命令行报表工具，<code>ledger</code>的命令<code>balance</code>和<code>register</code>足以涵盖大部分的使用场景：</p>
+<ul>
+<li><code>balance</code>可以生成所有帐号的余额的报表，用于每天与各个账户中的真实余额进行比较；</li>
+<li><code>register</code>可以生成给定帐号的交易明细，用于在余额不一致时与真实账户的流水一条条核对；</li>
+</ul>
+<p>美中不足的是，<code>ledger</code>的报表不够直观，因为它们是冷冰冰的文字信息，而不是振奋人心的统计图形。好在，正如<code>ledger</code>不存储数据，而只是一份份<code>.ledger</code>文件中的交易记录的搬运工一样，<code>gnuplot</code>也是这样的工具——它不存储数据，它只负责将存储在文本文件的数据以图形的形态呈现出来。</p>
+<h1 id="如何运用gnuplot"><a href="#如何运用gnuplot" class="headerlink" title="如何运用gnuplot"></a>如何运用<code>gnuplot</code></h1><p><code>gnuplot</code>是很容易使用的。以最简单的情况为例，首先将如下内容保存到文件<code>/tmp/data.csv</code>中</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-1 -1</span><br><span class="line">0 0</span><br><span class="line">1 1</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后在命令行中启动<code>gnuplot</code>，进入它的 REPL 中，并执行如下命令</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plot "/tmp/data.csv"</span><br></pre></td></tr></tbody></table></figure>
+
+<p>即可得到这三组数据的展示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/gnuplot%E7%BB%98%E5%9B%BE%E6%95%88%E6%9E%9C%E5%88%9D%E8%AF%86.jpg"></p>
+<p>三组数据分别是坐标为<code>(-1, -1)</code>、<code>(0, 0)</code>，以及<code>(1, 1)</code>的点。</p>
+<p>因此要让<code>gnuplot</code>绘制开销的图形，首先就是从账本中提取出要绘制的数据，再决定如何用<code>gnuplot</code>绘制即可。</p>
+<h2 id="用ledger提取开销记录"><a href="#用ledger提取开销记录" class="headerlink" title="用ledger提取开销记录"></a>用<code>ledger</code>提取开销记录</h2><p>尽管<code>ledger</code>的子命令<code>register</code>可以打印出给定帐号的交易明细，但此处更适合使用<code>csv</code>子命令。例如，下列的命令可以将最早的10条、吃的方面的支出记录，都以 CSV 格式打印出来</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food'</span><br><span class="line">"2019/09/10","","32034acc","efe2a5b9:c720f278:58a3cd91:0dc07b7b","A","20","",""</span><br><span class="line">"2019/09/11","","a61b6164","5d45e249:fe84ca06:778d1855:daf61ede","A","5","",""</span><br><span class="line">"2019/09/11","","674ec19f","5d018df1:ebf020db:29d43aba:d0c84127","A","15","",""</span><br><span class="line">"2019/09/11","","e55ff018","370ca545:7d3aa2d0:86f5f330:1379261b","A","20","",""</span><br><span class="line">"2019/09/12","","f6aa675c","08315491:4c8f1ee7:5eeaddf3:f879914e","A","10.5","",""</span><br><span class="line">"2019/09/12","","139b790f","a137e4ee:9bc8ee49:7d7ccd8b:472d6007","A","23.9","",""</span><br><span class="line">"2019/09/12","","b24b716d","de348971:5364622c:b2144d94:01e74ff3","A","148","",""</span><br><span class="line">"2019/09/13","","e7c066fa","b418a3b2:a3e21e87:a32ee8ac:8716a847","A","3","",""</span><br><span class="line">"2019/09/13","","9eb044fe","702a13e9:3de7f1bd:9b20a278:1d20668d","A","24","",""</span><br><span class="line">"2019/09/13","","ba301270","d2b7eeb3:381f9473:54f86a33:391a8662","A","36","",""</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>--anon</code>选项可以将交易明细中的敏感信息（如收款方、帐号）等匿名处理。</p>
+<p>尽管<code>ledger</code>打印出的内容有很多列，但只有第一列的日期，以及第六列的金额是我所需要的。同时，由于一天中可能会有多次吃的方面的开销，因此同一天的交易也会有多笔，在绘图之前，需要将同一天之中的开销累加起来，只留下一个数字。这两个需求，都可以用<code>csvsql</code>来满足。</p>
+<h2 id="用csvsql聚合数据"><a href="#用csvsql聚合数据" class="headerlink" title="用csvsql聚合数据"></a>用<code>csvsql</code>聚合数据</h2><p>以前文中的10条记录为例，用如下的命令可以将它们按天聚合在一起</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT `a`, SUM(`f`) FROM `expense` GROUP BY `a` ORDER BY `a` ASC' --tables 'expense'</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中：</p>
+<ul>
+<li>选项<code>-H</code>让<code>csvsql</code>知道从管道中输入的数据没有标题行。后续处理时，<code>csvsql</code>会默认使用<code>a</code>、<code>b</code>、<code>c</code>等作为列名；</li>
+<li>选项<code>--query</code>用于提交要执行的 SQL 语句；</li>
+<li>选项<code>--tables</code>用于指定表的名字，这样在<code>--query</code>中才能用 SQL 对其进行处理；</li>
+</ul>
+<p>结果如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT `a`, SUM(`f`) FROM `expense` GROUP BY `a` ORDER BY `a` ASC' --tables 'expense'</span><br><span class="line">a,SUM(`f`)</span><br><span class="line">2019-09-10,20</span><br><span class="line">2019-09-11,40</span><br><span class="line">2019-09-12,182.4</span><br><span class="line">2019-09-13,63</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="用gnuplot读取数据并绘图"><a href="#用gnuplot读取数据并绘图" class="headerlink" title="用gnuplot读取数据并绘图"></a>用<code>gnuplot</code>读取数据并绘图</h2><p>用重定向将<code>csvsql</code>的输出结果保存到文件<code>/tmp/data.csv</code>中，然后就可以用<code>gnuplot</code>将它们画出来</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger --anon --head 10 -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT `a`, SUM(`f`) FROM `expense` GROUP BY `a` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/data.csv</span><br><span class="line">➜  Accounting cat /tmp/plot_expense.gplot</span><br><span class="line">set format x '%y-%m-%d'</span><br><span class="line">set style data boxes</span><br><span class="line">set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</span><br><span class="line">set title '吃的开销'</span><br><span class="line">set output '/tmp/xyz.png'</span><br><span class="line">set timefmt '%Y-%m-%d'</span><br><span class="line">set xdata time</span><br><span class="line">set xlabel '日期'</span><br><span class="line">set xrange ['2019-09-10':'2019-09-13']</span><br><span class="line">set ylabel '金额(¥)'</span><br><span class="line">set yrange [0:200]</span><br><span class="line">set datafile separator comma</span><br><span class="line">plot '/tmp/data.csv' using 1:2</span><br><span class="line">➜  Accounting gnuplot /tmp/plot_expense.gplot</span><br></pre></td></tr></tbody></table></figure>
+
+<p>生成的图片文件<code>/tmp/xyz.png</code>如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz_bak.png"></p>
+<p>在脚本文件<code>/tmp/plot_expense.gplot</code>中用到的命令都可以通过<code>gnuplot</code>的<a href="http://www.gnuplot.info/docs_5.4/Gnuplot_5_4.pdf">在线手册</a>查阅到：</p>
+<ul>
+<li><code>set format</code>命令用于设置坐标轴的刻度的格式。<code>set format x "%y-%m-%d"</code>意味着设置 X 轴的刻度为形如<code>19-09-10</code>的格式；</li>
+<li><code>set style data</code>命令设置数据的绘制风格。<code>set style data box</code>表示采用空心柱状图；</li>
+<li><code>set terminal</code>命令用于告诉<code>gnuplot</code>该生成什么样的输出。<code>set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</code>表示输出结果为 PNG 格式的图片，并且采用给定的字体；</li>
+<li><code>set title</code>命令控制输出结果顶部中间位置的标题文案；</li>
+<li><code>set output</code>命令用于将原本输出到屏幕上的内容重定向到文件中；</li>
+<li><code>set timefmt</code>命令用于指定输入的日期时间数据的格式。<code>set timefmt '%Y-%m-%d'</code>意味着输入的日期时间数据的为形如<code>2019-09-10</code>的格式；</li>
+<li><code>set xdata</code>命令控制<code>gnuplot</code>如何理解属于 X 轴的数据。<code>set xdata time</code>表示 X 轴上的均为时间型数据；</li>
+<li><code>set xlabel</code>命令控制 X 轴的含义的文案。<code>set ylabel</code>与其类似，只是作用在 Y 轴上；</li>
+<li><code>set xrange</code>命令控制<code>gnuplot</code>所绘制的图形中 X 轴上的展示范围；</li>
+<li><code>set datafile separator</code>命令控制<code>gnuplot</code>读取数据文件时各列间的分隔符，<code>comma</code>表示分隔符为逗号。</li>
+</ul>
+<h2 id="想要按周统计怎么办"><a href="#想要按周统计怎么办" class="headerlink" title="想要按周统计怎么办"></a>想要按周统计怎么办</h2><p>假设我要查看的是2021年每一周在吃的方面的总开支，那么需要在<code>csvsql</code>中将数据按所处的是第几周进行聚合</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger -b '2021-01-01' -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT strftime("%W", `a`) AS `week`, SUM(`f`) FROM `expense` GROUP BY `week` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/expense_dow.csv</span><br><span class="line">➜  Accounting head /tmp/expense_dow.csv</span><br><span class="line">00,633.6</span><br><span class="line">01,437.3</span><br><span class="line">02,337.5</span><br><span class="line">03,428.4</span><br><span class="line">04,191.5</span><br><span class="line">05,330.4</span><br><span class="line">06,154.6</span><br><span class="line">07,621.4</span><br><span class="line">08,485.6</span><br><span class="line">09,375.73</span><br></pre></td></tr></tbody></table></figure>
+
+<p>同时也需要调整<code>gnuplot</code>的脚本</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</span><br><span class="line">set title '吃的开销'</span><br><span class="line">set output '/tmp/xyz2.png'</span><br><span class="line">set xlabel '第几周'</span><br><span class="line">set xrange [0:54]</span><br><span class="line">set ylabel '金额(¥)'</span><br><span class="line">set yrange [0:1000]</span><br><span class="line">set datafile separator comma</span><br><span class="line">plot '/tmp/expense_dow.csv' using 1:2 with lines</span><br></pre></td></tr></tbody></table></figure>
+
+<p>结果如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz2.png"></p>
+<h2 id="想要同时查看两年的图形怎么办"><a href="#想要同时查看两年的图形怎么办" class="headerlink" title="想要同时查看两年的图形怎么办"></a>想要同时查看两年的图形怎么办</h2><p><code>gnuplot</code>支持同时绘制多条曲线，只要使用数据文件中不同的列作为纵坐标即可。假设我要对比的是2020年和2021年，那么先分别统计两年的开支到不同的文件中</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting ledger -b '2020-01-01' -e '2021-01-01' -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT strftime("%W", `a`) AS `week`, SUM(`f`) FROM `expense` GROUP BY `week` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/expense_2020.csv</span><br><span class="line">➜  Accounting ledger -b '2021-01-01' -f 2021.ledger csv 'Expense:Food' | csvsql -H --query 'SELECT strftime("%W", `a`) AS `week`, SUM(`f`) FROM `expense` GROUP BY `week` ORDER BY `a` ASC' --tables 'expense' | tail -n '+2' &gt; /tmp/expense_2021.csv</span><br></pre></td></tr></tbody></table></figure>
+
+<p>再将处于同一周的数据合并在一起</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  Accounting csvjoin -H -c a /tmp/expense_2020.csv /tmp/expense_2021.csv | tail -n '+2' &gt; /tmp/expense_2years.csv</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后，再让<code>gnuplot</code>一次性绘制两条折线</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">set terminal png font '/System/Library/Fonts/Hiragino Sans GB.ttc'</span><br><span class="line">set title '吃的开销'</span><br><span class="line">set output '/tmp/xyz2years.png'</span><br><span class="line">set xlabel '第几周'</span><br><span class="line">set xrange [0:54]</span><br><span class="line">set ylabel '金额(¥)'</span><br><span class="line">set yrange [0:1000]</span><br><span class="line">set datafile separator comma</span><br><span class="line">plot '/tmp/expense_2years.csv' using 1:2 with lines title "2020", '/tmp/expense_2years.csv' using 1:3 with lines title "2021"</span><br></pre></td></tr></tbody></table></figure>
+
+<p>结果如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20211006/xyz2years.png"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>其实仍然是非常不直观的，因为最终生成的是一张静态的图片，并不能做到将鼠标挪到曲线上时就给出所在位置的纵坐标的效果。</p>
+
     </div>
 
     
@@ -291,7 +368,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2021/10/06/%E7%9B%B4%E8%A7%82%E5%9C%B0%E4%BA%86%E8%A7%A3%E8%87%AA%E5%B7%B1%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%90%83%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%BC%80%E9%94%80/" title="">https://liutos.github.io/2021/10/06/直观地了解自己每天在吃上面的开销/</a>
+    <a href="https://liutos.github.io/2021/10/06/%E7%9B%B4%E8%A7%82%E5%9C%B0%E4%BA%86%E8%A7%A3%E8%87%AA%E5%B7%B1%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%90%83%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%BC%80%E9%94%80/" title="直观地了解自己每天在吃上面的开销">https://liutos.github.io/2021/10/06/直观地了解自己每天在吃上面的开销/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -308,12 +385,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/09/04/git-log%E5%BE%88%E5%A5%BD%EF%BC%8C%E4%BD%A0%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%86%99%E4%B8%80%E4%B8%AA/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2021/09/04/git-log%E5%BE%88%E5%A5%BD%EF%BC%8C%E4%BD%A0%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%86%99%E4%B8%80%E4%B8%AA/" rel="prev" title="git-log很好，你也可以写一个">
+      <i class="fa fa-chevron-left"></i> git-log很好，你也可以写一个
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/10/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AE%A1Java%E5%8F%AB%E5%8D%95%E6%B4%BE%E5%8F%91%E4%BB%A5%E5%8F%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%B4%BE%E5%8F%91/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2021/10/15/%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AE%A1Java%E5%8F%AB%E5%8D%95%E6%B4%BE%E5%8F%91%E4%BB%A5%E5%8F%8A%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%B4%BE%E5%8F%91/" rel="next" title="为什么管Java叫单派发以及什么是多派发">
+      为什么管Java叫单派发以及什么是多派发 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +471,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%BF%90%E7%94%A8gnuplot"><span class="nav-number">1.</span> <span class="nav-text">如何运用gnuplot</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8ledger%E6%8F%90%E5%8F%96%E5%BC%80%E9%94%80%E8%AE%B0%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">用ledger提取开销记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8csvsql%E8%81%9A%E5%90%88%E6%95%B0%E6%8D%AE"><span class="nav-number">1.2.</span> <span class="nav-text">用csvsql聚合数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8gnuplot%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE%E5%B9%B6%E7%BB%98%E5%9B%BE"><span class="nav-number">1.3.</span> <span class="nav-text">用gnuplot读取数据并绘图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%B3%E8%A6%81%E6%8C%89%E5%91%A8%E7%BB%9F%E8%AE%A1%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">1.4.</span> <span class="nav-text">想要按周统计怎么办</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%B3%E8%A6%81%E5%90%8C%E6%97%B6%E6%9F%A5%E7%9C%8B%E4%B8%A4%E5%B9%B4%E7%9A%84%E5%9B%BE%E5%BD%A2%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">1.5.</span> <span class="nav-text">想要同时查看两年的图形怎么办</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">2.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +489,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +682,7 @@
         config: {page: {
             url: "https://liutos.github.io/2021/10/06/%E7%9B%B4%E8%A7%82%E5%9C%B0%E4%BA%86%E8%A7%A3%E8%87%AA%E5%B7%B1%E6%AF%8F%E5%A4%A9%E5%9C%A8%E5%90%83%E4%B8%8A%E9%9D%A2%E7%9A%84%E5%BC%80%E9%94%80/",
             identifier: "2021/10/06/直观地了解自己每天在吃上面的开销/",
-            title: ""
+            title: "直观地了解自己每天在吃上面的开销"
           }
         }
       });

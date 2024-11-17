@@ -200,7 +200,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/21/Evernote%E4%B8%8ELeanote/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -214,7 +214,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/05/21/Evernote%E4%B8%8ELeanote/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">开发一个trivial的lisp编译器（一）</a>
         </h1>
 
         <div class="post-meta">
@@ -224,8 +224,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-05-21 22:40:13" itemprop="dateCreated datePublished" datetime="2019-05-21T22:40:13+08:00">2019-05-21</time>
+              <time title="创建时间：2019-05-17 21:57:50" itemprop="dateCreated datePublished" datetime="2019-05-17T21:57:50+08:00">2019-05-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -236,8 +243,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/05/21/Evernote%E4%B8%8ELeanote/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/21/Evernote与Leanote/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2019/05/17/%E4%B8%80%E4%B8%AA%E7%AE%80%E9%99%8B%E7%9A%84%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%BC%96%E8%AF%91%E5%99%A8%E5%AE%9E%E7%8E%B0/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/17/一个简陋的四则运算编译器实现/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -252,7 +259,28 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>我已经记不清写过多少个lisp-like语言的解释器，以及编译成自制字节码的编译器了，但我想这一次依然不会是最后一个。我还记得之所以入坑写第一个解释器，是因为当时正好学了一点Common Lisp，数据结构的课本中又正好提到一种叫做广义表的数据结构，顿时觉得：“这个广义表不是正好可以表达CL中的atom和cons吗？”于是便尝试写一段程序解析输入、创建广义表，并打印成S表达式。在此基础上，又尝试着实现加减乘除等运算功能，一步步地开启了编写解释器的旅程。后来我看了Peter Norvig写的<a href="https://en.wikipedia.org/wiki/Paradigms_of_AI_Programming">《Paradigms of AI Programming》</a>，里面有两章分别讲了如何编写解释器和编译器——编译到一个自制虚拟机的字节码的那种。在巨擘的指引下，我也开始写起了trivial的编译器。</p>
+<p>这次开工的这一款有所不同：它不再将lisp-like代码编译成架空虚拟机的字节码，而是编译成macOS的x64汇编代码，着实是一个不小的挑战。众所周知，lisp-like的语言（Scheme、Common Lisp、Clojure等）都是一些高级语言，它们摆弄着一些高层次的概念：cons、continua、lambda、symbol，等等。这些语言中的概念无法直接对应到x64汇编上，因此我必须填补它们之间的鸿沟；另一方面，我对x86汇编可以说是一窍不通，完全是一边搜索资料一边写，生成的汇编代码的运行效率多半很低。但，管它呢，只要好玩就足够了。</p>
+<p>开始来实现一个lisp-like语言到x64汇编的trivial编译器吧。</p>
+<h1 id="编译加法运算"><a href="#编译加法运算" class="headerlink" title="编译加法运算"></a>编译加法运算</h1><p>如果你看过<a href="https://book.douban.com/subject/3296317/">龙书</a>，或其它经典的编译原理方面的书，那肯定知道编译器是一个很复杂的玩意儿。但我的编译器很简单，它会从一个小小的二元加法计算器开始演化。为了偷懒不写编译器的前端，我会使用Common Lisp来编写这个编译器的代码，也方便我直接从最让人兴奋的、生成汇编代码的环节入手。</p>
+<p>首先从最简单的两个小整数的加法运算开始。在lisp家族的语言，比如Common Lisp中，一段加法运算的代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">+</span> <span class="number">1</span> <span class="number">2</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>对于寄存器可以容纳的整数的相加，直接输出<code>add</code>指令即可，两个操作数可以暂时随意地存放到寄存器中。按照这个思路，一个简单的、可以编译小整数加法运算的编译器就出来了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(second expr) %eax)</span><br><span class="line">           (movl ,(third expr) %ebx)</span><br><span class="line">           (addl %eax %ebx)))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> stringify (<span class="name">asm</span>)</span><br><span class="line">  <span class="string">"根据jjcc2产生的S表达式生成汇编代码字符串"</span></span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .section __TEXT,__text,regular,pure_instructions~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        .globl _main~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"_main:~%"</span>)</span><br><span class="line">  (<span class="name">dolist</span> (<span class="name">ins</span> asm)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        ~A ~A, ~A~%"</span></span><br><span class="line">            (<span class="name">first</span> ins)</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">second</span> ins))</span><br><span class="line">                (<span class="name">second</span> ins))</span><br><span class="line">            (<span class="name">if</span> (<span class="name">numberp</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">format</span> <span class="literal">nil</span> <span class="string">"$~A"</span> (<span class="name">third</span> ins))</span><br><span class="line">                (<span class="name">third</span> ins))))</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl %ebx, %edi~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        movl $0x2000001, %eax~%"</span>)</span><br><span class="line">  (<span class="name">format</span> <span class="literal">t</span> <span class="string">"        syscall~%"</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在 REPL 中运行如下代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">stringify</span> (<span class="name">jjcc2</span> '(+ <span class="number">1</span> <span class="number">2</span>)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>得到如下的汇编代码</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EAX</span><br><span class="line">        MOVL $2, %EBX</span><br><span class="line">        ADDL %EAX, %EBX</span><br><span class="line">        movl %ebx, %edi</span><br><span class="line">        movl $0x2000001, %eax</span><br><span class="line">        syscall</span><br></pre></td></tr></tbody></table></figure>
+
+<p>将这段代码保存到名为<code>jjcc.s</code>的文件中再运行下列的命令，就得到一个能运行的<code>a.out</code>可执行文件了</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">as -o jjcc.o jjcc.s</span><br><span class="line">gcc jjcc.o</span><br><span class="line">./a.out</span><br><span class="line">echo $? # 输出3</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>有了这个基本的框架后，便可以开始扩展出很多功能了。比如除了加法，还可以支持减法、乘法，以及除法；可以支持<code>progn</code>，实现顺序求值多个表达式的效果；可以支持<code>setq</code>，实现变量和赋值的功能，等等。</p>
+<p>此外，这一小段代码也有不少问题。比如调用<code>format</code>输出<code>.section</code>的代码来自于<code>gcc -S</code>的结果，可以用更简短的<code>.text</code>代替；生成的汇编代码中，指令助记符和寄存器名字的大小写不统一，等等。之后我会尝试重构，将代码写得更好。</p>
+
       
     </div>
 
@@ -271,7 +299,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/14/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/05/07/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -285,7 +313,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/05/14/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2019/05/07/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/" class="post-title-link" itemprop="url">Boostnote及对记笔记的思考</a>
         </h1>
 
         <div class="post-meta">
@@ -295,8 +323,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-05-14 22:57:51" itemprop="dateCreated datePublished" datetime="2019-05-14T22:57:51+08:00">2019-05-14</time>
+              <time title="创建时间：2019-05-07 23:06:43" itemprop="dateCreated datePublished" datetime="2019-05-07T23:06:43+08:00">2019-05-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -307,8 +342,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2019/05/14/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/14/Boostnote及对记笔记的思考/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2019/05/07/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/05/07/Boostnote及对记笔记的思考/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -323,78 +358,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
+          <p>这篇文章就是在<a href="https://boostnote.io/">Boostnote</a> 中写成的XD</p>
+<h2 id="来龙去脉"><a href="#来龙去脉" class="headerlink" title="来龙去脉"></a>来龙去脉</h2><p>有一阵子，我沉迷于“笔记软件狩猎”中——就是不停寻找各种各样的笔记软件，再一个个试用，企图从中选出一个最强大的。回想起来，我尝试过有道云笔记、印象笔记、Quiver、Boostnote、OneNote、Yu Writer、Leanote（在本地搭建），等等。大部分都是浅尝辄止，例如OneNote，当我发现它不支持代码块语法高亮时，就放弃了它。目前仍然在使用的是Boostnote，并且也是最令我满意的。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/05/07/Boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+          <!--/noindex-->
         
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/03/31/%E6%B6%82%E8%89%B2%E7%AC%94%E8%AF%95%E9%A2%98%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E8%A7%A3%E6%B3%95/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/03/31/%E6%B6%82%E8%89%B2%E7%AC%94%E8%AF%95%E9%A2%98%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E8%A7%A3%E6%B3%95/" class="post-title-link" itemprop="url">未命名</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-03-31 11:48:03" itemprop="dateCreated datePublished" datetime="2019-03-31T11:48:03+08:00">2019-03-31</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2019/03/31/%E6%B6%82%E8%89%B2%E7%AC%94%E8%AF%95%E9%A2%98%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E8%A7%A3%E6%B3%95/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/03/31/涂色笔试题的动态规划解法/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          
       
     </div>
 
@@ -427,7 +400,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/03/13/%E6%9B%B4%E8%BF%87%E7%A8%8B%E5%BC%8F%E7%9A%84let%E2%80%94%E2%80%94vertical-let/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2019/03/13/%E6%9B%B4%E8%BF%87%E7%A8%8B%E5%BC%8F%E7%9A%84let%E2%80%94%E2%80%94vertical-let/" class="post-title-link" itemprop="url">更过程式的let——vertical-let</a>
         </h1>
 
         <div class="post-meta">
@@ -437,8 +410,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-03-13 23:04:17" itemprop="dateCreated datePublished" datetime="2019-03-13T23:04:17+08:00">2019-03-13</time>
+              <time title="创建时间：2019-03-13 23:02:59" itemprop="dateCreated datePublished" datetime="2019-03-13T23:02:59+08:00">2019-03-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -465,7 +445,44 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          
+          <p>作为一名自诩的non-trivial的Common Lisp程序员，在编码的时候经常会遇到令人不愉快的地方，其中一个便是<a href="http://www.lispworks.com/documentation/HyperSpec/Body/s_let_l.htm#let">LET</a>。</p>
+<p>一段典型的<code>LET</code>的示例代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> <span class="number">1</span>))</span><br><span class="line">   a)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>大多数时候，<code>LET</code>不会只有一个绑定。并且，也不会只是绑定一个常量这么简单，而应当是下面这样的</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">      (<span class="name">b</span> (<span class="name">bar</span> z)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>有时候我会想看看某一个绑定的值——最好是在它计算完毕后立即查看。如果要查看<code>foo</code>函数的返回值，可以这样写</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">      (<span class="name">b</span> (<span class="name">bar</span> z)))</span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果调用<code>foo</code>和<code>bar</code>都顺利的话上面的代码也就够了。比较棘手的情况是，如果<code>a</code>的值不符合预期，会导致<code>b</code>的计算过程出状况（尽管在上面的代码中看似不会）。这种情况多出现在<code>LET*</code>的使用中，如下面所示</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">foo</span> x y))</span><br><span class="line">       (<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果错误的<code>a</code>会导致<code>bar</code>的调用出错，那么在调用<code>function1</code>之前才调用<code>print</code>打印<code>a</code>已经为时过晚了——毕竟调用<code>bar</code>的时候就抛出<code>condition</code>往调用链的上游走了。一种方法是写成下面这样子</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">a</span> (<span class="name">let</span> ((<span class="name">tmp</span> (<span class="name">foo</span> x y)))</span><br><span class="line">            (<span class="name">print</span> tmp)</span><br><span class="line">            tmp))</span><br><span class="line">       (<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">  (<span class="name">function1</span> a b)</span><br><span class="line">  (<span class="name">function2</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这也太丑了！要不然写成下面这样子？</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">a</span> (<span class="name">foo</span> x y)))</span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">b</span> (<span class="name">bar</span> a)))</span><br><span class="line">    (<span class="name">function1</span> a b)</span><br><span class="line">    (<span class="name">function2</span> a b)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>本来一个<code>LET</code>就可以做到的事情，这下子用了两个，还导致缩进更深了一级。如果有十个变量需要打印，就会增加十个<code>LET</code>和十层缩进。如果心血来潮想查看一个变量的值，还要大幅调整代码。</p>
+<p>问题大概就出在<code>LET</code>和<code>LET*</code>的语法上。以<code>LET</code>为例，它由截然分开的<code>bindings</code>和<code>forms</code>组成，两者不能互相穿插。因此，如果想在<code>bindings</code>中求值一段表达式，只能将<code>bindings</code>切开，写成两个<code>LET</code>的形式。好像写一个新的宏可以解决这个问题？是的，<code>vertical-let</code>就是。</p>
+<p><code>vertical-let</code>是一个我自己写的宏，源代码<a href="https://github.com/Liutos/clitool/blob/master/cl/sak.lisp#L9">在此</a>。其用法如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line">  <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line">  a)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>它借鉴了<code>LOOP</code>中绑定变量的方式（即<code>:with</code>和<code>=</code>），绑定变量和用于求值的代码还可以交织在一起，如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">vertical-let</span></span><br><span class="line">  <span class="symbol">:with</span> a = <span class="number">1</span></span><br><span class="line">  (<span class="name">print</span> a)</span><br><span class="line">  <span class="symbol">:with</span> b = <span class="number">2</span></span><br><span class="line">  (<span class="name">+</span> a b))</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>vertical-let</code>最终会展开为<code>LET</code>，比如上面的代码，会展开为如下的代码</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">LET</span> ((<span class="name">A</span> <span class="number">1</span>))</span><br><span class="line">  (<span class="name">PRINT</span> A)</span><br><span class="line">  (<span class="name">LET</span> ((<span class="name">B</span> <span class="number">2</span>))</span><br><span class="line">    (<span class="name">+</span> A B)))</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>vertical-let</code>的算法很简单。它遍历表达式列表，当遇到<code>:with</code>时就把接下来的三个元素分别视为变量名、等号，以及待求值的表达式，将三者打包进一个列表中，再压栈；当遇到其它值时，就视为待求值的表达式（将会组成<code>LET</code>的<code>forms</code>部分），也放进列表中再压栈（具体方法参见源代码）。</p>
+<p>将所有值都遍历并压栈后，接下来要遍历这个栈中的元素。先准备两个空的栈——一个存放<code>bindings</code>，一个存放<code>forms</code>。接着，对于每一个从栈中弹出的元素，分为如下两种情况：</p>
+<ol>
+<li>如果表示<code>binding</code>，则直接压入存放<code>bindings</code>的栈，否则；</li>
+<li>如果是待求值的表达式，并且上一个出栈的元素是<code>binding</code>，则说明已经有一段完整的<code>LET</code>的内容被集齐。因此，将目前在两个栈中的内容全部弹出，组合为一个<code>LET</code>表达式再压入存放<code>forms</code>的栈中。然后将方才弹出的表达式也压入<code>forms</code>。重复上述过程直至所有元素都被处理，最后将还在两个栈中的内容也组合为一个<code>LET</code>表达式便结束了。</li>
+</ol>
+<p>全文完</p>
+
       
     </div>
 
@@ -498,7 +515,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/02/28/%E4%B8%8D%E5%90%8C%E5%B7%A5%E5%85%B7%E6%9F%A5%E7%9C%8B%E4%BB%A3%E7%A0%81%E5%88%86%E6%94%AFdiff%E7%9A%84%E5%B7%AE%E5%BC%82/" class="post-title-link" itemprop="url">未命名</a>
+            <a href="/2019/02/28/%E4%B8%8D%E5%90%8C%E5%B7%A5%E5%85%B7%E6%9F%A5%E7%9C%8B%E4%BB%A3%E7%A0%81%E5%88%86%E6%94%AFdiff%E7%9A%84%E5%B7%AE%E5%BC%82/" class="post-title-link" itemprop="url">不同工具查看代码分支diff的差异</a>
         </h1>
 
         <div class="post-meta">
@@ -508,8 +525,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-02-28 22:55:46" itemprop="dateCreated datePublished" datetime="2019-02-28T22:55:46+08:00">2019-02-28</time>
+              <time title="创建时间：2019-02-28 22:53:46" itemprop="dateCreated datePublished" datetime="2019-02-28T22:53:46+08:00">2019-02-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -536,7 +560,137 @@
     <div class="post-body" itemprop="articleBody">
 
       
+          <p>本文只是简单地讲述我自己在使用<a href="https://www.gnu.org/software/emacs/index.html">GNU Emacs</a>、<a href="https://git-fork.com/">Fork</a>，以及<a href="https://code.visualstudio.com/">Visual Studio Code</a>查看Git仓库的不同分支的diff上的经历。</p>
+<h2 id="Emacs"><a href="#Emacs" class="headerlink" title="Emacs"></a>Emacs</h2><p>当使用Emacs时，我更喜欢用<code>M-x package-install</code>安装的<a href="https://github.com/magit/magit"><code>magit</code></a>提供的功能——<code>magit-diff</code>，而不是它自带的<code>vc-dir</code>。按下<code>M-x</code>，输入<code>magit-diff</code>并敲下回车后，Emacs会在minibuffer中等待用户输入要比较的分支。就像在shell中使用<code>git-diff</code>一样，只需要输入两个以<code>..</code>连接的分支名并敲下回车，就可以列出它们间的差异。如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E4%BD%BF%E7%94%A8magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E5%B7%AE%E5%BC%82.png"></p>
+<p>上图是master与re两个分支间的差异。<code>magit-diff</code>会列出两个分支间不一致的文件，与直接使用<code>git-diff</code>命令没有不同。往下滚动跨过文件清单后，还可以查看单个文件的差异。如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/magit-diff%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AA%E5%88%86%E6%94%AF%E6%97%B6%E7%9A%84%E5%85%B7%E4%BD%93%E6%96%87%E4%BB%B6%E5%B7%AE%E5%BC%82.png"></p>
+<h2 id="Fork"><a href="#Fork" class="headerlink" title="Fork"></a>Fork</h2><p>第一次知道Fork是在知乎闲逛的时候，好像是在浏览“Mac下有什么值得推荐的软件”这类问题时看到的。某一次，为了能直观地查看两个commit间的差异，便试用了一番，效果确实不错。Fork的界面如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E7%9A%84%E7%95%8C%E9%9D%A2%E6%A6%82%E8%A7%88.png"></p>
+<p>还记得，当时为了能够比较两个commit间的差异，我还在Fork的菜单栏中翻了很久——虽然是毫无收获。结果发现，原来只需要选中两个commit就可以了。如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/Fork%E4%B8%AD%E5%AF%B9%E6%AF%94%E4%B8%A4%E4%B8%AAcommit%E9%97%B4%E7%9A%84%E5%B7%AE%E5%BC%82.png"></p>
+<p>图片两行蓝色的就是我选中的两个commit——先用鼠标点击其一，按住<code>control</code>键后再选中另一个即可。图片下方的部分与<code>magit-diff</code>差不多，应该也算是一目了然了。</p>
+<h2 id="Visual-Studio-Code"><a href="#Visual-Studio-Code" class="headerlink" title="Visual Studio Code"></a>Visual Studio Code</h2><p>原本我觉得Fork已经足够好了，某一天在用VSCode时才忽然发现，在Fork中显示的代码差异，是没有语法高亮的。通常来说，即使没有语法高亮，查看短小的diff也不成问题。但如果差异的内容很多，或是diff位于一个很长的函数内部，这时光靠diff来做代码审查已经不太够了——因为不好确定在这片diff中出现的变量和函数，到底是不是正确地定义了的。</p>
+<p>后来我发现，VSCode自带的“源代码管理”，即便是在查看diff时也是有语法高亮的——不仅有语法高亮，对于Node.js代码而言，还有ESLint的提示和“跳转到定义”的功能，awesome！不愧是全宇宙最好用的编辑器（笑</p>
+<p>为了可以用VSCode来查看两个分支间的差异，放狗搜了一下，找到了神器<a href="https://github.com/eamodio/vscode-gitlens">GitLens</a>。</p>
+<p>安装GitLens后，VSCode的最左侧会多出一个菜单项，在其中可以方便地选择两个分支来进行比较。首先，找到一个要比较的分支，选择“Select for Compare”。如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png"></p>
+<p>再选中另一个要比较的分支，右键单击选择“Compare with Selected”，然后便可以在下方看到VSCode罗列出不一致的文件清单了。如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/%E5%9C%A8GitLens%E4%B8%AD%E9%80%89%E4%B8%AD%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%A6%81%E6%AF%94%E8%BE%83%E7%9A%84%E5%88%86%E6%94%AF.png"></p>
+<p>VSCode是最吼的！</p>
+<p>全文完。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
           
+            <a href="/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/" class="post-title-link" itemprop="url">拿Emacs对接我的cuckoo</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-02-05 15:17:08" itemprop="dateCreated datePublished" datetime="2019-02-05T15:17:08+08:00">2019-02-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2019/02/05/%E6%8B%BFEmacs%E5%AF%B9%E6%8E%A5%E6%88%91%E7%9A%84cuckoo/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/02/05/拿Emacs对接我的cuckoo/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>cuckoo是一个我自己开发的类似待办事项的工具，运行在我本地的电脑上。它有如下两个接口：</p>
+<ol>
+<li>传入一个UNIX Epoch时间戳创建提醒</li>
+<li>传入一个标题以及提醒的ID来创建任务</li>
+</ol>
+<p>这样一来，便能在设定的时刻调用<a href="https://github.com/vjeantet/alerter"><code>alerter</code></a>在屏幕右上角弹出提醒。</p>
+<p>我喜欢用<a href="https://www.gnu.org/software/emacs/index.html">Emacs</a>的<a href="https://orgmode.org/">org-mode</a>来安排任务，但可惜的是，org-mode没有定点提醒的功能（如果有的话希望来个人打我的脸XD）。开发了cuckoo后，忽然灵机一动——何不给Emacs添砖加瓦，让它可以把org-mode中的条目内容（所谓的heading）当做任务丢给cuckoo，以此来实现定点提醒呢。感觉是个好主意，马上着手写这么些Elisp函数。</p>
+<p>PS：读者朋友们就不用执着于我的cuckoo究竟是怎样的接口定义了。</p>
+<p>为了实现所需要的功能，让我从结果反过来推导一番。首先，需要提炼一个TODO条目的标题和时间戳（用来创建提醒获取ID），才能调用cuckoo的接口。标题就是org-mode中一个TODO条目的heading text，在Emacs中用下面的代码获取</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">nth</span> <span class="number">4</span> (<span class="name">org-heading-components</span>))</span><br></pre></td></tr></tbody></table></figure>
+
+<p><code>org-headline-components</code>在光标位于TODO条目上的时候，会返回许多信息（参见下图）</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/org-heading-components%E7%9A%84%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3.png"></p>
+<p>其中下标为4的component就是我所需要的内容。</p>
+<p>接着便是要获取一个提醒的ID。ID当然是从cuckoo的接口中返回的，这就需要能够解析JSON格式的文本。在Emacs中解析JSON序列化后的文本可以用<a href="https://github.com/ryancrum/json.el">json</a>这个库，示例代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">s</span> <span class="string">"{\"remind\":{\"create_at\":\"2019-01-11T14:53:59.000Z\",\"duration\":null,\"id\":41,\"restricted_hours\":null,\"timestamp\":1547216100,\"update_at\":\"2019-01-11T14:53:59.000Z\"}}"</span>))</span><br><span class="line">  (<span class="name">cdr</span> (<span class="name">assoc</span> 'id (<span class="name">cdr</span> (<span class="name">car</span> (<span class="name">json-read-from-string</span> s))))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>既然知道如何解析（同时还知道如何提取解析后的内容），那么接下来便是要能够获取上述示例代码中的<code>s</code>。<code>s</code>来自于HTTP响应的body，为了发出HTTP请求，可以用Emacs的<a href="https://github.com/tkf/emacs-request">request</a>库，示例代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let*</span> ((<span class="name">this-request</span> (<span class="name">request</span></span><br><span class="line">                      <span class="string">"http://localhost:7001/remind"</span></span><br><span class="line">                      <span class="symbol">:data</span> <span class="string">"{\"timestamp\":1547216100}"</span></span><br><span class="line">                      <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">                      <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">                      <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">                      <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">                                (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                                  (<span class="name">message</span> <span class="string">"data: %S"</span> data)))</span><br><span class="line">                      <span class="symbol">:sync</span> <span class="literal">t</span>))</span><br><span class="line">       (<span class="name">data</span> (<span class="name">request-response-data</span> this-request)))</span><br><span class="line">  data)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>此处的<code>:sync</code>参数花了我好长的时间才捣鼓出来——看了一下<code>request</code>函数的docstring后才发现，原来需要传递<code>:sync</code>为<code>t</code>才可以让<code>request</code>函数阻塞地调用，否则一调用<code>request</code>就立马返回了<code>nil</code>。</p>
+<p>现在需要的就是构造<code>:data</code>的值了，其中的关键是生成秒级的UNIX Epoch时间戳，这个时间戳可以通过TODO条目的<code>SCHEDULED</code>属性转换而来。比如，一个条目的<code>SCHEDULED</code>属性的值可能是<code>&lt;2019-01-11 Fri 22:15&gt;</code>，将这个字符串传递给<code>date-to-time</code>函数可以解析成代表着秒数的几个数字</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">date-to-time</span> <span class="string">"&lt;2019-01-11 Fri 22:15&gt;"</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>时间戳字符串要怎么拿到？答案是使用org-mode的<code>org-entry-get</code>函数</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">org-entry-get</span> <span class="literal">nil</span> <span class="string">"SCHEDULED"</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>PS：需要先将光标定位在一个TODO条目上。</p>
+<p>至此，所有的原件都准备齐全了，最终我的Elisp代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> scheduled-to-time (<span class="name">scheduled</span>)</span><br><span class="line">  <span class="string">"将TODO条目的SCHEDULED属性转换为UNIX时间戳"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">lst</span> (<span class="name">date-to-time</span> scheduled)))</span><br><span class="line">    (<span class="name">+</span> (<span class="name">*</span> (<span class="name">car</span> lst) (<span class="name">expt</span> <span class="number">2</span> <span class="number">16</span>))</span><br><span class="line">       (<span class="name">cadr</span> lst))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> create-remind-in-cuckoo (<span class="name">timestamp</span>)</span><br><span class="line">  <span class="string">"往cuckoo中创建一个定时提醒并返回这个刚创建的提醒的ID"</span></span><br><span class="line">  (<span class="name">let</span> (<span class="name">remind-id</span>)</span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:7001/remind"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">json-encode-alist</span></span><br><span class="line">            (<span class="name">list</span> (<span class="name">cons</span> <span class="string">"timestamp"</span> timestamp)))</span><br><span class="line">     <span class="symbol">:headers</span> '((<span class="string">"Content-Type"</span> . <span class="string">"application/json"</span>))</span><br><span class="line">     <span class="symbol">:parser</span> 'buffer-string</span><br><span class="line">     <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">message</span> <span class="string">"返回内容为：%S"</span> data)</span><br><span class="line">                 (<span class="name">let</span> ((<span class="name">remind</span> (<span class="name">json-read-from-string</span> data)))</span><br><span class="line">                   (<span class="name">setq</span> remind-id (<span class="name">cdr</span> (<span class="name">assoc</span> 'id (<span class="name">cdr</span> (<span class="name">car</span> remind))))))))</span><br><span class="line">     <span class="symbol">:sync</span> <span class="literal">t</span>)</span><br><span class="line">    remind-id))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> create-task-in-cuckoo ()</span><br><span class="line">  (<span class="name">interactive</span>)</span><br><span class="line">  (<span class="name">let</span> ((<span class="name">brief</span>)</span><br><span class="line">        (<span class="name">remind-id</span>))</span><br><span class="line"></span><br><span class="line">    (<span class="name">setq</span> brief (<span class="name">nth</span> <span class="number">4</span> (<span class="name">org-heading-components</span>)))</span><br><span class="line"></span><br><span class="line">    (<span class="name">let*</span> ((<span class="name">scheduled</span> (<span class="name">org-entry-get</span> <span class="literal">nil</span> <span class="string">"SCHEDULED"</span>))</span><br><span class="line">           (<span class="name">timestamp</span> (<span class="name">scheduled-to-time</span> scheduled)))</span><br><span class="line">      (<span class="name">setq</span> remind-id (<span class="name">create-remind-in-cuckoo</span> timestamp)))</span><br><span class="line">    </span><br><span class="line">    (<span class="name">request</span></span><br><span class="line">     <span class="string">"http://localhost:7001/task"</span></span><br><span class="line">     <span class="symbol">:data</span> (<span class="name">concat</span> <span class="string">"brief="</span> (<span class="name">url-encode-url</span> brief) <span class="string">"&amp;detail=&amp;remind_id="</span> (<span class="name">format</span> <span class="string">"%S"</span> remind-id))</span><br><span class="line">     <span class="symbol">:type</span> <span class="string">"POST"</span></span><br><span class="line">     <span class="symbol">:success</span> (<span class="name">cl-function</span></span><br><span class="line">               (<span class="name">lambda</span> (<span class="name">&amp;key</span> data <span class="symbol">&amp;allow-other-keys</span>)</span><br><span class="line">                 (<span class="name">message</span> <span class="string">"任务创建完毕"</span>))))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在<code>create-task-in-cuckoo</code>中，之所以没有再传递<code>application/json</code>形式的数据给cuckoo，是因为不管我怎么测试，始终无法避免中文字符在传递到接口的时候变成了<code>\u</code>编码的形式，不得已而为之，只好把中文先做一遍url encoding，然后再通过表单的形式（<code>form/x-www-urlencode</code>）发送给接口了。</p>
+<p>全文完。</p>
+
       
     </div>
 
@@ -625,6 +779,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>

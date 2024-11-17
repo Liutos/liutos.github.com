@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -46,21 +46,26 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="准备过互联网公司的服务端岗位面试的人，对于二叉树的三种遍历方式想必是如数家珍。假设以类BinaryTree定义一棵二叉树 12345class BinaryTree:    def __init__(self, left, right, value):        self.left = left        self.right = right        self.value = val">
-<meta name="keywords" content="common lisp,算法,lisp,二叉树,递归,python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="非递归遍历二叉树到底有什么用">
-<meta property="og:url" content="https://liutos.github.io/2021/05/03/非递归遍历二叉树到底有什么用/index.html">
+<meta property="og:url" content="https://liutos.github.io/2021/05/03/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
 <meta property="og:description" content="准备过互联网公司的服务端岗位面试的人，对于二叉树的三种遍历方式想必是如数家珍。假设以类BinaryTree定义一棵二叉树 12345class BinaryTree:    def __init__(self, left, right, value):        self.left = left        self.right = right        self.value = val">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://liutos.github.io/images/loading.png">
-<meta property="og:updated_time" content="2022-05-02T03:18:18.518Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210503/%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91.png">
+<meta property="article:published_time" content="2021-05-03T03:58:11.000Z">
+<meta property="article:modified_time" content="2022-05-02T03:18:26.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="common lisp">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="lisp">
+<meta property="article:tag" content="二叉树">
+<meta property="article:tag" content="递归">
+<meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="非递归遍历二叉树到底有什么用">
-<meta name="twitter:description" content="准备过互联网公司的服务端岗位面试的人，对于二叉树的三种遍历方式想必是如数家珍。假设以类BinaryTree定义一棵二叉树 12345class BinaryTree:    def __init__(self, left, right, value):        self.left = left        self.right = right        self.value = val">
-<meta name="twitter:image" content="https://liutos.github.io/images/loading.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210503/%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91.png">
 
-<link rel="canonical" href="https://liutos.github.io/2021/05/03/非递归遍历二叉树到底有什么用/">
+<link rel="canonical" href="https://liutos.github.io/2021/05/03/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/">
 
 
 <script id="page-configurations">
@@ -112,6 +117,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -203,10 +209,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/05/03/非递归遍历二叉树到底有什么用/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2021/05/03/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -233,7 +239,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-02 11:18:18" itemprop="dateModified" datetime="2022-05-02T11:18:18+08:00">2022-05-02</time>
+                <time title="修改时间：2022-05-02 11:18:26" itemprop="dateModified" datetime="2022-05-02T11:18:26+08:00">2022-05-02</time>
               </span>
 
           
@@ -245,7 +251,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2021/05/03/非递归遍历二叉树到底有什么用/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2021/05/03/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/05/03/非递归遍历二叉树到底有什么用/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -262,14 +268,18 @@
 
       
         <p>准备过互联网公司的服务端岗位面试的人，对于二叉树的三种遍历方式想必是如数家珍。假设以类<code>BinaryTree</code>定义一棵二叉树</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BinaryTree</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, left, right, value)</span>:</span></span><br><span class="line">        self.left = left</span><br><span class="line">        self.right = right</span><br><span class="line">        self.value = value</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BinaryTree</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, left, right, value</span>):</span><br><span class="line">        <span class="variable language_">self</span>.left = left</span><br><span class="line">        <span class="variable language_">self</span>.right = right</span><br><span class="line">        <span class="variable language_">self</span>.value = value</span><br></pre></td></tr></tbody></table></figure>
+
 <p>实现一个前序遍历的算法便是信手拈来的事情</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preorder_traversal</span><span class="params">(tree, func)</span>:</span></span><br><span class="line">    <span class="string">"""前序遍历二叉树的每个节点。"""</span></span><br><span class="line">    <span class="keyword">if</span> tree <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    func(tree.value)</span><br><span class="line">    preorder_traversal(tree.left, func)</span><br><span class="line">    preorder_traversal(tree.right, func)</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">preorder_traversal</span>(<span class="params">tree, func</span>):</span><br><span class="line">    <span class="string">"""前序遍历二叉树的每个节点。"""</span></span><br><span class="line">    <span class="keyword">if</span> tree <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    func(tree.value)</span><br><span class="line">    preorder_traversal(tree.left, func)</span><br><span class="line">    preorder_traversal(tree.right, func)</span><br></pre></td></tr></tbody></table></figure>
+
 <p>随着行业曲率的增大，要求写出不使用递归的版本也没什么过分的</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">iterative_preorder_traversal</span><span class="params">(tree, func)</span>:</span></span><br><span class="line">    nodes = [tree]</span><br><span class="line">    <span class="keyword">while</span> len(nodes) &gt; <span class="number">0</span>:</span><br><span class="line">        node = nodes.pop()</span><br><span class="line">        func(node)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            nodes.append(node.right)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            nodes.append(node.left)</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">iterative_preorder_traversal</span>(<span class="params">tree, func</span>):</span><br><span class="line">    nodes = [tree]</span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">len</span>(nodes) &gt; <span class="number">0</span>:</span><br><span class="line">        node = nodes.pop()</span><br><span class="line">        func(node)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            nodes.append(node.right)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            nodes.append(node.left)</span><br></pre></td></tr></tbody></table></figure>
+
 <p>一直以来，我觉得这种用一个显式的栈来代替递归过程中隐式的栈的做法就是镜花水月。但最近却找到了它的一个用武之地——用于实现<code>iterator</code>。</p>
-<h1 id="iterator是个啥？"><a href="#iterator是个啥？" class="headerlink" title="iterator是个啥？"></a><code>iterator</code>是个啥？</h1><p>这年头，<code>iterator</code>已经不是什么新鲜事物了，许多语言中都有支持，维基百科上有一份<a href="https://en.wikipedia.org/wiki/Iterator#In_different_programming_languages" target="_blank" rel="noopener">清单</a>列出了比较知名的语言的<code>iterator</code>特性。按照Python官方的术语表中的<a href="https://docs.python.org/3/glossary.html#term-iterator" target="_blank" rel="noopener">定义</a>，<code>iterator</code>表示一个数据流，反复调用其<code>__next__</code>方法可以一个接一个地返回流中的下一项数据。将内置函数<code>iter</code>作用于<code>list</code>、<code>str</code>、<code>tuple</code>类型的对象，可以获得相应的迭代器</p>
-<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat get_iter.py</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -*- coding: utf8 -*-</span></span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    values = [</span><br><span class="line">        [1, 2, 3],</span><br><span class="line">        'Hello, world!',</span><br><span class="line">        (True, None),</span><br><span class="line">    ]</span><br><span class="line">    for v in values:</span><br><span class="line">        print('type of iter({}) is {}'.format(v, type(iter(v))))</span><br><span class="line"><span class="meta">$</span><span class="bash"> python get_iter.py</span></span><br><span class="line">type of iter([1, 2, 3]) is &lt;class 'list_iterator'&gt;</span><br><span class="line">type of iter(Hello, world!) is &lt;class 'str_iterator'&gt;</span><br><span class="line">type of iter((True, None)) is &lt;class 'tuple_iterator'&gt;</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="iterator是个啥？"><a href="#iterator是个啥？" class="headerlink" title="iterator是个啥？"></a><code>iterator</code>是个啥？</h1><p>这年头，<code>iterator</code>已经不是什么新鲜事物了，许多语言中都有支持，维基百科上有一份<a href="https://en.wikipedia.org/wiki/Iterator#In_different_programming_languages">清单</a>列出了比较知名的语言的<code>iterator</code>特性。按照Python官方的术语表中的<a href="https://docs.python.org/3/glossary.html#term-iterator">定义</a>，<code>iterator</code>表示一个数据流，反复调用其<code>__next__</code>方法可以一个接一个地返回流中的下一项数据。将内置函数<code>iter</code>作用于<code>list</code>、<code>str</code>、<code>tuple</code>类型的对象，可以获得相应的迭代器</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> get_iter.py</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-*- coding: utf8 -*-</span></span><br><span class="line">if __name__ == '__main__':</span><br><span class="line">    values = [</span><br><span class="line">        [1, 2, 3],</span><br><span class="line">        'Hello, world!',</span><br><span class="line">        (True, None),</span><br><span class="line">    ]</span><br><span class="line">    for v in values:</span><br><span class="line">        print('type of iter({}) is {}'.format(v, type(iter(v))))</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python get_iter.py</span></span><br><span class="line">type of iter([1, 2, 3]) is &lt;class 'list_iterator'&gt;</span><br><span class="line">type of iter(Hello, world!) is &lt;class 'str_iterator'&gt;</span><br><span class="line">type of iter((True, None)) is &lt;class 'tuple_iterator'&gt;</span><br></pre></td></tr></tbody></table></figure>
+
 <h1 id="写一个前序遍历的iterator"><a href="#写一个前序遍历的iterator" class="headerlink" title="写一个前序遍历的iterator"></a>写一个前序遍历的<code>iterator</code></h1><p>一个<code>iterator</code>对象必须要实现<code>__iter__</code>和<code>__next__</code>方法：</p>
 <ul>
 <li><code>__iter__</code>只需要返回<code>iterator</code>对象自身即可；</li>
@@ -282,16 +292,20 @@
 <li>最后四行就是负责填充<code>nodes</code>，好让它可以在下一次调用<code>__next__</code>的时候有值可以返回的。</li>
 </ul>
 <p>到这里，<code>iterator</code>的具体实现代码已经呼之欲出了</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BinaryTreePreorderIterator</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, root)</span>:</span></span><br><span class="line">        nodes = []</span><br><span class="line">        <span class="keyword">if</span> root <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            nodes.append(root)</span><br><span class="line">        self.nodes = nodes</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> len(self.nodes) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration</span><br><span class="line">        node = self.nodes.pop()</span><br><span class="line">        <span class="keyword">if</span> node.right <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            self.nodes.append(node.right)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            self.nodes.append(node.left)</span><br><span class="line">        <span class="keyword">return</span> node.value</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BinaryTreePreorderIterator</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, root</span>):</span><br><span class="line">        nodes = []</span><br><span class="line">        <span class="keyword">if</span> root <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            nodes.append(root)</span><br><span class="line">        <span class="variable language_">self</span>.nodes = nodes</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iter__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__next__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(<span class="variable language_">self</span>.nodes) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> StopIteration</span><br><span class="line">        node = <span class="variable language_">self</span>.nodes.pop()</span><br><span class="line">        <span class="keyword">if</span> node.right <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="variable language_">self</span>.nodes.append(node.right)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="variable language_">self</span>.nodes.append(node.left)</span><br><span class="line">        <span class="keyword">return</span> node.value</span><br></pre></td></tr></tbody></table></figure>
+
 <p>构造一棵这样的满二叉树</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210503/满二叉树.png" alt=""></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20210503/%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91.png"></p>
 <p>用<code>BinaryTreePreorderIterator</code>可以正确地打印出每一个节点的值</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    tree = BinaryTree(</span><br><span class="line">        BinaryTree(</span><br><span class="line">            BinaryTree(<span class="keyword">None</span>, <span class="keyword">None</span>, <span class="number">1</span>), </span><br><span class="line">            BinaryTree(<span class="keyword">None</span>, <span class="keyword">None</span>, <span class="number">3</span>), </span><br><span class="line">            <span class="number">2</span>,</span><br><span class="line">        ),</span><br><span class="line">        BinaryTree(</span><br><span class="line">            BinaryTree(<span class="keyword">None</span>, <span class="keyword">None</span>, <span class="number">5</span>), </span><br><span class="line">            BinaryTree(<span class="keyword">None</span>, <span class="keyword">None</span>, <span class="number">7</span>), </span><br><span class="line">            <span class="number">6</span>,</span><br><span class="line">        ),</span><br><span class="line">        <span class="number">4</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> BinaryTreePreorderIterator(tree):</span><br><span class="line">        print(<span class="string">'{}\t'</span>.format(n), end=<span class="string">''</span>)</span><br><span class="line"><span class="comment"># 打印内容为：4	2	1	3	6	5	7</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    tree = BinaryTree(</span><br><span class="line">        BinaryTree(</span><br><span class="line">            BinaryTree(<span class="literal">None</span>, <span class="literal">None</span>, <span class="number">1</span>), </span><br><span class="line">            BinaryTree(<span class="literal">None</span>, <span class="literal">None</span>, <span class="number">3</span>), </span><br><span class="line">            <span class="number">2</span>,</span><br><span class="line">        ),</span><br><span class="line">        BinaryTree(</span><br><span class="line">            BinaryTree(<span class="literal">None</span>, <span class="literal">None</span>, <span class="number">5</span>), </span><br><span class="line">            BinaryTree(<span class="literal">None</span>, <span class="literal">None</span>, <span class="number">7</span>), </span><br><span class="line">            <span class="number">6</span>,</span><br><span class="line">        ),</span><br><span class="line">        <span class="number">4</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> BinaryTreePreorderIterator(tree):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">'{}\t'</span>.<span class="built_in">format</span>(n), end=<span class="string">''</span>)</span><br><span class="line"><span class="comment"># 打印内容为：4	2	1	3	6	5	7</span></span><br></pre></td></tr></tbody></table></figure>
+
 <h1 id="iterator的优势"><a href="#iterator的优势" class="headerlink" title="iterator的优势"></a><code>iterator</code>的优势</h1><p>显然，<code>iterator</code>比起<code>preorder_traversal</code>更为灵活——很容易在<code>for-in</code>循环内添加各种各样的控制逻辑：用<code>continue</code>跳过一些值，或者用<code>break</code>提前结束遍历过程。这些在函数<code>preorder_traversal</code>中做起来会比较别扭。</p>
 <p>聪明的你应该已经发现了，大可不必将<code>preorder_traversal</code>拆解到一个构造方法和一个<code>__next__</code>方法中。用<code>generator</code>写起来明明更加直观</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preorder_generator</span><span class="params">(tree)</span>:</span></span><br><span class="line">    <span class="string">"""返回一个能够以前序遍历的次序遍历二叉树节点的generator。"""</span></span><br><span class="line">    nodes = [tree]</span><br><span class="line">    <span class="keyword">while</span> len(nodes) &gt; <span class="number">0</span>:</span><br><span class="line">        node = nodes.pop()</span><br><span class="line">        <span class="keyword">yield</span> node.value</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            nodes.append(node.right)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            nodes.append(node.left)</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">preorder_generator</span>(<span class="params">tree</span>):</span><br><span class="line">    <span class="string">"""返回一个能够以前序遍历的次序遍历二叉树节点的generator。"""</span></span><br><span class="line">    nodes = [tree]</span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">len</span>(nodes) &gt; <span class="number">0</span>:</span><br><span class="line">        node = nodes.pop()</span><br><span class="line">        <span class="keyword">yield</span> node.value</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            nodes.append(node.right)</span><br><span class="line">        <span class="keyword">if</span> node.left <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            nodes.append(node.left)</span><br></pre></td></tr></tbody></table></figure>
+
 <p>但是，很多语言并不支持<code>generator</code>。与之相比，<code>iterator</code>要亲民得多，更容易移植。例如，即使是Common Lisp这种一穷二白的语言，也可以实现和Python的<code>iterator</code>以及<code>for</code>类似的效果</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">in-package</span> #<span class="symbol">:cl-user</span>)</span><br><span class="line"></span><br><span class="line">(<span class="name">defpackage</span> #<span class="symbol">:com</span>.liutos.binary-tree</span><br><span class="line">  (<span class="symbol">:use</span> #<span class="symbol">:cl</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">in-package</span> #<span class="symbol">:com</span>.liutos.binary-tree)</span><br><span class="line"></span><br><span class="line">(<span class="name">defclass</span> preorder-iterator ()</span><br><span class="line">  ((<span class="name">nodes</span></span><br><span class="line">    <span class="symbol">:initform</span> <span class="literal">nil</span>)</span><br><span class="line">   (<span class="name">tree</span></span><br><span class="line">    <span class="symbol">:initarg</span> <span class="symbol">:tree</span>))</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"前序遍历二叉树的迭代器"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> initialize-instance <span class="symbol">:after</span> ((<span class="name">instance</span> preorder-iterator) <span class="symbol">&amp;key</span>)</span><br><span class="line">  (<span class="name">with-slots</span> (<span class="name">nodes</span> tree)</span><br><span class="line">      instance</span><br><span class="line">    (<span class="name">when</span> tree</span><br><span class="line">      (<span class="name">push</span> tree nodes))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defgeneric</span> next (<span class="name">iterator</span>)</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"返回迭代器的下一个值。"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">define-condition</span> stop-iteration (<span class="name">error</span>)</span><br><span class="line">  ()</span><br><span class="line">  (<span class="symbol">:documentation</span> <span class="string">"Python中StopIteration异常的等价物。"</span>))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmethod</span> next ((<span class="name">iterator</span> preorder-iterator))</span><br><span class="line">  (<span class="name">with-slots</span> (<span class="name">nodes</span>) iterator</span><br><span class="line">    (<span class="name">when</span> (<span class="name">null</span> nodes)</span><br><span class="line">      (<span class="name">error</span> 'stop-iteration))</span><br><span class="line"></span><br><span class="line">    (<span class="name">let</span> ((<span class="name">node</span> (<span class="name">pop</span> nodes)))</span><br><span class="line">      <span class="comment">;; 一个节点的结构为：(值 左子树 右子树)</span></span><br><span class="line">      (<span class="name">when</span> (<span class="name">third</span> node)</span><br><span class="line">        (<span class="name">push</span> (<span class="name">third</span> node) nodes))</span><br><span class="line">      (<span class="name">when</span> (<span class="name">second</span> node)</span><br><span class="line">        (<span class="name">push</span> (<span class="name">second</span> node) nodes))</span><br><span class="line">      (<span class="name">first</span> node))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defmacro</span> for-in (<span class="name">var</span> iterator <span class="symbol">&amp;body</span> forms)</span><br><span class="line">  <span class="string">"将iterator中的值逐个绑定到变量var上，并执行forms中的表达式。"</span></span><br><span class="line">  (<span class="name">let</span> ((<span class="name">iter</span> (<span class="name">gensym</span>)))</span><br><span class="line">    `(let ((,iter ,iterator))</span><br><span class="line">       (handler-case</span><br><span class="line">           (loop</span><br><span class="line">              (let ((,var (next ,iter)))</span><br><span class="line">                ,@forms))</span><br><span class="line">         (stop-iteration (c)</span><br><span class="line">           (declare (ignorable c)))))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defparameter</span> *tree*</span><br><span class="line">  '(<span class="number">4</span> (<span class="number">2</span> (<span class="number">1</span> <span class="literal">nil</span> <span class="literal">nil</span>) (<span class="number">3</span> <span class="literal">nil</span> <span class="literal">nil</span>)) (<span class="number">6</span> (<span class="number">5</span> <span class="literal">nil</span> <span class="literal">nil</span>) (<span class="number">7</span> <span class="literal">nil</span> <span class="literal">nil</span>))))</span><br><span class="line"></span><br><span class="line">(<span class="name">defun</span> test-preorder-iterator ()</span><br><span class="line">  <span class="string">"测试前序遍历迭代器。"</span></span><br><span class="line">  (<span class="name">for-in</span> n (<span class="name">make-instance</span> 'preorder-iterator</span><br><span class="line">                           <span class="symbol">:tree</span> *tree*)</span><br><span class="line">    (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~C"</span> n #\Tab)))</span><br></pre></td></tr></tbody></table></figure>
+
 <h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>中序遍历和后序遍历也可以写成迭代器，证明略。</p>
 
     </div>
@@ -331,7 +345,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2021/05/03/非递归遍历二叉树到底有什么用/" title="非递归遍历二叉树到底有什么用">https://liutos.github.io/2021/05/03/非递归遍历二叉树到底有什么用/</a>
+    <a href="https://liutos.github.io/2021/05/03/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/" title="非递归遍历二叉树到底有什么用">https://liutos.github.io/2021/05/03/非递归遍历二叉树到底有什么用/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -344,10 +358,10 @@
           
           <div class="post-tags">
               <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
-              <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
               <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
-              <a href="/tags/二叉树/" rel="tag"><i class="fa fa-tag"></i> 二叉树</a>
-              <a href="/tags/递归/" rel="tag"><i class="fa fa-tag"></i> 递归</a>
+              <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag"><i class="fa fa-tag"></i> 二叉树</a>
+              <a href="/tags/%E9%80%92%E5%BD%92/" rel="tag"><i class="fa fa-tag"></i> 递归</a>
               <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
           </div>
 
@@ -357,11 +371,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/04/17/当你SET的时候，Redis到底在SET些什么/" rel="prev" title="当你SET的时候，Redis到底在SET些什么">
+    <a href="/2021/04/17/%E5%BD%93%E4%BD%A0SET%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8CRedis%E5%88%B0%E5%BA%95%E5%9C%A8SET%E4%BA%9B%E4%BB%80%E4%B9%88/" rel="prev" title="当你SET的时候，Redis到底在SET些什么">
       <i class="fa fa-chevron-left"></i> 当你SET的时候，Redis到底在SET些什么
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/06/14/从AOP到method-combination/" rel="next" title="从AOP到method-combination">
+    <a href="/2021/06/14/%E4%BB%8EAOP%E5%88%B0method-combination/" rel="next" title="从AOP到method-combination">
       从AOP到method-combination <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -443,13 +457,13 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#iterator是个啥？"><span class="nav-number">1.</span> <span class="nav-text">iterator是个啥？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写一个前序遍历的iterator"><span class="nav-number">2.</span> <span class="nav-text">写一个前序遍历的iterator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iterator的优势"><span class="nav-number">3.</span> <span class="nav-text">iterator的优势</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#iterator%E6%98%AF%E4%B8%AA%E5%95%A5%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">iterator是个啥？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%99%E4%B8%80%E4%B8%AA%E5%89%8D%E5%BA%8F%E9%81%8D%E5%8E%86%E7%9A%84iterator"><span class="nav-number">2.</span> <span class="nav-text">写一个前序遍历的iterator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iterator%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">3.</span> <span class="nav-text">iterator的优势</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -458,7 +472,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -471,7 +485,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">120</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -496,19 +510,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -557,16 +571,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -592,6 +606,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -620,6 +642,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -637,7 +666,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2021/05/03/非递归遍历二叉树到底有什么用/",
+            url: "https://liutos.github.io/2021/05/03/%E9%9D%9E%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8/",
             identifier: "2021/05/03/非递归遍历二叉树到底有什么用/",
             title: "非递归遍历二叉树到底有什么用"
           }
@@ -660,7 +689,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: 'ef04ce5ebd01e185f9a9f642f576851e',
+      id: 'cff21a917ae1495e448696da7dbbccb3',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -668,4 +697,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

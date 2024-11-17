@@ -45,18 +45,22 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="使用 call/cc 实现计数循环什么是计数循环计数循环就是从一个数字$i$开始一直遍历到另一个数字$j$为止的循环过程。例如，下面的 Python 代码就会遍历从 0 到 9 这 10 个整数并逐个打印它们 12for i in range(10):    print(i)  如果是在 C 语言中实现同样的功能，代码会更显著一些 12345678910#include <stdi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="使用 call/cc 实现计数循环">
 <meta property="og:url" content="https://liutos.github.io/2023/05/07/impl-dotimes-by-callcc/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="使用 call/cc 实现计数循环什么是计数循环计数循环就是从一个数字$i$开始一直遍历到另一个数字$j$为止的循环过程。例如，下面的 Python 代码就会遍历从 0 到 9 这 10 个整数并逐个打印它们 12for i in range(10):    print(i)  如果是在 C 语言中实现同样的功能，代码会更显著一些 12345678910#include <stdi">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-05-07T08:58:39.000Z">
-<meta property="article:modified_time" content="2023-05-07T08:58:39.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20230507/%E7%94%A8callcc%E6%A8%A1%E6%8B%9F%E8%AE%A1%E6%95%B0%E5%BE%AA%E7%8E%AF.jpg">
+<meta property="article:published_time" content="2023-05-07T08:52:26.000Z">
+<meta property="article:modified_time" content="2023-05-07T09:00:18.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="lisp">
+<meta property="article:tag" content="编程语言">
+<meta property="article:tag" content="宏">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20230507/%E7%94%A8callcc%E6%A8%A1%E6%8B%9F%E8%AE%A1%E6%95%B0%E5%BE%AA%E7%8E%AF.jpg">
 
 <link rel="canonical" href="https://liutos.github.io/2023/05/07/impl-dotimes-by-callcc/">
 
@@ -70,7 +74,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>使用 call/cc 实现计数循环 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +219,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          使用 call/cc 实现计数循环
         </h1>
 
         <div class="post-meta">
@@ -224,8 +228,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2023-05-07 16:58:39" itemprop="dateCreated datePublished" datetime="2023-05-07T16:58:39+08:00">2023-05-07</time>
+              <time title="创建时间：2023-05-07 16:52:26 / 修改时间：17:00:18" itemprop="dateCreated datePublished" datetime="2023-05-07T16:52:26+08:00">2023-05-07</time>
             </span>
 
           
@@ -253,7 +258,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="使用-call-cc-实现计数循环"><a href="#使用-call-cc-实现计数循环" class="headerlink" title="使用 call/cc 实现计数循环"></a>使用 call/cc 实现计数循环</h1><h2 id="什么是计数循环"><a href="#什么是计数循环" class="headerlink" title="什么是计数循环"></a>什么是计数循环</h2><p>计数循环就是从一个数字$i$开始一直遍历到另一个数字$j$为止的循环过程。例如，下面的 Python 代码就会遍历从 0 到 9 这 10 个整数并逐个打印它们</p>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果是在 C 语言中实现同样的功能，代码会更显著一些</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在 C 语言的例子中，显式地指定了计数器变量<code>i</code>从 0 开始并且在等于 10 的时候结束循环，比之 Python 版本更有循环的味道。</p>
+<h2 id="拆开循环计数的语法糖"><a href="#拆开循环计数的语法糖" class="headerlink" title="拆开循环计数的语法糖"></a>拆开循环计数的语法糖</h2><p>使用 C 语言的<code>while</code>语句同样可以实现计数循环，示例代码如下</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">    i++;</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果将<code>while</code>也视为<code>if</code>和<code>goto</code>的语法糖的话，可以进一步将计数循环写成更原始的形式</p>
+<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">label0:</span><br><span class="line">  <span class="keyword">if</span> (i &gt;= <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">goto</span> label1;</span><br><span class="line">  }</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">  i++;</span><br><span class="line">  <span class="keyword">goto</span> label0;</span><br><span class="line">label1:</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="Common-Lisp-中的-go-与续延"><a href="#Common-Lisp-中的-go-与续延" class="headerlink" title="Common Lisp 中的 go 与续延"></a>Common Lisp 中的 go 与续延</h2><p>在 Common Lisp 中也有与 C 语言的<code>goto</code>特性相近的 special form，那就是<a href="http://clhs.lisp.se/Body/s_tagbod.htm"><code>tagbody</code></a>和<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/s_go.htm"><code>go</code></a>。使用它们可以将 C 代码直白地翻译为对应的 Common Lisp 版本</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">i</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   label0</span><br><span class="line">     (<span class="name">when</span> (<span class="name">&gt;=</span> i <span class="number">10</span>)</span><br><span class="line">       (<span class="name">go</span> label1))</span><br><span class="line"></span><br><span class="line">     (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~%"</span> i)</span><br><span class="line">     (<span class="name">incf</span> i)</span><br><span class="line">     (<span class="name">go</span> label0)</span><br><span class="line">   label1))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>聪明的你一定已经发现了，此处的第二个符号<code>label1</code>其实是丝毫不必要的，只要写成下面的形式即可</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">i</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   label0</span><br><span class="line">     (<span class="name">when</span> (<span class="name">&lt;</span> i <span class="number">10</span>)</span><br><span class="line">       (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~%"</span> i)</span><br><span class="line">       (<span class="name">incf</span> i)</span><br><span class="line">       (<span class="name">go</span> label0))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这个形式不仅仅是更简单了，而且它暴露出了一个事实：<code>label0</code>所表示的，其实就是在将变量<code>i</code>绑定为 0<strong>之后</strong>要执行的代码的位置。换句话说，它标识了一个续延（continuation）。</p>
+<h2 id="用-call-cc-重新实现计数循环"><a href="#用-call-cc-重新实现计数循环" class="headerlink" title="用 call/cc 重新实现计数循环"></a>用 call/cc 重新实现计数循环</h2><p>如果你用的语言中支持 first-class 的续延，那么便可以用来实现计数循环，例如<a href="https://github.com/Liutos/LiutCL">233-lisp</a>。在 233-lisp 中，提供了特殊操作符<code>call/cc</code>来捕捉当前续延对象，这个名字借鉴自 Scheme。借助这个操作符，即便没有<code>tagbody</code>和<code>go</code>，也可以实现计数循环。</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20230507/%E7%94%A8callcc%E6%A8%A1%E6%8B%9F%E8%AE%A1%E6%95%B0%E5%BE%AA%E7%8E%AF.jpg" alt="用callcc模拟计数循环"></p>
+<p>在上面的代码中，<code>call/cc</code>捕捉到的续延就是“赋值给局部变量<code>i</code>”。在将这个续延<code>k</code>保存到变量<code>next</code>之后，用 0 初始化变量<code>i</code>。之后只要<code>i</code>还小于 10，就将它打印到标准输出，并启动保存在了变量<code>next</code>中的续延，回到给变量<code>i</code>赋值的地方。此时传递给续延的参数为<code>(+ i 1)</code>，就实现了变量<code>i</code>的自增操作。当<code>(&lt; i 10)</code>不再成立时，也就不会启动续延“回到过去”了，至此，进程结束。</p>
+<p>在 233-lisp 中，将<code>dotimes</code>作为一个内置的宏用<code>call/cc</code>实现了一遍，参见<a href="https://github.com/Liutos/LiutCL/blob/6342693cb682b6d2f47067c3d3c9c6ce46eb891c/src/interpreter.lisp#L568">这里</a>，其代码如下</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> expand-dotimes-to-call/cc (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"将 DOTIMES 语句 EXPR 编译为等价的 CALL/CC 语句。"</span></span><br><span class="line">  (<span class="name">assert</span> (<span class="name">eq</span> (<span class="name">first</span> expr) 'dotimes))</span><br><span class="line">  (<span class="name">destructuring-bind</span> ((<span class="name">var</span> count-form) <span class="symbol">&amp;rest</span> statements)</span><br><span class="line">      (<span class="name">rest</span> expr)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">a</span> (<span class="name">gensym</span>))</span><br><span class="line">          (<span class="name">count-form-result</span> (<span class="name">gensym</span>))</span><br><span class="line">          (<span class="name">next</span> (<span class="name">gensym</span>)))</span><br><span class="line">      `(let ((,count-form-result ,count-form)) ; 由于目前 LET 只支持一个绑定，因此这里要写多个 LET。</span><br><span class="line">         (let ((,next <span class="number">0</span>))               ; 由于 <span class="number">233</span>-lisp 中尚未支持 NIL，因此这里填个 <span class="number">0</span>。</span><br><span class="line">           (let ((,var (call/cc (k)</span><br><span class="line">                                (progn</span><br><span class="line">                                  (setf ,next k)</span><br><span class="line">                                  <span class="number">0</span>))))     ; 计数循环从 <span class="number">0</span> 开始。</span><br><span class="line">             (if (&lt; ,var ,count-form-result)</span><br><span class="line">                 (progn</span><br><span class="line">                   ,@statements</span><br><span class="line">                   (,next (+ ,var <span class="number">1</span>)))</span><br><span class="line">                 <span class="number">0</span>)))))))                  <span class="comment">; 由于目前没有 NIL，因此返回一个数字 0 来代替。</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>变量<code>count-form-result</code>和<code>next</code>分别表示在宏展开后的代码中的计数上限和被捕捉的续延。之所以让它们以<code>(gensym)</code>的方式来命名，是为了避免多次求值<code>count-form</code>表达式，以及避免存储续延的变量名恰好出乎意料地与<code>statements</code>中的变量名冲突了，这也算是编写 Common Lisp 的宏时的最佳实践了。</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>直接用<code>call/cc</code>来一个个实现 Common Lisp 中的各种控制流还是太繁琐了，更好的方案是用<code>call/cc</code>先实现<code>tagbody</code>和<code>go</code>，然后再用后两者继续实现<code>do</code>，最后用<code>do</code>分别实现<code>dolist</code>和<code>dotimes</code>。当然了，这些都是后话了。</p>
+
     </div>
 
     
@@ -291,7 +324,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2023/05/07/impl-dotimes-by-callcc/" title="">https://liutos.github.io/2023/05/07/impl-dotimes-by-callcc/</a>
+    <a href="https://liutos.github.io/2023/05/07/impl-dotimes-by-callcc/" title="使用 call/cc 实现计数循环">https://liutos.github.io/2023/05/07/impl-dotimes-by-callcc/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +334,12 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+              <a href="/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" rel="tag"><i class="fa fa-tag"></i> 编程语言</a>
+              <a href="/tags/%E5%AE%8F/" rel="tag"><i class="fa fa-tag"></i> 宏</a>
+          </div>
 
         
 
@@ -308,12 +347,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/08/21/%E5%A6%82%E4%BD%95%E5%9C%A8CommonLisp%E4%B8%AD%E8%A7%A3%E6%9E%90%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2022/08/21/%E5%A6%82%E4%BD%95%E5%9C%A8CommonLisp%E4%B8%AD%E8%A7%A3%E6%9E%90%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0/" rel="prev" title="如何在CommonLisp中解析命令行参数">
+      <i class="fa fa-chevron-left"></i> 如何在CommonLisp中解析命令行参数
     </a></div>
       <div class="post-nav-item">
-    <a href="/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2023/05/23/%E5%9C%A8CommonLisp%E4%B8%AD%E6%94%AF%E6%8C%81JSON%E8%AF%AD%E6%B3%95/" rel="next" title="在CommonLisp中支持JSON语法">
+      在CommonLisp中支持JSON语法 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +433,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-call-cc-%E5%AE%9E%E7%8E%B0%E8%AE%A1%E6%95%B0%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.</span> <span class="nav-text">使用 call/cc 实现计数循环</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%AE%A1%E6%95%B0%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.1.</span> <span class="nav-text">什么是计数循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%86%E5%BC%80%E5%BE%AA%E7%8E%AF%E8%AE%A1%E6%95%B0%E7%9A%84%E8%AF%AD%E6%B3%95%E7%B3%96"><span class="nav-number">1.2.</span> <span class="nav-text">拆开循环计数的语法糖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Common-Lisp-%E4%B8%AD%E7%9A%84-go-%E4%B8%8E%E7%BB%AD%E5%BB%B6"><span class="nav-number">1.3.</span> <span class="nav-text">Common Lisp 中的 go 与续延</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8-call-cc-%E9%87%8D%E6%96%B0%E5%AE%9E%E7%8E%B0%E8%AE%A1%E6%95%B0%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.4.</span> <span class="nav-text">用 call/cc 重新实现计数循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">1.5.</span> <span class="nav-text">后记</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +451,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +644,7 @@
         config: {page: {
             url: "https://liutos.github.io/2023/05/07/impl-dotimes-by-callcc/",
             identifier: "2023/05/07/impl-dotimes-by-callcc/",
-            title: ""
+            title: "使用 call/cc 实现计数循环"
           }
         }
       });

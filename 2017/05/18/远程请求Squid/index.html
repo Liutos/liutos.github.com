@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -46,19 +46,21 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="不久前在办公室抓取某网站S被对方发现，导致对方自动屏蔽了来自办公室网络的所有HTTP请求，连正儿八经地用浏览器打开也不行。为了可以摸索出“改头换面”（改HTTP头部）访问的方法，必须先成功访问至少一次，看看发出的HTTP头部是怎样的才行。恰好想起自己有一台腾讯云服务器，登上去用curl访问网站S，发现是成功的（也就是尚未被屏蔽）。既然如此，干脆在服务器上部署一套Squid作为正向代理，帮助办公网络">
-<meta name="keywords" content="教程,tutorial,squid">
 <meta property="og:type" content="article">
 <meta property="og:title" content="远程请求Squid">
-<meta property="og:url" content="https://liutos.github.io/2017/05/18/远程请求Squid/index.html">
+<meta property="og:url" content="https://liutos.github.io/2017/05/18/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82Squid/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
 <meta property="og:description" content="不久前在办公室抓取某网站S被对方发现，导致对方自动屏蔽了来自办公室网络的所有HTTP请求，连正儿八经地用浏览器打开也不行。为了可以摸索出“改头换面”（改HTTP头部）访问的方法，必须先成功访问至少一次，看看发出的HTTP头部是怎样的才行。恰好想起自己有一台腾讯云服务器，登上去用curl访问网站S，发现是成功的（也就是尚未被屏蔽）。既然如此，干脆在服务器上部署一套Squid作为正向代理，帮助办公网络">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-09T15:20:35.000Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-05-18T13:18:42.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="教程">
+<meta property="article:tag" content="tutorial">
+<meta property="article:tag" content="squid">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="远程请求Squid">
-<meta name="twitter:description" content="不久前在办公室抓取某网站S被对方发现，导致对方自动屏蔽了来自办公室网络的所有HTTP请求，连正儿八经地用浏览器打开也不行。为了可以摸索出“改头换面”（改HTTP头部）访问的方法，必须先成功访问至少一次，看看发出的HTTP头部是怎样的才行。恰好想起自己有一台腾讯云服务器，登上去用curl访问网站S，发现是成功的（也就是尚未被屏蔽）。既然如此，干脆在服务器上部署一套Squid作为正向代理，帮助办公网络">
 
-<link rel="canonical" href="https://liutos.github.io/2017/05/18/远程请求Squid/">
+<link rel="canonical" href="https://liutos.github.io/2017/05/18/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82Squid/">
 
 
 <script id="page-configurations">
@@ -110,6 +112,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -201,10 +204,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/05/18/远程请求Squid/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/05/18/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82Squid/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -231,7 +234,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
               </span>
 
           
@@ -243,7 +246,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2017/05/18/远程请求Squid/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2017/05/18/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82Squid/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/05/18/远程请求Squid/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -261,18 +264,25 @@
       
         <p>不久前在办公室抓取某网站S被对方发现，导致对方自动屏蔽了来自办公室网络的所有HTTP请求，连正儿八经地用浏览器打开也不行。为了可以摸索出“改头换面”（改HTTP头部）访问的方法，必须先成功访问至少一次，看看发出的HTTP头部是怎样的才行。恰好想起自己有一台腾讯云服务器，登上去用<code>curl</code>访问网站S，发现是成功的（也就是尚未被屏蔽）。既然如此，干脆在服务器上部署一套Squid作为正向代理，帮助办公网络的请求成功抵达网站S并拿到响应页面。</p>
 <p>用<code>apt-get</code>安装了<code>squid</code>软件包后启动并监听端口8321，在办公网络下将公网地址和8321端口作为代理配置传递给<code>curl</code>的<code>-x</code>选项，访问网站S。不料Squid拒绝了我的请求，返回了如下内容（节选自<code>curl -v</code>命令的输出）</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt; HTTP/1.1 403 Forbidden</span><br><span class="line">&lt; Server: squid/3.5.12</span><br><span class="line">&lt; Mime-Version: 1.0</span><br><span class="line">&lt; Date: Wed, 17 May 2017 15:18:08 GMT</span><br><span class="line">&lt; Content-Type: text/html;charset=utf-8</span><br><span class="line">&lt; Content-Length: 3531</span><br><span class="line">&lt; X-Squid-Error: ERR_ACCESS_DENIED 0</span><br><span class="line">&lt; Vary: Accept-Language</span><br><span class="line">&lt; Content-Language: en</span><br><span class="line">&lt; X-Cache: MISS from VM-44-136-ubuntu</span><br><span class="line">&lt; X-Cache-Lookup: NONE from VM-44-136-ubuntu:8321</span><br><span class="line">&lt; Via: 1.1 VM-44-136-ubuntu (squid/3.5.12)</span><br><span class="line">&lt; Connection: keep-alive</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt; HTTP/1.1 403 Forbidden</span><br><span class="line">&lt; Server: squid/3.5.12</span><br><span class="line">&lt; Mime-Version: 1.0</span><br><span class="line">&lt; Date: Wed, 17 May 2017 15:18:08 GMT</span><br><span class="line">&lt; Content-Type: text/html;charset=utf-8</span><br><span class="line">&lt; Content-Length: 3531</span><br><span class="line">&lt; X-Squid-Error: ERR_ACCESS_DENIED 0</span><br><span class="line">&lt; Vary: Accept-Language</span><br><span class="line">&lt; Content-Language: en</span><br><span class="line">&lt; X-Cache: MISS from VM-44-136-ubuntu</span><br><span class="line">&lt; X-Cache-Lookup: NONE from VM-44-136-ubuntu:8321</span><br><span class="line">&lt; Via: 1.1 VM-44-136-ubuntu (squid/3.5.12)</span><br><span class="line">&lt; Connection: keep-alive</span><br></pre></td></tr></tbody></table></figure>
+
 <p>经过一番Google，才知道原来是Squid的配置导致的。在Squid配置文件（/etc/squid/squid.conf）中，默认的acl和http_access指令的设置如下</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">acl SSL_ports port 443</span><br><span class="line">acl Safe_ports port 80          # http</span><br><span class="line">acl Safe_ports port 21          # ftp</span><br><span class="line">acl Safe_ports port 443         # https</span><br><span class="line">acl Safe_ports port 70          # gopher</span><br><span class="line">acl Safe_ports port 210         # wais</span><br><span class="line">acl Safe_ports port 1025-65535  # unregistered ports</span><br><span class="line">acl Safe_ports port 280         # http-mgmt</span><br><span class="line">acl Safe_ports port 488         # gss-http</span><br><span class="line">acl Safe_ports port 591         # filemaker</span><br><span class="line">acl Safe_ports port 777         # multiling http</span><br><span class="line">acl CONNECT method CONNECT</span><br></pre></td></tr></tbody></table></figure>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http_access deny !Safe_ports</span><br><span class="line">http_access deny CONNECT !SSL_ports</span><br><span class="line">http_access allow localhost manager</span><br><span class="line">http_access deny manager</span><br><span class="line">http_access allow localhost</span><br><span class="line">http_access deny all</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">acl SSL_ports port 443</span><br><span class="line">acl Safe_ports port 80          # http</span><br><span class="line">acl Safe_ports port 21          # ftp</span><br><span class="line">acl Safe_ports port 443         # https</span><br><span class="line">acl Safe_ports port 70          # gopher</span><br><span class="line">acl Safe_ports port 210         # wais</span><br><span class="line">acl Safe_ports port 1025-65535  # unregistered ports</span><br><span class="line">acl Safe_ports port 280         # http-mgmt</span><br><span class="line">acl Safe_ports port 488         # gss-http</span><br><span class="line">acl Safe_ports port 591         # filemaker</span><br><span class="line">acl Safe_ports port 777         # multiling http</span><br><span class="line">acl CONNECT method CONNECT</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http_access deny !Safe_ports</span><br><span class="line">http_access deny CONNECT !SSL_ports</span><br><span class="line">http_access allow localhost manager</span><br><span class="line">http_access deny manager</span><br><span class="line">http_access allow localhost</span><br><span class="line">http_access deny all</span><br></pre></td></tr></tbody></table></figure>
+
 <p>由于Squid是按照第一条匹配的http_access指令来决定允许还是拒绝的，因为来自我办公网络的请求实际上命中的是</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access deny all</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access deny all</span><br></pre></td></tr></tbody></table></figure>
+
 <p>因此被拒绝是必然的。为了可以接受来自办公网络发起的请求，首先需要新增一行acl指令。通过Squid的日志（/var/log/squid/access.log）可以查看到被拒绝的请求的IP地址是多少，此处假设IP地址为8.7.198.45，那么相应的acl指令如下</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acl myclients src 8.7.198.45</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acl myclients src 8.7.198.45</span><br></pre></td></tr></tbody></table></figure>
+
 <p>此处的myclients为自定义的名称，顾名思义，它表示“我的客户端”；src是一种acl类型，表示客户端的IP地址；8.7.198.45是src类型下的参数，也就是我所使用的客户端发出的请求的来源IP地址。配置了acl后，还需要配置http_access指令。这个就简单多了，只要允许上面创建的这个acl的访问即可，内容如下</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access allow myclients</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http_access allow myclients</span><br></pre></td></tr></tbody></table></figure>
+
 <p>之后再重启Squid服务即可</p>
-<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service squid restart</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> service squid restart</span><br></pre></td></tr></tbody></table></figure>
+
 <p>这时候再从办公网络中以腾讯云服务器上的Squid为正向代理发出请求，就不会再被Squid拒绝了。</p>
 <p>全文完</p>
 
@@ -313,7 +323,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2017/05/18/远程请求Squid/" title="远程请求Squid">https://liutos.github.io/2017/05/18/远程请求Squid/</a>
+    <a href="https://liutos.github.io/2017/05/18/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82Squid/" title="远程请求Squid">https://liutos.github.io/2017/05/18/远程请求Squid/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -325,7 +335,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/教程/" rel="tag"><i class="fa fa-tag"></i> 教程</a>
+              <a href="/tags/%E6%95%99%E7%A8%8B/" rel="tag"><i class="fa fa-tag"></i> 教程</a>
               <a href="/tags/tutorial/" rel="tag"><i class="fa fa-tag"></i> tutorial</a>
               <a href="/tags/squid/" rel="tag"><i class="fa fa-tag"></i> squid</a>
           </div>
@@ -336,11 +346,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2017/04/30/如何使用CL实现snowflake/" rel="prev" title="如何使用CL实现snowflake">
+    <a href="/2017/04/30/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CL%E5%AE%9E%E7%8E%B0snowflake/" rel="prev" title="如何使用CL实现snowflake">
       <i class="fa fa-chevron-left"></i> 如何使用CL实现snowflake
     </a></div>
       <div class="post-nav-item">
-    <a href="/2017/06/04/cl-mongo用法入门/" rel="next" title="cl-mongo用法入门">
+    <a href="/2017/06/04/cl-mongo%E7%94%A8%E6%B3%95%E5%85%A5%E9%97%A8/" rel="next" title="cl-mongo用法入门">
       cl-mongo用法入门 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -427,7 +437,7 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -436,7 +446,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -449,7 +459,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">120</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -474,19 +484,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -535,16 +545,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -570,6 +580,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -598,6 +616,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -615,7 +640,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2017/05/18/远程请求Squid/",
+            url: "https://liutos.github.io/2017/05/18/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82Squid/",
             identifier: "2017/05/18/远程请求Squid/",
             title: "远程请求Squid"
           }
@@ -638,7 +663,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '43938d56fa19c58894eb4efc337462e0',
+      id: '7f32c0e86205292bb93a0a90460f8111',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -646,4 +671,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

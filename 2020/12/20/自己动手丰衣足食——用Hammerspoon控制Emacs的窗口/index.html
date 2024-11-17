@@ -45,18 +45,21 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="有一天，我用Homebrew安装了一些软件——因为已经是一个月前的事情了，所以已经记不清是安装了什么。安装后并没有立即出现什么问题，只是又过了两天我重新启动电脑后，发现同样是由Homebrew安装的Emacs不由分说地无法启动了。这下可麻烦了，毕竟我是org-mode的重度使用者，还需要偶尔用SLIME写点Common Lisp的代码，而它们都运行在Emacs中。 直觉告诉我，也许重新安装一下Em">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="自己动手丰衣足食——用Hammerspoon控制Emacs的窗口">
 <meta property="og:url" content="https://liutos.github.io/2020/12/20/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E4%B8%B0%E8%A1%A3%E8%B6%B3%E9%A3%9F%E2%80%94%E2%80%94%E7%94%A8Hammerspoon%E6%8E%A7%E5%88%B6Emacs%E7%9A%84%E7%AA%97%E5%8F%A3/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="有一天，我用Homebrew安装了一些软件——因为已经是一个月前的事情了，所以已经记不清是安装了什么。安装后并没有立即出现什么问题，只是又过了两天我重新启动电脑后，发现同样是由Homebrew安装的Emacs不由分说地无法启动了。这下可麻烦了，毕竟我是org-mode的重度使用者，还需要偶尔用SLIME写点Common Lisp的代码，而它们都运行在Emacs中。 直觉告诉我，也许重新安装一下Em">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201220/hammerspoon%E7%9A%84%E7%A4%BA%E4%BE%8B.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201220/%E7%94%A8BTT%E8%A7%A6%E5%8F%91Hammerspoon%E7%9A%84%E5%BF%AB%E6%8D%B7%E9%94%AE.jpg">
 <meta property="article:published_time" content="2020-12-20T13:00:07.000Z">
-<meta property="article:modified_time" content="2020-12-20T13:00:07.000Z">
+<meta property="article:modified_time" content="2020-12-20T13:00:13.000Z">
 <meta property="article:author" content="Liutos">
 <meta property="article:tag" content="emacs,lisp,programming">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201220/hammerspoon%E7%9A%84%E7%A4%BA%E4%BE%8B.jpg">
 
 <link rel="canonical" href="https://liutos.github.io/2020/12/20/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E4%B8%B0%E8%A1%A3%E8%B6%B3%E9%A3%9F%E2%80%94%E2%80%94%E7%94%A8Hammerspoon%E6%8E%A7%E5%88%B6Emacs%E7%9A%84%E7%AA%97%E5%8F%A3/">
 
@@ -70,7 +73,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>自己动手丰衣足食——用Hammerspoon控制Emacs的窗口 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +218,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          自己动手丰衣足食——用Hammerspoon控制Emacs的窗口
         </h1>
 
         <div class="post-meta">
@@ -224,8 +227,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-12-20 21:00:07" itemprop="dateCreated datePublished" datetime="2020-12-20T21:00:07+08:00">2020-12-20</time>
+              <time title="创建时间：2020-12-20 21:00:07 / 修改时间：21:00:13" itemprop="dateCreated datePublished" datetime="2020-12-20T21:00:07+08:00">2020-12-20</time>
             </span>
 
           
@@ -253,7 +257,61 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>有一天，我用<code>Homebrew</code>安装了一些软件——因为已经是一个月前的事情了，所以已经记不清是安装了什么。安装后并没有立即出现什么问题，只是又过了两天我重新启动电脑后，发现同样是由<code>Homebrew</code>安装的<code>Emacs</code>不由分说地无法启动了。这下可麻烦了，毕竟我是<code>org-mode</code>的重度使用者，还需要偶尔用<code>SLIME</code>写点Common Lisp的代码，而它们都运行在<code>Emacs</code>中。</p>
+<p>直觉告诉我，也许重新安装一下<code>Emacs</code>，一切就可以恢复正常。重装了<code>Emacs</code>后，又遇到了别的问题——用<code>BetterTouchTools</code>在Touch Bar中添加的按钮，无法在<code>Emacs</code>已经启动的情况下，切换到它的窗口上。</p>
+<p>非要说，问题其实也不大，毕竟很多时候是将MacBook Pro合上盖子当主机用的，Touch Bar在工作时的使用频率并不高。此外，糊<code>Node.js</code>等语言的代码时也用不到<code>Emacs</code>——还是<code>VSCode</code>更合适。</p>
+<p>但这就是令人不爽，因此我决定要解决它——用<code>Hammerspoon</code>。</p>
+<h1 id="Hammerspoon是什么？"><a href="#Hammerspoon是什么？" class="headerlink" title="Hammerspoon是什么？"></a>Hammerspoon是什么？</h1><p><code>Hammerspoon</code>的<a href="https://www.hammerspoon.org/">官网</a>很好地说明了这款工具的定位和原理</p>
+<blockquote>
+<p>This is a tool for powerful automation of OS X. At its core, Hammerspoon is just a bridge between the operating system and a Lua scripting  engine. What gives Hammerspoon its power is a set of extensions that expose  specific pieces of system functionality, to the user.</p>
+</blockquote>
+<ol>
+<li>它运行在OS X上——现在应该叫macOS；</li>
+<li>它是用来自动化操作的——就像系统内置的<code>Automator</code>或第三方的<code>Alfred Workflow</code>那样；</li>
+<li>它的原理是将操作系统的功能封装成了可以用<code>Lua</code>代码调用的模块；</li>
+</ol>
+<p>例如下面的代码</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"E"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">  hs.alert.show(<span class="string">"Hello World!"</span>)</span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>就可以让使用者在按下组合键<code>⌘⌥⌃e</code>的时候，在屏幕正中间显示<code>Hello World!</code>这段文本</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201220/hammerspoon%E7%9A%84%E7%A4%BA%E4%BE%8B.jpg"></p>
+<h1 id="为什么用Hammerspoon？"><a href="#为什么用Hammerspoon？" class="headerlink" title="为什么用Hammerspoon？"></a>为什么用Hammerspoon？</h1><p><code>Hammerspoon</code>正好可以解决我的问题，它的<code>hs.window</code>模块既可以让使用者遍历所有打开的窗口（用<a href="https://www.hammerspoon.org/docs/hs.window.html#allWindows"><code>hs.window.allWindows</code>函数</a>），也可以聚焦到指定的窗口上（用<a href="https://www.hammerspoon.org/docs/hs.window.html#focus"><code>focus</code>方法</a>）。有了它们，将<code>Emacs</code>调到最前面（front-most）来也就是水到渠成的事情了：</p>
+<ol>
+<li>调用函数<code>hs.window.allWindows</code>函数，获得所有窗口的列表；</li>
+<li>逐个检查列表中的窗口对象，如果属于<code>Emacs</code>的，就调用窗口的方法<code>focus</code>，并跳出循环。</li>
+</ol>
+<p>剩下的两个问题便是：</p>
+<ol>
+<li><code>Emacs</code>的<code>bundle ID</code>是什么；</li>
+<li>如何知道一个窗口对象的<code>bundle ID</code>。</li>
+</ol>
+<h1 id="Emacs的bundle-ID"><a href="#Emacs的bundle-ID" class="headerlink" title="Emacs的bundle ID"></a>Emacs的bundle ID</h1><p><code>Bundle ID</code>可以在macOS中独一无二地标识一个应用。要想知道<code>Emacs</code>的<code>bundle ID</code>是什么，只需要打开文件<code>/Applications/Emacs.app/Contents/Info.plist</code>，看看其中键为<code>CFBundleIdentifier</code>的值即可。</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜  Contents grep -A 1 <span class="string">'CFBundleIdentifier'</span> Info.plist</span><br><span class="line">	&lt;key&gt;CFBundleIdentifier&lt;/key&gt;</span><br><span class="line">	&lt;string&gt;org.gnu.Emacs&lt;/string&gt;</span><br><span class="line">➜  Contents</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以看到，<code>Emacs</code>的<code>bundle ID</code>是<code>org.gnu.Emacs</code>。</p>
+<h1 id="来点Lua代码吧"><a href="#来点Lua代码吧" class="headerlink" title="来点Lua代码吧"></a>来点Lua代码吧</h1><p>有了<code>Emacs</code>的<code>bundle ID</code>，接下来就可以在<code>Hammerspoon</code>中定义快捷键了。由于最后会通过Touch Bar上的按钮来触发这组快捷键，复杂点也不要紧，因此我直接沿用了<code>Hammerspoon</code>的入门指引中作为例子的<code>⌘⌥⌃w</code></p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>为了在一个循环中逐个遍历窗口对象，将<code>hs.window.allWindows</code>的返回值保存到一个局部变量中</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>照着简书上的<a href="https://www.jianshu.com/p/de5a4b132918">这篇文章</a>，依葫芦画瓢地用<code>for</code>和<code>pairs</code>来遍历变量<code>windows</code></p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>窗口自身没有<code>bundle ID</code>，为此需要先获取窗口所属的应用。查看文档可以知道，有一个<a href="https://www.hammerspoon.org/docs/hs.window.html#application"><code>application</code>方法</a>正是用来获取应用对象的</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">         <span class="keyword">local</span> app = win:application()</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>调用<code>allWindows</code>时使用的是英文句号（<code>.</code>），调用<code>application</code>则是用冒号（<code>:</code>），这正是<code>Lua</code>中调用函数与方法时语法上的差异。</p>
+<p>再用应用的<a href="https://www.hammerspoon.org/docs/hs.application.html#bundleID"><code>bundleID</code></a>方法获得它的<code>bundle ID</code></p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">         <span class="keyword">local</span> app = win:application()</span><br><span class="line">         <span class="keyword">local</span> bundleID = app:bundleID()</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在，只要变量<code>bundleID</code>等于<code>Emacs</code>的<code>bundle ID</code>就可以聚焦到当前遍历的窗口上了</p>
+<figure class="highlight lua"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">hs.hotkey.bind({<span class="string">"cmd"</span>, <span class="string">"alt"</span>, <span class="string">"ctrl"</span>}, <span class="string">"W"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">      <span class="keyword">local</span> windows = hs.window.allWindows()</span><br><span class="line">      <span class="comment">-- 在Lua中遍历表的方法：https://www.jianshu.com/p/de5a4b132918</span></span><br><span class="line">      <span class="keyword">for</span> _, win <span class="keyword">in</span> <span class="built_in">pairs</span>(windows) <span class="keyword">do</span></span><br><span class="line">         <span class="keyword">local</span> app = win:application()</span><br><span class="line">         <span class="keyword">local</span> bundleID = app:bundleID()</span><br><span class="line">         <span class="keyword">if</span> bundleID == <span class="string">"org.gnu.Emacs"</span> <span class="keyword">then</span></span><br><span class="line">            win:focus()</span><br><span class="line">         <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="让Touch-Bar按钮触发这一切"><a href="#让Touch-Bar按钮触发这一切" class="headerlink" title="让Touch Bar按钮触发这一切"></a>让Touch Bar按钮触发这一切</h1><p>只需要在<code>BetterTouchTools</code>中配置一下即可</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201220/%E7%94%A8BTT%E8%A7%A6%E5%8F%91Hammerspoon%E7%9A%84%E5%BF%AB%E6%8D%B7%E9%94%AE.jpg"></p>
+<p>这个方法比此前唤起<code>/Applications/Emacs.app</code>的方式更好，因为它只依赖于<code>Emacs</code>逻辑上亘古不变的东西——<code>bundle ID</code>，而不依赖于其物理上的安装位置。</p>
+
     </div>
 
     
@@ -291,7 +349,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2020/12/20/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E4%B8%B0%E8%A1%A3%E8%B6%B3%E9%A3%9F%E2%80%94%E2%80%94%E7%94%A8Hammerspoon%E6%8E%A7%E5%88%B6Emacs%E7%9A%84%E7%AA%97%E5%8F%A3/" title="">https://liutos.github.io/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/</a>
+    <a href="https://liutos.github.io/2020/12/20/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E4%B8%B0%E8%A1%A3%E8%B6%B3%E9%A3%9F%E2%80%94%E2%80%94%E7%94%A8Hammerspoon%E6%8E%A7%E5%88%B6Emacs%E7%9A%84%E7%AA%97%E5%8F%A3/" title="自己动手丰衣足食——用Hammerspoon控制Emacs的窗口">https://liutos.github.io/2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -308,12 +366,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/11/19/%E4%B8%80%E7%AE%AD%E5%8F%8C%E9%9B%95%E2%80%94%E2%80%94org-mode%E4%B8%AD%E7%9A%84ID%E5%92%8CCUSTOM-ID%E5%AD%97%E6%AE%B5/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2020/11/18/%E4%B8%80%E7%AE%AD%E5%8F%8C%E9%9B%95%E2%80%94%E2%80%94org-mode%E4%B8%AD%E7%9A%84ID%E5%92%8CCUSTOM-ID%E5%AD%97%E6%AE%B5/" rel="prev" title="一箭双雕——org-mode中的ID和CUSTOM_ID字段">
+      <i class="fa fa-chevron-left"></i> 一箭双雕——org-mode中的ID和CUSTOM_ID字段
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/01/02/%E5%B9%B4%E8%BD%BB%E4%BA%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAVSCode%E6%8F%92%E4%BB%B6/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2021/01/02/%E5%B9%B4%E8%BD%BB%E4%BA%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAVSCode%E6%8F%92%E4%BB%B6/" rel="next" title="年轻人的第一个VSCode扩展">
+      年轻人的第一个VSCode扩展 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +452,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hammerspoon%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">Hammerspoon是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8Hammerspoon%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">为什么用Hammerspoon？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Emacs%E7%9A%84bundle-ID"><span class="nav-number">3.</span> <span class="nav-text">Emacs的bundle ID</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%A5%E7%82%B9Lua%E4%BB%A3%E7%A0%81%E5%90%A7"><span class="nav-number">4.</span> <span class="nav-text">来点Lua代码吧</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A9Touch-Bar%E6%8C%89%E9%92%AE%E8%A7%A6%E5%8F%91%E8%BF%99%E4%B8%80%E5%88%87"><span class="nav-number">5.</span> <span class="nav-text">让Touch Bar按钮触发这一切</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +470,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +663,7 @@
         config: {page: {
             url: "https://liutos.github.io/2020/12/20/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E4%B8%B0%E8%A1%A3%E8%B6%B3%E9%A3%9F%E2%80%94%E2%80%94%E7%94%A8Hammerspoon%E6%8E%A7%E5%88%B6Emacs%E7%9A%84%E7%AA%97%E5%8F%A3/",
             identifier: "2020/12/20/自己动手丰衣足食——用Hammerspoon控制Emacs的窗口/",
-            title: ""
+            title: "自己动手丰衣足食——用Hammerspoon控制Emacs的窗口"
           }
         }
       });

@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -45,20 +45,22 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="题外话大一的时候为了装13就自己去图书馆借了很多讲解和CS有关却又还没有教或者不会教的内容的书来看，其中就有数据结构那一类的。不过我已经忘记了当时去图书馆借到的是什么样子的书了，只知道书的封面是蓝色的（要是有空的话去图书馆找找就可以知道了=。=）。不过说到数据结构方面的书，在国内大部分和计算机或者信息技术沾边的专业的学生中，比较广为人知的应该既不是《算法导论》，也不是《算法概论》，而是编者为严蔚敏">
-<meta name="keywords" content="algorithm,bfs,面试">
+  <meta name="description" content="题外话大一的时候为了装13就自己去图书馆借了很多讲解和CS有关却又还没有教或者不会教的内容的书来看，其中就有数据结构那一类的。不过我已经忘记了当时去图书馆借到的是什么样子的书了，只知道书的封面是蓝色的（要是有空的话去图书馆找找就可以知道了=。=）。不过说到数据结构方面的书，在国内大部分和计算机或者信息技术沾边的专业的学生中，比较广为人知的应该既不是《算法导论》，也不是《算法概论">
 <meta property="og:type" content="article">
 <meta property="og:title" content="报告层数的广度有限搜索">
-<meta property="og:url" content="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/index.html">
+<meta property="og:url" content="https://liutos.github.io/2013/02/18/%E6%8A%A5%E5%91%8A%E5%B1%82%E6%95%B0%E7%9A%84%E5%B9%BF%E5%BA%A6%E6%9C%89%E9%99%90%E6%90%9C%E7%B4%A2/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="题外话大一的时候为了装13就自己去图书馆借了很多讲解和CS有关却又还没有教或者不会教的内容的书来看，其中就有数据结构那一类的。不过我已经忘记了当时去图书馆借到的是什么样子的书了，只知道书的封面是蓝色的（要是有空的话去图书馆找找就可以知道了=。=）。不过说到数据结构方面的书，在国内大部分和计算机或者信息技术沾边的专业的学生中，比较广为人知的应该既不是《算法导论》，也不是《算法概论》，而是编者为严蔚敏">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-09T15:20:35.000Z">
+<meta property="og:description" content="题外话大一的时候为了装13就自己去图书馆借了很多讲解和CS有关却又还没有教或者不会教的内容的书来看，其中就有数据结构那一类的。不过我已经忘记了当时去图书馆借到的是什么样子的书了，只知道书的封面是蓝色的（要是有空的话去图书馆找找就可以知道了=。=）。不过说到数据结构方面的书，在国内大部分和计算机或者信息技术沾边的专业的学生中，比较广为人知的应该既不是《算法导论》，也不是《算法概论">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2013-02-18T14:59:40.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="algorithm">
+<meta property="article:tag" content="bfs">
+<meta property="article:tag" content="面试">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="报告层数的广度有限搜索">
-<meta name="twitter:description" content="题外话大一的时候为了装13就自己去图书馆借了很多讲解和CS有关却又还没有教或者不会教的内容的书来看，其中就有数据结构那一类的。不过我已经忘记了当时去图书馆借到的是什么样子的书了，只知道书的封面是蓝色的（要是有空的话去图书馆找找就可以知道了=。=）。不过说到数据结构方面的书，在国内大部分和计算机或者信息技术沾边的专业的学生中，比较广为人知的应该既不是《算法导论》，也不是《算法概论》，而是编者为严蔚敏">
 
-<link rel="canonical" href="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/">
+<link rel="canonical" href="https://liutos.github.io/2013/02/18/%E6%8A%A5%E5%91%8A%E5%B1%82%E6%95%B0%E7%9A%84%E5%B9%BF%E5%BA%A6%E6%9C%89%E9%99%90%E6%90%9C%E7%B4%A2/">
 
 
 <script id="page-configurations">
@@ -110,6 +112,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -201,10 +204,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2013/02/18/%E6%8A%A5%E5%91%8A%E5%B1%82%E6%95%B0%E7%9A%84%E5%B9%BF%E5%BA%A6%E6%9C%89%E9%99%90%E6%90%9C%E7%B4%A2/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -231,7 +234,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-01-09 23:20:35" itemprop="dateModified" datetime="2019-01-09T23:20:35+08:00">2019-01-09</time>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
               </span>
 
           
@@ -243,7 +246,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2013/02/18/报告层数的广度有限搜索/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2013/02/18/%E6%8A%A5%E5%91%8A%E5%B1%82%E6%95%B0%E7%9A%84%E5%B9%BF%E5%BA%A6%E6%9C%89%E9%99%90%E6%90%9C%E7%B4%A2/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/02/18/报告层数的广度有限搜索/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -269,11 +272,13 @@
 </ul>
 <p>我选择了第二种，因此查找功能需要增加一个传出参数depth，它的类型声明是int *。因此查找功能的入口函数的整体类型声明为：</p>
 <pre><code>TreeNode dfs_search_tree(Tree tree, char target, int *depth)
-</code></pre><p>（我觉得标识符取得还不错，不用解释了吧→_→）那么dfs_search_tree这个函数要如何实现具体的功能呢？现在我们是为了要在队列的版本上进行修改来实现查找功能的，那么原本需要使用队列来存储的深度信息现在应该交给函数的参数来存储，但是这个参数不能添加到入口函数中，因此我们需要一个辅助函数，就叫做dfs_search_tree_aux函数好了，它至少需要上面的函数所拥有的三个参数，并且还需要一个用来传递而不是用来返回的<em>深度</em>的信息，不妨声明为int *nd。</p>
+</code></pre>
+<p>（我觉得标识符取得还不错，不用解释了吧→_→）那么dfs_search_tree这个函数要如何实现具体的功能呢？现在我们是为了要在队列的版本上进行修改来实现查找功能的，那么原本需要使用队列来存储的深度信息现在应该交给函数的参数来存储，但是这个参数不能添加到入口函数中，因此我们需要一个辅助函数，就叫做dfs_search_tree_aux函数好了，它至少需要上面的函数所拥有的三个参数，并且还需要一个用来传递而不是用来返回的<em>深度</em>的信息，不妨声明为int *nd。</p>
 <p>试想一下，如果我们在处理第i层的一个节点，那么显然可以知道它的左右子树的根结点如果存在，必定会位于第i+1层，因此在广度优先搜索的函数递归调用的时候，nd参数的传递是以加一的形式进行的，即遍历子树的时候nd必定要比测试当前节点的时候加一。不过实际上这样子是不可行的，因为我们不是在测试了父节点之后就立即递归调用函数来测试两个子节点，在测试父节点的时候，只是把两个子节点给放进了队列罢了，因此没有办法通过简单地直接加一的方法来传递深度参数。我们需要的信息是，现在这个节点和上一个节点到底是不是在同一层。</p>
 <p>确定是否在同一层的一个办法，是知道每一层的节点的数目。例如第一层显然只能有一个节点，因此当测试了第一个节点后就可以知道第一层已经测试完了，那么接下来的函数调用的nd参数的值就至少应该增加一，并且应该把表示一层的节点个数的参数设置为第二层的对应值。第二层的节点个数可以利用遍历第一层的时候来得到。例如对于第i层的节点，如果每一个节点都有两个子节点，那么第i+1层的节点数目就是第i层的两倍，对于其它情况也可以很简单地推算出来。因此，我们需要额外的两个参数current_count和next_count，来分别存储当前层剩下的节点数目以及下一层目前所探测到的节点数目。现在，我们可以写出辅助函数的原型了：</p>
 <pre><code>TreeNode dfs_search_tree_aux(char target, int depth, int *nd, Queue queue, int current_count, int next_count)
-</code></pre><p>其中没有和dfs_search_tree一样的tree参数，因为在广度优先搜索中，树的节点是存储在队列queue中的。dfs_search_tree_aux这个函数的逻辑是这样子的：</p>
+</code></pre>
+<p>其中没有和dfs_search_tree一样的tree参数，因为在广度优先搜索中，树的节点是存储在队列queue中的。dfs_search_tree_aux这个函数的逻辑是这样子的：</p>
 <ol>
 <li>先看看队列是否为空。如果是就说明节点都已经测试完了，仍然没有找到目标节点，所以返回NULL；</li>
 <li>从队列中取出最早进入的节点。</li>
@@ -284,7 +289,7 @@
 <li>接下来，测试左子树是否为空。如果非空，就把当前节点的左子树根结点入队，并给next_count加一。同样的，右子树也是类似的处理办法。</li>
 <li>最后，递归调用辅助函数本身。</li>
 </ol>
-<p>最后给出代码链接好了：<a href="https://github.com/Liutos/CLab/blob/master/binary_tree/prototype.c" target="_blank" rel="noopener">https://github.com/Liutos/CLab/blob/master/binary_tree/prototype.c</a>。</p>
+<p>最后给出代码链接好了：<a href="https://github.com/Liutos/CLab/blob/master/binary_tree/prototype.c">https://github.com/Liutos/CLab/blob/master/binary_tree/prototype.c</a>。</p>
 
     </div>
 
@@ -323,7 +328,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/" title="报告层数的广度有限搜索">https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/</a>
+    <a href="https://liutos.github.io/2013/02/18/%E6%8A%A5%E5%91%8A%E5%B1%82%E6%95%B0%E7%9A%84%E5%B9%BF%E5%BA%A6%E6%9C%89%E9%99%90%E6%90%9C%E7%B4%A2/" title="报告层数的广度有限搜索">https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -337,7 +342,7 @@
           <div class="post-tags">
               <a href="/tags/algorithm/" rel="tag"><i class="fa fa-tag"></i> algorithm</a>
               <a href="/tags/bfs/" rel="tag"><i class="fa fa-tag"></i> bfs</a>
-              <a href="/tags/面试/" rel="tag"><i class="fa fa-tag"></i> 面试</a>
+              <a href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 面试</a>
           </div>
 
         
@@ -346,11 +351,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2012/10/26/递归、闭包、面向对象/" rel="prev" title="递归、闭包、面向对象">
+    <a href="/2012/10/26/%E9%80%92%E5%BD%92%E3%80%81%E9%97%AD%E5%8C%85%E3%80%81%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" rel="prev" title="递归、闭包、面向对象">
       <i class="fa fa-chevron-left"></i> 递归、闭包、面向对象
     </a></div>
       <div class="post-nav-item">
-    <a href="/2017/01/10/手动安装mysql/" rel="next" title="手动安装mysql">
+    <a href="/2017/01/10/%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85mysql/" rel="next" title="手动安装mysql">
       手动安装mysql <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -432,13 +437,13 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题外话"><span class="nav-number">1.</span> <span class="nav-text">题外话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#百度面试题"><span class="nav-number">2.</span> <span class="nav-text">百度面试题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三个版本"><span class="nav-number">3.</span> <span class="nav-text">第三个版本</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A2%98%E5%A4%96%E8%AF%9D"><span class="nav-number">1.</span> <span class="nav-text">题外话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BE%E5%BA%A6%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">百度面试题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E4%B8%AA%E7%89%88%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">第三个版本</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -447,7 +452,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -460,7 +465,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">120</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -485,19 +490,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -546,16 +551,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -581,6 +586,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -609,6 +622,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -626,7 +646,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2013/02/18/报告层数的广度有限搜索/",
+            url: "https://liutos.github.io/2013/02/18/%E6%8A%A5%E5%91%8A%E5%B1%82%E6%95%B0%E7%9A%84%E5%B9%BF%E5%BA%A6%E6%9C%89%E9%99%90%E6%90%9C%E7%B4%A2/",
             identifier: "2013/02/18/报告层数的广度有限搜索/",
             title: "报告层数的广度有限搜索"
           }
@@ -649,7 +669,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '9055b2349a9f7d6741d9e39aaf690e4f',
+      id: 'e8f0cdc5f5813a07edd02890296696ae',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -657,4 +677,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

@@ -2,7 +2,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -46,19 +46,20 @@
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <meta name="description" content="最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了cl-mongo这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己">
-<meta name="keywords" content="common lisp,mongo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cl-mongo用法入门">
-<meta property="og:url" content="https://liutos.github.io/2017/06/04/cl-mongo用法入门/index.html">
+<meta property="og:url" content="https://liutos.github.io/2017/06/04/cl-mongo%E7%94%A8%E6%B3%95%E5%85%A5%E9%97%A8/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
 <meta property="og:description" content="最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了cl-mongo这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-02T13:29:37.000Z">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-06-04T13:21:20.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
+<meta property="article:author" content="Liutos">
+<meta property="article:tag" content="common lisp">
+<meta property="article:tag" content="mongo">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cl-mongo用法入门">
-<meta name="twitter:description" content="最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了cl-mongo这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己">
 
-<link rel="canonical" href="https://liutos.github.io/2017/06/04/cl-mongo用法入门/">
+<link rel="canonical" href="https://liutos.github.io/2017/06/04/cl-mongo%E7%94%A8%E6%B3%95%E5%85%A5%E9%97%A8/">
 
 
 <script id="page-configurations">
@@ -110,6 +111,7 @@
   </style>
 </noscript>
 
+<link rel="alternate" href="/atom.xml" title="小打小闹写点bug" type="application/atom+xml">
 <script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('/style.css');loadCss('//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext');loadCss('//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css');</script><noscript><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&amp;display=swap&amp;subset=latin,latin-ext"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage">
@@ -201,10 +203,10 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/06/04/cl-mongo用法入门/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2017/06/04/cl-mongo%E7%94%A8%E6%B3%95%E5%85%A5%E9%97%A8/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/微信.jpg">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
       <meta itemprop="name" content="Liutos">
       <meta itemprop="description" content="记录编程生涯的大大小小的事情">
     </span>
@@ -231,7 +233,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-12-02 21:29:37" itemprop="dateModified" datetime="2018-12-02T21:29:37+08:00">2018-12-02</time>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
               </span>
 
           
@@ -243,7 +245,7 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2017/06/04/cl-mongo用法入门/#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/2017/06/04/cl-mongo%E7%94%A8%E6%B3%95%E5%85%A5%E9%97%A8/#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/06/04/cl-mongo用法入门/" itemprop="commentCount"></span>
     </a>
   </span>
@@ -259,27 +261,37 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了<a href="https://github.com/fons/cl-mongo" target="_blank" rel="noopener">cl-mongo</a>这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己查阅，也为了方便有相同需求的人了解如何使用cl-mongo，于是写了这篇文章。</p>
+        <p>最近用Common Lisp开发一个个人项目，需要记录发出的HTTP请求的参数，包括了目标地址、HTTP body，以及HTTP头部等多种信息。为了可以结构化地存储这些数据（比如HTTP头部是由多个键值对组成的），我选择将它们保存到MongoDB中。Google一番后，我找到了<a href="https://github.com/fons/cl-mongo">cl-mongo</a>这个库，可以在Common Lisp中读写MongoDB，尝试了一下也确实可以满足自己的需求。为了方便自己查阅，也为了方便有相同需求的人了解如何使用cl-mongo，于是写了这篇文章。</p>
 <p>首先使用<code>CL-MONGO:MONGO</code>函数连接MongoDB的服务器程序（mongod）。因为在我的系统上mongod进程监听的是27017这个端口，并且我希望使用的数据库名为test，因此键入如下代码来连接数据库</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:mongo</span> <span class="symbol">:db</span> <span class="string">"test"</span></span><br><span class="line">                <span class="symbol">:host</span> <span class="string">"127.0.0.1"</span></span><br><span class="line">                <span class="symbol">:port</span> <span class="number">27017</span>)</span><br></pre></td></tr></tbody></table></figure>
+
 <p>连接上了数据库后，首先尝试往其中写入一个文档。假设现在要记录的是发出的HTTP请求的信息，那么一个可以写入的基本信息就是请求的目标地址。假设在命令行的mongo shell中输入的内容如下</p>
-<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.insert({<span class="attr">uri</span>: <span class="string">'http://example.com'</span>});</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.<span class="property">http_request</span>.<span class="title function_">insert</span>({<span class="attr">uri</span>: <span class="string">'http://example.com'</span>});</span><br></pre></td></tr></tbody></table></figure>
+
 <p>那么使用cl-mongo提供的<code>DB.INSERT</code>函数达到上述效果的代码如下</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.insert <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>求值上述代码后返回值为NIL。为了将上述写入的文档重新查询出来，需要使用cl-mongo提供的<code>DB.FIND</code>函数。因为只有一个文档，所以直接查询就可以查看到结果了。在mongo shell中我们可以使用如下代码查询</p>
-<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.http_request.find();</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.<span class="property">http_request</span>.<span class="title function_">find</span>();</span><br></pre></td></tr></tbody></table></figure>
+
 <p>使用<code>DB.FIND</code>函数的话编写的代码可能会长得像下面这样</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>)</span><br></pre></td></tr></tbody></table></figure>
+
 <p>在我的系统上求值了上述代码后在REPL中输出的内容如下</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">((<span class="number">86</span> <span class="number">449</span> <span class="number">0</span> <span class="number">1</span> <span class="number">8</span> <span class="number">0</span> <span class="number">0</span> <span class="number">1</span> <span class="string">"http_request"</span>)</span><br><span class="line"> (<span class="name">&lt;CL-MONGO</span><span class="symbol">:DOCUMENT&gt;</span> : { </span><br><span class="line">   _id : CL-MONGO:<span class="symbol">:BSON-OID</span> [#(<span class="number">89</span> <span class="number">52</span> <span class="number">26</span> <span class="number">160</span> <span class="number">109</span> <span class="number">156</span> <span class="number">254</span> <span class="number">71</span> <span class="number">184</span> <span class="number">115</span> <span class="number">102</span> <span class="number">30</span>)]</span><br><span class="line">   elements : <span class="number">1</span>}</span><br><span class="line"></span><br><span class="line">))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>值得注意的是，<code>DB.FIND</code>的返回值不完全是文档组成的数组，而是在这个结果集的数组之外又多了一层列表，并且列表的第一个元素还是一个一看之下不知其所以然的子列表。由于cl-mongo的GitHub上没有提及这个玩意儿的来历，我也没有深入去了解<code>DB.FIND</code>函数的实现代码，因此这个元素就先忽略它吧。如果需要使用<code>DB.FIND</code>查询到的结果，那么开发者需要对<code>DB.FIND</code>的返回值应用一下函数<code>SECOND</code>才行，如下</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>返回值的列表中的每一个元素都是<code>CL-MONGO:DOCUMENT</code>这个类的实例对象，如果要直接使用还是稍微有点不方便的，因此我写了一个函数用来将<code>DB.FIND</code>函数查询到的<code>CL-MONGO:DOCUMENT</code>的实例对象都转换为较为熟悉，容易操作的数据类型——association list，函数的定义如下</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> document-to-alist (<span class="name">doc</span>)</span><br><span class="line">  <span class="string">"Convert a DOC of type CL-MONGO:DOCUMENT to a equivalent, serializable alist."</span></span><br><span class="line">  (<span class="name">check-type</span> doc cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">  (<span class="name">labels</span> ((<span class="name">aux</span> (<span class="name">doc</span>)</span><br><span class="line">             (<span class="name">cond</span> ((<span class="name">typep</span> doc 'cl-mongo<span class="symbol">:document</span>)</span><br><span class="line">                    (<span class="name">let</span> ((<span class="name">keys</span> (<span class="name">cl-mongo</span><span class="symbol">:get-keys</span> doc)))</span><br><span class="line">                      (<span class="name">mapcar</span> #'(lambda (key)</span><br><span class="line">                                  (cons key</span><br><span class="line">                                        (aux (cl-mongo:get-element key doc))))</span><br><span class="line">                              keys)))</span><br><span class="line">                   (<span class="name">t</span> doc))))</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">id</span> (<span class="name">cl-mongo</span><span class="symbol">:doc-id</span> doc)))</span><br><span class="line">      (<span class="name">append</span> (<span class="name">aux</span> doc) (<span class="name">list</span> (<span class="name">cons</span> <span class="string">"_id"</span> id))))))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>使用如下代码即可查看方才所写入的文档究竟长什么样子了</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">document-to-alist</span> (<span class="name">first</span> (<span class="name">second</span> (<span class="name">cl-mongo</span><span class="symbol">:db</span>.find <span class="string">"http_request"</span> <span class="symbol">:all</span>))))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>如果想要修改数据库中的文档，例如增加一个字段，那么可以使用cl-mongo提供的<code>DB.UPDATE</code>函数，用法如下</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.update <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>)</span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"$set"</span></span><br><span class="line">                                 (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"method"</span> <span class="string">"GET"</span>)))</span><br></pre></td></tr></tbody></table></figure>
+
 <p>最后如果要删除刚才所写入的这个文档，可以使用cl-mongo的<code>DB.DELETE</code>函数（我很好奇这个函数居然不是叫做DB.REMOVE），用法如下</p>
 <figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">cl-mongo</span><span class="symbol">:db</span>.delete <span class="string">"http_request"</span></span><br><span class="line">                    (<span class="name">cl-mongo</span><span class="symbol">:kv</span> <span class="string">"uri"</span> <span class="string">"http://example.com"</span>))</span><br></pre></td></tr></tbody></table></figure>
 
@@ -320,7 +332,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2017/06/04/cl-mongo用法入门/" title="cl-mongo用法入门">https://liutos.github.io/2017/06/04/cl-mongo用法入门/</a>
+    <a href="https://liutos.github.io/2017/06/04/cl-mongo%E7%94%A8%E6%B3%95%E5%85%A5%E9%97%A8/" title="cl-mongo用法入门">https://liutos.github.io/2017/06/04/cl-mongo用法入门/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -342,11 +354,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2017/05/18/远程请求Squid/" rel="prev" title="远程请求Squid">
+    <a href="/2017/05/18/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82Squid/" rel="prev" title="远程请求Squid">
       <i class="fa fa-chevron-left"></i> 远程请求Squid
     </a></div>
       <div class="post-nav-item">
-    <a href="/2018/08/02/MacBook-Pro使用体验/" rel="next" title="MacBook Pro使用体验">
+    <a href="/2018/08/02/MacBook-Pro%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C/" rel="next" title="MacBook Pro使用体验">
       MacBook Pro使用体验 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -433,7 +445,7 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/loading.png" data-original="/images/微信.jpg">
+    <img class="site-author-image" itemprop="image" alt="Liutos" src="/images/%E5%BE%AE%E4%BF%A1.jpg">
   <p class="site-author-name" itemprop="name">Liutos</p>
   <div class="site-description" itemprop="description">记录编程生涯的大大小小的事情</div>
 </div>
@@ -442,7 +454,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -455,7 +467,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">120</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -480,19 +492,19 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
-          <a href="http://u3coding.com" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
+          <a href="http://u3coding.com/" title="http://u3coding.com" rel="noopener" target="_blank">u3coding</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://www.skypyb.com/" title="https://www.skypyb.com/" rel="noopener" target="_blank">编码妙♂妙♂屋</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="https://xfy.now.sh" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
+          <a href="https://xfy.now.sh/" title="https://xfy.now.sh" rel="noopener" target="_blank">:- op( xfy ).</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="https://davincievans.top/" title="https://davincievans.top/" rel="noopener" target="_blank">Davinciの红茶馆</a>
         </li>
         <li class="links-of-blogroll-item">
-          <a href="http://reverland.org" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
+          <a href="http://reverland.org/" title="http://reverland.org" rel="noopener" target="_blank">reverland的知行阁</a>
         </li>
         <li class="links-of-blogroll-item">
           <a href="http://www.gndrive.org/" title="http://www.gndrive.org/" rel="noopener" target="_blank">高达数字实验室</a>
@@ -541,16 +553,16 @@
 <div class="copyright">
   
   © 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Liutos</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v7.3.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -576,6 +588,14 @@
 
 
 
+
+
+
+
+
+
+
+
   
 
 
@@ -604,6 +624,13 @@
 
 
 
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        
 
 <script src="/bundle.js"></script><script>
   function loadCount() {
@@ -621,7 +648,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2017/06/04/cl-mongo用法入门/",
+            url: "https://liutos.github.io/2017/06/04/cl-mongo%E7%94%A8%E6%B3%95%E5%85%A5%E9%97%A8/",
             identifier: "2017/06/04/cl-mongo用法入门/",
             title: "cl-mongo用法入门"
           }
@@ -644,7 +671,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '4949b76cd9dbd354e93b2a3c6547008f',
+      id: '963caba84d284bb9f3a9155454e96802',
         language: 'zh-CN',
       distractionFreeMode: true
     });
@@ -652,4 +679,12 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
   }, window.Gitalk);
 });
 ;
-!function(e){var c=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function i(){for(var r=0;r<c.length;r++)t=c[r],0<=(n=t.getBoundingClientRect()).top&&0<=n.left&&n.top<=(e.innerHeight||document.documentElement.clientHeight)&&function(){var t,n,e,i,o=c[r];t=o,n=function(){c=c.filter(function(t){return o!==t})},e=new Image,i=t.getAttribute("data-original"),e.onload=function(){t.src=i,n&&n()},e.src=i}();var t,n}i(),e.addEventListener("scroll",function(){var t,n;t=i,n=e,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(n)},500)})}(this);</script></body></html>
+
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        ;
+window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});;
+(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>

@@ -45,17 +45,24 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="在上一篇文章中，实现了对大于号（>）的处理，那么对if表达式的编译也就是信手拈来的事了，不解释太多。在本篇中，将会讲述一下如何产生可以调用来自于C语言标准库的exit(3)函数的汇编代码。 在Common Lisp中并没有一个叫做EXIT的内置函数，所以如同之前实现的_exit一样，我会新增一种需要识别的(first expr)，即符号exit。为了可以调用C语言标准库中的exit函数，需要">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="调用C标准库的exit函数">
 <meta property="og:url" content="https://liutos.github.io/2019/07/10/%E8%B0%83%E7%94%A8C%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84exit%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="在上一篇文章中，实现了对大于号（>）的处理，那么对if表达式的编译也就是信手拈来的事了，不解释太多。在本篇中，将会讲述一下如何产生可以调用来自于C语言标准库的exit(3)函数的汇编代码。 在Common Lisp中并没有一个叫做EXIT的内置函数，所以如同之前实现的_exit一样，我会新增一种需要识别的(first expr)，即符号exit。为了可以调用C语言标准库中的exit函数，需要">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-07-10T13:40:54.000Z">
-<meta property="article:modified_time" content="2019-07-10T13:40:54.000Z">
+<meta property="article:published_time" content="2019-07-10T11:58:06.000Z">
+<meta property="article:modified_time" content="2020-07-21T06:14:32.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="common lisp">
+<meta property="article:tag" content="lisp">
+<meta property="article:tag" content="assembly">
+<meta property="article:tag" content="compiler">
+<meta property="article:tag" content="setq">
+<meta property="article:tag" content="x64">
+<meta property="article:tag" content="汇编">
+<meta property="article:tag" content="编译器">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://liutos.github.io/2019/07/10/%E8%B0%83%E7%94%A8C%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84exit%E5%87%BD%E6%95%B0/">
@@ -70,7 +77,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>调用C标准库的exit函数 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +222,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          调用C标准库的exit函数
         </h1>
 
         <div class="post-meta">
@@ -225,8 +232,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-07-10 21:40:54" itemprop="dateCreated datePublished" datetime="2019-07-10T21:40:54+08:00">2019-07-10</time>
+              <time title="创建时间：2019-07-10 19:58:06" itemprop="dateCreated datePublished" datetime="2019-07-10T19:58:06+08:00">2019-07-10</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
+              </span>
 
           
   
@@ -253,7 +267,28 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>在<a href="http://liutos.github.io/2019/07/03/%E7%BC%96%E8%AF%91%E5%A4%A7%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6/">上一篇文章</a>中，实现了对大于号（<code>&gt;</code>）的处理，那么对<code>if</code>表达式的编译也就是信手拈来的事了，不解释太多。在本篇中，将会讲述一下如何产生可以调用来自于C语言标准库的<code>exit(3)</code>函数的汇编代码。</p>
+<p>在Common Lisp中并没有一个叫做<code>EXIT</code>的内置函数，所以如同之前实现的<code>_exit</code>一样，我会新增一种需要识别的<code>(first expr)</code>，即符号<code>exit</code>。为了可以调用C语言标准库中的<code>exit</code>函数，需要遵循调用约定。对于<code>exit</code>这种只有一个参数的函数而言，情形比较简单，只需要跟对<code>_exit</code>一样处理即可。刚开始，我写下的代码是这样的</p>
+<span id="more"></span>
+
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span> globals)</span><br><span class="line">  <span class="comment">;; 省略不必要的内容</span></span><br><span class="line">  (<span class="name">cond</span> <span class="comment">;; 省略不必要的内容</span></span><br><span class="line">        ((<span class="name">member</span> (<span class="name">first</span> expr) '(_exit exit))</span><br><span class="line">         <span class="comment">;; 暂时以硬编码的方式识别一个函数是否来自于C语言的标准库</span></span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %edi)</span><br><span class="line">           (call :|_exit|)))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>对<code>(exit 1)</code>进行编译，会得到如下的代码</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">        .data</span><br><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EDI</span><br><span class="line">        CALL _exit</span><br></pre></td></tr></tbody></table></figure>
+
+<p>不过这样的代码经过编译链接之后，一运行就会遇到段错误（segmentation fault）。经过一番放狗搜索后，才知道原来在macOS上调用C函数的时候，需要先将栈对齐到16字节——我将其理解为将指向栈顶的指针对齐到16字节。于是乎，我将<code>jjcc2</code>修改为如下的形式</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span> globals)</span><br><span class="line">  <span class="comment">;; 省略不必要的内容</span></span><br><span class="line">  (<span class="name">cond</span> <span class="comment">;; 省略不必要的内容</span></span><br><span class="line">        ((<span class="name">member</span> (<span class="name">first</span> expr) '(_exit exit))</span><br><span class="line">         <span class="comment">;; 暂时以硬编码的方式识别一个函数是否来自于C语言的标准库</span></span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %edi)</span><br><span class="line">           ;; 据这篇回答（https<span class="symbol">://stackoverflow</span>.com/questions/12678230/how-to-print-argv0-in-nasm）所说，在macOS上调用C语言函数，需要将栈对齐到<span class="number">16</span>位</span><br><span class="line">           ;; 假装要对齐的是栈顶地址。因为栈顶地址是往低地址增长的，所以只需要将地址的低<span class="number">16</span>位抹掉就可以了</span><br><span class="line">           (and ,(format <span class="literal">nil</span> <span class="string">"$0x~X"</span> <span class="number">#XFFFFFFF0</span>) %esp)</span><br><span class="line">           (call :|_exit|)))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>结果发现还是不行。最后，实在没辙了，只好先写一段简单的C代码，然后用<code>gcc -S</code>生成汇编代码，来看看究竟应当如何处理这个栈的对齐要求。一番瞎折腾之后，发现原来是要处理<code>RSP</code>寄存器而不是<code>ESP</code>寄存器——我也不晓得这是为什么，<code>ESP</code>不就是<code>RSP</code>的低32位而已么。</p>
+<p>最后，把<code>jjcc2</code>写成下面这样后，终于可以成功编译<code>(exit 1)</code>了</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> jjcc2 (<span class="name">expr</span> globals)</span><br><span class="line">  <span class="string">"支持两个数的四则运算的编译器"</span></span><br><span class="line">  (<span class="name">check-type</span> globals hash-table)</span><br><span class="line">  (<span class="name">cond</span> ((<span class="name">eq</span> (<span class="name">first</span> expr) '+)</span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (addl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '-)</span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (subl %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '*)</span><br><span class="line">         <span class="comment">;; 将两个数字相乘的结果放到第二个操作数所在的寄存器中</span></span><br><span class="line">         <span class="comment">;; 因为约定了用EAX寄存器作为存放最终结果给continuation用的寄存器，所以第二个操作数应当为EAX</span></span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (imull %ebx %eax)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '/)</span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">           (cltd)</span><br><span class="line">           (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">           (idivl %ebx)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'progn)</span><br><span class="line">         (<span class="name">let</span> ((<span class="name">result</span> '()))</span><br><span class="line">           (<span class="name">dolist</span> (<span class="name">expr</span> (<span class="name">rest</span> expr))</span><br><span class="line">             (<span class="name">setf</span> result (<span class="name">append</span> result (<span class="name">jjcc2</span> expr globals))))</span><br><span class="line">           result))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'setq)</span><br><span class="line">         <span class="comment">;; 编译赋值语句的方式比较简单，就是将被赋值的符号视为一个全局变量，然后将eax寄存器中的内容移动到这里面去</span></span><br><span class="line">         <span class="comment">;; <span class="doctag">TODO:</span> 这里expr的second的结果必须是一个符号才行</span></span><br><span class="line">         <span class="comment">;; <span class="doctag">FIXME:</span> 不知道应该赋值什么比较好，先随便写个0吧</span></span><br><span class="line">         (<span class="name">setf</span> (<span class="name">gethash</span> (<span class="name">second</span> expr) globals) <span class="number">0</span>)</span><br><span class="line">         (<span class="name">values</span> (<span class="name">append</span> (<span class="name">jjcc2</span> (<span class="name">third</span> expr) globals)</span><br><span class="line">                         <span class="comment">;; 为了方便stringify函数的实现，这里直接构造出RIP-relative形式的字符串</span></span><br><span class="line">                         `((movl %eax ,(get-operand expr <span class="number">0</span>))))</span><br><span class="line">                 globals))</span><br><span class="line">        <span class="comment">;; ((eq (first expr) '_exit)</span></span><br><span class="line">        <span class="comment">;;  ;; 因为知道_exit只需要一个参数，所以将它的第一个操作数塞到EDI寄存器里面就可以了</span></span><br><span class="line">        <span class="comment">;;  ;; <span class="doctag">TODO:</span> 更好的写法，应该是有一个单独的函数来处理这种参数传递的事情（以符合calling convention的方式）</span></span><br><span class="line">        <span class="comment">;;  `((movl ,(get-operand expr 0) %edi)</span></span><br><span class="line">        <span class="comment">;;    (movl #x2000001 %eax)</span></span><br><span class="line">        <span class="comment">;;    (syscall)))</span></span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) '&gt;)</span><br><span class="line">         <span class="comment">;; 为了可以把比较之后的结果放入到EAX寄存器中，以我目前不完整的汇编语言知识，可以想到的方法如下</span></span><br><span class="line">         (<span class="name">let</span> ((<span class="name">label-greater-than</span> (<span class="name">intern</span> (<span class="name">symbol-name</span> (<span class="name">gensym</span>)) <span class="symbol">:keyword</span>))</span><br><span class="line">               (<span class="name">label-end</span> (<span class="name">intern</span> (<span class="name">symbol-name</span> (<span class="name">gensym</span>)) <span class="symbol">:keyword</span>)))</span><br><span class="line">           <span class="comment">;; 根据这篇文章（https://en.wikibooks.org/wiki/X86_Assembly/Control_Flow#Comparison_Instructions）中的说法，大于号左边的数字应该放在CMP指令的第二个操作数中，右边的放在第一个操作数中</span></span><br><span class="line">           `((movl ,(get-operand expr <span class="number">0</span>) %eax)</span><br><span class="line">             (movl ,(get-operand expr <span class="number">1</span>) %ebx)</span><br><span class="line">             (cmpl %ebx %eax)</span><br><span class="line">             (jg ,label-greater-than)</span><br><span class="line">             (movl $<span class="number">0</span> %eax)</span><br><span class="line">             (jmp ,label-end)</span><br><span class="line">             ,label-greater-than</span><br><span class="line">             (movl $<span class="number">1</span> %eax)</span><br><span class="line">             ,label-end)))</span><br><span class="line">        ((<span class="name">eq</span> (<span class="name">first</span> expr) 'if)</span><br><span class="line">         <span class="comment">;; 假定if语句的测试表达式的结果也是放在%eax寄存器中的，所以只需要拿%eax寄存器中的值跟0做比较即可（类似于C语言）</span></span><br><span class="line">         (<span class="name">let</span> ((<span class="name">label-else</span> (<span class="name">intern</span> (<span class="name">symbol-name</span> (<span class="name">gensym</span>)) <span class="symbol">:keyword</span>))</span><br><span class="line">               (<span class="name">label-end</span> (<span class="name">intern</span> (<span class="name">symbol-name</span> (<span class="name">gensym</span>)) <span class="symbol">:keyword</span>)))</span><br><span class="line">           (<span class="name">append</span> (<span class="name">jjcc2</span> (<span class="name">second</span> expr) globals)</span><br><span class="line">                   `((cmpl $<span class="number">0</span> %eax)</span><br><span class="line">                     (je ,label-else))</span><br><span class="line">                   (<span class="name">jjcc2</span> (<span class="name">third</span> expr) globals)</span><br><span class="line">                   `((jmp ,label-end)</span><br><span class="line">                     ,label-else)</span><br><span class="line">                   (<span class="name">jjcc2</span> (<span class="name">fourth</span> expr) globals)</span><br><span class="line">                   `(,label-end))))</span><br><span class="line">        ((<span class="name">member</span> (<span class="name">first</span> expr) '(_exit exit))</span><br><span class="line">         <span class="comment">;; 暂时以硬编码的方式识别一个函数是否来自于C语言的标准库</span></span><br><span class="line">         `((movl ,(get-operand expr <span class="number">0</span>) %edi)</span><br><span class="line">           ;; 据这篇回答（https<span class="symbol">://stackoverflow</span>.com/questions/12678230/how-to-print-argv0-in-nasm）所说，在macOS上调用C语言函数，需要将栈对齐到<span class="number">16</span>位</span><br><span class="line">           ;; 假装要对齐的是栈顶地址。因为栈顶地址是往低地址增长的，所以只需要将地址的低<span class="number">16</span>位抹掉就可以了</span><br><span class="line">           (and ,(format <span class="literal">nil</span> <span class="string">"$0x~X"</span> <span class="number">#XFFFFFFFFFFFFFFF0</span>) %rsp)</span><br><span class="line">           (call :|_exit|)))))</span><br></pre></td></tr></tbody></table></figure>
+
+<p>生成的汇编代码如下</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">        .data</span><br><span class="line">        .section __TEXT,__text,regular,pure_instructions</span><br><span class="line">        .globl _main</span><br><span class="line">_main:</span><br><span class="line">        MOVL $1, %EDI</span><br><span class="line">        AND $0xFFFFFFFFFFFFFFF0, %RSP</span><br><span class="line">        CALL _exit</span><br></pre></td></tr></tbody></table></figure>
+
+<p>好了，这个时候我就在想，如果想要支持其它来自C语言标准库的函数的话，只要依葫芦画瓢就好了，好像还挺简单的——天真的我如此天真地想着。</p>
+<p>全文完</p>
+
     </div>
 
     
@@ -291,7 +326,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2019/07/10/%E8%B0%83%E7%94%A8C%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84exit%E5%87%BD%E6%95%B0/" title="">https://liutos.github.io/2019/07/10/调用C标准库的exit函数/</a>
+    <a href="https://liutos.github.io/2019/07/10/%E8%B0%83%E7%94%A8C%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84exit%E5%87%BD%E6%95%B0/" title="调用C标准库的exit函数">https://liutos.github.io/2019/07/10/调用C标准库的exit函数/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +336,17 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/common-lisp/" rel="tag"><i class="fa fa-tag"></i> common lisp</a>
+              <a href="/tags/lisp/" rel="tag"><i class="fa fa-tag"></i> lisp</a>
+              <a href="/tags/assembly/" rel="tag"><i class="fa fa-tag"></i> assembly</a>
+              <a href="/tags/compiler/" rel="tag"><i class="fa fa-tag"></i> compiler</a>
+              <a href="/tags/setq/" rel="tag"><i class="fa fa-tag"></i> setq</a>
+              <a href="/tags/x64/" rel="tag"><i class="fa fa-tag"></i> x64</a>
+              <a href="/tags/%E6%B1%87%E7%BC%96/" rel="tag"><i class="fa fa-tag"></i> 汇编</a>
+              <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> 编译器</a>
+          </div>
 
         
 
@@ -308,12 +354,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/07/10/%E7%BC%96%E8%AF%91%E5%A4%A7%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2019/07/03/%E7%BC%96%E8%AF%91%E5%A4%A7%E4%BA%8E%E8%BF%90%E7%AE%97%E7%AC%A6/" rel="prev" title="编译大于运算符">
+      <i class="fa fa-chevron-left"></i> 编译大于运算符
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/08/11/%E4%B8%80%E4%B8%AA%E6%9C%89%E7%94%A8%E7%9A%84org-agenda-custom-commands%E7%9A%84%E4%BE%8B%E5%AD%90/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2019/08/11/%E4%B8%80%E4%B8%AA%E6%9C%89%E7%94%A8%E7%9A%84org-agenda-custom-commands%E7%9A%84%E4%BE%8B%E5%AD%90/" rel="next" title="一个有用的org-agenda-custom-commands的例子">
+      一个有用的org-agenda-custom-commands的例子 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -411,6 +457,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +650,7 @@
         config: {page: {
             url: "https://liutos.github.io/2019/07/10/%E8%B0%83%E7%94%A8C%E6%A0%87%E5%87%86%E5%BA%93%E7%9A%84exit%E5%87%BD%E6%95%B0/",
             identifier: "2019/07/10/调用C标准库的exit函数/",
-            title: ""
+            title: "调用C标准库的exit函数"
           }
         }
       });

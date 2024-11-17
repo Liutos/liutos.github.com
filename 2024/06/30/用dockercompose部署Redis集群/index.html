@@ -45,18 +45,24 @@
 </script>
 
 <script data-ad-client="ca-pub-4199841931601311" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <meta name="description" content="记录编程生涯的大大小小的事情">
+  <meta name="description" content="序言在目前我参与开发的代码仓库中，当需要使用 Redis 时，基本上用的都是 Redis 集群。因此，我在办公电脑上也搭建了一个 Redis 集群，以便让我为这些仓库编写的单元测试能成功运行起来。 尽管 Redis 官方提供了部署集群的指引，但这要求团队内的每位成员都要依次执行如下操作：  用 Homebrew 安装 Redis； 创建 6 个目录； 创建 6 份redis.conf配置文件； 启">
 <meta property="og:type" content="article">
-<meta property="og:title" content="小打小闹写点bug">
+<meta property="og:title" content="单测要用 Redis 集群？教你用 docker 一键部署">
 <meta property="og:url" content="https://liutos.github.io/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
-<meta property="og:description" content="记录编程生涯的大大小小的事情">
+<meta property="og:description" content="序言在目前我参与开发的代码仓库中，当需要使用 Redis 时，基本上用的都是 Redis 集群。因此，我在办公电脑上也搭建了一个 Redis 集群，以便让我为这些仓库编写的单元测试能成功运行起来。 尽管 Redis 官方提供了部署集群的指引，但这要求团队内的每位成员都要依次执行如下操作：  用 Homebrew 安装 Redis； 创建 6 个目录； 创建 6 份redis.conf配置文件； 启">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-06-30T05:37:48.000Z">
-<meta property="article:modified_time" content="2024-06-30T05:37:48.000Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E5%90%AF%E5%8A%A8%E5%8D%95%E4%B8%AARedis%E5%AE%9E%E4%BE%8B.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E5%90%AF%E5%8A%A86%E4%B8%AARedis%E5%AE%B9%E5%99%A8.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E8%AF%BB%E5%86%99Redis%E9%9B%86%E7%BE%A4.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E4%B8%80%E9%94%AE%E5%90%AF%E5%8A%A8Redis%E9%9B%86%E7%BE%A4.jpeg">
+<meta property="article:published_time" content="2024-06-30T01:32:10.000Z">
+<meta property="article:modified_time" content="2024-06-30T05:37:50.000Z">
 <meta property="article:author" content="Liutos">
-<meta property="article:tag" content="emacs,lisp,programming">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="redis">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E5%90%AF%E5%8A%A8%E5%8D%95%E4%B8%AARedis%E5%AE%9E%E4%BE%8B.jpeg">
 
 <link rel="canonical" href="https://liutos.github.io/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/">
 
@@ -70,7 +76,7 @@
   };
 </script>
 
-  <title> | 小打小闹写点bug</title>
+  <title>单测要用 Redis 集群？教你用 docker 一键部署 | 小打小闹写点bug</title>
   
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-94082039-2"></script>
     <script>
@@ -215,7 +221,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          单测要用 Redis 集群？教你用 docker 一键部署
         </h1>
 
         <div class="post-meta">
@@ -224,8 +230,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2024-06-30 13:37:48" itemprop="dateCreated datePublished" datetime="2024-06-30T13:37:48+08:00">2024-06-30</time>
+              <time title="创建时间：2024-06-30 09:32:10 / 修改时间：13:37:50" itemprop="dateCreated datePublished" datetime="2024-06-30T09:32:10+08:00">2024-06-30</time>
             </span>
 
           
@@ -253,7 +260,50 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><p>在目前我参与开发的代码仓库中，当需要使用 Redis 时，基本上用的都是 Redis 集群。因此，我在办公电脑上也搭建了一个 Redis 集群，以便让我为这些仓库编写的单元测试能成功运行起来。</p>
+<p>尽管 Redis 官方提供了部署集群的<a href="https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/">指引</a>，但这要求团队内的每位成员都要依次执行如下操作：</p>
+<ol>
+<li>用 Homebrew 安装 Redis；</li>
+<li>创建 6 个目录；</li>
+<li>创建 6 份<code>redis.conf</code>配置文件；</li>
+<li>启动 6 个<code>redis-server</code>进程；</li>
+<li>用<code>redis-cli</code>创建集群。</li>
+</ol>
+<p>为了可以让更多的人愿意执行单元测试，必须要降低部署 Redis 集群的操作难度。因此，本文旨在提供一种基于 Docker 的、一键部署 Redis 集群的办法。</p>
+<h2 id="启动单个-Redis-容器"><a href="#启动单个-Redis-容器" class="headerlink" title="启动单个 Redis 容器"></a>启动单个 Redis 容器</h2><p>Redis 集群需要至少 6 个实例，那么首先要解决的问题便是如何启动单个 Redis 容器。从前文提到的部署集群的指引中可以知道，要启动一个集群模式的 Redis 实例，所需要的配置文件<code>redis.conf</code>的内容如下</p>
+<figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">port 8000</span><br><span class="line">cluster-enabled yes</span><br><span class="line">cluster-config-file nodes.conf</span><br><span class="line">cluster-node-timeout 5000</span><br><span class="line">appendonly yes</span><br></pre></td></tr></tbody></table></figure>
+
+<p>参考官方的 redis 镜像的<a href="https://hub.docker.com/_/redis">文档</a>的方式，让<code>redis-server</code>读取来自于宿主机的配置文件，示例代码如下</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">选项 --<span class="built_in">rm</span> 使该容器在退出后（例如按下 ctrl-c）可以被删除，毕竟这里只是先做个演示，不需要留下它。</span></span><br><span class="line">sudo docker run --rm -v "`pwd`:/usr/local/etc/redis" redis redis-server "/usr/local/etc/redis/redis.conf"</span><br></pre></td></tr></tbody></table></figure>
+
+<p>效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E5%90%AF%E5%8A%A8%E5%8D%95%E4%B8%AARedis%E5%AE%9E%E4%BE%8B.jpeg" alt="启动单个 Redis 容器"></p>
+<h2 id="启动-6-个-Redis-容器"><a href="#启动-6-个-Redis-容器" class="headerlink" title="启动 6 个 Redis 容器"></a>启动 6 个 Redis 容器</h2><p>接下来以相似的方式启动全部的 6 个 Redis 容器。首先创建 6 个目录</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这里我用 Redis 监听的端口号作为目录名，但这并非强制要求。</span></span><br><span class="line">mkdir 8000 8001 8002 8003 8004 8005</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后在每一个目录中都创建配置文件<code>redis.conf</code></p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">for port in 8000 8001 8002 8003 8004 8005 ;</span><br><span class="line">do</span><br><span class="line">    cat &lt;&lt; EOF &gt; "./${port}/redis.conf"</span><br><span class="line">port ${port}</span><br><span class="line">cluster-enabled yes</span><br><span class="line">cluster-config-file nodes.conf</span><br><span class="line">cluster-node-timeout 5000</span><br><span class="line">appendonly yes</span><br><span class="line">EOF</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最后启动它们</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建出名为 some-network 的容器间网络。</span></span><br><span class="line">docker network create some-network</span><br><span class="line"></span><br><span class="line">for port in 8000 8001 8002 8003 8004 8005 ;</span><br><span class="line">do</span><br><span class="line">    # --name 选项让这 6 个容器拥有确定的且不同的主机名，以便之后可以在 redis-cli 中指定它们。</span><br><span class="line">    # --network 选项让这 6 个容器处于同一个网络下，以便集群内的节点可以互相通信。</span><br><span class="line">    docker run --name "some-redis-${port}" --network some-network --rm -d -v "`pwd`/${port}:/usr/local/etc/redis" redis redis-server '/usr/local/etc/redis/redis.conf'</span><br><span class="line">done</span><br></pre></td></tr></tbody></table></figure>
+
+<p>效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E5%90%AF%E5%8A%A86%E4%B8%AARedis%E5%AE%B9%E5%99%A8.jpeg" alt="启动 6 个 Redis 容器"></p>
+<h2 id="创建集群"><a href="#创建集群" class="headerlink" title="创建集群"></a>创建集群</h2><p>此时 6 个运行中的 Redis 实例还不构成一个集群，还需要执行<code>redis-cli</code>的命令<code>--cluster create</code>才行。</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">给 redis-cli 的选项 --cluster-yes 使其默认接受集群内节点的分配情况。这在脚本执行、无法通过标准输出敲入 <span class="built_in">yes</span> 的时候很有用。</span></span><br><span class="line">docker run --network some-network --rm -i -t redis redis-cli --cluster create some-redis-8000:8000 some-redis-8001:8001 some-redis-8002:8002 some-redis-8003:8003 some-redis-8004:8004 some-redis-8005:8005 --cluster-replicas 1 --cluster-yes</span><br></pre></td></tr></tbody></table></figure>
+
+<p>但命令<code>--cluster create</code>并非幂等的，只能在创建集群的时候使用一次。因此，如果希望通过脚本一键搭建、启动集群，则必须在创建前先检查集群是否曾经被创建过。借助<code>redis-cli</code>的命令<code>--cluster check</code>可以实现</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run --network some-network --rm -i -t redis redis-cli --cluster check some-redis-8000:8000 | grep 'All 16384 slots covered.' &gt; /dev/null</span><br><span class="line">if [[ "$?" == '0' ]]; then</span><br><span class="line">    echo "Redis 集群已经创建好了。"</span><br><span class="line">else</span><br><span class="line">    echo "开始创建 Redis 集群。"</span><br><span class="line">    docker run --network some-network --rm -i -t redis redis-cli --cluster create some-redis-8000:8000 some-redis-8001:8001 some-redis-8002:8002 some-redis-8003:8003 some-redis-8004:8004 some-redis-8005:8005 --cluster-replicas 1 --cluster-yes</span><br><span class="line">fi</span><br></pre></td></tr></tbody></table></figure>
+
+<p>创建成功后，只要新的容器也使用网络<code>some-network</code>，就可以读写集群中的数据了</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --network some-network --rm -i -t redis redis-cli -c -h some-redis-8000 -p 8000</span><br></pre></td></tr></tbody></table></figure>
+
+<p>效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E8%AF%BB%E5%86%99Redis%E9%9B%86%E7%BE%A4.jpeg" alt="读写 Redis 集群"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我将上面的内容集成到了<code>redis_cluster</code>这个 GitHub <a href="https://github.com/Liutos/redis_cluster">仓库</a>中，只需要克隆到本地并执行脚本<code>start.sh</code>即可，效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20240630/%E4%B8%80%E9%94%AE%E5%90%AF%E5%8A%A8Redis%E9%9B%86%E7%BE%A4.jpeg" alt="一键启动 Redis 集群"></p>
+<p>全文完。</p>
+
     </div>
 
     
@@ -291,7 +341,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/" title="">https://liutos.github.io/2024/06/30/用dockercompose部署Redis集群/</a>
+    <a href="https://liutos.github.io/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/" title="单测要用 Redis 集群？教你用 docker 一键部署">https://liutos.github.io/2024/06/30/用dockercompose部署Redis集群/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -301,6 +351,11 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/docker/" rel="tag"><i class="fa fa-tag"></i> docker</a>
+              <a href="/tags/redis/" rel="tag"><i class="fa fa-tag"></i> redis</a>
+          </div>
 
         
 
@@ -308,12 +363,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2024/05/05/getattr-%E5%9C%A8CommonLisp%E4%B8%AD%E7%9A%84%E8%BF%91%E4%BC%BC%E7%89%B9%E6%80%A7/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2024/05/05/getattr-%E5%9C%A8CommonLisp%E4%B8%AD%E7%9A%84%E8%BF%91%E4%BC%BC%E7%89%B9%E6%80%A7/" rel="prev" title="从 Ruby 的 method_missing 到杂鱼 Common Lisp">
+      <i class="fa fa-chevron-left"></i> 从 Ruby 的 method_missing 到杂鱼 Common Lisp
     </a></div>
       <div class="post-nav-item">
-    <a href="/2024/10/06/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/" rel="next" title="用Prolog开发WEB服务">
-      用Prolog开发WEB服务 <i class="fa fa-chevron-right"></i>
+    <a href="/2024/11/17/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/" rel="next" title="用 Prolog 开发 WEB 服务">
+      用 Prolog 开发 WEB 服务 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,6 +449,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E5%8D%95%E4%B8%AA-Redis-%E5%AE%B9%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">启动单个 Redis 容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8-6-%E4%B8%AA-Redis-%E5%AE%B9%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">启动 6 个 Redis 容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%9B%86%E7%BE%A4"><span class="nav-number">4.</span> <span class="nav-text">创建集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -411,6 +467,18 @@
           <span class="site-state-item-count">105</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -592,7 +660,7 @@
         config: {page: {
             url: "https://liutos.github.io/2024/06/30/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2Redis%E9%9B%86%E7%BE%A4/",
             identifier: "2024/06/30/用dockercompose部署Redis集群/",
-            title: ""
+            title: "单测要用 Redis 集群？教你用 docker 一键部署"
           }
         }
       });
