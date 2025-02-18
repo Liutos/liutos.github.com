@@ -48,34 +48,36 @@
   <meta name="description" content="用 Prolog 开发 WEB 服务序言在绝大多数互联网行业开发者看来，Prolog 不是一门会被用在本职开发工作中的语言。更多的时候，谈论起 Prolog，人们联想到的往往是诸如“逻辑编程”、“人工智能”等词语，将它与 SQL 放在一起，视为一种 DSL，而非像 Java、Python 这样的通用编程语言。因此，我一直很好奇能否使用 Prolog 来开发一些更偏向于业务系统的程序。 答案是肯定的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用 Prolog 开发 WEB 服务">
-<meta property="og:url" content="https://liutos.github.io/2024/11/17/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:url" content="https://liutos.github.io/2025/02/19/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/index.html">
 <meta property="og:site_name" content="小打小闹写点bug">
 <meta property="og:description" content="用 Prolog 开发 WEB 服务序言在绝大多数互联网行业开发者看来，Prolog 不是一门会被用在本职开发工作中的语言。更多的时候，谈论起 Prolog，人们联想到的往往是诸如“逻辑编程”、“人工智能”等词语，将它与 SQL 放在一起，视为一种 DSL，而非像 Java、Python 这样的通用编程语言。因此，我一直很好奇能否使用 Prolog 来开发一些更偏向于业务系统的程序。 答案是肯定的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/hello_world%E7%9A%84%E6%95%88%E6%9E%9C.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E7%BC%96%E8%AF%91prolog%E7%A8%8B%E5%BA%8F.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E8%AF%BB%E5%8F%96%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E8%A7%A3%E6%9E%90JSON%E5%AD%97%E5%85%B8%E7%9A%84%E6%95%88%E6%9E%9C.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5%E7%9A%84%E6%8F%90%E7%A4%BA.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E4%B8%8D%E9%9C%80%E8%A6%81%E5%AF%BC%E5%85%A5%E7%9A%84%E4%BE%8B%E5%AD%90.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E4%B8%BA%E6%9C%8B%E5%8F%8B%E7%9A%84%E4%BE%8B%E5%AD%90.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E7%94%A8%E4%BA%8B%E5%AE%9E%E6%9D%A5%E5%AE%9A%E4%B9%89%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E5%9C%A8REPL%E4%B8%AD%E5%8A%A0%E8%BD%BDpl%E6%96%87%E4%BB%B6.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/Prolog%E7%9A%84%E5%9B%9E%E6%BA%AF%E8%BF%87%E7%A8%8B.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/findall%E7%9A%84%E6%9F%A5%E6%89%BE%E7%BB%93%E6%9E%9C.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E7%94%A8docker%E8%BF%90%E8%A1%8CProlog%E4%BB%A3%E7%A0%81.jpg">
-<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93.jpg">
-<meta property="article:published_time" content="2024-11-17T13:05:00.000Z">
-<meta property="article:modified_time" content="2025-02-14T15:27:49.106Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/hello_world%E7%9A%84%E6%95%88%E6%9E%9C.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E7%BC%96%E8%AF%91prolog%E7%A8%8B%E5%BA%8F.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%AF%BB%E5%8F%96%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%A7%A3%E6%9E%90JSON%E5%AD%97%E5%85%B8%E7%9A%84%E6%95%88%E6%9E%9C.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5%E7%9A%84%E6%8F%90%E7%A4%BA.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E4%B8%8D%E9%9C%80%E8%A6%81%E5%AF%BC%E5%85%A5%E7%9A%84%E4%BE%8B%E5%AD%90.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E4%B8%BA%E6%9C%8B%E5%8F%8B%E7%9A%84%E4%BE%8B%E5%AD%90.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E7%94%A8%E4%BA%8B%E5%AE%9E%E6%9D%A5%E5%AE%9A%E4%B9%89%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E5%9C%A8REPL%E4%B8%AD%E5%8A%A0%E8%BD%BDpl%E6%96%87%E4%BB%B6.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/Prolog%E7%9A%84%E5%9B%9E%E6%BA%AF%E8%BF%87%E7%A8%8B.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/findall%E7%9A%84%E6%9F%A5%E6%89%BE%E7%BB%93%E6%9E%9C.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E7%94%A8docker%E8%BF%90%E8%A1%8CProlog%E4%BB%A3%E7%A0%81.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E6%9F%A5%E5%87%BA%E4%B8%80%E8%A1%8C%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%88%E6%9E%9C.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E6%9F%A5%E5%87%BA%E5%A4%9A%E8%A1%8C%E7%9A%84%E6%95%88%E6%9E%9C.jpg">
+<meta property="article:published_time" content="2025-02-18T16:06:00.000Z">
+<meta property="article:modified_time" content="2025-02-18T16:06:30.123Z">
 <meta property="article:author" content="Liutos">
 <meta property="article:tag" content="prolog">
 <meta property="article:tag" content="swi-prolog">
 <meta property="article:tag" content="web">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/hello_world%E7%9A%84%E6%95%88%E6%9E%9C.jpg">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/hello_world%E7%9A%84%E6%95%88%E6%9E%9C.jpg">
 
-<link rel="canonical" href="https://liutos.github.io/2024/11/17/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/">
+<link rel="canonical" href="https://liutos.github.io/2025/02/19/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/">
 
 
 <script id="page-configurations">
@@ -219,7 +221,7 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2024/11/17/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2025/02/19/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
@@ -241,16 +243,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2024-11-17 21:05:00" itemprop="dateCreated datePublished" datetime="2024-11-17T21:05:00+08:00">2024-11-17</time>
+              <time title="创建时间：2025-02-19 00:06:00 / 修改时间：00:06:30" itemprop="dateCreated datePublished" datetime="2025-02-19T00:06:00+08:00">2025-02-19</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-02-14 23:27:49" itemprop="dateModified" datetime="2025-02-14T23:27:49+08:00">2025-02-14</time>
-              </span>
 
           
   
@@ -261,8 +257,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2024/11/17/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2024/11/17/用Prolog开发WEB服务/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2025/02/19/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2025/02/19/用Prolog开发WEB服务/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -292,7 +288,7 @@
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swipl ./hello_world.pl</span><br></pre></td></tr></tbody></table></figure>
 
 <p>可以看到它打印出了所期望的文本</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/hello_world%E7%9A%84%E6%95%88%E6%9E%9C.jpg" alt="hello_world的效果"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/hello_world%E7%9A%84%E6%95%88%E6%9E%9C.jpg" alt="hello_world的效果"></p>
 <p>现在让我来稍微介绍一下上述代码中的细节。<code>:- initialization(main, main).</code>是一个给 SWI-Prolog 的“指示”，可以理解为其声明了程序启动后的入口是一个叫做<code>main</code>的函数。而</p>
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    format(<span class="string">"Hello, world!~n"</span>).</span><br></pre></td></tr></tbody></table></figure>
 
@@ -301,7 +297,7 @@
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swipl --stand_alone=true -o hello_world -c hello_world.pl</span><br></pre></td></tr></tbody></table></figure>
 
 <p>效果如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E7%BC%96%E8%AF%91prolog%E7%A8%8B%E5%BA%8F.jpg" alt="编译prolog程序"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E7%BC%96%E8%AF%91prolog%E7%A8%8B%E5%BA%8F.jpg" alt="编译prolog程序"></p>
 <p>在 C 语言中，被编译的程序的入口是约定俗成的，即函数<code>main</code>。而由于在文件<code>hello_world.pl</code>中用指令<code>:- initialization(main, main).</code></p>
 <h2 id="Prolog-的使用"><a href="#Prolog-的使用" class="headerlink" title="Prolog 的使用"></a>Prolog 的使用</h2><p>在开发 WEB 服务的过程中，还会遇到许多与 WEB 无关的、Prolog 自身在其它领域的应用知识，例如：</p>
 <ol>
@@ -318,12 +314,12 @@
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">:- use_module(library(readutil)).</span><br><span class="line"></span><br><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    read_file_to_string(<span class="string">"/tmp/demo.txt"</span>, <span class="symbol">String</span>, []),</span><br><span class="line">    format(<span class="string">"file content is: ~s~n"</span>, [<span class="symbol">String</span>]).</span><br></pre></td></tr></tbody></table></figure>
 
 <p>这样就可以将读到的文件内容完全打印到控制台上，如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E8%AF%BB%E5%8F%96%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg" alt="读取磁盘文件"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%AF%BB%E5%8F%96%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg" alt="读取磁盘文件"></p>
 <h3 id="写入磁盘文件"><a href="#写入磁盘文件" class="headerlink" title="写入磁盘文件"></a>写入磁盘文件</h3><p>如果要将数据写入到磁盘文件中——例如，在每次处理完请求后记录日志，那么可以使用函数<code>write</code>。以将前文中的字符串<code>Hello, world!</code>写入到文件中为例，示例代码如下</p>
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    <span class="symbol">LogContent</span> = <span class="string">"Hello, world!"</span>,</span><br><span class="line">    open(<span class="string">"/tmp/access.log"</span>, write, <span class="symbol">Stream</span>),</span><br><span class="line">    write(<span class="symbol">Stream</span>, <span class="symbol">LogContent</span>),</span><br><span class="line">    close(<span class="symbol">Stream</span>).</span><br></pre></td></tr></tbody></table></figure>
 
 <p>效果如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg" alt="写入磁盘文件"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg" alt="写入磁盘文件"></p>
 <h3 id="解析-JSON-格式"><a href="#解析-JSON-格式" class="headerlink" title="解析 JSON 格式"></a>解析 JSON 格式</h3><p>JSON 已经是应用最广泛的数据交互格式之一了，因此如果一门语言要能够投产于业务系统的开发，必然离不开对 JSON 数据的处理能力。假设要处理的 JSON 数据如下</p>
 <figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"mysql"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">        <span class="attr">"driver_string"</span><span class="punctuation">:</span> <span class="string">"DRIVER={MySQL ODBC 8.0 Driver};String Types=Unicode;password=1234567;port=3306;server=mysql;user=root"</span></span><br><span class="line">    <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"redis"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">        <span class="attr">"hostname"</span><span class="punctuation">:</span> <span class="string">"redis"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">"port"</span><span class="punctuation">:</span> <span class="number">6379</span></span><br><span class="line">    <span class="punctuation">}</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
 
@@ -332,14 +328,14 @@
 
 <p>上文中的函数<a href="https://www.swi-prolog.org/pldoc/doc_for?object=atom_json_dict/3">atom_json_dict</a>将字符串类型的变量<code>String</code>反序列化为变量<code>JSONDict</code>。从<a href="https://www.swi-prolog.org/pldoc/man?section=ext-dict-functions">这里</a>可以看到，SWI-Prolog 为字典类型提供一个中缀操作符<code>.</code>，使得我们可以像在多数主流语言中引用类的成员变量一般，用简单的语法来获取字典内的字段——即<code>JSONDict.mysql.driver_string</code>这样的代码。</p>
 <p>上面的代码的运行效果如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E8%A7%A3%E6%9E%90JSON%E5%AD%97%E5%85%B8%E7%9A%84%E6%95%88%E6%9E%9C.jpg" alt="解析JSON字典的效果"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%A7%A3%E6%9E%90JSON%E5%AD%97%E5%85%B8%E7%9A%84%E6%95%88%E6%9E%9C.jpg" alt="解析JSON字典的效果"></p>
 <h3 id="自动导入的库"><a href="#自动导入的库" class="headerlink" title="自动导入的库"></a>自动导入的库</h3><p>如果分别查看函数<code>read_file_to_string</code>和<code>atom_json_dict</code>的文档（分别在<a href="https://www.swi-prolog.org/pldoc/doc_for?object=read_file_to_string/3">这里</a>和<a href="https://www.swi-prolog.org/pldoc/doc_for?object=atom_json_dict/3">这里</a>），就会发现前者的页面上写着<code>can be autoloaded</code>，而后者没有</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5%E7%9A%84%E6%8F%90%E7%A4%BA.jpg" alt="自动导入的提示"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5%E7%9A%84%E6%8F%90%E7%A4%BA.jpg" alt="自动导入的提示"></p>
 <p>所以前文关于<code>read_file_to_string</code>的例子中，即便不写上<code>:- use_module(library(readutil)).</code>，也是可以正常调用的</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E4%B8%8D%E9%9C%80%E8%A6%81%E5%AF%BC%E5%85%A5%E7%9A%84%E4%BE%8B%E5%AD%90.jpg" alt="不需要导入的例子"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E4%B8%8D%E9%9C%80%E8%A6%81%E5%AF%BC%E5%85%A5%E7%9A%84%E4%BE%8B%E5%AD%90.jpg" alt="不需要导入的例子"></p>
 <h3 id="事实与全局变量"><a href="#事实与全局变量" class="headerlink" title="事实与全局变量"></a>事实与全局变量</h3><p>在将磁盘上的配置文件的内容加载到内存中后，最好可以将其赋值为一个全局变量以便在所有的函数中访问到。要做到这一点，可以利用 Prolog 的一个特性：事实。</p>
 <p>在很多 Prolog 的入门教程中，都会介绍经典的、如何用 Prolog 来回答两个人是否为某种关系的例子。例如，在<a href="https://www.ruanyifeng.com/blog/2019/01/prolog.html">这个教程</a>中，就给出了如何判断两个人是否为朋友的示例，如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E4%B8%BA%E6%9C%8B%E5%8F%8B%E7%9A%84%E4%BE%8B%E5%AD%90.jpg" alt="判断是否为朋友的例子"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E4%B8%BA%E6%9C%8B%E5%8F%8B%E7%9A%84%E4%BE%8B%E5%AD%90.jpg" alt="判断是否为朋友的例子"></p>
 <p>其中，像</p>
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">friend(john, julia).</span><br><span class="line">friend(john, jack).</span><br><span class="line">friend(julia, sam).</span><br><span class="line">friend(julia, molly).</span><br></pre></td></tr></tbody></table></figure>
 
@@ -353,22 +349,22 @@
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line"><span class="comment">% 声明为动态的以便允许使用 asserta 修改。</span></span><br><span class="line">:- dynamic odbc_driver_string/<span class="number">1.</span></span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    asserta(odbc_driver_string(<span class="string">"This is a global variable"</span>)),</span><br><span class="line">    odbc_driver_string(<span class="symbol">DriverString</span>),</span><br><span class="line">    format(<span class="string">"DriverString = ~s~n"</span>, [<span class="symbol">DriverString</span>]).</span><br></pre></td></tr></tbody></table></figure>
 
 <p>效果如下</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E7%94%A8%E4%BA%8B%E5%AE%9E%E6%9D%A5%E5%AE%9A%E4%B9%89%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F.jpg" alt="用事实来定义全局变量"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E7%94%A8%E4%BA%8B%E5%AE%9E%E6%9D%A5%E5%AE%9A%E4%B9%89%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F.jpg" alt="用事实来定义全局变量"></p>
 <h3 id="用-findall-找到所有的解"><a href="#用-findall-找到所有的解" class="headerlink" title="用 findall 找到所有的解"></a>用 findall 找到所有的解</h3><p>在前一小节的截图中，可以看到我们可以询问 Prolog 一个事实是否成立。其实，我们还可以让 Prolog 遍历它的“知识库”，来找出符合我们所查询的问题的“答案”。例如，我先准备好一份内容如下的文件<code>friend.pl</code></p>
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">friend(john, julia).</span><br><span class="line">friend(john, jack).</span><br><span class="line">friend(julia, sam).</span><br><span class="line">friend(julia, molly).</span><br></pre></td></tr></tbody></table></figure>
 
 <p>接着我在 Prolog 的 REPL 中加载它，如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E5%9C%A8REPL%E4%B8%AD%E5%8A%A0%E8%BD%BDpl%E6%96%87%E4%BB%B6.jpg" alt="在REPL中加载pl文件"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E5%9C%A8REPL%E4%B8%AD%E5%8A%A0%E8%BD%BDpl%E6%96%87%E4%BB%B6.jpg" alt="在REPL中加载pl文件"></p>
 <p>然后我向 Prolog 提问，代码如下</p>
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">friend(john, <span class="symbol">X</span>), write(<span class="symbol">X</span>), nl, fail.</span><br></pre></td></tr></tbody></table></figure>
 
 <p>在 Prolog 中，英文逗号是一个二元操作符，它就像是 C 语言中的<code>&amp;&amp;</code>或 Python 中的<code>and</code>，只有当操作符的左右两边都成立时，整个表达式才成立。由于上面的代码以<code>fail</code>结尾，因此始终不会成立。Prolog 在遍历知识库、寻找变量<code>X</code>的值的过程中，遇到表达式无法成立时就会“回溯”，继续寻找下一个可能匹配的<code>X</code>。通过调用谓词<code>write</code>，就可以看到 Prolog 回溯的过程了，如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/Prolog%E7%9A%84%E5%9B%9E%E6%BA%AF%E8%BF%87%E7%A8%8B.jpg" alt="Prolog的回溯过程"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/Prolog%E7%9A%84%E5%9B%9E%E6%BA%AF%E8%BF%87%E7%A8%8B.jpg" alt="Prolog的回溯过程"></p>
 <p>可以看到 Prolog 尝试用<code>julia</code>和<code>jack</code>来作为变量<code>X</code>的值，但终究无法让查询成立——当然了，因为最后一个值为<code>fail</code>。如果我们希望将变量<code>X</code>的所有值都收集到列表中，可以借助内置的谓词<code>findall/3</code>，示例代码如下</p>
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">findall(<span class="symbol">X</span>, friend(john, <span class="symbol">X</span>), <span class="symbol">L</span>).</span><br></pre></td></tr></tbody></table></figure>
 
 <p>效果如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/findall%E7%9A%84%E6%9F%A5%E6%89%BE%E7%BB%93%E6%9E%9C.jpg" alt="findall的查找结果"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/findall%E7%9A%84%E6%9F%A5%E6%89%BE%E7%BB%93%E6%9E%9C.jpg" alt="findall的查找结果"></p>
 <h3 id="在-Docker-中运行-Prolog"><a href="#在-Docker-中运行-Prolog" class="headerlink" title="在 Docker 中运行 Prolog"></a>在 Docker 中运行 Prolog</h3><p>在之后的例子中，我还会介绍如何使用 Prolog 来读写数据库。但在摸索的过程中，我发现在 macOS 上无法运行成功，只有在 Docker 内才可行，因此这一节将会先介绍如何在 Docker 中运行 Prolog。</p>
 <p>以前文中的 Hello World 程序为例，在已经有了源文件<code>hello_world.pl</code>的前提下，准备如下的<code>hello_world.dockerfile</code>文件</p>
 <figure class="highlight dockerfile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> swipl:stable</span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> . /app/</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译源代码</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> swipl --goal=main --stand_alone=<span class="literal">true</span> -o hello_world -c hello_world.pl \</span></span><br><span class="line"><span class="language-bash">  &amp;&amp; <span class="built_in">cp</span> ./hello_world /bin/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [ <span class="string">"hello_world"</span> ]</span></span><br></pre></td></tr></tbody></table></figure>
@@ -383,7 +379,7 @@
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run hello_world</span><br></pre></td></tr></tbody></table></figure>
 
 <p>效果如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E7%94%A8docker%E8%BF%90%E8%A1%8CProlog%E4%BB%A3%E7%A0%81.jpg" alt="用docker运行Prolog代码"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E7%94%A8docker%E8%BF%90%E8%A1%8CProlog%E4%BB%A3%E7%A0%81.jpg" alt="用docker运行Prolog代码"></p>
 <h2 id="读写数据库"><a href="#读写数据库" class="headerlink" title="读写数据库"></a>读写数据库</h2><p>如果一门语言无法读写数据库，尤其是关系型数据库，那么用它来开发业务系统必然是捉襟见肘的。这一章中，将会介绍如何用 SWI-Prolog 读写 MySQL 中的数据。</p>
 <h3 id="连接-MySQL"><a href="#连接-MySQL" class="headerlink" title="连接 MySQL"></a>连接 MySQL</h3><p>通过 SWI-Prolog 的<a href="https://www.swi-prolog.org/pldoc/doc_for?object=section(%27packages/odbc.html%27)">文档</a>我们可以了解到，要操作关系型数据库，需要用到 ODBC，这一小节以连接 MySQL、调用函数<code>version</code>为例进行讲解。首先需要有一个 DSN 字符串来指定 MySQL 的连接参数，假设：</p>
 <ul>
@@ -399,7 +395,24 @@
 <figure class="highlight dockerfile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> swipl:stable</span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> apt-get clean \</span></span><br><span class="line"><span class="language-bash">  &amp;&amp; apt-get update \</span></span><br><span class="line"><span class="language-bash">  &amp;&amp; apt-get install -y unixodbc-dev</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> . /app/</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"><span class="comment"># 下列代码来自[这里](https://stackoverflow.com/questions/68590463/linux-installing-mysql-odbc-driver-error)，在容器内安装 ODBC 驱动程序。</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> tar -C /tmp/ -xzvf mysql-connector-odbc-8.4.0-linux-glibc2.28-aarch64.tar.gz \</span></span><br><span class="line"><span class="language-bash">  &amp;&amp; <span class="built_in">cd</span> /tmp/ \</span></span><br><span class="line"><span class="language-bash">  &amp;&amp; <span class="built_in">cp</span> -r ./mysql-connector-odbc-8.4.0-linux-glibc2.28-aarch64/bin/* /usr/local/bin \</span></span><br><span class="line"><span class="language-bash">  &amp;&amp; <span class="built_in">cp</span> -r ./mysql-connector-odbc-8.4.0-linux-glibc2.28-aarch64/lib/* /usr/local/lib \</span></span><br><span class="line"><span class="language-bash">  &amp;&amp; myodbc-installer -a -d -n <span class="string">"MySQL ODBC 8.0 Driver"</span> -t <span class="string">"Driver=/usr/local/lib/libmyodbc8w.so"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译源代码</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> swipl --goal=main --stand_alone=<span class="literal">true</span> -o query_version -c query_version.pl \</span></span><br><span class="line"><span class="language-bash">  &amp;&amp; <span class="built_in">cp</span> ./query_version /bin/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [ <span class="string">"query_version"</span> ]</span></span><br></pre></td></tr></tbody></table></figure>
 
 <p>然后构建镜像并运行即可，效果如下图所示</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20250214/%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93.jpg" alt="连接数据库"></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93.jpg" alt="连接数据库"></p>
+<h3 id="执行-SELECT-语句"><a href="#执行-SELECT-语句" class="headerlink" title="执行 SELECT 语句"></a>执行 SELECT 语句</h3><p>通过查阅<code>odbc_query/4</code>的<a href="https://www.swi-prolog.org/pldoc/man?predicate=odbc_query/4">文档</a>，可以看到要想从表中查询出一行记录，需要在该谓词的第三个参数<code>RowOrAffected</code>中传入<code>row(Lemma)</code>这样的复合表达式。以查询短链的内容为例，假设存储着原始链接与短链的 ID 的关系的表的结构如下</p>
+<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `t_url` (</span><br><span class="line">    `id` <span class="type">BIGINT</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">    `url` <span class="type">VARCHAR</span>(<span class="number">256</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">'短链对应的原始链接'</span>,</span><br><span class="line">    `ctime` <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span>,</span><br><span class="line">    `mtime` <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span>,</span><br><span class="line">    <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">    <span class="keyword">UNIQUE</span> INDEX `ux__url` (`url`)</span><br><span class="line">) AUTO_INCREMENT<span class="operator">=</span><span class="number">1000001</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>往其中添加一行测试用的数据</p>
+<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> `t_url` <span class="keyword">SET</span> `url` <span class="operator">=</span> <span class="string">'https://example.com/'</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>接着便可以在 Prolog 中用下列代码将其查询出来</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">:- use_module(library(odbc)).</span><br><span class="line"></span><br><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    <span class="symbol">Dsn</span> = <span class="string">"DRIVER={MySQL ODBC 9.2 Unicode Driver};String Types=Unicode;password=1234567;port=3306;server=localhost;user=root"</span>,</span><br><span class="line">    odbc_driver_connect(<span class="symbol">Dsn</span>, <span class="symbol">Connection</span>, []),</span><br><span class="line">    <span class="symbol">Sql</span> = <span class="string">"SELECT `id`, `url` FROM `test`.`t_url` WHERE `url` = ?"</span>,</span><br><span class="line">    odbc_prepare(<span class="symbol">Connection</span>, <span class="symbol">Sql</span>, [default], <span class="symbol">Statement</span>),</span><br><span class="line">    odbc_execute(<span class="symbol">Statement</span>, [<span class="string">"https://example.com/"</span>], row(<span class="symbol">Id</span>, <span class="symbol">Url</span>)),</span><br><span class="line">    odbc_disconnect(<span class="symbol">Connection</span>),</span><br><span class="line">    format(<span class="string">"Id is ~d~n"</span>, [<span class="symbol">Id</span>]),</span><br><span class="line">    format(<span class="string">"Id is ~s~n"</span>, [<span class="symbol">Url</span>]),</span><br></pre></td></tr></tbody></table></figure>
+
+<p>查询结果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E6%9F%A5%E5%87%BA%E4%B8%80%E8%A1%8C%E6%95%B0%E6%8D%AE%E7%9A%84%E6%95%88%E6%9E%9C.jpg" alt="查出一行数据的效果"></p>
+<p><code>odbc_execute/3</code>的第三个参数与谓词<code>odbc_query/4</code>是相同的，从后者的<a href="https://www.swi-prolog.org/pldoc/man?predicate=odbc_query/4">文档</a>可以看出，如果要接收查询结果中的多列，那么就需要相应地填上多少个变量。例如，前文中 SELECT 语句要查询的列为<code>id</code>和<code>url</code>，因此这里用的是<code>row/2</code>，其值是两个变量<code>Id</code>和<code>Url</code>。以此类推，如果将列<code>ctime</code>也查询出来，那么就要在<code>row</code>的对应位置新增一个变量来承载这一列的值。</p>
+<p>如果希望从数据库中查出多行记录并组织为列表的形式——这是一个很常见的需求，那么可以使用谓词<code>odbc_prepare</code>的<code>Options</code>参数。它等价于<code>odbc_query</code>的<code>Options</code>参数，因此可以传入<code>findall(info(Id, Url), row(Id, Url))</code>来将查询结果中的前两列按照<code>info(Id, Url)</code>的格式组成一个列表，最终赋值到一个变量中，示例代码如下</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">:- use_module(library(odbc)).</span><br><span class="line"></span><br><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    <span class="symbol">Dsn</span> = <span class="string">"DRIVER={MySQL ODBC 9.2 Unicode Driver};String Types=Unicode;password=1234567;port=3306;server=localhost;user=root"</span>,</span><br><span class="line">    odbc_driver_connect(<span class="symbol">Dsn</span>, <span class="symbol">Connection</span>, []),</span><br><span class="line">    <span class="symbol">Sql</span> = <span class="string">"SELECT `id`, `url` FROM `test`.`t_url` WHERE `id` &gt; ?"</span>,</span><br><span class="line">    odbc_prepare(<span class="symbol">Connection</span>, <span class="symbol">Sql</span>, [default], <span class="symbol">Statement</span>, [findall(info(<span class="symbol">Id</span>, <span class="symbol">Url</span>), row(<span class="symbol">Id</span>, <span class="symbol">Url</span>))]),</span><br><span class="line">    odbc_execute(<span class="symbol">Statement</span>, [<span class="number">0</span>], <span class="symbol">Rows</span>),</span><br><span class="line">    odbc_disconnect(<span class="symbol">Connection</span>),</span><br><span class="line">    length(<span class="symbol">Rows</span>, <span class="symbol">Length</span>),</span><br><span class="line">    format(<span class="string">"Length of Rows is ~d~n"</span>, [<span class="symbol">Length</span>]),</span><br><span class="line">    write(<span class="symbol">Rows</span>).</span><br></pre></td></tr></tbody></table></figure>
+
+<p>最终效果如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E6%9F%A5%E5%87%BA%E5%A4%9A%E8%A1%8C%E7%9A%84%E6%95%88%E6%9E%9C.jpg" alt="查出多行的效果"></p>
 
     </div>
 
@@ -438,7 +451,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://liutos.github.io/2024/11/17/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/" title="用 Prolog 开发 WEB 服务">https://liutos.github.io/2024/11/17/用Prolog开发WEB服务/</a>
+    <a href="https://liutos.github.io/2025/02/19/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/" title="用 Prolog 开发 WEB 服务">https://liutos.github.io/2025/02/19/用Prolog开发WEB服务/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -544,7 +557,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8-Prolog-%E5%BC%80%E5%8F%91-WEB-%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">用 Prolog 开发 WEB 服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prolog-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.2.</span> <span class="nav-text">Prolog 基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hello-World"><span class="nav-number">1.2.1.</span> <span class="nav-text">Hello World</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91-Prolog-%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">编译 Prolog 程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prolog-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Prolog 的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6"><span class="nav-number">1.3.1.</span> <span class="nav-text">读取磁盘文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6"><span class="nav-number">1.3.2.</span> <span class="nav-text">写入磁盘文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90-JSON-%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.3.3.</span> <span class="nav-text">解析 JSON 格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5%E7%9A%84%E5%BA%93"><span class="nav-number">1.3.4.</span> <span class="nav-text">自动导入的库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%AE%9E%E4%B8%8E%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="nav-number">1.3.5.</span> <span class="nav-text">事实与全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8-findall-%E6%89%BE%E5%88%B0%E6%89%80%E6%9C%89%E7%9A%84%E8%A7%A3"><span class="nav-number">1.3.6.</span> <span class="nav-text">用 findall 找到所有的解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Docker-%E4%B8%AD%E8%BF%90%E8%A1%8C-Prolog"><span class="nav-number">1.3.7.</span> <span class="nav-text">在 Docker 中运行 Prolog</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.4.</span> <span class="nav-text">读写数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5-MySQL"><span class="nav-number">1.4.1.</span> <span class="nav-text">连接 MySQL</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8-Prolog-%E5%BC%80%E5%8F%91-WEB-%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.</span> <span class="nav-text">用 Prolog 开发 WEB 服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">序言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prolog-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.2.</span> <span class="nav-text">Prolog 基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hello-World"><span class="nav-number">1.2.1.</span> <span class="nav-text">Hello World</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91-Prolog-%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">编译 Prolog 程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prolog-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">Prolog 的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6"><span class="nav-number">1.3.1.</span> <span class="nav-text">读取磁盘文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6"><span class="nav-number">1.3.2.</span> <span class="nav-text">写入磁盘文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90-JSON-%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.3.3.</span> <span class="nav-text">解析 JSON 格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5%E7%9A%84%E5%BA%93"><span class="nav-number">1.3.4.</span> <span class="nav-text">自动导入的库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%AE%9E%E4%B8%8E%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="nav-number">1.3.5.</span> <span class="nav-text">事实与全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8-findall-%E6%89%BE%E5%88%B0%E6%89%80%E6%9C%89%E7%9A%84%E8%A7%A3"><span class="nav-number">1.3.6.</span> <span class="nav-text">用 findall 找到所有的解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Docker-%E4%B8%AD%E8%BF%90%E8%A1%8C-Prolog"><span class="nav-number">1.3.7.</span> <span class="nav-text">在 Docker 中运行 Prolog</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.4.</span> <span class="nav-text">读写数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5-MySQL"><span class="nav-number">1.4.1.</span> <span class="nav-text">连接 MySQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C-SELECT-%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.4.2.</span> <span class="nav-text">执行 SELECT 语句</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -753,8 +766,8 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://liutos.github.io/2024/11/17/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/",
-            identifier: "2024/11/17/用Prolog开发WEB服务/",
+            url: "https://liutos.github.io/2025/02/19/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/",
+            identifier: "2025/02/19/用Prolog开发WEB服务/",
             title: "用 Prolog 开发 WEB 服务"
           }
         }
@@ -776,7 +789,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo: 'gitalk',
       owner: 'Liutos',
       admin: ['Liutos'],
-      id: '6c08fdf35209bf2114e0f8217edb611e',
+      id: '27003bb81c99c3842504e54b7eefb80c',
         language: 'zh-CN',
       distractionFreeMode: true
     });
