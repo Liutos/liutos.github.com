@@ -200,6 +200,108 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/" class="post-title-link" itemprop="url">Emacs的avy插件</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-10-11 10:07:27 / 修改时间：10:56:14" itemprop="dateCreated datePublished" datetime="2020-10-11T10:07:27+08:00">2020-10-11</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2020/10/11/Emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/11/Emacs的avy插件/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>用Emacs的时候，我习惯将它分成“四个部分”</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/Emacs%E5%88%86%E6%88%90%E5%9B%9B%E9%83%A8%E5%88%86.jpg"></p>
+<p>怎么弄的呢？一般是先按<code>C-x 3</code>分出左右两个window，再到各个window中用<code>C-x 2</code>分出上下两个window——这不是我的笔误，在Emacs的术语中，用来显示一个buffer的区域就叫做一个<a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Basic-Windows.html">window</a>。而常常被人们冠名为window的、最外层的窗体，则叫做<a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Frames.html#Frames">frame</a>。</p>
+<p>这样划分后，多次按下<code>C-Tab</code>（我把这个快捷键绑定到了命令<code>other-window</code>上），便可以按照左上、左下、右上、右下的顺序轮换当前聚焦的window了。</p>
+<p>如果需要从其它window中复制内容到当前window中粘贴，操作会麻烦一点。以右上角需要左下角的内容为例：</p>
+<ol>
+<li>按三次<code>C-Tab</code>换到左下角的window中——用快捷键是因为我不想去挪鼠标；</li>
+<li>按<code>k</code>或<code>j</code>上下移动光标到目标行——用<code>k</code>和<code>j</code>是因为用了<code>evil-mode</code>插件（参见<a href="https://liutos.github.io/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/">这篇文章</a>）；</li>
+<li>复制内容，再按一次<code>C-Tab</code>回到原来的window中粘贴。</li>
+</ol>
+<p>听起来可麻烦了。</p>
+<p>好在Emacs有一个非常好用的插件，可以把第1和第2个步骤合在一起完成。</p>
+<h1 id="avy"><a href="#avy" class="headerlink" title="avy"></a>avy</h1><p>这个非常好用的插件就是<a href="https://github.com/abo-abo/avy">avy</a>，它提供的<code>avy-goto-line</code>函数可以一步到位地完成上面的第1和第2个步骤。</p>
+<p>用Emacs的包管理器就可以安装它</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">M-x package-install RET avy RET</span><br></pre></td></tr></tbody></table></figure>
+
+<p>接着要为命令<code>avy-goto-line</code>绑定一个喜欢的快捷键</p>
+<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">global-set-key</span> (<span class="name">kbd</span> <span class="string">"M-g f"</span>) 'avy-goto-line)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>至此便可以在Emacs中愉快地使用<code>M-g f</code>来快速跳转到当前或其它window中的行了。百闻不如一见，我来演示一番。</p>
+<h1 id="avy-goto-line"><a href="#avy-goto-line" class="headerlink" title="avy-goto-line"></a>avy-goto-line</h1><p><del>众所周知，</del>我用org-mode来跟踪自己的学习计划，还会将摸索过程中的一些半成品代码保存到org-mode的条目中。例如，我想要将左下角的window中的三个函数的定义，复制到右上角的代码块中去</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/%E7%A7%BB%E5%8A%A8%E5%89%8D%E7%9A%84%E6%99%AF%E8%B1%A1.jpg"></p>
+<p>于是我先按下<code>M-g f</code>，让<code>avy</code>为每一行赋予一个标记</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/%E6%8C%89%E4%B8%8B%E5%BF%AB%E6%8D%B7%E9%94%AE%E4%B9%8B%E5%90%8E%E7%9A%84%E6%99%AF%E8%B1%A1.jpg"></p>
+<p>因为希望切换到左下角的window的第一行，所以我先按下<code>j</code></p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/%E6%8C%89%E4%B8%8B%E5%AD%97%E6%AF%8Dj%E4%B9%8B%E5%90%8E%E7%9A%84%E6%99%AF%E8%B1%A1.jpg"></p>
+<p>此时，在前一幅截图中不以字母<code>j</code>开始的标记统统消失了，而以字母<code>j</code>开始的标记则只留下了从第二个字符开始的部分。</p>
+<p>再按下字母<code>l</code>，就可以将焦点切换到左下角的window，并且将光标移动到第一行的行首了。然后只需要选中内容、复制，并返回原来的window中粘贴即可。完整的过程如下</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20201011/%E4%BD%BF%E7%94%A8avy-goto-line%E7%9A%84%E5%85%A8%E8%BF%87%E7%A8%8B.gif"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如果在按下组合键<code>M-g f</code>后，接着按下的是数字键的话，<code>avy-goto-line</code>会认为使用者打算跳转到指定的行。它将在Emacs的minibuffer中继续等待输入更多的数字或按下回车。不过我不怎么用这个功能，因为我没有让Emacs显示行号，按行号来跳转对我并不方便。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/09/28/%E6%89%8B%E6%8C%87%E7%96%BC%EF%BC%8C%E5%86%99%E7%82%B9%E4%BB%A3%E7%A0%81%E7%BC%93%E8%A7%A3%E4%B8%80%E4%B8%8B/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -636,109 +738,11 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2020/07/09/%E4%BD%A0%E7%9F%A5%E9%81%93%E5%90%97%EF%BC%9F2%E5%92%8C10%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E5%B9%82%E6%B0%B8%E4%B8%8D%E7%9B%B8%E7%AD%89/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/09/%E4%BD%A0%E7%9F%A5%E9%81%93%E5%90%97%EF%BC%9F2%E5%92%8C10%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E5%B9%82%E6%B0%B8%E4%B8%8D%E7%9B%B8%E7%AD%89/" class="post-title-link" itemprop="url">你知道吗？2和10的整数次幂永不相等</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-07-09 21:45:05" itemprop="dateCreated datePublished" datetime="2020-07-09T21:45:05+08:00">2020-07-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-21 14:14:32" itemprop="dateModified" datetime="2020-07-21T14:14:32+08:00">2020-07-21</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2020/07/09/%E4%BD%A0%E7%9F%A5%E9%81%93%E5%90%97%EF%BC%9F2%E5%92%8C10%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E5%B9%82%E6%B0%B8%E4%B8%8D%E7%9B%B8%E7%AD%89/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/07/09/你知道吗？2和10的整数次幂永不相等/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p><a href="https://book.douban.com/subject/4822685/">《编码》</a>这本书曾经在我的豆瓣“想读”列表中躺了很久，大概在今年年初才开始看。但读着读着发现书中的电路图越来越多，而我的阅读热情也随之被慢慢浇灭。五月初的时候，终究还是把它合上，并在豆瓣上羞愧难当地将其标注为“读过”。</p>
-<p>抛开晦涩的电路图不谈，书中有一句话吸引了我的注意力</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200709/%E5%8A%A0%E4%BA%86%E6%A0%87%E6%B3%A8%E5%90%8E%E7%9A%84%E3%80%8A%E7%BC%96%E7%A0%81%E3%80%8B%E4%B8%80%E4%B9%A6%E4%B8%AD%E7%9A%84%E5%8E%9F%E8%AF%9D.jpg"></p>
-<p>第一次读到这里时，我想作者应当会在下一段给出具体的证明过程——结果居然没有。难道作者觉得两侧的空白太小了，不足以写下他所发现的美妙证法？</p>
-<p>受好奇心的驱使，我便试着证明书中的这个结论。</p>
-<p>不过正式开始前，还得明确一下命题：对于任意的正整数<code>a</code>和<code>b</code>（<code>a</code>不等于<code>b</code>），10的<code>a</code>次幂和2的<code>b</code>次幂不相等。</p>
-<h1 id="先证明一条引理"><a href="#先证明一条引理" class="headerlink" title="先证明一条引理"></a>先证明一条引理</h1><p>为了证明上面的命题，需要先证明一条引理：对于任意的正整数<code>a</code>，5的<code>a</code>次幂是一个奇数。可以用数学归纳法来证明。</p>
-<p>首先验证<code>a</code>为1时命题成立。由于5的1次幂为5，并且5是一个奇数，所以命题成立；</p>
-<p>接着，假设<code>a</code>为<code>k</code>时命题成立，将5的<code>k</code>次幂写成<code>2n+1</code>的形式，当<code>a</code>为<code>k+1</code>时，</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200709/5%E7%9A%84k%E6%AC%A1%E5%B9%82%E7%9A%84%E5%8F%98%E6%8D%A2.jpeg"></p>
-<p>因此，5的<code>k</code>次幂也是一个奇数。因此，该命题对于任意的正整数<code>a</code>都是成立的。</p>
-<p>同理可证：对于任意的正整数<code>a</code>，2的<code>a</code>次幂是偶数。</p>
-<h1 id="反证法证明原命题"><a href="#反证法证明原命题" class="headerlink" title="反证法证明原命题"></a>反证法证明原命题</h1><p>假设存在正整数<code>a</code>和<code>b</code>（<code>b</code>大于<code>a</code>），使得10的<code>a</code>次幂与2的<code>b</code>次幂相等</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200709/%E5%BE%85%E8%AF%81%E6%98%8E%E7%9A%84%E7%AD%89%E5%BC%8F.jpeg"></p>
-<p>将10分解为2和5的积，再两边同时除以2的<code>a</code>次幂</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200709/%E5%8F%98%E6%8D%A2%E4%B8%BA%E5%AD%98%E5%9C%A8%E7%9F%9B%E7%9B%BE%E7%9A%84%E5%BD%A2%E5%BC%8F.jpeg"></p>
-<p>等式的左边和右边分别是5的正整数次幂与2的正整数次幂。由前一节的引理可知，左边是奇数，右边是偶数，两者不可能相等，与上述等式产生矛盾。因此，原假设不成立，命题得证。</p>
-<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>我最开始的想法很复杂。虽然也是采用反证法，但我将等式做了如下变换</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20200709/%E5%A4%8D%E6%9D%82%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%8C%E5%9F%BA%E4%BA%8E%E6%97%A0%E7%90%86%E6%95%B0.jpeg"></p>
-<p>然后试图证明以2为底的10的对数不是有理数，和等式右边不相等。不过这个方法于我而言太难了，便没有继续尝试下去。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">…</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">…</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">…</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -805,7 +809,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">105</span>
+          <span class="site-state-item-count">106</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

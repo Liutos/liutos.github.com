@@ -200,6 +200,104 @@
   
   
   <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2025/03/28/hello-world/">
+
+    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
+      <meta itemprop="name" content="Liutos">
+      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
+    </span>
+
+    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小打小闹写点bug">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/03/28/hello-world/" class="post-title-link" itemprop="url">用 Prolog 开发 Hello World 程序</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-03-28 21:54:43 / 修改时间：21:57:52" itemprop="dateCreated datePublished" datetime="2025-03-28T21:54:43+08:00">2025-03-28</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2025/03/28/hello-world/#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2025/03/28/hello-world/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1><span id="用-prolog-开发-hello-world-程序">用 Prolog 开发 Hello World 程序</span></h1><h2><span id="序言">序言</span></h2><p>本文演示如何用 Prolog 来实现经典的 Hello World 程序。</p>
+<h2><span id="搭建开发环境">搭建开发环境</span></h2><p>为了可以运行 Prolog 程序，需要先安装一个 Prolog 语言的实现。这里我选择的是 SWI-Prolog，到<a href="https://www.swi-prolog.org/download/stable">这里</a>下载对应平台的安装包，安装完毕后，运行命令<code>swipl --version</code>可以看到相应的输出</p>
+<figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜  /tmp swipl --version</span><br><span class="line">SWI-Prolog version 9.0.4 for x86_64-darwin</span><br></pre></td></tr></tbody></table></figure>
+
+<p>接着再打开<a href="https://marketplace.visualstudio.com/items?itemName=arthurwang.vsc-prolog">这个链接</a>，给 VSCode 安装相应的插件，实现语法高亮，效果如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%AF%AD%E6%B3%95%E9%AB%98%E4%BA%AE.jpg" alt="语法高亮"></p>
+<h2><span id="运行-prolog-程序">运行 Prolog 程序</span></h2><p>使用 VSCode 将下列代码保存到名为<code>hello_world.pl</code>的文件中</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    writeln(<span class="string">"Hello, world!"</span>).</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后运行命令<code>swipl ./hello_world.pl</code>即可输出<code>Hello, world!</code>到屏幕上，如下图所示</p>
+<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/hello_world%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C.jpg" alt="hello_world执行结果"></p>
+<h2><span id="展开说说">展开说说</span></h2><p>接下来对上述源文件<code>hello_world.pl</code>做一番讲解。</p>
+<h3><span id="源文件命名">源文件命名</span></h3><p>Prolog 源文件的后缀名通常为<code>.pl</code>，因此上文中的文件名为<code>hello_world.pl</code>。</p>
+<h3><span id="程序入口">程序入口</span></h3><p>与 C 语言不同，Prolog 并没有规定程序启动的时候要调用哪一个函数，而是由开发者使用命令（Prolog 的术语为<code>directive</code>）<code>:- initialization</code>来指定的。可以将<code>initialization</code>视为一个两个参数的函数：</p>
+<ul>
+<li>第一个参数为<code>Goal</code>，表示要调用的函数的名字。在这里就是<code>main</code>；</li>
+<li>第二个参数为<code>When</code>，表示在什么时候调用<code>Goal</code>。当它的值为<code>main</code>的时候（注意，这里的<code>main</code>是一个固定的模式，与作为参数<code>Goal</code>的函数的名字无关），就表示是在程序启动的时候调用。</li>
+</ul>
+<p>因此，<code>:- initialization(main, main).</code>的意思，就是在程序启动的时候，调用名为<code>main</code>的函数。</p>
+<h3><span id="函数定义">函数定义</span></h3><p>在 Prolog 中，使用操作符<code>:-</code>来定义函数。它的左侧是函数的名字和参数列表，在上文的例子中，函数名为<code>main</code>，它有一个参数。由于这个参数在函数体中并未被用到，因此将其命名为<code>_</code>——这是 Prolog 中的匿名变量的意思，它可以避免触发编译器对于一个变量仅出现了一次的警告。而在<code>:-</code>的右侧直到英文句号（即<code>.</code>这个符号）的代码则属于函数体，在这里是<code>writeln("Hello, world!")</code>。</p>
+<p>如果函数体中有多于一个语句，那么它们之间由英文逗号（即<code>,</code>这个符号）分隔。例如，将前文中的代码改写如下</p>
+<figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    write(<span class="string">"Hello, "</span>),</span><br><span class="line">    writeln(<span class="string">"world!"</span>).</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以看到，两个语句之间正是由<code>,</code>分隔。</p>
+<h3><span id="字符串">字符串</span></h3><p>就像其它许多语言一样，SWI-Prolog 也支持以双引号的语法来表示一个字符串对象，因此上文中的<code>"Hello, world!"</code>是字符串类型，而不是一个 atom（atom 是 Prolog 中的一种数据类型，前文中的<code>main</code>就是一个 atom）。</p>
+<h3><span id="输出">输出</span></h3><p>函数<code>write</code>和<code>writeln</code>都可以用于将字符串输出到屏幕，区别在于后者会在最后输出一个换行符。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2025/02/19/%E7%94%A8Prolog%E5%BC%80%E5%8F%91WEB%E6%9C%8D%E5%8A%A1/">
 
     <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -223,10 +321,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2025-02-19 00:06:00 / 修改时间：00:06:30" itemprop="dateCreated datePublished" datetime="2025-02-19T00:06:00+08:00">2025-02-19</time>
+              <time title="创建时间：2025-02-19 00:06:00" itemprop="dateCreated datePublished" datetime="2025-02-19T00:06:00+08:00">2025-02-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-02-23 15:30:02" itemprop="dateModified" datetime="2025-02-23T15:30:02+08:00">2025-02-23</time>
+              </span>
 
           
   
@@ -253,15 +357,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="用-Prolog-开发-WEB-服务"><a href="#用-Prolog-开发-WEB-服务" class="headerlink" title="用 Prolog 开发 WEB 服务"></a>用 Prolog 开发 WEB 服务</h1><h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><p>在绝大多数互联网行业开发者看来，Prolog 不是一门会被用在本职开发工作中的语言。更多的时候，谈论起 Prolog，人们联想到的往往是诸如“逻辑编程”、“人工智能”等词语，将它与 SQL 放在一起，视为一种 DSL，而非像 Java、Python 这样的通用编程语言。因此，我一直很好奇能否使用 Prolog 来开发一些更偏向于业务系统的程序。</p>
+          <h1><span id="用-prolog-开发-web-服务">用 Prolog 开发 WEB 服务</span></h1><h2><span id="序言">序言</span></h2><p>在绝大多数互联网行业开发者看来，Prolog 不是一门会被用在本职开发工作中的语言。更多的时候，谈论起 Prolog，人们联想到的往往是诸如“逻辑编程”、“人工智能”等词语，将它与 SQL 放在一起，视为一种 DSL，而非像 Java、Python 这样的通用编程语言。因此，我一直很好奇能否使用 Prolog 来开发一些更偏向于业务系统的程序。</p>
 <p>答案是肯定的。基于 SWI-Prolog 这个实现和它的标准库，我开发出了一个简单的短链服务，验证了 Prolog 的确可以满足开发一个业务系统的各种功能需求。</p>
-<h2 id="Prolog-基础知识"><a href="#Prolog-基础知识" class="headerlink" title="Prolog 基础知识"></a>Prolog 基础知识</h2><p>由于本文的大多数读者对 Prolog 应当是比较陌生的，因此在开始讲解如何用它开发一个 WEB 应用之前，必须稍作科普，介绍一下 Prolog 的基础知识，包括但不限于：</p>
+<h2><span id="prolog-基础知识">Prolog 基础知识</span></h2><p>由于本文的大多数读者对 Prolog 应当是比较陌生的，因此在开始讲解如何用它开发一个 WEB 应用之前，必须稍作科普，介绍一下 Prolog 的基础知识，包括但不限于：</p>
 <ol>
 <li>Prolog 程序的基本结构；</li>
 <li>运行 Prolog 脚本；</li>
 <li>编译 Prolog 程序。</li>
 </ol>
-<h3 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h3><p>Prolog 是一门语言而不是一个具体的解释器或者编译器，为了可以运行 Prolog 脚本或编译源代码，我选择使用 SWI-Prolog。有了它，就可以运行经典的 Hello World 程序了</p>
+<h3><span id="hello-world">Hello World</span></h3><p>Prolog 是一门语言而不是一个具体的解释器或者编译器，为了可以运行 Prolog 脚本或编译源代码，我选择使用 SWI-Prolog。有了它，就可以运行经典的 Hello World 程序了</p>
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    format(<span class="string">"Hello, world!~n"</span>).</span><br></pre></td></tr></tbody></table></figure>
 
 <p>假设上述源代码被保存在文件<code>hello_world.pl</code>中，那么执行它的命令如下</p>
@@ -273,13 +377,13 @@
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    format(<span class="string">"Hello, world!~n"</span>).</span><br></pre></td></tr></tbody></table></figure>
 
 <p>则是函数<code>main</code>的定义，它调用内置的函数<code>format</code>来打印一个字符串到标准输出。</p>
-<h3 id="编译-Prolog-程序"><a href="#编译-Prolog-程序" class="headerlink" title="编译 Prolog 程序"></a>编译 Prolog 程序</h3><p>利用 SWI-Prolog 可以像运行 Python 脚本一般来运行 Prolog 程序，当然，也可以像 C 程序一样将其从文本形态的源代码编译为一个独立的可执行文件。仍然以前文的源文件<code>hello_world.pl</code>为例，编译的命令如下</p>
+<h3><span id="编译-prolog-程序">编译 Prolog 程序</span></h3><p>利用 SWI-Prolog 可以像运行 Python 脚本一般来运行 Prolog 程序，当然，也可以像 C 程序一样将其从文本形态的源代码编译为一个独立的可执行文件。仍然以前文的源文件<code>hello_world.pl</code>为例，编译的命令如下</p>
 <figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swipl --stand_alone=true -o hello_world -c hello_world.pl</span><br></pre></td></tr></tbody></table></figure>
 
 <p>效果如下图所示</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E7%BC%96%E8%AF%91prolog%E7%A8%8B%E5%BA%8F.jpg" alt="编译prolog程序"></p>
 <p>在 C 语言中，被编译的程序的入口是约定俗成的，即函数<code>main</code>。而由于在文件<code>hello_world.pl</code>中用指令<code>:- initialization(main, main).</code></p>
-<h2 id="Prolog-的使用"><a href="#Prolog-的使用" class="headerlink" title="Prolog 的使用"></a>Prolog 的使用</h2><p>在开发 WEB 服务的过程中，还会遇到许多与 WEB 无关的、Prolog 自身在其它领域的应用知识，例如：</p>
+<h2><span id="prolog-的使用">Prolog 的使用</span></h2><p>在开发 WEB 服务的过程中，还会遇到许多与 WEB 无关的、Prolog 自身在其它领域的应用知识，例如：</p>
 <ol>
 <li>如何读写磁盘文件；</li>
 <li>如何处理 JSON 格式的数据；</li>
@@ -287,7 +391,7 @@
 <li>如何读写 Redis；</li>
 </ol>
 <p>因此在这一章节中，将会分别介绍在 Prolog 中如何做到上面的这些事情。</p>
-<h3 id="读取磁盘文件"><a href="#读取磁盘文件" class="headerlink" title="读取磁盘文件"></a>读取磁盘文件</h3><p>要读取磁盘文件的全部内容，可以使用 SWI-Prolog 的库提供的函数<a href="https://www.swi-prolog.org/pldoc/doc_for?object=read_file_to_string/3">read_file_to_string/3</a>。假设要读取的文件为<code>/tmp/demo.txt</code>，其内容如下</p>
+<h3><span id="读取磁盘文件">读取磁盘文件</span></h3><p>要读取磁盘文件的全部内容，可以使用 SWI-Prolog 的库提供的函数<a href="https://www.swi-prolog.org/pldoc/doc_for?object=read_file_to_string/3">read_file_to_string/3</a>。假设要读取的文件为<code>/tmp/demo.txt</code>，其内容如下</p>
 <figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Shopping List:</span><br><span class="line"></span><br><span class="line">- Milk</span><br><span class="line">- Bread</span><br><span class="line">- Eggs</span><br><span class="line">- Apples</span><br><span class="line">- Coffee</span><br></pre></td></tr></tbody></table></figure>
 
 <p>那么<code>read_file_to_string/3</code>的用法如下</p>
@@ -295,12 +399,12 @@
 
 <p>这样就可以将读到的文件内容完全打印到控制台上，如下图所示</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%AF%BB%E5%8F%96%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg" alt="读取磁盘文件"></p>
-<h3 id="写入磁盘文件"><a href="#写入磁盘文件" class="headerlink" title="写入磁盘文件"></a>写入磁盘文件</h3><p>如果要将数据写入到磁盘文件中——例如，在每次处理完请求后记录日志，那么可以使用函数<code>write</code>。以将前文中的字符串<code>Hello, world!</code>写入到文件中为例，示例代码如下</p>
+<h3><span id="写入磁盘文件">写入磁盘文件</span></h3><p>如果要将数据写入到磁盘文件中——例如，在每次处理完请求后记录日志，那么可以使用函数<code>write</code>。以将前文中的字符串<code>Hello, world!</code>写入到文件中为例，示例代码如下</p>
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">:- initialization(main, main).</span><br><span class="line"></span><br><span class="line">main(<span class="symbol">_</span>) :-</span><br><span class="line">    <span class="symbol">LogContent</span> = <span class="string">"Hello, world!"</span>,</span><br><span class="line">    open(<span class="string">"/tmp/access.log"</span>, write, <span class="symbol">Stream</span>),</span><br><span class="line">    write(<span class="symbol">Stream</span>, <span class="symbol">LogContent</span>),</span><br><span class="line">    close(<span class="symbol">Stream</span>).</span><br></pre></td></tr></tbody></table></figure>
 
 <p>效果如下图所示</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E5%86%99%E5%85%A5%E7%A3%81%E7%9B%98%E6%96%87%E4%BB%B6.jpg" alt="写入磁盘文件"></p>
-<h3 id="解析-JSON-格式"><a href="#解析-JSON-格式" class="headerlink" title="解析 JSON 格式"></a>解析 JSON 格式</h3><p>JSON 已经是应用最广泛的数据交互格式之一了，因此如果一门语言要能够投产于业务系统的开发，必然离不开对 JSON 数据的处理能力。假设要处理的 JSON 数据如下</p>
+<h3><span id="解析-json-格式">解析 JSON 格式</span></h3><p>JSON 已经是应用最广泛的数据交互格式之一了，因此如果一门语言要能够投产于业务系统的开发，必然离不开对 JSON 数据的处理能力。假设要处理的 JSON 数据如下</p>
 <figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"mysql"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">        <span class="attr">"driver_string"</span><span class="punctuation">:</span> <span class="string">"DRIVER={MySQL ODBC 8.0 Driver};String Types=Unicode;password=1234567;port=3306;server=mysql;user=root"</span></span><br><span class="line">    <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"redis"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">        <span class="attr">"hostname"</span><span class="punctuation">:</span> <span class="string">"redis"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">"port"</span><span class="punctuation">:</span> <span class="number">6379</span></span><br><span class="line">    <span class="punctuation">}</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
 
 <p>这些内容存储在文件<code>/tmp/config.json</code>中，那么下列代码会取出其中的叶子节点来输出</p>
@@ -309,11 +413,11 @@
 <p>上文中的函数<a href="https://www.swi-prolog.org/pldoc/doc_for?object=atom_json_dict/3">atom_json_dict</a>将字符串类型的变量<code>String</code>反序列化为变量<code>JSONDict</code>。从<a href="https://www.swi-prolog.org/pldoc/man?section=ext-dict-functions">这里</a>可以看到，SWI-Prolog 为字典类型提供一个中缀操作符<code>.</code>，使得我们可以像在多数主流语言中引用类的成员变量一般，用简单的语法来获取字典内的字段——即<code>JSONDict.mysql.driver_string</code>这样的代码。</p>
 <p>上面的代码的运行效果如下图所示</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%A7%A3%E6%9E%90JSON%E5%AD%97%E5%85%B8%E7%9A%84%E6%95%88%E6%9E%9C.jpg" alt="解析JSON字典的效果"></p>
-<h3 id="自动导入的库"><a href="#自动导入的库" class="headerlink" title="自动导入的库"></a>自动导入的库</h3><p>如果分别查看函数<code>read_file_to_string</code>和<code>atom_json_dict</code>的文档（分别在<a href="https://www.swi-prolog.org/pldoc/doc_for?object=read_file_to_string/3">这里</a>和<a href="https://www.swi-prolog.org/pldoc/doc_for?object=atom_json_dict/3">这里</a>），就会发现前者的页面上写着<code>can be autoloaded</code>，而后者没有</p>
+<h3><span id="自动导入的库">自动导入的库</span></h3><p>如果分别查看函数<code>read_file_to_string</code>和<code>atom_json_dict</code>的文档（分别在<a href="https://www.swi-prolog.org/pldoc/doc_for?object=read_file_to_string/3">这里</a>和<a href="https://www.swi-prolog.org/pldoc/doc_for?object=atom_json_dict/3">这里</a>），就会发现前者的页面上写着<code>can be autoloaded</code>，而后者没有</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5%E7%9A%84%E6%8F%90%E7%A4%BA.jpg" alt="自动导入的提示"></p>
 <p>所以前文关于<code>read_file_to_string</code>的例子中，即便不写上<code>:- use_module(library(readutil)).</code>，也是可以正常调用的</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E4%B8%8D%E9%9C%80%E8%A6%81%E5%AF%BC%E5%85%A5%E7%9A%84%E4%BE%8B%E5%AD%90.jpg" alt="不需要导入的例子"></p>
-<h3 id="事实与全局变量"><a href="#事实与全局变量" class="headerlink" title="事实与全局变量"></a>事实与全局变量</h3><p>在将磁盘上的配置文件的内容加载到内存中后，最好可以将其赋值为一个全局变量以便在所有的函数中访问到。要做到这一点，可以利用 Prolog 的一个特性：事实。</p>
+<h3><span id="事实与全局变量">事实与全局变量</span></h3><p>在将磁盘上的配置文件的内容加载到内存中后，最好可以将其赋值为一个全局变量以便在所有的函数中访问到。要做到这一点，可以利用 Prolog 的一个特性：事实。</p>
 <p>在很多 Prolog 的入门教程中，都会介绍经典的、如何用 Prolog 来回答两个人是否为某种关系的例子。例如，在<a href="https://www.ruanyifeng.com/blog/2019/01/prolog.html">这个教程</a>中，就给出了如何判断两个人是否为朋友的示例，如下图所示</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E4%B8%BA%E6%9C%8B%E5%8F%8B%E7%9A%84%E4%BE%8B%E5%AD%90.jpg" alt="判断是否为朋友的例子"></p>
 <p>其中，像</p>
@@ -330,7 +434,7 @@
 
 <p>效果如下</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E7%94%A8%E4%BA%8B%E5%AE%9E%E6%9D%A5%E5%AE%9A%E4%B9%89%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F.jpg" alt="用事实来定义全局变量"></p>
-<h3 id="用-findall-找到所有的解"><a href="#用-findall-找到所有的解" class="headerlink" title="用 findall 找到所有的解"></a>用 findall 找到所有的解</h3><p>在前一小节的截图中，可以看到我们可以询问 Prolog 一个事实是否成立。其实，我们还可以让 Prolog 遍历它的“知识库”，来找出符合我们所查询的问题的“答案”。例如，我先准备好一份内容如下的文件<code>friend.pl</code></p>
+<h3><span id="用-findall-找到所有的解">用 findall 找到所有的解</span></h3><p>在前一小节的截图中，可以看到我们可以询问 Prolog 一个事实是否成立。其实，我们还可以让 Prolog 遍历它的“知识库”，来找出符合我们所查询的问题的“答案”。例如，我先准备好一份内容如下的文件<code>friend.pl</code></p>
 <figure class="highlight prolog"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">friend(john, julia).</span><br><span class="line">friend(john, jack).</span><br><span class="line">friend(julia, sam).</span><br><span class="line">friend(julia, molly).</span><br></pre></td></tr></tbody></table></figure>
 
 <p>接着我在 Prolog 的 REPL 中加载它，如下图所示</p>
@@ -345,7 +449,7 @@
 
 <p>效果如下图所示</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/findall%E7%9A%84%E6%9F%A5%E6%89%BE%E7%BB%93%E6%9E%9C.jpg" alt="findall的查找结果"></p>
-<h3 id="在-Docker-中运行-Prolog"><a href="#在-Docker-中运行-Prolog" class="headerlink" title="在 Docker 中运行 Prolog"></a>在 Docker 中运行 Prolog</h3><p>在之后的例子中，我还会介绍如何使用 Prolog 来读写数据库。但在摸索的过程中，我发现在 macOS 上无法运行成功，只有在 Docker 内才可行，因此这一节将会先介绍如何在 Docker 中运行 Prolog。</p>
+<h3><span id="在-docker-中运行-prolog">在 Docker 中运行 Prolog</span></h3><p>在之后的例子中，我还会介绍如何使用 Prolog 来读写数据库。但在摸索的过程中，我发现在 macOS 上无法运行成功，只有在 Docker 内才可行，因此这一节将会先介绍如何在 Docker 中运行 Prolog。</p>
 <p>以前文中的 Hello World 程序为例，在已经有了源文件<code>hello_world.pl</code>的前提下，准备如下的<code>hello_world.dockerfile</code>文件</p>
 <figure class="highlight dockerfile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> swipl:stable</span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> . /app/</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译源代码</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> swipl --goal=main --stand_alone=<span class="literal">true</span> -o hello_world -c hello_world.pl \</span></span><br><span class="line"><span class="language-bash">  &amp;&amp; <span class="built_in">cp</span> ./hello_world /bin/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CMD</span><span class="language-bash"> [ <span class="string">"hello_world"</span> ]</span></span><br></pre></td></tr></tbody></table></figure>
 
@@ -360,8 +464,8 @@
 
 <p>效果如下图所示</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E7%94%A8docker%E8%BF%90%E8%A1%8CProlog%E4%BB%A3%E7%A0%81.jpg" alt="用docker运行Prolog代码"></p>
-<h2 id="读写数据库"><a href="#读写数据库" class="headerlink" title="读写数据库"></a>读写数据库</h2><p>如果一门语言无法读写数据库，尤其是关系型数据库，那么用它来开发业务系统必然是捉襟见肘的。这一章中，将会介绍如何用 SWI-Prolog 读写 MySQL 中的数据。</p>
-<h3 id="连接-MySQL"><a href="#连接-MySQL" class="headerlink" title="连接 MySQL"></a>连接 MySQL</h3><p>通过 SWI-Prolog 的<a href="https://www.swi-prolog.org/pldoc/doc_for?object=section(%27packages/odbc.html%27)">文档</a>我们可以了解到，要操作关系型数据库，需要用到 ODBC，这一小节以连接 MySQL、调用函数<code>version</code>为例进行讲解。首先需要有一个 DSN 字符串来指定 MySQL 的连接参数，假设：</p>
+<h2><span id="读写数据库">读写数据库</span></h2><p>如果一门语言无法读写数据库，尤其是关系型数据库，那么用它来开发业务系统必然是捉襟见肘的。这一章中，将会介绍如何用 SWI-Prolog 读写 MySQL 中的数据。</p>
+<h3><span id="连接-mysql">连接 MySQL</span></h3><p>通过 SWI-Prolog 的<a href="https://www.swi-prolog.org/pldoc/doc_for?object=section(%27packages/odbc.html%27)">文档</a>我们可以了解到，要操作关系型数据库，需要用到 ODBC，这一小节以连接 MySQL、调用函数<code>version</code>为例进行讲解。首先需要有一个 DSN 字符串来指定 MySQL 的连接参数，假设：</p>
 <ul>
 <li>密码为<code>1234567</code>；</li>
 <li>端口号为<code>3306</code>；</li>
@@ -376,7 +480,7 @@
 
 <p>然后构建镜像并运行即可，效果如下图所示</p>
 <p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93.jpg" alt="连接数据库"></p>
-<h3 id="执行-SELECT-语句"><a href="#执行-SELECT-语句" class="headerlink" title="执行 SELECT 语句"></a>执行 SELECT 语句</h3><p>通过查阅<code>odbc_query/4</code>的<a href="https://www.swi-prolog.org/pldoc/man?predicate=odbc_query/4">文档</a>，可以看到要想从表中查询出一行记录，需要在该谓词的第三个参数<code>RowOrAffected</code>中传入<code>row(Lemma)</code>这样的复合表达式。以查询短链的内容为例，假设存储着原始链接与短链的 ID 的关系的表的结构如下</p>
+<h3><span id="执行-select-语句">执行 SELECT 语句</span></h3><p>通过查阅<code>odbc_query/4</code>的<a href="https://www.swi-prolog.org/pldoc/man?predicate=odbc_query/4">文档</a>，可以看到要想从表中查询出一行记录，需要在该谓词的第三个参数<code>RowOrAffected</code>中传入<code>row(Lemma)</code>这样的复合表达式。以查询短链的内容为例，假设存储着原始链接与短链的 ID 的关系的表的结构如下</p>
 <figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `t_url` (</span><br><span class="line">    `id` <span class="type">BIGINT</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,</span><br><span class="line">    `url` <span class="type">VARCHAR</span>(<span class="number">256</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">'短链对应的原始链接'</span>,</span><br><span class="line">    `ctime` <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span>,</span><br><span class="line">    `mtime` <span class="type">TIMESTAMP</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span>,</span><br><span class="line">    <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">    <span class="keyword">UNIQUE</span> INDEX `ux__url` (`url`)</span><br><span class="line">) AUTO_INCREMENT<span class="operator">=</span><span class="number">1000001</span>;</span><br></pre></td></tr></tbody></table></figure>
 
 <p>往其中添加一行测试用的数据</p>
@@ -740,111 +844,11 @@
   
   
 
-        
-  
-  
-  <article itemscope="" itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://liutos.github.io/2023/05/07/impl-dotimes-by-callcc/">
-
-    <span hidden="" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/%E5%BE%AE%E4%BF%A1.jpg">
-      <meta itemprop="name" content="Liutos">
-      <meta itemprop="description" content="记录编程生涯的大大小小的事情">
-    </span>
-
-    <span hidden="" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小打小闹写点bug">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/05/07/impl-dotimes-by-callcc/" class="post-title-link" itemprop="url">使用 call/cc 实现计数循环</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-05-07 16:52:26 / 修改时间：17:00:18" itemprop="dateCreated datePublished" datetime="2023-05-07T16:52:26+08:00">2023-05-07</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2023/05/07/impl-dotimes-by-callcc/#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/05/07/impl-dotimes-by-callcc/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="使用-call-cc-实现计数循环"><a href="#使用-call-cc-实现计数循环" class="headerlink" title="使用 call/cc 实现计数循环"></a>使用 call/cc 实现计数循环</h1><h2 id="什么是计数循环"><a href="#什么是计数循环" class="headerlink" title="什么是计数循环"></a>什么是计数循环</h2><p>计数循环就是从一个数字$i$开始一直遍历到另一个数字$j$为止的循环过程。例如，下面的 Python 代码就会遍历从 0 到 9 这 10 个整数并逐个打印它们</p>
-<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br></pre></td></tr></tbody></table></figure>
-
-<p>如果是在 C 语言中实现同样的功能，代码会更显著一些</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<p>在 C 语言的例子中，显式地指定了计数器变量<code>i</code>从 0 开始并且在等于 10 的时候结束循环，比之 Python 版本更有循环的味道。</p>
-<h2 id="拆开循环计数的语法糖"><a href="#拆开循环计数的语法糖" class="headerlink" title="拆开循环计数的语法糖"></a>拆开循环计数的语法糖</h2><p>使用 C 语言的<code>while</code>语句同样可以实现计数循环，示例代码如下</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (i &lt; <span class="number">10</span>) {</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">    i++;</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<p>如果将<code>while</code>也视为<code>if</code>和<code>goto</code>的语法糖的话，可以进一步将计数循环写成更原始的形式</p>
-<figure class="highlight c"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">{</span><br><span class="line">  <span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">label0:</span><br><span class="line">  <span class="keyword">if</span> (i &gt;= <span class="number">10</span>) {</span><br><span class="line">    <span class="keyword">goto</span> label1;</span><br><span class="line">  }</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">  i++;</span><br><span class="line">  <span class="keyword">goto</span> label0;</span><br><span class="line">label1:</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="Common-Lisp-中的-go-与续延"><a href="#Common-Lisp-中的-go-与续延" class="headerlink" title="Common Lisp 中的 go 与续延"></a>Common Lisp 中的 go 与续延</h2><p>在 Common Lisp 中也有与 C 语言的<code>goto</code>特性相近的 special form，那就是<a href="http://clhs.lisp.se/Body/s_tagbod.htm"><code>tagbody</code></a>和<a href="http://www.lispworks.com/documentation/lw70/CLHS/Body/s_go.htm"><code>go</code></a>。使用它们可以将 C 代码直白地翻译为对应的 Common Lisp 版本</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">i</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   label0</span><br><span class="line">     (<span class="name">when</span> (<span class="name">&gt;=</span> i <span class="number">10</span>)</span><br><span class="line">       (<span class="name">go</span> label1))</span><br><span class="line"></span><br><span class="line">     (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~%"</span> i)</span><br><span class="line">     (<span class="name">incf</span> i)</span><br><span class="line">     (<span class="name">go</span> label0)</span><br><span class="line">   label1))</span><br></pre></td></tr></tbody></table></figure>
-
-<p>聪明的你一定已经发现了，此处的第二个符号<code>label1</code>其实是丝毫不必要的，只要写成下面的形式即可</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">let</span> ((<span class="name">i</span> <span class="number">0</span>))</span><br><span class="line">  (<span class="name">tagbody</span></span><br><span class="line">   label0</span><br><span class="line">     (<span class="name">when</span> (<span class="name">&lt;</span> i <span class="number">10</span>)</span><br><span class="line">       (<span class="name">format</span> <span class="literal">t</span> <span class="string">"~D~%"</span> i)</span><br><span class="line">       (<span class="name">incf</span> i)</span><br><span class="line">       (<span class="name">go</span> label0))))</span><br></pre></td></tr></tbody></table></figure>
-
-<p>这个形式不仅仅是更简单了，而且它暴露出了一个事实：<code>label0</code>所表示的，其实就是在将变量<code>i</code>绑定为 0<strong>之后</strong>要执行的代码的位置。换句话说，它标识了一个续延（continuation）。</p>
-<h2 id="用-call-cc-重新实现计数循环"><a href="#用-call-cc-重新实现计数循环" class="headerlink" title="用 call/cc 重新实现计数循环"></a>用 call/cc 重新实现计数循环</h2><p>如果你用的语言中支持 first-class 的续延，那么便可以用来实现计数循环，例如<a href="https://github.com/Liutos/LiutCL">233-lisp</a>。在 233-lisp 中，提供了特殊操作符<code>call/cc</code>来捕捉当前续延对象，这个名字借鉴自 Scheme。借助这个操作符，即便没有<code>tagbody</code>和<code>go</code>，也可以实现计数循环。</p>
-<p><img src="/images/loading.png" data-original="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/20230507/%E7%94%A8callcc%E6%A8%A1%E6%8B%9F%E8%AE%A1%E6%95%B0%E5%BE%AA%E7%8E%AF.jpg" alt="用callcc模拟计数循环"></p>
-<p>在上面的代码中，<code>call/cc</code>捕捉到的续延就是“赋值给局部变量<code>i</code>”。在将这个续延<code>k</code>保存到变量<code>next</code>之后，用 0 初始化变量<code>i</code>。之后只要<code>i</code>还小于 10，就将它打印到标准输出，并启动保存在了变量<code>next</code>中的续延，回到给变量<code>i</code>赋值的地方。此时传递给续延的参数为<code>(+ i 1)</code>，就实现了变量<code>i</code>的自增操作。当<code>(&lt; i 10)</code>不再成立时，也就不会启动续延“回到过去”了，至此，进程结束。</p>
-<p>在 233-lisp 中，将<code>dotimes</code>作为一个内置的宏用<code>call/cc</code>实现了一遍，参见<a href="https://github.com/Liutos/LiutCL/blob/6342693cb682b6d2f47067c3d3c9c6ce46eb891c/src/interpreter.lisp#L568">这里</a>，其代码如下</p>
-<figure class="highlight lisp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">defun</span> expand-dotimes-to-call/cc (<span class="name">expr</span>)</span><br><span class="line">  <span class="string">"将 DOTIMES 语句 EXPR 编译为等价的 CALL/CC 语句。"</span></span><br><span class="line">  (<span class="name">assert</span> (<span class="name">eq</span> (<span class="name">first</span> expr) 'dotimes))</span><br><span class="line">  (<span class="name">destructuring-bind</span> ((<span class="name">var</span> count-form) <span class="symbol">&amp;rest</span> statements)</span><br><span class="line">      (<span class="name">rest</span> expr)</span><br><span class="line">    (<span class="name">let</span> ((<span class="name">a</span> (<span class="name">gensym</span>))</span><br><span class="line">          (<span class="name">count-form-result</span> (<span class="name">gensym</span>))</span><br><span class="line">          (<span class="name">next</span> (<span class="name">gensym</span>)))</span><br><span class="line">      `(let ((,count-form-result ,count-form)) ; 由于目前 LET 只支持一个绑定，因此这里要写多个 LET。</span><br><span class="line">         (let ((,next <span class="number">0</span>))               ; 由于 <span class="number">233</span>-lisp 中尚未支持 NIL，因此这里填个 <span class="number">0</span>。</span><br><span class="line">           (let ((,var (call/cc (k)</span><br><span class="line">                                (progn</span><br><span class="line">                                  (setf ,next k)</span><br><span class="line">                                  <span class="number">0</span>))))     ; 计数循环从 <span class="number">0</span> 开始。</span><br><span class="line">             (if (&lt; ,var ,count-form-result)</span><br><span class="line">                 (progn</span><br><span class="line">                   ,@statements</span><br><span class="line">                   (,next (+ ,var <span class="number">1</span>)))</span><br><span class="line">                 <span class="number">0</span>)))))))                  <span class="comment">; 由于目前没有 NIL，因此返回一个数字 0 来代替。</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>变量<code>count-form-result</code>和<code>next</code>分别表示在宏展开后的代码中的计数上限和被捕捉的续延。之所以让它们以<code>(gensym)</code>的方式来命名，是为了避免多次求值<code>count-form</code>表达式，以及避免存储续延的变量名恰好出乎意料地与<code>statements</code>中的变量名冲突了，这也算是编写 Common Lisp 的宏时的最佳实践了。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>直接用<code>call/cc</code>来一个个实现 Common Lisp 中的各种控制流还是太繁琐了，更好的方案是用<code>call/cc</code>先实现<code>tagbody</code>和<code>go</code>，然后再用后两者继续实现<code>do</code>，最后用<code>do</code>分别实现<code>dolist</code>和<code>dotimes</code>。当然了，这些都是后话了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">…</span><a class="page-number" href="/page/21/">21</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">…</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -911,7 +915,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">105</span>
+          <span class="site-state-item-count">106</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
