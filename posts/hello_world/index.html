@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.144.2">
+    <meta name="generator" content="Relearn 7.6.0">
+    <meta name="description" content="序言 本文演示如何用 Prolog 来实现经典的 Hello World 程序。
+搭建开发环境 为了可以运行 Prolog 程序，需要先安装一个 Prolog 语言的实现。这里我选择的是 SWI-Prolog，到这里下载对应平台的安装包，安装完毕后，运行命令swipl --version可以看到相应的输出
+➜ /tmp swipl --version SWI-Prolog version 9.0.4 for x86_64-darwin 接着再打开这个链接，给 VSCode 安装相应的插件，实现语法高亮，效果如下图所示
+运行 Prolog 程序 使用 VSCode 将下列代码保存到名为hello_world.pl的文件中
+:- initialization(main, main). main(_) :- writeln(&#34;Hello, world!&#34;). 然后运行命令swipl ./hello_world.pl即可输出Hello, world!到屏幕上，如下图所示
+展开说说 接下来对上述源文件hello_world.pl做一番讲解。
+源文件命名 Prolog 源文件的后缀名通常为.pl，因此上文中的文件名为hello_world.pl。
+程序入口 与 C 语言不同，Prolog 并没有规定程序启动的时候要调用哪一个函数，而是由开发者使用命令（Prolog 的术语为directive）:- initialization来指定的。可以将initialization视为一个两个参数的函数：">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="用 Prolog 开发 Hello World 程序 :: 小打小闹写点bug">
+    <meta name="twitter:description" content="序言 本文演示如何用 Prolog 来实现经典的 Hello World 程序。
+搭建开发环境 为了可以运行 Prolog 程序，需要先安装一个 Prolog 语言的实现。这里我选择的是 SWI-Prolog，到这里下载对应平台的安装包，安装完毕后，运行命令swipl --version可以看到相应的输出
+➜ /tmp swipl --version SWI-Prolog version 9.0.4 for x86_64-darwin 接着再打开这个链接，给 VSCode 安装相应的插件，实现语法高亮，效果如下图所示
+运行 Prolog 程序 使用 VSCode 将下列代码保存到名为hello_world.pl的文件中
+:- initialization(main, main). main(_) :- writeln(&#34;Hello, world!&#34;). 然后运行命令swipl ./hello_world.pl即可输出Hello, world!到屏幕上，如下图所示
+展开说说 接下来对上述源文件hello_world.pl做一番讲解。
+源文件命名 Prolog 源文件的后缀名通常为.pl，因此上文中的文件名为hello_world.pl。
+程序入口 与 C 语言不同，Prolog 并没有规定程序启动的时候要调用哪一个函数，而是由开发者使用命令（Prolog 的术语为directive）:- initialization来指定的。可以将initialization视为一个两个参数的函数：">
+    <meta property="og:url" content="https://liutos.github.io/posts/hello_world/index.html">
+    <meta property="og:site_name" content="小打小闹写点bug">
+    <meta property="og:title" content="用 Prolog 开发 Hello World 程序 :: 小打小闹写点bug">
+    <meta property="og:description" content="序言 本文演示如何用 Prolog 来实现经典的 Hello World 程序。
+搭建开发环境 为了可以运行 Prolog 程序，需要先安装一个 Prolog 语言的实现。这里我选择的是 SWI-Prolog，到这里下载对应平台的安装包，安装完毕后，运行命令swipl --version可以看到相应的输出
+➜ /tmp swipl --version SWI-Prolog version 9.0.4 for x86_64-darwin 接着再打开这个链接，给 VSCode 安装相应的插件，实现语法高亮，效果如下图所示
+运行 Prolog 程序 使用 VSCode 将下列代码保存到名为hello_world.pl的文件中
+:- initialization(main, main). main(_) :- writeln(&#34;Hello, world!&#34;). 然后运行命令swipl ./hello_world.pl即可输出Hello, world!到屏幕上，如下图所示
+展开说说 接下来对上述源文件hello_world.pl做一番讲解。
+源文件命名 Prolog 源文件的后缀名通常为.pl，因此上文中的文件名为hello_world.pl。
+程序入口 与 C 语言不同，Prolog 并没有规定程序启动的时候要调用哪一个函数，而是由开发者使用命令（Prolog 的术语为directive）:- initialization来指定的。可以将initialization视为一个两个参数的函数：">
+    <meta property="og:locale" content="zh_cn">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="实用 Prolog 编程">
+    <meta property="article:published_time" content="2025-02-23T11:16:37+08:00">
+    <meta property="article:modified_time" content="2025-02-23T11:16:37+08:00">
+    <meta itemprop="name" content="用 Prolog 开发 Hello World 程序 :: 小打小闹写点bug">
+    <meta itemprop="description" content="序言 本文演示如何用 Prolog 来实现经典的 Hello World 程序。
+搭建开发环境 为了可以运行 Prolog 程序，需要先安装一个 Prolog 语言的实现。这里我选择的是 SWI-Prolog，到这里下载对应平台的安装包，安装完毕后，运行命令swipl --version可以看到相应的输出
+➜ /tmp swipl --version SWI-Prolog version 9.0.4 for x86_64-darwin 接着再打开这个链接，给 VSCode 安装相应的插件，实现语法高亮，效果如下图所示
+运行 Prolog 程序 使用 VSCode 将下列代码保存到名为hello_world.pl的文件中
+:- initialization(main, main). main(_) :- writeln(&#34;Hello, world!&#34;). 然后运行命令swipl ./hello_world.pl即可输出Hello, world!到屏幕上，如下图所示
+展开说说 接下来对上述源文件hello_world.pl做一番讲解。
+源文件命名 Prolog 源文件的后缀名通常为.pl，因此上文中的文件名为hello_world.pl。
+程序入口 与 C 语言不同，Prolog 并没有规定程序启动的时候要调用哪一个函数，而是由开发者使用命令（Prolog 的术语为directive）:- initialization来指定的。可以将initialization视为一个两个参数的函数：">
+    <meta itemprop="datePublished" content="2025-02-23T11:16:37+08:00">
+    <meta itemprop="dateModified" content="2025-02-23T11:16:37+08:00">
+    <meta itemprop="wordCount" content="88">
+    <title>用 Prolog 开发 Hello World 程序 :: 小打小闹写点bug</title>
+    <link href="/images/favicon.ico?1743232875" rel="icon" type="image/x-icon" sizes="any">
+    <link href="/fonts/fontawesome/css/fontawesome-all.min.css?1743232875" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/fonts/fontawesome/css/fontawesome-all.min.css?1743232875" rel="stylesheet"></noscript>
+    <link href="/css/perfect-scrollbar/perfect-scrollbar.min.css?1743232875" rel="stylesheet">
+    <link href="/css/theme.min.css?1743232875" rel="stylesheet">
+    <link href="/css/format-html.min.css?1743232875" rel="stylesheet" id="R-format-style">
+    <link href="/css/auto-complete/auto-complete.min.css?1743232875" rel="stylesheet">
+    <script src="/js/auto-complete/auto-complete.min.js?1743232875" defer></script>
+    <script src="/js/lunr/lunr.min.js?1743232875" defer></script>
+    <script src="/js/lunr/lunr.stemmer.support.min.js?1743232875" defer></script>
+    <script src="/js/lunr/lunr.multi.min.js?1743232875" defer></script>
+    <script src="/js/lunr/lunr.zh.min.js?1743232875" defer></script>
+    <script src="/js/search.min.js?1743232875" defer></script>
+    <script>
+      window.relearn = window.relearn || {};
+      // configuration
+      window.relearn.min = `.min`;
+      window.relearn.path='\/posts\/hello_world\/index.html';
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..';
+      window.relearn.absBaseUri='https:\/\/liutos.github.io';
+      window.relearn.contentLangs=['zh'];
+      window.relearn.index_js_url="/searchindex.en.js?1743232875";
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      window.relearn.disableInlineCopyToClipboard=false;
+      window.relearn.enableBlockCodeWrap=true;
+      // legal
+      window.relearn.getItem = (s,n) => {return s.getItem(n)};
+      window.relearn.setItem = (s,n,v) => {return s.setItem(n,v)};
+      window.relearn.removeItem = (s,n) => {return s.removeItem(n)};
+      // variant stuff
+      window.relearn.themevariants = [ 'auto' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+          window.relearn.markVariant();
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant");
+        document.querySelectorAll(".R-variantswitcher select").forEach((select) => {select.value = variant;});
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.relearn.getItem(window.localStorage, window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.relearn.setItem(window.localStorage, window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/posts/hello_world/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#序言">序言</a></li>
+    <li><a href="#搭建开发环境">搭建开发环境</a></li>
+    <li><a href="#运行-prolog-程序">运行 Prolog 程序</a></li>
+    <li><a href="#展开说说">展开说说</a>
+      <ul>
+        <li><a href="#源文件命名">源文件命名</a></li>
+        <li><a href="#程序入口">程序入口</a></li>
+        <li><a href="#函数定义">函数定义</a></li>
+        <li><a href="#字符串">字符串</a></li>
+        <li><a href="#输出">输出</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList">
+            <li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/index.html"><span itemprop="name">小打小闹写点bug</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li>
+            <li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><a itemprop="item" href="/posts/index.html"><span itemprop="name">实用 Prolog 编程</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li>
+            <li itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement" class=""><span itemprop="name">用 Prolog 开发 Hello World 程序</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/posts/index.html" title="实用 Prolog 编程 (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/posts/http_server/index.html" title="用 Prolog 提供 HTTP 服务_server (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable posts" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="用-prolog-开发-hello-world-程序">用 Prolog 开发 Hello World 程序</h1>
+
+<h2 id="序言">序言</h2>
+<p>本文演示如何用 Prolog 来实现经典的 Hello World 程序。</p>
+<h2 id="搭建开发环境">搭建开发环境</h2>
+<p>为了可以运行 Prolog 程序，需要先安装一个 Prolog 语言的实现。这里我选择的是 SWI-Prolog，到<a href="https://www.swi-prolog.org/download/stable" rel="external" target="_blank">这里</a>下载对应平台的安装包，安装完毕后，运行命令<code>swipl --version</code>可以看到相应的输出</p>
+<div class="highlight wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜  /tmp swipl --version
+</span></span><span style="display:flex;"><span>SWI-Prolog version 9.0.4 <span style="color:#66d9ef">for</span> x86_64-darwin</span></span></code></pre></div>
+<p>接着再打开<a href="https://marketplace.visualstudio.com/items?itemName=arthurwang.vsc-prolog" rel="external" target="_blank">这个链接</a>，给 VSCode 安装相应的插件，实现语法高亮，效果如下图所示</p>
+<p><a href="#R-image-713a6460b47021a998d968ffb2c10ac6" class="lightbox-link"><img alt="语法高亮" class="lazy lightbox figure-image" loading="lazy" src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%AF%AD%E6%B3%95%E9%AB%98%E4%BA%AE.jpg" style=" height: auto; width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-713a6460b47021a998d968ffb2c10ac6"><img alt="语法高亮" class="lazy lightbox lightbox-image" loading="lazy" src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/%E8%AF%AD%E6%B3%95%E9%AB%98%E4%BA%AE.jpg"></a></p>
+<h2 id="运行-prolog-程序">运行 Prolog 程序</h2>
+<p>使用 VSCode 将下列代码保存到名为<code>hello_world.pl</code>的文件中</p>
+<div class="highlight wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-prolog" data-lang="prolog"><span style="display:flex;"><span>:- <span style="color:#a6e22e">initialization</span>(<span style="color:#e6db74">main</span>, <span style="color:#e6db74">main</span>).
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">_</span>) :-
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">writeln</span>(<span style="color:#e6db74">&#34;Hello, world!&#34;</span>).</span></span></code></pre></div>
+<p>然后运行命令<code>swipl ./hello_world.pl</code>即可输出<code>Hello, world!</code>到屏幕上，如下图所示</p>
+<p><a href="#R-image-8ada52ba64c312df0023ec5cf6c3bcbc" class="lightbox-link"><img alt="hello_world执行结果" class="lazy lightbox figure-image" loading="lazy" src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/hello_world%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C.jpg" style=" height: auto; width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8ada52ba64c312df0023ec5cf6c3bcbc"><img alt="hello_world执行结果" class="lazy lightbox lightbox-image" loading="lazy" src="https://raw.githubusercontent.com/Liutos/riverbed/master/pictures/2025/hello_world%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C.jpg"></a></p>
+<h2 id="展开说说">展开说说</h2>
+<p>接下来对上述源文件<code>hello_world.pl</code>做一番讲解。</p>
+<h3 id="源文件命名">源文件命名</h3>
+<p>Prolog 源文件的后缀名通常为<code>.pl</code>，因此上文中的文件名为<code>hello_world.pl</code>。</p>
+<h3 id="程序入口">程序入口</h3>
+<p>与 C 语言不同，Prolog 并没有规定程序启动的时候要调用哪一个函数，而是由开发者使用命令（Prolog 的术语为<code>directive</code>）<code>:- initialization</code>来指定的。可以将<code>initialization</code>视为一个两个参数的函数：</p>
+<ul>
+<li>第一个参数为<code>Goal</code>，表示要调用的函数的名字。在这里就是<code>main</code>；</li>
+<li>第二个参数为<code>When</code>，表示在什么时候调用<code>Goal</code>。当它的值为<code>main</code>的时候（注意，这里的<code>main</code>是一个固定的模式，与作为参数<code>Goal</code>的函数的名字无关），就表示是在程序启动的时候调用。</li>
+</ul>
+<p>因此，<code>:- initialization(main, main).</code>的意思，就是在程序启动的时候，调用名为<code>main</code>的函数。</p>
+<h3 id="函数定义">函数定义</h3>
+<p>在 Prolog 中，使用操作符<code>:-</code>来定义函数。它的左侧是函数的名字和参数列表，在上文的例子中，函数名为<code>main</code>，它有一个参数。由于这个参数在函数体中并未被用到，因此将其命名为<code>_</code>——这是 Prolog 中的匿名变量的意思，它可以避免触发编译器对于一个变量仅出现了一次的警告。而在<code>:-</code>的右侧直到英文句号（即<code>.</code>这个符号）的代码则属于函数体，在这里是<code>writeln(&quot;Hello, world!&quot;)</code>。</p>
+<p>如果函数体中有多于一个语句，那么它们之间由英文逗号（即<code>,</code>这个符号）分隔。例如，将前文中的代码改写如下</p>
+<div class="highlight wrap-code" dir="auto"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-prolog" data-lang="prolog"><span style="display:flex;"><span>:- <span style="color:#a6e22e">initialization</span>(<span style="color:#e6db74">main</span>, <span style="color:#e6db74">main</span>).
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">_</span>) :-
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">write</span>(<span style="color:#e6db74">&#34;Hello, &#34;</span>),
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">writeln</span>(<span style="color:#e6db74">&#34;world!&#34;</span>).</span></span></code></pre></div>
+<p>可以看到，两个语句之间正是由<code>,</code>分隔。</p>
+<h3 id="字符串">字符串</h3>
+<p>就像其它许多语言一样，SWI-Prolog 也支持以双引号的语法来表示一个字符串对象，因此上文中的<code>&quot;Hello, world!&quot;</code>是字符串类型，而不是一个 atom（atom 是 Prolog 中的一种数据类型，前文中的<code>main</code>就是一个 atom）。</p>
+<h3 id="输出">输出</h3>
+<p>函数<code>write</code>和<code>writeln</code>都可以用于将字符串输出到屏幕，区别在于后者会在最后输出一个换行符。</p>
+
+  <footer class="footline">
+              <i class='fa-fw fas fa-calendar'></i> Feb 23, 2025
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+          <a id="R-logo" class="R-default" href="/index.html">
+            <div class="logo-title">小打小闹写点bug</div>
+          </a>
+        </div>
+        <search><form action="/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-homelinks">
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="/index.html"><a class="padding" href="/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-controls">
+          <ul class="">
+          </ul>
+        </div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div class="R-sidebarmenu R-shortcutmenu-home">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent " data-nav-id="/posts/index.html"><a class="padding" href="/posts/index.html">实用 Prolog 编程</a><ul id="R-subsections-b4e55eb7e39db1aee6d02808a2267090" class="collapsible-menu">
+            <li class="active " data-nav-id="/posts/hello_world/index.html"><a class="padding" href="/posts/hello_world/index.html">用 Prolog 开发 Hello World 程序</a></li>
+            <li class="" data-nav-id="/posts/http_server/index.html"><a class="padding" href="/posts/http_server/index.html">用 Prolog 提供 HTTP 服务_server</a></li>
+            <li class="" data-nav-id="/posts/shorten_url/index.html"><a class="padding" href="/posts/shorten_url/index.html">用 Prolog 提供短链服务</a></li>
+            <li class="" data-nav-id="/posts/lengthen_url/index.html"><a class="padding" href="/posts/lengthen_url/index.html">提供短链访问能力</a></li>
+            <li class="" data-nav-id="/posts/file_storage/index.html"><a class="padding" href="/posts/file_storage/index.html">存储 URL 到文件</a></li>
+            <li class="" data-nav-id="/posts/mysql_storage/index.html"><a class="padding" href="/posts/mysql_storage/index.html">存储 URL 到 MySQL</a></li>
+            <li class="" data-nav-id="/posts/json_config/index.html"><a class="padding" href="/posts/json_config/index.html">读取 JSON 配置文件</a></li></ul></li>
+          </ul>
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-shortcuts">
+          <ul class="space collapsible-menu">
+          </ul>
+        </div>
+        <div id="R-footer-margin"></div>
+        <div class="R-menu-divider default-animation">
+          <hr class="padding">
+        </div>
+        <div class="R-sidebarmenu R-shortcutmenu-controls">
+          <ul class="">
+          </ul>
+        </div>
+<div id="R-footer"><p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://gohugo.io/">Hugo</a></p></div>
+      </div>
+    </aside>
+    <script src="/js/clipboard/clipboard.min.js?1743232875" defer></script>
+    <script src="/js/perfect-scrollbar/perfect-scrollbar.min.js?1743232875" defer></script>
+    <script src="/js/theme.min.js?1743232875" defer></script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Log :: 小打小闹写点bug</title>
+    <link>http://localhost:1313/log/index.html</link>
+    <description>This is a new chapter.</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <lastBuildDate></lastBuildDate>
+    <atom:link href="http://localhost:1313/log/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>
