@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>无印 :: 小打小闹写点bug</title><link>https://liutos.github.io/normal/index.html</link><description>This is a new chapter.</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 07 May 2020 20:37:04 +0000</lastBuildDate><atom:link href="https://liutos.github.io/normal/index.xml" rel="self" type="application/rss+xml"/><item><title>程序员特有的画图方式——语绘工具小入门</title><link>https://liutos.github.io/normal/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/index.html</link><pubDate>Thu, 07 May 2020 20:37:04 +0000</pubDate><guid>https://liutos.github.io/normal/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/index.html</guid><description>黑客与画家 虽然程序员多数时候都在与字符打交道，但偶尔也会像建筑或制造业的工程师一样，画一些图，比如：
+为了表达多个系统如何协作以实现业务需求，会画时序图； 为了表达存储到数据库中的业务实体间的关系，会画ER图； 为了表达复杂的业务实体在整个生存期中状态的变化，会画状态图。 除此之外，还有流程图、甘特图、火焰图，等等。
+尽管软件开发过程中产出的这些图不一定逼真、漂亮，或严谨，但凭着图上不同的形状、颜色，以及布局，也可以做到一图胜千言的效果。
+图很有用，画图的工具也同样举足轻重。如果是本地的桌面应用，多数人可能会选择用Windows平台的Visio或macOS平台的OmniGraffle；若说到作图网站，则可能会选择ProcessOn或Draw.io。
+但比起用鼠标拖拖拉拉，我更喜欢用代码来画图。
+用代码画图？ 用代码画图大致上可以分为两类：
+用具体的编程语言控制某种绘图的API画出想要的图形，比如OpenGL、HTML5中的Canvas； 用DSL描述想要画的图，然后用程序根据DSL生成图片。 我所说的用代码画图指的是上述的第二类。
+百闻不如一见，以最容易上手的DOT语言为例，将下列内容保存在名为hello.dot的文件中
+digraph G { Hello -> World } 然后在shell中运行如下命令
+dot -Tpng hello.dot -o hello.png 便得到了相应的PNG文件
+更多的栗子 下面就带各位读者走马观花地看看不同的图可以用哪些工具来绘制。
+流程图 说到程序员画的图，最出名的当属流程图了。依稀记得在高中的时候，某一册的数学课本中讲到了算法（也许是辗转相除法），并且给出了图示，那应当就是我第一次见到流程图。上大学后也有一段时间痴迷于寻找能够绘制流程图的DSL，不过一直未果。直到遇到Boostnote后，才知道的确有这样的DSL，那便是flowchart.js。
+flowchart.js是一个JS编写的、用来绘制流程图的库。比如下面这张图
+便是依据下列的DSL生成的
+st=>start: Start op=>operation: Your Operation cond=>condition: Yes or No? e=>end st->op->cond cond(yes)->e cond(no)->op flowchart.js生成的是SVG格式的图片文件，但SVG文件不方便嵌入到Markdown或Confluence的文档中，因此我会把它转换为PNG格式。折腾了一番后，发现在Mac上最靠谱的方法，是将SVG文件嵌入一个HTML文档，再用浏览器打开这个HTML，然后复制图片到预览程序上保存下来。</description></item></channel></rss>
