@@ -5,7 +5,7 @@
 :- initialization(main, main). main(_) :- writeln("Hello, world!"). 然后运行命令swipl ./hello_world.pl即可输出Hello, world!到屏幕上，如下图所示
 展开说说 接下来对上述源文件hello_world.pl做一番讲解。
 源文件命名 Prolog 源文件的后缀名通常为.pl，因此上文中的文件名为hello_world.pl。
-程序入口 与 C 语言不同，Prolog 并没有规定程序启动的时候要调用哪一个函数，而是由开发者使用命令（Prolog 的术语为directive）:- initialization来指定的。可以将initialization视为一个两个参数的函数：</description></item><item><title>用 Prolog 提供 HTTP 服务_server</title><link>https://liutos.github.io/posts/http_server/index.html</link><pubDate>Sat, 29 Mar 2025 14:41:36 +0800</pubDate><guid>https://liutos.github.io/posts/http_server/index.html</guid><description>序言 书接上回，在上一篇文章中，我们通过尝试用 Prolog 编写 Hello World 程序，了解了 Prolog 程序的基本结构和运行方式。本篇将会在hello_world.pl的基础上，实现一个简单的 HTTP 服务器。
+程序入口 与 C 语言不同，Prolog 并没有规定程序启动的时候要调用哪一个函数，而是由开发者使用命令（Prolog 的术语为directive）:- initialization来指定的。可以将initialization视为一个两个参数的函数：</description></item><item><title>用 Prolog 提供 HTTP 服务</title><link>https://liutos.github.io/posts/http_server/index.html</link><pubDate>Sat, 29 Mar 2025 14:41:36 +0800</pubDate><guid>https://liutos.github.io/posts/http_server/index.html</guid><description>序言 书接上回，在上一篇文章中，我们通过尝试用 Prolog 编写 Hello World 程序，了解了 Prolog 程序的基本结构和运行方式。本篇将会在hello_world.pl的基础上，实现一个简单的 HTTP 服务器。
 启动 HTTP 服务器 利用 SWI-Prolog 内置的库，很容易就可以启动一个 HTTP 服务器。只需要调用函数http_server即可
 :- initialization(main, main). :- use_module(library(http/http_server), [http_server/1]). main(_) :- http_server([port(8082)]), sleep(100000000). 将上述代码保存到文件http_server.pl中并运行便可以启动 HTTP 服务器
 由于在源文件中没有定义任何接口，因此任何请求都只会返回 404 的响应
