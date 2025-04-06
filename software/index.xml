@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>软件使用经验 :: 小打小闹写点bug</title><link>https://liutos.github.io/software/index.html</link><description>This is a new chapter.</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sun, 30 Jun 2024 09:32:10 +0000</lastBuildDate><atom:link href="https://liutos.github.io/software/index.xml" rel="self" type="application/rss+xml"/><item><title>用dockercompose部署Redis集群</title><link>https://liutos.github.io/software/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2redis%E9%9B%86%E7%BE%A4/index.html</link><pubDate>Sun, 30 Jun 2024 09:32:10 +0000</pubDate><guid>https://liutos.github.io/software/%E7%94%A8dockercompose%E9%83%A8%E7%BD%B2redis%E9%9B%86%E7%BE%A4/index.html</guid><description>序言 在目前我参与开发的代码仓库中，当需要使用 Redis 时，基本上用的都是 Redis 集群。因此，我在办公电脑上也搭建了一个 Redis 集群，以便让我为这些仓库编写的单元测试能成功运行起来。
+尽管 Redis 官方提供了部署集群的指引，但这要求团队内的每位成员都要依次执行如下操作：
+用 Homebrew 安装 Redis； 创建 6 个目录； 创建 6 份redis.conf配置文件； 启动 6 个redis-server进程； 用redis-cli创建集群。 为了可以让更多的人愿意执行单元测试，必须要降低部署 Redis 集群的操作难度。因此，本文旨在提供一种基于 Docker 的、一键部署 Redis 集群的办法。
+启动单个 Redis 容器 Redis 集群需要至少 6 个实例，那么首先要解决的问题便是如何启动单个 Redis 容器。从前文提到的部署集群的指引中可以知道，要启动一个集群模式的 Redis 实例，所需要的配置文件redis.conf的内容如下
+port 8000 cluster-enabled yes cluster-config-file nodes.conf cluster-node-timeout 5000 appendonly yes 参考官方的 redis 镜像的文档的方式，让redis-server读取来自于宿主机的配置文件，示例代码如下
+# 选项 --rm 使该容器在退出后（例如按下 ctrl-c）可以被删除，毕竟这里只是先做个演示，不需要留下它。 sudo docker run --rm -v "`pwd`:/usr/local/etc/redis" redis redis-server "/usr/local/etc/redis/redis.conf" 效果如下图所示</description></item><item><title>自己动手丰衣足食——用Hammerspoon控制Emacs的窗口</title><link>https://liutos.github.io/software/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E4%B8%B0%E8%A1%A3%E8%B6%B3%E9%A3%9F%E7%94%A8hammerspoon%E6%8E%A7%E5%88%B6emacs%E7%9A%84%E7%AA%97%E5%8F%A3/index.html</link><pubDate>Sun, 20 Dec 2020 21:00:07 +0000</pubDate><guid>https://liutos.github.io/software/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E4%B8%B0%E8%A1%A3%E8%B6%B3%E9%A3%9F%E7%94%A8hammerspoon%E6%8E%A7%E5%88%B6emacs%E7%9A%84%E7%AA%97%E5%8F%A3/index.html</guid><description>有一天，我用Homebrew安装了一些软件——因为已经是一个月前的事情了，所以已经记不清是安装了什么。安装后并没有立即出现什么问题，只是又过了两天我重新启动电脑后，发现同样是由Homebrew安装的Emacs不由分说地无法启动了。这下可麻烦了，毕竟我是org-mode的重度使用者，还需要偶尔用SLIME写点Common Lisp的代码，而它们都运行在Emacs中。
+直觉告诉我，也许重新安装一下Emacs，一切就可以恢复正常。重装了Emacs后，又遇到了别的问题——用BetterTouchTools在Touch Bar中添加的按钮，无法在Emacs已经启动的情况下，切换到它的窗口上。
+非要说，问题其实也不大，毕竟很多时候是将MacBook Pro合上盖子当主机用的，Touch Bar在工作时的使用频率并不高。此外，糊Node.js等语言的代码时也用不到Emacs——还是VSCode更合适。
+但这就是令人不爽，因此我决定要解决它——用Hammerspoon。
+Hammerspoon是什么？ Hammerspoon的官网很好地说明了这款工具的定位和原理
+This is a tool for powerful automation of OS X. At its core, Hammerspoon is just a bridge between the operating system and a Lua scripting engine. What gives Hammerspoon its power is a set of extensions that expose specific pieces of system functionality, to the user.
+它运行在OS X上——现在应该叫macOS； 它是用来自动化操作的——就像系统内置的Automator或第三方的Alfred Workflow那样； 它的原理是将操作系统的功能封装成了可以用Lua代码调用的模块； 例如下面的代码
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "E", function() hs.alert.show("Hello World!") end) 就可以让使用者在按下组合键⌘⌥⌃e的时候，在屏幕正中间显示Hello World!这段文本</description></item><item><title>Emacs的avy插件</title><link>https://liutos.github.io/software/emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/index.html</link><pubDate>Sun, 11 Oct 2020 10:07:27 +0000</pubDate><guid>https://liutos.github.io/software/emacs%E7%9A%84avy%E6%8F%92%E4%BB%B6/index.html</guid><description>用Emacs的时候，我习惯将它分成“四个部分”
+怎么弄的呢？一般是先按C-x 3分出左右两个window，再到各个window中用C-x 2分出上下两个window——这不是我的笔误，在Emacs的术语中，用来显示一个buffer的区域就叫做一个window。而常常被人们冠名为window的、最外层的窗体，则叫做frame。
+这样划分后，多次按下C-Tab（我把这个快捷键绑定到了命令other-window上），便可以按照左上、左下、右上、右下的顺序轮换当前聚焦的window了。
+如果需要从其它window中复制内容到当前window中粘贴，操作会麻烦一点。以右上角需要左下角的内容为例：
+按三次C-Tab换到左下角的window中——用快捷键是因为我不想去挪鼠标； 按k或j上下移动光标到目标行——用k和j是因为用了evil-mode插件（参见这篇文章）； 复制内容，再按一次C-Tab回到原来的window中粘贴。 听起来可麻烦了。
+好在Emacs有一个非常好用的插件，可以把第1和第2个步骤合在一起完成。
+avy 这个非常好用的插件就是avy，它提供的avy-goto-line函数可以一步到位地完成上面的第1和第2个步骤。
+用Emacs的包管理器就可以安装它
+M-x package-install RET avy RET 接着要为命令avy-goto-line绑定一个喜欢的快捷键
+(global-set-key (kbd "M-g f") 'avy-goto-line) 至此便可以在Emacs中愉快地使用M-g f来快速跳转到当前或其它window中的行了。百闻不如一见，我来演示一番。
+avy-goto-line ~~众所周知，~~我用org-mode来跟踪自己的学习计划，还会将摸索过程中的一些半成品代码保存到org-mode的条目中。例如，我想要将左下角的window中的三个函数的定义，复制到右上角的代码块中去
+于是我先按下M-g f，让avy为每一行赋予一个标记
+因为希望切换到左下角的window的第一行，所以我先按下j
+此时，在前一幅截图中不以字母j开始的标记统统消失了，而以字母j开始的标记则只留下了从第二个字符开始的部分。
+再按下字母l，就可以将焦点切换到左下角的window，并且将光标移动到第一行的行首了。然后只需要选中内容、复制，并返回原来的window中粘贴即可。完整的过程如下</description></item><item><title>用org Mode管理API测试用例</title><link>https://liutos.github.io/software/%E7%94%A8org-mode%E7%AE%A1%E7%90%86api%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/index.html</link><pubDate>Wed, 10 Jun 2020 21:31:58 +0000</pubDate><guid>https://liutos.github.io/software/%E7%94%A8org-mode%E7%AE%A1%E7%90%86api%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/index.html</guid><description>API测试用例是什么？ 在互联网大行其道的今天，身为一名电商平台的程序员，必定经常与HTTP API打交道，一个常见的情况便是做API测试。抛开可以用单元测试代替的，很多时候需要真地发出HTTP请求才行。这些负责发出HTTP请求的东西可能是一行curl命令，可能是一个.js文件，也可能是一个在postman中点击按钮的操作，但不管形态如何，它们便是API测试用例。尽管名字中带有“用例”二字，但很多时候是由人来校验结果的，用例更关注发出怎样的HTTP请求。
+为什么要管理它们？ 不同于每天在浏览器中发生成千上万次的、平凡的HTTP（或HTTPS）请求，API测试用例是值得一番精心管理的，因为：
+API测试用例通常会重复使用，因此必须将它们持久化保存。也许是保存成shell脚本，也许是保存成脚本语言源文件，也许是保存为某一款软件的数据文件；
+需要为多个API编写测试用例，因此必须区分不同的API对应的测试用例。例如，负责管理业务资源的服务（比如一个管理商品数据的、提供RESTful API的服务），起码需要提供增删查改的功能，那么也就需要有增删查改对应的API测试用例；
+需要为多个服务的API编写用例，因此必须区分不同的服务对应的测试用例集。例如，既然有商品服务，那么极可能还有订单服务、优惠券服务、物流服务，等等，每个服务又都有增删查改的功能，这些不同服务的API也需要各自的测试用例；
+需要区分不同的运行环境。通常本地、开发、测试，以及生产环境是互相隔离的，一个用例中的参数往往不能照搬到另一个环境中。
+API、服务，以及环境这三个维度上的区别，使得测试用例的数量显著增加，如不进行管理，当要用时，要么不得不从零开始再写一遍脚本，要么得翻查很久才能找到所需的用例。
+用org-mode管理 org-mode是什么？ org-mode是一款Emacs编辑器的扩展，它让使用者能够用快速高效的纯文本方式来记笔记、维护待办事项、安排计划，以及编写文档。org-mode的精髓在于它的大纲组织能力，以及依托于Emacs的扩展能力，两者使其正好可以胜任管理API测试用例的工作。一个.org文件的示例如下图所示
+如何用org-mode管理API测试用例？ 尽管org-mode提供了丰富的功能，但只是管理API测试用例的话，并用不上太多花里胡哨的东西，只需要org-mode的大纲功能和org-babel特性即可。
+首先用不同的.org文件区分不同的环境。
+接着用不同层级的headline区分不同的服务、资源类型，以及API。
+然后用org-mode的代码块语法来编写HTTP请求。以请求https://httpbin.org/uuid为例
+#+BEGIN_SRC restclient GET https://httpbin.org/uuid #+END_SRC #+BEGIN_SRC和#+END_SRC分别表示开启和结束代码块，restclient表示这个代码块内的代码可以用Emacs的restclient-mode来编辑。在代码块中，GET https://httpbin.org/uuid表示以GET方法请求https://httpbin.org/uuid。
+安装了restclient后，将光标定位在代码块上并按下ctrl-c '，可以进入一个单独的buffer编辑其中的源代码
+最后，如果配置了org-babel，甚至可以直接在代码块上按下ctrl-c ctrl-c来发出HTTP请求。
+后记 以前我也用过其它的工具来管理API测试用例：
+刚工作的时候用的是Postman，那时候Postman还是Chrome的一个插件； 后来出于对Firefox浏览器的喜爱，找了一个叫RESTClient的插件来代替postman，久而久之发觉两者的差距蛮大，终究无法代替； 接着遇到了Emacs中的restclient.el，于是用了好一段时间的纯restclient-mode（没有搭配org-mode）； 再后来开始用Mac办公了，便开始寻找Mac下的这类工具，遇到了Insomnia。如果有人找我推荐用于HTTP API测试的GUI工具的话，我会毫无不犹豫地推荐这款。 再后来，我又回到了Emacs，并用org-mode来管理这些API测试用例。目前这是最适合我的一种方式。</description></item><item><title>程序员的记账工具——ledger与ledger Mode</title><link>https://liutos.github.io/software/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%AE%B0%E8%B4%A6%E5%B7%A5%E5%85%B7ledger%E4%B8%8Eledger-mode/index.html</link><pubDate>Thu, 19 Mar 2020 22:40:01 +0000</pubDate><guid>https://liutos.github.io/software/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84%E8%AE%B0%E8%B4%A6%E5%B7%A5%E5%85%B7ledger%E4%B8%8Eledger-mode/index.html</guid><description>上大学后不久我开始用挖财记账，当时记得很随意，不会去追究一些不知道花在哪里的钱，不时就要强行修正账户余额，就这么一直用到了2019年中。后来挖财的启动时间越来越长，同时我不想看启动时的广告，便动了换记账软件的念头。
+本想着试试MoneyWiz，但其价格令人望而却步，于是决定继续物色免费的记账工具，不久便遇到了GnuCash。由于它是GNU出品的，让我对其一开始便比较有好感，加上想尝试一下复式记账，便在同年9月份换到了GnuCash上。
+可惜好景不长，我很快便发现了GnuCash的不足：
+启动速度随着录入数据的增多显著变慢； UI不够美观； 比较依赖鼠标操作； 交易时间的精度只到天，且无法轻松调整一笔交易的位置——这一点是我尤其在意的，因为着意味着一旦我有一笔交易漏记了，再追加回去后，整个账本的交易数据次序也与银行记录的不一致了。 于是我抛弃了GnuCash，投向了ledger（以及ledger-mode）的怀抱。
+ledger和ledger-mode ledger ledger是一个基于复式记账的、生成财务报表的命令行程序——它不具备录入的功能，它只生成报表。
+要使用ledger，必须先将交易数据按它的语法写在一个文本文件中，然后才用ledger读取这个文件，生成各种各样的报表。百闻不如一见，下图便是ledger生成的报表
+ledger-mode 记录交易数据的源文件是纯文本格式的，可以用任何文本编辑器（text editor，不是word processor）来编辑。如果打算用Emacs，那么就不容错过ledger-mode了。
+ledger-mode是一个Emacs主模式，为编辑ledger的源文件（一般以ledger为后缀名）提供诸多便利。
+比如在上图中，ledger提供了语法高亮：日期（2020-03-04）和描述（利口福）是红色的，金额（-32）和货币（CNY）是紫色的，注释（分号及其后面的内容）是灰色的。ledger-mode还提供自动缩进，在输入了利口福并回车后，光标会自动定位到字母L的位置，下一行也是如此——连续敲入两个回车得到一行空行，标志着一笔交易记录结束。ledger-mode还支持在Emacs内查看ledger输出的报表（见下文）。
+ledger的优势 用ledger记账至少有以下优势：
+交易数据保存在本地，有利于保护用户的隐私； 交易数据保存为纯文本文件，用户可以依自己的喜好选择编辑工具（比如我就喜欢用Emacs），即使哪天ledger没法用了，这些数据也依旧可以查看； ledger支持自由定制符合个人习惯的资产和支出的层级。例如，我在Assets账户下细分了Checking和Investment子账户分别囊括消费和投资账户；Checking下细分了三个储蓄卡、微信零钱，及支付宝余额账户；Investment下细分了Fund和WMP，分别表示基金和银行理财产品；Expense下有一个Food，从上面的截图中可以看到，Food下进一步分了十个子账户——只要愿意，就可以随意定制账户名称和层级； ledger支持给每一笔交易添加元数据，其中一种便是tag（标签）。tag增强了ledger生成报表的灵活度，比如我给在公司点外卖的支出打上:公司:的tag后，便可以让ledger只生成在公司就餐的支出报表； ledger的用法 初始化账户 用ledger记账，要先初始化每个账户的余额。基于复式记账的原则，ledger要求每一笔交易中所有账户的金额变化之和为0，因此若要往储蓄卡资产账户中“充值”，就必须从另一个账户中减去等额的钱。在ledger中，这个“另一个账户”便是Equity。（在ledger的在线文档中有一个章节Understanding Equity可以帮助理解）。
+所以，初始化账户余额就是添加一笔交易，将与账户余额等量的钱从Equity:Opening Balance流到Assets下的细分账户中，如下图所示
+尽管在上图中，金额123后的货币为CNY，但ledger并不理解这三个字母是否真的为合法的货币名称——ledger只要求用户指定了即可。（可以参见ledger在线文档的Commodities and Currencies章节）
+PS：在上图中没有明确写出Equity:Opening Balance的变化为-123 CNY，是因为ledger足够“聪明”，可以自己补足这个信息。
+现在可以用ledger输出报表了</description></item><item><title>免除频繁输入ssh密码的烦恼</title><link>https://liutos.github.io/software/%E5%85%8D%E9%99%A4%E9%A2%91%E7%B9%81%E8%BE%93%E5%85%A5ssh%E5%AF%86%E7%A0%81%E7%9A%84%E7%83%A6%E6%81%BC/index.html</link><pubDate>Wed, 19 Feb 2020 11:40:18 +0000</pubDate><guid>https://liutos.github.io/software/%E5%85%8D%E9%99%A4%E9%A2%91%E7%B9%81%E8%BE%93%E5%85%A5ssh%E5%AF%86%E7%A0%81%E7%9A%84%E7%83%A6%E6%81%BC/index.html</guid><description>序言 在入手MacBook Pro前，我的开发环境主要是一个运行在VirtualBox中的Mint发行版。在这个系统中，只要运行一次git push并输入passphrase（下称密码）后，之后便不再需要输入了——即使ssh登录远程机器也是如此。
+但用上Mac后发现，这里的ssh没有这个方便的特性——每次运行git push或ssh，都需要输入密码，颇不方便。
+为了避免一遍又一遍地输入密码，每次登录后，我都会运行ssh-add来一劳永逸地解决问题
+ssh-add ~/.ssh/id_rsa 自从升级到macOS Catalina后，如果在合盖睡眠前没有注销的话，下次开盖唤醒极有可能卡死在登录界面。无奈之下，我每天都需要注销并在第二天重新登录，以至于每天都得运行ssh-add并输入密码。久而久之，这也挺烦人的。
+一次失败的优化 为了省却每次都输入长达14个字符的密码的烦恼，我想到了expect(1)，这是一种可以交互式地控制其它命令的脚本语言。遗憾的是，经过一番折腾，仍然没办法成功让expect把密码输入给ssh-add，我只好继续寻找其它的办法。
+一次成功的优化 某天在阅读ssh-add的man文档时，了解到原来ssh-add有一个-K选项，可以在添加身份到ssh-agent时，将密码存储到用户的keychain中。同时还有一个-A选项，可以让ssh-add使用来自于keychain的密码——这意味着可以不用一遍又一遍地输入！
+那么接下来要做的事情已经很清楚了。先手动运行一次带-K选项的ssh-add
+ssh-add -K ~/.ssh/id_rsa 并输入密码——这将会是在Mac上的最后一次输入。再用-A选项调用ssh-add
+#!/bin/bash ssh-add -A ~/.ssh/id_rsa 我把上面这段代码保存为文件/Users/liutos/SourceCode/shell/auto_ssh_add/auto_ssh_add.sh，它很快就会被用到。最后，写一个Launchd的配置文件~/Library/LaunchAgents/com.liutos.tools.sshAdd.plist
+&lt;?xml version="1.0" encoding="UTF-8"?> &lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"> &lt;plist version="1.0"> &lt;dict> &lt;key>Label&lt;/key> &lt;string>com.liutos.tools.sshAdd&lt;/string> &lt;key>Program&lt;/key> &lt;string>/Users/liutos/SourceCode/shell/auto_ssh_add/auto_ssh_add.sh&lt;/string> &lt;key>RunAtLoad&lt;/key> &lt;true/> &lt;key>StandardOutPath&lt;/key> &lt;string>/tmp/auto_ssh_add.log&lt;/string> &lt;key>StandardErrorPath&lt;/key> &lt;string>/tmp/auto_ssh_add.err&lt;/string> &lt;/dict> &lt;/plist> 从现在起，再也不需要一遍又一遍地输入ssh的密码了——一次也不需要。
+后记 要是有哪些读者朋友成功地用expect实现自动输入密码的，还望不吝赐教;)</description></item><item><title>让斗图赢在起跑线上</title><link>https://liutos.github.io/software/%E8%AE%A9%E6%96%97%E5%9B%BE%E8%B5%A2%E5%9C%A8%E8%B5%B7%E8%B7%91%E7%BA%BF%E4%B8%8A/index.html</link><pubDate>Mon, 16 Dec 2019 22:16:53 +0000</pubDate><guid>https://liutos.github.io/software/%E8%AE%A9%E6%96%97%E5%9B%BE%E8%B5%A2%E5%9C%A8%E8%B5%B7%E8%B7%91%E7%BA%BF%E4%B8%8A/index.html</guid><description>序言 以前用Windows的时候，我在QQ中添加了很多自定义表情，其中有很多我还为它们设置了短语，以便可以便捷地发出去。后来微信用得多了，也在微信中收集了很多的表情。很多时候，表情包真的是一图胜千言，而且比起直白地说出同样的话，发图片显得更有意思。比如说，某一天你的同事在谈论他朋友的一些事情时，你可以发一张
+当然了，很多时候可能手头没有这张图片，或者一时找不到，也可以来一句“你说的这个朋友到底是不是你自己.jpg”，异曲同工。每每遇到这些有趣的图片的时候，我便会将它们保存下来以备不时之需。不过收集得多了之后，在想要用的时候便发现找表情也不是一件特别容易的事情。比如说，我的表情包目录中已经有92张图片了，即便我明确地知道我要找的就是上面这张图，文件名也没记错，但要在九十多张图片中一眼看到它，还是颇具难度的。
+好在，咱是程序员，在很多事情上可以动动手指写写代码来予以辅助——找表情图片这件事情，恰好是其中之一。
+准备素材 首先，我要祭出神器Alfred。我会编写一个Alfred的Workflow，它起码要能够方便我按名字找到图片，并且能够复制到粘贴板中。这么一来，我就可以直接在IM软件的聊天窗口中发出选好的表情图。
+其次，正所谓巧妇难为无米之炊，如果没有表情图片的储备，那制作这么个工具也就毫无意义了。因此，我还得准备一个目录，用来存放所有将来可能会用上的图片文件，这个目录便是~/OneDrive/图片/表情包。OneDrive上1TB的存储空间，放点图片也是绰绰有余了——当然了，也不是非要把图片目录放到一个同步网盘里。
+最后，这些搜集回来的图片还不能就这么晾着，必须给它们取一些容易记忆的名字，毕竟之后就靠名字来找它们了。给表情图片文件命名很简单，因为许多图片中含有一两句关键的话。比如说，下面这张图
+直接用图中的文字来命名即可。
+编写Workflow 现在可以开始编写Workflow了。它的最终形态是下图这样的
+作为Workflow入口的是一个keyword为bqb的File Filter。File Filter是一个挺强大的工具，它本身就可以完成我所需要的功能，见如下演示
+可见，File Filter本身便足矣完成搜索图片并复制到粘贴板的需求，本篇文章也就到此为止了——才怪，光有File Filter还不够，因为收集回来的表情图片的尺寸并不统一，直接在IM工具中发送的效果并不好，可能有霸屏之嫌。比如文章开头的图片，用来自ImageMagick套件的identify程序可以看到这张图片足足有527像素宽405像素高，一下子占据了半个聊天窗口——群聊的时候，还是应当照顾一下群里其他人的感受的。
+因此，Workflow中的第二个对象，便负责将图片缩放为合适的尺寸。第二个对象是一个Run Script Action，Alfred在运行后第一个File Filter后便会接着调用这个对象中所指定的外部脚本。这个对象的配置如下图所示
+其中的脚本内容如下
+#!/bin/bash # 将图片等比缩放为300像素的宽度 filename=$(basename "${1}") suffix="${filename##*.}" if [ "${suffix}" = 'gif' ] then echo -n "${1}" else sips --resampleWidth 300 "${1}" --out /tmp > /dev/null 2>&amp;1 echo -n "/tmp/${filename}" fi 运行这个脚本后，便可以在/tmp目录下得到与原始图片同名的、宽度缩放为300像素的新图片。刚开始我也打算处理.gif文件，但试验后发现sips把GIF缩放成了一张静态图，于是便不处理GIF文件了。</description></item><item><title>Evernote与Leanote</title><link>https://liutos.github.io/software/evernote%E4%B8%8Eleanote/index.html</link><pubDate>Tue, 21 May 2019 22:38:19 +0000</pubDate><guid>https://liutos.github.io/software/evernote%E4%B8%8Eleanote/index.html</guid><description>最近开始重新用起了Evernote，当然还有Leanote，不过不算是“重新“而已。这两者各有各的优缺点，下面分别列举一下
+Evernote的优缺点以及和Leanote的对比 Evernote可以比较灵活地调整文字的字号，如下图所示</description></item><item><title>Boostnote及对记笔记的思考</title><link>https://liutos.github.io/software/boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/index.html</link><pubDate>Tue, 07 May 2019 23:06:43 +0000</pubDate><guid>https://liutos.github.io/software/boostnote%E5%8F%8A%E5%AF%B9%E8%AE%B0%E7%AC%94%E8%AE%B0%E7%9A%84%E6%80%9D%E8%80%83/index.html</guid><description>这篇文章就是在Boostnote 中写成的XD
+来龙去脉 有一阵子，我沉迷于“笔记软件狩猎”中——就是不停寻找各种各样的笔记软件，再一个个试用，企图从中选出一个最强大的。回想起来，我尝试过有道云笔记、印象笔记、Quiver、Boostnote、OneNote、Yu Writer、Leanote（在本地搭建），等等。大部分都是浅尝辄止，例如OneNote，当我发现它不支持代码块语法高亮时，就放弃了它。目前仍然在使用的是Boostnote，并且也是最令我满意的。</description></item><item><title>不同工具查看代码分支diff的差异</title><link>https://liutos.github.io/software/%E4%B8%8D%E5%90%8C%E5%B7%A5%E5%85%B7%E6%9F%A5%E7%9C%8B%E4%BB%A3%E7%A0%81%E5%88%86%E6%94%AFdiff%E7%9A%84%E5%B7%AE%E5%BC%82/index.html</link><pubDate>Thu, 28 Feb 2019 22:53:46 +0000</pubDate><guid>https://liutos.github.io/software/%E4%B8%8D%E5%90%8C%E5%B7%A5%E5%85%B7%E6%9F%A5%E7%9C%8B%E4%BB%A3%E7%A0%81%E5%88%86%E6%94%AFdiff%E7%9A%84%E5%B7%AE%E5%BC%82/index.html</guid><description>本文只是简单地讲述我自己在使用GNU Emacs、Fork，以及Visual Studio Code查看Git仓库的不同分支的diff上的经历。
+Emacs 当使用Emacs时，我更喜欢用M-x package-install安装的magit提供的功能——magit-diff，而不是它自带的vc-dir。按下M-x，输入magit-diff并敲下回车后，Emacs会在minibuffer中等待用户输入要比较的分支。就像在shell中使用git-diff一样，只需要输入两个以..连接的分支名并敲下回车，就可以列出它们间的差异。如下图所示
+上图是master与re两个分支间的差异。magit-diff会列出两个分支间不一致的文件，与直接使用git-diff命令没有不同。往下滚动跨过文件清单后，还可以查看单个文件的差异。如下图所示
+Fork 第一次知道Fork是在知乎闲逛的时候，好像是在浏览“Mac下有什么值得推荐的软件”这类问题时看到的。某一次，为了能直观地查看两个commit间的差异，便试用了一番，效果确实不错。Fork的界面如下图所示
+还记得，当时为了能够比较两个commit间的差异，我还在Fork的菜单栏中翻了很久——虽然是毫无收获。结果发现，原来只需要选中两个commit就可以了。如下图所示
+图片两行蓝色的就是我选中的两个commit——先用鼠标点击其一，按住control键后再选中另一个即可。图片下方的部分与magit-diff差不多，应该也算是一目了然了。
+Visual Studio Code 原本我觉得Fork已经足够好了，某一天在用VSCode时才忽然发现，在Fork中显示的代码差异，是没有语法高亮的。通常来说，即使没有语法高亮，查看短小的diff也不成问题。但如果差异的内容很多，或是diff位于一个很长的函数内部，这时光靠diff来做代码审查已经不太够了——因为不好确定在这片diff中出现的变量和函数，到底是不是正确地定义了的。
+后来我发现，VSCode自带的“源代码管理”，即便是在查看diff时也是有语法高亮的——不仅有语法高亮，对于Node.js代码而言，还有ESLint的提示和“跳转到定义”的功能，awesome！不愧是全宇宙最好用的编辑器（笑
+为了可以用VSCode来查看两个分支间的差异，放狗搜了一下，找到了神器GitLens。
+安装GitLens后，VSCode的最左侧会多出一个菜单项，在其中可以方便地选择两个分支来进行比较。首先，找到一个要比较的分支，选择“Select for Compare”。如下图所示
+再选中另一个要比较的分支，右键单击选择“Compare with Selected”，然后便可以在下方看到VSCode罗列出不一致的文件清单了。如下图所示</description></item><item><title>一些在Emacs中搜索文本的方法</title><link>https://liutos.github.io/software/%E4%B8%80%E4%BA%9B%E5%9C%A8emacs%E4%B8%AD%E6%90%9C%E7%B4%A2%E6%96%87%E6%9C%AC%E7%9A%84%E6%96%B9%E6%B3%95/index.html</link><pubDate>Fri, 11 Jan 2019 21:37:18 +0000</pubDate><guid>https://liutos.github.io/software/%E4%B8%80%E4%BA%9B%E5%9C%A8emacs%E4%B8%AD%E6%90%9C%E7%B4%A2%E6%96%87%E6%9C%AC%E7%9A%84%E6%96%B9%E6%B3%95/index.html</guid><description>在Emacs中写代码的时候，常常需要查找一个函数、方法，或者变量的定义。如果是正在写Common Lisp，那么SLIME已经配置好了相应的快捷键M-.，只需要将光标移动到要查看的函数、方法，或者变量的名字上，按下M-.便可以跳转过去——再按一下M-,还能回到原来的位置。
+如果是写其它语言的代码，很多时候都没办法方便地跳转过去，这时候就需要依赖于文本搜索了，这也是本篇所要讲述的主题。
+通常情况下，用C-s和C-r就足够了——一个负责“往下”搜索一个负责“往上”搜索。尤其在安装了Emacs的插件swiper之后，只需使用C-s便可以同时查看到上下两个方向的匹配文本。
+但C-s也有其局限性。例如，它不能跨文件搜索，如果要查看的函数、方法，或者变量的定义不在当前buffer中，就不得不手动在多个buffer间切换并频繁按下C-s了。
+有多种办法可以解决上面这种问题。例如，可以用Emacs的projectile-ag。通常，如果代码散布在多个源文件中，那么它们多半是放在一个项目中——比如一个Git仓库。打开位于项目中的文件时，Emacs的projectile-mode就会启动。此时，按下C-c C-p s s这套组合键，会调用projectile-ag函数。projectile-ag会在minibuffer中等候输入要搜索的内容，按下回车后，Emacs会调用命令行工具ag来搜索这个项目下的所有文件，找出匹配关键字的行并显示。
+projectile-ag函数会打开另一个buffer来展示搜索结果，一个示例如下
+ag --literal --group --line-number --column --color --color-match 30\;43 --color-path 1\;32 --smart-case --stats -- emacs . 0 matches 0 files contained matches 36 files searched 111365 bytes searched 0.007795 seconds 使用projectile-ag的前提是要搜索的文件都在同一个一个项目中，但并非所有时候都满足这个要求。这时，可以用Emacs的find-grep函数。
+find-grep函数调起后同样要求使用者在minibuffer输入内容，但它更原始一点
+光标会定位在-e选项之后，需要填补交给grep的正则表达式。由于minibuffer中给出的是完整的、将会被运行的命令，因此可以也给find命令添加一些选项和参数，来改变搜索行为。
+如果是在一个Node.js项目中搜索，一般还要让find忽略一些文件，如node_modules目录下的大量依赖，或者构建产生出来的.css和.js文件。这些文件中的行不仅很可能会命中输入的正则表达式，还极可能成片地出现，占据搜索结果中的半壁江山。
+除了grep之外，还有许多命令行的文本搜索工具，例如ack和rg，并且它们都称自己更快。要在Emacs中使用它们也很简单，尤其是后者还有相应的插件rg.el可以方便调起。
+如果经常要控制find来忽略node_modules，可以考虑用git-grep。man git-grep中说到，它只会搜索tracked的文件</description></item><item><title>用过的一些Markdown编辑器</title><link>https://liutos.github.io/software/%E7%94%A8%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9Bmarkdown%E7%BC%96%E8%BE%91%E5%99%A8/index.html</link><pubDate>Fri, 14 Dec 2018 23:43:50 +0000</pubDate><guid>https://liutos.github.io/software/%E7%94%A8%E8%BF%87%E7%9A%84%E4%B8%80%E4%BA%9Bmarkdown%E7%BC%96%E8%BE%91%E5%99%A8/index.html</guid><description>开篇 买了MacBook Pro之后的一段时间里，为了打造适合自己的知识管理体系，折腾起了笔记类软件（题外话，我还挺喜欢尝试新软件的，尤其在接触macOS后发现许多软件都长得很漂亮）。其实在入手Mac之前，我已经试用过不少笔记类软件和服务了，包括Evernote（还有印象笔记）、有道云笔记、为知笔记，等等。再后来，改用Emacs的org-mode来写笔记——主要是将一些常常搜索的内容或经验记录在了多个.org文件中，算是一份自己的FAQ。后来想看看在macOS的世界中有没有更好的工具，同时渐渐觉得Markdown是一个更好的笔记内容载体，便尝试了一些知名的笔记类软件暨Markdown编辑器。
+大致上尝试了下列这些：
+Emacs Boostnote Quiver Typora Visual Studio Code Yu Writer 本文并不是一篇完整的、专业的软件评测报告，只是我兴趣使然的对各个软件的吐槽和赞美，各位权当打发时间吧。下面我按顺序说一下上面提及的各款软件。
+Emacs Emacs并不仅仅是一款Markdown编辑器，我用得最多的是用它来做计划（之前还用来写Node.js代码，不过现在交给VSCode了）。用Emacs来写Markdown，坏处是没有live preview的功能。在Emacs中打开了一个.md文件，只会原原本本地显示着井号、星号，三个反引号等Markdown语法的关键字——并且还是白底黑字的模样，而不带有丝毫不同的样式。为了让它们好看点，你还需要安装一个叫做markdown-mode的Emacs扩展。但几遍安装了markdown-mode，也无法实时预览。markdown-mode的菜单栏中有一个叫做“Preview”的功能，它依赖一个名为markdown的命令行工具（用brew install markdown可以安装）。当一切安装完毕点击“Preview”菜单项时，才发现是在网页浏览器中查看的方式——虽然有preview了，但并不live。
+Emacs在写Markdown方面也并非一无是处。对程序员而言，在一篇Markdown写就的文章中插入代码是再正常不过的事情了。在Emacs中将光标定位到Markdown语法的代码块内，按下control和c的组合键，再敲一下单引号键，Emacs便会另起一个相应模式的buffer，并将代码块中的内容复制到新buffer中供继续编辑。如下图所示
+在上面的GIF中，代码块以GitHub Flavored Markdown的语法在开头的三个反引号后附上了模式的名字，即lisp，Emacs便会打开lisp-mode的buffer。在这个buffer中可以继续使用Emacs的完整功能编辑对代码，包括语法高亮、自动补全，等等——如果启动了SLIME，甚至可以运行里面的Common Lisp代码。
+Emacs和VSCode用于在编写代码的同时写写项目的README.md文件应当是绰绰有余的了。
+Boostnote Boostnote自诩为“程序员的笔记本”，它并不是我在Emacs之外寻找的第一款笔记软件，在它之前，我还尝试了Notion、Quiver来着。上手后发现，Boostnote简直就是Quiver的开源免费版本，相当的喜爱。
+Boostnote当然让我格外喜欢的有几点：首先，Boostnote可以实时预览键入的Markdown源文档。会有一列跟编辑区域差不多宽的区域被用来展示Markdown渲染后的效果。（刚刚发现，原来这个区域的宽度是可以拖动调节的）
+其次，它不仅支持Markdown、带语法高亮的代码块，甚至还支持表格和流程图的绘制！当然我以为，用竖线和连字符绘制表格的功能仅在Emacs的org-mode中存在（孤陋寡闻了汗颜），刚开始用Boostnote制作表格的时候可是相当兴奋。而text-based的绘制流程图的方式也是让我大开眼界（后来才知道原来有flowchart.js这样的工具）——尽管后来我渐渐发现，绘制流程图其实挺少用。
+然后Boostnote具备在多份笔记中搜索的功能，这对于一款笔记软件而言倒是真的非常重要，因为有时候只能想到一些只言片语，而并不能确定所要查阅的内容究竟在哪一份笔记中。
+但Boostnote也有一些缺点。首先，Boostnote是用自有的文件格式（而不是纯文本的.md文件）来存储输入的内容的——打开~/Boostnote/notes/可以看到这些后缀为.cson的文件。这样一来，假设我日后发现了一款更优秀的Markdown编辑器，那就不能无痛迁移了，还得先从Boostnote中将这些笔记逐一导出成.md文件才行。
+其次，Boostnote只支持三层的组织结构——最外层是storage，然后是folder，最后就是笔记本身。当初有道云笔记特别让我喜欢的，就是它支持非常多层级的目录结构。尽管目录不是越多越好，但有这种灵活性总是更好的。否则，笔记的使用者就只能在命名和标签上下功夫了
+最后一点，就是Boostnote在我的系统上非常容易崩溃。有时候一翻起盖子，看到的就是Boostnote崩溃的提示。
+不过Boostnote支持往其中粘贴图片，当我需要快速记录一些图文内容时，我还是很喜欢用它的。
+Yu Writer 某一天偶然遇到了Yu Writer，它官网上的截图看着很吸引人，于是我便试用了一下。第一印象是，Yu Writer is awesome！首先它很人性化。它的预览区域是一个minimap——就是Sublime Text最右侧的那一列。在做到实时预览的时候，也不会占用太多的横向空间。其次，它支持大纲视图
+即上图左侧的目录。恰逢当时我在用Boostnote写一篇比较长的设计文档，深刻地体验到了一个大纲视图的重要意义——对在长文档内的多个标题间跳转非常有帮助。再次，Yu Writer还准备了工具栏，方便不懂得Markdown语法的用户；支持标签页，便于在多个文档间切换；甚至可以把一个Markdown文档作为幻灯片来播放。
+但Yu Writer也有它自己的劣势。第一，在Yu Writer内，原本在macOS系统中全局可用的Emacs风格快捷键——即control+b往左移动光标、control+f往右移动光标——居然不生效！这些快捷键对我个人还是非常重要的。
+第二，在Yu Writer中，不能直接插入磁盘上的图片文件的绝对地址，既没有在预览区域显示出来，也没有在文档列表显示成功。
+据说Yu Writer的作者的主业是厨师，感觉好强</description></item><item><title>值得使用的软件之Alfred</title><link>https://liutos.github.io/software/%E5%80%BC%E5%BE%97%E4%BD%BF%E7%94%A8%E7%9A%84%E8%BD%AF%E4%BB%B6%E4%B9%8Balfred/index.html</link><pubDate>Fri, 16 Nov 2018 23:05:00 +0000</pubDate><guid>https://liutos.github.io/software/%E5%80%BC%E5%BE%97%E4%BD%BF%E7%94%A8%E7%9A%84%E8%BD%AF%E4%BB%B6%E4%B9%8Balfred/index.html</guid><description>Alfred是一款所谓的“生产力工具”，可以理解为就是帮助Mac用户提高日常事务的处理效率的工具，在我还没有入手MBP的时候就已经（在知乎上）听闻了这款软件的大名了。实际使用了之后发现确实可以提升一些事情的处理效率，是一款值得身为程序员的读者朋友使用的应用。接下来我会举一些例子来说明一下，希望可以传达到我的感受。献上我的Alfred使用统计 Alfred的Clipboard 剪贴板真是一个再常用不过的功能了，我想所有的读者朋友应该都使用过复制&amp;粘贴的功能——不管是在Windows上面的Ctrl-c Ctrl-v也好，还是在Mac上面的Command-c Command-v也罢。Alfred的Clipboard功能可以认为是一个强化版的剪贴板，它可以通过快捷键（在我的系统上设置为了Command-p）快速唤出 并且支持搜索（虽然很遗憾图片没办法搜索） 当需要在两个应用间复制粘贴多段内容的时候，Clipboard就派上用场了。只需要先把需要的每一段内容在一个应用中分别复制一次，打开另一个应用后唤出Clipboard，便可以把刚才复制的内容逐个粘贴进来。每当我在一些地方看到有趣的图片想要分享给微信或者QQ的朋友时，也是打开微信或者QQ后进入Alfred的Clipboard浏览——打开Clipboard后，敲入“Image”，便可以只查看记录在剪贴板中的图片了，并且还可以在发送前预览 Alfred的Snippets Snippets算是我近期才挖掘到并开始重度使用的功能，用一句话概括，就是“长话短说”。在Snippets中可以新建一个较短的关键字来代替一串较长的输入，例如我就分别用了gcd、gct，以及gmd来代替切换到develop分支、切换到test分支，以及合并develop分支这三条常用的Git操作命令 之后既可以通过快捷键唤出Snippets面板的方式来输入短语，也可以直接在短语定义时勾选【Auto expandsion allowed】来做到输入短语后自动展开为完整的内容。下图演示的是输入gcd后自动展开为完整的命令 我现在已经积累了很多的短语了，不仅提高了输入的速度，也降低了重复输入这些内容的出错率，实在是居家旅行coding必备。
+Alfred的Workflow 购买Alfred的Powerpack后就可以开启Workflow的功能了，实际上，在我真正开始用Alfred之前（还在用着Windows的时候），对Alfred的了解基本上局限于“它拥有一个很强大的叫做Workflow的功能”这样，可以说，让Alfred如此闻名遐迩的就是它的Workflow特性吧——不过后来我才知道原来Mac自带一个叫做Automator的类似的功能。
+刚开始接触Workflow的时候，我也沉迷于在网上搜罗别人写好的来用，慢慢地才发现这些其他人经常（在知乎的答案里）列举到的Workflow，其实并不适合我。有一两个觉得眼前一亮的，在使用了一两次之后也就不怎么用了。现在，我自己写了一些Workflow，倒是显著地提升了我的开发过程。
+比较合适作为例子的是我写的三个用于处理时间的Workflow。一个是用于将日期时间字符串转换为UNIX时间戳（毫秒单位）的Workflow，名为gt——取的是get time之意。使用起来的效果大致如下</description></item><item><title>远程请求Squid</title><link>https://liutos.github.io/software/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82squid/index.html</link><pubDate>Thu, 18 May 2017 21:18:42 +0000</pubDate><guid>https://liutos.github.io/software/%E8%BF%9C%E7%A8%8B%E8%AF%B7%E6%B1%82squid/index.html</guid><description>不久前在办公室抓取某网站S被对方发现，导致对方自动屏蔽了来自办公室网络的所有HTTP请求，连正儿八经地用浏览器打开也不行。为了可以摸索出“改头换面”（改HTTP头部）访问的方法，必须先成功访问至少一次，看看发出的HTTP头部是怎样的才行。恰好想起自己有一台腾讯云服务器，登上去用curl访问网站S，发现是成功的（也就是尚未被屏蔽）。既然如此，干脆在服务器上部署一套Squid作为正向代理，帮助办公网络的请求成功抵达网站S并拿到响应页面。
+用apt-get安装了squid软件包后启动并监听端口8321，在办公网络下将公网地址和8321端口作为代理配置传递给curl的-x选项，访问网站S。不料Squid拒绝了我的请求，返回了如下内容（节选自curl -v命令的输出）
+&lt; HTTP/1.1 403 Forbidden &lt; Server: squid/3.5.12 &lt; Mime-Version: 1.0 &lt; Date: Wed, 17 May 2017 15:18:08 GMT &lt; Content-Type: text/html;charset=utf-8 &lt; Content-Length: 3531 &lt; X-Squid-Error: ERR_ACCESS_DENIED 0 &lt; Vary: Accept-Language &lt; Content-Language: en &lt; X-Cache: MISS from VM-44-136-ubuntu &lt; X-Cache-Lookup: NONE from VM-44-136-ubuntu:8321 &lt; Via: 1.1 VM-44-136-ubuntu (squid/3.5.12) &lt; Connection: keep-alive 经过一番Google，才知道原来是Squid的配置导致的。在Squid配置文件（/etc/squid/squid.conf）中，默认的acl和http_access指令的设置如下
+acl SSL_ports port 443 acl Safe_ports port 80 # http acl Safe_ports port 21 # ftp acl Safe_ports port 443 # https acl Safe_ports port 70 # gopher acl Safe_ports port 210 # wais acl Safe_ports port 1025-65535 # unregistered ports acl Safe_ports port 280 # http-mgmt acl Safe_ports port 488 # gss-http acl Safe_ports port 591 # filemaker acl Safe_ports port 777 # multiling http acl CONNECT method CONNECT http_access deny !Safe_ports http_access deny CONNECT !SSL_ports http_access allow localhost manager http_access deny manager http_access allow localhost http_access deny all 由于Squid是按照第一条匹配的http_access指令来决定允许还是拒绝的，因为来自我办公网络的请求实际上命中的是</description></item><item><title>如何安装及使用Elastic Search</title><link>https://liutos.github.io/software/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8elastic-search/index.html</link><pubDate>Wed, 08 Mar 2017 17:31:32 +0000</pubDate><guid>https://liutos.github.io/software/%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8elastic-search/index.html</guid><description>最近产品需要一个搜索商城中的商品的功能，于是接触了一下Elastic Search。虽然久仰它的大名，但一直都没有真正用过。这次稍微摸索了一下，顺便记录下来，说不定哪天就真的需要用上了。
+安装 首先需要下载Elastic Search，我选择了.zip格式的安装包，下载地址在这里。下载完成后就拿到了一个5.2.2版本的Elastic Search的安装包，只需要解压即可使用。因为我喜欢把软件安装到主目录的app目录下，所以我用的命令是
+cd /home/liutos/app unzip ../installer/elasticsearch-5.2.2.zip 主目录下的installer是我习惯的用来存放软件的安装包的位置。解压后生成了一个名为elasticsearch-5.2.2的新目录。在这个目录下有一个名为bin的子目录，只需要进入该目录运行其中的elasticsearch文件即可，实例命令为
+cd elasticsearch-5.2.2/bin ./elasticsearch -d 为了让Elastic Search可以不占用当前的终端，添加了-d选项，使其以后台进程（daemon）的方式运行。Elastic Search需要JVM才能运行，在执行上面的命令之前请各位自行准备好Java程序的运行环境。成功启动后，Elastic Search默认会监听9200端口，可以通过浏览器访问http://localhost:9200来确认Elastic Search是否正常启动了
+使用 创建索引 遵照官方文档中的指导，先创建一个索引以便后续向这个索引中添加文档。假设要创建的索引是为商品准备的，取名为products，可以通过如下的命令创建出来
+curl -X PUT 'http://localhost:9200/products' 创建成功后Elastic Search的响应结果为
+{"acknowledged":true,"shards_acknowledged":true} 如果希望Elastic Search返回更可读的形式，可以添加?pretty参数到上面的URL的末尾。
+文档的增删查改 索引已经创建了，就可以创建文档了。Elastic Search的文档是对象形式的，假设现在要创建的对象的类型为product，示例命令如下
+curl -X POST 'http://localhost:9200/products/product' --data ' { "id": 1, "name": "Product 1" }' 在我的机器上，Elastic Search的响应结果为
+{"_index":"products","_type":"product","_id":"AVqpZHmVckriR6iVcbaW","_version":1,"result":"created","_shards":{"total":2,"successful":1,"failed":0},"created":true} 其中名为"_id"的字段的值为Elastic Search自动为这份新写入的文档分配的ID，通过这个ID可以从Elastic Search中取出这份文档，示例命令如下
+curl 'http://localhost:9200/products/product/AVqpZHmVckriR6iVcbaW?pretty' 相当的RESTful的接口路径，也许你已经猜到了，删除一个文档的代码就是将请求的GET方法替换为DELETE。是的，示例代码如下
+curl -X DELETE 'http://localhost:9200/products/product/AVqpZHmVckriR6iVcbaW?pretty' 再次查找刚才的ID的文档时，响应结果中的"_found"字段的值就已经变成了false了。关于修改文档的方法，请参考官方手册中的章节。
+搜索 准备数据 最简单的搜索接口的使用就是通过浏览器访问http://localhost:9200/products/_search这个地址了。在我的机器上，看到的页面内容为如下的JSON字符串</description></item><item><title>手动安装mysql</title><link>https://liutos.github.io/software/%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85mysql/index.html</link><pubDate>Tue, 10 Jan 2017 23:03:31 +0000</pubDate><guid>https://liutos.github.io/software/%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85mysql/index.html</guid><description>在战舰少女贴吧里，偶尔能看到的一个说法叫做“这活动我用脚打都能过”，意思是活动关卡很容易（实际上有时候并非真的那么简单，仅仅是调侃）。在安装mysql这件事情上，也有用脚安装和用手安装两种。
+典型的用脚安装就是使用系统的包管理器。例如在我的LinuxMint系统中，在shell中键入下列命令就可以装上mysql
+sudo apt-get install mysql-server 遗憾的是，包管理器并不是任何时候都可用的。举个例子：以前在UC，研发团队是可以申请到一些机器用于分配给开发人员使用的，但如果要在上面使用数据库，那么多半需要开发人员自己动手部署。此外，只要掌握了手动部署单个mysql实例的方法，就可以轻松地在一台机器上部署多个mysql实例了，而这正是我最近需要完成的一个任务。为了方便自己很久之后查阅，也为了帮到其他有此类需求的程序员，我写了这篇手动安装的指南。
+初始化数据库 安装mysql的第一步，是创建数据库运行所需要的一系列文件。在5.7.6版本之前的mysql中，这个过程是由mysql_install_db这个脚本完成的。在5.7.6的发行版中，这个功能被集成到了mysqld中，下面的操作也是基于mysqld实现的。mysqld提供了执行用于初始化的命令行选项：
+–initialize –initialize-insecure –initialize-insecure会为数据库的root账户设置空的密码，方便稍后登录，因此将选用这一个初始化的方法。
+为了初始化数据库，还需要指定mysql的安装目录和存放数据文件的目录。安装目录即mysql的二进制安装包解压缩后生成的目录，而存放数据文件的目录则可以自由选择。这两个路径分别传递给mysqld的–basedir和–datadir参数。为了方便起见，也为了避免mysqld启动后读取了已存在的mysql配置文件造成干扰，我将这两个参数写到了配置文件中。在我的机器上配置文件路径是~/local/mysql/my.cnf，内容如下
+[mysqld] basedir = /home/liutos/local/mysql datadir = /home/liutos/data/mysql/data 需要注意的是，根据官方文档的说明，datadir所设置的目录，必须为一个尚不存在的目录或者是一个空目录。在我的系统中，/home/liutos/data/mysql/data是一个尚未创建的目录。
+现在可以进行初始化了。因为在我的系统上解压缩后的目录为~/local/mysql，因此在shell中执行的命令为
+cd ~/local/mysql/ ./bin/mysqld --defaults-file=/home/liutos/local/mysql/my.cnf --initialize-insecure --user=`whoami` 启动数据库服务 完成初始化后就可以启动mysqld了。启动的命令为
+./bin/mysqld_safe --defaults-file=/home/liutos/local/mysql/my.cnf --user=`whoami` > /dev/null 2>&amp;1 &amp; 由于在我的系统中，已经使用包管理器安装了mysql服务并且正在监听着3306端口，为此必须修改即将启动的mysqld进程所监听的端口。监听的端口号可以通过配置文件来指定，修改后的配置文件如下
+[mysqld] basedir = /home/liutos/local/mysql datadir = /home/liutos/data/mysql/data port = 3307 # 新增该行 现在可以执行刚才的启动命令了。成功启动后，使用netstat -apn | grep '3307'应当可以看到类似下文的输出
+tcp6 0 0 :::3307 :::* LISTEN 30898/mysqld 登录数据库 一番波折，终于可以登录了。因为当初是使用–initialize-insecure执行初始化的，root账户没有登录密码，因此在shell中键入下列命令登录
+mysql -u root --skip-password -h 127.0.0.1 -P 3307 登录后建议为root账户设置登录密码。例如，我要给root账户设置密码为1234567，就执行下列SQL语句
+ALTER USER 'root'@'localhost' IDENTIFIED BY '1234567'; UNIX socket配置 按照上述步骤启动后，mysqld会在系统的/tmp目录下创建一个mysql.sock文件。此时如果再按照上述步骤是无法启动另一个mysql实例的，因此每一个mysqld必须使用单独的.sock文件。这可以通过配置文件来实现，在我的系统上的配置如下</description></item></channel></rss>
