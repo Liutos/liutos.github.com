@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>代码画图 :: 小打小闹写点bug</title><link>https://liutos.github.io/drawing/index.html</link><description>This is a new chapter.</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Thu, 29 Oct 2020 13:42:17 +0000</lastBuildDate><atom:link href="https://liutos.github.io/drawing/index.xml" rel="self" type="application/rss+xml"/><item><title>精确之美——用TikZ画硬盘示意图</title><link>https://liutos.github.io/drawing/%E7%B2%BE%E7%A1%AE%E4%B9%8B%E7%BE%8E%E7%94%A8tikz%E7%94%BB%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE/index.html</link><pubDate>Thu, 29 Oct 2020 13:42:17 +0000</pubDate><guid>https://liutos.github.io/drawing/%E7%B2%BE%E7%A1%AE%E4%B9%8B%E7%BE%8E%E7%94%A8tikz%E7%94%BB%E7%A1%AC%E7%9B%98%E7%A4%BA%E6%84%8F%E5%9B%BE/index.html</guid><description>序言 备考某等级考试的时候，在教材中碰到了几个一直不太理解的、关于硬盘的概念：磁道、柱面号、扇区。然而教材没有配图，无法直观地了解这些概念的物理形态。维基百科的硬盘词条页中倒是有一副不错的示意图，我截图搬运了过来
+原图是一张SVG图片，本质上是一堆指令——也就是所谓的语绘啦。我是一个语绘爱好者，也想试试看能否用代码画一幅差不多的图出来。
+在旧文《程序员特有的画图方式——语绘工具小入门》中，我演示过几款写代码画图的工具，但它们都不适合用来绘制几何图形，所以这次它们没有用武之地。
+本来我想试试用MetaPost来画的，但鉴于“入门”了太多次，这次还是换点新花样吧。这一次，我用LaTeX+TikZ来画。
+TikZ是什么及光速入门 著名的压泡面神器、麻将桌脚垫《TAOCP》的作者发明了TeX，知名的Raft竞品Paxos算法的作者在此基础上创造了LaTeX，它们都是程序员简历论文排版的好帮手。而TikZ则是如虎添翼地在LaTeX中实现了简单易懂的绘图功能的一个红包宏包（macro package，TeX的术语）。简而言之，TikZ自定义了一套“语言”，可以在用LaTeX编写的文档中画出各种图形。
+百闻不如一见，我演示一下如何用TikZ画一条线段、一个圆，以及一段圆弧。先将下列的代码保存到一个文件three_in_one.tex中
+\documentclass{standalone} \usepackage{tikz} \usetikzlibrary{shapes.geometric, arrows} \begin{document} \begin{tikzpicture}[scale=2] %% 画一条从原点指向(1, 1)的线段 \draw (0, 0) -- (1, 1); %% 画一个以(1, 1)为圆心，半径为2的圆。 \draw (1, 1) circle (2); %% 画一段以原点为圆心，半径为1，张开角度为30度的圆弧。 \draw (1, 0) arc (0:30:1); \end{tikzpicture} \end{document} 再使用xelatex将其编译成PDF文件（xelatex可以通过安装TeXLive 2020获得）
+xelatex three_in_one.tex 此时便得到了three_in_one.pdf文件。为了可以在文章中显示，我用ImageMagick将其转换为PNG文件
+convert three_in_one.pdf /tmp/three_in_one.png 最终的图片如下</description></item><item><title>程序员特有的画图方式——语绘工具小入门</title><link>https://liutos.github.io/drawing/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/index.html</link><pubDate>Thu, 07 May 2020 20:37:04 +0000</pubDate><guid>https://liutos.github.io/drawing/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%89%B9%E6%9C%89%E7%9A%84%E7%94%BB%E5%9B%BE%E6%96%B9%E5%BC%8F%E8%AF%AD%E7%BB%98%E5%B7%A5%E5%85%B7%E5%B0%8F%E5%85%A5%E9%97%A8/index.html</guid><description>黑客与画家 虽然程序员多数时候都在与字符打交道，但偶尔也会像建筑或制造业的工程师一样，画一些图，比如：
+为了表达多个系统如何协作以实现业务需求，会画时序图； 为了表达存储到数据库中的业务实体间的关系，会画ER图； 为了表达复杂的业务实体在整个生存期中状态的变化，会画状态图。 除此之外，还有流程图、甘特图、火焰图，等等。
+尽管软件开发过程中产出的这些图不一定逼真、漂亮，或严谨，但凭着图上不同的形状、颜色，以及布局，也可以做到一图胜千言的效果。
+图很有用，画图的工具也同样举足轻重。如果是本地的桌面应用，多数人可能会选择用Windows平台的Visio或macOS平台的OmniGraffle；若说到作图网站，则可能会选择ProcessOn或Draw.io。
+但比起用鼠标拖拖拉拉，我更喜欢用代码来画图。
+用代码画图？ 用代码画图大致上可以分为两类：
+用具体的编程语言控制某种绘图的API画出想要的图形，比如OpenGL、HTML5中的Canvas； 用DSL描述想要画的图，然后用程序根据DSL生成图片。 我所说的用代码画图指的是上述的第二类。
+百闻不如一见，以最容易上手的DOT语言为例，将下列内容保存在名为hello.dot的文件中
+digraph G { Hello -> World } 然后在shell中运行如下命令
+dot -Tpng hello.dot -o hello.png 便得到了相应的PNG文件
+更多的栗子 下面就带各位读者走马观花地看看不同的图可以用哪些工具来绘制。
+流程图 说到程序员画的图，最出名的当属流程图了。依稀记得在高中的时候，某一册的数学课本中讲到了算法（也许是辗转相除法），并且给出了图示，那应当就是我第一次见到流程图。上大学后也有一段时间痴迷于寻找能够绘制流程图的DSL，不过一直未果。直到遇到Boostnote后，才知道的确有这样的DSL，那便是flowchart.js。
+flowchart.js是一个JS编写的、用来绘制流程图的库。比如下面这张图
+便是依据下列的DSL生成的
+st=>start: Start op=>operation: Your Operation cond=>condition: Yes or No? e=>end st->op->cond cond(yes)->e cond(no)->op flowchart.js生成的是SVG格式的图片文件，但SVG文件不方便嵌入到Markdown或Confluence的文档中，因此我会把它转换为PNG格式。折腾了一番后，发现在Mac上最靠谱的方法，是将SVG文件嵌入一个HTML文档，再用浏览器打开这个HTML，然后复制图片到预览程序上保存下来。</description></item><item><title>时序图绘制工具走马观花</title><link>https://liutos.github.io/drawing/%E6%97%B6%E5%BA%8F%E5%9B%BE%E7%BB%98%E5%88%B6%E5%B7%A5%E5%85%B7%E8%B5%B0%E9%A9%AC%E8%A7%82%E8%8A%B1/index.html</link><pubDate>Tue, 18 Jun 2019 22:01:00 +0000</pubDate><guid>https://liutos.github.io/drawing/%E6%97%B6%E5%BA%8F%E5%9B%BE%E7%BB%98%E5%88%B6%E5%B7%A5%E5%85%B7%E8%B5%B0%E9%A9%AC%E8%A7%82%E8%8A%B1/index.html</guid><description>为什么我会需要绘制时序图 我司在做一些咋看之下比较复杂的需求的时候，都需要先写设计文档，不过我猜想这种规矩应该在很多公司都有才对，我并没有其它公司没有这种规矩的言外之意。然后呢，我个人比较习惯按照“从外到内”的方式来写设计文档，因此，在文档的开篇我总是会描述一下一个需求的全局视图，一般来说，就是用绘图的方式。对于一些复杂的活动需求里的流程，咋一看觉得会涉及到多个系统间的调用的时候，我就会选择画一幅时序图了。
+需要事先说明的是，我没有正儿八经地系统学习过UML方面的内容，所以我画出来的图都只是一些不算很规范的野鸡时序图，当然了，我也不知道这世界上到底有没有规范的时序图画法。
+为了画时序图，用过几款工具。它们的共同点，就是都是“语绘”的，也就是通过写代码的方式来描述所想要的图，然后让这些工具帮你把这张图给“画出来”。我个人更喜欢这种方式，而不是拖拖拉拉，不过这纯粹是个人喜好的问题而已。
+走马观花 www.websequencediagrams.com是我接触到的第一个“语绘”时序图的工具。打开它之后，就会看到它的实例代码和效果图了，截图如下
+用这个网站的工具画出来的时序图会有一种【手绘】的感觉
+sdedit是我第二款使用的绘图工具，是一款用Java开发的本地工具，只需要编写好一个.sd文件，然后用下列的命令处理即可
+sdedit -t png -o a.png a.sd sdedit绘制时序图的代码的语法跟WebSequenceDiagrams不同，在Emacs中似乎也没有找到别人写好的适合编辑.sd文件的主模式，后来我自己定义了一个简陋的主模式来用，如下
+(setq sdedit-highlights '(("Actor\\|Node" . font-lock-function-name-face))) (define-derived-mode sdedit-mode fundamental-mode "sdedit" "编辑.sd文件的主模式" (setq font-lock-defaults '(sdedit-highlights))) ;;; 代码是从下面这个网页给的例子改动来的 ;;; https://www.emacswiki.org/emacs/CompileCommand (add-hook 'sdedit-mode-hook (lambda () (unless (file-exists-p "Makefile") (set (make-local-variable 'compile-command) (let* ((buffer-name (buffer-name)) (base-name (car (split-string buffer-name "\\.")))) (format "/usr/local/bin/sdedit -t png -o %s.png %s.sd" base-name base-name)))))) (add-to-list 'auto-mode-alist '("\\.sd$" . sdedit-mode)) 勉勉强强可以接受</description></item><item><title>Sdedit使用方法介绍（混沌向）</title><link>https://liutos.github.io/drawing/sdedit%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D%E6%B7%B7%E6%B2%8C%E5%90%91/index.html</link><pubDate>Sun, 12 Aug 2018 08:52:54 +0000</pubDate><guid>https://liutos.github.io/drawing/sdedit%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E4%BB%8B%E7%BB%8D%E6%B7%B7%E6%B2%8C%E5%90%91/index.html</guid><description>最近在寻找绘制时序图的过程中遇到了sdedit，感觉非常适合自己使用，故写这么篇文章向自己也向有同样需求的其它开发人员介绍一些这款软件
+sdedit在macOS上安装还是非常容易的，只需要使用homebrew就可以轻松安装，命令如下
+brew install sdedit 之后sdedit就会被安装到/usr/local/bin 这个目录下，在命令中输入sdedit就可以启动了。
+输入sdedit后会启动一个Java Swing写的GUI程序，具体的外观和布局就不介绍了，这里主要讲解一下sdedit所支持的语法
+sdedit中绘图的常用语法 PS：我对UML中的一些术语并不了解，下面的介绍是可能有错误的，具体请以sdedit的官方文档（http://sdedit.sourceforge.net/enter_text/）为准。同时，既然有官方文档了，我就不在此翻译一遍了，只记录一些常用的用法
+如果需要输入整个时序图的标题（姑且叫做标题），那么可以使用下面的语法
+#![一键获取手机号并登录的交互流程] 即以UNIX中的shebang开头，后面通过一对方括号包住标题内容即可
+如果需要绘制一个参与时序图的节点，那么使用下面的语法（摘抄自官方文档）
+&lt;name>:&lt;Type>[&lt;flags>] "&lt;label>" 其中，就是节点的唯一名字，之后当描述节点间的交互时需要这个字段，请给每一个节点都取一个独一无二的名字（就像取变量名那样）；部分顾名思义就是类型，虽然我在使用的时候这个字段的值也是随心所欲地写的，但这个字段对sdedit而言似乎有特殊含义——例如，如果这个字段填入的是Actor，那么绘制出来的就会是一个人形的节点，在用来表示用户的时候特别有用；（flags我还没有用过就不介绍了）；label可以理解为节点的文案，如果不填，那么节点在最终绘制的图中展示的时候用的就是作为名字
+定义好节点之后，就需要把各个节点在不同的时间用不同的消息联系起来了。描述节点间联系用的语法是（摘自官网）
+&lt;caller>[&lt;s>]:&lt;answer>=&lt;callee>[m].&lt;message> 其中的caller和callee都是写的节点的（所以name需要时独一无二的），这样就会绘制出两条线——一条实线从caller指向callee，以及一条虚线从callee指向caller，以及在callee的生命周期下绘制出一个纵向的矩形，表示callee的处理过程；是从caller发往callee的消息，例如参数的描述；如果需要同时描述从callee返回的结果，那么就需要填写在上述语法的的的位置——个人觉得这个语法是有点奇怪的
+生成图片 上面的这些文本描述都需要输入到sdedit的文本框中（唯一UI上的右下角），之后点击保存就可以得到一个XXX.sdx的文件了。由于在我的电脑上，sdedit的GUI上的导出功能用起来非常有问题，所以我摸索出来的是在命令行导出图片文件的做法（并且可以导出的格式似乎更丰富）。总体的用法是
+sdedit -t &lt;类型> -o &lt;输出文件名> &lt;原始的.sdx文件> 输出文件名随性地取即可，其中类型对常用的都有支持（svg、png、jpg，和bmp），我一般常用的是png，然后就可以得到一张PNG图片了（便可以美美地用到设计文档里了）
+配图什么的等我哪天特别闲了再补充上来吧</description></item></channel></rss>
