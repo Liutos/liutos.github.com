@@ -4,16 +4,16 @@ var relearn_searchindex = [
     "content": "This is a new chapter.",
     "description": "This is a new chapter.",
     "tags": [],
-    "title": "实用 Prolog 编程",
-    "uri": "/posts/index.html"
+    "title": "无印",
+    "uri": "/normal/index.html"
   },
   {
     "breadcrumb": "小打小闹写点bug",
     "content": "This is a new chapter.",
     "description": "This is a new chapter.",
     "tags": [],
-    "title": "无印",
-    "uri": "/normal/index.html"
+    "title": "实用 Prolog 编程",
+    "uri": "/posts/index.html"
   },
   {
     "breadcrumb": "小打小闹写点bug",
@@ -878,14 +878,6 @@ var relearn_searchindex = [
     "tags": [],
     "title": "如何使用CL实现snowflake",
     "uri": "/practical_common_lisp/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8cl%E5%AE%9E%E7%8E%B0snowflake/index.html"
-  },
-  {
-    "breadcrumb": "小打小闹写点bug \u003e  无印",
-    "content": "假设有N个区间，将它们表达为 ，其中下标i位于区间 中\n为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间 而言，都有 （这里的i小于N-1）。\n为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系\n这是因为如果 ，那么所有位于区间 中的数都将会小于 b_k，那么第j个区间与第k个区间就不可能有交集了，因此上述不等式一定成立。再加上这一组区间都是按照区间的下界递增排序的，那么必然有\n假设 ，由于k和j都是正整数，这意味着在第j和第k个区间之间，必然还存在着一个区间l，那么这个区间的必然满足\n这就意味着第j个区间和第l个区间也存在交集，它们的交集是子区间 （这里假设 ）。这就说明了，如果可以在一组区间中找到两个不相邻的区间，它们存在重叠的部分，那么一定可以找到第三个区间，使得这个区间与其中的一个区间也存在重叠。\n这表示如果我们要判定一组区间是否存在重叠，那么只需要先将它们基于区间的起点按照递增排序后，比较每一对相邻的两个区间是否存在重叠即可。",
-    "description": "假设有N个区间，将它们表达为 ，其中下标i位于区间 中\n为了判定这组区间中是否存在两个区间是有重叠的，首先对这组区间进行排序，使得对于排序后的每一个区间 而言，都有 （这里的i小于N-1）。\n为了说明要如何判定这些区间中是否存在重叠，首先我们假设这其中确实存在着至少两个这样的区间，假设分别是第j个和第k个（假设j小于k），它们必然会满足这样的关系\n这是因为如果 ，那么所有位于区间 中的数都将会小于 b_k，那么第j个区间与第k个区间就不可能有交集了，因此上述不等式一定成立。再加上这一组区间都是按照区间的下界递增排序的，那么必然有",
-    "tags": [],
-    "title": "如何检查一组区间中是否存在两个区间有交集",
-    "uri": "/normal/%E5%A6%82%E4%BD%95%E6%A3%80%E6%9F%A5%E4%B8%80%E7%BB%84%E5%8C%BA%E9%97%B4%E4%B8%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E4%B8%A4%E4%B8%AA%E5%8C%BA%E9%97%B4%E6%9C%89%E4%BA%A4%E9%9B%86/index.html"
   },
   {
     "breadcrumb": "小打小闹写点bug \u003e  软件使用经验",
