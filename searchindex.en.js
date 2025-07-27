@@ -4,6 +4,14 @@ var relearn_searchindex = [
     "content": "This is a new chapter.",
     "description": "This is a new chapter.",
     "tags": [],
+    "title": "软件使用经验",
+    "uri": "/software/index.html"
+  },
+  {
+    "breadcrumb": "小打小闹写点bug",
+    "content": "This is a new chapter.",
+    "description": "This is a new chapter.",
+    "tags": [],
     "title": "无印",
     "uri": "/normal/index.html"
   },
@@ -14,14 +22,6 @@ var relearn_searchindex = [
     "tags": [],
     "title": "实用 Prolog 编程",
     "uri": "/posts/index.html"
-  },
-  {
-    "breadcrumb": "小打小闹写点bug",
-    "content": "This is a new chapter.",
-    "description": "This is a new chapter.",
-    "tags": [],
-    "title": "软件使用经验",
-    "uri": "/software/index.html"
   },
   {
     "breadcrumb": "小打小闹写点bug",
@@ -142,6 +142,22 @@ var relearn_searchindex = [
     "tags": [],
     "title": "读取 JSON 配置文件",
     "uri": "/posts/json_config/index.html"
+  },
+  {
+    "breadcrumb": "小打小闹写点bug \u003e  软件使用经验",
+    "content": "序言 在某篇文章中，看到别人提到一个叫做org-agenda-category-icons的东西。\n搜了一下发现原来这是一个 Emacs 的第三方插件，用来给 org-mode 中的分类添加图标的。而之所以可以这么做，得益于 org-mode 本身提供了一个叫做org-agenda-category-icon-alist的变量，可以定义分类名字和图标之间的关系，并在 agenda 的视图中显示出来。在 org-agenda-category-icons 的页面中，它又提到了另外一个插件 all-the-icons 中，它内置了许多图标，我们可以直接使用，而不需要逐个去寻找图片文件并下载下来。\n安装 all-the-icons 先找个地方将 all-the-icons 下载下来\ngit clone 'https://github.com/domtronn/all-the-icons.el.git' 然后在 Emacs 的启动配置中加载它\n(add-to-list 'load-path \"/Users/liutos/Projects/all-the-icons.el/\") (when (display-graphic-p) (require 'all-the-icons)) 成功调用require后，还要让 all-the-icons 帮我们下载字体。在 Emacs 中运行如下命令\nM-x all-the-icons-install-fonts 运行完毕输出如下信息\n使用 all-the-icons 作为 org-mode 的分类图标 使用C-h v可以看到变量org-agenda-category-icon-alist中接收的图标的参数有两种\n尽管没有找到资料说明string containing image data到底是什么格式，但幸好网上有其他人在不为人知的角落中提供了一则参考例子\n依葫芦画瓢，我给自己设置了如下的分类图标\n(setq org-agenda-category-icon-alist (list `(\"^me$\" ,(list (all-the-icons-faicon \"user\" :height 1.2))) `(\"编程爱好者\" ,(list (all-the-icons-material \"code\" :height 1.2))) `(\"电影\" ,(list (all-the-icons-material \"movie\" :height 1.2))) `(\"家庭\" ,(list (all-the-icons-faicon \"bed\" :height 1.2))) `(\"技术写作\" ,(list (all-the-icons-material \"publish\" :height 1.2))) `(\"漫画\" ,(list (all-the-icons-faicon \"book\" :height 1.2))) `(\"优化电脑使用体验\" ,(list (all-the-icons-material \"computer\" :height 1.2))) `(\"战舰少女\" ,(list (all-the-icons-material \"games\" :height 1.2))))) 效果如下图所示\n全文完。",
+    "description": "序言 在某篇文章中，看到别人提到一个叫做org-agenda-category-icons的东西。\n搜了一下发现原来这是一个 Emacs 的第三方插件，用来给 org-mode 中的分类添加图标的。而之所以可以这么做，得益于 org-mode 本身提供了一个叫做org-agenda-category-icon-alist的变量，可以定义分类名字和图标之间的关系，并在 agenda 的视图中显示出来。在 org-agenda-category-icons 的页面中，它又提到了另外一个插件 all-the-icons 中，它内置了许多图标，我们可以直接使用，而不需要逐个去寻找图片文件并下载下来。\n安装 all-the-icons 先找个地方将 all-the-icons 下载下来\ngit clone 'https://github.com/domtronn/all-the-icons.el.git' 然后在 Emacs 的启动配置中加载它\n(add-to-list 'load-path \"/Users/liutos/Projects/all-the-icons.el/\") (when (display-graphic-p) (require 'all-the-icons)) 成功调用require后，还要让 all-the-icons 帮我们下载字体。在 Emacs 中运行如下命令\nM-x all-the-icons-install-fonts 运行完毕输出如下信息\n使用 all-the-icons 作为 org-mode 的分类图标 使用C-h v可以看到变量org-agenda-category-icon-alist中接收的图标的参数有两种",
+    "tags": [],
+    "title": "Emacs的all-the-Icons插件",
+    "uri": "/software/emacs%E7%9A%84all-the-icons%E6%8F%92%E4%BB%B6/index.html"
+  },
+  {
+    "breadcrumb": "小打小闹写点bug \u003e  无印",
+    "content": "序言 假设有 N 个区间，每一个都可以表示为\n如果要判断这些区间中是否存在两个之间是有重叠的，可以采用下面的算法：\n将所有的区间按照各自的下确界递增排列； 如果相邻的区间不会重叠，则所有的区间都不会重叠。否则，存在区间重叠。 尽管这个算法非常符合直觉，但会不会存在两个不相邻的区间反而是重叠的呢？答案是否定的，接下来给出证明。\n算法证明 首先对这些区间进行排序，使得排序后的所有区间都满足下列关系\n接下来采用反证法，即：尽管所有相邻的区间都不会重叠，但仍然存在两个不相邻的区间是重叠的。假设第 j 个和第 k 个区间有重叠，不妨假设 j 小于 k，则它们满足如下关系\n由于相邻的区间不重叠，因此就有\n由于 k 不是 j 的相邻区间，因此 k 大于 j 加上 1，结合上面两个不等式可以得到\n这与一开始所有区间排序后所满足的关系矛盾，因此假设不成立，即：不存在两个不相邻的区间是有重叠的。",
+    "description": "序言 假设有 N 个区间，每一个都可以表示为\n如果要判断这些区间中是否存在两个之间是有重叠的，可以采用下面的算法：\n将所有的区间按照各自的下确界递增排列； 如果相邻的区间不会重叠，则所有的区间都不会重叠。否则，存在区间重叠。 尽管这个算法非常符合直觉，但会不会存在两个不相邻的区间反而是重叠的呢？答案是否定的，接下来给出证明。\n算法证明 首先对这些区间进行排序，使得排序后的所有区间都满足下列关系\n接下来采用反证法，即：尽管所有相邻的区间都不会重叠，但仍然存在两个不相邻的区间是重叠的。假设第 j 个和第 k 个区间有重叠，不妨假设 j 小于 k，则它们满足如下关系\n由于相邻的区间不重叠，因此就有\n由于 k 不是 j 的相邻区间，因此 k 大于 j 加上 1，结合上面两个不等式可以得到",
+    "tags": [],
+    "title": "如何检查一组区间中是否存在两个区间有交集（新）",
+    "uri": "/normal/%E5%A6%82%E4%BD%95%E6%A3%80%E6%9F%A5%E4%B8%80%E7%BB%84%E5%8C%BA%E9%97%B4%E4%B8%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E4%B8%A4%E4%B8%AA%E5%8C%BA%E9%97%B4%E6%9C%89%E4%BA%A4%E9%9B%86%E6%96%B0/index.html"
   },
   {
     "breadcrumb": "小打小闹写点bug \u003e  无印",
