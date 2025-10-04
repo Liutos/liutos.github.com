@@ -4,6 +4,14 @@ var relearn_searchindex = [
     "content": "This is a new chapter.",
     "description": "This is a new chapter.",
     "tags": [],
+    "title": "实战 Common Lisp",
+    "uri": "/practical_common_lisp/index.html"
+  },
+  {
+    "breadcrumb": "小打小闹写点bug",
+    "content": "This is a new chapter.",
+    "description": "This is a new chapter.",
+    "tags": [],
     "title": "软件使用经验",
     "uri": "/software/index.html"
   },
@@ -22,14 +30,6 @@ var relearn_searchindex = [
     "tags": [],
     "title": "实用 Prolog 编程",
     "uri": "/posts/index.html"
-  },
-  {
-    "breadcrumb": "小打小闹写点bug",
-    "content": "This is a new chapter.",
-    "description": "This is a new chapter.",
-    "tags": [],
-    "title": "实战 Common Lisp",
-    "uri": "/practical_common_lisp/index.html"
   },
   {
     "breadcrumb": "小打小闹写点bug",
@@ -142,6 +142,14 @@ var relearn_searchindex = [
     "tags": [],
     "title": "读取 JSON 配置文件",
     "uri": "/posts/json_config/index.html"
+  },
+  {
+    "breadcrumb": "小打小闹写点bug \u003e  实战 Common Lisp",
+    "content": "背景 在项目 X 中，有一个函数get_db_reader，顾名思义，它可以返回一个只读的数据库连接，其实现代码可能是下面这样的\nDB_READER_CONF = {} \"\"\"数据库只读账号的连接参数。\"\"\" def connect(**kwargs): \"\"\"基于配置获取数据库连接。\"\"\" pass def get_db_reader(): \"\"\"获取只读的数据库连接。\"\"\" return connect(**DB_READER_CONF) 这个函数在整个项目中大量使用。例如，在获取用户信息的接口中，需要查询用户的账号、个人资料，以及不同类型的小红点数据，需要多次调用函数get_db_reader。\n随着业务的发展，项目的数据库实例增加了从库，经过评估后，认为可以将获取用户的接口中的查询动作都从主库切换到从库中。此时代码可以有多种的修改方案：\n将原本调用get_db_reader的代码都替换为调用新函数get_db_slave_reader； 函数get_db_reader新增一个参数use_slave，传入True表示使用从库。然后，在原本调用get_db_reader的地方都补充参数use_slave=True； 在接口的入口位置，修改全局变量DB_READER_CONF为指向从库的配置。等到接口的业务逻辑处理完毕后，再恢复DB_READER_CONF原本的配置。 动态作用域就可以优雅地实现这里的第 3 个方案。\n动态作用域 由于 Python 不支持动态作用域，因此接下来的例子需要请出本站的老熟人 Common Lisp 来做演示。先将前文中的示例代码改下为 CL\n(defparameter *db-reader-conf* (list :host \"主库\") \"数据库只读账号的连接参数。\") (defun connect (\u0026rest args \u0026key host) (declare (ignorable args)) \"基于配置获取数据库连接。\" (format t \"host = ~S~%\" host)) (defun get-db-reader () \"获取只读的数据库连接。\" (apply #'connect *db-reader-conf*)) 上述代码中由语法defparameter定义的变量*db-reader-conf*就是一个动态作用域的变量。在函数get-db-reader中引用这个变量的时候，它的值取决于运行时赋予了它什么值。例如，如果直接调用函数get-db-reader，那么访问的就是默认的主库\n如果使用let给*db-reader-conf*一个临时的绑定关系，那么在函数get-db-reader内获取到的就会是这个临时的值，如下列代码所示\n(defun main () ;; 默认获取的是主库的连接。 (get-db-reader) ;; 在不改变实现代码的前提下，切换到从库。 (let ((*db-reader-conf* (list :host \"从库\"))) (get-db-reader))) 运行效果如下图所示\n词法作用域 前面的例子看起来平平无奇，因为变量*db-reader-conf*就像是其它语言中平平无奇的全局变量一样。在别的不具备动态作用域特性的语言中，也可以在调用get-db-reader前修改*db-reader-conf*的值，然后在函数返回后再恢复原来的值。因此，这里再看看如果*db-reader-conf*其实是一个词法作用域的变量时的效果。\n为了将其定义为词法作用域的变量，接下来不能再使用defparameter，而必须用let来定义这个顶层的变量\n(defun connect (\u0026rest args \u0026key host) (declare (ignorable args)) \"基于配置获取数据库连接。\" (format t \"host = ~S~%\" host)) (let ((*db-reader-conf* (list :host \"主库\"))) (defun get-db-reader () \"获取只读的数据库连接。\" (apply #'connect *db-reader-conf*))) 这样一来，*db-reader-conf*就只能被let范围内的代码访问到，也就是函数get-db-reader。这时候再运行上面的main函数，就丝毫无法影响到get-db-reader的运行逻辑\n全文完。",
+    "description": "背景 在项目 X 中，有一个函数get_db_reader，顾名思义，它可以返回一个只读的数据库连接，其实现代码可能是下面这样的\nDB_READER_CONF = {} \"\"\"数据库只读账号的连接参数。\"\"\" def connect(**kwargs): \"\"\"基于配置获取数据库连接。\"\"\" pass def get_db_reader(): \"\"\"获取只读的数据库连接。\"\"\" return connect(**DB_READER_CONF) 这个函数在整个项目中大量使用。例如，在获取用户信息的接口中，需要查询用户的账号、个人资料，以及不同类型的小红点数据，需要多次调用函数get_db_reader。\n随着业务的发展，项目的数据库实例增加了从库，经过评估后，认为可以将获取用户的接口中的查询动作都从主库切换到从库中。此时代码可以有多种的修改方案：\n将原本调用get_db_reader的代码都替换为调用新函数get_db_slave_reader； 函数get_db_reader新增一个参数use_slave，传入True表示使用从库。然后，在原本调用get_db_reader的地方都补充参数use_slave=True； 在接口的入口位置，修改全局变量DB_READER_CONF为指向从库的配置。等到接口的业务逻辑处理完毕后，再恢复DB_READER_CONF原本的配置。 动态作用域就可以优雅地实现这里的第 3 个方案。\n动态作用域 由于 Python 不支持动态作用域，因此接下来的例子需要请出本站的老熟人 Common Lisp 来做演示。先将前文中的示例代码改下为 CL\n(defparameter *db-reader-conf* (list :host \"主库\") \"数据库只读账号的连接参数。\") (defun connect (\u0026rest args \u0026key host) (declare (ignorable args)) \"基于配置获取数据库连接。\" (format t \"host = ~S~%\" host)) (defun get-db-reader () \"获取只读的数据库连接。\" (apply #'connect *db-reader-conf*)) 上述代码中由语法defparameter定义的变量*db-reader-conf*就是一个动态作用域的变量。在函数get-db-reader中引用这个变量的时候，它的值取决于运行时赋予了它什么值。例如，如果直接调用函数get-db-reader，那么访问的就是默认的主库",
+    "tags": [],
+    "title": "旧瓶装新酒——动态作用域",
+    "uri": "/practical_common_lisp/%E4%BB%80%E4%B9%88%E6%98%AF%E5%8A%A8%E6%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F/index.html"
   },
   {
     "breadcrumb": "小打小闹写点bug \u003e  软件使用经验",
